@@ -1,0 +1,44 @@
+# Auto detect text files and normalize to client appropriate line endings
+*		text=auto
+
+# Normalize text files to have Windows style line endings
+*.Config	eol=crlf
+*.Master	eol=crlf
+*.XML		eol=crlf
+*.asax		eol=crlf
+*.asmx		eol=crlf
+*.asp		eol=crlf
+*.aspx		eol=crlf
+*.cd		eol=crlf
+*.cmd		eol=crlf
+*.config	eol=crlf
+*.cs		eol=crlf
+*.cshtml	eol=crlf
+*.csproj	eol=crlf
+*.css		eol=crlf
+*.edmx		eol=crlf
+*.html		eol=crlf
+*.js		eol=crlf
+*.nuspec	eol=crlf
+*.php		eol=crlf
+*.ps1		eol=crlf
+*.pubxml	eol=crlf
+*.rgproj	eol=crlf
+*.scpf		eol=crlf
+*.settings	eol=crlf
+*.sln		eol=crlf
+*.sql		eol=crlf
+*.testsettings	eol=crlf
+*.transform	eol=crlf
+*.txt		eol=crlf
+*.vsmdi		eol=crlf
+*.xml		eol=crlf
+
+# Treat binary files as binary
+*.dll		binary
+*.gif		binary
+*.jpg		binary
+*.nupkg		binary
+*.pdb		binary
+*.png		binary
+*.ssc		binary
