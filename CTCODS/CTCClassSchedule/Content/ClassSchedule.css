@@ -109,3 +109,15 @@ textarea
 	width: 200px;
 	min-width: 200px;
 }
+
+h2
+{
+	font-size: 18px;
+	padding: 10px 0px;
+}
+
+h3
+{
+	font-size: 16px;
+	padding: 10px 0px;
+}

@@ -11,10 +11,46 @@ namespace CTCClassSchedule.Controllers
         //
         // GET: /Classes/
 
-        public ActionResult Index()
-        {
-            return View();
-        }
+			public ActionResult Index(string letter)
+			{
+				ViewBag.letter = letter;
+				return View();
+			}
+
+			public ActionResult All(string Subject)
+			{
+				return View();
+			}
+
+
+			public ActionResult Subject(string Subject)
+			{
+				ViewBag.Subject = Subject;
+				return View();
+			}
+
+			public ActionResult YearQuarter(string YearQuarter, string flex, string time, string days, string avail, string letter)
+			{
+				ViewBag.letter = letter;
+				ViewBag.YearQuarter = YearQuarter;
+				ViewBag.flex = flex;
+				return View();
+			}
+
+			public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string flex, string time, string days, string avail)
+			{
+				ViewBag.YearQuarter = YearQuarter;
+				ViewBag.Subject = Subject;
+				return View();
+			}
+
+
+			public ActionResult ClassDetails()
+			{
+				return View();
+			}
+
+
 
         //
         // GET: /Classes/Details/5
