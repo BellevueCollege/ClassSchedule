@@ -48,6 +48,11 @@ textarea
 }
 
 
+a, a:hover, a:visited, a:active
+{
+	color: #3e6d99;
+}
+
 /* Styles for validation helpers
 -----------------------------------------------------------*/
 .field-validation-error
@@ -126,3 +131,118 @@ h3
 {
 	margin: 10px 0px;
 }
+
+.classInfo .classNumber ,
+.classInfo .classTitle ,
+.classInfo .classCredits
+{
+	float: left;
+	margin-right: 10px;
+}
+
+.classInfo .classDescription
+{
+	padding: 10px 0px 25px 0px;
+	clear: both;
+}
+
+.programWebsite
+{
+	margin: 20px 0px;
+}
+
+
+#scheduleMain
+{
+	float: left;
+	width: 100%;
+	margin-top: 40px;
+
+}
+
+#facetedSearch
+{
+	float: left;
+	display: inline;
+	border: 1px solid #555;
+	width: 180px;
+	height: 200px;
+	padding: 10px;
+	margin-right: 40px;
+	margin-top: 20px;
+}
+
+#advancedFacetedSearch
+{
+	float: left;
+	display: inline;
+	border: 1px solid #555;
+	width: 180px;
+	height: 600px;
+	padding: 10px;
+	margin-right: 40px;
+	margin-top: 20px;
+}
+
+#scheduleContent
+{
+	margin-left: 240px;
+
+}
+
+#bigfoot
+{
+	clear: left;
+}
+
+/* nav container */
+
+#navcontainer
+{
+	margin-bottom: 20px;
+	clear: both;
+}
+
+#navcontainer ul
+{
+padding-left: 0;
+margin-left: 0;
+color: #000;
+float: left;
+width: 100%;
+font-family: arial, helvetica, sans-serif;
+border-bottom: 1px solid #000;
+}
+
+#navcontainer ul li
+{
+	display: inline;
+
+}
+
+#navcontainer ul li#active a
+{
+	background-color: #fff;
+}
+
+#navcontainer ul li a
+{
+	padding: 0.2em 1em;
+	background-color: #ccc;
+	color: #000;
+	text-decoration: none;
+	float: left;
+	margin: 5px;
+	margin-bottom: 0px;
+	border: 1px solid #000;
+	border-bottom: none;
+}
+
+#navcontainer ul li a:hover,
+#navcontainer ul li#active a:hover
+{
+	background-color: #369;
+	color: #fff;
+}
+
+/* end nav container */
