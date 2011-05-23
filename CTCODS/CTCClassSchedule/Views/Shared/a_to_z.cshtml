@@ -1,9 +1,19 @@
 ﻿<div id="a_to_z">
-@* print out the ascii values for a-z *@
+@* print out the ascii values for a-z
 @for (int i = 97; i < 123; i++)
 {
-	<a href="/Classes?letter=@Convert.ToChar(i)">@Convert.ToChar(i).ToString().ToUpper()</a> <text>| </text>
+	<a href="/Classes@(ViewBag.YearQuarter_a_to_z)?letter=@Convert.ToChar(i)">@Convert.ToChar(i).ToString().ToUpper()</a> <text>| </text>
 }
+
+*@
+
+@foreach (char let in ViewBag.Alphabet)
+{
+	<a href="/Classes@(ViewBag.YearQuarter_a_to_z)?letter=@let.ToString()">@let.ToString()</a> <text>| </text>
+}
+
+
+
 
 <a href="/Classes" class="grey">View All</a>
 </div>

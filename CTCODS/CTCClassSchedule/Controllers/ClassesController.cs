@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Globalization;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using Ctc.Ods;
@@ -19,12 +20,30 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult Index(string letter)
 		{
 
-			ViewBag.AlphabetArray = new bool[26];
+			//ViewBag.AlphabetArray =
+
+
+
 			ViewBag.i = 0;
 			using (OdsRepository respository = new OdsRepository())
 			{
 				IList<CoursePrefix> courses = respository.GetCourseSubjects();
+				List<char> alphabet = new List<char>();
+				ViewBag.AlphabetArray = new bool[26];
+
 				ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
+
+				//capitalize all first letters of words in title
+				foreach (CoursePrefix course in courses)
+				{
+					var tempChar = Convert.ToChar(course.Title.Substring(0,1));
+					alphabet.Add(tempChar);
+
+					course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title.ToLower());
+				}
+
+
+				ViewBag.Alphabet = alphabet;
 
 				if (letter != null)
 				{
@@ -32,6 +51,7 @@ namespace CTCClassSchedule.Controllers
 					coursesEnum = from c in courses
 												where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
 												select c;
+
 
 					return View(coursesEnum);
 				}
@@ -88,6 +108,8 @@ namespace CTCClassSchedule.Controllers
 
 		public ActionResult YearQuarter(string YearQuarter, string flex, string time, string days, string avail, string letter)
 		{
+			ViewBag.YearQuarter = YearQuarter;
+			ViewBag.YearQuarter_a_to_z = "/" + YearQuarter;
 			ViewBag.letter = letter;
 			ViewBag.YearQuarter = YearQuarter;
 			ViewBag.flex = flex;
@@ -98,6 +120,14 @@ namespace CTCClassSchedule.Controllers
 			{
 				IList<CoursePrefix> courses = respository.GetCourseSubjects();
 				ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
+
+
+				//capitalize all first letters of words in title
+				foreach (CoursePrefix course in courses)
+				{
+					course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title.ToLower());
+				}
+
 
 				if (letter != null)
 				{
