@@ -3,139 +3,209 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Ctc.Ods.Data;
+using Ctc.Ods.Types;
+using Ctc.Ods;
+
+
 
 namespace CTCClassSchedule.Controllers
 {
-    public class ClassesController : Controller
-    {
-        //
-        // GET: /Classes/
+	public class ClassesController : Controller
+	{
+		//
+		// GET: /Classes/
 
-			public ActionResult Index(string letter)
+		public ActionResult Index(string letter)
+		{
+
+			ViewBag.AlphabetArray = new bool[26];
+			ViewBag.i = 0;
+			using (OdsRepository respository = new OdsRepository())
 			{
-				ViewBag.letter = letter;
-				return View();
-			}
+				IList<CoursePrefix> courses = respository.GetCourseSubjects();
+				ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
 
-			public ActionResult All(string Subject)
+				if (letter != null)
+				{
+					IEnumerable<CoursePrefix> coursesEnum;
+					coursesEnum = from c in courses
+												where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
+												select c;
+
+					return View(coursesEnum);
+				}
+				else
+				{
+					View(courses);
+
+				}
+				//build the string to tell the user what letter they clicked on
+
+
+			}
+			return View();
+
+		}
+
+		public ActionResult All(string Subject)
+		{
+			return View();
+		}
+
+
+		public ActionResult Subject(string Subject)
+		{
+			ViewBag.Subject = Subject;
+
+
+			using (OdsRepository respository = new OdsRepository())
 			{
-				return View();
+				IList<Course> courses = respository.GetCourses();
+
+
+				if (Subject != null)
+				{
+					IEnumerable<Course> coursesEnum;
+					coursesEnum = from c in courses
+												where c.Subject == Subject
+												select c;
+
+					return View(coursesEnum);
+				}
+				else
+				{
+					View();
+
+				}
+
+
+
 			}
+			return View();
 
+		}
 
-			public ActionResult Subject(string Subject)
+		public ActionResult YearQuarter(string YearQuarter, string flex, string time, string days, string avail, string letter)
+		{
+			ViewBag.letter = letter;
+			ViewBag.YearQuarter = YearQuarter;
+			ViewBag.flex = flex;
+
+			ViewBag.AlphabetArray = new bool[26];
+			ViewBag.i = 0;
+			using (OdsRepository respository = new OdsRepository())
 			{
-				ViewBag.Subject = Subject;
-				return View();
-			}
+				IList<CoursePrefix> courses = respository.GetCourseSubjects();
+				ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
 
-			public ActionResult YearQuarter(string YearQuarter, string flex, string time, string days, string avail, string letter)
+				if (letter != null)
+				{
+					IEnumerable<CoursePrefix> coursesEnum;
+					coursesEnum = from c in courses
+												where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
+												select c;
+
+					return View(coursesEnum);
+				}
+				else
+				{
+					View(courses);
+
+				}
+				//build the string to tell the user what letter they clicked on
+
+
+			}
+			return View();
+
+
+
+		}
+
+		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string flex, string time, string days, string avail)
+		{
+			ViewBag.YearQuarter = YearQuarter;
+			ViewBag.Subject = Subject;
+			return View();
+		}
+
+
+		public ActionResult YRQClassDetails(string YearQuarterID, string Subject, string ClassNum)
+		{
+
+			string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
+			//ViewBag.ClassTitle = courseID;
+
+
+
+
+			using (OdsRepository respository = new OdsRepository())
 			{
-				ViewBag.letter = letter;
-				ViewBag.YearQuarter = YearQuarter;
-				ViewBag.flex = flex;
-				return View();
-			}
 
-			public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string flex, string time, string days, string avail)
+				if (courseID != null)
+				{
+					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID), YearQuarterID);
+
+					return View(sections);
+				}
+				else
+				{
+					return View();
+
+				}
+
+
+
+			}
+			return View();
+		}
+
+
+
+		//
+		// GET: /Classes/All/{Subject}/{ClassNum}
+
+		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
+		{
+			string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
+			//ViewBag.ClassTitle = courseID;
+
+
+
+
+			using (OdsRepository respository = new OdsRepository())
 			{
-				ViewBag.YearQuarter = YearQuarter;
-				ViewBag.Subject = Subject;
-				return View();
+
+				if (courseID != null)
+				{
+					if (YearQuarterID != "All")
+					{
+						IList<Section> sections = respository.GetSections(CourseID.FromString(courseID), YearQuarterID);
+						return View(sections);
+					}
+					else
+					{
+						IList<Section> sections = respository.GetSections(CourseID.FromString(courseID));
+						return View(sections);
+					}
+
+
+
+				}
+				else
+				{
+					return View();
+
+				}
+
+
+
 			}
+			return View();
+
+		}
 
 
-			public ActionResult ClassDetails()
-			{
-				return View();
-			}
-
-
-
-        //
-        // GET: /Classes/Details/5
-
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        //
-        // GET: /Classes/Create
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Classes/Create
-
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Classes/Edit/5
-
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Classes/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Classes/Delete/5
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Classes/Delete/5
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-    }
+	}
 }

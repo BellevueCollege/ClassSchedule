@@ -139,7 +139,9 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -168,15 +170,30 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Classes\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="globals\btheme_v0.1\img\Thumbs.db" />
-    <Content Include="Views\Classes\ClassDetails.cshtml" />
+    <Content Include="Views\Classes\ClassDetailsTemplate.cshtml" />
     <Content Include="Views\Classes\All.cshtml" />
     <Content Include="Views\Classes\YearQuarter.cshtml" />
     <Content Include="Views\Classes\YearQuarterSubject.cshtml" />
     <Content Include="Views\Classes\Subject.cshtml" />
+    <Content Include="Views\Classes\Copy of Index.cshtml" />
+    <Content Include="Views\Classes\Index.cshtml" />
+    <Content Include="Views\Shared\a_to_z.cshtml" />
+    <Content Include="Views\Classes\ClassDetails.cshtml" />
+    <None Include="Views\Classes\ClassDetails.cshtml.old" />
+    <Content Include="Views\Shared\basicFacetedSearch.cshtml" />
+    <Content Include="Views\Shared\advancedFacetedSearch.cshtml" />
+    <Content Include="Views\Shared\quarterNavigation.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">
+      <Project>{63DA4B74-842D-411A-B939-1E586CA127D5}</Project>
+      <Name>CTCODS.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTCODS\CTCODS.csproj">
+      <Project>{D4697354-CBB8-4376-BB92-65A21760C752}</Project>
+      <Name>CTCODS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
