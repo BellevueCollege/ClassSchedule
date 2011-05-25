@@ -80,7 +80,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
-				IList<ICourse> courses = respository.GetCourses();
+				IList<Course> courses = respository.GetCourses();
 
 
 				if (Subject != null)

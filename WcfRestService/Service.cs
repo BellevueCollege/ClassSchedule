@@ -21,9 +21,9 @@ namespace Ctc.Wcf
 		}
 
 		[WebGet(UriTemplate = "Course/")]
-		public IList<ICourse> GetCourses()
+		public IList<Course> GetCourses()
 		{
-			IList<ICourse> courses = new OdsRepository().GetCourses();
+			IList<Course> courses = new OdsRepository().GetCourses();
 			return courses;
 		}
 
