@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
+using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 
@@ -20,12 +21,33 @@ namespace Ctc.Wcf
 			return footNotes;
 		}
 
+
 		[WebGet(UriTemplate = "Course/")]
-		public IList<Course> GetCourses()
+		public IList<Course> GetAllCourses()
 		{
-			IList<Course> courses = new OdsRepository().GetCourses();
+			string YearQuarterID = "B014"; // TODO: add a way to get current ActiveYQ as default
+			IList<Course> courses = new OdsRepository().GetCourses(YearQuarter.FromString(YearQuarterID));
+			//courses = courses as Course;
+
 			return courses;
 		}
+		[WebGet(UriTemplate = "Course/{YearQuarterID}")]
+		public IList<Course> GetCoursesByYQ(string YearQuarterID = "B014")
+		{
+			IList<Course> courses = new OdsRepository().GetCourses(YearQuarter.FromString(YearQuarterID));
+			//courses = courses as Course;
+
+			return courses;
+		}
+
+		// 5/25/2011 - Not currently returning results
+		//[WebGet(UriTemplate = "Course/{YearQuarterID}/{courseID}")]
+		//public IList<Section> GetSectionsByYQcourseId(string YearQuarterID, string courseID)
+		//{
+		//  IList<Section> sections = new OdsRepository().GetSections(CourseID.FromString(courseID), YearQuarterID);
+
+		//  return sections;
+		//}
 
 	}
 }
