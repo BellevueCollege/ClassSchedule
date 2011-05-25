@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
-using System.Text;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 
@@ -24,9 +21,9 @@ namespace Ctc.Wcf
 		}
 
 		[WebGet(UriTemplate = "Course/")]
-		public IList<Course> GetCourses()
+		public IList<ICourse> GetCourses()
 		{
-			IList<Course> courses = new OdsRepository().GetCourses();
+			IList<ICourse> courses = new OdsRepository().GetCourses();
 			return courses;
 		}
 

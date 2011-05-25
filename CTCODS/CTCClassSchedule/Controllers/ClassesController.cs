@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using System.Globalization;
+using System.Linq;
+using System.Web.Mvc;
+using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
-using Ctc.Ods;
 
 
 
@@ -81,12 +80,12 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
-				IList<Course> courses = respository.GetCourses();
+				IList<ICourse> courses = respository.GetCourses();
 
 
 				if (Subject != null)
 				{
-					IEnumerable<Course> coursesEnum;
+					IEnumerable<ICourse> coursesEnum;
 					coursesEnum = from c in courses
 												where c.Subject == Subject
 												select c;
