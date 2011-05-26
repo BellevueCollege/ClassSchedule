@@ -143,7 +143,7 @@ h3
 .classInfo .classDescription
 {
 	padding: 10px 0px 25px 0px;
-	clear: both;
+
 }
 
 .programWebsite
@@ -160,7 +160,7 @@ h3
 
 }
 
-#facetedSearch
+#basicFacetedSearch
 {
 	float: left;
 	display: inline;
@@ -178,11 +178,18 @@ h3
 	display: inline;
 	border: 1px solid #555;
 	width: 180px;
-	height: 600px;
+	height: 720px;
 	padding: 10px;
 	margin-right: 40px;
 	margin-top: 20px;
 }
+
+#advancedFacetedSearch ul li,
+#basicFacetedSearch ul li
+{
+	padding: 4px 4px 4px 14px;
+}
+
 
 #scheduleContent
 {
@@ -220,7 +227,7 @@ border-bottom: 1px solid #000;
 
 }
 
-#navcontainer ul li#active a
+#navcontainer ul li.active a
 {
 	background-color: #fff;
 }
@@ -239,7 +246,7 @@ border-bottom: 1px solid #000;
 }
 
 #navcontainer ul li a:hover,
-#navcontainer ul li#active a:hover
+#navcontainer ul li.active a:hover
 {
 	background-color: #369;
 	color: #fff;
@@ -251,3 +258,91 @@ border-bottom: 1px solid #000;
 {
 	margin: 5px 0px;
 }
+
+.active
+{
+	font-weight: bold;
+}
+
+li.active
+{
+	list-style-image: url(images/right_small_arrow.gif);
+	margin-left: 20px;
+
+}
+
+li.active a
+{
+
+	margin-left: -20px;
+
+}
+
+
+.clear-right
+{
+	clear: right;
+}
+
+.clear-left
+{
+	clear: left;
+}
+
+.clear-both
+{
+	clear: both;
+}
+/* Error message styling */
+
+#ErrorMsg
+{
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	-moz-border-radius-bottomleft:4px;
+	-moz-border-radius-bottomright:4px;
+	-moz-border-radius-topleft:4px;
+	-moz-border-radius-topright:4px;
+	overflow:hidden;
+	background:#FFDFDF none repeat scroll 0 0;
+	border:1px solid #F3AFB5;
+	margin:0 0 1.5em;
+	padding:0 1.5em;
+	margin-top: 0px;
+}
+
+#ErrorMsg  h3
+{
+	font-size:1.5em;
+	line-height:1.2;
+	margin-bottom:0.476em;
+	font-weight: bold;
+}
+
+
+#ErrorMsg ul
+{
+	margin:0 0 1.5em;
+	padding:0;
+}
+
+#ErrorMsg ul li
+{
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	-moz-border-radius-bottomleft:4px;
+	-moz-border-radius-bottomright:4px;
+	-moz-border-radius-topleft:4px;
+	-moz-border-radius-topright:4px;
+	background:#F6BEC1 none repeat scroll 0 0;
+	font-size:0.85em;
+	margin:0 0 3px 1.5em;
+	padding:7px;
+	position:relative;
+
+}
+
+
+/* End error message styling */
