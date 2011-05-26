@@ -30,11 +30,7 @@ namespace CTCClassSchedule
 			routes.MapRoute("All", "{controller}/All", new { controller = "Classes", action = "Index" });
 			routes.MapRoute("YearQuarter", "{controller}/{YearQuarter}", new { controller = "Classes", action = "YearQuarter"});
 			routes.MapRoute("Default", "{controller}/{action}", new { controller = "Classes", action = "Index"});
-		//  routes.MapRoute(
-		//    "Default", // Route name
-		//    "{controller}/{action}/{id}", // URL with parameters
-		//    new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-		//);
+
 
 		}
 
