@@ -7,13 +7,13 @@
 
 *@
 
-@foreach (char let in ViewBag.Alphabet)
+@foreach (string let in ViewBag.Alphabet)
 {
-	<a href="/Classes@(ViewBag.YearQuarter_a_to_z)?letter=@let.ToString()">@let.ToString()</a> <text>| </text>
+	<a href="/Classes@(ViewBag.YearQuarter_a_to_z)?type=beta@(ViewBag.queryStringNoLetter)&letter=@let.ToString()">@let.ToString()</a> <text>| </text>
 }
 
 
 
 
-<a href="/Classes" class="grey">View All</a>
+<a href="/Classes@(ViewBag.YearQuarter_a_to_z)?type=beta@(ViewBag.queryStringNoLetter)">View All</a>
 </div>
