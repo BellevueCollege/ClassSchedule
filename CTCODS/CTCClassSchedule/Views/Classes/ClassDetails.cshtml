@@ -6,9 +6,6 @@
 
 <h2>ClassDetails</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table>
     <tr>
         <th>
@@ -38,7 +35,7 @@
         <th>
             InstructorName
         </th>
-        <th></th>
+
     </tr>
 
 @foreach (var item in Model) {
@@ -70,11 +67,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.InstructorName)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
+
     </tr>
 }
 

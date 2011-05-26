@@ -9,11 +9,14 @@
 
 @Html.Partial("quarterNavigation")
 
-@Html.Partial("basicFacetedSearch")
+@Html.Partial("advancedFacetedSearch")
 
 
 <div id="scheduleContent">
-		<h2>@ViewBag.YearQuarter Credit Classes (@ViewBag.WhichClasses)</h2>
+
+		@Html.Partial("ErrorMsg")
+
+		<h2>@ViewBag.YearQuarterHP Credit Classes (@ViewBag.WhichClasses)</h2>
 
 		@Html.Partial("a_to_z")
 
