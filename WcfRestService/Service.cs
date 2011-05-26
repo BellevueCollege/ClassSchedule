@@ -40,14 +40,14 @@ namespace Ctc.Wcf
 			return courses;
 		}
 
-		// 5/25/2011 - Not currently returning results
-		//[WebGet(UriTemplate = "Course/{YearQuarterID}/{courseID}")]
-		//public IList<Section> GetSectionsByYQcourseId(string YearQuarterID, string courseID)
-		//{
-		//  IList<Section> sections = new OdsRepository().GetSections(CourseID.FromString(courseID), YearQuarterID);
+		 //5/25/2011 - Not currently returning results
+		[WebGet(UriTemplate = "Course/{YearQuarterID}/{courseID}")]
+		public IList<Section> GetSectionsByYQcourseId(string YearQuarterID, string courseID)
+		{
+		  IList<Section> sections = new OdsRepository().GetSections(CourseID.FromString(courseID), YearQuarterID);
 
-		//  return sections;
-		//}
+		  return sections;
+		}
 
 	}
 }
