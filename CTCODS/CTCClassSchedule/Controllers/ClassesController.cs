@@ -35,7 +35,7 @@ namespace CTCClassSchedule.Controllers
 				//capitalize all first letters of words in title
 				foreach (CoursePrefix course in courses)
 				{
-					course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title.ToLower());
+					//course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title.ToLower());
 				}
 
 				alphabet = from c in courses
@@ -114,10 +114,13 @@ namespace CTCClassSchedule.Controllers
 
 			setViewBagVars(YearQuarter, flex, time, days, avail, letter);
 			ViewBag.AlphabetArray = new bool[26];
+			ViewBag.AlphabetCharacter = 0;
 
 			using (OdsRepository respository = new OdsRepository())
 			{
-				IList<CoursePrefix> courses = respository.GetCourseSubjects();
+				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
+
+				IList<CoursePrefix> courses = respository.GetCourseSubjects(YRQ);
 				IEnumerable<String> alphabet;
 				ViewBag.AlphabetArray = new bool[26];
 
@@ -126,7 +129,7 @@ namespace CTCClassSchedule.Controllers
 				//capitalize all first letters of words in title
 				foreach (CoursePrefix course in courses)
 				{
-					course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title.ToLower());
+					//course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title.ToLower());
 				}
 
 				alphabet = from c in courses
@@ -142,6 +145,8 @@ namespace CTCClassSchedule.Controllers
 					coursesEnum = from c in courses
 												where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
 												select c;
+
+					coursesEnum = coursesEnum.Distinct();
 
 					return View(coursesEnum);
 				}
@@ -164,9 +169,32 @@ namespace CTCClassSchedule.Controllers
 		[ValidateInput(false)]
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string flex, string time, string days, string avail)
 		{
-			ViewBag.YearQuarter = YearQuarter;
-			ViewBag.Subject = Subject;
+			setViewBagVars(YearQuarter, flex, time, days, avail, "");
+
+			using (OdsRepository respository = new OdsRepository())
+			{
+				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
+				IList<Course> courses = respository.GetCourses(YRQ);
+
+				//capitalize all first letters of words in title
+				foreach (Course course in courses)
+				{
+					course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title.ToLower());
+				}
+
+				IEnumerable<Course> coursesEnum;
+				coursesEnum = from c in courses
+											where c.Subject == Subject.ToUpper()
+											select c;
+
+				return View(coursesEnum);
+
+
+			}
 			return View();
+
+
+
 		}
 
 		[ValidateInput(false)]
@@ -355,26 +383,23 @@ namespace CTCClassSchedule.Controllers
 			//find out which decade it is in, to determine Axxx (first character in string)
 			switch (decade)
 			{
-				case "195":
-					YearQuarter1 = isLastTwoQuarters == true ? "6" : "5";
-					break;
-				case "196":
-					YearQuarter1 = isLastTwoQuarters == true ? "7" : "6";
-					break;
 				case "197":
-					YearQuarter1 = isLastTwoQuarters == true ? "8" : "7";
+					YearQuarter1 = isLastTwoQuarters == true ? "6" : "7";
 					break;
 				case "198":
-					YearQuarter1 = isLastTwoQuarters == true ? "9" : "8";
+					YearQuarter1 = isLastTwoQuarters == true ? "7" : "8";
 					break;
 				case "199":
-					YearQuarter1 = isLastTwoQuarters == true ? "A" : "9";
+					YearQuarter1 = isLastTwoQuarters == true ? "8" : "9";
 					break;
 				case "200":
-					YearQuarter1 = isLastTwoQuarters == true ? "B" : "A";
+					YearQuarter1 = isLastTwoQuarters == true ? "9" : "A";
 					break;
 				case "201":
-					YearQuarter1 = isLastTwoQuarters == true ? "C" : "B";
+					YearQuarter1 = isLastTwoQuarters == true ? "A" : "B";
+					break;
+				case "202":
+					YearQuarter1 = isLastTwoQuarters == true ? "B" : "C";
 					break;
 
 

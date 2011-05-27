@@ -67,7 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Helpers.cs" />
-    <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -75,6 +74,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\right_small_arrow.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -158,7 +158,9 @@
     <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -175,6 +177,7 @@
     <Content Include="Views\Classes\All.cshtml" />
     <Content Include="Views\Classes\YearQuarter.cshtml" />
     <Content Include="Views\Classes\YearQuarterSubject.cshtml" />
+    <None Include="Views\Classes\YearQuarterSubject.cshtml.bak" />
     <Content Include="Views\Classes\Subject.cshtml" />
     <Content Include="Views\Classes\Copy of Index.cshtml" />
     <Content Include="Views\Classes\Index.cshtml" />
@@ -184,6 +187,7 @@
     <Content Include="Views\Shared\basicFacetedSearch.cshtml" />
     <Content Include="Views\Shared\advancedFacetedSearch.cshtml" />
     <Content Include="Views\Shared\quarterNavigation.cshtml" />
+    <Content Include="Views\Shared\ErrorMsg.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">

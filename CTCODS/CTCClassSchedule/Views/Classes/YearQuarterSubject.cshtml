@@ -1,37 +1,27 @@
-﻿@{
-    ViewBag.Title = "YearQuarterSubject";
+﻿@model IEnumerable<Ctc.Ods.Types.Course>
+
+@ViewBag.Subject classes for @ViewBag.Yearquarter
+
+
+
+<div id="scheduleMain">
+
+
+@Html.Partial("quarterNavigation")
+
+@Html.Partial("advancedFacetedSearch")
+
+
+<div id="scheduleContent">
+
+
+@foreach (var item in Model) {
+
+  @Html.DisplayFor(modelItem => item.Subject)  @Html.DisplayFor(modelItem => item.Number)   @Html.DisplayFor(modelItem => item.Title)  @Html.DisplayFor(modelItem => item.Credits)
+   <text><br /></text>
+
+
 }
 
-<h2>YearQuarterSubject</h2>
-
-
-<h1>Art</h1>
-
-
-<h3>Art 101 Modern Architecture & Design * 5 CR</h3>
-<p>
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-</p>
-<a href="/">View Detials for Art 101</a>
-
-<h3>Art 102 Modern Architecture & Design * 5 CR</h3>
-<p>
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-</p>
-<a href="/">View Detials for Art 102</a>
-
-
-<h3>Art 122 Modern Architecture & Design * 5 CR</h3>
-<p>
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-OMG this is the description! OMG this is the description! OMG this is the description! OMG this is the description!
-</p>
-<a href="/">View Detials for Art 122</a>
+</div>
+</div>

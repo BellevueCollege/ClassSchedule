@@ -14,7 +14,10 @@
 
 <div id="scheduleContent">
 
-		@Html.Partial("ErrorMsg")
+		@if (ViewBag.ErrorMsg.Length > 0) {
+			@Html.Partial("ErrorMsg")
+		}
+
 
 		<h2>@ViewBag.YearQuarterHP Credit Classes (@ViewBag.WhichClasses)</h2>
 
@@ -26,11 +29,23 @@
 
 
 
-	@if (ViewBag.whichclasses != "All") {
+	@if (ViewBag.whichclasses != "All")
+ {
 
-	}
+ }
 
-		@foreach (var item in Model) {
+		@foreach (var item in Model)
+	{
+
+		@*  if there is a break between the characters, e.g. from J to M,
+				make sure the alphabet array is updated and incremented.
+		*@
+
+		while ((char)(ViewBag.AlphabetCharacter + 65) < Convert.ToChar(item.Subject.Substring(0, 1))) {
+			ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
+			ViewBag.AlphabetCharacter++;
+		}
+
 
 		@*
 			Check if the array is in bound (less than 26 letters in alphabet).
@@ -41,12 +56,12 @@
 
 		 *@
 
-		if (ViewBag.i <= 25 && ViewBag.AlphabetArray[ViewBag.i] == false && (char)(ViewBag.i + 65) == Convert.ToChar(item.Title.Substring(0,1)))
+		if (ViewBag.AlphabetCharacter <= 25 && ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] == false && (char)(ViewBag.AlphabetCharacter + 65) == Convert.ToChar(item.Subject.Substring(0, 1)))
 		{
-			<h2>@((char)(ViewBag.i + 65))</h2>
+			<h2>@((char)(ViewBag.AlphabetCharacter + 65))</h2>
 
-			ViewBag.AlphabetArray[ViewBag.i] = true;
-			ViewBag.i++;
+	 ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
+	 ViewBag.AlphabetCharacter++;
 		}
 
 			<div class="subject">
