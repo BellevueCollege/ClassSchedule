@@ -1,19 +1,17 @@
 ﻿body
 {
-		font-size: .85em;
-		font-family: "Trebuchet MS", Verdana, Helvetica, Sans-Serif;
-		color: #232323;
-		background-color: #fff;
-		margin-right: auto;
-		margin-left: auto;
-		width: 960px;
+	font-size: .85em;
+	font-family: "Trebuchet MS" , Verdana, Helvetica, Sans-Serif;
+	color: #232323;
+	background-color: #fff;
+	margin-right: auto;
+	margin-left: auto;
+	width: 960px;
 }
 
-header,
-footer,
-nav,
-section {
-		display: block;
+header, footer, nav, section
+{
+	display: block;
 }
 
 /* Styles for basic forms
@@ -21,30 +19,30 @@ section {
 
 fieldset
 {
-		border:1px solid #ddd;
-		padding:0 1.4em 1.4em 1.4em;
-		margin:0 0 1.5em 0;
+	border: 1px solid #ddd;
+	padding: 0 1.4em 1.4em 1.4em;
+	margin: 0 0 1.5em 0;
 }
 
 legend
 {
-		font-size:1.2em;
-		font-weight: bold;
+	font-size: 1.2em;
+	font-weight: bold;
 }
 
 textarea
 {
-		min-height: 75px;
+	min-height: 75px;
 }
 
 .editor-label
 {
-		margin: 1em 0 0 0;
+	margin: 1em 0 0 0;
 }
 
 .editor-field
 {
-		margin:0.5em 0 0 0;
+	margin: 0.5em 0 0 0;
 }
 
 
@@ -57,29 +55,29 @@ a, a:hover, a:visited, a:active
 -----------------------------------------------------------*/
 .field-validation-error
 {
-		color: #ff0000;
+	color: #ff0000;
 }
 
 .field-validation-valid
 {
-		display: none;
+	display: none;
 }
 
 .input-validation-error
 {
-		border: 1px solid #ff0000;
-		background-color: #ffeeee;
+	border: 1px solid #ff0000;
+	background-color: #ffeeee;
 }
 
 .validation-summary-errors
 {
-		font-weight: bold;
-		color: #ff0000;
+	font-weight: bold;
+	color: #ff0000;
 }
 
 .validation-summary-valid
 {
-		display: none;
+	display: none;
 }
 
 .class_month ul
@@ -88,14 +86,12 @@ a, a:hover, a:visited, a:active
 	padding-left: 0px;
 	margin-top: 2px;
 	margin-bottom: 4px;
-
 }
 
 .class_month ul li
 {
 	display: inline;
 	padding-left: 10px;
-
 	color: #ccc;
 }
 
@@ -132,9 +128,7 @@ h3
 	margin: 10px 0px;
 }
 
-.classInfo .classNumber ,
-.classInfo .classTitle ,
-.classInfo .classCredits
+.classInfo .classNumber, .classInfo .classTitle, .classInfo .classCredits
 {
 	float: left;
 	margin-right: 10px;
@@ -143,7 +137,6 @@ h3
 .classInfo .classDescription
 {
 	padding: 10px 0px 25px 0px;
-
 }
 
 .programWebsite
@@ -157,7 +150,6 @@ h3
 	float: left;
 	width: 100%;
 	margin-top: 40px;
-
 }
 
 #basicFacetedSearch
@@ -184,8 +176,7 @@ h3
 	margin-top: 20px;
 }
 
-#advancedFacetedSearch ul li,
-#basicFacetedSearch ul li
+#advancedFacetedSearch ul li, #basicFacetedSearch ul li
 {
 	padding: 4px 4px 4px 14px;
 }
@@ -194,7 +185,13 @@ h3
 #scheduleContent
 {
 	margin-left: 240px;
+	padding-top: 15px;
+}
 
+#scheduleContentNoSidebar
+{
+	margin-left: 0px;
+	padding-top: 15px;
 }
 
 #bigfoot
@@ -212,19 +209,18 @@ h3
 
 #navcontainer ul
 {
-padding-left: 0;
-margin-left: 0;
-color: #000;
-float: left;
-width: 100%;
-font-family: arial, helvetica, sans-serif;
-border-bottom: 1px solid #000;
+	padding-left: 0;
+	margin-left: 0;
+	color: #000;
+	float: left;
+	width: 100%;
+	font-family: arial, helvetica, sans-serif;
+	border-bottom: 1px solid #000;
 }
 
 #navcontainer ul li
 {
 	display: inline;
-
 }
 
 #navcontainer ul li.active a
@@ -245,8 +241,7 @@ border-bottom: 1px solid #000;
 	border-bottom: none;
 }
 
-#navcontainer ul li a:hover,
-#navcontainer ul li.active a:hover
+#navcontainer ul li a:hover, #navcontainer ul li.active a:hover
 {
 	background-color: #369;
 	color: #fff;
@@ -268,14 +263,11 @@ li.active
 {
 	list-style-image: url(images/right_small_arrow.gif);
 	margin-left: 20px;
-
 }
 
 li.active a
 {
-
 	margin-left: -20px;
-
 }
 
 
@@ -297,52 +289,216 @@ li.active a
 
 #ErrorMsg
 {
-	-moz-background-clip:border;
-	-moz-background-inline-policy:continuous;
-	-moz-background-origin:padding;
-	-moz-border-radius-bottomleft:4px;
-	-moz-border-radius-bottomright:4px;
-	-moz-border-radius-topleft:4px;
-	-moz-border-radius-topright:4px;
-	overflow:hidden;
-	background:#FFDFDF none repeat scroll 0 0;
-	border:1px solid #F3AFB5;
-	margin:0 0 1.5em;
-	padding:0 1.5em;
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	-moz-border-radius-bottomleft: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+	overflow: hidden;
+	background: #FFDFDF none repeat scroll 0 0;
+	border: 1px solid #F3AFB5;
+	margin: 0 0 1.5em;
+	padding: 0 1.5em;
 	margin-top: 0px;
 }
 
-#ErrorMsg  h3
+#ErrorMsg h3
 {
-	font-size:1.5em;
-	line-height:1.2;
-	margin-bottom:0.476em;
+	font-size: 1.5em;
+	line-height: 1.2;
+	margin-bottom: 0.476em;
 	font-weight: bold;
 }
 
 
 #ErrorMsg ul
 {
-	margin:0 0 1.5em;
-	padding:0;
+	margin: 0 0 1.5em;
+	padding: 0;
 }
 
 #ErrorMsg ul li
 {
-	-moz-background-clip:border;
-	-moz-background-inline-policy:continuous;
-	-moz-background-origin:padding;
-	-moz-border-radius-bottomleft:4px;
-	-moz-border-radius-bottomright:4px;
-	-moz-border-radius-topleft:4px;
-	-moz-border-radius-topright:4px;
-	background:#F6BEC1 none repeat scroll 0 0;
-	font-size:0.85em;
-	margin:0 0 3px 1.5em;
-	padding:7px;
-	position:relative;
-
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	-moz-border-radius-bottomleft: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+	background: #F6BEC1 none repeat scroll 0 0;
+	font-size: 0.85em;
+	margin: 0 0 3px 1.5em;
+	padding: 7px;
+	position: relative;
 }
 
 
 /* End error message styling */
+
+
+/****** START SCHEDULE BLOCK CODE ******/
+a
+{
+	color: #003d79;
+}
+
+h2.course-title, h3.course-title
+{
+	font-size: 15px;
+	line-height: 21px;
+	margin: 21px 0 0 0;
+}
+p.prerequisite
+{
+	margin: 0;
+	font-size: 12px;
+	color: #666;
+}
+p.prerequisite a
+{
+	color: #666;
+}
+
+p.course-details-link
+{
+	margin: 0;
+	font-size: 12px;
+}
+
+.course-block
+{
+	font-size: 12px;
+	list-style: none;
+	margin: 0;
+	padding: 0; /*padding-top: 21px; there will be a bg image in this space later */
+}
+.course-block ul
+{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.course-block li
+{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+}
+.section-listing
+{
+	border-top: 1px solid #eee;
+	width: 800px;
+	overflow: hidden;
+}
+
+li.section-listing
+{
+	padding-top: 5px;
+}
+
+.item-number
+{
+	display: block;
+	float: left;
+	width: 40px;
+
+}
+.section-details
+{
+	float: left;
+	width: 760px;
+	overflow: hidden;
+}
+
+.section, .instructor, .meets, .days, .times, .room, .availability, .online, .tv
+{
+	display: block;
+	float: left;
+}
+
+
+
+.section
+{
+	width: 55px;
+}
+.instructor
+{
+	width: 140px;
+}
+.meets
+{
+}
+.meets li
+{
+	clear: left;
+}
+.days
+{
+	width: 76px;
+}
+.times
+{
+	width: 120px;
+}
+.room
+{
+	width: 80px;
+}
+.online, .tv
+{
+	width: 276px;
+}
+
+
+
+.cancelled
+{
+	background-color: #efefef;
+	color: #666;
+}
+.cancelled a
+{
+	color: #666;
+}
+
+.course-updated
+{
+	font-size: 11px;
+	color: #666;
+}
+.course-updated a
+{
+	font-weight: bold;
+}
+
+.course-block li.section-notes
+{
+	color: #666;
+	padding-left: 55px;
+	clear: left;
+}
+
+.section-notes li
+{
+	display: inline;
+}
+.section-notes .label
+{
+	font-style: italic;
+}
+
+.descriptor
+{
+	position: absolute;
+	left: -9999px;
+	top: -9999px;
+}
+
+
+
+/*END SCHEDULE BLOCK CODE*/

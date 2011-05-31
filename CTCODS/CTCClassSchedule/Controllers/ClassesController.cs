@@ -17,7 +17,7 @@ namespace CTCClassSchedule.Controllers
 		//
 		// GET: /Classes/
 
-		[ValidateInput(false)]
+
 		public ActionResult Index(string letter)
 		{
 
@@ -69,13 +69,13 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
-		[ValidateInput(false)]
+
 		public ActionResult All(string Subject)
 		{
 			return View();
 		}
 
-		[ValidateInput(false)]
+
 		public ActionResult Subject(string Subject)
 		{
 			ViewBag.Subject = Subject;
@@ -108,10 +108,10 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
-		[ValidateInput(false)]
+
 		public ActionResult YearQuarter(string YearQuarter, string flex, string time, string days, string avail, string letter)
 		{
-
+			ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
 			setViewBagVars(YearQuarter, flex, time, days, avail, letter);
 			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.AlphabetCharacter = 0;
@@ -124,7 +124,7 @@ namespace CTCClassSchedule.Controllers
 				IEnumerable<String> alphabet;
 				ViewBag.AlphabetArray = new bool[26];
 
-				ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
+
 
 				//capitalize all first letters of words in title
 				foreach (CoursePrefix course in courses)
@@ -166,28 +166,30 @@ namespace CTCClassSchedule.Controllers
 		}
 
 
-		[ValidateInput(false)]
+
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string flex, string time, string days, string avail)
 		{
 			setViewBagVars(YearQuarter, flex, time, days, avail, "");
+			ViewBag.displayedCourseNum = 0;
+			ViewBag.Title = ViewBag.Subject + "classes for " + @ViewBag.Yearquarter;
 
 			using (OdsRepository respository = new OdsRepository())
 			{
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
-				IList<Course> courses = respository.GetCourses(YRQ);
+				IList<Section> sections = respository.GetSections(Subject, getYRQFromFriendlyDate(YearQuarter));
 
 				//capitalize all first letters of words in title
-				foreach (Course course in courses)
+				foreach (Section section in sections)
 				{
-					course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title.ToLower());
+					section.CourseTitle = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(section.CourseTitle.ToLower());
 				}
 
-				IEnumerable<Course> coursesEnum;
-				coursesEnum = from c in courses
-											where c.Subject == Subject.ToUpper()
+				IEnumerable<Section> sectionsEnum;
+				sectionsEnum = from c in sections
+											where c.CourseSubject == Subject.ToUpper()
 											select c;
 
-				return View(coursesEnum);
+				return View(sectionsEnum);
 
 
 			}
@@ -197,12 +199,12 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
-		[ValidateInput(false)]
+
 		public ActionResult YRQClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 
 			string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
-			//ViewBag.ClassTitle = courseID;
+			ViewBag.displayedCourseNum = 0;
 
 
 
@@ -230,11 +232,11 @@ namespace CTCClassSchedule.Controllers
 
 		//
 		// GET: /Classes/All/{Subject}/{ClassNum}
-		[ValidateInput(false)]
+
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 			string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
-			//ViewBag.ClassTitle = courseID;
+			ViewBag.titleDisplayed = false;
 
 
 
@@ -310,6 +312,13 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.ActiveFlexTelecourse = "";
 			ViewBag.ActiveFlexReducedTrip = "";
 			ViewBag.ActiveFlexAll = "";
+
+
+
+			ViewBag.QuarterURL = YearQuarter;
+
+
+
 		}
 
 	private string getYRQFromFriendlyDate(string friendlyDate)

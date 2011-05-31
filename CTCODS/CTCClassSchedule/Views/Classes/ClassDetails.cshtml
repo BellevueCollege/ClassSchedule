@@ -1,74 +1,74 @@
 ﻿@model IEnumerable<Ctc.Ods.Types.Section>
 
-@{
-    ViewBag.Title = "ClassDetails";
+<div id="scheduleMain">
+
+
+@Html.Partial("quarterNavigation")
+
+
+
+
+<div id="scheduleContentNoSidebar">
+
+
+@foreach (var item in Model)
+{
+	if (@ViewBag.titleDisplayed == false)
+	{
+
+		<h3 class="course-title"><a href="#"><span class="courseID">@item.CourseSubject @item.CourseNumber </span><span>@item.CourseTitle </span><span>• @item.Credits <abbr title="Credits ">CR</abbr></span></a></h3>
+		<p class="prerequisite">Prerequisite: <a href="#">ART 105</a> or <a href="#">permission by instructor</a></p>
+		<p class="course-details-link"><a href="#">View class details</a></p>
+		ViewBag.titleDisplayed = true;
+
+
+	}
+
+	if (@ViewBag.currentQuarter != item.ID.ToString().Substring(4, 4))
+	{
+
+		<h3 class="course-YRQ">@((item.ID).ToString().Substring(4, 4))</h3>
+		ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
+	}
+
+
+
+<ul class="course-block">
+
+<li class="section-listing"><span class="item-number"><span class="descriptor">Item number: </span>@((item.ID).ToString().Substring(0, 4))</span>
+    <ul class="section-details">
+        <li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
+
+        <li class="instructor"><span class="descriptor">Instructor:</span>
+            <ul>
+                <li><a href="#">@item.InstructorName</a></li>
+            </ul>
+        </li>
+
+        <li><span class="descriptor">Meets: </span>
+            <ul class="meets">
+                <li>
+                    <span class="days"><abbr title="Mondays and Wednesdays">@item.Offered.Days</abbr></span>
+                    <span class="times"><span class="descriptor">at </span>5:30p-6:20p</span>
+                    <span class="room"><span class="descriptor">in </span>R201</span>
+                </li>
+            </ul>
+		</li>
+
+        <li class="availability"><span class="descriptor">Seat Availability: </span><strong>Class full</strong> <span class="course-updated">updated 5 seconds ago <a href="">[update]</a></span>
+        </li>
+
+        <li class="section-notes"><span class="descriptor">Notes: </span>
+            <ul>
+                <li><span class="label">@item.AdditionalInformation</span></li>
+            </ul>
+        </li>
+
+    </ul>
+</li>
+
+</ul>
 }
 
-<h2>ClassDetails</h2>
-
-<table>
-    <tr>
-        <th>
-            CourseSubject
-        </th>
-        <th>
-            CourseNumber
-        </th>
-        <th>
-            AdditionalInformation
-        </th>
-        <th>
-            YearQuarterID
-        </th>
-        <th>
-            SectionCode
-        </th>
-        <th>
-            CourseID
-        </th>
-        <th>
-            CourseTitle
-        </th>
-        <th>
-            Credits
-        </th>
-        <th>
-            InstructorName
-        </th>
-
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CourseSubject)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CourseNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AdditionalInformation)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.YearQuarterID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SectionCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CourseID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CourseTitle)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Credits)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InstructorName)
-        </td>
-
-    </tr>
-}
-
-</table>
+</div>
+</div>

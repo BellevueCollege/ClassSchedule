@@ -29,10 +29,6 @@
 
 
 
-	@if (ViewBag.whichclasses != "All")
- {
-
- }
 
 		@foreach (var item in Model)
 	{
@@ -65,7 +61,13 @@
 		}
 
 			<div class="subject">
-				<a href="/Classes/All/@item.Subject/">@Html.DisplayFor(modelItem => item.Title)</a>
+				<a href="/Classes/@ViewBag.QuarterURL/@item.Subject/">@Html.DisplayFor(modelItem => item.Title)</a>
+
+				@if (item.IsCommonCourse == true)
+		{
+					<text> (Transferable to WA CC's)</text>
+		}
+
 			</div>
 		}
 
