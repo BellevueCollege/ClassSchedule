@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Ctc.Ods.Types.CoursePrefix>
 
 @{
-    ViewBag.Title = "Index";
+		ViewBag.Title = "Index";
 }
 
 <div id="scheduleMain">
@@ -19,16 +19,9 @@
 		}
 
 
-		<h2>@ViewBag.YearQuarterHP Credit Classes (@ViewBag.WhichClasses)</h2>
+		<h2>@ViewBag.FriendlyYRQ Credit Classes (@ViewBag.WhichClasses)</h2>
 
 		@Html.Partial("a_to_z")
-
-		<p>
-				@*Html.ActionLink("Create New", "Create") *@
-		</p>
-
-
-
 
 		@foreach (var item in Model)
 	{
@@ -56,17 +49,17 @@
 		{
 			<h2>@((char)(ViewBag.AlphabetCharacter + 65))</h2>
 
-	 ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
-	 ViewBag.AlphabetCharacter++;
+		 ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
+		 ViewBag.AlphabetCharacter++;
 		}
 
 			<div class="subject">
 				<a href="/Classes/@ViewBag.QuarterURL/@item.Subject/">@Html.DisplayFor(modelItem => item.Title)</a>
 
 				@if (item.IsCommonCourse == true)
-		{
+				{
 					<text> (Transferable to WA CC's)</text>
-		}
+				}
 
 			</div>
 		}

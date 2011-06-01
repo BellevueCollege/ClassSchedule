@@ -7,6 +7,9 @@ using System.Globalization;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using Ctc.Ods;
+using System.Text;
+using System.Net;
+using System.IO;
 
 
 
@@ -22,14 +25,18 @@ namespace CTCClassSchedule.Controllers
 		{
 
 			setViewBagVars("", "", "", "", "", letter);
+			ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
 			ViewBag.AlphabetArray = new bool[26];
+			ViewBag.AlphabetCharacter = 0;
+
+
 
 			using (OdsRepository respository = new OdsRepository())
 			{
 				IList<CoursePrefix> courses = respository.GetCourseSubjects();
 				IEnumerable<String> alphabet;
 
-
+				ViewBag.AlphabetArray = new bool[26];
 				ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
 
 				//capitalize all first letters of words in title
@@ -53,20 +60,14 @@ namespace CTCClassSchedule.Controllers
 												where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
 												select c;
 
-
 					return View(coursesEnum);
 				}
 				else
 				{
 					View(courses);
-
 				}
-				//build the string to tell the user what letter they clicked on
-
-
 			}
 			return View();
-
 		}
 
 
@@ -115,6 +116,8 @@ namespace CTCClassSchedule.Controllers
 			setViewBagVars(YearQuarter, flex, time, days, avail, letter);
 			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.AlphabetCharacter = 0;
+			ViewBag.YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)).ToString();
+			ViewBag.FriendlyYRQ = getFriendlyDateFromYRQ(Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)));
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -236,7 +239,12 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 			string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
+
+
 			ViewBag.titleDisplayed = false;
+
+
+			ViewBag.CourseOutcome = getCourseOutcome(Subject, ClassNum);
 
 
 
@@ -246,6 +254,13 @@ namespace CTCClassSchedule.Controllers
 
 				if (courseID != null)
 				{
+					IList<CourseDescription> courseDescriptions = respository.GetCourseDescription(CourseID.FromString(courseID));
+
+					foreach(CourseDescription desc in courseDescriptions) {
+						ViewBag.CourseDescription = desc.Description;
+
+					}
+
 					if (YearQuarterID != "All")
 					{
 						IList<Section> sections = respository.GetSections(CourseID.FromString(courseID), YearQuarterID);
@@ -273,7 +288,51 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
-	private void setViewBagVars(string YearQuarter, string flex, string time, string days, string avail, string letter)
+
+		private dynamic getCourseOutcome(string Subject, string ClassNum)
+		{
+			string url = "http://bellevuecollege.edu/courseoutcomes/?CourseID=" + Subject + "%20" + ClassNum;
+			StringBuilder sb = new StringBuilder();
+
+			byte[] buffer = new byte[8000];
+			HttpWebRequest request = (HttpWebRequest)
+			WebRequest.Create(url);
+
+			// execute the request
+			HttpWebResponse response = (HttpWebResponse)
+				request.GetResponse();
+
+			// we will read data via the response stream
+			Stream resStream = response.GetResponseStream();
+
+			string tempString = null;
+			int count = 0;
+
+			do
+			{
+				// fill the buffer with data
+				count = resStream.Read(buffer, 0, buffer.Length);
+
+				// make sure we read some data
+				if (count != 0)
+				{
+					// translate from bytes to ASCII text
+					tempString = Encoding.ASCII.GetString(buffer, 0, count);
+
+					// continue building the string
+					sb.Append(tempString);
+				}
+			}
+			while (count > 0); // any more data to read?
+
+			// return course outcome page source
+			return sb.ToString();
+
+
+
+		}
+
+		private void setViewBagVars(string YearQuarter, string flex, string time, string days, string avail, string letter)
 		{
 			ViewBag.ErrorMsg = "";
 
@@ -321,7 +380,7 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
-	private string getYRQFromFriendlyDate(string friendlyDate)
+		private string getYRQFromFriendlyDate(string friendlyDate)
 	{
 		//Example: Winter 2008 = A783
 
@@ -337,6 +396,7 @@ namespace CTCClassSchedule.Controllers
 		string quarterFriendly = friendlyDate.Substring(0, friendlyDate.Length - 4); //Spring
 		string decade = "";
 		int yearBaseTen = 0;
+		int yearBaseTenPlusOne = 0;
 		string YearQuarter1 = "";
 		string YearQuarter23 = "";
 		string quarter = "";
@@ -352,8 +412,8 @@ namespace CTCClassSchedule.Controllers
 			}
 			else
 			{
-				 yearBaseTen = Convert.ToInt16(year.Substring(3, 1));
-				 decade = year.Substring(0, 3); //201
+				yearBaseTen = Convert.ToInt16(year.Substring(3, 1));
+				decade = year.Substring(0, 3); //201
 			}
 		}
 
@@ -378,7 +438,8 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
-		if(!badlyFormedQuarter && !badlyFormedYear) {
+		if (!badlyFormedQuarter && !badlyFormedYear)
+		{
 
 
 
@@ -415,9 +476,17 @@ namespace CTCClassSchedule.Controllers
 			}
 
 			//figure out what the x23x portion of the YRQ is
-			if(quarter == "1" || quarter == "2")
+			if (quarter == "1" || quarter == "2")
 			{
-				YearQuarter23 = Convert.ToString(yearBaseTen) + Convert.ToString((yearBaseTen + 1));
+				if (yearBaseTen + 1 > 9)
+				{
+					yearBaseTenPlusOne = yearBaseTen + 1 - 10;
+				}
+				else
+				{
+					yearBaseTenPlusOne = yearBaseTen + 1;
+				}
+				YearQuarter23 = Convert.ToString(yearBaseTen) + Convert.ToString((yearBaseTenPlusOne));
 
 			}
 			else if (quarter == "3" || quarter == "4")
@@ -432,7 +501,7 @@ namespace CTCClassSchedule.Controllers
 					tempYearBaseTen = yearBaseTen;
 				}
 
-				YearQuarter23 = Convert.ToString(tempYearBaseTen-1) + Convert.ToString((yearBaseTen));
+				YearQuarter23 = Convert.ToString(tempYearBaseTen - 1) + Convert.ToString((yearBaseTen));
 			}
 
 			return YearQuarter1 + YearQuarter23 + quarter;
@@ -455,8 +524,206 @@ namespace CTCClassSchedule.Controllers
 
 	}
 
+		private String getFriendlyDateFromYRQ(YearQuarter YRQ)
+	{
+		//Example: Winter 2008 = A783
 
-	public static bool IsInteger(string value)
+		//summer: xxx1
+		//fall:   xxx2
+		//winter: xxx3
+		//spring:	xxx4
+
+		//Academic year 2006-2007: x67x
+		//Academic year 2011-2012: x12x
+
+		string stringYRQ = YRQ.ID.ToString();
+
+		string year1 = stringYRQ.Substring(stringYRQ.Length - 3, 1); //x6xx = 2006
+		string year2 = stringYRQ.Substring(stringYRQ.Length - 2, 1); //xx7x = 2007
+		string quarter = stringYRQ.Substring(stringYRQ.Length - 1, 1); //Spring
+		string decade = stringYRQ.Substring(stringYRQ.Length - 4, 1); //Axxx = 2000's
+		string strQuarter = "";
+		bool isLastTwoQuarters = false;
+		bool badlyFormedQuarter = false;
+		bool badlyFormedYear = false;
+
+		string year = "";
+
+				//is the year an overlapping year? e.g. spring 2000 = 9904 but summer 2000 = A011
+			if (year2 == "0" && (quarter == "3" || quarter == "4"))
+			{
+				isLastTwoQuarters = true;
+			}
+
+		//determine the quarter in string form "1", "2", etc... essentially the xxx2 character
+		switch (quarter)
+		{
+			case "1":
+				strQuarter = "Summer";
+				year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
+				break;
+			case "2":
+				strQuarter = "Fall";
+				year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
+				break;
+			case "3":
+				strQuarter = "Winter";
+				year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
+				break;
+			case "4":
+				strQuarter = "Spring";
+				year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
+				break;
+			default:
+				badlyFormedQuarter = true;
+				break;
+
+		}
+		if (IsInteger(year))
+		{
+			if (Convert.ToInt16(year) < 1975 || Convert.ToInt16(year) > 2030)
+			{
+				badlyFormedYear = true;
+			}
+		}
+
+		string returnFriendly = "You have entered a badly formed quarter/year.";
+
+		if (!badlyFormedQuarter || !badlyFormedYear)
+		{
+			returnFriendly = strQuarter + " " + year;
+		}
+
+		return returnFriendly;
+
+
+
+
+	}
+
+		private string getYearHelper(string quarter, string year1, string year2, string decade, bool isLastTwoQuarters)
+	{
+		string first2OfYear = "";
+		string last2OfYear = "";
+		string ThirdOfYear = "";
+
+		int intYear1 = Convert.ToInt16(year1);
+		int intYear2 = Convert.ToInt16(year2);
+
+		switch (decade)
+		{
+			case "7":
+				first2OfYear = "19";
+				break;
+			case "8":
+				first2OfYear = "19";
+				break;
+			case "9":
+				first2OfYear = isLastTwoQuarters == true ? "20" : "19";
+				break;
+			case "A":
+				first2OfYear = "20";
+				break;
+			case "B":
+				first2OfYear = "20";
+				break;
+			case "C":
+				first2OfYear = "20";
+				break;
+			case "D":
+				first2OfYear = "20";
+				break;
+			default:
+				break;
+
+		}
+
+		switch (quarter)
+		{
+			case "1":
+				last2OfYear = getDecadeIntegerFromString(decade) + intYear1.ToString();
+				break;
+			case "2":
+				last2OfYear = getDecadeIntegerFromString(decade) + intYear1.ToString();
+				break;
+			case "3":
+				ThirdOfYear = isLastTwoQuarters == true ? getDecadeIntegerFromString(getNextDecade(decade)) : getDecadeIntegerFromString(decade);
+				last2OfYear = ThirdOfYear + intYear2.ToString();
+				break;
+			case "4":
+				ThirdOfYear = isLastTwoQuarters == true ? getDecadeIntegerFromString(getNextDecade(decade)) : getDecadeIntegerFromString(decade);
+				last2OfYear = ThirdOfYear + intYear2.ToString();
+				break;
+			default:
+
+				break;
+
+		}
+
+		return first2OfYear + last2OfYear;
+
+	}
+
+		private string getDecadeIntegerFromString(string decade)
+	{
+		switch (decade)
+		{
+			case "7":
+				return "7";
+				break;
+			case "8":
+				return "8";
+				break;
+			case "9":
+				return "9";
+				break;
+			case "A":
+				return "0";
+				break;
+			case "B":
+				return "1";
+				break;
+			case "C":
+				return "2";
+				break;
+			case "D":
+				return "3";
+				break;
+		}
+		return "";
+	}
+
+		private string getNextDecade(string decade)
+		{
+			switch (decade)
+			{
+				case "7":
+					return "8";
+					break;
+				case "8":
+					return "9";
+					break;
+				case "9":
+					return "A";
+					break;
+				case "A":
+					return "B";
+					break;
+				case "B":
+					return "C";
+					break;
+				case "C":
+					return "D";
+					break;
+				case "D":
+					return "E";
+					break;
+			}
+			return "";
+
+		}
+
+		public static bool IsInteger(string value)
 	{
 		try
 		{
@@ -469,9 +736,6 @@ namespace CTCClassSchedule.Controllers
 		}
 
 	}
-
-
-
 
 	}
 }

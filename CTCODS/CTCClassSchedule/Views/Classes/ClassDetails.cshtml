@@ -16,10 +16,20 @@
 	if (@ViewBag.titleDisplayed == false)
 	{
 
-		<h3 class="course-title"><a href="#"><span class="courseID">@item.CourseSubject @item.CourseNumber </span><span>@item.CourseTitle </span><span>• @item.Credits <abbr title="Credits ">CR</abbr></span></a></h3>
+		<h3 class="course-title"><span class="courseID">@item.CourseSubject @item.CourseNumber </span><span>@item.CourseTitle </span><span>• @item.Credits <abbr title="Credits ">CR</abbr></span></h3>
 		<p class="prerequisite">Prerequisite: <a href="#">ART 105</a> or <a href="#">permission by instructor</a></p>
 		<p class="course-details-link"><a href="#">View class details</a></p>
 		ViewBag.titleDisplayed = true;
+
+		<div id="courseDescription">
+			<h3>Description:</h3>
+			@ViewBag.CourseDescription
+		</div>
+
+	<div id="courseOutcome">
+			<h3>Outcomes:</h3>
+			@Html.Raw(ViewBag.CourseOutcome)
+		</div>
 
 
 	}
@@ -28,8 +38,9 @@
 	{
 
 		<h3 class="course-YRQ">@((item.ID).ToString().Substring(4, 4))</h3>
-		ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
+										 ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
 	}
+
 
 
 

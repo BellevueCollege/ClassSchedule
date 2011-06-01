@@ -173,7 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="globals\btheme_v0.1\img\Thumbs.db" />
-    <Content Include="Views\Classes\ClassDetailsTemplate.cshtml" />
     <Content Include="Views\Classes\All.cshtml" />
     <Content Include="Views\Classes\YearQuarter.cshtml" />
     <Content Include="Views\Classes\YearQuarterSubject.cshtml" />
@@ -183,7 +182,6 @@
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Shared\a_to_z.cshtml" />
     <Content Include="Views\Classes\ClassDetails.cshtml" />
-    <None Include="Views\Classes\ClassDetails.cshtml.old" />
     <Content Include="Views\Shared\basicFacetedSearch.cshtml" />
     <Content Include="Views\Shared\advancedFacetedSearch.cshtml" />
     <Content Include="Views\Shared\quarterNavigation.cshtml" />
@@ -216,7 +214,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>60940</DevelopmentServerPort>
+          <DevelopmentServerPort>51877</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

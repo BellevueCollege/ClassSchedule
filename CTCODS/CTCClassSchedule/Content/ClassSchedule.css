@@ -185,7 +185,8 @@ h3
 #scheduleContent
 {
 	margin-left: 240px;
-	padding-top: 15px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 #scheduleContentNoSidebar
@@ -391,7 +392,7 @@ p.course-details-link
 .section-listing
 {
 	border-top: 1px solid #eee;
-	width: 800px;
+	width: 700px;
 	overflow: hidden;
 }
 
@@ -502,3 +503,27 @@ li.section-listing
 
 
 /*END SCHEDULE BLOCK CODE*/
+
+
+
+
+/*END COURSE DESCRIPTION BLOCK CODE*/
+#courseOutcome ul
+{
+	list-style-type: disc;
+}
+
+#courseOutcome li
+{
+	margin-left: 28px;
+}
+
+
+#courseOutcome p
+{
+	display: none;
+}
+
+
+
+/*END COURSE DESCRIPTION BLOCK CODE*/
