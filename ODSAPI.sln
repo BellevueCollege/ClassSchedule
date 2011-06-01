@@ -15,6 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTCWCF", "WcfRestService\CTCWCF.csproj", "{A5BDDB17-44B1-454B-8723-2570668837CB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Research", "Research", "{73BECA23-C79E-4BB1-B9C9-F73DC2A5F3E1}"
+	ProjectSection(SolutionItems) = preProject
+		Research\Bellevue-SectionInstructorTimeAndLocation.sql = Research\Bellevue-SectionInstructorTimeAndLocation.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 5
