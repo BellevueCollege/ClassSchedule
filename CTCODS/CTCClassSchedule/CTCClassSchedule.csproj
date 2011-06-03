@@ -177,11 +177,11 @@
     <Content Include="Views\Classes\YearQuarter.cshtml" />
     <Content Include="Views\Classes\YearQuarterSubject.cshtml" />
     <None Include="Views\Classes\YearQuarterSubject.cshtml.bak" />
-    <Content Include="Views\Classes\Subject.cshtml" />
+    <None Include="Views\Classes\Subject.cshtml" />
     <Content Include="Views\Classes\Copy of Index.cshtml" />
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Shared\a_to_z.cshtml" />
-    <Content Include="Views\Classes\ClassDetails.cshtml" />
+    <None Include="Views\Classes\ClassDetails.cshtml" />
     <Content Include="Views\Shared\basicFacetedSearch.cshtml" />
     <Content Include="Views\Shared\advancedFacetedSearch.cshtml" />
     <Content Include="Views\Shared\quarterNavigation.cshtml" />

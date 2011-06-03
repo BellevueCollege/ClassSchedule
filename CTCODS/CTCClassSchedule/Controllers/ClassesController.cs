@@ -179,7 +179,7 @@ namespace CTCClassSchedule.Controllers
 			using (OdsRepository respository = new OdsRepository())
 			{
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
-				IList<Section> sections = respository.GetSections(Subject, getYRQFromFriendlyDate(YearQuarter));
+				IList<Section> sections = respository.GetSections(Subject, YRQ);
 
 
 
@@ -219,7 +219,7 @@ namespace CTCClassSchedule.Controllers
 
 				if (courseID != null)
 				{
-					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID), YearQuarterID);
+					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID),  Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID));
 
 					return View(sections);
 				}
@@ -238,18 +238,12 @@ namespace CTCClassSchedule.Controllers
 		//
 		// GET: /Classes/All/{Subject}/{ClassNum}
 
+
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 			string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
-
-
 			ViewBag.titleDisplayed = false;
-
-
 			ViewBag.CourseOutcome = getCourseOutcome(Subject, ClassNum);
-
-
-
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -265,12 +259,13 @@ namespace CTCClassSchedule.Controllers
 
 					if (YearQuarterID != "All")
 					{
-						IList<Section> sections = respository.GetSections(CourseID.FromString(courseID), YearQuarterID);
+						IList<Section> sections = respository.GetSections(CourseID.FromString(courseID),  Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID));
 						return View(sections);
 					}
 					else
 					{
 						IList<Section> sections = respository.GetSections(CourseID.FromString(courseID));
+
 						return View(sections);
 					}
 
