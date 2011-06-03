@@ -44,7 +44,7 @@ namespace Ctc.Wcf
 		[WebGet(UriTemplate = "Course/{YearQuarterID}/{courseID}")]
 		public IList<Section> GetSectionsByYQcourseId(string YearQuarterID, string courseID)
 		{
-		  IList<Section> sections = new OdsRepository().GetSections(CourseID.FromString(courseID), YearQuarterID);
+		  IList<Section> sections = new OdsRepository().GetSections(CourseID.FromString(courseID), YearQuarter.FromString(YearQuarterID));
 
 		  return sections;
 		}
