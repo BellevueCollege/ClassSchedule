@@ -181,6 +181,8 @@ namespace CTCClassSchedule.Controllers
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
 				IList<Section> sections = respository.GetSections(Subject, getYRQFromFriendlyDate(YearQuarter));
 
+
+
 				//capitalize all first letters of words in title
 				foreach (Section section in sections)
 				{
