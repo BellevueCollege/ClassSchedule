@@ -1,57 +1,53 @@
 ﻿
 
 <div id="advancedFacetedSearch">
-<h3>Subject</h3>
-<a href="/">Choose a Subject</a>
+	<h3>Subject</h3>
+	<a href="/">Choose a Subject</a>
 
-<h3>Flexible options</h3>
-<ul>
-	<li @if(ViewBag.flex == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)">All</a></li>
-	<li @if(ViewBag.flex == "online") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=online">Online</a> </li>
-	<li @if(ViewBag.flex == "hybrid") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=hybrid">Hybrid</a> </li>
-	<li @if(ViewBag.flex == "telecourse") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=telecourse">Telecourse</a> </li>
-	<li @if(ViewBag.flex == "reduced") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=reduced">Reduced Trip</a> </li>
-	<li @if(ViewBag.flex == "late") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=late">Late-start</a> </li>
-</ul>
-
-
-
-<h3>Times</h3>
-<ul>
-	<li @if(ViewBag.time == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)">All</a></li>
-	<li @if(ViewBag.time == "morning") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=morning">Morning</a> (5am-noon)</li>
-	<li @if(ViewBag.time == "afternoon") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=afternoon">Afternoon</a> (5am-noon)</li>
-	<li @if(ViewBag.time == "evening") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=evening">Evening</a> (5am-noon)</li>
-</ul>
-
-
-<h3>Days</h3>
-<ul>
-	<li @if(ViewBag.days == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)">All</a></li>
-	<li @if(ViewBag.days == "weekday") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=weekday">Weekday</a></li>
-	<li @if(ViewBag.days == "weekend") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=weekend">Weekend</a></li>
-</ul>
-
-
-<h3>Availability</h3>
-<ul>
-	<li @if(ViewBag.avail == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)">All</a></li>
-	<li @if(ViewBag.avail == "open") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=open">Open</a></li>
-	<li @if(ViewBag.avail == "waitlist") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=waitlist">Waitlisted</a> </li>
-	<li @if(ViewBag.avail == "cancelled") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=cancelled">Cancelled</a> </li>
-	<li @if(ViewBag.avail == "closed") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=closed">Closed</a> </li>
-</ul>
-
-<h3>Classes Offered:</h3>
-<ul>
-	<li @if(ViewBag.YearQuarter == "all") { @(ViewBag.activeClass) }><a href="/Classes/All">All Credit Classes</a></li>
-	<li @if(ViewBag.YearQuarter == "Fall2011") { @(ViewBag.activeClass) }><a href="/Classes/Fall2011">Fall 2011</a></li>
-	<li @if(ViewBag.YearQuarter == "Summer2011") { @(ViewBag.activeClass) }><a href="/Classes/Summer2011">Summer 2011</a></li>
-	<li @if(ViewBag.YearQuarter == "Spring2011") { @(ViewBag.activeClass) }><a href="/Classes/Spring2011">Spring 2011</a></li>
-</ul>
+	<h3>Flexible options</h3>
+	<ul>
+		<li @if(ViewBag.flex == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)">All</a></li>
+		<li @if(ViewBag.flex == "online") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=online">Online</a> </li>
+		<li @if(ViewBag.flex == "hybrid") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=hybrid">Hybrid</a> </li>
+		<li @if(ViewBag.flex == "telecourse") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=telecourse">Telecourse</a> </li>
+		<li @if(ViewBag.flex == "reduced") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=reduced">Reduced Trip</a> </li>
+		<li @if(ViewBag.flex == "late") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=late">Late-start</a> </li>
+	</ul>
 
 
 
+	<h3>Times</h3>
+	<ul>
+		<li @if(ViewBag.time == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)">All</a></li>
+		<li @if(ViewBag.time == "morning") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=morning">Morning</a> (5am-noon)</li>
+		<li @if(ViewBag.time == "afternoon") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=afternoon">Afternoon</a> (5am-noon)</li>
+		<li @if(ViewBag.time == "evening") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=evening">Evening</a> (5am-noon)</li>
+	</ul>
 
+
+	<h3>Days</h3>
+	<ul>
+		<li @if(ViewBag.days == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)">All</a></li>
+		<li @if(ViewBag.days == "weekday") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=weekday">Weekday</a></li>
+		<li @if(ViewBag.days == "weekend") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=weekend">Weekend</a></li>
+	</ul>
+
+
+	<h3>Availability</h3>
+	<ul>
+		<li @if(ViewBag.avail == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)">All</a></li>
+		<li @if(ViewBag.avail == "open") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=open">Open</a></li>
+		<li @if(ViewBag.avail == "waitlist") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=waitlist">Waitlisted</a> </li>
+		<li @if(ViewBag.avail == "cancelled") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=cancelled">Cancelled</a> </li>
+		<li @if(ViewBag.avail == "closed") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=closed">Closed</a> </li>
+	</ul>
+
+	<h3>Classes Offered:</h3>
+	<ul>
+		<li @if(ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")		{ @(ViewBag.activeClass) }><a href="/Classes/All" id="current">All Credit Classes</a></li>
+		<li @if(ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())				{ @(ViewBag.activeClass) }><a href="/Classes/@(ViewBag.QuarterOneURL)">@(ViewBag.QuarterOneFriendly)</a></li>
+		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())			{ @(ViewBag.activeClass) }><a href="/Classes/@(ViewBag.QuarterTwoURL)">@(ViewBag.QuarterTwoFriendly)</a></li>
+		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())		{ @(ViewBag.activeClass) }><a href="/Classes/@(ViewBag.QuarterThreeURL)">@(ViewBag.QuarterThreeFriendly)</a></li>
+	</ul>
 
 </div>

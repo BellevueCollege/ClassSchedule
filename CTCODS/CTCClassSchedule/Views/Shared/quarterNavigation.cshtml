@@ -2,7 +2,7 @@
 <ul id="navlist">
 
 
-<li  @if(ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")		{ @(ViewBag.activeClass) }><a href="/Classes/All" id="current">All Credit Classes</a></li>
+<li @if(ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")		{ @(ViewBag.activeClass) }><a href="/Classes/All" id="current">All Credit Classes</a></li>
 <li @if(ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())				{ @(ViewBag.activeClass) }><a href="/Classes/@(ViewBag.QuarterOneURL)">@(ViewBag.QuarterOneFriendly)</a></li>
 <li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())			{ @(ViewBag.activeClass) }><a href="/Classes/@(ViewBag.QuarterTwoURL)">@(ViewBag.QuarterTwoFriendly)</a></li>
 <li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())		{ @(ViewBag.activeClass) }><a href="/Classes/@(ViewBag.QuarterThreeURL)">@(ViewBag.QuarterThreeFriendly)</a></li>
