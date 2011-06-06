@@ -193,7 +193,6 @@
     <Content Include="Views\Classes\YearQuarter.cshtml" />
     <Content Include="Views\Classes\YearQuarterSubject.cshtml" />
     <None Include="Views\Classes\Subject.cshtml" />
-    <Content Include="Views\Classes\Copy of Index.cshtml" />
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Shared\a_to_z.cshtml" />
     <None Include="Views\Classes\ClassDetails.cshtml" />
