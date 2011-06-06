@@ -128,21 +128,37 @@ h3
 	margin: 10px 0px;
 }
 
+.classInfo
+{
+	margin-top: 10px;
+}
+
+
 .classInfo .classNumber, .classInfo .classTitle, .classInfo .classCredits
 {
-	float: left;
+	display: inline;
 	margin-right: 10px;
+	margin-top: 10px;
+}
+
+.classInfo .classCredits
+{
 }
 
 .classInfo .classDescription
 {
-	padding: 10px 0px 25px 0px;
+
+
+	padding: 10px 0px 15px 0px;
 }
 
 .programWebsite
 {
-	margin: 20px 0px;
+	padding-top: 20px;
+
+
 }
+
 
 
 #scheduleMain
@@ -399,6 +415,7 @@ p.course-details-link
 li.section-listing
 {
 	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 .item-number
@@ -527,3 +544,13 @@ li.section-listing
 
 
 /*END COURSE DESCRIPTION BLOCK CODE*/
+
+.classDetails
+{
+	margin-bottom: 10px;
+}
+
+.classHeading
+{
+	margin-top: 20px;
+}
