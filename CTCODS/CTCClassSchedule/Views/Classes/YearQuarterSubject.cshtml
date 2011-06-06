@@ -2,92 +2,72 @@
 
 <div id="scheduleMain">
 
+	@Html.Partial("quarterNavigation")
+	@Html.Partial("advancedFacetedSearch")
 
-@Html.Partial("quarterNavigation")
+	<div id="scheduleContent">
+		@foreach (var item in Model)
+		{
 
-@Html.Partial("advancedFacetedSearch")
+			if (@ViewBag.displayedCourseNum < Convert.ToInt16(item.CourseNumber))
+			{
 
-
-<div id="scheduleContent">
-
-
-@foreach (var item in Model)
-{
-	if (@ViewBag.displayedCourseNum < Convert.ToInt16(item.CourseNumber))
-	{
-
-		<h2><a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">@Html.DisplayFor(modelItem => item.CourseSubject)  @Html.DisplayFor(modelItem => item.CourseNumber)
-		@Html.DisplayFor(modelItem => item.CourseTitle)  @Html.DisplayFor(modelItem => item.Credits) </a></h2>
-		<p><a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">View Class Details</a></p>
+					<h2><a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">@Html.DisplayFor(modelItem => item.CourseSubject)  @Html.DisplayFor(modelItem => item.CourseNumber)
+					@Html.DisplayFor(modelItem => item.CourseTitle)  @Html.DisplayFor(modelItem => item.Credits) </a></h2>
+					<p><a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">View Class Details</a></p>
 
 
+			}
+			<text>
+
+			<ul class="course-block">
+
+			@foreach (var offering in item.Offered)
+			{
+
+				<li class="section-listing"><span class="item-number"><span class="descriptor">Item number: </span>@((item.ID).ToString().Substring(0, 4))</span>
+					<ul class="section-details">
+						<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
+						<li class="instructor"><span class="descriptor">Instructor:</span>
+								<ul>
+										<li>
+										</li>
+								</ul>
+						</li>
+						<li><span class="descriptor">Meets: </span>
+								<ul class="meets">
+										<li>
+												<span class="days"><abbr title="Mondays and Wednesdays">MW</abbr></span>
+												<span class="times"><span class="descriptor">at </span>5:30p-6:20p</span>
+												<span class="room"><span class="descriptor">in </span>R201</span>
+										</li>
+								</ul>
+					</li>
+
+						<li class="availability"><span class="descriptor">Seat Availability: </span><strong>Class full</strong> <span class="course-updated">updated 5 seconds ago <a href="">[update]</a></span>
+						</li>
+
+						<li class="section-notes"><span class="descriptor">Notes: </span>
+								<ul>
+										<li><span class="label">@item.AdditionalInformation</span></li>
+								</ul>
+						</li>
 
 
+				</ul>
 
-	}
-
-
-
-	<ul class="course-block">
-
-<li class="section-listing"><span class="item-number"><span class="descriptor">Item number: </span>@((item.ID).ToString().Substring(0, 4))</span>
-		<ul class="section-details">
-				<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
-
-				<li class="instructor"><span class="descriptor">Instructor:</span>
-						<ul>
-								<li>@item.InstructorName</li>
-						</ul>
 				</li>
+			}
 
-				<li><span class="descriptor">Meets: </span>
-						<ul class="meets">
-								<li>
-										<span class="days"><abbr title="Mondays and Wednesdays">MW</abbr></span>
-										<span class="times"><span class="descriptor">at </span>5:30p-6:20p</span>
-										<span class="room"><span class="descriptor">in </span>R201</span>
-								</li>
-						</ul>
-			</li>
+			</ul>
+			</text>
 
-				<li class="availability"><span class="descriptor">Seat Availability: </span><strong>Class full</strong> <span class="course-updated">updated 5 seconds ago <a href="">[update]</a></span>
-				</li>
+			if (@ViewBag.displayedCourseNum < Convert.ToInt16(item.CourseNumber))
+			{
+				ViewBag.displayedCourseNum = Convert.ToInt16(item.CourseNumber);
+			}
 
-				<li class="section-notes"><span class="descriptor">Notes: </span>
-						<ul>
-								<li><span class="label">@item.AdditionalInformation</span></li>
-						</ul>
-				</li>
+		}
 
-		</ul>
-</li>
-
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-																	 if (@ViewBag.displayedCourseNum < Convert.ToInt16(item.CourseNumber))
-																	 {
-																		 ViewBag.displayedCourseNum = Convert.ToInt16(item.CourseNumber);
-
-																	 }
-}
-
-</div>
+	</div>
 </div>

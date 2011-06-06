@@ -33,6 +33,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
+				getCurrentFutureYRQs(respository);
 				IList<CoursePrefix> courses = respository.GetCourseSubjects();
 				IEnumerable<String> alphabet;
 
@@ -71,10 +72,7 @@ namespace CTCClassSchedule.Controllers
 		}
 
 
-		public ActionResult All(string Subject)
-		{
-			return View();
-		}
+
 
 
 		public ActionResult Subject(string Subject)
@@ -84,6 +82,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
+				getCurrentFutureYRQs(respository);
 				IList<Course> courses = respository.GetCourses();
 
 
@@ -121,6 +120,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
+				getCurrentFutureYRQs(respository);
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
 
 				IList<CoursePrefix> courses = respository.GetCourseSubjects(YRQ);
@@ -169,7 +169,6 @@ namespace CTCClassSchedule.Controllers
 		}
 
 
-
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string flex, string time, string days, string avail)
 		{
 			setViewBagVars(YearQuarter, flex, time, days, avail, "");
@@ -178,6 +177,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
+				getCurrentFutureYRQs(respository);
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
 				IList<Section> sections = respository.GetSections(Subject, YRQ);
 
@@ -216,6 +216,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
+				getCurrentFutureYRQs(respository);
 
 				if (courseID != null)
 				{
@@ -247,6 +248,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
+				getCurrentFutureYRQs(respository);
 
 				if (courseID != null)
 				{
@@ -285,6 +287,25 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
+
+
+		private void getCurrentFutureYRQs(OdsRepository respository)
+		{
+			IList<YearQuarter> currentFutureQuarters;
+			currentFutureQuarters = respository.GetRegistrationQuarters(3);
+			ViewBag.QuarterOne = currentFutureQuarters[0];
+			ViewBag.QuarterTwo = currentFutureQuarters[1];
+			ViewBag.QuarterThree = currentFutureQuarters[2];
+
+			ViewBag.QuarterOneFriendly = getFriendlyDateFromYRQ(currentFutureQuarters[0]);
+			ViewBag.QuarterTwoFriendly = getFriendlyDateFromYRQ(currentFutureQuarters[1]);
+			ViewBag.QuarterThreeFriendly = getFriendlyDateFromYRQ(currentFutureQuarters[2]);
+
+			ViewBag.QuarterOneURL = ViewBag.QuarterOneFriendly.Replace(" ", "");
+			ViewBag.QuarterTwoURL = ViewBag.QuarterTwoFriendly.Replace(" ", "");
+			ViewBag.QuarterThreeURL = ViewBag.QuarterThreeFriendly.Replace(" ", "");
+
+		}
 
 		private dynamic getCourseOutcome(string Subject, string ClassNum)
 		{
@@ -372,8 +393,6 @@ namespace CTCClassSchedule.Controllers
 
 
 			ViewBag.QuarterURL = YearQuarter;
-
-
 
 		}
 
