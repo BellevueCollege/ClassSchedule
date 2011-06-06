@@ -17,10 +17,10 @@ namespace CTCClassSchedule.Controllers
 {
 	public class ClassesController : Controller
 	{
-		//
-		// GET: /Classes/
 
-
+		/// <summary>
+		/// GET: /Classes/, /Classes/All
+		/// </summary>
 		public ActionResult Index(string letter)
 		{
 
@@ -28,8 +28,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
 			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.AlphabetCharacter = 0;
-
-
+			ViewBag.Title = "All classes";
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -39,12 +38,6 @@ namespace CTCClassSchedule.Controllers
 
 				ViewBag.AlphabetArray = new bool[26];
 				ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
-
-				//capitalize all first letters of words in title
-				foreach (CoursePrefix course in courses)
-				{
-					//course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title.ToLower());
-				}
 
 				alphabet = from c in courses
 									 orderby c.Title
@@ -71,20 +64,18 @@ namespace CTCClassSchedule.Controllers
 			return View();
 		}
 
-
-
-
-
+		/// <summary>
+		/// GET: /Classes/All/{Subject}/
+		/// </summary>
 		public ActionResult Subject(string Subject)
 		{
 			ViewBag.Subject = Subject;
-
+			ViewBag.Title = "All " +  @Subject + " classes";
 
 			using (OdsRepository respository = new OdsRepository())
 			{
 				getCurrentFutureYRQs(respository);
 				IList<Course> courses = respository.GetCourses();
-
 
 				if (Subject != null)
 				{
@@ -98,17 +89,14 @@ namespace CTCClassSchedule.Controllers
 				else
 				{
 					View();
-
 				}
-
-
-
 			}
 			return View();
-
 		}
 
-
+		/// <summary>
+		/// GET: /Classes/{FriendlyYRQ}/
+		/// </summary>
 		public ActionResult YearQuarter(string YearQuarter, string flex, string time, string days, string avail, string letter)
 		{
 			ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
@@ -117,6 +105,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.AlphabetCharacter = 0;
 			ViewBag.YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)).ToString();
 			ViewBag.FriendlyYRQ = getFriendlyDateFromYRQ(Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)));
+			ViewBag.Title = ViewBag.Subject + "Classes for " + @ViewBag.Yearquarter;
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -126,14 +115,6 @@ namespace CTCClassSchedule.Controllers
 				IList<CoursePrefix> courses = respository.GetCourseSubjects(YRQ);
 				IEnumerable<String> alphabet;
 				ViewBag.AlphabetArray = new bool[26];
-
-
-
-				//capitalize all first letters of words in title
-				foreach (CoursePrefix course in courses)
-				{
-					//course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title.ToLower());
-				}
 
 				alphabet = from c in courses
 									 orderby c.Title
@@ -156,24 +137,19 @@ namespace CTCClassSchedule.Controllers
 				else
 				{
 					View(courses);
-
 				}
-				//build the string to tell the user what letter they clicked on
-
-
 			}
 			return View();
-
-
-
 		}
 
-
+		/// <summary>
+		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
+		/// </summary>
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string flex, string time, string days, string avail)
 		{
 			setViewBagVars(YearQuarter, flex, time, days, avail, "");
 			ViewBag.displayedCourseNum = 0;
-			ViewBag.Title = ViewBag.Subject + "classes for " + @ViewBag.Yearquarter;
+			ViewBag.Title = @ViewBag.Yearquarter + " " + @Subject + " classes";
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -181,38 +157,23 @@ namespace CTCClassSchedule.Controllers
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
 				IList<Section> sections = respository.GetSections(Subject, YRQ);
 
-
-
-				//capitalize all first letters of words in title
-				foreach (Section section in sections)
-				{
-					section.CourseTitle = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(section.CourseTitle.ToLower());
-				}
-
 				IEnumerable<Section> sectionsEnum;
 				sectionsEnum = from c in sections
 											where c.CourseSubject == Subject.ToUpper()
 											select c;
 
 				return View(sectionsEnum);
-
-
 			}
-			return View();
-
-
-
 		}
 
-
+		/// <summary>
+		/// GET: /Classes/{FriendlyYRQ}/{Subject}/{ClassNum}
+		/// </summary>
 		public ActionResult YRQClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 
 			string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
 			ViewBag.displayedCourseNum = 0;
-
-
-
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -227,24 +188,19 @@ namespace CTCClassSchedule.Controllers
 				else
 				{
 					return View();
-
 				}
-
-
-
 			}
-			return View();
 		}
 
-		//
-		// GET: /Classes/All/{Subject}/{ClassNum}
-
-
+		/// <summary>
+		/// GET: /Classes/All/{Subject}/{ClassNum}
+		/// </summary>
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 			string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
 			ViewBag.titleDisplayed = false;
 			ViewBag.CourseOutcome = getCourseOutcome(Subject, ClassNum);
+			ViewBag.Title = @Subject + " " + ClassNum + " sections";
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -259,36 +215,21 @@ namespace CTCClassSchedule.Controllers
 
 					}
 
-					if (YearQuarterID != "All")
-					{
-						IList<Section> sections = respository.GetSections(CourseID.FromString(courseID),  Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID));
-						return View(sections);
-					}
-					else
-					{
-						IList<Section> sections = respository.GetSections(CourseID.FromString(courseID));
-
-						return View(sections);
-					}
-
-
-
+					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID));
+					return View(sections);
 				}
 				else
 				{
 					return View();
-
 				}
-
-
-
 			}
-			return View();
-
 		}
 
 
-
+		/// <summary>
+		/// Gets the current <see cref="YearQuarter"/> and assigns ViewBag variables
+		/// for the current, +1, +2 quarters. This drives the dynamic YRQ navigation bar
+		/// </summary>
 		private void getCurrentFutureYRQs(OdsRepository respository)
 		{
 			IList<YearQuarter> currentFutureQuarters;
@@ -307,6 +248,10 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
+		/// <summary>
+		/// Gets the course outcome information by scraping the Cellevue College
+		/// course outcomes website
+		/// </summary>
 		private dynamic getCourseOutcome(string Subject, string ClassNum)
 		{
 			string url = "http://bellevuecollege.edu/courseoutcomes/?CourseID=" + Subject + "%20" + ClassNum;
@@ -350,6 +295,9 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
+		/// <summary>
+		/// Sets all of the common ViewBag variables
+		/// </summary>
 		private void setViewBagVars(string YearQuarter, string flex, string time, string days, string avail, string letter)
 		{
 			ViewBag.ErrorMsg = "";
@@ -396,6 +344,9 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
+		/// <summary>
+		/// Converts a friendly YRQ (Fall2011) into a <see cref="YearQuarter"/>
+		/// </summary>
 		private string getYRQFromFriendlyDate(string friendlyDate)
 	{
 		//Example: Winter 2008 = A783
@@ -540,6 +491,9 @@ namespace CTCClassSchedule.Controllers
 
 	}
 
+		/// <summary>
+		/// Converts a <see cref="YearQuarter"/> into a friendly YRQ (Fall2011)
+		/// </summary>
 		private String getFriendlyDateFromYRQ(YearQuarter YRQ)
 	{
 		//Example: Winter 2008 = A783
@@ -617,6 +571,9 @@ namespace CTCClassSchedule.Controllers
 
 	}
 
+		/// <summary>
+		/// Gets the current year given some input params. Helper method for getFriendlyDateFromYRQ
+		/// </summary>
 		private string getYearHelper(string quarter, string year1, string year2, string decade, bool isLastTwoQuarters)
 	{
 		string first2OfYear = "";
@@ -680,6 +637,9 @@ namespace CTCClassSchedule.Controllers
 
 	}
 
+		/// <summary>
+		/// Gets the friendly decade value from the HP decade (A = 2000's, B = 2010's). Helper method for getYearHelper
+		/// </summary>
 		private string getDecadeIntegerFromString(string decade)
 	{
 		switch (decade)
@@ -709,6 +669,9 @@ namespace CTCClassSchedule.Controllers
 		return "";
 	}
 
+		/// <summary>
+		/// Gets the next decade in HP format (8, 9, A, B)
+		/// </summary>
 		private string getNextDecade(string decade)
 		{
 			switch (decade)
@@ -739,6 +702,9 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
+		/// <summary>
+		/// Returns true/false if the value passed is an integer
+		/// </summary>
 		public static bool IsInteger(string value)
 	{
 		try

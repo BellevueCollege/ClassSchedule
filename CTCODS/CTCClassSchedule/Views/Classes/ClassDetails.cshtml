@@ -52,18 +52,24 @@
     <ul class="section-details">
         <li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
 
+				<!--start of repeat offered information -->
+				@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
+				{
+
+
+
         <li class="instructor"><span class="descriptor">Instructor:</span>
             <ul>
-                <li><a href="#"></a></li>
+                <li><a href="#">@offering.InstructorName</a></li>
             </ul>
         </li>
 
         <li><span class="descriptor">Meets: </span>
             <ul class="meets">
                 <li>
-                    <span class="days"><abbr title="Mondays and Wednesdays">MW</abbr></span>
-                    <span class="times"><span class="descriptor">at </span>5:30p-6:20p</span>
-                    <span class="room"><span class="descriptor">in </span>R201</span>
+                    <span class="days"><abbr title="Mondays and Wednesdays">@offering.Days</abbr></span>
+                    <span class="times"><span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime)-@String.Format("{0:t}", offering.EndTime) </span>
+                    <span class="room"><span class="descriptor">in </span>@offering.Room</span>
                 </li>
             </ul>
 		</li>
@@ -76,6 +82,8 @@
                 <li><span class="label">@item.AdditionalInformation</span></li>
             </ul>
         </li>
+				}
+				<!--end of repeat offered information -->
 
     </ul>
 </li>
