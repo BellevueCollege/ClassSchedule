@@ -236,15 +236,20 @@ namespace CTCClassSchedule.Controllers
 			int? seats = null;
 			string friendlyTime = "";
 
-			var seatsAvailableLocal =	(from s in _scheduledb.SeatAvailabilities
+			var seatsAvailableLocal =	from s in _scheduledb.SeatAvailabilities
 																where s.ClassID == sectionID
-																select s).First();
+																select s;
+			int rows = seatsAvailableLocal.Count();
 
-			if (seatsAvailableLocal == null)
+			if (rows == 0)
 			{
 				//insert the value
-				SeatAvailability newseat = new SeatAvailability { ClassID = sectionID, SeatsAvailable = 6, LastUpdated = DateTime.Now };
-				seatsAvailableLocal.Add(newseat);
+				SeatAvailability newseat = new SeatAvailability();
+				newseat.ClassID = sectionID;
+				newseat.SeatsAvailable = 6;
+				newseat.LastUpdated = DateTime.Now;
+
+				_scheduledb.SeatAvailabilities.AddObject(newseat);
 
 
 			}
