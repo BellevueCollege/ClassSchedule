@@ -4,36 +4,21 @@
 
 	$(document).ready(function () {
 
-
-		$.ajax({
-			url: '/Classes/getseats',
-			type: 'GET',
-			success: function (result) {
-
-				//alert(result);
-
-
-			}
-		});
-
-
 		$('.course-updated a').click(function () {
 
-			var courseID = this.id;
-			var availability = '.availability-' + courseID + ' .seatsAvailable';
+			var courseIdPlusYRQ = this.id;
+			var availability = '.availability-' + courseIdPlusYRQ + ' .seatsAvailable';
 
-			var courseUpdated = '.availability-' + courseID + ' .course-updated em';
+			var courseUpdated = '.availability-' + courseIdPlusYRQ + ' .course-updated em';
 
 			var originalSeatsAvailable = $(availability).html();
 
 			$(availability).html('<img src="/Content/images/ajax-loader.gif" title="loading_seats_available" alt="loading_seats_available" />');
 
-
-
 			$.ajax({
 				url: '/Classes/getseats',
 				type: 'POST',
-				data: { sectionID: courseID },
+				data: { courseIdPlusYRQ: courseIdPlusYRQ },
 				success: function (result) {
 					var indexOfPipe = result.indexOf("|");
 					var seatsAvailable = result.substring(0, indexOfPipe);
@@ -41,7 +26,7 @@
 
 					//alert("updated: " + friendlyTime);
 					//alert("pipe at position: " + indexOfPipe);
-					$(availability).html(seatsAvailable);
+					$(availability).html("Seats: " + seatsAvailable);
 					$(courseUpdated).html(friendlyTime);
 
 				}
@@ -96,7 +81,7 @@
 
 		<h3 class="course-YRQ">@((item.ID).ToString().Substring(4, 4))</h3>
 										 ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
-										 @item.YearQuarterID;
+										 @item.Yrq;
 
 	}
 
@@ -130,8 +115,13 @@
 
 				<li class="availability-@(item.ID.ToString())">
 					<span class="descriptor">Seat Availability: </span>
-					<strong class="seatsAvailable"></strong>
-					<span class="course-updated"><em>updated 5 seconds ago</em> <a id="@(item.ID.ToString())">[update]</a></span>
+					@if(@item.WaitlistCount > 0){
+						<strong class="seatsAvailable">Class Full - @item.WaitlistCount on waitlist</strong>
+						<span class="course-updated"></span>
+					} else {
+						<strong class="seatsAvailable">Seats: 2</strong>
+						<span class="course-updated"><em>updated 5 seconds ago</em> <a id="@(item.ID.ToString())">[update]</a></span>
+					}
 				</li>
 
 
