@@ -236,42 +236,40 @@ namespace CTCClassSchedule.Controllers
 			int? seats = null;
 			string friendlyTime = "";
 
+			var seatsAvailableLocal =	(from s in _scheduledb.SeatAvailabilities
+																where s.ClassID == sectionID
+																select s).First();
 
-			var seatsAvailable = from s in _scheduledb.SeatAvailabilities
-													where s.ClassID == sectionID
-													select s;
+			if (seatsAvailableLocal == null)
+			{
+				//insert the value
+				SeatAvailability newseat = new SeatAvailability { ClassID = sectionID, SeatsAvailable = 6, LastUpdated = DateTime.Now };
+				seatsAvailableLocal.Add(newseat);
+
+
+			}
+			else
+			{
+				//update the value
+
+			}
+
+			_scheduledb.SaveChanges();
+
+			var seatsAvailable = from s in _scheduledb.vw_SeatAvailability
+															where s.ClassID == sectionID
+															select s;
 
 			foreach (var seat in seatsAvailable)
 			{
 				seats = seat.SeatsAvailable;
 				DateTime lastUpdated = Convert.ToDateTime(seat.LastUpdated);
 				friendlyTime = getFriendlyTime(lastUpdated);
-
 			}
 
-			if (seats == null)
-			{
-				var seatsAvailableODS = from s in _scheduledb.vw_SeatAvailability
-														 where s.ClassID == sectionID
-														 select s;
-
-				foreach (var seat in seatsAvailableODS)
-				{
-					seats = seat.SeatsAvailable;
-					DateTime lastUpdated = Convert.ToDateTime(seat.LastUpdated);
-					friendlyTime = getFriendlyTime(lastUpdated);
-
-				}
-
-			}
 
 			var jsonReturnValue = seats.ToString() + "|" + friendlyTime;
-
-
-
-
 			return Json(jsonReturnValue);
-
 		}
 
 
