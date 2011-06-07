@@ -8,13 +8,13 @@
 
 			var courseIdPlusYRQ = this.id;
 			var availability = '.availability-' + courseIdPlusYRQ + ' .seatsAvailable';
-
 			var courseUpdated = '.availability-' + courseIdPlusYRQ + ' .course-updated em';
-
 			var originalSeatsAvailable = $(availability).html();
 
+			//load the throbber
 			$(availability).html('<img src="/Content/images/ajax-loader.gif" title="loading_seats_available" alt="loading_seats_available" />');
 
+			//post the ajax call to get the available seats and update the UI
 			$.ajax({
 				url: '/Classes/getseats',
 				type: 'POST',
@@ -24,20 +24,12 @@
 					var seatsAvailable = result.substring(0, indexOfPipe);
 					var friendlyTime = "updated " + result.substring(indexOfPipe + 1, result.length);
 
-					//alert("updated: " + friendlyTime);
-					//alert("pipe at position: " + indexOfPipe);
 					$(availability).html("Seats: " + seatsAvailable);
 					$(courseUpdated).html(friendlyTime);
-
 				}
-
 			});
-
 		});
-
-
 	});
-
 
 </script>
 

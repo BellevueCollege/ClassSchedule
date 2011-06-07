@@ -10,5 +10,6 @@ namespace CTCClassSchedule
 	public class SectionWithSeats : Section
 	{
 		public int seatsAvailable { get; set; }
+		public int WaitlistCount { get; set; }
 	}
 }

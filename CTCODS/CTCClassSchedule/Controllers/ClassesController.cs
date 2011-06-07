@@ -162,9 +162,10 @@ namespace CTCClassSchedule.Controllers
 				IList<Section> sections = respository.GetSections(Subject, YRQ);
 
 				IEnumerable<Section> sectionsEnum;
-				sectionsEnum = from c in sections
-											where c.CourseSubject == Subject.ToUpper()
-											select c;
+				sectionsEnum =  from c in sections
+												where c.CourseSubject == Subject.ToUpper()
+												select c;
+
 
 				return View(sectionsEnum);
 			}
@@ -220,6 +221,30 @@ namespace CTCClassSchedule.Controllers
 					}
 
 					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID));
+
+					IEnumerable<SectionWithSeats> sectionsEnum;
+					sectionsEnum = (
+												from c in sections
+												where c.CourseSubject == Subject.ToUpper()
+												select new SectionWithSeats
+												{
+													ID = c.ID,
+													AdditionalInformation = c.AdditionalInformation,
+													CourseID = c.CourseID,
+													CourseNumber = c.CourseNumber,
+													CourseTitle = c.CourseTitle,
+													CourseSubject = c.CourseSubject,
+													Credits = c.Credits,
+													Offered = c.Offered,
+													SectionCode = c.SectionCode,
+													WaitlistCount = c.WaitlistCount,
+													Yrq = c.Yrq,
+													seatsAvailable = 2
+												}
+
+											);
+
+
 					return View(sections);
 				}
 				else
@@ -231,13 +256,24 @@ namespace CTCClassSchedule.Controllers
 
 
 		[HttpPost]
-		public ActionResult getSeats(string sectionID)
+		public ActionResult getSeats(string courseIdPlusYRQ)
 		{
 			int? seats = null;
 			string friendlyTime = "";
 
+			string classID = courseIdPlusYRQ.Substring(0, 4);
+			string yrq = courseIdPlusYRQ.Substring(4, 4);
+
+
+			CourseHPQuery query = new CourseHPQuery();
+			seats = query.findOpenSeats(classID, yrq);
+			string HPseatsAvailable = seats.ToString();
+
+
+
+
 			var seatsAvailableLocal =	from s in _scheduledb.SeatAvailabilities
-																where s.ClassID == sectionID
+																where s.ClassID == courseIdPlusYRQ
 																select s;
 			int rows = seatsAvailableLocal.Count();
 
@@ -245,8 +281,8 @@ namespace CTCClassSchedule.Controllers
 			{
 				//insert the value
 				SeatAvailability newseat = new SeatAvailability();
-				newseat.ClassID = sectionID;
-				newseat.SeatsAvailable = 6;
+				newseat.ClassID = courseIdPlusYRQ;
+				newseat.SeatsAvailable = seats;
 				newseat.LastUpdated = DateTime.Now;
 
 				_scheduledb.SeatAvailabilities.AddObject(newseat);
@@ -256,13 +292,18 @@ namespace CTCClassSchedule.Controllers
 			else
 			{
 				//update the value
+				foreach (SeatAvailability seat in seatsAvailableLocal)
+				{
+					seat.SeatsAvailable = seats;
+					seat.LastUpdated = DateTime.Now;
+				}
 
 			}
 
 			_scheduledb.SaveChanges();
 
 			var seatsAvailable = from s in _scheduledb.vw_SeatAvailability
-															where s.ClassID == sectionID
+													 where s.ClassID == courseIdPlusYRQ
 															select s;
 
 			foreach (var seat in seatsAvailable)
