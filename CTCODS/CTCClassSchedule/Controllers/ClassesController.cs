@@ -10,6 +10,7 @@ using Ctc.Ods;
 using System.Text;
 using System.Net;
 using System.IO;
+using CTCClassSchedule.Models;
 
 
 
@@ -17,6 +18,9 @@ namespace CTCClassSchedule.Controllers
 {
 	public class ClassesController : Controller
 	{
+		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
+
+		#region controller actions
 
 		/// <summary>
 		/// GET: /Classes/, /Classes/All
@@ -224,6 +228,61 @@ namespace CTCClassSchedule.Controllers
 				}
 			}
 		}
+
+
+		[HttpPost]
+		public ActionResult getSeats(string sectionID)
+		{
+			int? seats = null;
+			string friendlyTime = "";
+
+
+			var seatsAvailable = from s in _scheduledb.SeatAvailabilities
+													where s.ClassID == sectionID
+													select s;
+
+			foreach (var seat in seatsAvailable)
+			{
+				seats = seat.SeatsAvailable;
+				DateTime lastUpdated = Convert.ToDateTime(seat.LastUpdated);
+				friendlyTime = getFriendlyTime(lastUpdated);
+
+			}
+
+			if (seats == null)
+			{
+				var seatsAvailableODS = from s in _scheduledb.vw_SeatAvailability
+														 where s.ClassID == sectionID
+														 select s;
+
+				foreach (var seat in seatsAvailableODS)
+				{
+					seats = seat.SeatsAvailable;
+					DateTime lastUpdated = Convert.ToDateTime(seat.LastUpdated);
+					friendlyTime = getFriendlyTime(lastUpdated);
+
+				}
+
+			}
+
+			var jsonReturnValue = seats.ToString() + "|" + friendlyTime;
+
+
+
+
+			return Json(jsonReturnValue);
+
+		}
+
+
+		#endregion
+
+
+
+
+		#region helper methods
+
+
 
 
 		/// <summary>
@@ -719,5 +778,78 @@ namespace CTCClassSchedule.Controllers
 
 	}
 
+
+		public string getFriendlyTime(DateTime theDate)
+		{
+
+			if (theDate == null)
+			{
+				return "last updated time unavailable";
+			}
+			else
+			{
+
+
+				const int SECOND = 1;
+				const int MINUTE = 60 * SECOND;
+				const int HOUR = 60 * MINUTE;
+				const int DAY = 24 * HOUR;
+				const int MONTH = 30 * DAY;
+
+				var deltaTimeSpan = new TimeSpan(DateTime.UtcNow.Ticks - theDate.Ticks);
+
+				var delta = deltaTimeSpan.TotalSeconds;
+
+				if (delta < 0)
+				{
+					return "not yet";
+				}
+
+				if (delta < 1 * MINUTE)
+				{
+					return deltaTimeSpan.Seconds == 1 ? "one second ago" : deltaTimeSpan.Seconds + " seconds ago";
+				}
+				if (delta < 2 * MINUTE)
+				{
+					return "a minute ago";
+				}
+				if (delta < 45 * MINUTE)
+				{
+					return deltaTimeSpan.Minutes + " minutes ago";
+				}
+				if (delta < 90 * MINUTE)
+				{
+					return "an hour ago";
+				}
+				if (delta < 24 * HOUR)
+				{
+					return deltaTimeSpan.Hours + " hours ago";
+				}
+				if (delta < 48 * HOUR)
+				{
+					return "yesterday";
+				}
+				if (delta < 30 * DAY)
+				{
+					return deltaTimeSpan.Days + " days ago";
+				}
+				if (delta < 12 * MONTH)
+				{
+					int months = Convert.ToInt32(Math.Floor((double)deltaTimeSpan.Days / 30));
+					return months <= 1 ? "one month ago" : months + " months ago";
+				}
+				else
+				{
+					int years = Convert.ToInt32(Math.Floor((double)deltaTimeSpan.Days / 365));
+					return years <= 1 ? "one year ago" : years + " years ago";
+				}
+
+			}
+
+		}
+
+
+
+		#endregion
 	}
 }

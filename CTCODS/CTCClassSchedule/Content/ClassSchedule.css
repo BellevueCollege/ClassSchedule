@@ -554,3 +554,8 @@ li.section-listing
 {
 	margin-top: 20px;
 }
+
+.course-updated a:hover
+{
+	cursor:pointer;
+}

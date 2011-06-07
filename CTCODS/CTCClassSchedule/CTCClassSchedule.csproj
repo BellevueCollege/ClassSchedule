@@ -45,6 +45,8 @@
     </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Mvc">
       <Private>True</Private>
     </Reference>
@@ -88,9 +90,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AvailableSeats.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AvailableSeats.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\right_small_arrow.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -182,9 +190,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -192,6 +198,10 @@
     <None Include="globals\btheme_v0.1\img\Thumbs.db" />
     <Content Include="Views\Classes\YearQuarter.cshtml" />
     <Content Include="Views\Classes\YearQuarterSubject.cshtml" />
+    <EntityDeploy Include="Models\AvailableSeats.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AvailableSeats.Designer.cs</LastGenOutput>
+    </EntityDeploy>
     <None Include="Views\Classes\Subject.cshtml" />
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Shared\a_to_z.cshtml" />

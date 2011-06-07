@@ -22,6 +22,7 @@ namespace CTCClassSchedule
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+			routes.MapRoute("getSeats", "{controller}/getseats", new { controller = "Classes", action = "getSeats" });
 			routes.MapRoute("ClassDetails", "{controller}/{YearQuarterID}/{Subject}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
 			//routes.MapRoute("ClassDetails", "{controller}/All/{Subject}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
 			//routes.MapRoute("YRQClassDetails", "{controller}/{YearQuarter}/{Subject}/{ClassNum}", new { controller = "Classes", action = "YRQClassDetails" });
