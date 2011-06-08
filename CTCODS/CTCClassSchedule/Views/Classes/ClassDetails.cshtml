@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Ctc.Ods.Types.Section>
+﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
 
 <script type="text/javascript">
 
@@ -111,8 +111,8 @@
 						<strong class="seatsAvailable">Class Full - @item.WaitlistCount on waitlist</strong>
 						<span class="course-updated"></span>
 					} else {
-						<strong class="seatsAvailable">Seats: 2</strong>
-						<span class="course-updated"><em>updated 5 seconds ago</em> <a id="@(item.ID.ToString())">[update]</a></span>
+						<strong class="seatsAvailable">Seats: @item.SeatsAvailable</strong>
+						<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">[update]</a></span>
 					}
 				</li>
 

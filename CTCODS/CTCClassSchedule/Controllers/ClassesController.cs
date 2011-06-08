@@ -220,11 +220,39 @@ namespace CTCClassSchedule.Controllers
 
 					}
 
+					var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
+
+																		 select s);
+
+
+
 					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID));
 
 					IEnumerable<SectionWithSeats> sectionsEnum;
+					//sectionsEnum = (
+					//              from c in sections
+					//              join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
+					//              where c.CourseSubject == Subject.ToUpper()
+					//              select new SectionWithSeats
+					//              {
+					//                ID = c.ID,
+					//                AdditionalInformation = c.AdditionalInformation,
+					//                CourseID = c.CourseID,
+					//                CourseNumber = c.CourseNumber,
+					//                CourseTitle = c.CourseTitle,
+					//                CourseSubject = c.CourseSubject,
+					//                Credits = c.Credits,
+					//                Offered = c.Offered,
+					//                SectionCode = c.SectionCode,
+					//                WaitlistCount = c.WaitlistCount,
+					//                Yrq = c.Yrq,
+					//                seatsAvailable = d.SeatsAvailable
+					//              }
+
+					//            );
 					sectionsEnum = (
 												from c in sections
+												join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
 												where c.CourseSubject == Subject.ToUpper()
 												select new SectionWithSeats
 												{
@@ -239,13 +267,18 @@ namespace CTCClassSchedule.Controllers
 													SectionCode = c.SectionCode,
 													WaitlistCount = c.WaitlistCount,
 													Yrq = c.Yrq,
-													seatsAvailable = 2
+													SeatsAvailable = d.SeatsAvailable,
+													LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated))
+
 												}
 
 											);
 
 
-					return View(sections);
+
+
+
+					return View(sectionsEnum);
 				}
 				else
 				{
@@ -266,7 +299,7 @@ namespace CTCClassSchedule.Controllers
 
 
 			CourseHPQuery query = new CourseHPQuery();
-			seats = query.findOpenSeats(classID, yrq);
+			int HPseats = query.findOpenSeats(classID, yrq);
 			string HPseatsAvailable = seats.ToString();
 
 
@@ -282,7 +315,7 @@ namespace CTCClassSchedule.Controllers
 				//insert the value
 				SeatAvailability newseat = new SeatAvailability();
 				newseat.ClassID = courseIdPlusYRQ;
-				newseat.SeatsAvailable = seats;
+				newseat.SeatsAvailable = HPseats;
 				newseat.LastUpdated = DateTime.Now;
 
 				_scheduledb.SeatAvailabilities.AddObject(newseat);
@@ -294,7 +327,7 @@ namespace CTCClassSchedule.Controllers
 				//update the value
 				foreach (SeatAvailability seat in seatsAvailableLocal)
 				{
-					seat.SeatsAvailable = seats;
+					seat.SeatsAvailable = HPseats;
 					seat.LastUpdated = DateTime.Now;
 				}
 
@@ -309,6 +342,7 @@ namespace CTCClassSchedule.Controllers
 			foreach (var seat in seatsAvailable)
 			{
 				seats = seat.SeatsAvailable;
+
 				DateTime lastUpdated = Convert.ToDateTime(seat.LastUpdated);
 				friendlyTime = getFriendlyTime(lastUpdated);
 			}
@@ -840,7 +874,7 @@ namespace CTCClassSchedule.Controllers
 				const int DAY = 24 * HOUR;
 				const int MONTH = 30 * DAY;
 
-				var deltaTimeSpan = new TimeSpan(DateTime.UtcNow.Ticks - theDate.Ticks);
+				var deltaTimeSpan = new TimeSpan(DateTime.Now.Ticks - theDate.Ticks);
 
 				var delta = deltaTimeSpan.TotalSeconds;
 
