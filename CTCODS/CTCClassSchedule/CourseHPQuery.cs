@@ -46,7 +46,6 @@ namespace CTCClassSchedule
       request.ContentLength = data.Length;
 
       //Create a delegate to send content into the request
-      //You would probably implement this as a seperate method that could be re-used
       AsyncCallback contentLoader = delegate(IAsyncResult asynchronousResult)
       {
         //Pull request out of async state
@@ -61,8 +60,8 @@ namespace CTCClassSchedule
 
       //Use the delegate to pour our content down the request
       IAsyncResult res = request.BeginGetRequestStream(contentLoader, request);
-      //We are going to lock while we wait for a response but you could perform other
-      //operations while the request is processed
+
+      //lock while we wait for a response
       res.AsyncWaitHandle.WaitOne();
 
       //Pull the final content back out of the response
@@ -70,10 +69,10 @@ namespace CTCClassSchedule
       StreamReader streamFinalContent = new StreamReader(resPostback.GetResponseStream());
       result = streamFinalContent.ReadLine();
 
-      //grab the seats available
+      //grab the start of the 'seats available' string
       index = result.IndexOf("Seats Available: ");
 
-      //if there are seats available
+      //if 'seats available' was found
       if (index != -1)
       {
         seatsAvailable = result.Substring(index + 17, 3);
@@ -83,7 +82,8 @@ namespace CTCClassSchedule
       }
 
       //if there are no seats available, return 0
-      else return 0;
+      else
+					return 0;
     }
 
     private static string getPostData(string itemNumber, string YRQ)
