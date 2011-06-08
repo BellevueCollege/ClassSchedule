@@ -85,7 +85,7 @@ namespace CTCClassSchedule.Controllers
 				{
 					IEnumerable<Course> coursesEnum;
 					coursesEnum = from c in courses
-												where c.Subject == Subject
+												where c.Subject == Subject.ToUpper()
 												select c;
 
 					return View(coursesEnum);

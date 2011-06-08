@@ -11,6 +11,7 @@
 			var courseUpdated = '.availability-' + courseIdPlusYRQ + ' .course-updated em';
 			var originalSeatsAvailable = $(availability).html();
 
+
 			//load the throbber
 			$(availability).html('<img src="/Content/images/ajax-loader.gif" title="loading_seats_available" alt="loading_seats_available" />');
 
@@ -19,14 +20,21 @@
 				url: '/Classes/getseats',
 				type: 'POST',
 				data: { courseIdPlusYRQ: courseIdPlusYRQ },
+				timeout: 4000,
 				success: function (result) {
 					var indexOfPipe = result.indexOf("|");
 					var seatsAvailable = result.substring(0, indexOfPipe);
 					var friendlyTime = "updated " + result.substring(indexOfPipe + 1, result.length);
 
-					$(availability).html("Seats: " + seatsAvailable);
+					$(availability).html("seats: " + seatsAvailable);
 					$(courseUpdated).html(friendlyTime);
+				},
+				error: function (x, t, m) {
+					//alert("got timeout");
+					$(availability).html(originalSeatsAvailable);
+					$(courseUpdated).html("server busy, try again");
 				}
+
 			});
 		});
 	});
@@ -108,10 +116,10 @@
 				<li class="availability-@(item.ID.ToString())">
 					<span class="descriptor">Seat Availability: </span>
 					@if(@item.WaitlistCount > 0){
-						<strong class="seatsAvailable">Class Full - @item.WaitlistCount on waitlist</strong>
+						<strong class="seatsAvailable">class full, @item.WaitlistCount on waitlist</strong>
 						<span class="course-updated"></span>
 					} else {
-						<strong class="seatsAvailable">Seats: @item.SeatsAvailable</strong>
+						<strong class="seatsAvailable">seats: @item.SeatsAvailable</strong>
 						<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">[update]</a></span>
 					}
 				</li>
