@@ -229,27 +229,6 @@ namespace CTCClassSchedule.Controllers
 					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID));
 
 					IEnumerable<SectionWithSeats> sectionsEnum;
-					//sectionsEnum = (
-					//              from c in sections
-					//              join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
-					//              where c.CourseSubject == Subject.ToUpper()
-					//              select new SectionWithSeats
-					//              {
-					//                ID = c.ID,
-					//                AdditionalInformation = c.AdditionalInformation,
-					//                CourseID = c.CourseID,
-					//                CourseNumber = c.CourseNumber,
-					//                CourseTitle = c.CourseTitle,
-					//                CourseSubject = c.CourseSubject,
-					//                Credits = c.Credits,
-					//                Offered = c.Offered,
-					//                SectionCode = c.SectionCode,
-					//                WaitlistCount = c.WaitlistCount,
-					//                Yrq = c.Yrq,
-					//                seatsAvailable = d.SeatsAvailable
-					//              }
-
-					//            );
 					sectionsEnum = (
 												from c in sections
 												join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
