@@ -1,7 +1,7 @@
 ﻿body
 {
 	font-size: .85em;
-	font-family: "Trebuchet MS" , Verdana, Helvetica, Sans-Serif;
+	font-family: Helvetica, Arial,  Sans-Serif;    /*Juan Tweak*/
 	color: #232323;
 	background-color: #fff;
 	margin-right: auto;
@@ -171,36 +171,59 @@ h3
 #basicFacetedSearch
 {
 	float: left;
-	display: inline;
-	border: 1px solid #555;
-	width: 180px;
-	height: 200px;
-	padding: 10px;
-	margin-right: 40px;
-	margin-top: 20px;
+	display: block;/*ju*/
+	border: 1px solid #999; /*ju*/
+	width: 158px; /*ju*/
+	xxxheight: 200px;/*remove */
+	padding: 8px 0 20px; /*ju*/
+	margin-right: 10px; /*ju*/
+	margin-top: 33px; /*ju*/
+	font-size: 12px; /*new*/
+	line-height: 21px; /*new*/
 }
 
 #advancedFacetedSearch
 {
 	float: left;
-	display: inline;
-	border: 1px solid #555;
-	width: 180px;
-	height: 720px;
-	padding: 10px;
-	margin-right: 40px;
-	margin-top: 20px;
+	display: block;/*ju*/
+	border: 1px solid #999; /*ju*/
+	width: 158px; /*ju*/
+	xxxheight: 720px; /*remove */
+	padding: 8px 0 20px; /*ju*/
+	margin-right: 10px; /*ju*/
+	margin-top: 33px; /*ju*/
+	font-size: 12px; /*new*/
+	line-height: 21px; /*new*/
 }
 
-#advancedFacetedSearch ul li, #basicFacetedSearch ul li
-{
-	padding: 4px 4px 4px 14px;
+/*JU NEW*/
+#basicFacetedSearch h3,
+#advancedFacetedSearch h3 {
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 21px;
+	padding: 0 5px 0 19px;
+}
+#advancedFacetedSearch ul, #basicFacetedSearch ul {
+	margin-bottom: 21px;
+}
+
+#advancedFacetedSearch p,
+#basicFacetedSearch p{
+	padding: 0 5px 0 19px;   /*choose a subject needs to be wrapped in a paragraph tag*/
+	margin-bottom: 21px;
+}
+/*END JU NEW definitions*/
+
+#advancedFacetedSearch ul li,
+#basicFacetedSearch ul li {
+	padding: 0 5px 0 19px; /*ju*/
 }
 
 
 #scheduleContent
 {
-	margin-left: 240px;
+	margin-left: 190px; /*ju*/
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
@@ -390,7 +413,9 @@ p.course-details-link
 	font-size: 12px;
 	list-style: none;
 	margin: 0;
-	padding: 0; /*padding-top: 21px; there will be a bg image in this space later */
+	padding-top: 21px;  /*ju */
+	background:  url(images/course-block-header.png) 0 9px no-repeat;  /*new*/
+
 }
 .course-block ul
 {
@@ -408,7 +433,7 @@ p.course-details-link
 .section-listing
 {
 	border-top: 1px solid #eee;
-	width: 700px;
+	width: 770px;  /*JU*/
 	overflow: hidden;
 }
 
@@ -422,13 +447,13 @@ li.section-listing
 {
 	display: block;
 	float: left;
-	width: 40px;
+	width: 45px;
 
 }
 .section-details
 {
 	float: left;
-	width: 760px;
+	width: 725px; /*ju*/
 	overflow: hidden;
 }
 
@@ -442,7 +467,7 @@ li.section-listing
 
 .section
 {
-	width: 55px;
+	width: 50px; /*ju*/
 }
 .instructor
 {
