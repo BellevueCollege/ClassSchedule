@@ -71,15 +71,18 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// GET: /Classes/All/{Subject}/
 		/// </summary>
-		public ActionResult Subject(string Subject)
+		public ActionResult Subject(string Subject, string flex, string time, string days, string avail)
 		{
 			ViewBag.Subject = Subject;
+			setViewBagVars("", flex, time, days, avail, "");
 			ViewBag.Title = "All " +  @Subject + " classes";
+			IList<ISectionFacet> facets = addFacets(flex, time, days, avail);
 
 			using (OdsRepository respository = new OdsRepository())
 			{
 				getCurrentFutureYRQs(respository);
-				IList<Course> courses = respository.GetCourses();
+
+				IList<Course> courses = respository.GetCourses(facetOptions: facets);
 
 				if (Subject != null)
 				{
@@ -87,6 +90,7 @@ namespace CTCClassSchedule.Controllers
 					coursesEnum = from c in courses
 												where c.Subject == Subject.ToUpper()
 												select c;
+					ViewBag.ItemCount = coursesEnum.Count();
 
 					return View(coursesEnum);
 				}
@@ -110,13 +114,16 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)).ToString();
 			ViewBag.FriendlyYRQ = getFriendlyDateFromYRQ(Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)));
 			ViewBag.Title = ViewBag.Subject + "Classes for " + @ViewBag.Yearquarter;
+			IList<ISectionFacet> facets = addFacets(flex, time, days, avail);
 
 			using (OdsRepository respository = new OdsRepository())
 			{
 				getCurrentFutureYRQs(respository);
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
 
-				IList<CoursePrefix> courses = respository.GetCourseSubjects(YRQ);
+				IList<CoursePrefix> courses = respository.GetCourseSubjects(YRQ, facetOptions: facets);
+				ViewBag.ItemCount = courses.Count();
+
 				IEnumerable<String> alphabet;
 				ViewBag.AlphabetArray = new bool[26];
 
@@ -135,6 +142,7 @@ namespace CTCClassSchedule.Controllers
 												select c;
 
 					coursesEnum = coursesEnum.Distinct();
+					ViewBag.ItemCount = coursesEnum.Count();
 
 					return View(coursesEnum);
 				}
@@ -166,9 +174,9 @@ namespace CTCClassSchedule.Controllers
 				var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
 																	 select s);
 
-				IList<Section> sections = respository.GetSections(Subject, YRQ);
-				//IList<Section> sections = respository.GetSections(Subject, YRQ, facetOptions: facets);
-
+				//IList<Section> sections = respository.GetSections(Subject, YRQ);
+				IList<Section> sections = respository.GetSections(Subject, YRQ, facetOptions: facets);
+				ViewBag.ItemCount = sections.Count();
 
 
 
@@ -197,6 +205,7 @@ namespace CTCClassSchedule.Controllers
 											}
 										);
 
+				ViewBag.ItemCount = sectionsEnum.Count();
 				return View(sectionsEnum);
 			}
 		}
@@ -219,7 +228,7 @@ namespace CTCClassSchedule.Controllers
 				if (courseID != null)
 				{
 					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID),  Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID));
-
+					ViewBag.ItemCount = sections.Count();
 					return View(sections);
 				}
 				else
