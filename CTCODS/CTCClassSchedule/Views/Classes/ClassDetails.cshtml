@@ -55,6 +55,7 @@
 
 @foreach (var item in Model)
 {
+	int count = 0;
 	if (@ViewBag.titleDisplayed == false)
 	{
 
@@ -78,17 +79,25 @@
 
 	if (@ViewBag.currentQuarter != item.ID.ToString().Substring(4, 4))
 	{
+		if (count == 0)
+		{
+			@Html.Raw("</ul>")
 
-		<h3 class="course-YRQ">@((item.ID).ToString().Substring(4, 4))</h3>
-										 ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
-										 @item.Yrq;
+
+			count++;
+		}
+
+			<h3 class="course-YRQ">@item.Yrq.FriendlyName</h3>
+			ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
+
+			@Html.Raw("<ul class='course-block'>");
 
 	}
 
 
 
 
-<ul class="course-block">
+
 
 <li class="section-listing"><span class="item-number"><span class="descriptor">Item number: </span>@((item.ID).ToString().Substring(0, 4))</span>
 		<ul class="section-details">
@@ -139,7 +148,7 @@
 		</ul>
 </li>
 
-</ul>
+
 }
 
 </div>

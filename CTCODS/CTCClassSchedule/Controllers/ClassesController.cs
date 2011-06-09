@@ -154,22 +154,54 @@ namespace CTCClassSchedule.Controllers
 			setViewBagVars(YearQuarter, flex, time, days, avail, "");
 			ViewBag.displayedCourseNum = 0;
 			ViewBag.Title = @ViewBag.Yearquarter + " " + @Subject + " classes";
+			IList<ISectionFacet> facets = addFacets(flex, time, days, avail);
+
+
 
 			using (OdsRepository respository = new OdsRepository())
 			{
 				getCurrentFutureYRQs(respository);
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
+
+				var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
+																	 select s);
+
 				IList<Section> sections = respository.GetSections(Subject, YRQ);
+				//IList<Section> sections = respository.GetSections(Subject, YRQ, facetOptions: facets);
 
-				IEnumerable<Section> sectionsEnum;
-				sectionsEnum =  from c in sections
-												where c.CourseSubject == Subject.ToUpper()
-												select c;
 
+
+
+
+				IEnumerable<SectionWithSeats> sectionsEnum;
+				sectionsEnum = (
+											from c in sections
+											join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
+											where c.CourseSubject == Subject.ToUpper()
+											&& c.Yrq.ToString() == YRQ.ToString()
+											select new SectionWithSeats
+											{
+												ID = c.ID,
+												AdditionalInformation = c.AdditionalInformation,
+												CourseID = c.CourseID,
+												CourseNumber = c.CourseNumber,
+												CourseTitle = c.CourseTitle,
+												CourseSubject = c.CourseSubject,
+												Credits = c.Credits,
+												Offered = c.Offered,
+												SectionCode = c.SectionCode,
+												WaitlistCount = c.WaitlistCount,
+												Yrq = c.Yrq,
+												SeatsAvailable = d.SeatsAvailable,
+												LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated))
+											}
+										);
 
 				return View(sectionsEnum);
 			}
 		}
+
+
 
 		/// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/{ClassNum}
@@ -835,7 +867,11 @@ namespace CTCClassSchedule.Controllers
 
 	}
 
-
+		/// <summary>
+		/// Returns a friendly time in sentance form given a datetime. This value
+		/// is create by subtracting the input datetime from the current datetime.
+		/// example: 6/8/2011 07:23:123 -> about 4 hours ago
+		/// </summary>
 		public string getFriendlyTime(DateTime theDate)
 		{
 
@@ -903,6 +939,38 @@ namespace CTCClassSchedule.Controllers
 
 			}
 
+		}
+
+		/// <summary>
+		/// returns an IList<ISectionFacet> that contains all of the facet information
+		/// passed into the app by the user clicking on the faceted search left pane
+		/// facets accepted: flex, time, days, availability
+		/// </summary>
+		private IList<ISectionFacet> addFacets(string flex, string time, string days, string avail)
+		{
+			IList<ISectionFacet> facets = new List<ISectionFacet>();
+
+			//the other facets won't be implemented by the time the first QA build is pushed.
+			//TODO: add the rest of the facets once we have methods to plug into.
+			if (flex != "")
+			{
+				switch (flex)
+				{
+					case "online":
+						facets.Add(new ModalityFacet(ModalityFacet.Options.Online));
+						break;
+					case "hybrid":
+						facets.Add(new ModalityFacet(ModalityFacet.Options.Hybrid));
+						break;
+					case "telecourse":
+						facets.Add(new ModalityFacet(ModalityFacet.Options.Telecourse));
+						break;
+					case "oncampus":
+						facets.Add(new ModalityFacet(ModalityFacet.Options.OnCampus));
+						break;
+				}
+			}
+			return facets;
 		}
 
 

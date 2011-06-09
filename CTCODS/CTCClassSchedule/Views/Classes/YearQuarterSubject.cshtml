@@ -1,4 +1,47 @@
-﻿@model IEnumerable<Ctc.Ods.Types.Section>
+﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		$('.course-updated a').click(function () {
+
+			var courseIdPlusYRQ = this.id;
+			var availability = '.availability-' + courseIdPlusYRQ + ' .seatsAvailable';
+			var courseUpdated = '.availability-' + courseIdPlusYRQ + ' .course-updated em';
+			var originalSeatsAvailable = $(availability).html();
+
+
+			//load the throbber
+			$(availability).html('<img src="/Content/images/ajax-loader.gif" title="loading_seats_available" alt="loading_seats_available" />');
+
+			//post the ajax call to get the available seats and update the UI
+			$.ajax({
+				url: '/Classes/getseats',
+				type: 'POST',
+				data: { courseIdPlusYRQ: courseIdPlusYRQ },
+				timeout: 4000,
+				success: function (result) {
+					var indexOfPipe = result.indexOf("|");
+					var seatsAvailable = result.substring(0, indexOfPipe);
+					var friendlyTime = "updated " + result.substring(indexOfPipe + 1, result.length);
+
+					$(availability).html("seats: " + seatsAvailable);
+					$(courseUpdated).html(friendlyTime);
+				},
+				error: function (x, t, m) {
+					//alert("got timeout");
+					$(availability).html(originalSeatsAvailable);
+					$(courseUpdated).html("server busy, try again");
+				}
+
+			});
+		});
+	});
+
+</script>
+
+
 
 <div id="scheduleMain">
 
@@ -7,17 +50,17 @@
 
 	<div id="scheduleContent">
 		@foreach (var item in Model)
-		{
+	{
 
-			if (@ViewBag.displayedCourseNum < Convert.ToInt16(item.CourseNumber))
-			{
+		if (@ViewBag.displayedCourseNum < Convert.ToInt16(item.CourseNumber))
+		{
 
 					<h2 class="classHeading"><a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">@Html.DisplayFor(modelItem => item.CourseSubject)  @Html.DisplayFor(modelItem => item.CourseNumber)
 					@Html.DisplayFor(modelItem => item.CourseTitle)  @Html.DisplayFor(modelItem => item.Credits) </a></h2>
 					<p class="classDetails"><a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">View Class Details</a></p>
 
 
-			}
+		}
 
 
 			<ul class="course-block">
@@ -29,7 +72,7 @@
 
 			<!--start of repeat offered information -->
 				@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
-				{
+		{
 
 
 						<li class="instructor"><span class="descriptor">Instructor:</span>
@@ -48,15 +91,27 @@
 								</ul>
 					</li>
 
-						<li class="availability"><span class="descriptor">Seat Availability: </span><strong>Class full</strong> <span class="course-updated">updated 5 seconds ago <a href="">[update]</a></span>
-						</li>
-
-						<li class="section-notes"><span class="descriptor">Notes: </span>
-								<ul>
-										<li><span class="label">@item.AdditionalInformation</span></li>
-								</ul>
-						</li>
+					<li class="availability-@(item.ID.ToString())">
+						<span class="descriptor">Seat Availability: </span>
+							@if (@item.WaitlistCount > 0)
+							{
+								<strong class="seatsAvailable">class full, @item.WaitlistCount on waitlist</strong>
+								<span class="course-updated"></span>
 							}
+							else
+							{
+								<strong class="seatsAvailable">seats: @item.SeatsAvailable</strong>
+								<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">[update]</a></span>
+							}
+					</li>
+
+
+					<li class="section-notes"><span class="descriptor">Notes: </span>
+							<ul>
+									<li><span class="label">@item.AdditionalInformation</span></li>
+							</ul>
+					</li>
+		}
 				<!--end of repeat offered information -->
 
 
@@ -68,12 +123,12 @@
 			</ul>
 
 
-			if (@ViewBag.displayedCourseNum < Convert.ToInt16(item.CourseNumber))
-			{
-				ViewBag.displayedCourseNum = Convert.ToInt16(item.CourseNumber);
-			}
-
+		if (@ViewBag.displayedCourseNum < Convert.ToInt16(item.CourseNumber))
+		{
+			ViewBag.displayedCourseNum = Convert.ToInt16(item.CourseNumber);
 		}
+
+	}
 
 	</div>
 </div>
