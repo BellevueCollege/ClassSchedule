@@ -3,6 +3,7 @@
   <Description>These are default test settings for a local test run.</Description>
   <Deployment>
     <DeploymentItem filename="CTCODS\CTCODS.Tests\ConnectionStrings.config" />
+    <DeploymentItem filename="CTCODS\CTCODS.Tests\AppSettings.config" />
   </Deployment>
   <Execution>
     <TestTypeSpecific>
