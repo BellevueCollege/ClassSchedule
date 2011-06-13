@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
-
 <script type="text/javascript">
 
 	$(document).ready(function () {
@@ -40,14 +39,9 @@
 	});
 
 </script>
-
-
-
 <div id="scheduleMain">
-
 	@Html.Partial("quarterNavigation")
 	@Html.Partial("advancedFacetedSearch")
-
 	<div id="scheduleContent">
 		@foreach (var item in Model)
 	{
@@ -56,12 +50,17 @@
 		{
 			if (count == 0)
 			{
-				@Html.Raw("</ul>")
-				count++;
+			@Html.Raw("</ul>")
+count++;
 			}
-			<h2 class="classHeading"><a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">@Html.DisplayFor(modelItem => item.CourseSubject)  @Html.DisplayFor(modelItem => item.CourseNumber)
-			@Html.DisplayFor(modelItem => item.CourseTitle)  @Html.DisplayFor(modelItem => item.Credits) </a></h2>
-			<p class="classDetails"><a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">View Class Details</a></p>
+			<h2 class="classHeading">
+				<a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">@Html.DisplayFor(modelItem => item.CourseSubject)
+					@Html.DisplayFor(modelItem => item.CourseNumber)
+					@Html.DisplayFor(modelItem => item.CourseTitle) @Html.DisplayFor(modelItem => item.Credits)
+				</a>
+			</h2>
+			<p class="classDetails">
+				<a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">View Class Details</a></p>
 
 			@Html.Raw("<ul class='course-block'>");
 		}
@@ -69,34 +68,33 @@
 
 
 
-			<li class="section-listing"><span class="item-number"><span class="descriptor">Item number: </span>@((item.ID).ToString().Substring(0, 4))</span>
-					<ul class="section-details">
-						<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
-
-
-			<!--start of repeat offered information -->
-				@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
-		{
+			<li class="section-listing"><span class="item-number"><span class="descriptor">Item
+				number: </span>@((item.ID).ToString().Substring(0, 4))</span>
+				<ul class="section-details">
+					<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
+					<!--start of repeat offered information -->
+					@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
+		 {
 
 
 						<li class="instructor"><span class="descriptor">Instructor:</span>
-								<ul>
-										<li>@offering.InstructorName
-										</li>
-								</ul>
+							<ul>
+								<li>@offering.InstructorName
+								</li>
+							</ul>
 						</li>
 						<li><span class="descriptor">Meets: </span>
-								<ul class="meets">
-										<li>
-												<span class="days"><abbr title="Mondays and Wednesdays">@offering.Days</abbr></span>
-												<span class="times"><span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime)-@String.Format("{0:t}", offering.EndTime) </span>
-												<span class="room"><span class="descriptor">in </span>@offering.Room</span>
-										</li>
-								</ul>
-					</li>
+							<ul class="meets">
+								<li><span class="days">
+									<abbr title="Mondays and Wednesdays">@offering.Days</abbr></span> <span class="times">
+										<span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime)-@String.Format("{0:t}", offering.EndTime)
+									</span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
+								</li>
+							</ul>
+						</li>
 
-					<li class="availability-@(item.ID.ToString())">
-						<span class="descriptor">Seat Availability: </span>
+						<li class="availability-@(item.ID.ToString())"><span class="descriptor">Seat Availability:
+						</span>
 							@if (@item.WaitlistCount > 0)
 			 {
 								<strong class="seatsAvailable">class full, @item.WaitlistCount on waitlist</strong>
@@ -105,39 +103,43 @@
 			 else
 			 {
 								<strong class="seatsAvailable">@item.SeatsAvailable</strong>
-								<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">[update]</a></span>
+								<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">
+									[update]</a></span>
 			 }
-					</li>
+						</li>
 
 
-					<li class="section-notes"><span class="descriptor">Notes: </span>
-							<ul>
-									<li><span class="label">@item.AdditionalInformation</span></li>
-							</ul>
-					</li>
-		}
-				<!--end of repeat offered information -->
-
-
+						<li class="section-notes"><span class="descriptor">Notes: </span>
+							@if (@item.Footnotes != null && @item.Footnotes.Count() > 0)
+			 {
+								<ul>
+									@foreach (string note in @item.Footnotes)
+				 {
+										<li><span class="label">@note</span></li>
+				 }
+								</ul>
+			 }
+						</li>
+		 }
+					<!--end of repeat offered information -->
 				</ul>
-
-				</li>
-
+			</li>
 
 
 
-		if (@ViewBag.displayedCourseNum < Convert.ToInt16(item.CourseNumber))
-		{
-			ViewBag.displayedCourseNum = Convert.ToInt16(item.CourseNumber);
-		}
+
+		 if (@ViewBag.displayedCourseNum < Convert.ToInt16(item.CourseNumber))
+		 {
+			 ViewBag.displayedCourseNum = Convert.ToInt16(item.CourseNumber);
+		 }
 
 	}
-
-		@if (ViewBag.ItemCount == 0) {
-				<text>
-					<h3>No classes found.</h3>
-				</text>
-			}
-
+		@if (ViewBag.ItemCount == 0)
+	{
+			<text>
+			<h3>
+				No classes found.</h3>
+			</text>
+	}
 	</div>
 </div>

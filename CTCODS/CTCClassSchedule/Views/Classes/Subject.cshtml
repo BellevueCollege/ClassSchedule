@@ -1,50 +1,44 @@
 ﻿@model IEnumerable<Ctc.Ods.Types.Course>
-
-
 <div id="scheduleMain">
+	@Html.Partial("quarterNavigation")
+	@Html.Partial("advancedFacetedSearch")
+	<div id="scheduleContent">
+		<h2>@ViewBag.Subject classes for any quarter</h2>
+		<a href="/" class="programWebsite">Program Website</a>
+		@foreach (var item in Model)
+	{
 
-
-@Html.Partial("quarterNavigation")
-
-@Html.Partial("advancedFacetedSearch")
-
-
-<div id="scheduleContent">
-
-	<h2>@ViewBag.Subject classes for any quarter</h2>
-	<a href="/" class="programWebsite">Program Website</a>
-
-	@foreach (var item in Model) {
-
-	 <div class="classInfo">
-		<div class="classNumber">
-
-		 <a href="/Classes/All/@item.Subject/@item.Number">@item.Subject @item.Number</a>
-		</div>
-		<div class="classTitle">
-		<a href="/Classes/All/@item.Subject/@item.Number">@item.Title</a>
-		</div>
-
-		<div class="classCredits">
-		 @item.Credits
-		</div>
-
-		<div class="classDescription">
-			This is a generic description until we can figure out where the real description is coming from. This is a generic description until we can figure out where the real description is coming from. This is a generic description until we can figure out where the real description is coming from. This is a generic description until we can figure out where the real description is coming from.
-		</div>
-
-
-	 </div>
+			<div class="classInfo">
+				<div class="classNumber">
+					<a href="/Classes/All/@item.Subject/@item.Number">@item.Subject @item.Number</a>
+				</div>
+				<div class="classTitle">
+					<a href="/Classes/All/@item.Subject/@item.Number">@item.Title</a>
+				</div>
+				<div class="classCredits">
+					@item.Credits
+				</div>
+					@if (@item.Descriptions != null && @item.Descriptions.Count() > 0)
+		 {
+				<div class="classDescription">
+				@item.Descriptions.First().Description
+				</div>
+		 }
+		 else
+		 {
+				<div class="classDescription">
+				** DESCRIPTION NOT FOUND **
+				</div>
+		 }
+			</div>
 
 	}
-
-	@if (ViewBag.ItemCount == 0) {
-		<text>
-			<h3>No classes found.</h3>
-		</text>
+		@if (ViewBag.ItemCount == 0)
+	{
+			<text>
+			<h3>
+				No classes found.</h3>
+			</text>
 	}
-
+	</div>
 </div>
-</div>
-
-

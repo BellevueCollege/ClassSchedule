@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
-
 <script type="text/javascript">
 
 	$(document).ready(function () {
@@ -40,116 +39,121 @@
 	});
 
 </script>
-
-
 <div id="scheduleMain">
-
-
-@Html.Partial("quarterNavigation")
-
-
-
-
-<div id="scheduleContentNoSidebar">
-
-
-@foreach (var item in Model)
-{
-	int count = 0;
-	if (@ViewBag.titleDisplayed == false)
+	@Html.Partial("quarterNavigation")
+	<div id="scheduleContentNoSidebar">
+		@foreach (var item in Model)
 	{
-
-		<h3 class="course-title"><span class="courseID">@item.CourseSubject @item.CourseNumber </span><span>@item.CourseTitle </span><span>• @item.Credits <abbr title="Credits ">CR</abbr></span></h3>
-		<p class="prerequisite"></p>
-
-		ViewBag.titleDisplayed = true;
-
-		<div id="courseDescription">
-			<h3>Description:</h3>
-			@ViewBag.CourseDescription
-		</div>
-
-	<div id="courseOutcome">
-			<h3>Outcomes:</h3>
-			@Html.Raw(ViewBag.CourseOutcome)
-		</div>
-
-
-	}
-
-	if (@ViewBag.currentQuarter != item.ID.ToString().Substring(4, 4))
-	{
-		if (count == 0)
+		int count = 0;
+		if (@ViewBag.titleDisplayed == false)
 		{
+
+			<h3 class="course-title">
+				<span class="courseID">@item.CourseSubject @item.CourseNumber </span><span>@item.CourseTitle
+				</span><span>• @item.Credits
+					<abbr title="Credits ">
+						CR</abbr></span></h3>
+			<p class="prerequisite">
+			</p>
+
+							ViewBag.titleDisplayed = true;
+
+			<div id="courseDescription">
+				<h3>
+					Description:</h3>
+				@ViewBag.CourseDescription
+			</div>
+
+			<div id="courseOutcome">
+				<h3>
+					Outcomes:</h3>
+				@Html.Raw(ViewBag.CourseOutcome)
+			</div>
+
+
+		}
+
+		if (@ViewBag.currentQuarter != item.ID.ToString().Substring(4, 4))
+		{
+			if (count == 0)
+			{
 			@Html.Raw("</ul>")
 
 
-			count++;
-		}
+count++;
+			}
 
 			<h3 class="course-YRQ">@item.Yrq.FriendlyName</h3>
-			ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
+										 ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
 
 			@Html.Raw("<ul class='course-block'>");
 
-	}
+		}
 
 
 
 
 
 
-<li class="section-listing"><span class="item-number"><span class="descriptor">Item number: </span>@((item.ID).ToString().Substring(0, 4))</span>
-		<ul class="section-details">
-				<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
-
-				<!--start of repeat offered information -->
-				@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
-				{
-					<li class="instructor"><span class="descriptor">Instructor:</span>
-						<ul>
+			<li class="section-listing"><span class="item-number"><span class="descriptor">Item
+				number: </span>@((item.ID).ToString().Substring(0, 4))</span>
+				<ul class="section-details">
+					<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
+					<!--start of repeat offered information -->
+					@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
+		 {
+						<li class="instructor"><span class="descriptor">Instructor:</span>
+							<ul>
 								<li><a href="#">@offering.InstructorName</a></li>
-						</ul>
-				</li>
+							</ul>
+						</li>
 
-				<li><span class="descriptor">Meets: </span>
-						<ul class="meets">
-								<li>
-										<span class="days"><abbr title="Mondays and Wednesdays">@offering.Days</abbr></span>
-										<span class="times"><span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime)-@String.Format("{0:t}", offering.EndTime) </span>
-										<span class="room"><span class="descriptor">in </span>@offering.Room</span>
+						<li><span class="descriptor">Meets: </span>
+							<ul class="meets">
+								<li><span class="days">
+									<abbr title="Mondays and Wednesdays">@offering.Days</abbr></span> <span class="times">
+										<span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime)-@String.Format("{0:t}", offering.EndTime)
+									</span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
 								</li>
-						</ul>
+							</ul>
+						</li>
+
+						<li class="availability-@(item.ID.ToString())"><span class="descriptor">Seat Availability:
+						</span>
+							@if (@item.WaitlistCount > 0)
+			 {
+								<strong class="seatsAvailable">class full, @item.WaitlistCount on waitlist</strong>
+								<span class="course-updated"></span>
+			 }
+			 else
+			 {
+								<strong class="seatsAvailable">@item.SeatsAvailable</strong>
+								<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">
+									[update]</a></span>
+			 }
+						</li>
+
+
+
+
+
+						<li class="section-notes"><span class="descriptor">Notes: </span>
+							@if (@item.Footnotes != null && @item.Footnotes.Count() > 0)
+			 {
+								<ul>
+									@foreach (string note in @item.Footnotes)
+				 {
+										<li><span class="label">@note</span></li>
+				 }
+								</ul>
+			 }
+						</li>
+		 }
+					<!--end of repeat offered information -->
+				</ul>
 			</li>
 
-				<li class="availability-@(item.ID.ToString())">
-					<span class="descriptor">Seat Availability: </span>
-					@if(@item.WaitlistCount > 0){
-						<strong class="seatsAvailable">class full, @item.WaitlistCount on waitlist</strong>
-						<span class="course-updated"></span>
-					} else {
-						<strong class="seatsAvailable">@item.SeatsAvailable</strong>
-						<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">[update]</a></span>
-					}
-				</li>
 
-
-
-
-
-				<li class="section-notes"><span class="descriptor">Notes: </span>
-						<ul>
-								<li><span class="label">@item.AdditionalInformation</span></li>
-						</ul>
-				</li>
-				}
-				<!--end of repeat offered information -->
-
-		</ul>
-</li>
-
-
-}
-
-</div>
+	}
+	</div>
 </div>

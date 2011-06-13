@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Web;
+using System.Net;
+using System.Text;
 using System.Web.Mvc;
-using System.Globalization;
+using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
-using Ctc.Ods;
-using System.Text;
-using System.Net;
-using System.IO;
 using CTCClassSchedule.Models;
 
 
@@ -87,9 +85,9 @@ namespace CTCClassSchedule.Controllers
 				if (Subject != null)
 				{
 					IEnumerable<Course> coursesEnum;
-					coursesEnum = from c in courses
+					coursesEnum = (from c in courses
 												where c.Subject == Subject.ToUpper()
-												select c;
+												select c).OrderBy(c => c.Subject).ThenBy(c => c.Number);
 					ViewBag.ItemCount = coursesEnum.Count();
 
 					return View(coursesEnum);
@@ -190,7 +188,6 @@ namespace CTCClassSchedule.Controllers
 											select new SectionWithSeats
 											{
 												ID = c.ID,
-												AdditionalInformation = c.AdditionalInformation,
 												CourseID = c.CourseID,
 												CourseNumber = c.CourseNumber,
 												CourseTitle = c.CourseTitle,
@@ -277,7 +274,6 @@ namespace CTCClassSchedule.Controllers
 												select new SectionWithSeats
 												{
 													ID = c.ID,
-													AdditionalInformation = c.AdditionalInformation,
 													CourseID = c.CourseID,
 													CourseNumber = c.CourseNumber,
 													CourseTitle = c.CourseTitle,
