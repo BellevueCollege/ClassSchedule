@@ -14,12 +14,13 @@ namespace Ctc.Wcf
 	public class Service
 	{
 
-		[WebGet(UriTemplate = "Footnote/{id}")]
-		public IList<Footnote> GetFootnotes(string id)
-		{
-			IList<Footnote> footNotes = new OdsRepository().GetFootnote(id);
-			return footNotes;
-		}
+// GetFootnote() appears to have been removed from the OdsRepository - 6/10/2011, shawn.south@bellevuecollege.edu
+		//[WebGet(UriTemplate = "Footnote/{id}")]
+		//public IList<Footnote> GetFootnotes(string id)
+		//{
+		//  IList<Footnote> footNotes = new OdsRepository().GetFootnote(id);
+		//  return footNotes;
+		//}
 
 
 		[WebGet(UriTemplate = "Course/")]
@@ -40,13 +41,13 @@ namespace Ctc.Wcf
 			return courses;
 		}
 
-		 //5/25/2011 - Not currently returning results
+		//5/25/2011 - Not currently returning results
 		[WebGet(UriTemplate = "Course/{YearQuarterID}/{courseID}")]
 		public IList<Section> GetSectionsByYQcourseId(string YearQuarterID, string courseID)
 		{
-		  IList<Section> sections = new OdsRepository().GetSections(CourseID.FromString(courseID), YearQuarter.FromString(YearQuarterID));
+			IList<Section> sections = new OdsRepository().GetSections(CourseID.FromString(courseID), YearQuarter.FromString(YearQuarterID));
 
-		  return sections;
+			return sections;
 		}
 
 	}
