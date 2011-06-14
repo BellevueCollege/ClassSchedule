@@ -104,7 +104,16 @@ count++;
 		 {
 						<li class="instructor"><span class="descriptor">Instructor:</span>
 							<ul>
-								<li><a href="#">@offering.InstructorName</a></li>
+								<li>
+									@if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
+				 {
+										@offering.InstructorName
+				 }
+				 else
+				 {
+										<a href="mailto:@offering.InstructorEmail">@offering.InstructorName</a>
+				 }
+								</li>
 							</ul>
 						</li>
 
