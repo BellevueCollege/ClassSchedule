@@ -975,6 +975,26 @@ namespace CTCClassSchedule.Controllers
 						break;
 				}
 			}
+			if (!string.IsNullOrWhiteSpace(time))
+			{
+				TimeSpan morningStart = new TimeSpan(5,0,0);
+				TimeSpan noon = new TimeSpan(12,0,0);
+				TimeSpan afternoonEnd = new TimeSpan(17,0,0);
+				TimeSpan eveningEnd = new TimeSpan(22,0,0);
+
+				switch (time)
+				{
+					case "morning":
+						facets.Add(new TimeFacet(morningStart, noon));
+						break;
+					case "afternoon":
+						facets.Add(new TimeFacet(noon, afternoonEnd));
+						break;
+					case "evening":
+						facets.Add(new TimeFacet(afternoonEnd, eveningEnd));
+						break;
+				}
+			}
 			return facets;
 		}
 
