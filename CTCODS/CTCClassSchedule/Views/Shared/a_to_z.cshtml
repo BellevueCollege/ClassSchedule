@@ -2,8 +2,11 @@
 @* print out the ascii values for a-z  *@
 @foreach (string let in ViewBag.Alphabet)
 {
-	<a href="/Classes@(ViewBag.YearQuarter_a_to_z)?type=beta@(ViewBag.queryStringNoLetter)&letter=@let.ToString()">@let.ToString()</a> <text>| </text>
+	@* **************************************************************
+	TODO:  Add the rest of the query parameters to these ActionLinks
+	**************************************************************** *@
+	@Html.ActionLink(let.ToString(), "Index", "Classes", new {letter = let.ToString(), type = "beta"}, null) <text>| </text>
 }
 
-<a href="/Classes@(ViewBag.YearQuarter_a_to_z)?type=beta@(ViewBag.queryStringNoLetter)">View All</a>
+@Html.ActionLink("View All", "Index", "Classes")
 </div>

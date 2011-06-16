@@ -54,8 +54,7 @@
 		}
 
 			<div class="subject">
-				<a href="/Classes/All/@item.Subject/">@Html.DisplayFor(modelItem => item.Title)</a>
-
+				@Html.ActionLink(item.Title, item.Subject, "Classes/All")
 
 			@if (item.IsCommonCourse == true)
 			{
