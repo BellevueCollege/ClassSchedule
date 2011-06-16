@@ -50,6 +50,9 @@
     <Reference Include="System.Web.Mvc">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -75,7 +78,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Abstractions">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Routing">
       <Private>True</Private>
     </Reference>
@@ -205,10 +210,10 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>AvailableSeats.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Views\Classes\Subject.cshtml" />
+    <Content Include="Views\Classes\Subject.cshtml" />
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Shared\a_to_z.cshtml" />
-    <None Include="Views\Classes\ClassDetails.cshtml" />
+    <Content Include="Views\Classes\ClassDetails.cshtml" />
     <Content Include="Views\Shared\basicFacetedSearch.cshtml" />
     <Content Include="Views\Shared\advancedFacetedSearch.cshtml" />
     <Content Include="Views\Shared\quarterNavigation.cshtml" />
