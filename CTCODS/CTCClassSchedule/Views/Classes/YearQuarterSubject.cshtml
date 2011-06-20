@@ -1,4 +1,10 @@
 ﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
+
+@{
+	String YearQuarter = ViewBag.YearQuarter;
+}
+
+
 <script type="text/javascript">
 
 	$(document).ready(function () {
@@ -54,13 +60,12 @@
 count++;
 			}
 			<h2 class="classHeading">
-				<a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">@Html.DisplayFor(modelItem => item.CourseSubject)
-					@Html.DisplayFor(modelItem => item.CourseNumber)
-					@Html.DisplayFor(modelItem => item.CourseTitle) @Html.DisplayFor(modelItem => item.Credits)
-				</a>
+
+				@Html.ActionLink(item.CourseSubject + " " + item.CourseNumber + " " + item.CourseTitle + " " + item.Credits, YearQuarter + "/" + item.CourseSubject + "/" + item.CourseNumber)
+
 			</h2>
 			<p class="classDetails">
-				<a href="/Classes/All/@item.CourseSubject/@item.CourseNumber">View Class Details</a></p>
+				@Html.ActionLink("View Class Details", YearQuarter + "/" + item.CourseSubject + "/" + item.CourseNumber)</p>
 
 			@Html.Raw("<ul class='course-block'>");
 		}

@@ -1,12 +1,23 @@
 ﻿<div id="a_to_z">
+
+@{
+	String letter = ViewBag.letter;
+	String YearQuarter = ViewBag.YearQuarter;
+	String time = ViewBag.time;
+	String days = ViewBag.days;
+	String flex = ViewBag.flex;
+	String avail = ViewBag.avail;
+
+
+
+}
+
 @* print out the ascii values for a-z  *@
 @foreach (string let in ViewBag.Alphabet)
 {
-	@* **************************************************************
-	TODO:  Add the rest of the query parameters to these ActionLinks
-	**************************************************************** *@
-	@Html.ActionLink(let.ToString(), "Index", "Classes", new {letter = let.ToString(), type = "beta"}, null) <text>| </text>
+
+	@Html.ActionLink(let.ToString(), @YearQuarter, new { time = time, flex = flex, days = days, avail = avail, type = "beta", letter = let.ToString() }) <text>| </text>
 }
 
-@Html.ActionLink("View All", "Index", "Classes")
+@Html.ActionLink("View All", @YearQuarter, new { time = time, flex = flex, days = days, avail = avail, type = "beta", letter = letter })
 </div>

@@ -2,6 +2,7 @@
 
 @{
 		ViewBag.Title = "Index";
+		String YearQuarter = ViewBag.YearQuarter;
 }
 
 <div id="scheduleMain">
@@ -54,7 +55,7 @@
 		}
 
 			<div class="subject">
-				<a href="/Classes/@ViewBag.QuarterURL/@item.Subject/">@Html.DisplayFor(modelItem => item.Title)</a>
+				@Html.ActionLink(item.Title, YearQuarter + "/" + item.Subject)
 
 				@if (item.IsCommonCourse == true)
 				{
