@@ -31,9 +31,9 @@
 	<h3>Times</h3>
 	<ul>
 		<li @if(ViewBag.time == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)">All</a></li>
-		<li @if(ViewBag.time == "morning") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=morning">Morning</a> (5am-noon)</li>
+		<li @if(ViewBag.time == "morning") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=morning">Morning</a> (before noon)</li>
 		<li @if(ViewBag.time == "afternoon") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=afternoon">Afternoon</a> (noon-5pm)</li>
-		<li @if(ViewBag.time == "evening") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=evening">Evening</a> (5pm-midnight)</li>
+		<li @if(ViewBag.time == "evening") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=evening">Evening</a> (after 5pm)</li>
 	</ul>
 
 
