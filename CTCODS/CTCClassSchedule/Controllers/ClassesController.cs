@@ -27,7 +27,7 @@ namespace CTCClassSchedule.Controllers
 		{
 
 			setViewBagVars("", "", "", "", "", letter);
-			ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
+			ViewBag.WhichClasses = (letter == null || letter == "" ? " (All)" : " (" + letter.ToUpper() + ")");
 			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.AlphabetCharacter = 0;
 			ViewBag.Title = "All classes";
@@ -39,7 +39,7 @@ namespace CTCClassSchedule.Controllers
 				IEnumerable<String> alphabet;
 
 				ViewBag.AlphabetArray = new bool[26];
-				ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
+
 
 				alphabet = from c in courses
 									 orderby c.Title
@@ -105,7 +105,7 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		public ActionResult YearQuarter(string YearQuarter, string flex, string time, string days, string avail, string letter)
 		{
-			ViewBag.WhichClasses = (letter == null ? "All" : letter.ToUpper());
+			ViewBag.WhichClasses = (letter == null || letter == "" ? " (All)" : " (" + letter.ToUpper() + ")");
 			setViewBagVars(YearQuarter, flex, time, days, avail, letter);
 			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.AlphabetCharacter = 0;

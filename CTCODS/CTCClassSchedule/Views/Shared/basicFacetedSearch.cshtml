@@ -2,12 +2,33 @@
 	<h3>Subject</h3>
 	<p><a href="/">Choose a Subject</a></p>
 
+	@{
+
+		String QuarterOneFriendly = ViewBag.QuarterOneFriendly;
+		String QuarterTwoFriendly = ViewBag.QuarterTwoFriendly;
+		String QuarterThreeFriendly = ViewBag.QuarterThreeFriendly;
+
+		String QuarterOneURL = ViewBag.QuarterOneURL;
+		String QuarterTwoURL = ViewBag.QuarterTwoURL;
+		String QuarterThreeURL = ViewBag.QuarterThreeURL;
+	}
+
+
 	<h3>Classes Offered:</h3>
 	<ul>
-		<li><a href="/Classes/All">All Credit Classes</a></li>
-		<li><a href="/Classes/Fall2011">Fall 2011</a></li>
-		<li><a href="/Classes/Summer2011">Summer 2011</a></li>
-		<li><a href="/Classes/Spring2011">Spring 2011</a></li>
+		<li @if(ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")		{ @(ViewBag.activeClass) }>
+			@Html.ActionLink("All Credit Classes", "/All")
+		</li>
+		<li @if(ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())				{ @(ViewBag.activeClass) }>
+			@Html.ActionLink(@QuarterOneFriendly, "/" + QuarterOneURL)
+		</li>
+		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())			{ @(ViewBag.activeClass) }>
+			@Html.ActionLink(@QuarterTwoFriendly, "/" + QuarterTwoURL)
+		</li>
+		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())		{ @(ViewBag.activeClass) }>
+			@Html.ActionLink(@QuarterThreeFriendly, "/" + QuarterThreeURL)
+		</li>
+
 	</ul>
 
 </div>

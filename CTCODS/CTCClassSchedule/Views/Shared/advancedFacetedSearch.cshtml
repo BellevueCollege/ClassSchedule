@@ -1,4 +1,17 @@
 ﻿
+	@{
+
+		String QuarterOneFriendly = ViewBag.QuarterOneFriendly;
+		String QuarterTwoFriendly = ViewBag.QuarterTwoFriendly;
+		String QuarterThreeFriendly = ViewBag.QuarterThreeFriendly;
+
+		String QuarterOneURL = ViewBag.QuarterOneURL;
+		String QuarterTwoURL = ViewBag.QuarterTwoURL;
+		String QuarterThreeURL = ViewBag.QuarterThreeURL;
+	}
+
+
+
 
 <div id="advancedFacetedSearch">
 	<h3>Subject</h3>
@@ -19,8 +32,8 @@
 	<ul>
 		<li @if(ViewBag.time == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)">All</a></li>
 		<li @if(ViewBag.time == "morning") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=morning">Morning</a> (5am-noon)</li>
-		<li @if(ViewBag.time == "afternoon") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=afternoon">Afternoon</a> (5am-noon)</li>
-		<li @if(ViewBag.time == "evening") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=evening">Evening</a> (5am-noon)</li>
+		<li @if(ViewBag.time == "afternoon") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=afternoon">Afternoon</a> (noon-5pm)</li>
+		<li @if(ViewBag.time == "evening") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=evening">Evening</a> (5pm-midnight)</li>
 	</ul>
 
 
@@ -43,10 +56,20 @@
 
 	<h3>Classes Offered:</h3>
 	<ul>
-		<li @if(ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")		{ @(ViewBag.activeClass) }><a href="/Classes/All" id="current">All Credit Classes</a></li>
-		<li @if(ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())				{ @(ViewBag.activeClass) }><a href="/Classes/@(ViewBag.QuarterOneURL)">@(ViewBag.QuarterOneFriendly)</a></li>
-		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())			{ @(ViewBag.activeClass) }><a href="/Classes/@(ViewBag.QuarterTwoURL)">@(ViewBag.QuarterTwoFriendly)</a></li>
-		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())		{ @(ViewBag.activeClass) }><a href="/Classes/@(ViewBag.QuarterThreeURL)">@(ViewBag.QuarterThreeFriendly)</a></li>
+		<li @if(ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")		{ @(ViewBag.activeClass) }>
+			@Html.ActionLink("All Credit Classes", "/All")
+		</li>
+		<li @if(ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())				{ @(ViewBag.activeClass) }>
+			@Html.ActionLink(@QuarterOneFriendly, "/" + QuarterOneURL)
+		</li>
+		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())			{ @(ViewBag.activeClass) }>
+			@Html.ActionLink(@QuarterTwoFriendly, "/" + QuarterTwoURL)
+		</li>
+		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())		{ @(ViewBag.activeClass) }>
+			@Html.ActionLink(@QuarterThreeFriendly, "/" + QuarterThreeURL)
+		</li>
+
 	</ul>
+
 
 </div>
