@@ -98,21 +98,38 @@ count++;
 			<li class="section-listing"><span class="item-number"><span class="descriptor">Item
 				number: </span>@((item.ID).ToString().Substring(0, 4))</span>
 				<ul class="section-details">
-					<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
+
 					<!--start of repeat offered information -->
 					@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
-		 {
+					{
+						<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
 						<li class="instructor"><span class="descriptor">Instructor:</span>
 							<ul>
 								<li>
 									@if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
-				 {
-										@offering.InstructorName
-				 }
-				 else
-				 {
-										<a href="mailto:@offering.InstructorEmail">@offering.InstructorName</a>
-				 }
+									{
+										if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+										{
+											<text>TBD</text>
+										}
+										else
+										{
+											@offering.InstructorName
+										}
+
+									}
+									else
+									{
+										if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+										{
+											<text>TBD</text>
+										}
+										else
+										{
+											<a href="mailto:@offering.InstructorEmail">@offering.InstructorName</a>
+										}
+
+									}
 								</li>
 							</ul>
 						</li>

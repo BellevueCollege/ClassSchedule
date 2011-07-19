@@ -17,7 +17,7 @@ namespace CTCClassSchedule
 {
 	public class CourseHPQuery
 	{
-    public HttpWebRequest request;
+    public WebRequest request;
     public string result, seatsAvailable;
     public int index, seats;
 
@@ -33,15 +33,42 @@ namespace CTCClassSchedule
       string postData;
 
       //set the location the post is going to
-      request = (HttpWebRequest)WebRequest.Create("https://www.ctc.edu/cgi-bin/rq080");
-
-      ASCIIEncoding encoding = new ASCIIEncoding();
-
+      request = WebRequest.Create("https://www.ctc.edu/cgi-bin/rq080");
+			request.Method = "POST";
       postData = getPostData(itemNumber, YRQ);
 
-      byte[] data = encoding.GetBytes(postData);
+      byte[] byteArray = Encoding.UTF8.GetBytes(postData);
 
-      request.Method = "POST";
+			// Set the ContentType property of the WebRequest.
+			request.ContentType = "application/x-www-form-urlencoded";
+			// Set the ContentLength property of the WebRequest.
+			request.ContentLength = byteArray.Length;
+			// Get the request stream.
+			Stream dataStream = request.GetRequestStream();
+			// Write the data to the request stream.
+			dataStream.Write(byteArray, 0, byteArray.Length);
+			// Close the Stream object.
+			dataStream.Close();
+			// Get the response.
+			WebResponse response = request.GetResponse();
+			// Display the status.
+			Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+			// Get the stream containing content returned by the server.
+			dataStream = response.GetResponseStream();
+			// Open the stream using a StreamReader for easy access.
+			StreamReader reader = new StreamReader(dataStream);
+			// Read the content.
+			string responseFromServer = reader.ReadToEnd();
+			// Display the content.
+			Console.WriteLine(responseFromServer);
+			// Clean up the streams.
+			reader.Close();
+			dataStream.Close();
+			response.Close();
+
+
+
+
       request.ContentType = "application/x-www-form-urlencoded";
       request.ContentLength = data.Length;
 
@@ -55,6 +82,7 @@ namespace CTCClassSchedule
         byte[] content = Encoding.UTF8.GetBytes(postData);
         System.IO.Stream postStream = request.EndGetRequestStream(asynchronousResult);
         postStream.Write(content, 0, content.Length);
+				postStream.Flush();
         postStream.Close();
       };
 
@@ -62,7 +90,7 @@ namespace CTCClassSchedule
       IAsyncResult res = request.BeginGetRequestStream(contentLoader, request);
 
       //lock while we wait for a response
-      res.AsyncWaitHandle.WaitOne();
+			res.AsyncWaitHandle.WaitOne(3000);
 
       //Pull the final content back out of the response
       WebResponse resPostback = request.GetResponse();
