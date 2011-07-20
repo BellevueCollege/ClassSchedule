@@ -48,7 +48,7 @@ textarea
 
 a, a:hover, a:visited, a:active
 {
-	color: #3e6d99;
+	color: #003D79;
 }
 
 /* Styles for validation helpers
@@ -149,7 +149,13 @@ h3
 {
 
 
-	padding: 10px 0px 15px 0px;
+	padding: 10px 0px 10px 0px;
+}
+
+.classDetailsLink
+{
+	font-size: 10px;
+	padding-bottom: 15px;
 }
 
 .classNumber a

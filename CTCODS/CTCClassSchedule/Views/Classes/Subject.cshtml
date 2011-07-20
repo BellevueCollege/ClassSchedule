@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Ctc.Ods.Types.Course>
 <div id="scheduleMain">
 	@Html.Partial("quarterNavigation")
-	@Html.Partial("advancedFacetedSearch")
+	@Html.Partial("basicFacetedSearch")
 	<div id="scheduleContent">
 		<h2>@ViewBag.Subject classes for any quarter</h2>
 		<a href="/" class="programWebsite">Program Website</a>
@@ -22,6 +22,12 @@
 				<div class="classDescription">
 				@item.Descriptions.First().Description
 				</div>
+
+			 <div class="classDetailsLink">
+				@Html.ActionLink("View Details for " + item.Subject + " " + item.Number, "All/" + item.Subject + "/" + item.Number)
+				</div>
+
+
 		 }
 		 else
 		 {
