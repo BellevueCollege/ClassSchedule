@@ -152,6 +152,11 @@ h3
 	padding: 10px 0px 15px 0px;
 }
 
+.classNumber a
+{
+	text-decoration: none;
+}
+
 .programWebsite
 {
 	padding-top: 20px;
