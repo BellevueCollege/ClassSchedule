@@ -14,7 +14,7 @@
 
 
 <div id="scheduleContent">
-
+	<div id="scheduleMiddle">
 		@if (ViewBag.ErrorMsg.Length > 0) {
 			@Html.Partial("ErrorMsg")
 		}
@@ -72,4 +72,13 @@
 			}
 
 	</div>
+
+	<div id="scheduleRightSidebar">
+	@Html.Partial("rightSidebar")
+</div>
+
+</div>
+
+
+
 </div>
