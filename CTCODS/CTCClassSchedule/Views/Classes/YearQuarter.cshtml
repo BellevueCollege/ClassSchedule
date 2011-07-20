@@ -3,6 +3,7 @@
 @{
 		ViewBag.Title = "Index";
 		String YearQuarter = ViewBag.YearQuarter;
+		String QueryStringAll = ViewBag.queryStringAll;
 }
 
 <div id="scheduleMain">
@@ -55,7 +56,7 @@
 		}
 
 			<div class="subject">
-				@Html.ActionLink(item.Title, YearQuarter + "/" + item.Subject)
+				<a href="/Classes/@(YearQuarter)/@(item.Subject)?type=beta@(QueryStringAll)">@item.Title</a>
 
 				@if (item.IsCommonCourse == true)
 				{

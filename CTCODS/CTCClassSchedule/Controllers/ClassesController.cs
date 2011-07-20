@@ -159,6 +159,7 @@ namespace CTCClassSchedule.Controllers
 		{
 			setViewBagVars(YearQuarter, flex, time, days, avail, "");
 			ViewBag.displayedCourseNum = 0;
+			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.Title = @ViewBag.Yearquarter + " " + @Subject + " classes";
 			IList<ISectionFacet> facets = addFacets(flex, time, days, avail);
 

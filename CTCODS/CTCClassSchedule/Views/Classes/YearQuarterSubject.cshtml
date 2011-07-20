@@ -76,26 +76,42 @@ count++;
 			<li class="section-listing"><span class="item-number"><span class="descriptor">Item
 				number: </span>@((item.ID).ToString().Substring(0, 4))</span>
 				<ul class="section-details">
-					<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
+
 					<!--start of repeat offered information -->
 					@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
-		 {
-
-
+					{
+						<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
 						<li class="instructor"><span class="descriptor">Instructor:</span>
 							<ul>
 								<li>
 									@if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
-				 {
-										@offering.InstructorName
-				 }
-				 else
-				 {
-										<a href="mailto:@offering.InstructorEmail">@offering.InstructorName</a>
-				 }
+									{
+										if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+										{
+											<text>TBD</text>
+										}
+										else
+										{
+											@offering.InstructorName
+										}
+
+									}
+									else
+									{
+										if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+										{
+											<text>TBD</text>
+										}
+										else
+										{
+											<a href="mailto:@offering.InstructorEmail">@offering.InstructorName</a>
+										}
+
+									}
 								</li>
 							</ul>
 						</li>
+
 						<li><span class="descriptor">Meets: </span>
 							<ul class="meets">
 								<li><span class="days">
@@ -106,37 +122,46 @@ count++;
 							</ul>
 						</li>
 
-						<li class="availability-@(item.ID.ToString())"><span class="descriptor">Seat Availability:
-						</span>
-							@if (@item.WaitlistCount > 0)
-			 {
-								<strong class="seatsAvailable">class full, @item.WaitlistCount on waitlist</strong>
-								<span class="course-updated"></span>
-			 }
-			 else
-			 {
-								<strong class="seatsAvailable">@item.SeatsAvailable</strong>
-								<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">
-									[update]</a></span>
-			 }
-						</li>
+
+						if (ViewBag.seatAvailbilityDisplayed == false) {
+							<li class="availability-@(item.ID.ToString())">
+								<span class="descriptor">Seat Availability:
+								</span>
+								@if (@item.WaitlistCount > 0)
+								{
+									<strong class="seatsAvailable">class full, @item.WaitlistCount on waitlist</strong>
+									<span class="course-updated"></span>
+								}
+								else
+								{
+									<strong class="seatsAvailable">@item.SeatsAvailable</strong>
+									<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">
+										[update]</a></span>
+								}
+							</li>
+							ViewBag.seatAvailbilityDisplayed = true;
+						}
+
+
 
 
 						<li class="section-notes"><span class="descriptor">Notes: </span>
-							@if (@item.Footnotes != null && @item.Footnotes.Count() > 0)
-			 {
-								<ul>
-									@foreach (string note in @item.Footnotes)
-				 {
-										<li><span class="label">@note</span></li>
-				 }
-								</ul>
-			 }
+						@if (@item.Footnotes != null && @item.Footnotes.Count() > 0)
+						{
+							<ul>
+							@foreach (string note in @item.Footnotes)
+							{
+								<li><span class="label">@note</span></li>
+							}
+							</ul>
+						}
 						</li>
 		 }
+
 					<!--end of repeat offered information -->
 				</ul>
 			</li>
+		ViewBag.seatAvailbilityDisplayed = false;
 
 
 
