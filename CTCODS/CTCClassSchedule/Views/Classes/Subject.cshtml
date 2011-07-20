@@ -11,11 +11,9 @@
 			<div class="classInfo">
 				<div class="classNumber">
 					<!--a href="/Classes/All/@item.Subject/@item.Number">@item.Subject @item.Number</a-->
-					@Html.ActionLink(item.Subject + " " + item.Number, "All/" + item.Subject + "/" + item.Number)
+					@Html.ActionLink(item.Subject + " " + item.Number + " - " + item.Title, "All/" + item.Subject + "/" + item.Number)
 				</div>
-				<div class="classTitle">
-					@Html.ActionLink(item.Title, "All/" + item.Subject + "/" + item.Number)
-				</div>
+
 				<div class="classCredits">
 					@item.Credits
 				</div>
