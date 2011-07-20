@@ -242,6 +242,7 @@ namespace CTCClassSchedule.Controllers
 		{
 			string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
 			ViewBag.titleDisplayed = false;
+			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.CourseOutcome = getCourseOutcome(Subject, ClassNum);
 			ViewBag.Title = @Subject + " " + ClassNum + " sections";
 

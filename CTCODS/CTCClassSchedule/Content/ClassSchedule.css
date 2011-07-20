@@ -234,6 +234,47 @@ h3
 	padding-top: 15px;
 }
 
+#scheduleRightSidebar
+{
+	width: 200px;
+	float: right;
+	display: inline;
+	margin-top: 80px;
+	font-size: 10px;
+
+
+}
+
+#scheduleRightSidebar li
+{
+	list-style: disc;
+	margin-left: 10px;
+}
+
+#scheduleMiddle
+{
+	float: left;
+	width: 500px;
+}
+
+#otherClassesMsg, #thanksMsg
+{
+	padding: 10px;
+	border: 1px solid #000;
+	margin: 20px 0px;
+}
+
+#scheduleRightSidebar p
+{
+	margin: 6px 0px;
+	line-height: 12px;
+}
+
+#scheduleRightSidebar strong
+{
+	font-weight: bold;
+}
+
 #bigfoot
 {
 	clear: left;

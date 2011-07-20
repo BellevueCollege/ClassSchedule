@@ -218,6 +218,7 @@
     <Content Include="Views\Shared\advancedFacetedSearch.cshtml" />
     <Content Include="Views\Shared\quarterNavigation.cshtml" />
     <Content Include="Views\Shared\ErrorMsg.cshtml" />
+    <Content Include="Views\Shared\rightSidebar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">

@@ -30,6 +30,8 @@ namespace CTCClassSchedule
     //code to grab the open seats and return as string
     public int findOpenSeats (string itemNumber, string YRQ)
     {
+			//much of this is from: http://msdn.microsoft.com/en-us/library/debx8sh9.aspx
+
       string postData;
 
       //set the location the post is going to
@@ -58,44 +60,12 @@ namespace CTCClassSchedule
 			// Open the stream using a StreamReader for easy access.
 			StreamReader reader = new StreamReader(dataStream);
 			// Read the content.
-			string responseFromServer = reader.ReadToEnd();
-			// Display the content.
-			Console.WriteLine(responseFromServer);
+			result = reader.ReadToEnd();
+
 			// Clean up the streams.
 			reader.Close();
 			dataStream.Close();
 			response.Close();
-
-
-
-
-      request.ContentType = "application/x-www-form-urlencoded";
-      request.ContentLength = data.Length;
-
-      //Create a delegate to send content into the request
-      AsyncCallback contentLoader = delegate(IAsyncResult asynchronousResult)
-      {
-        //Pull request out of async state
-        HttpWebRequest req = (HttpWebRequest)asynchronousResult.AsyncState;
-
-        //Turn our content into binary data and send it down the request stream
-        byte[] content = Encoding.UTF8.GetBytes(postData);
-        System.IO.Stream postStream = request.EndGetRequestStream(asynchronousResult);
-        postStream.Write(content, 0, content.Length);
-				postStream.Flush();
-        postStream.Close();
-      };
-
-      //Use the delegate to pour our content down the request
-      IAsyncResult res = request.BeginGetRequestStream(contentLoader, request);
-
-      //lock while we wait for a response
-			res.AsyncWaitHandle.WaitOne(3000);
-
-      //Pull the final content back out of the response
-      WebResponse resPostback = request.GetResponse();
-      StreamReader streamFinalContent = new StreamReader(resPostback.GetResponseStream());
-      result = streamFinalContent.ReadLine();
 
       //grab the start of the 'seats available' string
       index = result.IndexOf("Seats Available: ");
