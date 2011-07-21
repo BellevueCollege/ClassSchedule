@@ -1,6 +1,18 @@
 ﻿<div id="basicFacetedSearch">
 	<h3>Subject</h3>
-	<p><a href="/">Choose a Subject</a></p>
+	@if (string.IsNullOrWhiteSpace(ViewBag.Subject))
+ {
+	 <p><a href="/">Choose Subject</a></p>
+ }
+ else {
+		<ul class="subject">
+			<li @(ViewBag.activeClass)>
+				<a href="" >@ViewBag.Subject</a>
+			</li>
+		</ul>
+	 <p><a href="/">Change Subject</a></p>
+ }
+
 
 	@{
 
@@ -16,16 +28,20 @@
 
 	<h3>Classes Offered:</h3>
 	<ul>
-		<li @if(ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")		{ @(ViewBag.activeClass) }>
+		<li @if (ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")
+			{ @(ViewBag.activeClass) }>
 			@Html.ActionLink("All Credit Classes", "/All")
 		</li>
-		<li @if(ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())				{ @(ViewBag.activeClass) }>
+		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())
+			{ @(ViewBag.activeClass) }>
 			@Html.ActionLink(@QuarterOneFriendly, "/" + QuarterOneURL)
 		</li>
-		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())			{ @(ViewBag.activeClass) }>
+		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())
+			{ @(ViewBag.activeClass) }>
 			@Html.ActionLink(@QuarterTwoFriendly, "/" + QuarterTwoURL)
 		</li>
-		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())		{ @(ViewBag.activeClass) }>
+		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())
+			{ @(ViewBag.activeClass) }>
 			@Html.ActionLink(@QuarterThreeFriendly, "/" + QuarterThreeURL)
 		</li>
 

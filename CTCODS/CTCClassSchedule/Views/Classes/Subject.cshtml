@@ -5,6 +5,7 @@
 	<div id="scheduleContent">
 		<h2>@ViewBag.Subject classes for any quarter</h2>
 		<a href="/" class="programWebsite">Program Website</a>
+		<div id="classInfoWrap">
 		@foreach (var item in Model)
 	{
 
@@ -38,12 +39,13 @@
 			</div>
 
 	}
-		@if (ViewBag.ItemCount == 0)
+	@if (ViewBag.ItemCount == 0)
 	{
 			<text>
 			<h3>
 				No classes found.</h3>
 			</text>
 	}
+	</div>
 	</div>
 </div>

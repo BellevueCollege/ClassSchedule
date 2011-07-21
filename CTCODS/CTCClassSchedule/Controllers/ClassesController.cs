@@ -108,6 +108,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.WhichClasses = (letter == null || letter == "" ? " (All)" : " (" + letter.ToUpper() + ")");
 			setViewBagVars(YearQuarter, flex, time, days, avail, letter);
 			ViewBag.AlphabetArray = new bool[26];
+			ViewBag.Subject = "All";
 			ViewBag.AlphabetCharacter = 0;
 			ViewBag.YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)).ToString();
 			ViewBag.FriendlyYRQ = getFriendlyDateFromYRQ(Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)));
@@ -160,6 +161,7 @@ namespace CTCClassSchedule.Controllers
 			setViewBagVars(YearQuarter, flex, time, days, avail, "");
 			ViewBag.displayedCourseNum = 0;
 			ViewBag.seatAvailbilityDisplayed = false;
+			ViewBag.Subject = Subject;
 			ViewBag.Title = @ViewBag.Yearquarter + " " + @Subject + " classes";
 			IList<ISectionFacet> facets = addFacets(flex, time, days, avail);
 

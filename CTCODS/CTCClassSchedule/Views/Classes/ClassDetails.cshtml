@@ -86,6 +86,8 @@ count++;
 			<h3 class="course-YRQ">@item.Yrq.FriendlyName</h3>
 										 ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
 
+			<div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle • @item.Credits</div>
+
 			@Html.Raw("<ul class='course-block'>");
 
 		}
@@ -101,35 +103,35 @@ count++;
 
 					<!--start of repeat offered information -->
 					@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
-					{
+		 {
 						<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
 						<li class="instructor"><span class="descriptor">Instructor:</span>
 							<ul>
 								<li>
 									@if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
-									{
-										if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-										{
+				 {
+					 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+					 {
 											<text>TBD</text>
-										}
-										else
-										{
+					 }
+					 else
+					 {
 											@offering.InstructorName
-										}
+					 }
 
-									}
-									else
-									{
-										if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-										{
+				 }
+				 else
+				 {
+					 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+					 {
 											<text>TBD</text>
-										}
-										else
-										{
+					 }
+					 else
+					 {
 											<a href="mailto:@offering.InstructorEmail">@offering.InstructorName</a>
-										}
+					 }
 
-									}
+				 }
 								</li>
 							</ul>
 						</li>
@@ -137,7 +139,7 @@ count++;
 						<li><span class="descriptor">Meets: </span>
 							<ul class="meets">
 								<li><span class="days">
-									<abbr title="Mondays and Wednesdays">@offering.Days</abbr></span> <span class="times">
+									<abbr title="Days Offered">@offering.Days</abbr></span> <span class="times">
 										<span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime)-@String.Format("{0:t}", offering.EndTime)
 									</span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
 								</li>
@@ -145,45 +147,46 @@ count++;
 						</li>
 
 
-						if (ViewBag.seatAvailbilityDisplayed == false) {
+																																 if (ViewBag.seatAvailbilityDisplayed == false)
+																																 {
 							<li class="availability-@(item.ID.ToString())">
 								<span class="descriptor">Seat Availability:
 								</span>
 								@if (@item.WaitlistCount > 0)
-								{
+				{
 									<strong class="seatsAvailable">class full, @item.WaitlistCount on waitlist</strong>
 									<span class="course-updated"></span>
-								}
-								else
-								{
+				}
+				else
+				{
 									<strong class="seatsAvailable">@item.SeatsAvailable</strong>
 									<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">
 										[update]</a></span>
-								}
+				}
 							</li>
-							ViewBag.seatAvailbilityDisplayed = true;
-						}
+				ViewBag.seatAvailbilityDisplayed = true;
+																																 }
 
 
 
 
 						<li class="section-notes"><span class="descriptor">Notes: </span>
 						@if (@item.Footnotes != null && @item.Footnotes.Count() > 0)
-						{
+			{
 							<ul>
 							@foreach (string note in @item.Footnotes)
-							{
+			 {
 								<li><span class="label">@note</span></li>
-							}
+			 }
 							</ul>
-						}
+			}
 						</li>
 		 }
 
 					<!--end of repeat offered information -->
 				</ul>
 			</li>
-		ViewBag.seatAvailbilityDisplayed = false;
+		 ViewBag.seatAvailbilityDisplayed = false;
 
 	}
 	</div>

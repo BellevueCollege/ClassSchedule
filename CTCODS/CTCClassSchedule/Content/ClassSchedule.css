@@ -115,12 +115,14 @@ h2
 {
 	font-size: 18px;
 	padding: 10px 0px;
+
 }
 
 h3
 {
-	font-size: 16px;
+	font-size: 14px;
 	padding: 10px 0px;
+	font-weight: bold;
 }
 
 #a_to_z
@@ -131,6 +133,11 @@ h3
 .classInfo
 {
 	margin-top: 10px;
+}
+
+#classInfoWrap
+{
+	margin-top: 30px;
 }
 
 
@@ -165,7 +172,7 @@ h3
 
 .programWebsite
 {
-	padding-top: 20px;
+	font-size: 12px;
 
 
 }
@@ -215,6 +222,24 @@ h3
 	line-height: 21px;
 	padding: 0 5px 0 19px;
 }
+
+#basicFacetedSearch ul.subject ,
+#advancedFacetedSearch ul.subject
+{
+	margin-bottom: 0px;
+}
+
+ul.subject li
+{
+	margin-left: 20px;
+
+}
+
+ul.subject li a
+{
+	text-decoration: none;
+}
+
 #advancedFacetedSearch ul, #basicFacetedSearch ul {
 	margin-bottom: 21px;
 }
@@ -609,7 +634,9 @@ li.section-listing
 
 #courseOutcome li
 {
+	font-size: 12px;
 	margin-left: 28px;
+
 }
 
 
@@ -635,4 +662,10 @@ li.section-listing
 .course-updated a:hover
 {
 	cursor:pointer;
+}
+
+#courseDescription
+{
+	font-size: 12px;
+	line-height: 14px;
 }

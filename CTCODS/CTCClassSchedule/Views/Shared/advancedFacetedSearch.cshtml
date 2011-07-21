@@ -14,8 +14,13 @@
 
 
 <div id="advancedFacetedSearch">
-	<h3>Subject</h3>
-	<p><a href="/">Choose a Subject</a></p>
+		<h3>Subject</h3>
+	<ul class="subject">
+		<li @(ViewBag.activeClass)>
+			<a href="" >@ViewBag.Subject</a>
+		</li>
+	</ul>
+	<p><a href="/">Change Subject</a></p>
 
 	<h3>Flexible options</h3>
 	<ul>
