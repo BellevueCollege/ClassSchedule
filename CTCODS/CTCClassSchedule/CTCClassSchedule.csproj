@@ -105,6 +105,7 @@
     <Compile Include="SectionWithSeats.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\grids.css" />
     <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\course-block-header.png" />
     <Content Include="Content\images\right_small_arrow.gif" />
@@ -219,6 +220,7 @@
     <Content Include="Views\Shared\quarterNavigation.cshtml" />
     <Content Include="Views\Shared\ErrorMsg.cshtml" />
     <Content Include="Views\Shared\rightSidebar.cshtml" />
+    <Content Include="Views\Shared\Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">

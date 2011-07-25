@@ -700,3 +700,31 @@ li.section-listing
 	font-size: 12px;
 	line-height: 14px;
 }
+
+#footer
+{
+	line-height: 20px;
+	margin: 40px 0px;
+	font-size: 12px;
+}
+
+#footerSpacer
+{
+	margin-top: 40px;
+	float: left;
+	height: 10px;
+	border-top: 1px solid #5dc8dc;
+	width: 960px;
+}
+
+.grid_fourth
+{
+	border-right: 1px solid #5dc8dc;
+	padding-right: 2px;
+	height: 140px;
+}
+
+.grid_fourth.last
+{
+	border-right: none;
+}
