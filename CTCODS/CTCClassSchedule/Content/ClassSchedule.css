@@ -1,4 +1,9 @@
-﻿#bodyWrapper
+﻿body
+{
+	background-color: #fff;
+}
+
+#bodyWrapper
 {
 	font-size: .85em;
 	font-family: Helvetica, Arial,  Sans-Serif;    /*Juan Tweak*/

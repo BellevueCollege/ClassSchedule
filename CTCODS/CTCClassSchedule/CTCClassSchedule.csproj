@@ -90,6 +90,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Encryption64.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="CourseHPQuery.cs" />

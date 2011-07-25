@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
+@using CTCClassSchedule.Common;
 <script type="text/javascript">
 
 	$(document).ready(function () {
@@ -128,8 +129,9 @@ count++;
 					 }
 					 else
 					 {
-											<a href="mailto:@offering.InstructorEmail">@offering.InstructorName</a>
+											<a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))" target="_blank">@offering.InstructorName</a>
 					 }
+
 
 				 }
 								</li>
