@@ -1,4 +1,4 @@
-﻿body
+﻿#bodyWrapper
 {
 	font-size: .85em;
 	font-family: Helvetica, Arial,  Sans-Serif;    /*Juan Tweak*/
@@ -8,6 +8,37 @@
 	margin-left: auto;
 	width: 960px;
 }
+
+
+/* beta section */
+#betaBar
+{
+	background-color: #FAFAD2;
+	height: 16px;
+	font-size: 10px;
+	line-height: 16px;
+}
+
+#betaBarWrapper
+{
+	margin-left: auto;
+	margin-right: auto;
+	width: 960px;
+}
+
+#betaInfo
+{
+	display: inline;
+	padding-left: 300px;
+}
+
+#betaFeedback
+{
+	float: right;
+}
+
+
+/*end beta section */
 
 header, footer, nav, section
 {
