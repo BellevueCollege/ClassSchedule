@@ -541,6 +541,7 @@ p.course-details-link
 	list-style: none;
 	margin: 0;
 	padding: 0;
+	line-height: 14px;
 
 }
 .section-listing
@@ -672,6 +673,7 @@ li.section-listing
 {
 	font-size: 12px;
 	margin-left: 28px;
+	line-height: 14px;
 
 }
 
