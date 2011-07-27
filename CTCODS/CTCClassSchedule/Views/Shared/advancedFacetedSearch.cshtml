@@ -5,9 +5,9 @@
 		String QuarterTwoFriendly = ViewBag.QuarterTwoFriendly;
 		String QuarterThreeFriendly = ViewBag.QuarterThreeFriendly;
 
-		String QuarterOneURL = ViewBag.QuarterOneURL + ViewBag.queryStringAll;
-		String QuarterTwoURL = ViewBag.QuarterTwoURL + ViewBag.queryStringAll;
-		String QuarterThreeURL = ViewBag.QuarterThreeURL + ViewBag.queryStringAll;
+		String QuarterOneURL = ViewBag.QuarterOneURL + "?type=beta" + ViewBag.queryStringAll;
+		String QuarterTwoURL = ViewBag.QuarterTwoURL + "?type=beta" + ViewBag.queryStringAll;
+		String QuarterThreeURL = ViewBag.QuarterThreeURL + "?type=beta" + ViewBag.queryStringAll;
 	}
 
 
@@ -62,16 +62,18 @@
 	<h3>Classes Offered:</h3>
 	<ul>
 		<li @if(ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")		{ @(ViewBag.activeClass) }>
-			@Html.ActionLink("All Credit Classes", "/All")
+
+			<a href="@ViewBag.currentAppSubdirectory/Classes/All?type=beta@(ViewBag.queryStringAll)">All Credit Classes</a>
 		</li>
-		<li @if(ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())				{ @(ViewBag.activeClass) }>
-			@Html.ActionLink(@QuarterOneFriendly, "/" + QuarterOneURL)
+		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())
+			{ @(ViewBag.activeClass) }>
+			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterOneURL)">@QuarterOneFriendly</a>
 		</li>
 		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())			{ @(ViewBag.activeClass) }>
-			@Html.ActionLink(@QuarterTwoFriendly, "/" + QuarterTwoURL)
+			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterTwoURL)">@QuarterTwoFriendly</a>
 		</li>
 		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())		{ @(ViewBag.activeClass) }>
-			@Html.ActionLink(@QuarterThreeFriendly, "/" + QuarterThreeURL)
+			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterThreeURL)">@QuarterThreeFriendly</a>
 		</li>
 
 	</ul>
