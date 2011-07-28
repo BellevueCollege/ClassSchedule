@@ -45,7 +45,9 @@
 	<h3>Days</h3>
 	<ul>
 		<li @if(ViewBag.days == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)">All</a></li>
-		<li @if(ViewBag.days == "weekday") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=weekday">Weekday</a></li>
+		<li @if(ViewBag.days == "daily") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=daily">Daily</a></li>
+		<li @if(ViewBag.days == "mw") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=mw">M/W</a></li>
+		<li @if(ViewBag.days == "tth") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=tth">T/Th</a></li>
 		<li @if(ViewBag.days == "weekend") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=weekend">Weekend</a></li>
 	</ul>
 

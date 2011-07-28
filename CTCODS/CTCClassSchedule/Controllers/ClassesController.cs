@@ -989,16 +989,40 @@ namespace CTCClassSchedule.Controllers
 				switch (time)
 				{
 					case "morning":
-						facets.Add(new TimeFacet(new TimeSpan(0,0,0), new TimeSpan(11,59,0)));
+						facets.Add(new TimeFacet(new TimeSpan(0, 0, 0), new TimeSpan(11, 59, 0)));
 						break;
 					case "afternoon":
-						facets.Add(new TimeFacet(new TimeSpan(12,0,0), new TimeSpan(16,59,0)));
+						facets.Add(new TimeFacet(new TimeSpan(12, 0, 0), new TimeSpan(16, 59, 0)));
 						break;
 					case "evening":
-						facets.Add(new TimeFacet(new TimeSpan(17,0,0), new TimeSpan(23,59,0)));
+						facets.Add(new TimeFacet(new TimeSpan(17, 0, 0), new TimeSpan(23, 59, 0)));
 						break;
 				}
 			}
+
+			if (!string.IsNullOrWhiteSpace(days))
+			{
+				switch (days)
+				{
+					case "all":
+						//don't add a facet in this case, just include all days
+						break;
+					case "mw":
+						facets.Add(new DaysFacet(DaysFacet.Options.MondayWednesday));
+						break;
+					case "tth":
+						facets.Add(new DaysFacet(DaysFacet.Options.TuesdayThursday));
+						break;
+					case "daily":
+						facets.Add(new DaysFacet(DaysFacet.Options.Daily));
+						break;
+					case "weekend":
+						facets.Add(new DaysFacet(DaysFacet.Options.Weekend));
+						break;
+
+				}
+			}
+
 			return facets;
 		}
 
