@@ -141,7 +141,20 @@ count++;
 						<li><span class="descriptor">Meets: </span>
 							<ul class="meets">
 								<li><span class="days">
-									<abbr title="Days Offered">@offering.Days</abbr></span> <span class="times">
+									<abbr title="Days Offered">
+
+											@if (item.IsOnline == true)
+										{
+											<text>Online</text>
+										}
+										else {
+											@offering.Days
+										}
+
+
+
+
+									</abbr></span> <span class="times">
 										<span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime)-@String.Format("{0:t}", offering.EndTime)
 									</span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
 								</li>

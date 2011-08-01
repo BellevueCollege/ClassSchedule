@@ -290,8 +290,8 @@ namespace CTCClassSchedule.Controllers
 													WaitlistCount = c.WaitlistCount,
 													Yrq = c.Yrq,
 													SeatsAvailable = d.SeatsAvailable,
-													LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated))
-
+													LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated)),
+													IsOnline = c.IsOnline
 												}
 
 											);
