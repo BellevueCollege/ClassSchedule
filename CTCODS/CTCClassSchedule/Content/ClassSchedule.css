@@ -528,6 +528,7 @@ p.course-details-link
 	margin: 0;
 	padding-top: 21px;  /*ju */
 	background:  url(images/course-block-header.png) 0 9px no-repeat;  /*new*/
+	margin-bottom: 8px;
 
 }
 .course-block ul

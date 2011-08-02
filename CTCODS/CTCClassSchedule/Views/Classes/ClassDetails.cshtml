@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
 @using CTCClassSchedule.Common;
+
+@ViewBag.CourseTitle = "";
+
 <script type="text/javascript">
 
 	$(document).ready(function () {
@@ -76,25 +79,26 @@
 
 		if (@ViewBag.currentQuarter != item.ID.ToString().Substring(4, 4))
 		{
-			if (count == 0)
-			{
-			@Html.Raw("</ul>")
 
-
-count++;
-			}
 
 			<h3 class="course-YRQ">@item.Yrq.FriendlyName</h3>
-										 ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
+			ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
+			ViewBag.CourseTitle = "";
 
-			<div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle • @item.Credits</div>
-
-			@Html.Raw("<ul class='course-block'>");
 
 		}
 
-
-
+		if(!item.CourseTitle.Equals(ViewBag.CourseTitle))
+		{
+			if (count == 0)
+			{
+				@Html.Raw("</ul>")
+				count++;
+			}
+			ViewBag.CourseTitle = item.CourseTitle;
+			<div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle • @item.Credits</div>
+			@Html.Raw("<ul class='course-block'>");
+		}
 
 
 
@@ -112,27 +116,16 @@ count++;
 									@if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
 				 {
 					 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-					 {
-											<text>TBD</text>
-					 }
+					 { <text>TBD</text> }
 					 else
-					 {
-											@offering.InstructorName
-					 }
-
+					 { @offering.InstructorName	}
 				 }
 				 else
 				 {
 					 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-					 {
-											<text>TBD</text>
-					 }
+					 { <text>TBD</text> }
 					 else
-					 {
-											<a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))" target="_blank">@offering.InstructorName</a>
-					 }
-
-
+					 { <a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))" target="_blank">@offering.InstructorName</a>	}
 				 }
 								</li>
 							</ul>
@@ -142,18 +135,10 @@ count++;
 							<ul class="meets">
 								<li><span class="days">
 									<abbr title="Days Offered">
-
-											@if (item.IsOnline == true)
-										{
-											<text>Online</text>
-										}
-										else {
-											@offering.Days
-										}
-
-
-
-
+										@if (item.IsOnline == true)
+					{ <text>Online</text> }
+					else
+					{ @offering.Days }
 									</abbr></span> <span class="times">
 										<span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime)-@String.Format("{0:t}", offering.EndTime)
 									</span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
@@ -182,9 +167,6 @@ count++;
 				ViewBag.seatAvailbilityDisplayed = true;
 																																 }
 
-
-
-
 						<li class="section-notes"><span class="descriptor">Notes: </span>
 						@if (@item.Footnotes != null && @item.Footnotes.Count() > 0)
 			{
@@ -196,13 +178,12 @@ count++;
 							</ul>
 			}
 						</li>
-		 }
+		 } <!--end of repeat offered information -->
 
-					<!--end of repeat offered information -->
 				</ul>
 			</li>
-		 ViewBag.seatAvailbilityDisplayed = false;
+			ViewBag.seatAvailbilityDisplayed = false;
 
-	}
+		}
 	</div>
 </div>
