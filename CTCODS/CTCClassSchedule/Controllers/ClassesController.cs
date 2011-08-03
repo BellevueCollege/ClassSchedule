@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,7 +10,6 @@ using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Models;
-using System.Configuration;
 
 
 
@@ -191,21 +191,11 @@ namespace CTCClassSchedule.Controllers
 											&& c.Yrq.ToString() == YRQ.ToString()
 											select new SectionWithSeats
 											{
-												ID = c.ID,
-												CourseID = c.CourseID,
-												CourseNumber = c.CourseNumber,
-												CourseTitle = c.CourseTitle,
-												CourseSubject = c.CourseSubject,
-												Credits = c.Credits,
-												Offered = c.Offered,
-												SectionCode = c.SectionCode,
-												WaitlistCount = c.WaitlistCount,
-												Yrq = c.Yrq,
-												SeatsAvailable = d.SeatsAvailable,
-												LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated)),
-												IsOnline = c.IsOnline
+													ParentObject = c,
+													SeatsAvailable = d.SeatsAvailable,
+													LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated)),
 											}
-										);
+				               );
 
 				ViewBag.ItemCount = sectionsEnum.Count();
 				return View(sectionsEnum);
@@ -266,7 +256,7 @@ namespace CTCClassSchedule.Controllers
 
 					var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
 
-																		 select s);
+					                           select s);
 
 
 
@@ -274,27 +264,17 @@ namespace CTCClassSchedule.Controllers
 
 					IEnumerable<SectionWithSeats> sectionsEnum;
 					sectionsEnum = (
-												from c in sections
-												join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
-												where c.CourseSubject == Subject.ToUpper()
-												select new SectionWithSeats
-												{
-													ID = c.ID,
-													CourseID = c.CourseID,
-													CourseNumber = c.CourseNumber,
-													CourseTitle = c.CourseTitle,
-													CourseSubject = c.CourseSubject,
-													Credits = c.Credits,
-													Offered = c.Offered,
-													SectionCode = c.SectionCode,
-													WaitlistCount = c.WaitlistCount,
-													Yrq = c.Yrq,
-													SeatsAvailable = d.SeatsAvailable,
-													LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated)),
-													IsOnline = c.IsOnline
-												}
+								from c in sections
+								join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
+								where c.CourseSubject == Subject.ToUpper()
+								select new SectionWithSeats
+									{
+																				ParentObject = c,
+											SeatsAvailable = d.SeatsAvailable,
+											LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated)),
+									}
 
-											);
+					               );
 
 
 
@@ -328,8 +308,8 @@ namespace CTCClassSchedule.Controllers
 
 
 			var seatsAvailableLocal =	from s in _scheduledb.SeatAvailabilities
-																where s.ClassID == courseIdPlusYRQ
-																select s;
+							where s.ClassID == courseIdPlusYRQ
+							select s;
 			int rows = seatsAvailableLocal.Count();
 
 			if (rows == 0)
@@ -358,8 +338,8 @@ namespace CTCClassSchedule.Controllers
 			_scheduledb.SaveChanges();
 
 			var seatsAvailable = from s in _scheduledb.vw_SeatAvailability
-													 where s.ClassID == courseIdPlusYRQ
-															select s;
+			                     where s.ClassID == courseIdPlusYRQ
+			                     select s;
 
 			foreach (var seat in seatsAvailable)
 			{
@@ -418,11 +398,11 @@ namespace CTCClassSchedule.Controllers
 
 			byte[] buffer = new byte[8000];
 			HttpWebRequest request = (HttpWebRequest)
-			WebRequest.Create(url);
+			                         WebRequest.Create(url);
 
 			// execute the request
 			HttpWebResponse response = (HttpWebResponse)
-				request.GetResponse();
+			                           request.GetResponse();
 
 			// we will read data via the response stream
 			Stream resStream = response.GetResponseStream();
@@ -511,326 +491,326 @@ namespace CTCClassSchedule.Controllers
 		/// Converts a friendly YRQ (Fall2011) into a <see cref="YearQuarter"/>
 		/// </summary>
 		private string getYRQFromFriendlyDate(string friendlyDate)
-	{
-		//Example: Winter 2008 = A783
-
-		//summer: xxx1
-		//fall:   xxx2
-		//winter: xxx3
-		//spring:	xxx4
-
-		//Academic year 2006-2007: x67x
-		//Academic year 2011-2012: x12x
-
-		string year = friendlyDate.Substring(friendlyDate.Length - 4);  //2011
-		string quarterFriendly = friendlyDate.Substring(0, friendlyDate.Length - 4); //Spring
-		string decade = "";
-		int yearBaseTen = 0;
-		int yearBaseTenPlusOne = 0;
-		string YearQuarter1 = "";
-		string YearQuarter23 = "";
-		string quarter = "";
-		bool isLastTwoQuarters = false;
-		bool badlyFormedQuarter = false;
-		bool badlyFormedYear = false;
-
-		if (IsInteger(year))
 		{
-			if (Convert.ToInt16(year) < 1975 || Convert.ToInt16(year) > 2030)
+			//Example: Winter 2008 = A783
+
+			//summer: xxx1
+			//fall:   xxx2
+			//winter: xxx3
+			//spring:	xxx4
+
+			//Academic year 2006-2007: x67x
+			//Academic year 2011-2012: x12x
+
+			string year = friendlyDate.Substring(friendlyDate.Length - 4);  //2011
+			string quarterFriendly = friendlyDate.Substring(0, friendlyDate.Length - 4); //Spring
+			string decade = "";
+			int yearBaseTen = 0;
+			int yearBaseTenPlusOne = 0;
+			string YearQuarter1 = "";
+			string YearQuarter23 = "";
+			string quarter = "";
+			bool isLastTwoQuarters = false;
+			bool badlyFormedQuarter = false;
+			bool badlyFormedYear = false;
+
+			if (IsInteger(year))
 			{
-				badlyFormedYear = true;
-			}
-			else
-			{
-				yearBaseTen = Convert.ToInt16(year.Substring(3, 1));
-				decade = year.Substring(0, 3); //201
-			}
-		}
-
-		//determine the quarter in string form "1", "2", etc... essentially the xxx2 character
-		switch (quarterFriendly.ToLower())
-		{
-			case "summer":
-				quarter = "1";
-				break;
-			case "fall":
-				quarter = "2";
-				break;
-			case "winter":
-				quarter = "3";
-				break;
-			case "spring":
-				quarter = "4";
-				break;
-			default:
-				badlyFormedQuarter = true;
-				break;
-
-		}
-
-		if (!badlyFormedQuarter && !badlyFormedYear)
-		{
-
-
-
-
-			//is the year an overlapping year? e.g. spring 2000 = 9904 but summer 2000 = A011
-			if (yearBaseTen == 0 && (quarter == "3" || quarter == "4"))
-			{
-				isLastTwoQuarters = true;
-			}
-
-			//find out which decade it is in, to determine Axxx (first character in string)
-			switch (decade)
-			{
-				case "197":
-					YearQuarter1 = isLastTwoQuarters == true ? "6" : "7";
-					break;
-				case "198":
-					YearQuarter1 = isLastTwoQuarters == true ? "7" : "8";
-					break;
-				case "199":
-					YearQuarter1 = isLastTwoQuarters == true ? "8" : "9";
-					break;
-				case "200":
-					YearQuarter1 = isLastTwoQuarters == true ? "9" : "A";
-					break;
-				case "201":
-					YearQuarter1 = isLastTwoQuarters == true ? "A" : "B";
-					break;
-				case "202":
-					YearQuarter1 = isLastTwoQuarters == true ? "B" : "C";
-					break;
-
-
-			}
-
-			//figure out what the x23x portion of the YRQ is
-			if (quarter == "1" || quarter == "2")
-			{
-				if (yearBaseTen + 1 > 9)
+				if (Convert.ToInt16(year) < 1975 || Convert.ToInt16(year) > 2030)
 				{
-					yearBaseTenPlusOne = yearBaseTen + 1 - 10;
+					badlyFormedYear = true;
 				}
 				else
 				{
-					yearBaseTenPlusOne = yearBaseTen + 1;
+					yearBaseTen = Convert.ToInt16(year.Substring(3, 1));
+					decade = year.Substring(0, 3); //201
 				}
-				YearQuarter23 = Convert.ToString(yearBaseTen) + Convert.ToString((yearBaseTenPlusOne));
-
 			}
-			else if (quarter == "3" || quarter == "4")
+
+			//determine the quarter in string form "1", "2", etc... essentially the xxx2 character
+			switch (quarterFriendly.ToLower())
 			{
-				int tempYearBaseTen;
-				if (yearBaseTen == 0)
-				{
-					tempYearBaseTen = 10;
-				}
-				else
-				{
-					tempYearBaseTen = yearBaseTen;
-				}
+				case "summer":
+					quarter = "1";
+					break;
+				case "fall":
+					quarter = "2";
+					break;
+				case "winter":
+					quarter = "3";
+					break;
+				case "spring":
+					quarter = "4";
+					break;
+				default:
+					badlyFormedQuarter = true;
+					break;
 
-				YearQuarter23 = Convert.ToString(tempYearBaseTen - 1) + Convert.ToString((yearBaseTen));
 			}
 
-			return YearQuarter1 + YearQuarter23 + quarter;
+			if (!badlyFormedQuarter && !badlyFormedYear)
+			{
+
+
+
+
+				//is the year an overlapping year? e.g. spring 2000 = 9904 but summer 2000 = A011
+				if (yearBaseTen == 0 && (quarter == "3" || quarter == "4"))
+				{
+					isLastTwoQuarters = true;
+				}
+
+				//find out which decade it is in, to determine Axxx (first character in string)
+				switch (decade)
+				{
+					case "197":
+						YearQuarter1 = isLastTwoQuarters == true ? "6" : "7";
+						break;
+					case "198":
+						YearQuarter1 = isLastTwoQuarters == true ? "7" : "8";
+						break;
+					case "199":
+						YearQuarter1 = isLastTwoQuarters == true ? "8" : "9";
+						break;
+					case "200":
+						YearQuarter1 = isLastTwoQuarters == true ? "9" : "A";
+						break;
+					case "201":
+						YearQuarter1 = isLastTwoQuarters == true ? "A" : "B";
+						break;
+					case "202":
+						YearQuarter1 = isLastTwoQuarters == true ? "B" : "C";
+						break;
+
+
+				}
+
+				//figure out what the x23x portion of the YRQ is
+				if (quarter == "1" || quarter == "2")
+				{
+					if (yearBaseTen + 1 > 9)
+					{
+						yearBaseTenPlusOne = yearBaseTen + 1 - 10;
+					}
+					else
+					{
+						yearBaseTenPlusOne = yearBaseTen + 1;
+					}
+					YearQuarter23 = Convert.ToString(yearBaseTen) + Convert.ToString((yearBaseTenPlusOne));
+
+				}
+				else if (quarter == "3" || quarter == "4")
+				{
+					int tempYearBaseTen;
+					if (yearBaseTen == 0)
+					{
+						tempYearBaseTen = 10;
+					}
+					else
+					{
+						tempYearBaseTen = yearBaseTen;
+					}
+
+					YearQuarter23 = Convert.ToString(tempYearBaseTen - 1) + Convert.ToString((yearBaseTen));
+				}
+
+				return YearQuarter1 + YearQuarter23 + quarter;
+
+			}
+
+			if (badlyFormedYear == true)
+			{
+				ViewBag.ErrorMsg = ViewBag.ErrorMsg + "<li>Badly formed year, please enter a new year in the URL in the format 'Quarter2011'</li>";
+			}
+
+			if (badlyFormedQuarter == true)
+			{
+				ViewBag.ErrorMsg = ViewBag.ErrorMsg + "<li>Badly formed quarter, please enter a new Quarter in the URL in the format 'Fall20XX'</li>";
+			}
+
+			return "Z999";
+
+
 
 		}
-
-		if (badlyFormedYear == true)
-		{
-			ViewBag.ErrorMsg = ViewBag.ErrorMsg + "<li>Badly formed year, please enter a new year in the URL in the format 'Quarter2011'</li>";
-		}
-
-		if (badlyFormedQuarter == true)
-		{
-			ViewBag.ErrorMsg = ViewBag.ErrorMsg + "<li>Badly formed quarter, please enter a new Quarter in the URL in the format 'Fall20XX'</li>";
-		}
-
-		return "Z999";
-
-
-
-	}
 
 		/// <summary>
 		/// Converts a <see cref="YearQuarter"/> into a friendly YRQ (Fall2011)
 		/// </summary>
 		private String getFriendlyDateFromYRQ(YearQuarter YRQ)
-	{
-		//Example: Winter 2008 = A783
+		{
+			//Example: Winter 2008 = A783
 
-		//summer: xxx1
-		//fall:   xxx2
-		//winter: xxx3
-		//spring:	xxx4
+			//summer: xxx1
+			//fall:   xxx2
+			//winter: xxx3
+			//spring:	xxx4
 
-		//Academic year 2006-2007: x67x
-		//Academic year 2011-2012: x12x
+			//Academic year 2006-2007: x67x
+			//Academic year 2011-2012: x12x
 
-		string stringYRQ = YRQ.ID.ToString();
+			string stringYRQ = YRQ.ID.ToString();
 
-		string year1 = stringYRQ.Substring(stringYRQ.Length - 3, 1); //x6xx = 2006
-		string year2 = stringYRQ.Substring(stringYRQ.Length - 2, 1); //xx7x = 2007
-		string quarter = stringYRQ.Substring(stringYRQ.Length - 1, 1); //Spring
-		string decade = stringYRQ.Substring(stringYRQ.Length - 4, 1); //Axxx = 2000's
-		string strQuarter = "";
-		bool isLastTwoQuarters = false;
-		bool badlyFormedQuarter = false;
-		bool badlyFormedYear = false;
+			string year1 = stringYRQ.Substring(stringYRQ.Length - 3, 1); //x6xx = 2006
+			string year2 = stringYRQ.Substring(stringYRQ.Length - 2, 1); //xx7x = 2007
+			string quarter = stringYRQ.Substring(stringYRQ.Length - 1, 1); //Spring
+			string decade = stringYRQ.Substring(stringYRQ.Length - 4, 1); //Axxx = 2000's
+			string strQuarter = "";
+			bool isLastTwoQuarters = false;
+			bool badlyFormedQuarter = false;
+			bool badlyFormedYear = false;
 
-		string year = "";
+			string year = "";
 
-				//is the year an overlapping year? e.g. spring 2000 = 9904 but summer 2000 = A011
+			//is the year an overlapping year? e.g. spring 2000 = 9904 but summer 2000 = A011
 			if (year2 == "0" && (quarter == "3" || quarter == "4"))
 			{
 				isLastTwoQuarters = true;
 			}
 
-		//determine the quarter in string form "1", "2", etc... essentially the xxx2 character
-		switch (quarter)
-		{
-			case "1":
-				strQuarter = "Summer";
-				year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
-				break;
-			case "2":
-				strQuarter = "Fall";
-				year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
-				break;
-			case "3":
-				strQuarter = "Winter";
-				year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
-				break;
-			case "4":
-				strQuarter = "Spring";
-				year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
-				break;
-			default:
-				badlyFormedQuarter = true;
-				break;
-
-		}
-		if (IsInteger(year))
-		{
-			if (Convert.ToInt16(year) < 1975 || Convert.ToInt16(year) > 2030)
+			//determine the quarter in string form "1", "2", etc... essentially the xxx2 character
+			switch (quarter)
 			{
-				badlyFormedYear = true;
+				case "1":
+					strQuarter = "Summer";
+					year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
+					break;
+				case "2":
+					strQuarter = "Fall";
+					year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
+					break;
+				case "3":
+					strQuarter = "Winter";
+					year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
+					break;
+				case "4":
+					strQuarter = "Spring";
+					year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
+					break;
+				default:
+					badlyFormedQuarter = true;
+					break;
+
 			}
+			if (IsInteger(year))
+			{
+				if (Convert.ToInt16(year) < 1975 || Convert.ToInt16(year) > 2030)
+				{
+					badlyFormedYear = true;
+				}
+			}
+
+			string returnFriendly = "You have entered a badly formed quarter/year.";
+
+			if (!badlyFormedQuarter || !badlyFormedYear)
+			{
+				returnFriendly = strQuarter + " " + year;
+			}
+
+			return returnFriendly;
+
+
+
+
 		}
-
-		string returnFriendly = "You have entered a badly formed quarter/year.";
-
-		if (!badlyFormedQuarter || !badlyFormedYear)
-		{
-			returnFriendly = strQuarter + " " + year;
-		}
-
-		return returnFriendly;
-
-
-
-
-	}
 
 		/// <summary>
 		/// Gets the current year given some input params. Helper method for getFriendlyDateFromYRQ
 		/// </summary>
 		private string getYearHelper(string quarter, string year1, string year2, string decade, bool isLastTwoQuarters)
-	{
-		string first2OfYear = "";
-		string last2OfYear = "";
-		string ThirdOfYear = "";
-
-		int intYear1 = Convert.ToInt16(year1);
-		int intYear2 = Convert.ToInt16(year2);
-
-		switch (decade)
 		{
-			case "7":
-				first2OfYear = "19";
-				break;
-			case "8":
-				first2OfYear = "19";
-				break;
-			case "9":
-				first2OfYear = isLastTwoQuarters == true ? "20" : "19";
-				break;
-			case "A":
-				first2OfYear = "20";
-				break;
-			case "B":
-				first2OfYear = "20";
-				break;
-			case "C":
-				first2OfYear = "20";
-				break;
-			case "D":
-				first2OfYear = "20";
-				break;
-			default:
-				break;
+			string first2OfYear = "";
+			string last2OfYear = "";
+			string ThirdOfYear = "";
+
+			int intYear1 = Convert.ToInt16(year1);
+			int intYear2 = Convert.ToInt16(year2);
+
+			switch (decade)
+			{
+				case "7":
+					first2OfYear = "19";
+					break;
+				case "8":
+					first2OfYear = "19";
+					break;
+				case "9":
+					first2OfYear = isLastTwoQuarters == true ? "20" : "19";
+					break;
+				case "A":
+					first2OfYear = "20";
+					break;
+				case "B":
+					first2OfYear = "20";
+					break;
+				case "C":
+					first2OfYear = "20";
+					break;
+				case "D":
+					first2OfYear = "20";
+					break;
+				default:
+					break;
+
+			}
+
+			switch (quarter)
+			{
+				case "1":
+					last2OfYear = getDecadeIntegerFromString(decade) + intYear1.ToString();
+					break;
+				case "2":
+					last2OfYear = getDecadeIntegerFromString(decade) + intYear1.ToString();
+					break;
+				case "3":
+					ThirdOfYear = isLastTwoQuarters == true ? getDecadeIntegerFromString(getNextDecade(decade)) : getDecadeIntegerFromString(decade);
+					last2OfYear = ThirdOfYear + intYear2.ToString();
+					break;
+				case "4":
+					ThirdOfYear = isLastTwoQuarters == true ? getDecadeIntegerFromString(getNextDecade(decade)) : getDecadeIntegerFromString(decade);
+					last2OfYear = ThirdOfYear + intYear2.ToString();
+					break;
+				default:
+
+					break;
+
+			}
+
+			return first2OfYear + last2OfYear;
 
 		}
-
-		switch (quarter)
-		{
-			case "1":
-				last2OfYear = getDecadeIntegerFromString(decade) + intYear1.ToString();
-				break;
-			case "2":
-				last2OfYear = getDecadeIntegerFromString(decade) + intYear1.ToString();
-				break;
-			case "3":
-				ThirdOfYear = isLastTwoQuarters == true ? getDecadeIntegerFromString(getNextDecade(decade)) : getDecadeIntegerFromString(decade);
-				last2OfYear = ThirdOfYear + intYear2.ToString();
-				break;
-			case "4":
-				ThirdOfYear = isLastTwoQuarters == true ? getDecadeIntegerFromString(getNextDecade(decade)) : getDecadeIntegerFromString(decade);
-				last2OfYear = ThirdOfYear + intYear2.ToString();
-				break;
-			default:
-
-				break;
-
-		}
-
-		return first2OfYear + last2OfYear;
-
-	}
 
 		/// <summary>
 		/// Gets the friendly decade value from the HP decade (A = 2000's, B = 2010's). Helper method for getYearHelper
 		/// </summary>
 		private string getDecadeIntegerFromString(string decade)
-	{
-		switch (decade)
 		{
-			case "7":
-				return "7";
-				break;
-			case "8":
-				return "8";
-				break;
-			case "9":
-				return "9";
-				break;
-			case "A":
-				return "0";
-				break;
-			case "B":
-				return "1";
-				break;
-			case "C":
-				return "2";
-				break;
-			case "D":
-				return "3";
-				break;
+			switch (decade)
+			{
+				case "7":
+					return "7";
+					break;
+				case "8":
+					return "8";
+					break;
+				case "9":
+					return "9";
+					break;
+				case "A":
+					return "0";
+					break;
+				case "B":
+					return "1";
+					break;
+				case "C":
+					return "2";
+					break;
+				case "D":
+					return "3";
+					break;
+			}
+			return "";
 		}
-		return "";
-	}
 
 		/// <summary>
 		/// Gets the next decade in HP format (8, 9, A, B)
@@ -869,18 +849,18 @@ namespace CTCClassSchedule.Controllers
 		/// Returns true/false if the value passed is an integer
 		/// </summary>
 		public static bool IsInteger(string value)
-	{
-		try
 		{
-			Convert.ToInt32(value);
-			return true;
-		}
-		catch
-		{
-			return false;
-		}
+			try
+			{
+				Convert.ToInt32(value);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 
-	}
+		}
 
 		/// <summary>
 		/// Returns a friendly time in sentance form given a datetime. This value
