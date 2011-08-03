@@ -31,7 +31,7 @@
 				make sure the alphabet array is updated and incremented.
 		*@
 
-		while ((char)(ViewBag.AlphabetCharacter + 65) < Convert.ToChar(item.Subject.Substring(0, 1)))
+		while ((char)(ViewBag.AlphabetCharacter + 65) < Convert.ToChar(item.Title.Substring(0, 1)))
 		{
 			ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
 			ViewBag.AlphabetCharacter++;
