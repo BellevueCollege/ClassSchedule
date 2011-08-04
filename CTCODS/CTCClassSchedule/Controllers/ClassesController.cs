@@ -789,25 +789,18 @@ namespace CTCClassSchedule.Controllers
 			{
 				case "7":
 					return "7";
-					break;
 				case "8":
 					return "8";
-					break;
 				case "9":
 					return "9";
-					break;
 				case "A":
 					return "0";
-					break;
 				case "B":
 					return "1";
-					break;
 				case "C":
 					return "2";
-					break;
 				case "D":
 					return "3";
-					break;
 			}
 			return "";
 		}
@@ -821,25 +814,18 @@ namespace CTCClassSchedule.Controllers
 			{
 				case "7":
 					return "8";
-					break;
 				case "8":
 					return "9";
-					break;
 				case "9":
 					return "A";
-					break;
 				case "A":
 					return "B";
-					break;
 				case "B":
 					return "C";
-					break;
 				case "C":
 					return "D";
-					break;
 				case "D":
 					return "E";
-					break;
 			}
 			return "";
 
