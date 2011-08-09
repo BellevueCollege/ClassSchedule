@@ -150,8 +150,9 @@ namespace CTCClassSchedule.Controllers
 				{
 					View(courses);
 				}
+				return View();
 			}
-			return View();
+
 		}
 
 		/// <summary>
