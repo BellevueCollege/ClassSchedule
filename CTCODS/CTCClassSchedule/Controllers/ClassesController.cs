@@ -18,6 +18,7 @@ namespace CTCClassSchedule.Controllers
 	public class ClassesController : Controller
 	{
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
+		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
 
 		#region controller actions
 
@@ -77,6 +78,10 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.Title = "All " +  @Subject + " classes";
 			IList<ISectionFacet> facets = addFacets(flex, time, days, avail);
 
+			ViewBag.ProgramUrl = getProgramUrl(Subject);
+
+
+
 			using (OdsRepository respository = new OdsRepository())
 			{
 				getCurrentFutureYRQs(respository);
@@ -100,6 +105,8 @@ namespace CTCClassSchedule.Controllers
 			}
 			return View();
 		}
+
+
 
 		/// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/
@@ -208,28 +215,28 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/{ClassNum}
 		/// </summary>
-		public ActionResult YRQClassDetails(string YearQuarterID, string Subject, string ClassNum)
-		{
+		//public ActionResult YRQClassDetails(string YearQuarterID, string Subject, string ClassNum)
+		//{
 
-			string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
-			ViewBag.displayedCourseNum = 0;
+		//  string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
+		//  ViewBag.displayedCourseNum = 0;
 
-			using (OdsRepository respository = new OdsRepository())
-			{
-				getCurrentFutureYRQs(respository);
+		//  using (OdsRepository respository = new OdsRepository())
+		//  {
+		//    getCurrentFutureYRQs(respository);
 
-				if (courseID != null)
-				{
-					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID),  Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID));
-					ViewBag.ItemCount = sections.Count();
-					return View(sections);
-				}
-				else
-				{
-					return View();
-				}
-			}
-		}
+		//    if (courseID != null)
+		//    {
+		//      IList<Section> sections = respository.GetSections(CourseID.FromString(courseID),  Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID));
+		//      ViewBag.ItemCount = sections.Count();
+		//      return View(sections);
+		//    }
+		//    else
+		//    {
+		//      return View();
+		//    }
+		//  }
+		//}
 
 		/// <summary>
 		/// GET: /Classes/All/{Subject}/{ClassNum}
@@ -241,6 +248,8 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.CourseOutcome = getCourseOutcome(Subject, ClassNum);
 			ViewBag.Title = @Subject + " " + ClassNum + " sections";
+			ViewBag.ProgramUrl = getProgramUrl(Subject);
+
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -992,6 +1001,34 @@ namespace CTCClassSchedule.Controllers
 			}
 
 			return facets;
+		}
+
+		private string getProgramUrl(string Subject)
+		{
+			string ProgramURL = "";
+			var specificProgramInfo = from s in _programdb.ProgramInformation
+																where s.Abbreviation == Subject
+																select s;
+
+			foreach (ProgramInformation program in specificProgramInfo)
+			{
+				ProgramURL = program.Url;
+			}
+
+
+			//if the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
+			//just return it, otherwise prepend iwth the current school url.
+			if (ProgramURL.Contains("http://"))
+			{
+				return ProgramURL;
+			}
+			else
+			{
+				ProgramURL = ConfigurationManager.AppSettings["currentSchoolUrl"] + ConfigurationManager.AppSettings["currentAppSubdirectory"] + ProgramURL;
+
+			}
+
+			return ProgramURL;
 		}
 
 

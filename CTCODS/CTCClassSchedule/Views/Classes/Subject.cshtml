@@ -4,7 +4,7 @@
 	@Html.Partial("basicFacetedSearch")
 	<div id="scheduleContent">
 		<h2>@ViewBag.Subject classes for any quarter</h2>
-		<a href="/" class="programWebsite">Program Website</a>
+		<a href="@ViewBag.ProgramUrl" class="programWebsite" target="_blank">Program Website</a>
 		<div id="classInfoWrap">
 		@foreach (var item in Model)
 	{

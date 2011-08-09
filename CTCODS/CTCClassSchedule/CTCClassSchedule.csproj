@@ -112,6 +112,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AvailableSeats.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProgramInformation.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProgramInformation.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SectionWithSeats.cs" />
   </ItemGroup>
@@ -235,6 +240,10 @@
     <Content Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <EntityDeploy Include="Models\ProgramInformation.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ProgramInformation.Designer.cs</LastGenOutput>
+    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">

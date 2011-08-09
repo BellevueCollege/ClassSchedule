@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
 @using CTCClassSchedule.Common;
 
-@ViewBag.CourseTitle = "";
+@(ViewBag.CourseTitle = "")
 
 <script type="text/javascript">
 
@@ -147,8 +147,8 @@
 						</li>
 
 
-																																 if (ViewBag.seatAvailbilityDisplayed == false)
-																																 {
+				if (ViewBag.seatAvailbilityDisplayed == false)
+				{
 							<li class="availability-@(item.ID.ToString())">
 								<span class="descriptor">Seat Availability:
 								</span>
