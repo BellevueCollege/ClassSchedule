@@ -282,6 +282,7 @@ namespace CTCClassSchedule.Controllers
 																				ParentObject = c,
 											SeatsAvailable = d.SeatsAvailable,
 											LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated)),
+																				Footnotes = c.Footnotes,
 									}
 
 					               );

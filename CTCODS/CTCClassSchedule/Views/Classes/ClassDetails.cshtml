@@ -168,10 +168,10 @@
 																																 }
 
 						<li class="section-notes"><span class="descriptor">Notes: </span>
-						@if (@item.Footnotes != null && @item.Footnotes.Count() > 0)
+						@if (@item.Footnotes != null)
 			{
 							<ul>
-							@foreach (string note in @item.Footnotes)
+							@foreach (string note in item.Footnotes)
 			 {
 								<li><span class="label">@note</span></li>
 			 }

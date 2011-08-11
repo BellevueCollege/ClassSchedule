@@ -637,7 +637,9 @@ li.section-listing
 .course-block li.section-notes
 {
 	color: #666;
-	padding-left: 55px;
+	padding-left: 51px;
+	padding-top: 3px;
+	padding-bottom: 3px;
 	clear: left;
 }
 

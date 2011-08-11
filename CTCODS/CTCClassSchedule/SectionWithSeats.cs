@@ -1,4 +1,5 @@
 ﻿using Ctc.Ods.Types;
+using System.Collections.Generic;
 
 namespace CTCClassSchedule
 {
@@ -6,6 +7,7 @@ namespace CTCClassSchedule
 	{
 		public int? SeatsAvailable { get; set; }
 		public string LastUpdated { get; set; }
+		public IEnumerable<string> Footnotes { get; set; }
 
 		/// <summary>
 		/// Provides a means to set protected values of the parent object.
@@ -25,6 +27,7 @@ namespace CTCClassSchedule
 				WaitlistCount = value.WaitlistCount;
 				Yrq = value.Yrq;
 				IsOnline = value.IsOnline;
+
 			}
 		}
 	}
