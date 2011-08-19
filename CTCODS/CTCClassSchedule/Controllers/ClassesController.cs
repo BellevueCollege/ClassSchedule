@@ -185,7 +185,7 @@ namespace CTCClassSchedule.Controllers
 																	 select s);
 
 				//IList<Section> sections = respository.GetSections(Subject, YRQ);
-				IList<Section> sections = respository.GetSections(Subject, YRQ, facetOptions: facets);
+				IList<Section> sections = respository.GetSections(Subject, YRQ, facets);
 				ViewBag.ItemCount = sections.Count();
 
 
@@ -268,9 +268,10 @@ namespace CTCClassSchedule.Controllers
 
 					                           select s);
 
+					// TODO: move this declaration somewhere it can more easily be re-used
+					IList<ISectionFacet> facets = new List<ISectionFacet> {new RegistrationQuartersFacet(-4)};	// Current & previous 3 quarters
 
-
-					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID));
+					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID), facetOptions: facets);
 
 					IEnumerable<SectionWithSeats> sectionsEnum;
 					sectionsEnum = (
