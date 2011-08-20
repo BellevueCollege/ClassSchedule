@@ -86,7 +86,7 @@ namespace CTCClassSchedule.Controllers
 			{
 				getCurrentFutureYRQs(respository);
 
-				IList<Course> courses = respository.GetCourses(facetOptions: facets);
+				IList<Course> courses = respository.GetCourses(facets);
 
 				if (Subject != null)
 				{
