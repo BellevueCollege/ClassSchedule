@@ -27,7 +27,6 @@ namespace CTCClassSchedule
 				WaitlistCount = value.WaitlistCount;
 				Yrq = value.Yrq;
 				IsOnline = value.IsOnline;
-
 			}
 		}
 	}

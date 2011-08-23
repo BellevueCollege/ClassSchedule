@@ -400,6 +400,84 @@ ul.subject li a
 	color: #fff;
 }
 
+#navbar
+{
+	background-color: #999;
+	width: 90%;
+	color: #fff;
+	height: 28px;
+	clear: both;
+	margin-top: 0px;
+	padding-top: 1px;
+	float: left;
+
+}
+
+#navbar #browse
+{
+	float: left;
+	padding: 5px 20px;
+	height: 24px;
+	margin-top: 2px;
+
+}
+
+#navbar #search
+{
+	float: left;
+	height: 24px;
+	margin-top: 1px;
+	border-left: 1px solid #fff;
+	padding-left: 10px;
+}
+
+#navbar #search select
+{
+	padding-left: 20px;
+
+}
+
+#navbar #search input.searchInput
+{
+	width: 400px;
+
+}
+
+
+#navbar #search input.searchSubmit
+{
+	width: 50px;
+
+}
+
+#register
+{
+	float: left;
+	margin-top: 0px;
+	padding: 8px 20px 0px 20px;
+	height: 21px;
+	border-left: 3px solid #fff;
+	color: #fff;
+	background-color: #999;
+
+}
+
+
+#register a
+{
+	color: #fff;
+	text-decoration: none;
+}
+
+
+#register a:hover
+{
+	text-decoration: underline;
+}
+
+
+
+
 /* end nav container */
 
 .subject
@@ -493,6 +571,13 @@ li.active a
 
 
 /****** START SCHEDULE BLOCK CODE ******/
+#NotOffered h2
+{
+	margin-left: 190px;
+	color: #003D79;
+	text-decoration: underline;
+}
+
 a
 {
 	color: #003d79;
@@ -531,6 +616,20 @@ p.course-details-link
 	margin-bottom: 8px;
 
 }
+
+.course-block-no-section
+{
+	font-size: 12px;
+	list-style: none;
+	margin: 0;
+	padding-top: 21px;  /*ju */
+	background:  none;  /*new*/
+	margin-bottom: 8px;
+	margin-left: 190px;
+	line-height: 14px;
+
+}
+
 .course-block ul
 {
 	list-style: none;
@@ -565,6 +664,24 @@ li.section-listing
 	width: 45px;
 
 }
+
+.class-number
+{
+	display: block;
+	float: left;
+	width: 100px;
+	height: 70px;
+
+}
+
+ul.class-description
+{
+	height: 70px;
+	float: right;
+	width: 580px;
+	padding-right: 70px;
+}
+
 .section-details
 {
 	float: left;

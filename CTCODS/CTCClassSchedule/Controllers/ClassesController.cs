@@ -729,7 +729,7 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// Gets the current year given some input params. Helper method for getFriendlyDateFromYRQ
 		/// </summary>
-		private string getYearHelper(string quarter, string year1, string year2, string decade, bool isLastTwoQuarters)
+		public string getYearHelper(string quarter, string year1, string year2, string decade, bool isLastTwoQuarters)
 		{
 			string first2OfYear = "";
 			string last2OfYear = "";

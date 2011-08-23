@@ -1,0 +1,189 @@
+﻿@model CTCClassSchedule.SearchResultsModel
+@using CTCClassSchedule.Common;
+
+@{
+	String quarter = ViewBag.quarter;
+}
+
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		$('.course-updated a').click(function () {
+
+			var courseIdPlusYRQ = this.id;
+			var availability = '.availability-' + courseIdPlusYRQ + ' .seatsAvailable';
+			var courseUpdated = '.availability-' + courseIdPlusYRQ + ' .course-updated em';
+			var originalSeatsAvailable = $(availability).html();
+
+
+			//load the throbber
+			$(availability).html('<img src="/Content/images/ajax-loader.gif" title="loading_seats_available" alt="loading_seats_available" />');
+
+			//post the ajax call to get the available seats and update the UI
+			$.ajax({
+				url: '/Classes/getseats',
+				type: 'POST',
+				data: { courseIdPlusYRQ: courseIdPlusYRQ },
+				timeout: 4000,
+				success: function (result) {
+					var indexOfPipe = result.indexOf("|");
+					var seatsAvailable = result.substring(0, indexOfPipe);
+					var friendlyTime = "updated " + result.substring(indexOfPipe + 1, result.length);
+
+					$(availability).html(seatsAvailable);
+					$(courseUpdated).html(friendlyTime);
+				},
+				error: function (x, t, m) {
+					//alert("got timeout");
+					$(availability).html(originalSeatsAvailable);
+					$(courseUpdated).html("server busy, try again");
+				}
+
+			});
+		});
+	});
+
+</script>
+<div id="scheduleMain">
+	@Html.Partial("quarterNavigation")
+	@Html.Partial("advancedFacetedSearch")
+	<div id="scheduleContent">
+		@foreach (var item in Model.Section)
+	{
+		int count = 0;
+		if(String.Compare(@ViewBag.displayedCourseNum, item.CourseNumber) < 0)
+		{
+			if (count == 0)
+			{
+			@Html.Raw("</ul>")
+count++;
+			}
+			<h2 class="classHeading">
+
+				@Html.ActionLink(item.CourseSubject + " " + item.CourseNumber + " " + item.CourseTitle + " " + item.Credits, quarter + "/" + item.CourseSubject + "/" + item.CourseNumber, "Classes")
+
+			</h2>
+			<p class="classDetails">
+				@Html.ActionLink("View Class Details", quarter + "/" + item.CourseSubject + "/" + item.CourseNumber, "Classes")</p>
+
+			@Html.Raw("<ul class='course-block'>");
+		}
+
+
+
+
+			<li class="section-listing"><span class="item-number"><span class="descriptor">Item
+				number: </span>@((item.ID).ToString().Substring(0, 4))</span>
+				<ul class="section-details">
+
+					<!--start of repeat offered information -->
+					@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
+					{
+						<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
+						<li class="instructor"><span class="descriptor">Instructor:</span>
+							<ul>
+								<li>
+										@if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
+				 {
+					 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+					 { <text>TBD</text> }
+					 else
+					 { @offering.InstructorName	}
+				 }
+				 else
+				 {
+					 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+					 { <text>TBD</text> }
+					 else
+					 { <a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))" target="_blank">@offering.InstructorName</a>	}
+				 }
+								</li>
+							</ul>
+						</li>
+
+						<li><span class="descriptor">Meets: </span>
+							<ul class="meets">
+								<li><span class="days">
+									<abbr title="Mondays and Wednesdays">
+										@if (item.IsOnline == true)
+										{
+											<text>Online</text>
+										}
+										else {
+											@offering.Days
+										}
+
+
+									</abbr></span> <span class="times">
+										<span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime)-@String.Format("{0:t}", offering.EndTime)
+									</span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
+								</li>
+							</ul>
+						</li>
+
+
+																																 if (ViewBag.seatAvailbilityDisplayed == false)
+																																 {
+							<li class="availability-@(item.ID.ToString())">
+								<span class="descriptor">Seat Availability:
+								</span>
+								@if (@item.WaitlistCount > 0)
+				{
+									<strong class="seatsAvailable">class full, @item.WaitlistCount on waitlist</strong>
+									<span class="course-updated"></span>
+				}
+				else
+				{
+									<strong class="seatsAvailable">@item.SeatsAvailable</strong>
+									<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">
+										[update]</a></span>
+				}
+							</li>
+				ViewBag.seatAvailbilityDisplayed = true;
+																																 }
+
+
+
+
+						<li class="section-notes"><span class="descriptor">Notes: </span>
+						@if (@item.Footnotes != null && @item.Footnotes.Count() > 0)
+			{
+							<ul>
+							@foreach (string note in @item.Footnotes)
+			 {
+								<li><span class="label">@note</span></li>
+			 }
+							</ul>
+			}
+						</li>
+					}
+
+					<!--end of repeat offered information -->
+				</ul>
+			</li>
+		 ViewBag.seatAvailbilityDisplayed = false;
+
+
+
+
+		 if (String.Compare(@ViewBag.displayedCourseNum, item.CourseNumber) < 0)
+		 {
+			 ViewBag.displayedCourseNum = item.CourseNumber;
+		 }
+
+	}
+		@if (ViewBag.ItemCount == 0)
+	{
+			<text>
+			<h3>
+				No classes found.</h3>
+			</text>
+	}
+	</div>
+
+	@{Html.RenderPartial("NoSectionCourses");}
+
+
+</div>

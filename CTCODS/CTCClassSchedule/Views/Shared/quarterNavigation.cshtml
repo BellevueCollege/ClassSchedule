@@ -1,7 +1,8 @@
-﻿
+﻿@*
 <div id="navcontainer">
 <ul id="navlist">
 
+*@
 @{
 	//viewbag variables are dynamic, so we need to convert to string to use with the Html.ActionLink
 	String QuarterOneFriendly = (String)ViewBag.QuarterOneFriendly;
@@ -14,6 +15,7 @@
 
 }
 
+@*
 
 <li @if(ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")		{ @(ViewBag.activeClass) }>@Html.ActionLink("All Credit Classes", "All")</li>
 <li @if(ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())				{ @(ViewBag.activeClass) }>@Html.ActionLink(QuarterOneFriendly, QuarterOneURL)</li>
@@ -23,3 +25,25 @@
 <li><a href="http://bellevuecollege.edu/careers/">Career Center</a></li>
 </ul>
 </div>
+
+*@
+
+@using(Html.BeginForm("Index", "Search", FormMethod.Post)) {
+<div id="navbar">
+	<div id="browse">Browse for Classes</div>
+	<div id="search">
+		Search
+		<select name="quarter">
+			<option value="@QuarterOneURL">@QuarterOneFriendly</option>
+			<option value="@QuarterTwoURL">@QuarterTwoFriendly</option>
+			<option value="@QuarterThreeURL">@QuarterThreeFriendly</option>
+			<option value="CE">Continuing Education</option>
+		</select>
+		<input type="text" class="searchInput" name="searchterm" />
+		<input type="submit" class="searchSubmit"  name="submit" value="Go" />
+
+	</div>
+
+</div>
+<div id="register"><a href="http://bellevuecollege.edu/enrollment/registration/register/">Register</a></div>
+}

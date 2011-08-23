@@ -1,0 +1,29 @@
+﻿@model CTCClassSchedule.SearchResultsModel
+
+
+
+<div id="NotOffered">
+<h2>Not Offered @ViewBag.quarter</h2>
+
+
+<ul class="course-block-no-section">
+@foreach (var item in Model.SearchResultNoSection) {
+
+
+	<li class="class-listing">
+		<span class="class-number">
+			<span class="descriptor">
+				Item	number:
+			</span>
+			@Html.DisplayFor(modelItem => item.CourseID)
+		</span>
+		<ul class="class-description">
+				<li class="Classdescription"><span class="descriptor">Description: </span>@Html.DisplayFor(modelItem => item.CourseDescription)</li>
+		</ul>
+	</li>
+
+}
+</ul>
+
+
+</div>
