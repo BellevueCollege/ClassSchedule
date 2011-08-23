@@ -23,9 +23,22 @@ namespace CTCClassSchedule.Controllers
 		#region controller actions
 
 		/// <summary>
-		/// GET: /Classes/, /Classes/All
+		/// GET: /Classes/
 		/// </summary>
-		public ActionResult Index(string letter)
+		public ActionResult Index()
+		{
+			using (OdsRepository respository = new OdsRepository())
+			{
+				getCurrentFutureYRQs(respository);
+			}
+			return View();
+		}
+
+
+		/// <summary>
+		/// GET: /Classes/All
+		/// </summary>
+		public ActionResult AllClasses(string letter)
 		{
 
 			setViewBagVars("", "", "", "", "", letter);

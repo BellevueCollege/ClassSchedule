@@ -27,10 +27,10 @@ namespace CTCClassSchedule
 			routes.MapRoute("ClassDetails", "{controller}/{YearQuarterID}/{Subject}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
 			routes.MapRoute("Subject", "{controller}/All/{Subject}", new { controller = "Classes", action = "Subject" });
 			routes.MapRoute("YearQuarterSubject", "{controller}/{YearQuarter}/{Subject}", new { controller = "Classes", action = "YearQuarterSubject"});
-			routes.MapRoute("All", "{controller}/All", new { controller = "Classes", action = "Index" });
+			routes.MapRoute("AllClasses", "{controller}/All", new { controller = "Classes", action = "AllClasses" });
 			routes.MapRoute("YearQuarter", "{controller}/{YearQuarter}", new { controller = "Classes", action = "YearQuarter"});
-			routes.MapRoute("Default", "{controller}/{action}", new { controller = "Classes", action = "Index"});
-			routes.MapRoute("Search", "{controller}/{action}", new { controller = "Search", action = "Index" });
+			routes.MapRoute("Default", "{controller}", new { controller = "Classes", action = "Index" });
+			routes.MapRoute("Search", "{controller}/{quarter}", new { controller = "Search", action = "Index" });
 
 		}
 

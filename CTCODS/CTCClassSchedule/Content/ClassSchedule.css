@@ -855,3 +855,190 @@ ul.class-description
 {
 	border-right: none;
 }
+
+
+/*  Front page css */
+
+
+
+
+#top
+{
+	height: auto;
+	background-color: #eee;
+	margin-top: 20px;
+}
+
+#top a
+{
+	color: #013d79;
+}
+#topleft
+{
+	float: left;
+	height: 230px;
+	width: 660px;
+
+}
+
+#topleft h2
+{
+	padding-left: 10px;
+}
+
+#topleft #browse
+{
+	margin: 20px 0px 0px 30px;
+	padding: 10px;
+	color: #333;
+	background-color: #eee;
+	font-weight: bold;
+	font-size: 15px;
+	border: 1px solid #ddd;
+	width: 140px;
+	text-align: center;
+	line-height: 20px;
+}
+
+#topleft #browse a
+{
+	color: #000;
+	text-decoration: none;
+}
+
+#topleft #browse a:hover
+{
+	text-decoration: underline;
+}
+
+#topright
+{
+	float: left;
+	height: 220px;
+	width: 280px;
+
+	padding: 0px 10px 10px 10px;
+	font-size: 12px;
+	line-height: 14px;
+}
+
+#topright a
+{
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 20px;
+}
+
+#topright a.grey
+{
+	font-weight: normal;
+	color: #999;
+	font-size: 12px;
+}
+
+
+#leftpanel_topleft
+{
+	float: left;
+	width: 200px;
+	height: 140px;
+
+	padding-left: 10px;
+}
+
+
+#leftpanel_topleft  h4
+{
+	color: #bbb;
+	font-size: 12px;
+	line-height: 20px;
+}
+
+#leftpanel_topleft a
+{
+	color: #bbb;
+	font-size: 12px;
+	line-height: 20px;
+}
+
+#leftpanel_topleft a.yrq
+{
+	color: #013d79;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+
+#paneldivider_topleft
+{
+	float: left;
+	width: 20px;
+	height: 140px;
+	background-color: #eef;
+}
+
+#rightpanel_topleft
+{
+	float: left;
+	width: 429px;
+	height: 140px;
+
+	border-right: 1px solid #000;
+}
+
+#bottompanel_topleft
+{
+	clear: both;
+	float: left;
+	padding-left: 10px;
+	padding-top: 10px;
+	width: 500px;
+
+}
+
+
+
+
+#middleleft
+{
+	float: left;
+	height: 250px;
+	width: 710px;
+
+}
+
+#middleleft .advertise
+{
+	float: right;
+	font-size: 12px;
+	padding-right: 30px;
+	color: #999;
+
+}
+
+#middleright
+{
+	float: left;
+	height: 250px;
+	width: 230px;
+	padding: 10px;
+
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+#middleright ul
+{
+	margin-left: 20px;
+}
+
+
+#middleright li
+{
+	list-style: disc;
+}
+
+
+
+/*  Front page css ends */

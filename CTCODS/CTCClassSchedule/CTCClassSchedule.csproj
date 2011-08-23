@@ -128,7 +128,9 @@
     <Content Include="Content\grids.css" />
     <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\course-block-header.png" />
+    <Content Include="Content\images\or_divider.gif" />
     <Content Include="Content\images\right_small_arrow.gif" />
+    <Content Include="Content\images\scroller.jpg" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -223,7 +225,7 @@
       <LastGenOutput>AvailableSeats.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="Views\Classes\Subject.cshtml" />
-    <Content Include="Views\Classes\Index.cshtml" />
+    <Content Include="Views\Classes\AllClasses.cshtml" />
     <Content Include="Views\Shared\a_to_z.cshtml" />
     <Content Include="Views\Classes\ClassDetails.cshtml" />
     <Content Include="Views\Shared\basicFacetedSearch.cshtml" />
@@ -248,6 +250,7 @@
     <Content Include="web.Dev.config">
       <DependentUpon>web.config</DependentUpon>
     </Content>
+    <Content Include="Views\Classes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">

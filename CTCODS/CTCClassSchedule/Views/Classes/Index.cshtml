@@ -1,73 +1,83 @@
-﻿@model IEnumerable<Ctc.Ods.Types.CoursePrefix>
-
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "Classes at Bellevue College";
 }
 
-<div id="scheduleMain">
+	@Html.Partial("quarterNavigation")
+<div id="front_layout">
 
+	<div id="top">
 
-@Html.Partial("quarterNavigation")
+		<div id="topleft">
+			<h2>Browse Credit Classes:</h2>
 
-@Html.Partial("basicFacetedSearch")
-
-
-<div id="scheduleContent">
-	<div id="scheduleMiddle">
-		<h2>Credit Classes @ViewBag.WhichClasses</h2>
-
-		@Html.Partial("a_to_z")
-
-
-
-
-	@if (ViewBag.whichclasses != " (All)") {
-
-	}
-
-		@foreach (var item in Model) {
-
-				@*  if there is a break between the characters, e.g. from J to M,
-				make sure the alphabet array is updated and incremented.
-		*@
-
-		while ((char)(ViewBag.AlphabetCharacter + 65) < Convert.ToChar(item.Title.Substring(0, 1)))
-		{
-			ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
-			ViewBag.AlphabetCharacter++;
-		}
-
-
-		@*
-			Check if the array is in bound (less than 26 letters in alphabet).
-			Check if the boolean value in the alphabet array is false (means that letter hasn't been printed yet)
-			Check if the current letter is the same as the first letter of the current title
-			If so, then display a letter, otherwise skip, as this is the same letter title as before and we only
-			want a single letter printed per grouping of like titles.
-
-		 *@
-
-		if (ViewBag.AlphabetCharacter <= 25 && ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] == false && (char)(ViewBag.AlphabetCharacter + 65) == Convert.ToChar(item.Subject.Substring(0, 1)))
-		{
-			<h2>@((char)(ViewBag.AlphabetCharacter + 65))</h2>
-			 ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
-			 ViewBag.AlphabetCharacter++;
-		}
-
-			<div class="subject">
-				@Html.ActionLink(item.Title, item.Subject, "Classes/All")
+			<div id="leftpanel_topleft">
+				<h4>Choose a quarter:</h4>
+				<ul>
+					<li><a class="yrq" href="/Classes/Fall2011">Fall 2011</a></li>
+					<li><a class="yrq" href="/Classes/Summer2011">Summer 2011</a></li>
+					<li><a class="yrq" href="/Classes/Spring2011">Spring 2011</a></li>
+				</ul>
 			</div>
-	}
 
-		</table>
+			<div id="paneldivider_topleft">
+				<img src="/Content/images/or_divider.gif" />
+			</div>
+			<div id="rightpanel_topleft">
+				<div id="browse">
+					<a href="/Classes/All">Browse all classes with descriptions</a>
+				</div>
+			</div>
+			<div id="bottompanel_topleft">
+				You can also <a href="http://bellevuecollege.edu/schedule/print/">Download PDF versions of the credit class schedule</a>
+			</div>
 
-	</div>
+		</div>
 
-	<div id="scheduleRightSidebar">
-	@Html.Partial("rightSidebar")
-</div>
+		<div id="topright">
+			<h3>Other classes and workshops:</h3>
+			<div id="otherclasses">
+				<a href="http://www.campusce.net/BC/Search/Search.aspx">Continuing Education classes (non-credit)</a>
+				<p>Continuing Education offeres non-credit classes and you blah blah blah!</p>
+				<a class="grey" href="http://www.campusce.net/BC/Search/Search.aspx">Check out their classes</a>
+			</div>
 
-</div>
+			<div id="otherclasses">
+				<a href="http://bellevuecollege.edu/careers/sac_classes.html">Career Center classes and workshops</a>
+				<p>The Career Center offeres various classes, free workshops and orientations to help you blah blah blah!</p>
+				<a class="grey" href="http://bellevuecollege.edu/careers/sac_classes.html">Check out their classes and workshops</a>
+			</div>
+
+		</div>
+
+
+	</div>	<!-- end of #top -->
+
+
+
+	<div id="middle">
+		<div id="middleleft">
+			<img src="/Content/images/scroller.jpg" />
+			<div id="middleleft_floatright">
+				<a class="advertise" href="mailto:webservices@bellevuecollege.edu">How to advertise in this site</a>
+			</div>
+		</div>
+
+
+		<div id="middleright">
+			<h5>UPCOMING DEADLINES</h5>
+			<ul>
+				<li>Registration begins XXX</li>
+				<li>asdfasdfds asdfds</li>
+				<li>aaw45 afs3wra</li>
+				<li>asdfaw aa343</li>
+				<li>asdfa3w fdsf</li>
+
+			</ul>
+		</div>
+
+
+	</div> <!-- end of #middle -->
+
 
 
 
