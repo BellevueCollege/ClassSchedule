@@ -127,6 +127,9 @@
   <ItemGroup>
     <Content Include="Content\grids.css" />
     <Content Include="Content\images\ajax-loader.gif" />
+    <Content Include="Content\images\coin-slider\sc1.jpg" />
+    <Content Include="Content\images\coin-slider\sc2.jpg" />
+    <Content Include="Content\images\coin-slider\sc3.jpg" />
     <Content Include="Content\images\course-block-header.png" />
     <Content Include="Content\images\or_divider.gif" />
     <Content Include="Content\images\right_small_arrow.gif" />
@@ -185,6 +188,8 @@
     <Content Include="globals\btheme_v0.1\img\translucentpixel.png" />
     <Content Include="globals\btheme_v0.1\img\twitter.png" />
     <Content Include="globals\btheme_v0.1\img\youtube.png" />
+    <Content Include="Content\coin-slider-styles.css" />
+    <Content Include="Scripts\coin-slider\coin-slider.js" />
     <Content Include="Scripts\jquery-1.5.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.5.1.js" />
     <Content Include="Scripts\jquery-1.5.1.min.js" />

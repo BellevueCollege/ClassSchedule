@@ -1,6 +1,32 @@
-﻿@{
+﻿<!--
+	coin-slider effects:
+
+	width: 565, // width of slider panel
+	height: 290, // height of slider panel
+	spw: 7, // squares per width
+	sph: 5, // squares per height
+	delay: 3000, // delay between images in ms
+	sDelay: 30, // delay beetwen squares in ms
+	opacity: 0.7, // opacity of title and navigation
+	titleSpeed: 500, // speed of title appereance in ms
+	effect: '', // random, swirl, rain, straight
+	navigation: true, // prev next and buttons
+	links : true, // show images as links
+	hoverPause: true // pause on hover
+
+-->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#games').coinslider({effect: 'straight'});
+		});
+</script>
+
+@{
     ViewBag.Title = "Classes at Bellevue College";
 }
+
+
+
 
 	@Html.Partial("quarterNavigation")
 <div id="front_layout">
@@ -54,9 +80,35 @@
 
 
 
+
 	<div id="middle">
 		<div id="middleleft">
-			<img src="/Content/images/scroller.jpg" />
+
+		<div id="games">
+
+				<a href="http://www.psu.com/Soul-Calibur-IV-Hands-on--a003147-p0.php" target="_blank">
+
+					<img height="281" width="500" src="@Url.Content("~/Content/images/coin-slider/sc1.jpg")" alt="sc1.jpg" />
+					<span>
+						Two stages were on offer, one an outdoor courtyard with Cherry Blossom blowing serenely in the wind, the other an underground lair with an odd tint of green. Both of them were beautifully rendered, if not a little low res.
+					</span>
+				</a>
+				<a href="http://www.psu.com/Soul-Calibur-IV-Hands-on--a003147-p0.php">
+					<img height="281" width="500" src="@Url.Content("~/Content/images/coin-slider/sc2.jpg")" alt="sc3.jpg" />
+					<span>
+						Thoroughly beaten, we agreed to a rematch with different characters. Playing as Mitsurugi ourselves, we notice that our frantic button mashing was not creating some of the combos that Soul Calibur II had allowed.
+					</span>
+
+				</a>
+				<a href="http://www.psu.com/Soul-Calibur-IV-Hands-on--a003147-p0.php">
+					<img height="281" width="500" src="@Url.Content("~/Content/images/coin-slider/sc3.jpg")"  alt="sc3.jpg" />
+					<span>
+						Soul Calibur is back, and it's ready to take on Street Fighter IV.
+					</span>
+				</a>
+
+		</div>
+
 			<div id="middleleft_floatright">
 				<a class="advertise" href="mailto:webservices@bellevuecollege.edu">How to advertise in this site</a>
 			</div>
