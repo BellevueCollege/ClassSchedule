@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,9 +10,8 @@ using System.Web.Mvc;
 using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
-using CTCClassSchedule.Models;
 using CTCClassSchedule.Common;
-using System.Data.SqlClient;
+using CTCClassSchedule.Models;
 
 
 namespace CTCClassSchedule.Controllers
@@ -805,16 +805,16 @@ namespace CTCClassSchedule.Controllers
 								//don't add a facet in this case, just include all days
 								break;
 							case "mw":
-								facets.Add(new DaysFacet(DaysFacet.Options.MondayWednesday));
+								facets.Add(new DaysFacet(DaysFacet.Options.Monday | DaysFacet.Options.Wednesday));
 								break;
 							case "tth":
-								facets.Add(new DaysFacet(DaysFacet.Options.TuesdayThursday));
+								facets.Add(new DaysFacet(DaysFacet.Options.Tuesday | DaysFacet.Options.Thursday));
 								break;
 							case "daily":
-								facets.Add(new DaysFacet(DaysFacet.Options.Daily));
+								facets.Add(new DaysFacet(DaysFacet.Options.Monday | DaysFacet.Options.Tuesday | DaysFacet.Options.Wednesday | DaysFacet.Options.Thursday | DaysFacet.Options.Friday));
 								break;
 							case "weekend":
-								facets.Add(new DaysFacet(DaysFacet.Options.Weekend));
+								facets.Add(new DaysFacet(DaysFacet.Options.Saturday | DaysFacet.Options.Sunday));
 								break;
 
 						}
