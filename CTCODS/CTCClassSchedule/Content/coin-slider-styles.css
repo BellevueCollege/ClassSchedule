@@ -10,6 +10,7 @@
 	zoom: 1;
 	position: relative;
 	width: 565px;
+	font-family: Verdana
 }
 .coin-slider a
 {
@@ -34,23 +35,31 @@
 	color: #B8C4CF;
 	text-indent: -1000px;
 }
+
 .cs-active
 {
 	background-color: #B8C4CF;
-	color: #FFFFFF;
+	color: #FFF;
 }
 
 .cs-title
 {
 	width: 545px;
 	padding: 10px;
-	background-color: #000000;
-	color: #FFFFFF;
+	background-color: #000;
+	color: #FFF;
 }
 
-.cs-prev, .cs-next
+.cs-next, .cs-prev
 {
-	background-color: #000000;
-	color: #FFFFFF;
+	background-color: #000;
+	color: #FFF;
 	padding: 0px 10px;
+}
+
+
+.cs-next:hover, .cs-prev:hover
+{
+	color: #FFF;
+
 }
