@@ -250,14 +250,7 @@ h3
 	line-height: 21px; /*new*/
 }
 
-/*JU NEW*/
-#basicFacetedSearch h3,
-#advancedFacetedSearch h3 {
-	font-weight: bold;
-	font-size: 12px;
-	line-height: 21px;
-	padding: 0 5px 0 19px;
-}
+
 
 #basicFacetedSearch ul.subject ,
 #advancedFacetedSearch ul.subject
@@ -280,11 +273,7 @@ ul.subject li a
 	margin-bottom: 21px;
 }
 
-#advancedFacetedSearch p,
-#basicFacetedSearch p{
-	padding: 0 5px 0 19px;   /*choose a subject needs to be wrapped in a paragraph tag*/
-	margin-bottom: 21px;
-}
+
 /*END JU NEW definitions*/
 
 #advancedFacetedSearch ul li,
@@ -1042,3 +1031,44 @@ ul.class-description
 
 
 /*  Front page css ends */
+
+
+/* facet css  */
+
+#days, #classformat, #times
+{
+	margin-left: 10px;
+}
+.day
+{
+	width: 18px;
+	float: left;
+
+}
+
+.daylabel
+{
+	margin-left: 3px;
+}
+
+
+#times
+{
+	clear: both;
+}
+
+#timestart, #timeend
+{
+
+	width: 30px;
+}
+
+#basicFacetedSearch h3,
+#advancedFacetedSearch h3 {
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 21px;
+	padding: 0 5px 0 9px;
+}
+
+/* end facet css */

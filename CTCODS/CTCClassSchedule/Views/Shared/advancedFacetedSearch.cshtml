@@ -1,4 +1,11 @@
-﻿
+﻿<script type="text/javascript">
+	$(document).ready(function () {
+		$('#timestart').timepicker();
+		$('#timeend').timepicker();
+	});
+</script>
+
+
 	@{
 
 		String QuarterOneFriendly = ViewBag.QuarterOneFriendly;
@@ -22,59 +29,82 @@
 	</ul>
 	<p><a href="/">Change Subject</a></p>
 
-	<h3>Flexible options</h3>
-	<ul>
-		<li @if(ViewBag.flex == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)">All</a></li>
-		<li @if(ViewBag.flex == "online") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=online">Online</a> </li>
-		<li @if(ViewBag.flex == "hybrid") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=hybrid">Hybrid</a> </li>
-		<li @if(ViewBag.flex == "telecourse") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=telecourse">Telecourse</a> </li>
-		<li @if(ViewBag.flex == "oncampus") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoFlex)&flex=oncampus">On Campus</a> </li>
-	</ul>
+	<h3>Class Format</h3>
+	<div id="classformat">
+		<p class="label_checkbox_pair">
+			<input class="clear" type="checkbox" name="format" value="oncampus" />
+			<label for="oncampus">On Campus</label>
+		</p>
+		<p class="label_checkbox_pair">
+			<input class="clear" type="checkbox" name="format" value="online" />
+			<label for="oncampus">Online</label>
+		</p>
+		<p class="label_checkbox_pair">
+			<input class="clear" type="checkbox" name="format" value="hybrid" />
+			<label for="oncampus">Hybrid</label>
+		</p>
+		<p class="label_checkbox_pair">
+			<input class="clear" type="checkbox" name="format" value="telecourse" />
+			<label for="oncampus">Telecourse</label>
+	</p>
+	</div>
 
 
-
-	<h3>Times</h3>
-	<ul>
-		<li @if(ViewBag.time == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)">All</a></li>
-		<li @if(ViewBag.time == "morning") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=morning">Morning</a> (before noon)</li>
-		<li @if(ViewBag.time == "afternoon") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=afternoon">Afternoon</a> (noon-5pm)</li>
-		<li @if(ViewBag.time == "evening") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoTimes)&time=evening">Evening</a> (after 5pm)</li>
-	</ul>
-
-
-	<h3>Days</h3>
-	<ul>
-		<li @if(ViewBag.days == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)">All</a></li>
-		<li @if(ViewBag.days == "daily") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=daily">Daily</a></li>
-		<li @if(ViewBag.days == "mw") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=mw">M/W</a></li>
-		<li @if(ViewBag.days == "tth") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=tth">T/Th</a></li>
-		<li @if(ViewBag.days == "weekend") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoDays)&days=weekend">Weekend</a></li>
-	</ul>
+	<h3>Days & Times</h3>
+	<div id="times">
+	<input id="timestart"  name="timestart" type="text" /> - <input id="timeend" name="timeend" type="text"  />
+	</div>
+	<div id="days">
+		<div class="day">
+			<div class="daylabel">Su</div>
+				<input type="checkbox" name="day" value="day_su" />
+		</div>
+		<div class="day">
+			<div class="daylabel">M</div>
+			<input type="checkbox" name="day" value="day_m" />
+		</div>
+		<div class="day">
+			<div class="daylabel">T</div>
+			<input type="checkbox" name="day" value="day_t" />
+		</div>
+		<div class="day">
+			<div class="daylabel">W</div>
+			<input type="checkbox" name="day" value="day_w" />
+		</div>
+		<div class="day">
+			<div class="daylabel">Th</div>
+			<input type="checkbox" name="day" value="day_th" />
+		</div>
+		<div class="day">
+			<div class="daylabel">F</div>
+			<input type="checkbox" name="day" value="day_f" />
+		</div>
+		<div class="day">
+			<div class="daylabel">S</div>
+			<input type="checkbox" name="day" value="day_ss" />
+		</div>
+	</div>
 
 
 	<h3>Availability</h3>
 	<ul>
-		<li @if(ViewBag.avail == "all") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)">All</a></li>
-		<li @if(ViewBag.avail == "open") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=open">Open</a></li>
-		<li @if(ViewBag.avail == "waitlist") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=waitlist">Waitlisted</a> </li>
-		<li @if(ViewBag.avail == "cancelled") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=cancelled">Cancelled</a> </li>
-		<li @if(ViewBag.avail == "closed") { @(ViewBag.activeClass) }><a href="@ViewBag.currentUrl?type=beta@(ViewBag.queryStringNoAvail)&avail=closed">Closed</a> </li>
+		<li><a href="">All</a></li>
+		<li><a href="">Open</a></li>
 	</ul>
 
 	<h3>Classes Offered:</h3>
 	<ul>
 		<li @if(ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")		{ @(ViewBag.activeClass) }>
 
-			<a href="@ViewBag.currentAppSubdirectory/Classes/All?type=beta@(ViewBag.queryStringAll)">All Credit Classes</a>
+			<a href="">All Credit Classes</a>
 		</li>
-		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())
-			{ @(ViewBag.activeClass) }>
+		<li>
 			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterOneURL)">@QuarterOneFriendly</a>
 		</li>
-		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())			{ @(ViewBag.activeClass) }>
+		<li>
 			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterTwoURL)">@QuarterTwoFriendly</a>
 		</li>
-		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())		{ @(ViewBag.activeClass) }>
+		<li>
 			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterThreeURL)">@QuarterThreeFriendly</a>
 		</li>
 

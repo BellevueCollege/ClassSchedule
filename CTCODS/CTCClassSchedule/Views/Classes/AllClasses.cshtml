@@ -55,7 +55,8 @@
 		}
 
 			<div class="subject">
-				@Html.ActionLink(item.Title, item.Subject, "Classes/All")
+				@Html.ActionLink(item.Title, "Subject", "Classes", new { item.Subject }, null)
+
 			</div>
 	}
 
