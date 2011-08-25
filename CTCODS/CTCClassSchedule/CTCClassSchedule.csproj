@@ -295,6 +295,8 @@
       <DependentUpon>web.config</DependentUpon>
     </Content>
     <Content Include="Views\Classes\Index.cshtml" />
+    <Content Include="Views\Shared\subjectList.cshtml" />
+    <Content Include="Views\Shared\subjectNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">
