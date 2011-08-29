@@ -30,19 +30,19 @@
 	<ul>
 		<li @if (ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")
 			{ @(ViewBag.activeClass) }>
-			@Html.ActionLink("All Credit Classes", "/All")
+			<a href="@ViewBag.currentAppSubdirectory/Classes/All">All Credit Classes</a>
 		</li>
 		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())
 			{ @(ViewBag.activeClass) }>
-			@Html.ActionLink(@QuarterOneFriendly, "/" + QuarterOneURL)
+			<a href="@ViewBag.currentAppSubdirectory/Classes/@QuarterOneURL">@QuarterOneFriendly</a>
 		</li>
 		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())
 			{ @(ViewBag.activeClass) }>
-			@Html.ActionLink(@QuarterTwoFriendly, "/" + QuarterTwoURL)
+			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterTwoURL)">@QuarterTwoFriendly</a>
 		</li>
 		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())
 			{ @(ViewBag.activeClass) }>
-			@Html.ActionLink(@QuarterThreeFriendly, "/" + QuarterThreeURL)
+			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterThreeURL)">@QuarterThreeFriendly</a>
 		</li>
 
 	</ul>
