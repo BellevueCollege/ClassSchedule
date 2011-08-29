@@ -33,9 +33,11 @@ namespace CTCClassSchedule
 			//much of this is from: http://msdn.microsoft.com/en-us/library/debx8sh9.aspx
 
       string postData;
+			string colCode = ConfigurationManager.AppSettings["CollegeCode"]; // College Code to construct URL
+
 
       //set the location the post is going to
-      request = WebRequest.Create("https://www.ctc.edu/cgi-bin/rq080");
+      request = WebRequest.Create("https://www.ctc.edu/cgi-bin/rq" + colCode);
 			request.Method = "POST";
       postData = getPostData(itemNumber, YRQ);
 
