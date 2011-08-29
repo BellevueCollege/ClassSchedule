@@ -217,12 +217,14 @@ namespace CTCClassSchedule.Controllers
 
 				}
 
+				// TODO: Find a way to make course outcomes optional through web.config settings
 				/// <summary>
 				/// Gets the course outcome information by scraping the Cellevue College
 				/// course outcomes website
 				/// </summary>
 				private dynamic getCourseOutcome(string Subject, string ClassNum)
 				{
+
 					string url = "http://bellevuecollege.edu/courseoutcomes/?CourseID=" + Subject + "%20" + ClassNum;
 					StringBuilder sb = new StringBuilder();
 

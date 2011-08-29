@@ -19,7 +19,7 @@ namespace CTCClassSchedule.Common
 
 		}
 
-
+		// TODO: Jeremy, another optional/BCC specific way of getting data - find another way?
 		public static String getProfileURL(string SID)
 		{
 			Encryption64 en = new Encryption64();
