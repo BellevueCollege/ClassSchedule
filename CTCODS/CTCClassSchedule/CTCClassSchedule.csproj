@@ -296,7 +296,6 @@
       <DependentUpon>web.config</DependentUpon>
     </Content>
     <Content Include="Views\Classes\Index.cshtml" />
-    <Content Include="Views\Shared\subjectList.cshtml" />
     <Content Include="Views\Shared\subjectNavigation.cshtml" />
     <Content Include="Views\Api\Subjects.cshtml" />
   </ItemGroup>
