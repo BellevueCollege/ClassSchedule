@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 
 
@@ -22,7 +18,10 @@ namespace CTCClassSchedule
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+			// API calls the application exposes
+			routes.MapRoute("ApiSubjects", "Api/Subjects", new {controller = "Api", action = "Subjects"});
 
+			// default application routes
 			routes.MapRoute("getSeats", "{controller}/getseats", new { controller = "Classes", action = "getSeats" });
 			routes.MapRoute("ClassDetails", "{controller}/{YearQuarterID}/{Subject}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
 			routes.MapRoute("Subject", "{controller}/All/{Subject}", new { controller = "Classes", action = "Subject" });

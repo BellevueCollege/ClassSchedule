@@ -1,17 +1,14 @@
 ﻿<div id="basicFacetedSearch">
 	<h3>Subject</h3>
-	@if (string.IsNullOrWhiteSpace(ViewBag.Subject))
+	@if (!string.IsNullOrWhiteSpace(ViewBag.Subject))
  {
-	 <p><a href="/">Choose Subject</a></p>
- }
- else {
 		<ul class="subject">
 			<li @(ViewBag.activeClass)>
 				<a href="" >@ViewBag.Subject</a>
 			</li>
 		</ul>
-	 <p><a href="/">Change Subject</a></p>
  }
+ @Html.Partial("subjectNavigation")
 
 
 	@{

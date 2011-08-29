@@ -1,11 +1,10 @@
 ﻿@model IEnumerable<Ctc.Ods.Types.CoursePrefix>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+Hello world!
+
+@*
 <table>
     <tr>
-        <th></th>
         <th>
             Subject
         </th>
@@ -17,11 +16,6 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-        <td>
             @item.Subject
         </td>
         <td>
@@ -31,3 +25,4 @@
 }
 
 </table>
+*@
