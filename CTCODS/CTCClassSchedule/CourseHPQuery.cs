@@ -136,13 +136,16 @@ namespace CTCClassSchedule
       yearData += (yearDataInt + Int32.Parse(yearFrom) + 1).ToString()[3];
 
 
+			string schoolURL = ConfigurationManager.AppSettings["currentSchoolUrl"]; // School URL for returnURL
+			string scheduleDir = ConfigurationManager.AppSettings["currentAppSubdirectory"]; // App SubDir for returnURL
+
 
       //set up the post parameters
 			postData = "item=" + itemNumber;
       postData += "&request=classchd";
       postData += "&ayr=" + yearData; // "&ayr=2009 - 10";
       postData += "&sess=" + sessionData; // "&sess=4 - spring";
-      postData += "&returnurl=http://bellevuecollege.edu/schedule/";
+      postData += "&returnurl=" + schoolURL + scheduleDir;
       return postData;
     }
   }
