@@ -102,6 +102,7 @@
   <ItemGroup>
     <Compile Include="Common\Encryption64.cs" />
     <Compile Include="Common\Helpers.cs" />
+    <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="SearchResultsNoSection.cs" />
@@ -297,6 +298,7 @@
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Shared\subjectList.cshtml" />
     <Content Include="Views\Shared\subjectNavigation.cshtml" />
+    <Content Include="Views\Api\Subjects.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">

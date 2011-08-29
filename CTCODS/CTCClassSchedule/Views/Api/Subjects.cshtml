@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Ctc.Ods.Types.CoursePrefix>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th></th>
+        <th>
+            Subject
+        </th>
+        <th>
+            Title
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+        <td>
+            @item.Subject
+        </td>
+        <td>
+            @item.Title
+        </td>
+    </tr>
+}
+
+</table>
