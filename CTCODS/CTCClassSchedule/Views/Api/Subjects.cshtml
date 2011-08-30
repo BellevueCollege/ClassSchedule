@@ -1,28 +1,32 @@
 ﻿@model IEnumerable<Ctc.Ods.Types.CoursePrefix>
 
-Hello world!
-
-@*
-<table>
-    <tr>
-        <th>
-            Subject
-        </th>
-        <th>
-            Title
-        </th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @item.Subject
-        </td>
-        <td>
-            @item.Title
-        </td>
-    </tr>
+<style type="text/css">
+@for(int i = 1; i <= ViewBag.SubjectsColumns; i++) {
+	<text>
+	#subjects-column-@i {
+		float: left;
+		width: @((int)(100 / ViewBag.SubjectsColumns))%
+	}
+	</text>
 }
+</style>
 
-</table>
-*@
+<div id="subjects-list">
+	@{
+		int count = 1,
+				breakPoint = (Model.Count() / (ViewBag.SubjectsColumns != null ? (int)ViewBag.SubjectsColumns : 1)),
+				columnNumber = 1;
+	}
+	<div id="subjects-column-@columnNumber">
+	@foreach (var item in Model) {
+		if(count++ > breakPoint) {
+		count = 1;
+	@:</div>
+	@:<div id="subjects-column-@(++columnNumber)">
+		}
+		<div class="subject">
+			@Html.ActionLink(item.Title, "Subject", "Classes", new { item.Subject }, null)
+		</div>
+	}
+	</div>
+</div>

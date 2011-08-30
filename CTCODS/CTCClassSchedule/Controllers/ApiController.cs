@@ -16,6 +16,7 @@ namespace CTCClassSchedule.Controllers
 			{
 				IList<CoursePrefix> data = db.GetCourseSubjects();
 
+				ViewBag.SubjectsColumns = 2;
 				return PartialView(data);
 			}
 		}
