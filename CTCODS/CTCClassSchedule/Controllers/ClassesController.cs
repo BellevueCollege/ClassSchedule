@@ -84,12 +84,12 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// GET: /Classes/All/{Subject}/
 		/// </summary>
-		public ActionResult Subject(string Subject, string flex, string time, string days, string avail)
+		public ActionResult Subject(string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail)
 		{
 			ViewBag.Subject = Subject;
-			setViewBagVars("", flex, time, days, avail, "");
+			setViewBagVars("", "", "", "", avail, "");
 			ViewBag.Title = "All " +  @Subject + " classes";
-			IList<ISectionFacet> facets = addFacets(flex, time, days, avail);
+			IList<ISectionFacet> facets = addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
 			ViewBag.ProgramUrl = getProgramUrl(Subject);
 
@@ -124,17 +124,18 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/
 		/// </summary>
-		public ActionResult YearQuarter(string YearQuarter, string flex, string time, string days, string avail, string letter)
+
+		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter)
 		{
 			ViewBag.WhichClasses = (letter == null || letter == "" ? " (All)" : " (" + letter.ToUpper() + ")");
-			setViewBagVars(YearQuarter, flex, time, days, avail, letter);
+			setViewBagVars(YearQuarter, "", "", "", avail, letter);
 			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.Subject = "All";
 			ViewBag.AlphabetCharacter = 0;
 			ViewBag.YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)).ToString();
 			ViewBag.FriendlyYRQ = getFriendlyDateFromYRQ(Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)));
 			ViewBag.Title = ViewBag.Subject + "Classes for " + @ViewBag.Yearquarter;
-			IList<ISectionFacet> facets = addFacets(flex, time, days, avail);
+			IList<ISectionFacet> facets = addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -178,14 +179,32 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
-		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string flex, string time, string days, string avail)
+		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail)
 		{
-			setViewBagVars(YearQuarter, flex, time, days, avail, "");
+			setViewBagVars(YearQuarter, "", "", "", avail, "");
+
+			ViewBag.timestart = timestart;
+			ViewBag.timeend = timeend;
+			ViewBag.day_su = day_su;
+			ViewBag.day_m = day_m;
+			ViewBag.day_t = day_t;
+			ViewBag.day_w = day_w;
+			ViewBag.day_th = day_th;
+			ViewBag.day_f = day_f;
+			ViewBag.day_s = day_s;
+			ViewBag.f_oncampus = f_oncampus;
+			ViewBag.f_online = f_online;
+			ViewBag.f_hybrid = f_hybrid;
+			ViewBag.f_telecourse = f_telecourse;
+			ViewBag.avail = avail;
+
+
+
 			ViewBag.displayedCourseNum = 0;
 			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.Subject = Subject;
 			ViewBag.Title = @ViewBag.Yearquarter + " " + @Subject + " classes";
-			IList<ISectionFacet> facets = addFacets(flex, time, days, avail);
+			IList<ISectionFacet> facets = addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
 
 
@@ -953,68 +972,94 @@ namespace CTCClassSchedule.Controllers
 		/// passed into the app by the user clicking on the faceted search left pane
 		/// facets accepted: flex, time, days, availability
 		/// </summary>
-		private IList<ISectionFacet> addFacets(string flex, string time, string days, string avail)
+		private IList<ISectionFacet> addFacets(string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail)
 		{
 			IList<ISectionFacet> facets = new List<ISectionFacet>();
 
-			//the other facets won't be implemented by the time the first QA build is pushed.
-			//TODO: add the rest of the facets once we have methods to plug into.
-			if (flex != "")
+			//add the class format facet options (online, hybrid, telecourse, on campus)
+			if (!string.IsNullOrWhiteSpace(f_online))
 			{
-				switch (flex)
-				{
-					case "online":
-						facets.Add(new ModalityFacet(ModalityFacet.Options.Online));
-						break;
-					case "hybrid":
-						facets.Add(new ModalityFacet(ModalityFacet.Options.Hybrid));
-						break;
-					case "telecourse":
-						facets.Add(new ModalityFacet(ModalityFacet.Options.Telecourse));
-						break;
-					case "oncampus":
-						facets.Add(new ModalityFacet(ModalityFacet.Options.OnCampus));
-						break;
-				}
+				facets.Add(new ModalityFacet(ModalityFacet.Options.Online));
 			}
-			if (!string.IsNullOrWhiteSpace(time))
+			if (!string.IsNullOrWhiteSpace(f_hybrid))
 			{
-				switch (time)
+				facets.Add(new ModalityFacet(ModalityFacet.Options.Hybrid));
+			}
+			if (!string.IsNullOrWhiteSpace(f_telecourse))
+			{
+				facets.Add(new ModalityFacet(ModalityFacet.Options.Telecourse));
+			}
+			if (!string.IsNullOrWhiteSpace(f_oncampus))
+			{
+				facets.Add(new ModalityFacet(ModalityFacet.Options.OnCampus));
+			}
+
+
+
+			//if only the starting time has a value, add that facet as the min and 23:59 as the max
+			if (!string.IsNullOrWhiteSpace(timestart) && string.IsNullOrWhiteSpace(timeend))
+			{
+				facets.Add(new TimeFacet(new TimeSpan(0, 0, 0), new TimeSpan(23, 59, 0)));
+			}
+			//if only the ending time has a value, add that facet as the max and 00:00 as the min
+			else if (string.IsNullOrWhiteSpace(timestart) && !string.IsNullOrWhiteSpace(timeend))
+			{
+				facets.Add(new TimeFacet(new TimeSpan(0, 0, 0), new TimeSpan(11, 59, 0)));
+			}
+			//if both times have a value, add those times as a facet's min and max
+			else if (!string.IsNullOrWhiteSpace(timestart) && !string.IsNullOrWhiteSpace(timeend))
+			{
+				facets.Add(new TimeFacet(new TimeSpan(0, 0, 0), new TimeSpan(11, 59, 0)));
+			}
+
+
+			//day of the week facets
+			if (!string.IsNullOrWhiteSpace(day_su))
+			{
+				facets.Add(new DaysFacet(DaysFacet.Options.Sunday));
+			}
+			if (!string.IsNullOrWhiteSpace(day_m))
+			{
+				facets.Add(new DaysFacet(DaysFacet.Options.Monday));
+			}
+			if (!string.IsNullOrWhiteSpace(day_t))
+			{
+				facets.Add(new DaysFacet(DaysFacet.Options.Tuesday));
+			}
+			if (!string.IsNullOrWhiteSpace(day_w))
+			{
+				facets.Add(new DaysFacet(DaysFacet.Options.Wednesday));
+			}
+			if (!string.IsNullOrWhiteSpace(day_th))
+			{
+				facets.Add(new DaysFacet(DaysFacet.Options.Thursday));
+			}
+			if (!string.IsNullOrWhiteSpace(day_f))
+			{
+				facets.Add(new DaysFacet(DaysFacet.Options.Friday));
+			}
+			if (!string.IsNullOrWhiteSpace(day_s))
+			{
+				facets.Add(new DaysFacet(DaysFacet.Options.Saturday));
+			}
+
+
+			if (!string.IsNullOrWhiteSpace(avail))
+			{
+				if (avail == "All")
 				{
-					case "morning":
-						facets.Add(new TimeFacet(new TimeSpan(0, 0, 0), new TimeSpan(11, 59, 0)));
-						break;
-					case "afternoon":
-						facets.Add(new TimeFacet(new TimeSpan(12, 0, 0), new TimeSpan(16, 59, 0)));
-						break;
-					case "evening":
-						facets.Add(new TimeFacet(new TimeSpan(17, 0, 0), new TimeSpan(23, 59, 0)));
-						break;
+					facets.Add(new AvailabilityFacet(AvailabilityFacet.Options.All));
+				}
+
+				if (avail == "Open")
+				{
+					facets.Add(new AvailabilityFacet(AvailabilityFacet.Options.Open));
 				}
 			}
 
-			if (!string.IsNullOrWhiteSpace(days))
-			{
-				switch (days)
-				{
-					case "all":
-						//don't add a facet in this case, just include all days
-						break;
-					case "mw":
-						facets.Add(new DaysFacet(DaysFacet.Options.Monday | DaysFacet.Options.Wednesday));
-						break;
-					case "tth":
-						facets.Add(new DaysFacet(DaysFacet.Options.Tuesday | DaysFacet.Options.Thursday));
-						break;
-					case "daily":
-						facets.Add(new DaysFacet(DaysFacet.Options.Monday | DaysFacet.Options.Tuesday | DaysFacet.Options.Wednesday | DaysFacet.Options.Thursday | DaysFacet.Options.Friday));
-						break;
-					case "weekend":
-						facets.Add(new DaysFacet(DaysFacet.Options.Saturday | DaysFacet.Options.Sunday));
-						break;
 
-				}
-			}
+
+
 
 			return facets;
 		}
