@@ -1000,7 +1000,8 @@ ul.class-description
 {
 	float: right;
 	font-size: 12px;
-	padding-right: 30px;
+	padding-right: 108px;
+	padding-top: 5px;
 	color: #999;
 
 }
