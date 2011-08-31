@@ -17,13 +17,65 @@
 -->
 	<script type="text/javascript">
 		$(document).ready(function () {
-			$('#games').coinslider({
-				effect: 'straight',
-				width: 565,
-				delay: 6000,
-				sDelay: 0,
-				spw: 1,
-				sph: 1});
+
+			//Show the paging and activate its first link
+			$(".paging").show();
+			$(".paging a:first").addClass("active");
+
+			//Get size of the image, how many images there are, then determin the size of the image reel.
+			var imageWidth = $(".window").width();
+			var imageSum = $(".image_reel img").size();
+			var imageReelWidth = imageWidth * imageSum;
+
+			//Adjust the image reel to its new size
+			$(".image_reel").css({ 'width': imageReelWidth });
+
+			//Paging  and Slider Function
+			rotate = function () {
+				var triggerID = $active.attr("rel") - 1; //Get number of times to slide
+				var image_reelPosition = triggerID * imageWidth; //Determines the distance the image reel needs to slide
+
+				$(".paging a").removeClass('active'); //Remove all active class
+				$active.addClass('active'); //Add active class (the $active is declared in the rotateSwitch function)
+
+				//Slider Animation
+				$(".image_reel").animate({
+					left: -image_reelPosition
+				}, 500);
+
+			};
+
+			//Rotation  and Timing Event
+			rotateSwitch = function () {
+				play = setInterval(function () { //Set timer - this will repeat itself every 5 seconds
+					$active = $('.paging a.active').next(); //Move to the next paging
+					if ($active.length === 0) { //If paging reaches the end...
+						$active = $('.paging a:first'); //go back to first
+					}
+					rotate(); //Trigger the paging and slider function
+				}, 5000); //Timer speed in milliseconds (5 seconds)
+			};
+
+			rotateSwitch(); //Run function on launch
+
+
+			//On Hover
+			$(".image_reel a").hover(function () {
+				clearInterval(play); //Stop the rotation
+			}, function () {
+				rotateSwitch(); //Resume rotation timer
+			});
+
+			//On Click
+			$(".paging a").click(function () {
+				$active = $(this); //Activate the clicked paging
+				//Reset Timer
+				clearInterval(play); //Stop the rotation
+				rotate(); //Trigger rotation immediately
+				rotateSwitch(); // Resume rotation timer
+				return false; //Prevent browser jump to link anchor
+			});
+
 		});
 </script>
 <!-- TODO: Make the title configurable in web.config. Possible? -->
@@ -90,30 +142,22 @@
 	<div id="middle">
 		<div id="middleleft">
 
-		<div id="games">
-
-				<a href="http://www.psu.com/Soul-Calibur-IV-Hands-on--a003147-p0.php" target="_blank">
-
-					<img height="281" width="500" src="@Url.Content("~/Content/images/coin-slider/sc1.jpg")" alt="sc1.jpg" />
-					<span>
-						Two stages were on offer, one an outdoor courtyard with Cherry Blossom blowing serenely in the wind, the other an underground lair with an odd tint of green. Both of them were beautifully rendered, if not a little low res.
-					</span>
-				</a>
-				<a href="http://www.psu.com/Soul-Calibur-IV-Hands-on--a003147-p0.php">
-					<img height="281" width="500" src="@Url.Content("~/Content/images/coin-slider/sc2.jpg")" alt="sc3.jpg" />
-					<span>
-						Thoroughly beaten, we agreed to a rematch with different characters. Playing as Mitsurugi ourselves, we notice that our frantic button mashing was not creating some of the combos that Soul Calibur II had allowed.
-					</span>
-
-				</a>
-				<a href="http://www.psu.com/Soul-Calibur-IV-Hands-on--a003147-p0.php">
-					<img height="281" width="500" src="@Url.Content("~/Content/images/coin-slider/sc3.jpg")"  alt="sc3.jpg" />
-					<span>
-						Soul Calibur is back, and it's ready to take on Street Fighter IV.
-					</span>
-				</a>
-
+			<div class="main_view">
+				<div class="window">
+						<div class="image_reel">
+								<a href="http://www.psu.com/Soul-Calibur-IV-Hands-on--a003147-p0.php"><img src="@Url.Content("~/Content/images/coin-slider/sc1.jpg")" width="600" alt="" /></a>
+								<a href="http://www.psu.com/Soul-Calibur-IV-Hands-on--a003147-p0.php"><img src="@Url.Content("~/Content/images/coin-slider/sc2.jpg")" width="600" alt="" /></a>
+								<a href="http://www.psu.com/Soul-Calibur-IV-Hands-on--a003147-p0.php"><img src="@Url.Content("~/Content/images/coin-slider/sc3.jpg")" width="600" alt="" /></a>
+						</div>
+				</div>
+				<div class="paging">
+						<a href="#" rel="1">1</a>
+						<a href="#" rel="2">2</a>
+						<a href="#" rel="3">3</a>
+				</div>
 		</div>
+
+
 
 			<div id="middleleft_floatright"> <!-- TODO: add email address configurable from web.config -->
 				<a class="advertise" href="mailto:webservices@bellevuecollege.edu">How to advertise in this site</a>
