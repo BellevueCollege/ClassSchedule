@@ -33,7 +33,7 @@ namespace CTCClassSchedule
 			//much of this is from: http://msdn.microsoft.com/en-us/library/debx8sh9.aspx
 
       string postData;
-			string colCode = ConfigurationManager.AppSettings["CollegeCode"]; // College Code to construct URL
+			string colCode = ConfigurationManager.AppSettings["collegeCode"]; // College Code to construct URL
 
 
       //set the location the post is going to
