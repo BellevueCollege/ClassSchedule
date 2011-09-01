@@ -13,7 +13,8 @@ namespace CTCClassSchedule.Controllers
 		/// Returns an array of <see cref="Course"/> Subjects
 		/// </summary>
 		/// <param name="format"></param>
-		/// <returns>
+		///<param name="yrq"></param>
+		///<returns>
 		///		Either a <see cref="PartialViewResult"/> which can be embedded in an MVC View,
 		///		or the list of <see cref="Course"/> Subjects as a JSON array.
 		/// </returns>
@@ -24,8 +25,16 @@ namespace CTCClassSchedule.Controllers
 		///		</example>
 		/// </remarks>
 		[HttpGet]
-		public ActionResult Subjects(string format)
+		public ActionResult Subjects(string format, string yrq)
 		{
+
+// TODO: Can we take a RouteValueDictionary as as parameter (and thus keep all our facets bundled together for passing around)?
+
+			if (!string.IsNullOrWhiteSpace(yrq))
+			{
+				ViewBag.YearQuarter = yrq;
+			}
+
 			using (OdsRepository db = new OdsRepository())
 			{
 				IList<CoursePrefix> data = db.GetCourseSubjects();

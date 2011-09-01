@@ -1,10 +1,28 @@
 ﻿<script type="text/javascript">
+	var opts = {
+		lines: 12, // The number of lines to draw
+		length: 7, // The length of each line
+		width: 5, // The line thickness
+		radius: 10, // The radius of the inner circle
+		color: '#000', // #rbg or #rrggbb
+		speed: 1, // Rounds per second
+		trail: 100, // Afterglow percentage
+		shadow: true // Whether to render a shadow
+	};
+	var spinner = new Spinner(opts);
+
 	$(document).ready(function () {
-		$("#nav-choose-subjects").dialog({
+		$("div#nav-choose-subjects").dialog({
 			autoOpen: false,
 			height: 500,
 			width: 600,
-			modal: true
+			modal: true,
+			open: function () {
+				// only show the spinner if we don't already have data
+				if ($("div#nav-choose-subjects").html() == '') {
+					spinner.spin(document.getElementById('nav-choose-subjects'))
+				}
+			}
 		})
 	});
 </script>
@@ -13,12 +31,17 @@
 	<li>@Ajax.ActionLink("Choose subject",
 											 "Subjects",
 											 "Api",
+											 new {
+												 format = string.Empty,
+												 yrq = ViewBag.YearQuarter
+											 },
 											 new AjaxOptions
 											 {
-													UpdateTargetId = "nav-choose-subjects",
-													HttpMethod="GET",
-													InsertionMode = InsertionMode.InsertAfter,
-													OnBegin = "$('#nav-choose-subjects').dialog('open');",
+												 UpdateTargetId = "nav-choose-subjects",
+												 HttpMethod = "GET",
+												 InsertionMode = InsertionMode.Replace,
+												 OnBegin = "$('#nav-choose-subjects').dialog('open');",
+												 OnComplete = "spinner.stop();",
 											 })
 	</li>
 </ul>

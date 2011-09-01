@@ -9,6 +9,16 @@
 	String flex = ViewBag.flex;
 	String avail = ViewBag.avail;
 }
+<div class="debug">
+		[yrq = @yrq, ViewBag.YearQuarter = @ViewBag.YearQuarter]<br />
+		@foreach (KeyValuePair<string, Object> piece in ViewContext.RouteData.Values)
+		{
+			<text>
+			[@piece.Key = @piece.Value.ToString()]<br />
+			</text>
+		}
+</div>
+
 <style type="text/css">
 @for(int i = 1; i <= columnCount; i++) {
 	<text>
@@ -24,13 +34,18 @@
 	}
 </style>
 
+<a name="nav-subjects-top">&nbsp;</a>
 <div id="a_to_z">
+@{
+	int loopCount = 0;
+}
 @foreach (char lttr in alphabet)
 {
-	@Html.ActionLink(lttr.ToString(), "AllClasses", "Classes", new { letter = lttr.ToString(), time = time, days = days, flex = flex, avail = avail }, null);
-	@: |
+	if (loopCount++ > 0) {
+		@: |
+	}
+	<a href="#nav-subjects-@lttr">@lttr</a>
 }
-@Html.ActionLink("View All", "AllClasses", "Classes", new { time = time, days = days, flex = flex, avail = avail }, null)
 </div>
 
 <div id="subjects-list">
@@ -42,7 +57,7 @@
 				columnNumber = 1;
 
 	 <div class="subjects-letter">
-		<h2>@letter</h2>
+		<h2><a name="nav-subjects-@letter">@letter</a></h2>
 
 		<div id="subjects-column-@columnNumber">
 			@foreach (var item in titles) {
@@ -51,8 +66,15 @@
 		@:</div>
 		@:<div id="subjects-column-@(++columnNumber)">
 				}
+
+@* TODO: Add facets to the link being constructed. *@
+
 			<div class="subject">
-				@Html.ActionLink(item.Title, "Subject", "Classes", new { item.Subject }, null)
+				@if (yrq == "All") {
+					Write(Html.ActionLink(item.Title, "Subject", "Classes", new { item.Subject }, null));
+				} else {
+					Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new { YearQuarter = yrq, Subject = item.Subject }, null));
+				}
 			</div>
 			}
 		</div>
