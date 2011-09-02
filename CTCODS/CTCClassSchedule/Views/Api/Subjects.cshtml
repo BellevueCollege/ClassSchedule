@@ -2,23 +2,7 @@
 @{
 	int columnCount = (ViewBag.SubjectsColumns != null ? (int)ViewBag.SubjectsColumns : 1);
 	IEnumerable<char> alphabet = Model.Select(s => s.Title.First()).Distinct();
-
-	String yrq = ViewBag.YearQuarter ?? "All";
-	String time = ViewBag.time;
-	String days = ViewBag.days;
-	String flex = ViewBag.flex;
-	String avail = ViewBag.avail;
 }
-<div class="debug">
-		[yrq = @yrq, ViewBag.YearQuarter = @ViewBag.YearQuarter]<br />
-		@foreach (KeyValuePair<string, Object> piece in ViewContext.RouteData.Values)
-		{
-			<text>
-			[@piece.Key = @piece.Value.ToString()]<br />
-			</text>
-		}
-</div>
-
 <style type="text/css">
 @for(int i = 1; i <= columnCount; i++) {
 	<text>
@@ -37,6 +21,7 @@
 <a name="nav-subjects-top">&nbsp;</a>
 <div id="a_to_z">
 @{
+	// display the letters along the top for quick access
 	int loopCount = 0;
 }
 @foreach (char lttr in alphabet)
@@ -47,12 +32,21 @@
 	<a href="#nav-subjects-@lttr">@lttr</a>
 }
 </div>
+@{
+	// construct the route values we'll pass to the ActionLink helper
+	IDictionary<string, object> routeParms = ViewBag.LinkParams;
+	routeParms.Add("Subject", string.Empty);
 
+	if(!string.IsNullOrWhiteSpace(ViewBag.YearQuarter)) {
+		routeParms.Add("YearQuarter", ViewBag.YearQuarter);
+	}
+}
 <div id="subjects-list">
 	@foreach (char letter in alphabet) {
 
 		IEnumerable<Ctc.Ods.Types.CoursePrefix> titles = Model.Where(s => s.Title.StartsWith(letter.ToString()));
 		int count = 1,
+				// ensure that blank lines wind up in the last column by always rounding up
 				breakPoint = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(titles.Count()) / columnCount)),
 				columnNumber = 1;
 
@@ -62,23 +56,24 @@
 		<div id="subjects-column-@columnNumber">
 			@foreach (var item in titles) {
 				if(count++ > breakPoint) {
-				count = 1;
+					// insert a column break
+					count = 1;
 		@:</div>
 		@:<div id="subjects-column-@(++columnNumber)">
 				}
 
-@* TODO: Add facets to the link being constructed. *@
+				// construct the appropriate link, maintaining any query string paramters
+				routeParms["Subject"] = item.Subject;
 
-			<div class="subject">
-				@if (yrq == "All") {
-					Write(Html.ActionLink(item.Title, "Subject", "Classes", new { item.Subject }, null));
+					<div class="subject">
+				@if (routeParms.Keys.Contains("YearQuarter")) {
+					Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null));
 				} else {
-					Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new { YearQuarter = yrq, Subject = item.Subject }, null));
+					Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
 				}
 			</div>
 			}
 		</div>
 	 </div>
-
 	}
 </div>

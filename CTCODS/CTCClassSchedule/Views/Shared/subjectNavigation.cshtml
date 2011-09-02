@@ -18,7 +18,7 @@
 			width: 600,
 			modal: true,
 			open: function () {
-				// only show the spinner if we don't already have data
+				// only show the spinner if we don't already have data in the dialog
 				if ($("div#nav-choose-subjects").html() == '') {
 					spinner.spin(document.getElementById('nav-choose-subjects'))
 				}
@@ -27,14 +27,23 @@
 	});
 </script>
 
+@{
+	IDictionary<string, object> routeParms = new Dictionary<string, object>(Request.QueryString.Count + 2);
+	routeParms.Add("format", string.Empty);
+	routeParms.Add("yrq", ViewBag.YearQuarter);
+
+	// TODO: move building the query string collection into the controller
+	foreach(string key in Request.QueryString.AllKeys)
+	{
+		routeParms.Add(key, Request.QueryString[key]);
+	}
+}
+
 <ul>
 	<li>@Ajax.ActionLink("Choose subject",
 											 "Subjects",
 											 "Api",
-											 new {
-												 format = string.Empty,
-												 yrq = ViewBag.YearQuarter
-											 },
+											 new RouteValueDictionary(routeParms),
 											 new AjaxOptions
 											 {
 												 UpdateTargetId = "nav-choose-subjects",

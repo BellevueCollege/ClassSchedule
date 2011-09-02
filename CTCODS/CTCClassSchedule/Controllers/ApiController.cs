@@ -13,7 +13,6 @@ namespace CTCClassSchedule.Controllers
 		/// Returns an array of <see cref="Course"/> Subjects
 		/// </summary>
 		/// <param name="format"></param>
-		///<param name="yrq"></param>
 		///<returns>
 		///		Either a <see cref="PartialViewResult"/> which can be embedded in an MVC View,
 		///		or the list of <see cref="Course"/> Subjects as a JSON array.
@@ -25,28 +24,34 @@ namespace CTCClassSchedule.Controllers
 		///		</example>
 		/// </remarks>
 		[HttpGet]
-		public ActionResult Subjects(string format, string yrq)
+		public ActionResult Subjects(string format)
 		{
-
-// TODO: Can we take a RouteValueDictionary as as parameter (and thus keep all our facets bundled together for passing around)?
-
-			if (!string.IsNullOrWhiteSpace(yrq))
-			{
-				ViewBag.YearQuarter = yrq;
-			}
-
 			using (OdsRepository db = new OdsRepository())
 			{
 				IList<CoursePrefix> data = db.GetCourseSubjects();
 
 				if (format == "json")
 				{
-					// NOTE: AllowGet exposes a potential for JSON Hijacking (http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
-					// but is not an issue here because we are returning public (e.g. non-sensitive) data
+					// NOTE: AllowGet exposes a potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
 					return Json(data, JsonRequestBehavior.AllowGet);
 				}
 
+				IDictionary<string, object> linkParams = new Dictionary<string, object>(Request.QueryString.Count);
+				foreach (string key in Request.QueryString.AllKeys)
+				{
+					if (key != "X-Requested-With")
+					{
+						if (key == "yrq") {
+							ViewBag.YearQuarter = Request.QueryString[key];
+						} else {
+							linkParams.Add(key, Request.QueryString[key]);
+						}
+					}
+				}
+				ViewBag.LinkParams = linkParams;
 				ViewBag.SubjectsColumns = 2;
+
 				return PartialView(data);
 			}
 		}
