@@ -96,15 +96,8 @@ namespace CTCClassSchedule.Controllers
 							var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
 																				 select s);
 
-							//IList<Section> sections = respository.GetSections(Subject, YRQ);
+
 							IList<Section> sections = null;
-
-							sections = respository.GetSections(Subject, YRQ, facetOptions: facets);
-
-
-
-
-
 
 
 							//since there are multiple search scenarios (e.g. searching All, or Fall2011 Art) we need to have a few if statements.
