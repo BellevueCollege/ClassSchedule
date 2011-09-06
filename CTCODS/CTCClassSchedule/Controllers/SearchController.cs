@@ -822,34 +822,38 @@ namespace CTCClassSchedule.Controllers
 
 
 					//day of the week facets
+			DaysFacet.Options facetOptions = DaysFacet.Options.All;	// default value
+
 					if (!string.IsNullOrWhiteSpace(day_su))
 					{
-						facets.Add(new DaysFacet(DaysFacet.Options.Sunday));
+						facetOptions = (facetOptions | DaysFacet.Options.Sunday);
 					}
 					if (!string.IsNullOrWhiteSpace(day_m))
 					{
-						facets.Add(new DaysFacet(DaysFacet.Options.Monday));
+						facetOptions = (facetOptions | DaysFacet.Options.Monday);
 					}
 					if (!string.IsNullOrWhiteSpace(day_t))
 					{
-						facets.Add(new DaysFacet(DaysFacet.Options.Tuesday));
+						facetOptions = (facetOptions | DaysFacet.Options.Tuesday);
 					}
 					if (!string.IsNullOrWhiteSpace(day_w))
 					{
-						facets.Add(new DaysFacet(DaysFacet.Options.Wednesday));
+						facetOptions = (facetOptions | DaysFacet.Options.Wednesday);
 					}
 					if (!string.IsNullOrWhiteSpace(day_th))
 					{
-						facets.Add(new DaysFacet(DaysFacet.Options.Thursday));
+						facetOptions = (facetOptions | DaysFacet.Options.Thursday);
 					}
 					if (!string.IsNullOrWhiteSpace(day_f))
 					{
-						facets.Add(new DaysFacet(DaysFacet.Options.Friday));
+						facetOptions = (facetOptions | DaysFacet.Options.Friday);
 					}
 					if (!string.IsNullOrWhiteSpace(day_s))
 					{
-						facets.Add(new DaysFacet(DaysFacet.Options.Saturday));
+						facetOptions = (facetOptions | DaysFacet.Options.Saturday);
 					}
+
+					facets.Add(new DaysFacet(facetOptions));
 
 
 					if (!string.IsNullOrWhiteSpace(avail))
@@ -872,10 +876,7 @@ namespace CTCClassSchedule.Controllers
 					return facets;
 				}
 
-
-
-
-				private string getProgramUrl(string Subject)
+	private string getProgramUrl(string Subject)
 				{
 					string ProgramURL = "";
 					var specificProgramInfo = from s in _programdb.ProgramInformation
