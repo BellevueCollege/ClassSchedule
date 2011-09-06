@@ -1026,23 +1026,26 @@ namespace CTCClassSchedule.Controllers
 				facets.Add(new ModalityFacet(ModalityFacet.Options.OnCampus));
 			}
 
+			int startHour = 0;
+			int startMinute = 0;
+			int endHour = 23;
+			int endMinute = 59;
 
+			//determine integer values for start/end time hours and minutes
+			if (!string.IsNullOrWhiteSpace(timestart))
+			{
+				startHour = Convert.ToInt16(timestart.Substring(0, 2));
+				startMinute = Convert.ToInt16(timestart.Substring(3, 2));
+			}
+			if (!string.IsNullOrWhiteSpace(timeend))
+			{
+				endHour = Convert.ToInt16(timeend.Substring(0, 2));
+				endMinute = Convert.ToInt16(timeend.Substring(3, 2));
+			}
 
-			//if only the starting time has a value, add that facet as the min and 23:59 as the max
-			if (!string.IsNullOrWhiteSpace(timestart) && string.IsNullOrWhiteSpace(timeend))
-			{
-				facets.Add(new TimeFacet(new TimeSpan(0, 0, 0), new TimeSpan(23, 59, 0)));
-			}
-			//if only the ending time has a value, add that facet as the max and 00:00 as the min
-			else if (string.IsNullOrWhiteSpace(timestart) && !string.IsNullOrWhiteSpace(timeend))
-			{
-				facets.Add(new TimeFacet(new TimeSpan(0, 0, 0), new TimeSpan(11, 59, 0)));
-			}
-			//if both times have a value, add those times as a facet's min and max
-			else if (!string.IsNullOrWhiteSpace(timestart) && !string.IsNullOrWhiteSpace(timeend))
-			{
-				facets.Add(new TimeFacet(new TimeSpan(0, 0, 0), new TimeSpan(11, 59, 0)));
-			}
+			//add the time facet
+			facets.Add(new TimeFacet(new TimeSpan(startHour, startMinute, 0), new TimeSpan(endHour, endMinute, 0)));
+
 
 
 			//day of the week facets

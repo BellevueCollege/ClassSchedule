@@ -28,6 +28,7 @@ namespace CTCClassSchedule.Controllers
 			public ActionResult Index(String searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, String YearQuarter = "")
 				{
 					IEnumerable<SectionWithSeats> sectionsEnum;
+					IEnumerable<string> titles;
 					bool ceRedirect = false;
 
 					if (quarter == "CE")
@@ -37,6 +38,23 @@ namespace CTCClassSchedule.Controllers
 					}
 
 					setViewBagVars(YearQuarter, "", "", "", avail, "");
+
+					ViewBag.timestart = timestart;
+					ViewBag.timeend = timeend;
+					ViewBag.day_su = day_su;
+					ViewBag.day_m = day_m;
+					ViewBag.day_t = day_t;
+					ViewBag.day_w = day_w;
+					ViewBag.day_th = day_th;
+					ViewBag.day_f = day_f;
+					ViewBag.day_s = day_s;
+					ViewBag.f_oncampus = f_oncampus;
+					ViewBag.f_online = f_online;
+					ViewBag.f_hybrid = f_hybrid;
+					ViewBag.f_telecourse = f_telecourse;
+					ViewBag.avail = avail;
+
+
 					ViewBag.displayedCourseNum = "000";
 					ViewBag.seatAvailbilityDisplayed = false;
 					ViewBag.Subject = Subject;
@@ -172,9 +190,14 @@ namespace CTCClassSchedule.Controllers
 
 							ViewBag.ItemCount = sectionsEnum.Count();
 
+
+							titles = (from s in sectionsEnum
+												select s.CourseSubject).Distinct();
+
 							var model = new SearchResultsModel {
 								Section = sectionsEnum,
-								SearchResultNoSection = NoSectionSearchResults
+								SearchResultNoSection = NoSectionSearchResults,
+								Titles = titles
 							};
 
 							return View(model);
@@ -784,21 +807,25 @@ namespace CTCClassSchedule.Controllers
 
 
 
-					//if only the starting time has a value, add that facet as the min and 23:59 as the max
-					if (!string.IsNullOrWhiteSpace(timestart) && string.IsNullOrWhiteSpace(timeend))
+					int startHour = 0;
+					int startMinute = 0;
+					int endHour = 23;
+					int endMinute = 59;
+
+					//determine integer values for start/end time hours and minutes
+					if (!string.IsNullOrWhiteSpace(timestart))
 					{
-						facets.Add(new TimeFacet(new TimeSpan(0, 0, 0), new TimeSpan(23, 59, 0)));
+						startHour = Convert.ToInt16(timestart.Substring(0, 2));
+						startMinute = Convert.ToInt16(timestart.Substring(3, 2));
 					}
-					//if only the ending time has a value, add that facet as the max and 00:00 as the min
-					else if (string.IsNullOrWhiteSpace(timestart) && !string.IsNullOrWhiteSpace(timeend))
+					if (!string.IsNullOrWhiteSpace(timeend))
 					{
-						facets.Add(new TimeFacet(new TimeSpan(0, 0, 0), new TimeSpan(11, 59, 0)));
+						endHour = Convert.ToInt16(timeend.Substring(0, 2));
+						endMinute = Convert.ToInt16(timeend.Substring(3, 2));
 					}
-					//if both times have a value, add those times as a facet's min and max
-					else if (!string.IsNullOrWhiteSpace(timestart) && !string.IsNullOrWhiteSpace(timeend))
-					{
-						facets.Add(new TimeFacet(new TimeSpan(0, 0, 0), new TimeSpan(11, 59, 0)));
-					}
+
+					//add the time facet
+					facets.Add(new TimeFacet(new TimeSpan(startHour, startMinute, 0), new TimeSpan(endHour, endMinute, 0)));
 
 
 					//day of the week facets

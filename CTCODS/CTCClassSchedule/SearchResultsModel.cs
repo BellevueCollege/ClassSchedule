@@ -11,5 +11,7 @@ namespace CTCClassSchedule
 		public IEnumerable<SectionWithSeats> Section { get; set; }
 
 		public IEnumerable<SearchResultNoSection> SearchResultNoSection { get; set; }
+
+		public IEnumerable<string> Titles { get; set; }
 	}
 }

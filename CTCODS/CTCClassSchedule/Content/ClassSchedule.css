@@ -281,6 +281,17 @@ ul.subject li a
 	padding: 0 5px 0 19px; /*ju*/
 }
 
+#advancedFacetedSearch ul.subjectSearch li {
+	padding-left: 10px;
+}
+
+
+ul.subjectSearch li
+{
+	margin: 0px;
+
+}
+
 
 #scheduleContent
 {

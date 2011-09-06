@@ -23,6 +23,7 @@
 		//when user clicks refine, show throbber
 		$('#submit_days_times').click(function () {
 			showThrobber();
+			$('#daystimesform').submit();
 		});
 
 		if (!$("#radio_all").is(':checked')) {
@@ -105,16 +106,70 @@
 
 <div id="advancedFacetedSearch">
 		<h3>Subject</h3>
+
+@* if the user has browsed vs. searched for a term, display a different subject chooser UI  *@
+@if (string.IsNullOrWhiteSpace(@ViewBag.searchterm))
+{
 	<ul class="subject">
 		<li @(ViewBag.activeClass)>
 			<a href="" >@ViewBag.Subject</a>
 		</li>
 	</ul>
  @Html.Partial("subjectNavigation")
+}
+else {
 
-<form id="daystimesform" action="@Url.Content("~/Classes/")@ViewBag.YearQuarter/@ViewBag.Subject" method="get">
 
-	<!-- hidden fields to include in form -->
+	<ul class="subjectSearch">
+	@foreach (var item in Model.Titles) {
+		if(!string.IsNullOrWhiteSpace(ViewBag.Subject))
+		{
+			int firstChar = Request.QueryString.ToString().IndexOf("&Subject");
+			string modifiedQueryString = Request.QueryString.ToString().Remove(firstChar);
+			<li>
+				<a href="@Url.Content("~/Search/")?@modifiedQueryString">All</a>
+			</li>
+			<li>
+				@item
+			</li>
+		}
+		else
+		{
+		 <li>
+				<a href="@Url.Content("~/Search/")?@Request.QueryString&Subject=@item">@item</a>
+			</li>
+		}
+
+	}
+	</ul>
+}
+
+@if (ViewContext.RouteData.Values["Controller"].Equals("Classes"))
+{
+	<div>
+		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])@ViewBag.YearQuarter/@ViewBag.Subject" method="get">
+	</div>
+}
+else if (ViewContext.RouteData.Values["Controller"].Equals("Search")) {
+	<div>
+		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])" method="get">
+		<!-- hidden fields to include in form -->
+		@if (!string.IsNullOrWhiteSpace(ViewBag.quarter))
+		{
+			<input type="hidden" name="quarter" value="@ViewBag.quarter"/>
+		}
+
+		@if (!string.IsNullOrWhiteSpace(ViewBag.Subject))
+		{
+			<input type="hidden" name="Subject" value="@ViewBag.Subject"/>
+		}
+		<input type="hidden" name="searchterm" value="@ViewBag.searchterm"/>
+
+	</div>
+}
+
+
+
 
 
 
