@@ -82,7 +82,7 @@
 
 <div id="overlay"></div>
 <div id="lightbox">
- <img src="@ViewBag.currentAppSubdirectory/Content/images/ajax-loader_big.gif" />
+ <img src="@Url.Content("~/Content/")images/ajax-loader_big.gif" />
 </div>
 
 
@@ -92,9 +92,12 @@
 		String QuarterTwoFriendly = ViewBag.QuarterTwoFriendly;
 		String QuarterThreeFriendly = ViewBag.QuarterThreeFriendly;
 
-		String QuarterOneURL = ViewBag.QuarterOneURL + "?type=beta" + ViewBag.queryStringAll;
-		String QuarterTwoURL = ViewBag.QuarterTwoURL + "?type=beta" + ViewBag.queryStringAll;
-		String QuarterThreeURL = ViewBag.QuarterThreeURL + "?type=beta" + ViewBag.queryStringAll;
+		String QuarterOneURL = ViewBag.QuarterOneURL;
+		String QuarterTwoURL = ViewBag.QuarterTwoURL;
+		String QuarterThreeURL = ViewBag.QuarterThreeURL;
+		if (ViewBag.Subject == "All") {
+			ViewBag.Subject = "";
+		}
 	}
 
 
@@ -109,7 +112,7 @@
 	</ul>
  @Html.Partial("subjectNavigation")
 
-<form id="daystimesform" action="@ViewBag.currentAppSubdirectory/Classes/@ViewBag.YearQuarter/@ViewBag.Subject" method="get">
+<form id="daystimesform" action="@Url.Content("~/Classes/")@ViewBag.YearQuarter/@ViewBag.Subject" method="get">
 
 	<!-- hidden fields to include in form -->
 
@@ -221,13 +224,13 @@
 			<a href="">All Credit Classes</a>
 		</li>
 		<li>
-			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterOneURL)">@QuarterOneFriendly</a>
+			<a href="@Url.Content("~/Classes/")@(QuarterOneURL)">@QuarterOneFriendly</a>
 		</li>
 		<li>
-			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterTwoURL)">@QuarterTwoFriendly</a>
+			<a href="@Url.Content("~/Classes/")@(QuarterTwoURL)">@QuarterTwoFriendly</a>
 		</li>
 		<li>
-			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterThreeURL)">@QuarterThreeFriendly</a>
+			<a href="@Url.Content("~/Classes/")@(QuarterThreeURL)">@QuarterThreeFriendly</a>
 		</li>
 
 	</ul>

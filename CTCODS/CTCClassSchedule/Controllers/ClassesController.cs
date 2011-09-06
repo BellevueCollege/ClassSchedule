@@ -88,6 +88,21 @@ namespace CTCClassSchedule.Controllers
 		{
 			ViewBag.Subject = Subject;
 			setViewBagVars("", "", "", "", avail, "");
+			ViewBag.timestart = timestart;
+			ViewBag.timeend = timeend;
+			ViewBag.day_su = day_su;
+			ViewBag.day_m = day_m;
+			ViewBag.day_t = day_t;
+			ViewBag.day_w = day_w;
+			ViewBag.day_th = day_th;
+			ViewBag.day_f = day_f;
+			ViewBag.day_s = day_s;
+			ViewBag.f_oncampus = f_oncampus;
+			ViewBag.f_online = f_online;
+			ViewBag.f_hybrid = f_hybrid;
+			ViewBag.f_telecourse = f_telecourse;
+			ViewBag.avail = avail;
+
 			ViewBag.Title = "All " +  @Subject + " classes";
 			IList<ISectionFacet> facets = addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
@@ -129,6 +144,23 @@ namespace CTCClassSchedule.Controllers
 		{
 			ViewBag.WhichClasses = (letter == null || letter == "" ? " (All)" : " (" + letter.ToUpper() + ")");
 			setViewBagVars(YearQuarter, "", "", "", avail, letter);
+
+			ViewBag.timestart = timestart;
+			ViewBag.timeend = timeend;
+			ViewBag.day_su = day_su;
+			ViewBag.day_m = day_m;
+			ViewBag.day_t = day_t;
+			ViewBag.day_w = day_w;
+			ViewBag.day_th = day_th;
+			ViewBag.day_f = day_f;
+			ViewBag.day_s = day_s;
+			ViewBag.f_oncampus = f_oncampus;
+			ViewBag.f_online = f_online;
+			ViewBag.f_hybrid = f_hybrid;
+			ViewBag.f_telecourse = f_telecourse;
+			ViewBag.avail = avail;
+
+
 			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.Subject = "All";
 			ViewBag.AlphabetCharacter = 0;
