@@ -1143,3 +1143,17 @@ ul.class-description
 	font-weight: bold;
 	margin-top: 10px;
 }
+
+#navbar #browse a,
+#navbar #browse a:hover,
+#navbar #browse a:active,
+#navbar #browse a:visited
+{
+	color: #fff;
+	text-decoration: none;
+}
+
+#navbar #browse a:hover
+{
+	text-decoration: underline;
+}

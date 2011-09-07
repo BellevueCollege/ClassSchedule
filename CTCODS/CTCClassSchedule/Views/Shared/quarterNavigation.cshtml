@@ -32,7 +32,7 @@
 
 @using(Html.BeginForm("Index", "Search", FormMethod.Get)) {
 <div id="navbar">
-	<div id="browse">Browse for Classes</div>
+	<div id="browse"><a href="@Url.Content("~/Classes/")All">Browse for Classes</a></div>
 	<div id="search">
 		Search
 		<select name="quarter">
