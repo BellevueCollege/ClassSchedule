@@ -147,7 +147,7 @@ else {
 @if (ViewContext.RouteData.Values["Controller"].Equals("Classes"))
 {
 	<div>
-		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])@ViewBag.YearQuarter/@ViewBag.Subject" method="get">
+		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])/@ViewBag.YearQuarter/@ViewBag.Subject" method="get">
 	</div>
 }
 else if (ViewContext.RouteData.Values["Controller"].Equals("Search")) {
