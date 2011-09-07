@@ -68,7 +68,7 @@
 			<div id="courseDescription">
 				<h3>
 					Description:</h3>
-				@ViewBag.CourseDescription
+				@(item.CourseDescriptions.Count <= 0 || string.IsNullOrWhiteSpace(item.CourseDescriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : item.CourseDescriptions[0].Description)
 			</div>
 
 			<div id="courseOutcome">

@@ -321,15 +321,7 @@ namespace CTCClassSchedule.Controllers
 
 				if (courseID != null)
 				{
-					IList<CourseDescription> courseDescriptions = respository.GetCourseDescription(CourseID.FromString(courseID));
-
-					foreach(CourseDescription desc in courseDescriptions) {
-						ViewBag.CourseDescription = desc.Description;
-
-					}
-
 					var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
-
 					                           select s);
 
 					// TODO: move this declaration somewhere it can more easily be re-used
@@ -349,12 +341,7 @@ namespace CTCClassSchedule.Controllers
 											LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated)),
 																				Footnotes = c.Footnotes,
 									}
-
 					               );
-
-
-
-
 
 					return View(sectionsEnum);
 				}
