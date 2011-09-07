@@ -1115,3 +1115,31 @@ ul.class-description
 	/*margin: -431px 0 0 -455px;*/
 	background: #fff;
 }
+
+
+
+
+#pagerNums
+{
+	width: 200px;
+	margin-left: auto;
+	margin-right: auto;
+	font-weight: bold;
+
+
+}
+
+#pagerNums a
+{
+	text-decoration: none;
+	color: #003D79;
+}
+
+#pagerInfo
+{
+	width: 130px;
+	margin-left: auto;
+	margin-right: auto;
+	font-weight: bold;
+	margin-top: 10px;
+}

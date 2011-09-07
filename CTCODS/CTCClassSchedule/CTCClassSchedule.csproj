@@ -300,6 +300,7 @@
     <Content Include="Views\Classes\Index.cshtml" />
     <Content Include="Views\Shared\subjectNavigation.cshtml" />
     <Content Include="Views\Api\Subjects.cshtml" />
+    <Content Include="Views\Shared\Pager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">

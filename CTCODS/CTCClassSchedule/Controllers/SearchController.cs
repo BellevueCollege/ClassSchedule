@@ -25,7 +25,7 @@ namespace CTCClassSchedule.Controllers
 
         //
         // GET: /Search/
-			public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, String YearQuarter = "")
+			public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, String YearQuarter = "", int p_offset = 0)
 				{
 					IEnumerable<SectionWithSeats> sectionsEnum;
 					IEnumerable<string> titles;
@@ -53,6 +53,7 @@ namespace CTCClassSchedule.Controllers
 					ViewBag.f_hybrid = f_hybrid;
 					ViewBag.f_telecourse = f_telecourse;
 					ViewBag.avail = avail;
+					ViewBag.p_offset = p_offset;
 
 
 					ViewBag.displayedCourseNum = "000";
@@ -171,23 +172,22 @@ namespace CTCClassSchedule.Controllers
 
 							}
 
+							ViewBag.ItemCount = sectionsEnum.Count();
+							titles = (from s in sectionsEnum
+																			orderby s.CourseSubject ascending
+																			select s.CourseSubject
+																			).Distinct();
 							sectionsEnum = (
 																from c in sectionsEnum
 																join d in SearchResults on c.ID.ToString() equals d.ClassID
 																orderby d.SearchRank descending
-																select c
+																select c).Skip(p_offset*40).Take(40);
 
 
-								);
 
 
-							ViewBag.ItemCount = sectionsEnum.Count();
 
 
-							titles = (from s in sectionsEnum
-												orderby s.CourseSubject ascending
-												select s.CourseSubject
-												).Distinct();
 
 							var model = new SearchResultsModel {
 								Section = sectionsEnum,

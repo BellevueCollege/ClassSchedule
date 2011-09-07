@@ -1,0 +1,57 @@
+﻿@{
+	string modifiedQueryString;
+	int firstChar = Request.QueryString.ToString().IndexOf("&p_offset");
+	if (firstChar != -1)
+	{
+		modifiedQueryString = Request.QueryString.ToString().Remove(firstChar);
+	}
+	else {
+		modifiedQueryString = Request.QueryString.ToString();
+	}
+
+	string prev_offset, next_offset;
+	if (ViewBag.p_offset != 0)
+	{
+		 prev_offset = Convert.ToString(ViewBag.p_offset - 1);
+	}
+	else {
+		prev_offset = "0";
+	}
+
+	if (ViewBag.p_offset < ViewBag.ItemCount)
+	{
+		next_offset = Convert.ToString(ViewBag.p_offset + 1);
+	}
+	else {
+		next_offset = Convert.ToString(ViewBag.p_offset);
+	}
+
+}
+
+<div id="pager">
+	<div id="pagerNums">
+	@if (ViewBag.ItemCount > 40) {
+
+		<a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@prev_offset"> &lt;</a> <text>| </text>
+		for (int i = 0; i < (ViewBag.ItemCount / 40); i++)
+		{
+			if (ViewBag.p_offset == i)
+			{
+				@(i + 1) <text>| </text>
+			}
+			else {
+				<a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@i"> @(i + 1)</a> <text>| </text>
+			}
+
+		}
+		<a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@next_offset"> &gt;</a>
+ }
+	</div>
+	<div id="pagerInfo">
+	@if (ViewBag.ItemCount > 40) {
+		<text>More Results</text>
+	}
+
+	</div>
+
+</div>
