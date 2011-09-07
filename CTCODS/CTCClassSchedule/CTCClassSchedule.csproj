@@ -105,6 +105,11 @@
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="SearchResultsNoSection.cs" />
     <Compile Include="CourseHPQuery.cs" />
     <Compile Include="Global.asax.cs">
@@ -301,6 +306,10 @@
     <Content Include="Views\Shared\subjectNavigation.cshtml" />
     <Content Include="Views\Api\Subjects.cshtml" />
     <Content Include="Views\Shared\Pager.cshtml" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">
