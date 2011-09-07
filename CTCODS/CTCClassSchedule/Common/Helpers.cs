@@ -196,18 +196,16 @@ namespace CTCClassSchedule.Common
 		/// <summary>
 		/// Returns true/false if the value passed is an integer
 		/// </summary>
-		public static bool IsInteger(string value)
+		public static bool IsBadlyFormedYear(string year)
 		{
-			try
+			short yearNumber;
+
+			if (Int16.TryParse(year, out yearNumber))
 			{
-				Convert.ToInt32(value);
-				return true;
-			}
-			catch
-			{
-				return false;
+				return (yearNumber < 1975 || yearNumber > 2030);
 			}
 
+			return true;
 		}
 
 		/// <summary>

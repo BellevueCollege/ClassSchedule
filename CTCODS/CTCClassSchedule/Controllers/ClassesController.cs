@@ -42,7 +42,7 @@ namespace CTCClassSchedule.Controllers
 		{
 
 			setViewBagVars("", "", "", "", "", letter);
-			ViewBag.WhichClasses = (letter == null || letter == "" ? " (All)" : " (" + letter.ToUpper() + ")");
+			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? " (All)" : " (" + letter.ToUpper() + ")");
 			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.AlphabetCharacter = 0;
 			ViewBag.Title = "All classes";
@@ -75,10 +75,9 @@ namespace CTCClassSchedule.Controllers
 				}
 				else
 				{
-					View(courses);
+					return View(courses);
 				}
 			}
-			return View();
 		}
 
 		/// <summary>
@@ -108,8 +107,6 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.ProgramUrl = getProgramUrl(Subject);
 
-
-
 			using (OdsRepository respository = new OdsRepository())
 			{
 				getCurrentFutureYRQs(respository);
@@ -128,7 +125,7 @@ namespace CTCClassSchedule.Controllers
 				}
 				else
 				{
-					View();
+					return View();
 				}
 			}
 			return View();
@@ -568,17 +565,12 @@ namespace CTCClassSchedule.Controllers
 			bool badlyFormedQuarter = false;
 			bool badlyFormedYear = false;
 
-			if (Helpers.IsInteger(year))
+			badlyFormedYear = Helpers.IsBadlyFormedYear(year);
+
+			if (!badlyFormedYear)
 			{
-				if (Convert.ToInt16(year) < 1975 || Convert.ToInt16(year) > 2030)
-				{
-					badlyFormedYear = true;
-				}
-				else
-				{
-					yearBaseTen = Convert.ToInt16(year.Substring(3, 1));
-					decade = year.Substring(0, 3); //201
-				}
+				yearBaseTen = Convert.ToInt16(year.Substring(3, 1));
+				decade = year.Substring(0, 3); //201
 			}
 
 			//determine the quarter in string form "1", "2", etc... essentially the xxx2 character
@@ -604,10 +596,6 @@ namespace CTCClassSchedule.Controllers
 
 			if (!badlyFormedQuarter && !badlyFormedYear)
 			{
-
-
-
-
 				//is the year an overlapping year? e.g. spring 2000 = 9904 but summer 2000 = A011
 				if (yearBaseTen == 0 && (quarter == "3" || quarter == "4"))
 				{
