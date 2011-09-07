@@ -63,12 +63,13 @@
 				count++;
 			}
 			<h2 class="classHeading">
+				@Html.ActionLink(item.CourseSubject + " " + item.CourseNumber + " " + item.CourseTitle + " " + item.Credits, "ClassDetails", "Classes", new { YearQuarterID = quarter, Subject = item.CourseSubject, ClassNum = item.CourseNumber }, null)
 
-				@Html.ActionLink(item.CourseSubject + " " + item.CourseNumber + " " + item.CourseTitle + " " + item.Credits, quarter + "/" + item.CourseSubject + "/" + item.CourseNumber, "Classes")
 
 			</h2>
 			<p class="classDetails">
-				@Html.ActionLink("View Class Details", quarter + "/" + item.CourseSubject + "/" + item.CourseNumber)</p>
+				@Html.ActionLink("View Class Details", "ClassDetails",  "Classes", new { YearQuarterID = quarter, Subject = item.CourseSubject, ClassNum = item.CourseNumber }, null)
+			</p>
 
 
 			@Html.Raw("<ul class='course-block'>");

@@ -56,7 +56,7 @@
 		}
 
 			<div class="subject">
-				<a href="/Classes/@(YearQuarter)/@(item.Subject)?type=beta@(QueryStringAll)">@item.Title</a>
+				@Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new { Subject = item.Subject }, null)
 			</div>
 		}
 
