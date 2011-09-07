@@ -307,7 +307,8 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
-			string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
+
+			ICourseID courseID = CourseID.FromString(Subject, ClassNum);
 			ViewBag.titleDisplayed = false;
 			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.CourseOutcome = getCourseOutcome(Subject, ClassNum);
@@ -321,13 +322,14 @@ namespace CTCClassSchedule.Controllers
 
 				if (courseID != null)
 				{
+					// TODO: if we joined the seat availablility lookup w/ the sections, would it return faster?
 					var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
 					                           select s);
 
 					// TODO: move this declaration somewhere it can more easily be re-used
 					IList<ISectionFacet> facets = new List<ISectionFacet> {new RegistrationQuartersFacet(-4)};	// Current & previous 3 quarters
 
-					IList<Section> sections = respository.GetSections(CourseID.FromString(courseID), facetOptions: facets);
+					IList<Section> sections = respository.GetSections(courseID, facetOptions: facets);
 
 					IEnumerable<SectionWithSeats> sectionsEnum;
 					sectionsEnum = (
@@ -338,8 +340,7 @@ namespace CTCClassSchedule.Controllers
 									{
 																				ParentObject = c,
 											SeatsAvailable = d.SeatsAvailable,
-											LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated)),
-																				Footnotes = c.Footnotes,
+											LastUpdated = getFriendlyTime(d.LastUpdated != null ? d.LastUpdated.Value : DateTime.MinValue),
 									}
 					               );
 
