@@ -25,7 +25,7 @@ namespace CTCClassSchedule.Controllers
 
         //
         // GET: /Search/
-			public ActionResult Index(String searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, String YearQuarter = "")
+			public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, String YearQuarter = "")
 				{
 					IEnumerable<SectionWithSeats> sectionsEnum;
 					IEnumerable<string> titles;
@@ -185,7 +185,9 @@ namespace CTCClassSchedule.Controllers
 
 
 							titles = (from s in sectionsEnum
-												select s.CourseSubject).Distinct();
+												orderby s.CourseSubject ascending
+												select s.CourseSubject
+												).Distinct();
 
 							var model = new SearchResultsModel {
 								Section = sectionsEnum,

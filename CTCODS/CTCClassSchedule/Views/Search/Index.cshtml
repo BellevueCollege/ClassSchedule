@@ -55,7 +55,7 @@
 	@foreach (var item in Model.Section)
 	{
 		int count = 0;
-		if(String.Compare(@ViewBag.displayedCourseNum, item.CourseNumber) < 0)
+		if(@ViewBag.displayedCourseNum != item.CourseNumber)
 		{
 			if (count == 0)
 			{
@@ -68,7 +68,8 @@
 
 			</h2>
 			<p class="classDetails">
-				@Html.ActionLink("View Class Details", quarter + "/" + item.CourseSubject + "/" + item.CourseNumber, "Classes")</p>
+				@Html.ActionLink("View Class Details", quarter + "/" + item.CourseSubject + "/" + item.CourseNumber)</p>
+
 
 			@Html.Raw("<ul class='course-block'>");
 		}
