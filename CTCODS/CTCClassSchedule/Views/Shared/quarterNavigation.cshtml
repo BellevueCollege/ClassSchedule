@@ -1,4 +1,24 @@
-﻿
+﻿<script type="text/javascript">
+	$(document).ready(function () {
+		function showThrobber() {
+			var pageHeight = $(document).height();
+			$('#overlay').css('height', pageHeight - 49 + 'px');
+			$('#overlay').css('margin-top', 49 + 'px');
+			$('#overlay').css('opacity', '0.5');
+			$('#overlay').css('display', 'inherit');
+			$('#lightbox').css('display', 'inherit');
+		}
+
+		//when user clicks refine, show throbber
+		$('.searchSubmit').click(function () {
+			showThrobber();
+			$('#submitSearchForm').submit();
+		});
+
+	});
+</script>
+
+
 @{
 	//viewbag variables are dynamic, so we need to convert to string to use with the Html.ActionLink
 	String QuarterOneFriendly = (String)ViewBag.QuarterOneFriendly;
@@ -13,18 +33,18 @@
 
 }
 
-@using(Html.BeginForm("Index", "Search", FormMethod.Get)) {
+@using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" })) {
 <div id="navbar">
 	<div id="browse"><a href="@Url.Content("~/Classes/")All">Browse for Classes</a></div>
 	<div id="search">
 		Search
 		<select name="quarter">
-			<option value="@QuarterOneURL">@QuarterOneFriendly</option>
-			<option value="@QuarterTwoURL">@QuarterTwoFriendly</option>
-			<option value="@QuarterThreeURL">@QuarterThreeFriendly</option>
+			<option value="@QuarterOneURL" @if (@ViewBag.quarter == QuarterOneURL) { <text> selected</text>}>@QuarterOneFriendly</option>
+			<option value="@QuarterTwoURL" @if (@ViewBag.quarter == QuarterTwoURL) { <text> selected</text>}>@QuarterTwoFriendly</option>
+			<option value="@QuarterThreeURL" @if (@ViewBag.quarter == QuarterThreeURL) { <text> selected</text>}>@QuarterThreeFriendly</option>
 			<option value="CE">Continuing Education</option>
 		</select>
-		<input type="text" class="searchInput" name="searchterm" />
+		<input type="text" class="searchInput" name="searchterm" value="@ViewBag.searchterm"/>
 		<input type="submit" class="searchSubmit"  name="submit" value="Go" />
 
 	</div>
