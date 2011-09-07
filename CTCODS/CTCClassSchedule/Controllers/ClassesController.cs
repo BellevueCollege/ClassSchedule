@@ -159,22 +159,20 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.f_telecourse = f_telecourse;
 			ViewBag.avail = avail;
 
+			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
 
-			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.Subject = "All";
 			ViewBag.AlphabetCharacter = 0;
-			ViewBag.YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)).ToString();
-			ViewBag.FriendlyYRQ = getFriendlyDateFromYRQ(Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter)));
+			ViewBag.YRQ = yrq.ToString();
+			ViewBag.FriendlyYRQ = getFriendlyDateFromYRQ(yrq);
 			ViewBag.Title = ViewBag.Subject + "Classes for " + @ViewBag.Yearquarter;
 			IList<ISectionFacet> facets = addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
 			using (OdsRepository respository = new OdsRepository())
 			{
 				getCurrentFutureYRQs(respository);
-				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
 
-				IList<CoursePrefix> courses = respository.GetCourseSubjects(YRQ, facetOptions: facets);
-				ViewBag.ItemCount = courses.Count();
+				IList<CoursePrefix> courses = respository.GetCourseSubjects(yrq, facets);
 
 				IEnumerable<String> alphabet;
 				ViewBag.AlphabetArray = new bool[26];
@@ -200,11 +198,11 @@ namespace CTCClassSchedule.Controllers
 				}
 				else
 				{
-					View(courses);
-				}
-				return View();
-			}
+					ViewBag.ItemCount = courses.Count();
 
+					return View(courses);
+				}
+			}
 		}
 
 		/// <summary>
