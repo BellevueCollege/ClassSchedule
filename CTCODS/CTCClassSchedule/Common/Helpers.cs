@@ -74,34 +74,38 @@ namespace CTCClassSchedule.Common
 			facets.Add(new TimeFacet(new TimeSpan(startHour, startMinute, 0), new TimeSpan(endHour, endMinute, 0)));
 
 			//day of the week facets
+			DaysFacet.Options days = DaysFacet.Options.All;	// default
+
 			if (!String.IsNullOrWhiteSpace(day_su))
 			{
-				facets.Add(new DaysFacet(DaysFacet.Options.Sunday));
+				days = (days | DaysFacet.Options.Sunday);
 			}
 			if (!String.IsNullOrWhiteSpace(day_m))
 			{
-				facets.Add(new DaysFacet(DaysFacet.Options.Monday));
+				days = (days | DaysFacet.Options.Monday);
 			}
 			if (!String.IsNullOrWhiteSpace(day_t))
 			{
-				facets.Add(new DaysFacet(DaysFacet.Options.Tuesday));
+				days = (days | DaysFacet.Options.Tuesday);
 			}
 			if (!String.IsNullOrWhiteSpace(day_w))
 			{
-				facets.Add(new DaysFacet(DaysFacet.Options.Wednesday));
+				days = (days | DaysFacet.Options.Wednesday);
 			}
 			if (!String.IsNullOrWhiteSpace(day_th))
 			{
-				facets.Add(new DaysFacet(DaysFacet.Options.Thursday));
+				days = (days | DaysFacet.Options.Thursday);
 			}
 			if (!String.IsNullOrWhiteSpace(day_f))
 			{
-				facets.Add(new DaysFacet(DaysFacet.Options.Friday));
+				days = (days | DaysFacet.Options.Friday);
 			}
 			if (!String.IsNullOrWhiteSpace(day_s))
 			{
-				facets.Add(new DaysFacet(DaysFacet.Options.Saturday));
+				days = (days | DaysFacet.Options.Saturday);
 			}
+			facets.Add(new DaysFacet(days));
+
 
 			if (!String.IsNullOrWhiteSpace(avail))
 			{
