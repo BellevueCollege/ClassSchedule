@@ -164,7 +164,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.Subject = "All";
 			ViewBag.AlphabetCharacter = 0;
 			ViewBag.YRQ = yrq.ToString();
-			ViewBag.FriendlyYRQ = getFriendlyDateFromYRQ(yrq);
+			ViewBag.FriendlyYRQ = yrq.FriendlyName;
 			ViewBag.Title = ViewBag.Subject + "Classes for " + @ViewBag.Yearquarter;
 			IList<ISectionFacet> facets = addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
@@ -429,9 +429,9 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.QuarterTwo = currentFutureQuarters[1];
 			ViewBag.QuarterThree = currentFutureQuarters[2];
 
-			ViewBag.QuarterOneFriendly = getFriendlyDateFromYRQ(currentFutureQuarters[0]);
-			ViewBag.QuarterTwoFriendly = getFriendlyDateFromYRQ(currentFutureQuarters[1]);
-			ViewBag.QuarterThreeFriendly = getFriendlyDateFromYRQ(currentFutureQuarters[2]);
+			ViewBag.QuarterOneFriendly = currentFutureQuarters[0].FriendlyName;
+			ViewBag.QuarterTwoFriendly = currentFutureQuarters[1].FriendlyName;
+			ViewBag.QuarterThreeFriendly = currentFutureQuarters[2].FriendlyName;
 
 			ViewBag.QuarterOneURL = ViewBag.QuarterOneFriendly.Replace(" ", "");
 			ViewBag.QuarterTwoURL = ViewBag.QuarterTwoFriendly.Replace(" ", "");
@@ -682,86 +682,6 @@ namespace CTCClassSchedule.Controllers
 			}
 
 			return "Z999";
-
-
-
-		}
-
-		/// <summary>
-		/// Converts a <see cref="YearQuarter"/> into a friendly YRQ (Fall2011)
-		/// </summary>
-		private String getFriendlyDateFromYRQ(YearQuarter YRQ)
-		{
-			//Example: Winter 2008 = A783
-
-			//summer: xxx1
-			//fall:   xxx2
-			//winter: xxx3
-			//spring:	xxx4
-
-			//Academic year 2006-2007: x67x
-			//Academic year 2011-2012: x12x
-
-			string stringYRQ = YRQ.ID.ToString();
-
-			string year1 = stringYRQ.Substring(stringYRQ.Length - 3, 1); //x6xx = 2006
-			string year2 = stringYRQ.Substring(stringYRQ.Length - 2, 1); //xx7x = 2007
-			string quarter = stringYRQ.Substring(stringYRQ.Length - 1, 1); //Spring
-			string decade = stringYRQ.Substring(stringYRQ.Length - 4, 1); //Axxx = 2000's
-			string strQuarter = "";
-			bool isLastTwoQuarters = false;
-			bool badlyFormedQuarter = false;
-			bool badlyFormedYear = false;
-
-			string year = "";
-
-			//is the year an overlapping year? e.g. spring 2000 = 9904 but summer 2000 = A011
-			if (year2 == "0" && (quarter == "3" || quarter == "4"))
-			{
-				isLastTwoQuarters = true;
-			}
-
-			//determine the quarter in string form "1", "2", etc... essentially the xxx2 character
-			switch (quarter)
-			{
-				case "1":
-					strQuarter = "Summer";
-					year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
-					break;
-				case "2":
-					strQuarter = "Fall";
-					year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
-					break;
-				case "3":
-					strQuarter = "Winter";
-					year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
-					break;
-				case "4":
-					strQuarter = "Spring";
-					year = getYearHelper(quarter, year1, year2, decade, isLastTwoQuarters);
-					break;
-				default:
-					badlyFormedQuarter = true;
-					break;
-
-			}
-			if (IsInteger(year))
-			{
-				if (Convert.ToInt16(year) < 1975 || Convert.ToInt16(year) > 2030)
-				{
-					badlyFormedYear = true;
-				}
-			}
-
-			string returnFriendly = "You have entered a badly formed quarter/year.";
-
-			if (!badlyFormedQuarter || !badlyFormedYear)
-			{
-				returnFriendly = strQuarter + " " + year;
-			}
-
-			return returnFriendly;
-
 
 
 
