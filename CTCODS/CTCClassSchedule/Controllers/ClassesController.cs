@@ -10,8 +10,7 @@ using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Models;
-
-
+using CTCClassSchedule.Properties;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -230,15 +229,11 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.f_telecourse = f_telecourse;
 			ViewBag.avail = avail;
 
-
-
 			ViewBag.displayedCourseNum = 0;
 			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.Subject = Subject;
 			ViewBag.Title = @ViewBag.Yearquarter + " " + @Subject + " classes";
 			IList<ISectionFacet> facets = addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
-
-
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -252,9 +247,6 @@ namespace CTCClassSchedule.Controllers
 				IList<Section> sections = respository.GetSections(Subject, YRQ, facets);
 				ViewBag.ItemCount = sections.Count();
 
-
-
-
 				IEnumerable<SectionWithSeats> sectionsEnum;
 				sectionsEnum = (
 											from c in sections
@@ -265,7 +257,7 @@ namespace CTCClassSchedule.Controllers
 											{
 													ParentObject = c,
 													SeatsAvailable = d.SeatsAvailable,
-													LastUpdated = this.getFriendlyTime(Convert.ToDateTime(d.LastUpdated)),
+													LastUpdated = getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
 											}
 				               );
 
@@ -327,7 +319,7 @@ namespace CTCClassSchedule.Controllers
 					                           select s);
 
 					// TODO: move this declaration somewhere it can more easily be re-used
-					IList<ISectionFacet> facets = new List<ISectionFacet> {new RegistrationQuartersFacet(-4)};	// Current & previous 3 quarters
+					IList<ISectionFacet> facets = new List<ISectionFacet> {new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay)};
 
 					IList<Section> sections = respository.GetSections(courseID, facetOptions: facets);
 
@@ -340,7 +332,7 @@ namespace CTCClassSchedule.Controllers
 									{
 																				ParentObject = c,
 											SeatsAvailable = d.SeatsAvailable,
-											LastUpdated = getFriendlyTime(d.LastUpdated != null ? d.LastUpdated.Value : DateTime.MinValue),
+											LastUpdated = getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
 									}
 					               );
 
@@ -408,9 +400,7 @@ namespace CTCClassSchedule.Controllers
 			foreach (var seat in seatsAvailable)
 			{
 				seats = seat.SeatsAvailable;
-
-				DateTime lastUpdated = Convert.ToDateTime(seat.LastUpdated);
-				friendlyTime = getFriendlyTime(lastUpdated);
+				friendlyTime = getFriendlyTime(seat.LastUpdated.GetValueOrDefault());
 			}
 
 
