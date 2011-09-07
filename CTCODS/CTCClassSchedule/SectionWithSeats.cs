@@ -1,5 +1,5 @@
-﻿using Ctc.Ods.Types;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Ctc.Ods.Types;
 
 namespace CTCClassSchedule
 {
@@ -21,6 +21,7 @@ namespace CTCClassSchedule
 				CourseNumber = value.CourseNumber;
 				CourseTitle = value.CourseTitle;
 				CourseSubject = value.CourseSubject;
+				CourseDescriptions = value.CourseDescriptions;
 				Credits = value.Credits;
 				Offered = value.Offered;
 				SectionCode = value.SectionCode;
