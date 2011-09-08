@@ -157,7 +157,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.f_telecourse = f_telecourse;
 			ViewBag.avail = avail;
 
-			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
+			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 
 			ViewBag.Subject = "All";
 			ViewBag.AlphabetCharacter = 0;
@@ -234,7 +234,7 @@ namespace CTCClassSchedule.Controllers
 			using (OdsRepository respository = new OdsRepository())
 			{
 				getCurrentFutureYRQs(respository);
-				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromString(getYRQFromFriendlyDate(YearQuarter));
+				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 
 				var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
 																	 select s);
@@ -493,7 +493,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.YearQuarter = YearQuarter;
 			if (YearQuarter != "")
 			{
-				ViewBag.YearQuarterHP = getYRQFromFriendlyDate(YearQuarter);
+				ViewBag.YearQuarterHP = Ctc.Ods.Types.YearQuarter.ToYearQuarterID(YearQuarter);
 
 			}
 
@@ -532,6 +532,7 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
+/*
 		/// <summary>
 		/// Converts a friendly YRQ (Fall2011) into a <see cref="YearQuarter"/>
 		/// </summary>
@@ -669,6 +670,7 @@ namespace CTCClassSchedule.Controllers
 
 
 		}
+*/
 
 		private string getProgramUrl(string Subject)
 		{
