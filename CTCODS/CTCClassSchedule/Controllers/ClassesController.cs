@@ -111,6 +111,7 @@ namespace CTCClassSchedule.Controllers
 			{
 				getCurrentFutureYRQs(respository);
 
+				// TODO: GetCourses() can take a Subject parameter - returning a smaller dataset which doesn't need to be further filtered.
 				IList<Course> courses = respository.GetCourses(facets);
 
 				if (Subject != null)
@@ -128,7 +129,6 @@ namespace CTCClassSchedule.Controllers
 					return View();
 				}
 			}
-			return View();
 		}
 
 
@@ -354,10 +354,6 @@ namespace CTCClassSchedule.Controllers
 
 			CourseHPQuery query = new CourseHPQuery();
 			int HPseats = query.findOpenSeats(classID, yrq);
-			string HPseatsAvailable = seats.ToString();
-
-
-
 
 			var seatsAvailableLocal =	from s in _scheduledb.SeatAvailabilities
 							where s.ClassID == courseIdPlusYRQ
@@ -373,8 +369,6 @@ namespace CTCClassSchedule.Controllers
 				newseat.LastUpdated = DateTime.Now;
 
 				_scheduledb.SeatAvailabilities.AddObject(newseat);
-
-
 			}
 			else
 			{

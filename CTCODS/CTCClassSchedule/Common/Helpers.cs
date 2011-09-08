@@ -130,75 +130,63 @@ namespace CTCClassSchedule.Common
 		/// </summary>
 		public static string getFriendlyTime(DateTime theDate)
 		{
+			const int SECOND = 1;
+			const int MINUTE = 60 * SECOND;
+			const int HOUR = 60 * MINUTE;
+			const int DAY = 24 * HOUR;
+			const int MONTH = 30 * DAY;
 
-			if (theDate == null)
+			var deltaTimeSpan = new TimeSpan(DateTime.Now.Ticks - theDate.Ticks);
+
+			var delta = deltaTimeSpan.TotalSeconds;
+
+			if (delta < 0)
 			{
-				return "last updated time unavailable";
+				return "not yet";
+			}
+
+			if (delta < 1 * MINUTE)
+			{
+				return deltaTimeSpan.Seconds == 1 ? "one second ago" : deltaTimeSpan.Seconds + " seconds ago";
+			}
+			if (delta < 2 * MINUTE)
+			{
+				return "a minute ago";
+			}
+			if (delta < 45 * MINUTE)
+			{
+				return deltaTimeSpan.Minutes + " minutes ago";
+			}
+			if (delta < 90 * MINUTE)
+			{
+				return "an hour ago";
+			}
+			if (delta < 24 * HOUR)
+			{
+				return deltaTimeSpan.Hours + " hours ago";
+			}
+			if (delta < 48 * HOUR)
+			{
+				return "yesterday";
+			}
+			if (delta < 30 * DAY)
+			{
+				return deltaTimeSpan.Days + " days ago";
+			}
+			if (delta < 12 * MONTH)
+			{
+				int months = Convert.ToInt32(Math.Floor((double)deltaTimeSpan.Days / 30));
+				return months <= 1 ? "one month ago" : months + " months ago";
 			}
 			else
 			{
-
-
-				const int SECOND = 1;
-				const int MINUTE = 60 * SECOND;
-				const int HOUR = 60 * MINUTE;
-				const int DAY = 24 * HOUR;
-				const int MONTH = 30 * DAY;
-
-				var deltaTimeSpan = new TimeSpan(DateTime.Now.Ticks - theDate.Ticks);
-
-				var delta = deltaTimeSpan.TotalSeconds;
-
-				if (delta < 0)
-				{
-					return "not yet";
-				}
-
-				if (delta < 1 * MINUTE)
-				{
-					return deltaTimeSpan.Seconds == 1 ? "one second ago" : deltaTimeSpan.Seconds + " seconds ago";
-				}
-				if (delta < 2 * MINUTE)
-				{
-					return "a minute ago";
-				}
-				if (delta < 45 * MINUTE)
-				{
-					return deltaTimeSpan.Minutes + " minutes ago";
-				}
-				if (delta < 90 * MINUTE)
-				{
-					return "an hour ago";
-				}
-				if (delta < 24 * HOUR)
-				{
-					return deltaTimeSpan.Hours + " hours ago";
-				}
-				if (delta < 48 * HOUR)
-				{
-					return "yesterday";
-				}
-				if (delta < 30 * DAY)
-				{
-					return deltaTimeSpan.Days + " days ago";
-				}
-				if (delta < 12 * MONTH)
-				{
-					int months = Convert.ToInt32(Math.Floor((double)deltaTimeSpan.Days / 30));
-					return months <= 1 ? "one month ago" : months + " months ago";
-				}
-				else
-				{
-					int years = Convert.ToInt32(Math.Floor((double)deltaTimeSpan.Days / 365));
-					return years <= 1 ? "one year ago" : years + " years ago";
-				}
-
+				int years = Convert.ToInt32(Math.Floor((double)deltaTimeSpan.Days / 365));
+				return years <= 1 ? "one year ago" : years + " years ago";
 			}
-
 		}
 
 		/// <summary>
-		/// Returns true/false if the value passed is an integer
+		/// Returns true/false if the value passed does not meet valid year requirements
 		/// </summary>
 		public static bool IsBadlyFormedYear(string year)
 		{
@@ -249,7 +237,6 @@ namespace CTCClassSchedule.Common
 					break;
 				default:
 					break;
-
 			}
 
 			switch (quarter)
