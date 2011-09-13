@@ -102,6 +102,18 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.f_telecourse = f_telecourse;
 			ViewBag.avail = avail;
 
+
+			IDictionary<string, object> linkParams = new Dictionary<string, object>(Request.QueryString.Count);
+			foreach (string key in Request.QueryString.AllKeys)
+			{
+				if (key != "X-Requested-With")
+				{
+						linkParams.Add(key, Request.QueryString[key]);
+				}
+			}
+			ViewBag.LinkParams = linkParams;
+
+
 			ViewBag.Title = "All " +  @Subject + " classes";
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
@@ -119,7 +131,7 @@ namespace CTCClassSchedule.Controllers
 					IEnumerable<Course> coursesEnum;
 					coursesEnum = (from c in courses
 												where c.Subject == Subject.ToUpper()
-												select c).OrderBy(c => c.Subject).ThenBy(c => c.Number);
+												select c).OrderBy(c => c.Subject).ThenBy(c => c.Number).Distinct();
 					ViewBag.ItemCount = coursesEnum.Count();
 
 					return View(coursesEnum);
