@@ -34,24 +34,26 @@ namespace CTCClassSchedule.Common
 		{
 			IList<ISectionFacet> facets = new List<ISectionFacet>();
 
-			// TODO: can we group facets? e.g. "classformat=online / =hybrid / etc. Would be easier to programmatically evaluate (could use select/case).
 			//add the class format facet options (online, hybrid, telecourse, on campus)
+			ModalityFacet.Options modality = ModalityFacet.Options.All;	// default
+
 			if (!String.IsNullOrWhiteSpace(f_online))
 			{
-				facets.Add(new ModalityFacet(ModalityFacet.Options.Online));
+				modality = (modality | ModalityFacet.Options.Online);
 			}
 			if (!String.IsNullOrWhiteSpace(f_hybrid))
 			{
-				facets.Add(new ModalityFacet(ModalityFacet.Options.Hybrid));
+				modality = (modality | ModalityFacet.Options.Hybrid);
 			}
 			if (!String.IsNullOrWhiteSpace(f_telecourse))
 			{
-				facets.Add(new ModalityFacet(ModalityFacet.Options.Telecourse));
+				modality = (modality | ModalityFacet.Options.Telecourse);
 			}
 			if (!String.IsNullOrWhiteSpace(f_oncampus))
 			{
-				facets.Add(new ModalityFacet(ModalityFacet.Options.OnCampus));
+				modality = (modality | ModalityFacet.Options.OnCampus);
 			}
+			facets.Add(new ModalityFacet(modality));
 
 			int startHour = 0;
 			int startMinute = 0;
