@@ -6,6 +6,16 @@
 		String QueryStringAll = ViewBag.queryStringAll;
 }
 
+	@{
+		// construct the route values we'll pass to the ActionLink helper
+		IDictionary<string, object> routeParms = ViewBag.LinkParams;
+		if (!string.IsNullOrWhiteSpace(ViewBag.Subject))
+		{
+			routeParms.Add("Subject", ViewBag.Subject);
+		}
+	}
+
+
 <div id="scheduleMain">
 
 
@@ -32,7 +42,8 @@
 				make sure the alphabet array is updated and incremented.
 		*@
 
-		while ((char)(ViewBag.AlphabetCharacter + 65) < Convert.ToChar(item.Title.Substring(0, 1))) {
+		while ((char)(ViewBag.AlphabetCharacter + 65) < Convert.ToChar(item.Title.Substring(0, 1)))
+		{
 			ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
 			ViewBag.AlphabetCharacter++;
 		}
@@ -51,12 +62,16 @@
 		{
 			<h2>@((char)(ViewBag.AlphabetCharacter + 65))</h2>
 
-		 ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
-		 ViewBag.AlphabetCharacter++;
+	 ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
+	 ViewBag.AlphabetCharacter++;
 		}
 
 			<div class="subject">
-				@Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new { Subject = item.Subject }, null)
+				@{
+					routeParms.Remove("Subject");
+					routeParms.Add("Subject", item.Subject);
+				}
+				@Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null)
 			</div>
 		}
 
