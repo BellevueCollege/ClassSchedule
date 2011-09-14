@@ -103,15 +103,6 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.avail = avail;
 
 
-			IDictionary<string, object> linkParams = new Dictionary<string, object>(Request.QueryString.Count);
-			foreach (string key in Request.QueryString.AllKeys)
-			{
-				if (key != "X-Requested-With")
-				{
-						linkParams.Add(key, Request.QueryString[key]);
-				}
-			}
-			ViewBag.LinkParams = linkParams;
 
 
 			ViewBag.Title = "All " +  @Subject + " classes";
@@ -168,6 +159,20 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.f_hybrid = f_hybrid;
 			ViewBag.f_telecourse = f_telecourse;
 			ViewBag.avail = avail;
+
+
+			IDictionary<string, object> linkParams = new Dictionary<string, object>(Request.QueryString.Count);
+			foreach (string key in Request.QueryString.AllKeys)
+			{
+				if (key != "X-Requested-With")
+				{
+					linkParams.Add(key, Request.QueryString[key]);
+				}
+			}
+			ViewBag.LinkParams = linkParams;
+
+
+
 
 			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 
