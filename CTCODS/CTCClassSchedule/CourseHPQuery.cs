@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Data;
 using System.Configuration;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
+using System.IO;
 using System.Net;
 using System.Text;
-using System.IO;
+using Encoder = Microsoft.Security.Application.Encoder;
 
 namespace CTCClassSchedule
 {
@@ -114,16 +106,16 @@ namespace CTCClassSchedule
       switch (quarter)
       {
         case "1":
-          sessionData = "1 - summer";
+          sessionData = "1+-+summer";
           break;
         case "2":
-          sessionData = "2 - fall";
+          sessionData = "2+-+fall";
           break;
         case "3":
-          sessionData = "3 - winter";
+          sessionData = "3+-+winter";
           break;
         case "4":
-          sessionData = "4 - spring";
+          sessionData = "4+-+spring";
           break;
         default:
           sessionData = "";
@@ -131,7 +123,7 @@ namespace CTCClassSchedule
 
       }
 
-      yearData += (yearDataInt + Int32.Parse(yearFrom)).ToString() + " - ";
+      yearData += (yearDataInt + Int32.Parse(yearFrom)).ToString() + "+-+";
       yearData += (yearDataInt + Int32.Parse(yearFrom) + 1).ToString()[2];
       yearData += (yearDataInt + Int32.Parse(yearFrom) + 1).ToString()[3];
 
@@ -145,7 +137,7 @@ namespace CTCClassSchedule
       postData += "&request=classchd";
       postData += "&ayr=" + yearData; // "&ayr=2009 - 10";
       postData += "&sess=" + sessionData; // "&sess=4 - spring";
-      postData += "&returnurl=" + schoolURL + scheduleDir;
+      postData += "&returnurl=" + Encoder.HtmlFormUrlEncode(schoolURL) + Encoder.HtmlFormUrlEncode(scheduleDir);
       return postData;
     }
   }
