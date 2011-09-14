@@ -1,7 +1,11 @@
 ﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
 @using CTCClassSchedule.Common;
 
-@(ViewBag.CourseTitle = "")
+
+@{
+	String subdir = ViewBag.currentAppSubdirectory;
+	ViewBag.CourseTitle = "";
+}
 
 <script type="text/javascript">
 
@@ -16,11 +20,11 @@
 
 
 			//load the throbber
-			$(availability).html('<img src="/Content/images/ajax-loader.gif" title="loading_seats_available" alt="loading_seats_available" />');
+			$(availability).html('<img src="@(subdir)/Content/images/ajax-loader.gif" title="loading_seats_available" alt="loading_seats_available" />');
 
 			//post the ajax call to get the available seats and update the UI
 			$.ajax({
-				url: '/Classes/getseats',
+				url: '@(subdir)/Classes/getseats',
 				type: 'POST',
 				data: { courseIdPlusYRQ: courseIdPlusYRQ },
 				timeout: 4000,
