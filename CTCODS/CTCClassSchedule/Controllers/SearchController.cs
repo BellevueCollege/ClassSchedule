@@ -217,23 +217,26 @@ namespace CTCClassSchedule.Controllers
 				/// Gets the current <see cref="YearQuarter"/> and assigns ViewBag variables
 				/// for the current, +1, +2 quarters. This drives the dynamic YRQ navigation bar
 				/// </summary>
-				private void getCurrentFutureYRQs(OdsRepository respository)
-				{
-					IList<YearQuarter> currentFutureQuarters;
-					currentFutureQuarters = respository.GetRegistrationQuarters(3);
-					ViewBag.QuarterOne = currentFutureQuarters[0];
-					ViewBag.QuarterTwo = currentFutureQuarters[1];
-					ViewBag.QuarterThree = currentFutureQuarters[2];
+			private void getCurrentFutureYRQs(OdsRepository respository)
+			{
+				IList<YearQuarter> currentFutureQuarters;
+				currentFutureQuarters = respository.GetRegistrationQuarters(4);
+				ViewBag.QuarterOne = currentFutureQuarters[0];
+				ViewBag.QuarterTwo = currentFutureQuarters[1];
+				ViewBag.QuarterThree = currentFutureQuarters[2];
+				ViewBag.QuarterFour = currentFutureQuarters[3];
 
-					ViewBag.QuarterOneFriendly = getFriendlyDateFromYRQ(currentFutureQuarters[0]);
-					ViewBag.QuarterTwoFriendly = getFriendlyDateFromYRQ(currentFutureQuarters[1]);
-					ViewBag.QuarterThreeFriendly = getFriendlyDateFromYRQ(currentFutureQuarters[2]);
+				ViewBag.QuarterOneFriendly = currentFutureQuarters[0].FriendlyName;
+				ViewBag.QuarterTwoFriendly = currentFutureQuarters[1].FriendlyName;
+				ViewBag.QuarterThreeFriendly = currentFutureQuarters[2].FriendlyName;
+				ViewBag.QuarterFourFriendly = currentFutureQuarters[3].FriendlyName;
 
-					ViewBag.QuarterOneURL = ViewBag.QuarterOneFriendly.Replace(" ", "");
-					ViewBag.QuarterTwoURL = ViewBag.QuarterTwoFriendly.Replace(" ", "");
-					ViewBag.QuarterThreeURL = ViewBag.QuarterThreeFriendly.Replace(" ", "");
+				ViewBag.QuarterOneURL = ViewBag.QuarterOneFriendly.Replace(" ", "");
+				ViewBag.QuarterTwoURL = ViewBag.QuarterTwoFriendly.Replace(" ", "");
+				ViewBag.QuarterThreeURL = ViewBag.QuarterThreeFriendly.Replace(" ", "");
+				ViewBag.QuarterFourURL = ViewBag.QuarterFourFriendly.Replace(" ", "");
 
-				}
+			}
 
 				// TODO: Find a way to make course outcomes optional through web.config settings
 				/// <summary>

@@ -12,14 +12,17 @@
 
 
 	@{
+		//viewbag variables are dynamic, so we need to convert to string to use with the Html.ActionLink
+		String QuarterOneFriendly = (String)ViewBag.QuarterOneFriendly;
+		String QuarterTwoFriendly = (String)ViewBag.QuarterTwoFriendly;
+		String QuarterThreeFriendly = (String)ViewBag.QuarterThreeFriendly;
+		String QuarterFourFriendly = (String)ViewBag.QuarterFourFriendly;
 
-		String QuarterOneFriendly = ViewBag.QuarterOneFriendly;
-		String QuarterTwoFriendly = ViewBag.QuarterTwoFriendly;
-		String QuarterThreeFriendly = ViewBag.QuarterThreeFriendly;
+		String QuarterOneURL = (String)ViewBag.QuarterOneURL;
+		String QuarterTwoURL = (String)ViewBag.QuarterTwoURL;
+		String QuarterThreeURL = (String)ViewBag.QuarterThreeURL;
+		String QuarterFourURL = (String)ViewBag.QuarterFourURL;
 
-		String QuarterOneURL = ViewBag.QuarterOneURL;
-		String QuarterTwoURL = ViewBag.QuarterTwoURL;
-		String QuarterThreeURL = ViewBag.QuarterThreeURL;
 	}
 
 
@@ -40,6 +43,10 @@
 		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())
 			{ @(ViewBag.activeClass) }>
 			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterThreeURL)">@QuarterThreeFriendly</a>
+		</li>
+		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterFour.ToString())
+			{ @(ViewBag.activeClass) }>
+			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterFourURL)">@QuarterFourFriendly</a>
 		</li>
 
 	</ul>

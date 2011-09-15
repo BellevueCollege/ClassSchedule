@@ -24,10 +24,12 @@
 	String QuarterOneFriendly = (String)ViewBag.QuarterOneFriendly;
 	String QuarterTwoFriendly = (String)ViewBag.QuarterTwoFriendly;
 	String QuarterThreeFriendly = (String)ViewBag.QuarterThreeFriendly;
+	String QuarterFourFriendly = (String)ViewBag.QuarterFourFriendly;
 
 	String QuarterOneURL = (String)ViewBag.QuarterOneURL;
 	String QuarterTwoURL = (String)ViewBag.QuarterTwoURL;
 	String QuarterThreeURL = (String)ViewBag.QuarterThreeURL;
+	String QuarterFourURL = (String)ViewBag.QuarterFourURL;
 
 	String selected = " selected";
 
@@ -35,13 +37,14 @@
 
 @using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" })) {
 <div id="navbar">
-	<div id="browse"><a href="@Url.Content("~/Classes/")All">Browse for Classes</a></div>
+	<div id="browse"><a href="@Url.Content("~/")">Browse for Classes</a></div>
 	<div id="search">
 		Search
 		<select name="quarter">
 			<option value="@QuarterOneURL" @if (@ViewBag.quarter == QuarterOneURL) { <text> selected</text>}>@QuarterOneFriendly</option>
 			<option value="@QuarterTwoURL" @if (@ViewBag.quarter == QuarterTwoURL) { <text> selected</text>}>@QuarterTwoFriendly</option>
 			<option value="@QuarterThreeURL" @if (@ViewBag.quarter == QuarterThreeURL) { <text> selected</text>}>@QuarterThreeFriendly</option>
+			<option value="@QuarterFourURL" @if (@ViewBag.quarter == QuarterFourURL) { <text> selected</text>}>@QuarterFourFriendly</option>
 			<option value="CE">Continuing Education</option>
 		</select>
 		<input type="text" class="searchInput" name="searchterm" value="@ViewBag.searchterm"/>

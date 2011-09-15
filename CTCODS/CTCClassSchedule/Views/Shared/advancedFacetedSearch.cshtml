@@ -89,13 +89,17 @@
 
 	@{
 
-		String QuarterOneFriendly = ViewBag.QuarterOneFriendly;
-		String QuarterTwoFriendly = ViewBag.QuarterTwoFriendly;
-		String QuarterThreeFriendly = ViewBag.QuarterThreeFriendly;
+		//viewbag variables are dynamic, so we need to convert to string to use with the Html.ActionLink
+		String QuarterOneFriendly = (String)ViewBag.QuarterOneFriendly;
+		String QuarterTwoFriendly = (String)ViewBag.QuarterTwoFriendly;
+		String QuarterThreeFriendly = (String)ViewBag.QuarterThreeFriendly;
+		String QuarterFourFriendly = (String)ViewBag.QuarterFourFriendly;
 
-		String QuarterOneURL = ViewBag.QuarterOneURL;
-		String QuarterTwoURL = ViewBag.QuarterTwoURL;
-		String QuarterThreeURL = ViewBag.QuarterThreeURL;
+		String QuarterOneURL = (String)ViewBag.QuarterOneURL;
+		String QuarterTwoURL = (String)ViewBag.QuarterTwoURL;
+		String QuarterThreeURL = (String)ViewBag.QuarterThreeURL;
+		String QuarterFourURL = (String)ViewBag.QuarterFourURL;
+
 		if (ViewBag.Subject == "All") {
 			ViewBag.Subject = "";
 		}
@@ -286,6 +290,9 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search")) {
 		</li>
 		<li>
 			<a href="@Url.Content("~/Classes/")@(QuarterThreeURL)">@QuarterThreeFriendly</a>
+		</li>
+		<li>
+			<a href="@Url.Content("~/Classes/")@(QuarterFourURL)">@QuarterFourFriendly</a>
 		</li>
 
 	</ul>

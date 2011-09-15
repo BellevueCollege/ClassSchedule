@@ -47,6 +47,8 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.AlphabetCharacter = 0;
 			ViewBag.Title = "All classes";
 
+			ViewBag.LinkParams = getLinkParams();
+
 			using (OdsRepository respository = new OdsRepository())
 			{
 				getCurrentFutureYRQs(respository);
@@ -102,7 +104,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.f_telecourse = f_telecourse;
 			ViewBag.avail = avail;
 
-
+			ViewBag.LinkParams = getLinkParams();
 
 
 			ViewBag.Title = "All " +  @Subject + " classes";
@@ -161,15 +163,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.avail = avail;
 
 
-			IDictionary<string, object> linkParams = new Dictionary<string, object>(Request.QueryString.Count);
-			foreach (string key in Request.QueryString.AllKeys)
-			{
-				if (key != "X-Requested-With")
-				{
-					linkParams.Add(key, Request.QueryString[key]);
-				}
-			}
-			ViewBag.LinkParams = linkParams;
+			ViewBag.LinkParams = getLinkParams();
 
 
 
@@ -220,6 +214,8 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 
+
+
 		/// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
@@ -241,6 +237,9 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.f_hybrid = f_hybrid;
 			ViewBag.f_telecourse = f_telecourse;
 			ViewBag.avail = avail;
+
+			ViewBag.LinkParams = getLinkParams();
+
 
 			ViewBag.displayedCourseNum = 0;
 			ViewBag.seatAvailbilityDisplayed = false;
@@ -282,32 +281,6 @@ namespace CTCClassSchedule.Controllers
 
 
 		/// <summary>
-		/// GET: /Classes/{FriendlyYRQ}/{Subject}/{ClassNum}
-		/// </summary>
-		//public ActionResult YRQClassDetails(string YearQuarterID, string Subject, string ClassNum)
-		//{
-
-		//  string courseID = string.Concat(Subject, string.Concat(" ", ClassNum));
-		//  ViewBag.displayedCourseNum = 0;
-
-		//  using (OdsRepository respository = new OdsRepository())
-		//  {
-		//    getCurrentFutureYRQs(respository);
-
-		//    if (courseID != null)
-		//    {
-		//      IList<Section> sections = respository.GetSections(CourseID.FromString(courseID),  Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID));
-		//      ViewBag.ItemCount = sections.Count();
-		//      return View(sections);
-		//    }
-		//    else
-		//    {
-		//      return View();
-		//    }
-		//  }
-		//}
-
-		/// <summary>
 		/// GET: /Classes/All/{Subject}/{ClassNum}
 		/// </summary>
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
@@ -320,6 +293,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.Title = @Subject + " " + ClassNum + " sections";
 			ViewBag.ProgramUrl = getProgramUrl(Subject);
 
+			ViewBag.LinkParams = getLinkParams();
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -423,8 +397,22 @@ namespace CTCClassSchedule.Controllers
 
 		#region helper methods
 
-
-
+		/// <summary>
+		/// Gets the current http get/post params and assigns them to an IDictionary<string, object>
+		/// This is mainly used to set a Viewbag variable so these can be passed into action links in the views.
+		/// </summary>
+		private IDictionary<string, object> getLinkParams()
+		{
+			IDictionary<string, object> linkParams = new Dictionary<string, object>(Request.QueryString.Count);
+			foreach (string key in Request.QueryString.AllKeys)
+			{
+				if (key != "X-Requested-With")
+				{
+					linkParams.Add(key, Request.QueryString[key]);
+				}
+			}
+			return linkParams;
+		}
 
 		/// <summary>
 		/// Gets the current <see cref="YearQuarter"/> and assigns ViewBag variables
@@ -433,18 +421,21 @@ namespace CTCClassSchedule.Controllers
 		private void getCurrentFutureYRQs(OdsRepository respository)
 		{
 			IList<YearQuarter> currentFutureQuarters;
-			currentFutureQuarters = respository.GetRegistrationQuarters(3);
+			currentFutureQuarters = respository.GetRegistrationQuarters(4);
 			ViewBag.QuarterOne = currentFutureQuarters[0];
 			ViewBag.QuarterTwo = currentFutureQuarters[1];
 			ViewBag.QuarterThree = currentFutureQuarters[2];
+			ViewBag.QuarterFour = currentFutureQuarters[3];
 
 			ViewBag.QuarterOneFriendly = currentFutureQuarters[0].FriendlyName;
 			ViewBag.QuarterTwoFriendly = currentFutureQuarters[1].FriendlyName;
 			ViewBag.QuarterThreeFriendly = currentFutureQuarters[2].FriendlyName;
+			ViewBag.QuarterFourFriendly = currentFutureQuarters[3].FriendlyName;
 
 			ViewBag.QuarterOneURL = ViewBag.QuarterOneFriendly.Replace(" ", "");
 			ViewBag.QuarterTwoURL = ViewBag.QuarterTwoFriendly.Replace(" ", "");
 			ViewBag.QuarterThreeURL = ViewBag.QuarterThreeFriendly.Replace(" ", "");
+			ViewBag.QuarterFourURL = ViewBag.QuarterFourFriendly.Replace(" ", "");
 
 		}
 
@@ -517,177 +508,12 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.YearQuarter_a_to_z = "/" + YearQuarter;
 			ViewBag.letter = letter;
 			ViewBag.YearQuarter = YearQuarter ?? "all";
-			ViewBag.flex = flex ?? "all";
-			ViewBag.time = time ?? "all";
-			ViewBag.days = days ?? "all";
 			ViewBag.avail = avail ?? "all";
-
-
 			ViewBag.activeClass = " class=active";
 			ViewBag.currentUrl = Request.Url.AbsolutePath;
-
-
-			//create the GET string for links
-			ViewBag.queryStringNoFlex = "&time=" + ViewBag.time + "&days=" + ViewBag.days + "&avail=" + ViewBag.avail + "&letter=" + letter;
-			ViewBag.queryStringNoTimes = "&flex=" + ViewBag.flex + "&days=" + ViewBag.days + "&avail=" + ViewBag.avail + "&letter=" + letter;
-			ViewBag.queryStringNoDays = "&flex=" + ViewBag.flex + "&time=" + ViewBag.time + "&avail=" + ViewBag.avail + "&letter=" + letter;
-			ViewBag.queryStringNoAvail = "&flex=" + ViewBag.flex + "&time=" + ViewBag.time + "&days=" + ViewBag.days + "&letter=" + letter;
-			ViewBag.queryStringNoLetter = "&flex=" + ViewBag.flex + "&time=" + ViewBag.time + "&days=" + ViewBag.days + "&avail=" + avail;
-			ViewBag.queryStringAll = "&flex=" + ViewBag.flex + "&time=" + ViewBag.time + "&days=" + ViewBag.days + "&avail=" + ViewBag.avail + "&letter=" + letter;
-
-
-			ViewBag.ActiveFlexAll = "";
-			ViewBag.ActiveFlexOnline = "";
-			ViewBag.ActiveFlexHybrid = "";
-			ViewBag.ActiveFlexTelecourse = "";
-			ViewBag.ActiveFlexReducedTrip = "";
-			ViewBag.ActiveFlexAll = "";
-
-
-
 			ViewBag.QuarterURL = YearQuarter;
 
 		}
-
-/*
-		/// <summary>
-		/// Converts a friendly YRQ (Fall2011) into a <see cref="YearQuarter"/>
-		/// </summary>
-		private string getYRQFromFriendlyDate(string friendlyDate)
-		{
-			//Example: Winter 2008 = A783
-
-			//summer: xxx1
-			//fall:   xxx2
-			//winter: xxx3
-			//spring:	xxx4
-
-			//Academic year 2006-2007: x67x
-			//Academic year 2011-2012: x12x
-
-			string year = friendlyDate.Substring(friendlyDate.Length - 4);  //2011
-			string quarterFriendly = friendlyDate.Substring(0, friendlyDate.Length - 4); //Spring
-			string decade = "";
-			int yearBaseTen = 0;
-			int yearBaseTenPlusOne = 0;
-			string YearQuarter1 = "";
-			string YearQuarter23 = "";
-			string quarter = "";
-			bool isLastTwoQuarters = false;
-			bool badlyFormedQuarter = false;
-			bool badlyFormedYear = false;
-
-			badlyFormedYear = Helpers.IsBadlyFormedYear(year);
-
-			if (!badlyFormedYear)
-			{
-				yearBaseTen = Convert.ToInt16(year.Substring(3, 1));
-				decade = year.Substring(0, 3); //201
-			}
-
-			//determine the quarter in string form "1", "2", etc... essentially the xxx2 character
-			switch (quarterFriendly.ToLower())
-			{
-				case "summer":
-					quarter = "1";
-					break;
-				case "fall":
-					quarter = "2";
-					break;
-				case "winter":
-					quarter = "3";
-					break;
-				case "spring":
-					quarter = "4";
-					break;
-				default:
-					badlyFormedQuarter = true;
-					break;
-
-			}
-
-			if (!badlyFormedQuarter && !badlyFormedYear)
-			{
-				//is the year an overlapping year? e.g. spring 2000 = 9904 but summer 2000 = A011
-				if (yearBaseTen == 0 && (quarter == "3" || quarter == "4"))
-				{
-					isLastTwoQuarters = true;
-				}
-
-				//find out which decade it is in, to determine Axxx (first character in string)
-				switch (decade)
-				{
-					case "197":
-						YearQuarter1 = isLastTwoQuarters == true ? "6" : "7";
-						break;
-					case "198":
-						YearQuarter1 = isLastTwoQuarters == true ? "7" : "8";
-						break;
-					case "199":
-						YearQuarter1 = isLastTwoQuarters == true ? "8" : "9";
-						break;
-					case "200":
-						YearQuarter1 = isLastTwoQuarters == true ? "9" : "A";
-						break;
-					case "201":
-						YearQuarter1 = isLastTwoQuarters == true ? "A" : "B";
-						break;
-					case "202":
-						YearQuarter1 = isLastTwoQuarters == true ? "B" : "C";
-						break;
-
-
-				}
-
-				//figure out what the x23x portion of the YRQ is
-				if (quarter == "1" || quarter == "2")
-				{
-					if (yearBaseTen + 1 > 9)
-					{
-						yearBaseTenPlusOne = yearBaseTen + 1 - 10;
-					}
-					else
-					{
-						yearBaseTenPlusOne = yearBaseTen + 1;
-					}
-					YearQuarter23 = Convert.ToString(yearBaseTen) + Convert.ToString((yearBaseTenPlusOne));
-
-				}
-				else if (quarter == "3" || quarter == "4")
-				{
-					int tempYearBaseTen;
-					if (yearBaseTen == 0)
-					{
-						tempYearBaseTen = 10;
-					}
-					else
-					{
-						tempYearBaseTen = yearBaseTen;
-					}
-
-					YearQuarter23 = Convert.ToString(tempYearBaseTen - 1) + Convert.ToString((yearBaseTen));
-				}
-
-				return YearQuarter1 + YearQuarter23 + quarter;
-
-			}
-
-			if (badlyFormedYear == true)
-			{
-				ViewBag.ErrorMsg = ViewBag.ErrorMsg + "<li>Badly formed year, please enter a new year in the URL in the format 'Quarter2011'</li>";
-			}
-
-			if (badlyFormedQuarter == true)
-			{
-				ViewBag.ErrorMsg = ViewBag.ErrorMsg + "<li>Badly formed quarter, please enter a new Quarter in the URL in the format 'Fall20XX'</li>";
-			}
-
-			return "Z999";
-
-
-
-		}
-*/
 
 		private string getProgramUrl(string Subject)
 		{

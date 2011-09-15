@@ -81,12 +81,22 @@
 <!-- TODO: Make the title configurable in web.config. Possible? -->
 @{
     ViewBag.Title = "Classes at Bellevue College";
+
+		//viewbag variables are dynamic, so we need to convert to string to use with the Html.ActionLink
+		String QuarterOneFriendly = (String)ViewBag.QuarterOneFriendly;
+		String QuarterTwoFriendly = (String)ViewBag.QuarterTwoFriendly;
+		String QuarterThreeFriendly = (String)ViewBag.QuarterThreeFriendly;
+		String QuarterFourFriendly = (String)ViewBag.QuarterFourFriendly;
+
+		String QuarterOneURL = (String)ViewBag.QuarterOneURL;
+		String QuarterTwoURL = (String)ViewBag.QuarterTwoURL;
+		String QuarterThreeURL = (String)ViewBag.QuarterThreeURL;
+		String QuarterFourURL = (String)ViewBag.QuarterFourURL;
+
 }
 
 
-
-
-	@Html.Partial("quarterNavigation")
+@Html.Partial("quarterNavigation")
 <div id="front_layout">
 
 	<div id="top">
@@ -97,9 +107,20 @@
 			<div id="leftpanel_topleft">
 				<h4>Choose a quarter:</h4>
 				<ul>
-					<li><a class="yrq" href="@Url.Content("~/Classes/")Fall2011">Fall 2011</a></li>
-					<li><a class="yrq" href="@Url.Content("~/Classes/")Summer2011">Summer 2011</a></li>
-					<li><a class="yrq" href="@Url.Content("~/Classes/")Spring2011">Spring 2011</a></li>
+					<li>
+						<a class="yrq" href="@Url.Content("~/Classes/")@(QuarterOneURL)">@QuarterOneFriendly</a>
+					</li>
+					<li>
+						<a class="yrq" href="@Url.Content("~/Classes/")@(QuarterTwoURL)">@QuarterTwoFriendly</a>
+					</li>
+					<li>
+						<a class="yrq" href="@Url.Content("~/Classes/")@(QuarterThreeURL)">@QuarterThreeFriendly</a>
+					</li>
+					<li>
+						<a class="yrq" href="@Url.Content("~/Classes/")@(QuarterFourURL)">@QuarterFourFriendly</a>
+					</li>
+
+
 				</ul>
 			</div>
 
