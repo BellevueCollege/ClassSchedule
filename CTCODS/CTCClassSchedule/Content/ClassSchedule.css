@@ -219,7 +219,6 @@ h3
 {
 	float: left;
 	width: 100%;
-	margin-top: 40px;
 }
 
 #basicFacetedSearch
@@ -273,8 +272,10 @@ ul.subject li a
 	margin-bottom: 21px;
 }
 
-
 /*END JU NEW definitions*/
+
+#titlebar { height: 61px; width: 960px; margin: 0 auto;}
+#sitename { font-size: 34px; padding: 21px 0 0 20px}
 
 #advancedFacetedSearch ul li,
 #basicFacetedSearch ul li {
@@ -410,7 +411,7 @@ ul.subjectSearch li
 	margin-top: 0px;
 	padding-top: 1px;
 	float: left;
-
+    position: relative;
 }
 
 #navbar #browse
@@ -430,7 +431,18 @@ ul.subjectSearch li
 	border-left: 1px solid #fff;
 	padding-left: 10px;
 }
-
+#navbar #search-tip {
+    background: White url(images/search-tip-arrow.png) no-repeat left 4px;
+    color: #444;
+    display: block;
+    font-size: 12px;
+    height: 21px;
+    left: 415px;
+    padding-left: 35px;
+    position: absolute;
+    top: -21px;
+    width: 400px;
+}
 #navbar #search select
 {
 	padding-left: 20px;
