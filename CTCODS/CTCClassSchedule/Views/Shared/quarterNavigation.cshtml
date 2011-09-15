@@ -39,7 +39,7 @@
 <div id="navbar">
 	<div id="browse"><a href="@Url.Content("~/")">Browse for Classes</a></div>
 	<div id="search">
-		Search
+		Search  <span id="search-tip">Tip: you can search by title, subject, courseid, item number or instructor.</span>
 		<select name="quarter">
 			<option value="@QuarterOneURL" @if (@ViewBag.quarter == QuarterOneURL) { <text> selected</text>}>@QuarterOneFriendly</option>
 			<option value="@QuarterTwoURL" @if (@ViewBag.quarter == QuarterTwoURL) { <text> selected</text>}>@QuarterTwoFriendly</option>
