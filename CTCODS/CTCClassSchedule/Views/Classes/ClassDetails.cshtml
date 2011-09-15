@@ -75,11 +75,13 @@
 				@(item.CourseDescriptions.Count <= 0 || string.IsNullOrWhiteSpace(item.CourseDescriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : item.CourseDescriptions[0].Description)
 			</div>
 
+		if (!string.IsNullOrWhiteSpace(ViewBag.CourseOutcome))
+		{
 			<div id="courseOutcome">
-				<h3>
-					Outcomes:</h3>
+				<h3>Outcomes:</h3>
 				@Html.Raw(ViewBag.CourseOutcome)
 			</div>
+		}
 
 
 		}

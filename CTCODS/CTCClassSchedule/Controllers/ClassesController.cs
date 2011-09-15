@@ -446,45 +446,55 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		private static dynamic getCourseOutcome(string Subject, string ClassNum)
 		{
-			string url = "http://bellevuecollege.edu/courseoutcomes/?CourseID=" + Subject + "%20" + ClassNum;
-			StringBuilder sb = new StringBuilder();
+			const string SETTING_KEY = "IncludeCourseOutcomes";
+			bool includeCourseOutcomes = false;
 
-			byte[] buffer = new byte[8000];
-			HttpWebRequest request = (HttpWebRequest)
-			                         WebRequest.Create(url);
-
-			// execute the request
-			HttpWebResponse response = (HttpWebResponse)
-			                           request.GetResponse();
-
-			// we will read data via the response stream
-			Stream resStream = response.GetResponseStream();
-
-			string tempString = null;
-			int count = 0;
-
-			do
+			if (ConfigurationManager.AppSettings.AllKeys.Contains(SETTING_KEY))
 			{
-				// fill the buffer with data
-				count = resStream.Read(buffer, 0, buffer.Length);
-
-				// make sure we read some data
-				if (count != 0)
-				{
-					// translate from bytes to ASCII text
-					tempString = Encoding.ASCII.GetString(buffer, 0, count);
-
-					// continue building the string
-					sb.Append(tempString);
-				}
+				bool.TryParse(ConfigurationManager.AppSettings[SETTING_KEY], out includeCourseOutcomes);
 			}
-			while (count > 0); // any more data to read?
 
-			// return course outcome page source
-			return sb.ToString();
+			if (includeCourseOutcomes)
+			{
+				string url = "http://bellevuecollege.edu/courseoutcomes/?CourseID=" + Subject + "%20" + ClassNum;
+				StringBuilder sb = new StringBuilder();
 
+				byte[] buffer = new byte[8000];
+				HttpWebRequest request = (HttpWebRequest)
+				                         WebRequest.Create(url);
 
+				// execute the request
+				HttpWebResponse response = (HttpWebResponse)
+				                           request.GetResponse();
 
+				// we will read data via the response stream
+				Stream resStream = response.GetResponseStream();
+
+				string tempString = null;
+				int count = 0;
+
+				do
+				{
+					// fill the buffer with data
+					count = resStream.Read(buffer, 0, buffer.Length);
+
+					// make sure we read some data
+					if (count != 0)
+					{
+						// translate from bytes to ASCII text
+						tempString = Encoding.ASCII.GetString(buffer, 0, count);
+
+						// continue building the string
+						sb.Append(tempString);
+					}
+				}
+				while (count > 0); // any more data to read?
+
+				// return course outcome page source
+				return sb.ToString();
+			}
+
+			return string.Empty;
 		}
 
 		/// <summary>
