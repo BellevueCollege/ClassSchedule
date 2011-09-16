@@ -83,9 +83,22 @@ count++;
 				<ul class="section-details">
 
 					<!--start of repeat offered information -->
+					@{
+							 Boolean sectionDisplayed = false;
+					}
 					@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
 		 {
-						<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
+						<li class="section"><span class="descriptor">Section: </span>
+							@if (sectionDisplayed == false)
+			 {
+								@item.SectionCode
+			 } else {
+				 <text>&nbsp;</text>
+			 }
+
+						</li>
+			 sectionDisplayed = true;
+
 						<li class="instructor"><span class="descriptor">Instructor:</span>
 							<ul>
 								<li>
@@ -173,7 +186,11 @@ count++;
 							</ul>
 			}
 						</li>
+
 		 }
+		@{
+			sectionDisplayed = false;
+		}
 
 					<!--end of repeat offered information -->
 				</ul>
