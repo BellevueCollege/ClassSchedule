@@ -315,6 +315,7 @@ namespace CTCClassSchedule.Controllers
 								from c in sections
 								join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
 								where c.CourseSubject == Subject.ToUpper()
+														orderby c.Yrq.ID descending
 								select new SectionWithSeats
 									{
 																				ParentObject = c,
