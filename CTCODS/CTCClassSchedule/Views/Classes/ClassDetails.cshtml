@@ -5,6 +5,7 @@
 @{
 	String subdir = ViewBag.currentAppSubdirectory;
 	ViewBag.CourseTitle = "";
+	//Page Title is set during Model iteration:
 }
 
 <script type="text/javascript">
@@ -52,6 +53,7 @@
 	<div id="scheduleContentNoSidebar">
 		@foreach (var item in Model)
 	{
+		ViewBag.PageTitle = item.CourseSubject + " " + item.CourseNumber + " at Bellevue College";
 		int count = 0;
 		if (@ViewBag.titleDisplayed == false)
 		{

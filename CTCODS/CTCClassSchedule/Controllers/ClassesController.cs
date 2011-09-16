@@ -244,7 +244,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.displayedCourseNum = 0;
 			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.Subject = Subject;
-			ViewBag.Title = @ViewBag.Yearquarter + " " + @Subject + " classes";
+
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
 			using (OdsRepository respository = new OdsRepository())
