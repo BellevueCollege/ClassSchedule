@@ -226,42 +226,42 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search")) {
 
 		<h3>Days & Times</h3>
 		<div id="times">
-		<input id="timestart"  name="timestart" type="text" value="@ViewBag.timestart" /> - <input id="timeend" name="timeend" type="text" value="@ViewBag.timeend" />
+		    <label><span title="Start Time" class="time-text">START</span><input id="timestart"  name="timestart" type="text" value="@ViewBag.timestart" /></label><span class="time-separator">-</span><label><span title="End Time" class="time-text">END</span><input id="timeend" name="timeend" type="text" value="@ViewBag.timeend" /></label>
 		</div>
 		<div id="days">
 			<div class="day">
-				<div class="daylabel">S</div>
-					<input type="checkbox" name="day_su" value="true" @if (@ViewBag.day_su == "true")
+				<label class="daylabel weekend" for="day_su"><abbr title="Sunday ">S</abbr></label>
+					<input type="checkbox" name="day_su" id="day_su"  value="true" @if (@ViewBag.day_su == "true")
 																											 {  <text>checked="checked"</text> } />
 			</div>
 			<div class="day">
-				<div class="daylabel">M</div>
-				<input type="checkbox" name="day_m" value="true"  @if (@ViewBag.day_m == "true")
+				<label class="daylabel" for="day_m"><abbr title="Monday ">M</abbr></label>
+				<input type="checkbox" name="day_m" id="day_m" value="true"  @if (@ViewBag.day_m == "true")
 																											{  <text>checked="checked"</text> }/>
 			</div>
 			<div class="day">
-				<div class="daylabel">T</div>
-				<input type="checkbox" name="day_t" value="true"  @if (@ViewBag.day_t == "true")
+				<label class="daylabel" for="day_t"><abbr title="Tuesday ">T</abbr></label>
+				<input type="checkbox" name="day_t" id="day_t" value="true"  @if (@ViewBag.day_t == "true")
 																											{  <text>checked="checked"</text> }/>
 			</div>
 			<div class="day">
-				<div class="daylabel">W</div>
-				<input type="checkbox" name="day_w"  value="true" @if (@ViewBag.day_w == "true")
+				<label class="daylabel" for="day_w"><abbr title="Wednesday ">W</abbr></label>
+				<input type="checkbox" name="day_w"  id="day_w" value="true" @if (@ViewBag.day_w == "true")
 																											{  <text>checked="checked"</text> } />
 			</div>
 			<div class="day">
-				<div class="daylabel">Th</div>
-				<input type="checkbox" name="day_th" value="true" @if (@ViewBag.day_th == "true")
+				<label class="daylabel" for="day_th"><abbr title="Thursday ">T</abbr></label>
+				<input type="checkbox" name="day_th" id="day_th" value="true" @if (@ViewBag.day_th == "true")
 																											{  <text>checked="checked"</text> } />
 			</div>
 			<div class="day">
-				<div class="daylabel">F</div>
-				<input type="checkbox" name="day_f" value="true"  @if (@ViewBag.day_f == "true")
+				<label class="daylabel" for="day_f"><abbr title="Friday ">F</abbr></label>
+				<input type="checkbox" name="day_f" id="day_f" value="true"  @if (@ViewBag.day_f == "true")
 																											{  <text>checked="checked"</text> }/>
 			</div>
 			<div class="day">
-				<div class="daylabel">S</div>
-				<input type="checkbox" name="day_s" value="true"  @if (@ViewBag.day_s == "true")
+				<label class="daylabel weekend" for="day_s"><abbr title="Saturday ">S</abbr></label>
+				<input type="checkbox" name="day_s" id="day_s" value="true"  @if (@ViewBag.day_s == "true")
 																											{  <text>checked="checked"</text> }/>
 			</div>
 
@@ -273,20 +273,20 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search")) {
 
 
 	<h3>Availability</h3>
-	<ul>
+	<ul id="availability-facet">
 
 
-		<li><input id="radio_all" type="radio" name="avail" value="All" @if (@ViewBag.avail == "All" || @ViewBag.avail == null)
-																																	{  <text> checked="checked"</text> } > All</li>
-		<li><input id="radio_open" type="radio" name="avail" value="Open"	@if (@ViewBag.avail == "Open")
-																																		{  <text> checked="checked"</text> } > Open</li>
+		<li><label><input id="radio_all" type="radio" name="avail" value="All" @if (@ViewBag.avail == "All" || @ViewBag.avail == null)
+																																	{  <text> checked="checked"</text> } > All</label></li>
+		<li><label></lable><input id="radio_open" type="radio" name="avail" value="Open"	@if (@ViewBag.avail == "Open")
+																																		{  <text> checked="checked"</text> } > Open</label></li>
 	</ul>
 
 	<div id="submit">
 		<input type="submit" id="submit_days_times" name="submitbtn" value="Refine >" />
 	</div>
 </form>
-	<h3>Classes Offered:</h3>
+	<h3>Classes Offered</h3>
 	<ul>
 		<li @if (ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")
 			{ @(ViewBag.activeClass) }>
