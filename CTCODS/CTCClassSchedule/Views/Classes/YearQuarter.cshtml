@@ -11,7 +11,10 @@
 		IDictionary<string, object> routeParms = ViewBag.LinkParams;
 		if (!string.IsNullOrWhiteSpace(ViewBag.Subject))
 		{
-			routeParms.Add("Subject", ViewBag.Subject);
+			if (!routeParms.ContainsKey("Subject")) {
+				routeParms.Add("Subject", ViewBag.Subject);
+			}
+
 		}
 	}
 

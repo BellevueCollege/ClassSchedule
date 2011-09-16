@@ -11,10 +11,8 @@
 
 	// construct the route values we'll pass to the ActionLink helper
 	IDictionary<string, object> routeParms = ViewBag.LinkParams;
-	if (!string.IsNullOrWhiteSpace(ViewBag.letter))
-	{
-		routeParms.Add("letter", ViewBag.letter);
-	}
+
+
 
 	string Controller = ViewContext.RouteData.Values["Controller"].ToString();
 	string Action = ViewContext.RouteData.Values["Action"].ToString();
@@ -29,11 +27,18 @@
 	routeParms.Remove("letter");
 	routeParms.Add("letter", let.ToString());
 
-	@Html.ActionLink(let.ToString(), Controller, Action, new RouteValueDictionary(routeParms), null) <text>| </text>
-	@*Html.ActionLink(let.ToString(), @YearQuarter, new { time = time, flex = flex, days = days, avail = avail, type = "beta", letter = let.ToString() }) <text>| </text> *@
+	@Html.ActionLink(let.ToString(), Action, new RouteValueDictionary(routeParms)) <text>| </text>
+
+
+	@*Html.ActionLink(let.ToString(), Controller, Action, new RouteValueDictionary(routeParms), null) <text>| </text> 	*@
+
+
 }
 
-@Html.ActionLink("View All", @YearQuarter, new { time = time, flex = flex, days = days, avail = avail, type = "beta", letter = "" })
+@{
+	routeParms.Remove("letter");
+}
+@Html.ActionLink("View All", Action, new RouteValueDictionary(routeParms))
 </div>
 
 
