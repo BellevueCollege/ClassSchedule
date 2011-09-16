@@ -34,24 +34,29 @@
 	String selected = " selected";
 
 }
-
-@using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" })) {
 <div id="navbar">
+@using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" })) {
+
 	<div id="browse"><a href="@Url.Content("~/")">Browse for Classes</a></div>
 	<div id="search">
 		Search  <span id="search-tip">Tip: you can search by title, subject, courseid, item number or instructor.</span>
-		<select name="quarter">
+		<label for="seach-quarter-select">Pick a quarter</label>
+        <select name="quarter" id="seach-quarter-select">
 			<option value="@QuarterOneURL" @if (@ViewBag.quarter == QuarterOneURL) { <text> selected</text>}>@QuarterOneFriendly</option>
 			<option value="@QuarterTwoURL" @if (@ViewBag.quarter == QuarterTwoURL) { <text> selected</text>}>@QuarterTwoFriendly</option>
 			<option value="@QuarterThreeURL" @if (@ViewBag.quarter == QuarterThreeURL) { <text> selected</text>}>@QuarterThreeFriendly</option>
 			<option value="@QuarterFourURL" @if (@ViewBag.quarter == QuarterFourURL) { <text> selected</text>}>@QuarterFourFriendly</option>
 			<option value="CE">Continuing Education</option>
 		</select>
-		<input type="text" class="searchInput" name="searchterm" value="@ViewBag.searchterm"/>
+		<label for="searh-keyword">Keywords</label>
+        <input type="text" class="searchInput" id="searh-keyword" name="searchterm" value="@ViewBag.searchterm"/>
 		<input type="submit" class="searchSubmit"  name="submit" value="Go" />
 
 	</div>
-
-</div> <!-- TODO: configurable? -->
-<div id="register"><a href="http://bellevuecollege.edu/enrollment/registration/register/">Register</a></div>
+    <div id="register"><a href="http://bellevuecollege.edu/enrollment/registration/register/">Register</a></div>
 }
+
+</div> <!-- #navbar   TODO: configurable? -->
+<div class="clearer"></div>
+
+
