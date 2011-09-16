@@ -3,6 +3,10 @@
 	background-color: #fff;
 }
 
+h1 {
+    font-size: 27px;
+}
+
 #bodyWrapper
 {
 	font-size: .85em;
@@ -221,45 +225,37 @@ h3
 	width: 100%;
 }
 
-#basicFacetedSearch
-{
-	float: left;
-	display: block;/*ju*/
-	border: 1px solid #999; /*ju*/
-	width: 158px; /*ju*/
-	xxxheight: 200px;/*remove */
-	padding: 8px 0 20px; /*ju*/
-	margin-right: 10px; /*ju*/
-	margin-top: 33px; /*ju*/
-	font-size: 12px; /*new*/
-	line-height: 21px; /*new*/
-}
-
-#advancedFacetedSearch
+.sidenav
 {
 	float: left;
 	display: block;/*ju*/
 	border: 1px solid #999; /*ju*/
 	width: 158px; /*ju*/
 	xxxheight: 720px; /*remove */
-	padding: 8px 0 20px; /*ju*/
+	padding: 0 0 20px; /*ju*/
 	margin-right: 10px; /*ju*/
 	margin-top: 33px; /*ju*/
 	font-size: 12px; /*new*/
 	line-height: 21px; /*new*/
 }
+.sidenav h2 {
+    background-color: #999;
+    padding: 0 0 1px 19px;
+    color: White;
+    font-size: 12px;
+    line-height: 13px;
+    margin-bottom: 14px;
+}
 
 
-
-#basicFacetedSearch ul.subject ,
-#advancedFacetedSearch ul.subject
+.sidenav ul.subject
 {
 	margin-bottom: 0px;
 }
 
 ul.subject li
 {
-	margin-left: 20px;
+	margin-left: 19px;
 
 }
 
@@ -268,9 +264,14 @@ ul.subject li a
 	text-decoration: none;
 }
 
-#advancedFacetedSearch ul, #basicFacetedSearch ul {
+.sidenav ul {
 	margin-bottom: 21px;
 }
+
+#classformat { margin-bottom: 21px;}
+#times { margin-bottom: 14px}
+#days { margin-bottom: 21px;}
+
 
 /*END JU NEW definitions*/
 
@@ -297,7 +298,7 @@ ul.subjectSearch li
 #scheduleContent
 {
 	margin-left: 190px; /*ju*/
-	padding-top: 10px;
+	padding-top: 28px;
 	padding-bottom: 10px;
 }
 
@@ -404,7 +405,6 @@ ul.subjectSearch li
 #navbar
 {
 	background-color: #999;
-	width: 90%;
 	color: #fff;
 	height: 28px;
 	clear: both;
@@ -443,6 +443,9 @@ ul.subjectSearch li
     top: -21px;
     width: 400px;
 }
+
+#navbar label { position: absolute; left: -9999px; top: -9999px}
+
 #navbar #search select
 {
 	padding-left: 20px;
@@ -524,7 +527,7 @@ li.active a
 	clear: left;
 }
 
-.clear-both
+.clear-both, .clearer
 {
 	clear: both;
 }
@@ -1089,16 +1092,17 @@ ul.class-description
 
 #basicFacetedSearch h3,
 #advancedFacetedSearch h3 {
-	font-weight: bold;
+	color: #333;
+    font-weight: bold;
 	font-size: 12px;
 	line-height: 21px;
-	padding: 0 5px 0 9px;
+	padding: 0 5px 0 19px;
 }
 
 
 #submit_days_times
 {
-	margin-left: 65px;
+	margin: 7px 0 0 0;
 }
 /* end facet css */
 
