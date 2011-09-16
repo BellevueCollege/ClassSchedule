@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Ctc.Ods.Types.CoursePrefix>
 
 @{
-		ViewBag.PageTitle = @ViewBag.FriendlyYRQ + " Credit Classes";
+	ViewBag.PageTitle = ViewBag.FriendlyYRQ + " Credit Class Schedule "+ ViewBag.FriendlyYRQ.Substring(ViewBag.FriendlyYRQ.Length -4) +" at Bellevue College";
 		String YearQuarter = ViewBag.YearQuarter;
 		String QueryStringAll = ViewBag.queryStringAll;
 }
@@ -34,7 +34,7 @@
 		}
 
 
-		<h2>@ViewBag.FriendlyYRQ Credit Classes @ViewBag.Subject</h2>
+		<h2>@ViewBag.FriendlyYRQ Credit Classes</h2>
 
 		@Html.Partial("a_to_z")
 

@@ -28,26 +28,30 @@
 
 	<h3>Classes Offered:</h3>
 	<ul>
+
 		<li @if (ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")
 			{ @(ViewBag.activeClass) }>
 			<a href="@ViewBag.currentAppSubdirectory/Classes/All">All Credit Classes</a>
 		</li>
 		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())
 			{ @(ViewBag.activeClass) }>
-			<a href="@ViewBag.currentAppSubdirectory/Classes/@QuarterOneURL">@QuarterOneFriendly</a>
+			<a href="@Url.Content("~/Classes/")@(QuarterOneURL)">@QuarterOneFriendly</a>
 		</li>
 		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())
 			{ @(ViewBag.activeClass) }>
-			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterTwoURL)">@QuarterTwoFriendly</a>
+			<a href="@Url.Content("~/Classes/")@(QuarterTwoURL)">@QuarterTwoFriendly</a>
 		</li>
 		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())
 			{ @(ViewBag.activeClass) }>
-			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterThreeURL)">@QuarterThreeFriendly</a>
+			<a href="@Url.Content("~/Classes/")@(QuarterThreeURL)">@QuarterThreeFriendly</a>
 		</li>
 		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterFour.ToString())
 			{ @(ViewBag.activeClass) }>
-			<a href="@ViewBag.currentAppSubdirectory/Classes/@(QuarterFourURL)">@QuarterFourFriendly</a>
+			<a href="@Url.Content("~/Classes/")@(QuarterFourURL)">@QuarterFourFriendly</a>
 		</li>
+
+
+
 
 	</ul>
 
