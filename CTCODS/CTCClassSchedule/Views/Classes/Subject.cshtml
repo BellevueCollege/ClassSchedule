@@ -6,46 +6,46 @@
 
 
 	<div id="scheduleContent">
-		<h2>@ViewBag.Subject classes for any quarter</h2>
-		<a href="@ViewBag.ProgramUrl" class="programWebsite" target="_blank">Program Website</a>
+		<h1>@ViewBag.Subject Classes</h1>
+		<p class="programWebsite"><a href="@ViewBag.ProgramUrl">Program Website</a></p>
 		<div id="classInfoWrap">
 		@foreach (var item in Model)
 	{
 
 			<div class="classInfo">
-				<div class="classNumber">
+                <h2>
+				<span class="classNumber">
 					@Html.ActionLink(item.Subject + " " + item.Number + " - " + item.Title, "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number }, null)
-				</div>
+				</span>
 
-				<div class="classCredits">
+				<span class="classCredits">
 					@item.Credits
-				</div>
-					@if (@item.Descriptions != null && @item.Descriptions.Count() > 0)
-		 {
-				<div class="classDescription">
-				@item.Descriptions.First().Description
-				</div>
+				    <abbr title=" credit(s) ">Cr.</abbr>
+                </span>
+                </h2>
+				@if (@item.Descriptions != null && @item.Descriptions.Count() > 0)
+		            {
+				    <p class="classDescription">
+				    @item.Descriptions.First().Description
+				    </p>
 
-			 <div class="classDetailsLink">
-				@Html.ActionLink("View Details for " + item.Subject + " " + item.Number, "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number }, null)
-				</div>
+		        }
+		        else
+		        {
+				    <p class="classDescription error">No class description found. Please report this via the feedback link at the top of this website</p>
+		        }
 
+                <p class="classDetailsLink">
+				    @Html.ActionLink("View Details for " + item.Subject + " " + item.Number, "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number }, null)
+		        </p>
 
-		 }
-		 else
-		 {
-				<div class="classDescription">
-				** DESCRIPTION NOT FOUND **
-				</div>
-		 }
-			</div>
+            </div>
 
 	}
 	@if (ViewBag.ItemCount == 0)
  {
 			<text>
-			<h3>
-				No classes found.</h3>
+			<p class="error">No classes found.</p>
 			</text>
 	}
 	</div>
