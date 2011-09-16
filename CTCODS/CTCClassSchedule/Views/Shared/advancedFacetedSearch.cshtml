@@ -103,6 +103,9 @@
 		if (ViewBag.Subject == "All") {
 			ViewBag.Subject = "";
 		}
+
+		// construct the route values we'll pass to the ActionLink helper
+		IDictionary<string, object> routeParms = ViewBag.LinkParams;
 	}
 
 
@@ -152,6 +155,11 @@ else {
 {
 	<div>
 		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])/@ViewBag.YearQuarter/@ViewBag.Subject" method="get">
+
+		@if(routeParms.ContainsKey("letter")) {
+			<input type="hidden" name="letter" value="@routeParms["letter"]" />
+		}
+
 	</div>
 }
 else if (ViewContext.RouteData.Values["Controller"].Equals("Search")) {
@@ -168,6 +176,8 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search")) {
 			<input type="hidden" name="Subject" value="@ViewBag.Subject"/>
 		}
 		<input type="hidden" name="searchterm" value="@ViewBag.searchterm"/>
+
+
 
 	</div>
 }

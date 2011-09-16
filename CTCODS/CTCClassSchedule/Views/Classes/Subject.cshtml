@@ -1,4 +1,8 @@
 ﻿@model IEnumerable<Ctc.Ods.Types.Course>
+@{
+	ViewBag.Title = ViewBag.Subject + "-" + ViewBag.Subject + " Classes at Bellevue College!";
+}
+
 <div id="scheduleMain">
 	@Html.Partial("quarterNavigation")
 	@Html.Partial("basicFacetedSearch")
@@ -6,8 +10,8 @@
 
 
 	<div id="scheduleContent">
-		<h1>@ViewBag.Subject Classes</h1>
-		<p class="programWebsite"><a href="@ViewBag.ProgramUrl">Program Website</a></p>
+		<h2>@ViewBag.Subject classes for any quarter</h2>
+		<a href="@ViewBag.ProgramUrl" class="programWebsite" target="_blank">Program Website</a>
 		<div id="classInfoWrap">
 		@foreach (var item in Model)
 	{
@@ -50,4 +54,5 @@
 	}
 	</div>
 	</div>
+</div>
 </div>
