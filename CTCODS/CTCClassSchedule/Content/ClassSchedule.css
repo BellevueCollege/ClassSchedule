@@ -1,16 +1,18 @@
 ﻿body
 {
 	background-color: #fff;
+    font-size: 13px;
+    line-height: 21px;
 }
 
 h1 {
     font-size: 27px;
 }
 
+
 #bodyWrapper
 {
-	font-size: .85em;
-	font-family: Helvetica, Arial,  Sans-Serif;    /*Juan Tweak*/
+	font-family: "Lucida Sans Unicode","Lucida Grande", Helvetica, Arial,  Sans-Serif;
 	color: #232323;
 	background-color: #fff;
 	margin-right: auto;
@@ -446,7 +448,7 @@ ul.subjectSearch li
     padding-left: 35px;
     position: absolute;
     top: -23px;
-    width: 400px;
+    width: 450px;
 }
 
 #navbar label { position: absolute; left: -9999px; top: -9999px}
@@ -792,7 +794,7 @@ ul.class-description
 }
 .section-notes .label
 {
-	font-style: italic;
+
 }
 
 .descriptor
@@ -888,18 +890,14 @@ ul.class-description
 
 
 
-#top
+#home-main-content
 {
 	height: auto;
-	background-color: #eee;
 	margin-top: 20px;
 }
 
-#top a
-{
-	color: #013d79;
-}
-#topleft
+
+#browse-credit
 {
 	float: left;
 	height: 230px;
@@ -907,12 +905,9 @@ ul.class-description
 
 }
 
-#topleft h2
-{
-	padding-left: 10px;
-}
 
-#topleft #browse
+
+#browse-credit #browse-all
 {
 	margin: 20px 0px 0px 30px;
 	padding: 10px;
@@ -937,30 +932,19 @@ ul.class-description
 	text-decoration: underline;
 }
 
-#topright
+
+
+#other-clases
 {
 	float: left;
 	height: 220px;
 	width: 280px;
-
 	padding: 0px 10px 10px 10px;
 	font-size: 12px;
 	line-height: 14px;
 }
 
-#topright a
-{
-	font-size: 13px;
-	font-weight: bold;
-	line-height: 20px;
-}
 
-#topright a.grey
-{
-	font-weight: normal;
-	color: #999;
-	font-size: 12px;
-}
 
 
 #leftpanel_topleft
@@ -1007,9 +991,7 @@ ul.class-description
 {
 	float: left;
 	width: 429px;
-	height: 140px;
 
-	border-right: 1px solid #000;
 }
 
 #bottompanel_topleft
@@ -1065,8 +1047,6 @@ ul.class-description
 {
 	list-style: disc;
 }
-
-
 
 /*  Front page css ends */
 
