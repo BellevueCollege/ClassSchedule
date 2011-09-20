@@ -99,9 +99,9 @@
 @Html.Partial("quarterNavigation")
 <div id="front_layout">
 
-	<div id="top">
+	<div id="home-main-content">
 
-		<div id="topleft">
+		<div id="browse-credit">
 			<h2>Browse Credit Classes:</h2>
 
 			<div id="leftpanel_topleft">
@@ -128,9 +128,9 @@
 				<img src="@Url.Content("~/Content/images/or_divider.gif")" />
 			</div>
 			<div id="rightpanel_topleft">
-				<div id="browse">
+				<div id="browse-all ">
 					<a href="@Url.Content("~/Classes/")All">Browse all classes with descriptions</a>
-				</div>
+				</div>x
 			</div>
 			<div id="bottompanel_topleft"> <!-- Bellevue specific and/or optional -->
 				You can also <a href="http://bellevuecollege.edu/schedule/print/">Download PDF versions of the credit class schedule</a>
@@ -138,19 +138,15 @@
 
 		</div>
 
-		<div id="topright">
-			<h3>Other classes and workshops:</h3>
-			<div id="otherclasses">
-				<a href="http://www.campusce.net/BC/Search/Search.aspx">Continuing Education classes (non-credit)</a>
-				<p>Continuing Education offeres non-credit classes and you blah blah blah!</p>
-				<a class="grey" href="http://www.campusce.net/BC/Search/Search.aspx">Check out their classes</a>
-			</div>
+		<div id="other-classes">
+			<h2>Other classes and workshops:</h2>
+			<h3><a href="http://www.campusce.net/BC/Search/Search.aspx">Continuing Education classes (non-credit)</a></h3>
+			<p>Continuing Education offeres a wide variety variety of non-credit classes.</p>
+			<p><a href="http://www.campusce.net/BC/Search/Search.aspx" title="Continuing Education Classes">Check out their classes</a></p>
 
-			<div id="otherclasses">
-				<a href="http://bellevuecollege.edu/careers/sac_classes.html">Career Center classes and workshops</a>
-				<p>The Career Center offeres various classes, free workshops and orientations to help you blah blah blah!</p>
-				<a class="grey" href="http://bellevuecollege.edu/careers/sac_classes.html">Check out their classes and workshops</a>
-			</div>
+			<h3><a href="http://bellevuecollege.edu/careers/sac_classes.html">Center for Career Connections classes and workshops</a></h3>
+			<p>The Center for Career Connections offeres various classes, free workshops and orientations to students, alumni and the community to help your career.</p>
+			<p><a class="grey" href="http://bellevuecollege.edu/careers/sac_classes.html" title="Career Center classes and workshops">Check out their classes and workshops</a></p>
 
 		</div>
 
