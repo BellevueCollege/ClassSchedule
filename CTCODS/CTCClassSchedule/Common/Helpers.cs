@@ -317,5 +317,17 @@ namespace CTCClassSchedule.Common
 			return "";
 
 		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="fieldID"></param>
+		/// <param name="fieldTitle"></param>
+		/// <param name="fieldValue"></param>
+		/// <returns></returns>
+		static public KeyValuePair<string, KeyValuePair<string, bool>> GetModalityInfo(string fieldID, string fieldTitle, string fieldValue)
+		{
+			return new KeyValuePair<string, KeyValuePair<string,bool>>(fieldID, new KeyValuePair<string, bool>(fieldTitle, Utility.SafeConvertToBool(fieldValue)));
+		}
 	}
 }

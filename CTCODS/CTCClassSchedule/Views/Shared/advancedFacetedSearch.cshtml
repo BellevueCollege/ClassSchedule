@@ -187,39 +187,30 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search")) {
 
 
 
-
+@*
+	m.Key == fieldID
+	m.Value.Key == fieldTitle
+	m.Value.Value == fieldValue (bool)
+*@
 	<h3>Class Format</h3>
 	<div id="classformat">
-	@if (@ViewBag.f_oncampus == "true" || @ViewBag.f_online == "true" || @ViewBag.f_hybrid == "true" || @ViewBag.f_telecourse == "true")
+	@{
+		IList<KeyValuePair<string,KeyValuePair<string,bool>>> modalities;
+		modalities = (IList<KeyValuePair<string,KeyValuePair<string,bool>>>)ViewBag.Modality;
+	}
+	@if (modalities.Where(m => m.Value.Value == true).Count() > 0)
  {
 		<p class="label_checkbox_pair">
 			<a href="#" id="uncheckFormat">Uncheck all</a>
 		</p>
  }
+ @foreach (KeyValuePair<string, KeyValuePair<string,bool>> m in ViewBag.Modality)
+ {
 		<p class="label_checkbox_pair">
-
-			<input class="clear" type="checkbox" name="f_oncampus" id="f_oncampus" value="true" @if (@ViewBag.f_oncampus == "true")
-																																											 {  <text>checked="checked"</text> } />
-			<label for="f_oncampus">On Campus</label>
+			<input class="clear" type="checkbox" name="@m.Key" id="@m.Key" value="true" @if (m.Value.Value) { <text>checked='checked'</text> } />
+			<label for="@m.Key">@m.Value.Key</label>
 		</p>
-		<p class="label_checkbox_pair">
-
-			<input class="clear" type="checkbox" name="f_online" id="f_online" value="true" @if (@ViewBag.f_online == "true")
-																																									 {  <text>checked="checked"</text> }  />
-			<label for="f_online">Online</label>
-		</p>
-		<p class="label_checkbox_pair">
-
-			<input class="clear" type="checkbox" name="f_hybrid" id="f_hybrid" value="true" @if (@ViewBag.f_hybrid == "true")
-																																									 {  <text>checked="checked"</text> }  />
-			<label for="f_hybrid">Hybrid</label>
-		</p>
-		<p class="label_checkbox_pair">
-
-			<input class="clear" type="checkbox" name="f_telecourse" id="f_telecourse" value="true" @if (@ViewBag.f_telecourse == "true")
-																																													 {  <text>checked="checked"</text> }  />
-			<label for="f_telecourse">Telecourse</label>
-	</p>
+ }
 	</div>
 
 

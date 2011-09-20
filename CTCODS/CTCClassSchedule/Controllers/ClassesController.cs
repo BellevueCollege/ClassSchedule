@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -98,10 +99,14 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.day_th = day_th;
 			ViewBag.day_f = day_f;
 			ViewBag.day_s = day_s;
-			ViewBag.f_oncampus = f_oncampus;
-			ViewBag.f_online = f_online;
-			ViewBag.f_hybrid = f_hybrid;
-			ViewBag.f_telecourse = f_telecourse;
+
+			IList<KeyValuePair<string,KeyValuePair<string,bool>>> modality = new List<KeyValuePair<string, KeyValuePair<string,bool>>>(4);
+			modality.Add(Helpers.GetModalityInfo("f_oncampus", "On Campus", f_oncampus) );
+			modality.Add(Helpers.GetModalityInfo("f_online", "Online", f_online));
+			modality.Add(Helpers.GetModalityInfo("f_hybrid", "Hybrid", f_hybrid));
+			modality.Add(Helpers.GetModalityInfo("f_telecourse", "Telecourse", f_telecourse));
+			ViewBag.Modality = modality;
+
 			ViewBag.avail = avail;
 
 			ViewBag.LinkParams = getLinkParams();
@@ -156,10 +161,14 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.day_th = day_th;
 			ViewBag.day_f = day_f;
 			ViewBag.day_s = day_s;
-			ViewBag.f_oncampus = f_oncampus;
-			ViewBag.f_online = f_online;
-			ViewBag.f_hybrid = f_hybrid;
-			ViewBag.f_telecourse = f_telecourse;
+
+			IList<KeyValuePair<string,KeyValuePair<string,bool>>> modality = new List<KeyValuePair<string, KeyValuePair<string,bool>>>(4);
+			modality.Add(Helpers.GetModalityInfo("f_oncampus", "On Campus", f_oncampus) );
+			modality.Add(Helpers.GetModalityInfo("f_online", "Online", f_online));
+			modality.Add(Helpers.GetModalityInfo("f_hybrid", "Hybrid", f_hybrid));
+			modality.Add(Helpers.GetModalityInfo("f_telecourse", "Telecourse", f_telecourse));
+			ViewBag.Modality = modality;
+
 			ViewBag.avail = avail;
 
 
@@ -232,10 +241,19 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.day_th = day_th;
 			ViewBag.day_f = day_f;
 			ViewBag.day_s = day_s;
+
+			IList<KeyValuePair<string,KeyValuePair<string,bool>>> modality = new List<KeyValuePair<string, KeyValuePair<string,bool>>>(4);
+			modality.Add(Helpers.GetModalityInfo("f_oncampus", "On Campus", f_oncampus) );
+			modality.Add(Helpers.GetModalityInfo("f_online", "Online", f_online));
+			modality.Add(Helpers.GetModalityInfo("f_hybrid", "Hybrid", f_hybrid));
+			modality.Add(Helpers.GetModalityInfo("f_telecourse", "Telecourse", f_telecourse));
+			ViewBag.Modality = modality;
+/*
 			ViewBag.f_oncampus = f_oncampus;
 			ViewBag.f_online = f_online;
 			ViewBag.f_hybrid = f_hybrid;
 			ViewBag.f_telecourse = f_telecourse;
+*/
 			ViewBag.avail = avail;
 
 			ViewBag.LinkParams = getLinkParams();
@@ -277,8 +295,6 @@ namespace CTCClassSchedule.Controllers
 				return View(sectionsEnum);
 			}
 		}
-
-
 
 		/// <summary>
 		/// GET: /Classes/All/{Subject}/{ClassNum}
@@ -555,9 +571,6 @@ namespace CTCClassSchedule.Controllers
 
 			return ProgramURL;
 		}
-
-
-
 		#endregion
 	}
 }
