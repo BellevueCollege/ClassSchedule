@@ -298,7 +298,7 @@ ul.subjectSearch li
 {
 	margin-left: 190px; /*ju*/
 	padding-top: 28px;
-	padding-bottom: 10px;
+	padding-bottom: 35px;
 }
 
 #scheduleContentNoSidebar
@@ -859,6 +859,7 @@ ul.class-description
 	margin-top: 35px;
     overflow: hidden;
     background-color: #eee;
+    clear: both;
 }
 #classes-footer h2 {
     position: absolute;
