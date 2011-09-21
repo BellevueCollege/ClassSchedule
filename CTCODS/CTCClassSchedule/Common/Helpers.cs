@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Ctc.Ods;
@@ -326,7 +325,7 @@ namespace CTCClassSchedule.Common
 		/// <param name="fieldTitle"></param>
 		/// <param name="fieldValue"></param>
 		/// <returns></returns>
-		static public KeyValuePair<string, KeyValuePair<string, bool>> GetModalityInfo(string fieldID, string fieldTitle, string fieldValue)
+		static public KeyValuePair<string, KeyValuePair<string, bool>> getModalityInfo(string fieldID, string fieldTitle, string fieldValue)
 		{
 			return new KeyValuePair<string, KeyValuePair<string, bool>>(fieldID, new KeyValuePair<string, bool>(fieldTitle, Utility.SafeConvertToBool(fieldValue)));
 		}
@@ -335,22 +334,33 @@ namespace CTCClassSchedule.Common
 		{
 			IList<KeyValuePair<string,KeyValuePair<string,bool>>> modality = new List<KeyValuePair<string, KeyValuePair<string,bool>>>(4);
 
+/*
+ * Disabled contextual showing/hiding of facets because this functionality needs much more
+ * discussion, planning and design. - 9/21/2011, shawn.south@bellevuecollege.edu
+ *
+ * See also: Bug 154
+ *
 			if (sections.Where(s => s.IsOnCampus).Count() > 0)
 			{
-				modality.Add(GetModalityInfo("f_oncampus", "On Campus", f_oncampus) );
+				modality.Add(getModalityInfo("f_oncampus", "On Campus", f_oncampus) );
 			}
 			if (sections.Where(s => s.IsOnline).Count() > 0)
 			{
-				modality.Add(GetModalityInfo("f_online", "Online", f_online));
+				modality.Add(getModalityInfo("f_online", "Online", f_online));
 			}
 			if (sections.Where(s => s.IsHybrid).Count() > 0)
 			{
-				modality.Add(GetModalityInfo("f_hybrid", "Hybrid", f_hybrid));
+				modality.Add(getModalityInfo("f_hybrid", "Hybrid", f_hybrid));
 			}
 			if (sections.Where(s => s.IsTelecourse).Count() > 0)
 			{
-				modality.Add(GetModalityInfo("f_telecourse", "Telecourse", f_telecourse));
+				modality.Add(getModalityInfo("f_telecourse", "Telecourse", f_telecourse));
 			}
+*/
+			modality.Add(getModalityInfo("f_oncampus", "On Campus", f_oncampus) );
+			modality.Add(getModalityInfo("f_online", "Online", f_online));
+			modality.Add(getModalityInfo("f_hybrid", "Hybrid", f_hybrid));
+			modality.Add(getModalityInfo("f_telecourse", "Telecourse", f_telecourse));
 
 			return modality;
 		}
