@@ -428,7 +428,8 @@ ul.subjectSearch li
 #search{
 	float: left;
 	height: 31px;
-	padding:  0 9px 0 17px;
+	padding: 0 0 0 17px;
+    width: 697px;
     color: #fff;
     background-color: #999;
     line-height: 31px;
@@ -450,17 +451,16 @@ ul.subjectSearch li
 
 #navbar label { position: absolute; left: -9999px; top: -9999px}
 
-#navbar #search select
-{
-	padding-left: 20px;
-
+#seach-quarter-select {
+	margin-right: 6px;
+    width: 180px;
 }
 
-#search input.searchInput {
-	width: 380px;
+#searh-keyword {
+	height: 16px;
+    margin-right: 5px;
     padding: 0 10px;
-    height: 16px;
-
+    width: 370px;
 }
 
 

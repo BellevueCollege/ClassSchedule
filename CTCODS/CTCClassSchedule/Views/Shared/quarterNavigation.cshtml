@@ -37,7 +37,7 @@
 <div id="navbar">
 @using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" })) {
 
-	<div id="browse"><a href="@Url.Content("~/")">Browse for Classes</a></div>
+	<div id="browse"><a href="@Url.Content("~/")">Browse Classes</a></div>
 	<div id="search">
 		<span id="search-text">Search</span>  <span id="search-tip">Tip: you can search by title, subject, courseid, item number or instructor.</span>
 		<label for="seach-quarter-select">Pick a quarter</label>
@@ -47,10 +47,7 @@
 			<option value="@QuarterThreeURL" @if (@ViewBag.quarter == QuarterThreeURL) { <text> selected</text>}>@QuarterThreeFriendly</option>
 			<option value="@QuarterFourURL" @if (@ViewBag.quarter == QuarterFourURL) { <text> selected</text>}>@QuarterFourFriendly</option>
 			<option value="CE">Continuing Education</option>
-		</select>
-		<label for="searh-keyword">Keywords</label>
-        <input type="text" class="searchInput" id="searh-keyword" name="searchterm" value="@ViewBag.searchterm"/>
-		<input type="submit" class="searchSubmit"  name="submit" value="Go" />
+		</select><label for="searh-keyword">Keywords</label><input type="text" class="searchInput" id="searh-keyword" name="searchterm" value="@ViewBag.searchterm"/><input type="submit" class="searchSubmit"  name="submit" value="Go" />
 
 	</div>
     <div id="register"><a href="http://bellevuecollege.edu/enrollment/registration/register/">Register</a></div>
