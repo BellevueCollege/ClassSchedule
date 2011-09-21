@@ -26,6 +26,9 @@ namespace CTCClassSchedule
 				WaitlistCount = value.WaitlistCount;
 				Yrq = value.Yrq;
 				IsOnline = value.IsOnline;
+				IsOnCampus = value.IsOnCampus;
+				IsHybrid = value.IsHybrid;
+				IsTelecourse = value.IsTelecourse;
 				Footnotes = value.Footnotes;
 			}
 		}

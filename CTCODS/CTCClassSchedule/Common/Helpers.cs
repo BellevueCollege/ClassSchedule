@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Ctc.Ods;
@@ -327,7 +328,31 @@ namespace CTCClassSchedule.Common
 		/// <returns></returns>
 		static public KeyValuePair<string, KeyValuePair<string, bool>> GetModalityInfo(string fieldID, string fieldTitle, string fieldValue)
 		{
-			return new KeyValuePair<string, KeyValuePair<string,bool>>(fieldID, new KeyValuePair<string, bool>(fieldTitle, Utility.SafeConvertToBool(fieldValue)));
+			return new KeyValuePair<string, KeyValuePair<string, bool>>(fieldID, new KeyValuePair<string, bool>(fieldTitle, Utility.SafeConvertToBool(fieldValue)));
+		}
+
+		static public IList<KeyValuePair<string, KeyValuePair<string, bool>>> ConstructModalityList(IEnumerable<SectionWithSeats> sections, string f_oncampus, string f_online, string f_hybrid, string f_telecourse)
+		{
+			IList<KeyValuePair<string,KeyValuePair<string,bool>>> modality = new List<KeyValuePair<string, KeyValuePair<string,bool>>>(4);
+
+			if (sections.Where(s => s.IsOnCampus).Count() > 0)
+			{
+				modality.Add(GetModalityInfo("f_oncampus", "On Campus", f_oncampus) );
+			}
+			if (sections.Where(s => s.IsOnline).Count() > 0)
+			{
+				modality.Add(GetModalityInfo("f_online", "Online", f_online));
+			}
+			if (sections.Where(s => s.IsHybrid).Count() > 0)
+			{
+				modality.Add(GetModalityInfo("f_hybrid", "Hybrid", f_hybrid));
+			}
+			if (sections.Where(s => s.IsTelecourse).Count() > 0)
+			{
+				modality.Add(GetModalityInfo("f_telecourse", "Telecourse", f_telecourse));
+			}
+
+			return modality;
 		}
 	}
 }
