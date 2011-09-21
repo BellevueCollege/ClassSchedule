@@ -9,6 +9,16 @@ h1 {
     font-size: 27px;
 }
 
+h2{
+	font-size: 19px;
+
+}
+
+h3{
+	font-size: 15px;
+	font-weight: bold;
+}
+
 
 #bodyWrapper
 {
@@ -153,19 +163,7 @@ a, a:hover, a:visited, a:active
 	min-width: 200px;
 }
 
-h2
-{
-	font-size: 18px;
-	padding: 10px 0px;
 
-}
-
-h3
-{
-	font-size: 14px;
-	padding: 10px 0px;
-	font-weight: bold;
-}
 
 #a_to_z
 {
@@ -278,8 +276,10 @@ ul.subject li a
 
 /*END JU NEW definitions*/
 
-#titlebar { height: 61px; width: 960px; margin: 0 auto;}
-#sitename { font-size: 34px; padding: 21px 0 0 20px}
+#titlebar {
+    height: 62px; width: 960px; margin: 0 auto;}
+
+#sitename { font-size: 34px; line-height: 34px; padding: 21px 0 0 20px}
 
 #advancedFacetedSearch ul li,
 #basicFacetedSearch ul li {
@@ -395,15 +395,13 @@ ul.subjectSearch li
 	border-bottom: none;
 }
 
-#navcontainer ul li a:hover, #navcontainer ul li.active a:hover
-{
+#navcontainer ul li a:hover, #navcontainer ul li.active a:hover{
 	background-color: #369;
 	color: #fff;
 }
 
-#navbar
-{
-	height: 28px;
+#navbar {
+	height: 31px;
 	clear: both;
 	margin-top: 0px;
 	float: left;
@@ -417,8 +415,8 @@ ul.subjectSearch li
 #browse a {
     float: left;
 	width: 160px;
-	height: 28px;
-    line-height: 28px;
+	height: 31px;
+    line-height: 31px;
     text-align: center;
     color: #fff;
     background-color: #999;
@@ -427,14 +425,13 @@ ul.subjectSearch li
 }
 #browse a:hover, #browse a:focus { background-color: #003d79;}
 
-#search
-{
+#search{
 	float: left;
-	height: 28px;
+	height: 31px;
 	padding:  0 9px 0 17px;
     color: #fff;
     background-color: #999;
-    line-height: 28px;
+    line-height: 31px;
 }
 #search-text { font-weight: bold; padding-right: 5px;}
 #search-tip {
@@ -459,11 +456,10 @@ ul.subjectSearch li
 
 }
 
-#navbar #search input.searchInput
-{
+#search input.searchInput {
 	width: 380px;
     padding: 0 10px;
-    height: 17px;
+    height: 16px;
 
 }
 
@@ -487,8 +483,8 @@ ul.subjectSearch li
     display: block;
     width: 80px;
 	padding: 0;
-	height: 28px;
-    line-height: 28px;
+	height: 31px;
+    line-height: 31px;
 	border-left: 3px solid #fff;
 	color: #fff;
 	background-color: #999;
@@ -889,27 +885,23 @@ ul.class-description
 /*  Front page css */
 
 
-
-
-#home-main-content
-{
+#home-main-content{
 	height: auto;
-	margin-top: 20px;
+	margin-top: 30px;
 }
 
 
 #browse-credit
 {
 	float: left;
-	height: 230px;
-	width: 660px;
-
+	width: 640px;
 }
+#browse-credit h2 {
+    padding-left: 20px;
+    font-size: 21px}
 
 
-
-#browse-credit #browse-all
-{
+#browse-all {
 	margin: 20px 0px 0px 30px;
 	padding: 10px;
 	color: #333;
@@ -922,91 +914,93 @@ ul.class-description
 	line-height: 20px;
 }
 
-#topleft #browse a
-{
+#browse-all a {
 	color: #000;
 	text-decoration: none;
 }
 
-#topleft #browse a:hover
-{
+#browse-all a:hover {
 	text-decoration: underline;
 }
 
 
-
-#other-clases
-{
-	float: left;
-	height: 220px;
-	width: 280px;
-	padding: 0px 10px 10px 10px;
-	font-size: 12px;
-	line-height: 14px;
-}
-
-
-
-
-#leftpanel_topleft
-{
+#browse-quarter{
 	float: left;
 	width: 200px;
 	height: 140px;
-
-	padding-left: 10px;
+	padding-left: 20px;
 }
 
 
-#leftpanel_topleft  h4
+#browse-quarter  .choose-quarter
 {
-	color: #bbb;
-	font-size: 12px;
-	line-height: 20px;
+	color: #999;
+	font-size: 13px;
 }
 
-#leftpanel_topleft a
+#browse-quarter a
 {
-	color: #bbb;
-	font-size: 12px;
-	line-height: 20px;
-}
-
-#leftpanel_topleft a.yrq
-{
-	color: #013d79;
-	font-size: 14px;
-	line-height: 20px;
+	color: #003d79;
+	font-size: 15px;
+	line-height: 28px;
 }
 
 
-#paneldivider_topleft
+#browse-divider
 {
 	float: left;
 	width: 20px;
 	height: 140px;
-
+    padding-left: 22px;
 }
 
-#rightpanel_topleft
-{
+#browse-all-classes{
 	float: left;
-	width: 429px;
-
+	width: 300px;
+    padding-left: 70px;
+}
+#browse-all-classes a {
+    background: none repeat scroll 0 0 #FBFBFB;
+    border: 1px solid #CCCCCC;
+    display: block;
+    padding: 13px 17px 15px;
+    width: 9Em;
+    font-size: 15px;
+    text-decoration: none;
+    color: #333;
+}
+#browse-all-classes a:hover, #browse-all-classes a:focus {
+    color: white;
+    border-color: #003d79;
+    background-color: #003d79;
 }
 
-#bottompanel_topleft
-{
-	clear: both;
+
+#printable-schedules{
+	color: #999;
+    clear: both;
 	float: left;
-	padding-left: 10px;
-	padding-top: 10px;
+	padding-left: 20px;
+	padding-top: 14px;
 	width: 500px;
-
 }
 
+#printable-schedules a { color: #999}
+#printable-schedules a:hover,
+#printable-schedules a:focus {
+    color: #003d79;
+}
 
-
+#other-classes {
+    float: left;
+    width: 320px;
+    padding: 0;
+    }
+#other-classes h2 { font-size: 15px; padding: 0 20px 7px 20px;}
+#other-classes h3 { font-size: 13px; border-left: 1px solid #ccc; padding: 0 20px 0 19px; }
+#other-classes h3 .low-emphasis { font-weight: normal; font-size: 12px; }
+#other-classes p {color: #333; ; border-left: 1px solid #ccc; padding: 0 20px 21px 19px;}
+#other-classes p a { color: #333;}
 
 #middleleft
 {
