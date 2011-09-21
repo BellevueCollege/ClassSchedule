@@ -3,6 +3,7 @@
 	background-color: #fff;
     font-size: 13px;
     line-height: 21px;
+    color: #333;
 }
 
 h1 {
@@ -23,7 +24,6 @@ h3{
 #bodyWrapper
 {
 	font-family: "Lucida Sans Unicode","Lucida Grande", Helvetica, Arial,  Sans-Serif;
-	color: #232323;
 	background-color: #fff;
 	margin-right: auto;
 	margin-left: auto;
@@ -853,40 +853,46 @@ ul.class-description
 	line-height: 14px;
 }
 
-#footer
-{
-	line-height: 20px;
-	margin: 40px 0px;
-	font-size: 12px;
+#classes-footer {
+	border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+	margin-top: 35px;
+    overflow: hidden;
+    background-color: #eee;
+}
+#classes-footer h2 {
+    position: absolute;
+    left: -9999px;
+    top: -9999px; }
+
+#classes-footer h3 {
+    font-size: 13px;
+    font-weight: bold;
+}
+#classes-footer ul {
+    font-size: 12px;
 }
 
-#footerSpacer
+#classes-footer .block
 {
-	margin-top: 40px;
-	float: left;
-	height: 10px;
-	border-top: 1px solid #5dc8dc;
-	width: 960px;
+	padding: 7px 19px 0 20px;
+    width: 200px;
+    float: left;
+    border-right: 1px solid #ccc;
+	height: 119px;
 }
 
-.grid_fourth
+#classes-footer .first
 {
-	border-right: 1px solid #5dc8dc;
-	padding-right: 2px;
-	height: 140px;
-}
-
-.grid_fourth.last
-{
-	border-right: none;
+	padding-left:19px;
+    border-left: 1px solid #ccc;
 }
 
 
 /*  Front page css */
 
-
+#front_layout { overflow: hidden;}
 #home-main-content{
-	height: auto;
 	margin-top: 30px;
 }
 
@@ -897,7 +903,7 @@ ul.class-description
 	width: 640px;
 }
 #browse-credit h2 {
-    padding-left: 20px;
+    padding: 0 0 7px 20px;
     font-size: 21px}
 
 
@@ -999,9 +1005,10 @@ ul.class-description
 #other-classes h2 { font-size: 15px; padding: 0 20px 7px 20px;}
 #other-classes h3 { font-size: 13px; border-left: 1px solid #ccc; padding: 0 20px 0 19px; }
 #other-classes h3 .low-emphasis { font-weight: normal; font-size: 12px; }
-#other-classes p {color: #333; ; border-left: 1px solid #ccc; padding: 0 20px 21px 19px;}
+#other-classes p {color: #333;border-left: 1px solid #ccc; padding: 0 20px 14px 19px;}
 #other-classes p a { color: #333;}
 
+#middle { display: none;}
 #middleleft
 {
 	float: left;
