@@ -728,6 +728,7 @@ ul.class-description
 .section
 {
 	width: 50px; /*ju*/
+	clear: left;
 }
 .instructor
 {
