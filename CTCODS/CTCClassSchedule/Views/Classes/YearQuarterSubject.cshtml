@@ -49,10 +49,19 @@
 	@Html.Partial("quarterNavigation")
 	@Html.Partial("advancedFacetedSearch")
 	<div id="scheduleContent">
+	<h3 class="course-title">
+		<span class="courseID">
+			We need a method to pass in Subject Abbr. and get full text subject
+		</span>
+	</h3>
+		<div id="programWebsite">
+			<a href="@ViewBag.ProgramUrl" class="programWebsite" target="_blank">Program Website</a>
+		</div>
+
 		@foreach (var course in Model.Select(c => new { c.CourseID, c.CourseSubject, c.CourseNumber, c.CourseTitle, c.Credits }).Distinct())
 	{
 		<h2 class="classHeading">
-			@Html.ActionLink(course.CourseSubject + " " + course.CourseNumber + " " + course.CourseTitle + " " + course.Credits, "ClassDetails", "Classes", new { YearQuarterID = YearQuarter, Subject = course.CourseSubject, ClassNum = course.CourseNumber }, null)
+			@Html.ActionLink(course.CourseSubject + " " + course.CourseNumber + " " + course.CourseTitle + " " + course.Credits + " CR", "ClassDetails", "Classes", new { YearQuarterID = YearQuarter, Subject = course.CourseSubject, ClassNum = course.CourseNumber }, null)
 		</h2>
 		<p class="classDetails">
 			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new { YearQuarterID = YearQuarter, Subject = course.CourseSubject, ClassNum = course.CourseNumber }, null)

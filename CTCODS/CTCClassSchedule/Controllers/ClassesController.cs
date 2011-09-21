@@ -251,6 +251,8 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.Subject = Subject;
 
+			ViewBag.ProgramUrl = getProgramUrl(Subject);
+
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
 			using (OdsRepository respository = new OdsRepository())
@@ -261,7 +263,6 @@ namespace CTCClassSchedule.Controllers
 				var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
 																	 select s);
 
-				//IList<Section> sections = respository.GetSections(Subject, YRQ);
 				IList<Section> sections = respository.GetSections(Subject, YRQ, facets);
 
 				IEnumerable<SectionWithSeats> sectionsEnum;
