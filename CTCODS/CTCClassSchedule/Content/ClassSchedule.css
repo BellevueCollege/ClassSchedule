@@ -1164,7 +1164,7 @@ ul.class-description
 
 #pagerNums a
 {
-	text-decoration: none;
+	text-decoration: underline;
 	color: #003D79;
 }
 

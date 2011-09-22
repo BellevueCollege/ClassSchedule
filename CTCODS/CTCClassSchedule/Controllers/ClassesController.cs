@@ -252,6 +252,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.Subject = Subject;
 
+			ViewBag.ProgramTitle = getProgramTitle(Subject);
 			ViewBag.ProgramUrl = getProgramUrl(Subject);
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);

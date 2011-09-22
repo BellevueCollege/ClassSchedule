@@ -33,7 +33,7 @@
 	@if (ViewBag.ItemCount > 40) {
 
 		<a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@prev_offset"> &lt;</a> <text>| </text>
-		for (int i = 0; i < (ViewBag.ItemCount / 40); i++)
+		for (int i = 0; i < Math.Ceiling((double)ViewBag.ItemCount / 40.0); i++)
 		{
 			if (ViewBag.p_offset == i)
 			{

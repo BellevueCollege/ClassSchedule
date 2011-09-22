@@ -30,6 +30,7 @@ namespace CTCClassSchedule.Controllers
 					IEnumerable<SectionWithSeats> sectionsEnum;
 					IEnumerable<string> titles;
 					bool ceRedirect = false;
+					int itemCount = 0;
 
 					if (quarter == "CE")
 					{
@@ -176,18 +177,22 @@ namespace CTCClassSchedule.Controllers
 
 							}
 
-							ViewBag.ItemCount = sectionsEnum.Count();
+							itemCount = sectionsEnum.Count();
+							ViewBag.ItemCount = itemCount;
 							titles = (from s in sectionsEnum
 																			orderby s.CourseSubject ascending
 																			select s.CourseSubject
 																			).Distinct();
 
-							ViewBag.test = true;
+							ViewBag.SubjectCount = titles.Count();
 							sectionsEnum = (
 																from c in sectionsEnum
 																join d in SearchResults on c.ID.ToString() equals d.ClassID
 																orderby d.SearchRank descending
 																select c).Skip(p_offset*40).Take(40);
+
+							ViewBag.TotalPages = Math.Ceiling((double)itemCount / 40.0);
+							ViewBag.CurrentPage = p_offset + 1;
 
 
 

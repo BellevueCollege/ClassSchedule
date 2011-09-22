@@ -3,6 +3,8 @@
 
 @{
 	String quarter = ViewBag.quarter;
+	String classDesc = ViewBag.SubjectCount == 1 ? "class" : "classes";
+	String sectionDesc = ViewBag.ItemCount == 1 ? "section" : "sections";
 }
 
 
@@ -51,6 +53,12 @@
 	@Html.Partial("advancedFacetedSearch")
 	<div id="scheduleContent">
 
+	<div id="searchResultsMsg">
+		"@(ViewBag.searchterm)" found @ViewBag.ItemCount @sectionDesc in @ViewBag.SubjectCount @classDesc
+	</div>
+	<div id="searchPageNum">
+		page @ViewBag.CurrentPage of @ViewBag.TotalPages
+	</div>
 
 	@foreach (var item in Model.Section)
 	{
