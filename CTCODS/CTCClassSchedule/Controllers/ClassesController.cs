@@ -115,6 +115,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.Title = "All " +  @Subject + " classes";
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
+			ViewBag.ProgramTitle = getProgramTitle(Subject);
 			ViewBag.ProgramUrl = getProgramUrl(Subject);
 
 			using (OdsRepository respository = new OdsRepository())
@@ -561,6 +562,23 @@ namespace CTCClassSchedule.Controllers
 
 			return ProgramURL;
 		}
+
+		private string getProgramTitle(string Subject)
+		{
+			string ProgramTitle = "";
+			var specificProgramInfo = from s in _programdb.ProgramInformation
+																where s.Abbreviation == Subject
+																select s;
+
+			// TODO: should this be a loop? Only the last item is being used.
+			foreach (ProgramInformation program in specificProgramInfo)
+			{
+				ProgramTitle = program.Title;
+			}
+
+			return ProgramTitle;
+		}
+
 		#endregion
 	}
 }
