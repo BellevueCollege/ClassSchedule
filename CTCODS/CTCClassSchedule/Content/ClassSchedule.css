@@ -1208,3 +1208,8 @@ ul.class-description
 	float: right;
 	width: 180px;
 }
+
+#courseDescription em.keyword, a em.keyword
+{
+	background-color: yellow;
+}

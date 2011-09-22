@@ -1,10 +1,12 @@
 ﻿@model CTCClassSchedule.SearchResultsModel
 @using CTCClassSchedule.Common;
+@using System.Text.RegularExpressions;
 
 @{
 	String quarter = ViewBag.quarter;
 	String classDesc = ViewBag.SubjectCount == 1 ? "class" : "classes";
 	String sectionDesc = ViewBag.ItemCount == 1 ? "section" : "sections";
+	String description = "";
 }
 
 
@@ -12,6 +14,22 @@
 
 	$(document).ready(function () {
 
+		//highlight all of the words that match the search term, respecting case.
+		var lowercase = "@(ViewBag.searchterm)".toLowerCase();
+		var uppercase = "@(ViewBag.searchterm)".toUpperCase();
+		var capitalized = "@(ViewBag.searchterm)".charAt(0).toUpperCase() + "@(ViewBag.searchterm)".substr(1);
+
+		$("*").each(function () {
+			if ($(this).children().length == 0) {
+				$(this).html($(this).html().replace(lowercase, '<em class="keyword">' + lowercase + '</em>'));
+				$(this).html($(this).html().replace(capitalized, '<em class="keyword">' + capitalized + '</em>'));
+				$(this).html($(this).html().replace(uppercase, '<em class="keyword">' + uppercase + '</em>'));
+			}
+		});
+
+		//end of highlight
+
+		//call the getSeats method when any of the [update] links are clicked.
 		$('.course-updated a').click(function () {
 
 			var courseIdPlusYRQ = this.id;
@@ -74,9 +92,16 @@
 			}
 			<h2 class="classHeading">
 				@Html.ActionLink(item.CourseSubject + " " + item.CourseNumber + " " + item.CourseTitle + " " + item.Credits, "ClassDetails", "Classes", new { YearQuarterID = quarter, Subject = item.CourseSubject, ClassNum = item.CourseNumber }, null)
-
-
 			</h2>
+
+
+
+
+
+			<div id="courseDescription">
+				@*Html.Raw(item.CourseDescriptions[0].Description.Replace(ViewBag.searchterm, "<em class='keyword'>" + ViewBag.searchterm + "</em>"))) *@
+				@item.CourseDescriptions[0].Description
+			</div>
 			<p class="classDetails">
 				@Html.ActionLink("View Class Details", "ClassDetails",  "Classes", new { YearQuarterID = quarter, Subject = item.CourseSubject, ClassNum = item.CourseNumber }, null)
 			</p>
@@ -202,7 +227,10 @@
 
 	@{Html.RenderPartial("Pager");}
 
-	@{Html.RenderPartial("NoSectionCourses");}
+	@if(ViewBag.TotalPages == 1){
+		Html.RenderPartial("NoSectionCourses");
+	}
+
 
 
 </div>
