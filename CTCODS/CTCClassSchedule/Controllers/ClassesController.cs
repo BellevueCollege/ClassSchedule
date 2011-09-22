@@ -100,7 +100,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.day_f = day_f;
 			ViewBag.day_s = day_s;
 
-			IList<KeyValuePair<string,KeyValuePair<string,bool>>> modality = new List<KeyValuePair<string, KeyValuePair<string,bool>>>(4);
+			IList<ModalityFacetInfo> modality = new List<ModalityFacetInfo>(4);
 			modality.Add(Helpers.getModalityInfo("f_oncampus", "On Campus", f_oncampus) );
 			modality.Add(Helpers.getModalityInfo("f_online", "Online", f_online));
 			modality.Add(Helpers.getModalityInfo("f_hybrid", "Hybrid", f_hybrid));
@@ -163,7 +163,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.day_f = day_f;
 			ViewBag.day_s = day_s;
 
-			IList<KeyValuePair<string,KeyValuePair<string,bool>>> modality = new List<KeyValuePair<string, KeyValuePair<string,bool>>>(4);
+			IList<ModalityFacetInfo> modality = new List<ModalityFacetInfo>(4);
 			modality.Add(Helpers.getModalityInfo("f_oncampus", "On Campus", f_oncampus) );
 			modality.Add(Helpers.getModalityInfo("f_online", "Online", f_online));
 			modality.Add(Helpers.getModalityInfo("f_hybrid", "Hybrid", f_hybrid));

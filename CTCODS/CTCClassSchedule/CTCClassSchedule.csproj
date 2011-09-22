@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Encryption64.cs" />
+    <Compile Include="Common\HelperContainers.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />

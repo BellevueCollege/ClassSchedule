@@ -1,4 +1,5 @@
-﻿<script type="text/javascript">
+﻿@using CTCClassSchedule.Common;
+<script type="text/javascript">
 	$(document).ready(function () {
 		$('#timestart').timepicker();
 		$('#timeend').timepicker();
@@ -184,31 +185,22 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search")) {
 }
 
 
-
-
-
-@*
-	m.Key == fieldID
-	m.Value.Key == fieldTitle
-	m.Value.Value == fieldValue (bool)
-*@
 	<h3>Class Format</h3>
 	<div id="classformat">
 	@{
-		IList<KeyValuePair<string,KeyValuePair<string,bool>>> modalities;
-		modalities = (IList<KeyValuePair<string,KeyValuePair<string,bool>>>)ViewBag.Modality;
+		IList<ModalityFacetInfo> modalities = (IList<ModalityFacetInfo>)ViewBag.Modality;
 	}
-	@if (modalities.Where(m => m.Value.Value == true).Count() > 0)
+	@if (modalities.Where(m => m.Selected == true).Count() > 0)
  {
 		<p class="label_checkbox_pair">
 			<a href="#" id="uncheckFormat">Uncheck all</a>
 		</p>
  }
- @foreach (KeyValuePair<string, KeyValuePair<string,bool>> m in ViewBag.Modality)
+ @foreach (ModalityFacetInfo m in modalities)
  {
 		<p class="label_checkbox_pair">
-			<input class="clear" type="checkbox" name="@m.Key" id="@m.Key" value="true" @if (m.Value.Value) { <text>checked='checked'</text> } />
-			<label for="@m.Key">@m.Value.Key</label>
+			<input class="clear" type="checkbox" name="@m.ID" id="@m.ID" value="true" @if (m.Selected) { <text>checked='checked'</text> } />
+			<label for="@m.ID">@m.Title</label>
 		</p>
  }
 	</div>

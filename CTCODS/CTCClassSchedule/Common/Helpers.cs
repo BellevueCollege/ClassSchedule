@@ -325,14 +325,19 @@ namespace CTCClassSchedule.Common
 		/// <param name="fieldTitle"></param>
 		/// <param name="fieldValue"></param>
 		/// <returns></returns>
-		static public KeyValuePair<string, KeyValuePair<string, bool>> getModalityInfo(string fieldID, string fieldTitle, string fieldValue)
+		static public ModalityFacetInfo getModalityInfo(string fieldID, string fieldTitle, string fieldValue)
 		{
-			return new KeyValuePair<string, KeyValuePair<string, bool>>(fieldID, new KeyValuePair<string, bool>(fieldTitle, Utility.SafeConvertToBool(fieldValue)));
+			return new ModalityFacetInfo
+				{
+						ID = fieldID,
+						Title = fieldTitle,
+						Selected = Utility.SafeConvertToBool(fieldValue)
+				};
 		}
 
-		static public IList<KeyValuePair<string, KeyValuePair<string, bool>>> ConstructModalityList(IEnumerable<SectionWithSeats> sections, string f_oncampus, string f_online, string f_hybrid, string f_telecourse)
+		static public IList<ModalityFacetInfo> ConstructModalityList(IEnumerable<SectionWithSeats> sections, string f_oncampus, string f_online, string f_hybrid, string f_telecourse)
 		{
-			IList<KeyValuePair<string,KeyValuePair<string,bool>>> modality = new List<KeyValuePair<string, KeyValuePair<string,bool>>>(4);
+			IList<ModalityFacetInfo> modality = new List<ModalityFacetInfo>(4);
 
 /*
  * Disabled contextual showing/hiding of facets because this functionality needs much more
