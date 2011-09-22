@@ -19,7 +19,15 @@ h3{
 	font-size: 15px;
 	font-weight: bold;
 }
-
+a{
+	color: #003d79;
+}
+a:visited {
+    color: #003d79;
+}
+a:hover,  a:active {
+	color: #0281ff;
+}
 
 #bodyWrapper
 {
@@ -98,10 +106,6 @@ textarea
 }
 
 
-a, a:hover, a:visited, a:active
-{
-	color: #003D79;
-}
 
 /* Styles for validation helpers
 -----------------------------------------------------------*/
@@ -602,10 +606,7 @@ li.active a
 	text-decoration: underline;
 }
 
-a
-{
-	color: #003d79;
-}
+
 
 h2.course-title, h3.course-title
 {
@@ -889,7 +890,6 @@ ul.class-description
     border-left: 1px solid #ccc;
 }
 
-
 /*  Front page css */
 
 #front_layout { overflow: hidden;}
@@ -921,7 +921,8 @@ ul.class-description
 	line-height: 20px;
 }
 
-#browse-all a {
+#browse-all a:link,#browse-all a:visited
+ {
 	color: #000;
 	text-decoration: none;
 }
@@ -930,7 +931,6 @@ ul.class-description
 	text-decoration: underline;
 }
 
-
 #browse-quarter{
 	float: left;
 	width: 200px;
@@ -938,18 +938,20 @@ ul.class-description
 	padding-left: 20px;
 }
 
-
 #browse-quarter  .choose-quarter
 {
 	color: #999;
 	font-size: 13px;
 }
 
-#browse-quarter a
-{
-	color: #003d79;
-	font-size: 15px;
+#browse-quarter a {
+    font-size: 15px;
 	line-height: 28px;
+    color: #003d79;
+}
+
+#browse-quarter a:hover, #browse-quarter a:focus {
+	color: #0281FF;
 }
 
 
@@ -995,7 +997,7 @@ ul.class-description
 #printable-schedules a { color: #999}
 #printable-schedules a:hover,
 #printable-schedules a:focus {
-    color: #003d79;
+    color: #0281FF;
 }
 
 #other-classes {
@@ -1007,7 +1009,8 @@ ul.class-description
 #other-classes h3 { font-size: 13px; border-left: 1px solid #ccc; padding: 0 20px 0 19px; }
 #other-classes h3 .low-emphasis { font-weight: normal; font-size: 12px; }
 #other-classes p {color: #333;border-left: 1px solid #ccc; padding: 0 20px 14px 19px;}
-#other-classes p a { color: #333;}
+#other-classes p a {
+    color: #0281FF;}
 
 #middle { display: none;}
 #middleleft
