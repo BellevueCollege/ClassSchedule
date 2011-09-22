@@ -181,6 +181,8 @@ namespace CTCClassSchedule.Controllers
 																			orderby s.CourseSubject ascending
 																			select s.CourseSubject
 																			).Distinct();
+
+							ViewBag.test = true;
 							sectionsEnum = (
 																from c in sectionsEnum
 																join d in SearchResults on c.ID.ToString() equals d.ClassID
