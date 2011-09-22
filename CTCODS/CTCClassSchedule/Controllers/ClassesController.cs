@@ -457,6 +457,7 @@ namespace CTCClassSchedule.Controllers
 		{
 			const string SETTING_KEY = "IncludeCourseOutcomes";
 			bool includeCourseOutcomes = false;
+			string returnString = "";
 
 			if (ConfigurationManager.AppSettings.AllKeys.Contains(SETTING_KEY))
 			{
@@ -499,8 +500,20 @@ namespace CTCClassSchedule.Controllers
 				}
 				while (count > 0); // any more data to read?
 
+
+				//do some error checking. If there is no outcome found, the following String will be returned that we have to clean up:
+				// Error: We didn't find any outcomes for this course.
+				if (sb.ToString().Contains("Error: We"))
+				{
+					returnString = "";
+				}
+				else
+				{
+					returnString = sb.ToString();
+				}
+
 				// return course outcome page source
-				return sb.ToString();
+				return returnString;
 			}
 
 			return string.Empty;
