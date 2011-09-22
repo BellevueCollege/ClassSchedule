@@ -53,11 +53,13 @@
 	@Html.Partial("advancedFacetedSearch")
 	<div id="scheduleContent">
 
-	<div id="searchResultsMsg">
-		"@(ViewBag.searchterm)" found @ViewBag.ItemCount @sectionDesc in @ViewBag.SubjectCount @classDesc
-	</div>
-	<div id="searchPageNum">
-		page @ViewBag.CurrentPage of @ViewBag.TotalPages
+	<div id="searchHeaderInfo">
+		<div id="searchResultsMsg">
+			"@(ViewBag.searchterm)" found @ViewBag.ItemCount @sectionDesc in @ViewBag.SubjectCount @classDesc
+		</div>
+		<div id="searchPageNum">
+			page @ViewBag.CurrentPage of @ViewBag.TotalPages
+		</div>
 	</div>
 
 	@foreach (var item in Model.Section)

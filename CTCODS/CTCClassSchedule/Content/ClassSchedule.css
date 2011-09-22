@@ -1190,3 +1190,21 @@ ul.class-description
 {
 	text-decoration: underline;
 }
+
+
+#searchHeaderInfo
+{
+	margin-bottom: 40px;
+}
+
+#searchResultsMsg
+{
+	float: left;
+	width: 590px;
+}
+
+#searchPageNum
+{
+	float: right;
+	width: 180px;
+}
