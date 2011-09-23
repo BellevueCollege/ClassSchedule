@@ -1,5 +1,7 @@
-﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
+﻿@using MvcMiniProfiler;
+@model IEnumerable<CTCClassSchedule.SectionWithSeats>
 @{
+	MiniProfiler _profiler = MiniProfiler.Current;
 	String YearQuarter = ViewBag.YearQuarter;
 	String subdir = ViewBag.currentAppSubdirectory;
 	String CourseTitle = "";
@@ -57,14 +59,16 @@
 		<div id="programWebsite">
 			<a href="@ViewBag.ProgramUrl" class="programWebsite" target="_blank">Program Website</a>
 		</div>
-
-		@foreach (var course in Model.Select(c => new { c.CourseID, c.CourseSubject, c.CourseNumber, c.CourseTitle, c.Credits }).Distinct())
+		@using (_profiler.Step("Rendering courses"))
 	{
+		foreach (var course in Model.Select(c => new { c.CourseID, c.CourseSubject, c.CourseNumber, c.CourseTitle, c.Credits }).Distinct())
+		{
 		<h2 class="classHeading">
 			@Html.ActionLink(string.Format("{0} {1} {2} CR", course.CourseSubject, course.CourseNumber, course.CourseTitle, course.Credits),
 											"ClassDetails",
 											"Classes",
-											new {
+											new
+											{
 												YearQuarterID = YearQuarter,
 												Subject = course.CourseSubject,
 												ClassNum = course.CourseNumber
@@ -72,7 +76,8 @@
 		</h2>
 		<p class="classDetails">
 			@Html.ActionLink("View Class Details", "ClassDetails", "Classes",
-											new {
+											new
+											{
 												YearQuarterID = YearQuarter,
 												Subject = course.CourseSubject,
 												ClassNum = course.CourseNumber
@@ -80,28 +85,35 @@
 		</p>
 
 		<ul class='course-block'>
-				@foreach (var sec in Model.Where(s => s.CourseID == course.CourseID).Select(s => s))
+		@using (_profiler.Step("Rendering sections"))
+	{
+		foreach (var sec in Model.Where(s => s.CourseID == course.CourseID).Select(s => s))
 		{
 			<li class="section-listing">
 			<span class="item-number"><span class="descriptor">Item number: </span>@(sec.ID.ItemNumber)</span>
 			<ul class="section-details">
 			@{
-			int rowCount = 0;
+																																			int rowCount = 0;
 		}
-			@foreach (var item in sec.Offered)
-	 {
-		 rowCount++;
+		@using (_profiler.Step("Rendering offered items"))
+	{
+		foreach (var item in sec.Offered)
+		{
+			rowCount++;
 
 				<li class="section">@Html.Raw(rowCount <= 1 ? sec.SectionCode : "&nbsp;")</li>
 				<li class="instructor">
 					<span class="descriptor">Instructor:</span>
 					<ul>
 						<li>
-						@if (string.IsNullOrWhiteSpace(item.InstructorEmail)) {
+						@if (string.IsNullOrWhiteSpace(item.InstructorEmail))
+			{
 							@Html.Raw(string.IsNullOrWhiteSpace(item.InstructorName) ? "&nbsp;" : item.InstructorName)
-						} else {
+			}
+			else
+			{
 							<a href="mailto:@item.InstructorEmail">@item.InstructorName</a>
-						}
+			}
 						</li>
 					</ul>
 				</li>
@@ -111,9 +123,12 @@
 						<li>
 							<span class="days">
 								<abbr title="** TITLE GOES HERE **">
-								@if (sec.IsOnline) {
+								@if (sec.IsOnline)
+				{
 									<text>Online</text>
-					} else {
+				}
+				else
+				{
 						@item.Days
 				}
 								</abbr>
@@ -130,7 +145,7 @@
 					</ul>
 				</li>
 
-		 if (rowCount <= 1)
+	 if (rowCount <= 1)
 	 {
 				<li class="availability-@(sec.ID.ToString())">
 					<span class="descriptor">Seat Availability: </span>
@@ -150,24 +165,27 @@
 	 {
 		 <li>&nbsp;</li>
 	 }
-	 } @* end foreach(item) *@
+		} @* end foreach(item) *@
+	}
 				<li class="section-notes">
 					<span class="descriptor">Notes: </span>
 					@if (@sec.Footnotes != null && @sec.Footnotes.Count() > 0)
-			 {
+		 {
 					<ul>
 					@foreach (string note in @sec.Footnotes)
-				 {
+		 {
 						<li><span class="label">@note</span></li>
-				 }
+		 }
 					</ul>
-			 }
+		 }
 				</li>
 			</ul>
 			</li>
 		} @* end foreach(sec) *@
+	}
 		</ul>
-	} @* end foreach(course) *@
+		} @* end foreach(course) *@
+	}
 
 		@if (ViewBag.ItemCount == 0)
 	{
