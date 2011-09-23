@@ -109,6 +109,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionOutputCacheAttribute.cs" />
     <Compile Include="Common\Encryption64.cs" />
     <Compile Include="Common\HelperContainers.cs" />
     <Compile Include="Common\Helpers.cs" />
