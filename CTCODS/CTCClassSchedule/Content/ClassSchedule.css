@@ -30,6 +30,10 @@ a:hover,  a:active {
 }
 strong { font-weight: bold;
 }
+abbr:hover {
+    cursor: help;
+    border-bottom: 1px dotted #ccc;}
+
 #bodyWrapper
 {
 	font-family: "Lucida Sans Unicode","Lucida Grande", Helvetica, Arial,  Sans-Serif;
@@ -175,40 +179,20 @@ textarea
 	margin: 10px 0px;
 }
 
-.classInfo
-{
-	margin-top: 10px;
+.classInfo  {}
+.classInfo h2 {
+    font-size: 15px;
 }
-
-#classInfoWrap
-{
-	margin-top: 30px;
-}
+#classInfoWrap {}
 
 
-.classInfo .classNumber, .classInfo .classTitle, .classInfo .classCredits
-{
-	display: inline;
-	margin-right: 10px;
-	margin-top: 10px;
-}
+.classInfo .classNumber, .classInfo .classTitle, .classInfo .classCredits{}
 
-.classInfo .classCredits
-{
-}
+.classInfo .classCredits{}
 
-.classInfo .classDescription
-{
+.classInfo .classDescription{}
 
-
-	padding: 10px 0px 10px 0px;
-}
-
-.classDetailsLink
-{
-	font-size: 10px;
-	padding-bottom: 15px;
-}
+.classDetailsLink {}
 
 .classNumber a
 {

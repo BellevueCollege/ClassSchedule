@@ -10,49 +10,60 @@
 
 
 	<div id="scheduleContent">
-		<h2>@ViewBag.ProgramTitle</h2>
-		<a href="@ViewBag.ProgramUrl" class="programWebsite" target="_blank">Program Website</a>
-		<div id="classInfoWrap">
-		@foreach (var item in Model)
-	{
+        <div id="scheduleMiddle">
+		    <h1>@ViewBag.ProgramTitle</h1>
 
-			<div class="classInfo">
-                <h2>
-				<span class="classNumber">
-					@Html.ActionLink(item.Subject + " " + item.Number + " - " + item.Title, "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number }, null)
-				</span>
+		    <div id="classInfoWrap">
+		    @foreach (var item in Model)
+	    {
 
-				<span class="classCredits">
-					@item.Credits
-				    <abbr title=" credit(s) ">Cr.</abbr>
-                </span>
-                </h2>
-				@if (@item.Descriptions != null && @item.Descriptions.Count() > 0)
+			    <div class="classInfo">
+                    <h2>
+				    <span class="classNumber">
+					    @Html.ActionLink(item.Subject + " " + item.Number + " " + item.Title, "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number }, null)
+				    </span>
+
+				    <span class="classCredits">&#8226;
+					    @item.Credits
+				        <abbr title=" credit(s) ">Cr.</abbr>
+                    </span>
+                    </h2>
+				    @if (@item.Descriptions != null && @item.Descriptions.Count() > 0)
+		                {
+				        <p class="classDescription">
+				        @item.Descriptions.First().Description
+				        </p>
+
+		            }
+		            else
 		            {
-				    <p class="classDescription">
-				    @item.Descriptions.First().Description
-				    </p>
+				        <p class="classDescription error">No class description found. Please report this via the feedback link at the top of this website</p>
+		            }
 
-		        }
-		        else
-		        {
-				    <p class="classDescription error">No class description found. Please report this via the feedback link at the top of this website</p>
-		        }
+                    <p class="classDetailsLink">
+				        @Html.ActionLink("View Details for " + item.Subject + " " + item.Number, "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number }, null)
+		            </p>
 
-                <p class="classDetailsLink">
-				    @Html.ActionLink("View Details for " + item.Subject + " " + item.Number, "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number }, null)
-		        </p>
+                </div>
 
-            </div>
+	    }
+	    @if (ViewBag.ItemCount == 0)
+     {
+			    <text>
+			    <p class="error">No classes found.</p>
+			    </text>
+	    }
+	    </div>
+        </div> <!-- #scheduleMiddle -->
 
-	}
-	@if (ViewBag.ItemCount == 0)
- {
-			<text>
-			<p class="error">No classes found.</p>
-			</text>
-	}
-	</div>
+         <div id="scheduleRightSidebar">
+
+            <div id="programWebsite">
+                <h2>Department</h2>
+			    <p><a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a></p>
+
+		    </div>
+       </div><!-- scheduleRightSidebar -->
 	</div>
 </div>
 </div>
