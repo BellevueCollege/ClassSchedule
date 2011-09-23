@@ -109,22 +109,22 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionOutputCacheAttribute.cs" />
+    <Compile Include="Common\ActionOutputCacheAttribute.cs" />
     <Compile Include="Common\Encryption64.cs" />
     <Compile Include="Common\HelperContainers.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
-    <Compile Include="ProfilingActionFilter.cs" />
-    <Compile Include="ProfilingViewEngine.cs" />
+    <Compile Include="Common\ProfilingActionFilter.cs" />
+    <Compile Include="Common\ProfilingViewEngine.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="SearchResultsNoSection.cs" />
-    <Compile Include="CourseHPQuery.cs" />
+    <Compile Include="Common\SearchResultsNoSection.cs" />
+    <Compile Include="Common\CourseHPQuery.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -139,9 +139,9 @@
       <DependentUpon>ProgramInformation.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchResult.cs" />
-    <Compile Include="SearchResultsModel.cs" />
-    <Compile Include="SectionWithSeats.cs" />
+    <Compile Include="Common\SearchResult.cs" />
+    <Compile Include="Common\SearchResultsModel.cs" />
+    <Compile Include="Common\SectionWithSeats.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\automatic-image-slider.css" />
