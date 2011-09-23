@@ -19,9 +19,22 @@ namespace CTCClassSchedule.Controllers
 {
 	public class ClassesController : Controller
 	{
+		#region controller member vars
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
 		readonly private MiniProfiler _profiler = MiniProfiler.Current;
+
+		//setting the cache time for each View in seconds
+		enum CacheTime {
+			Index = 72000,
+			AllClasses = 18000,
+			Subject = 18000,
+			YearQuarter = 1800,
+			YearQuarterSubject = 1800,
+			ClassDetails = 1800
+		}
+
+		#endregion
 
 		#region controller actions
 
@@ -29,7 +42,7 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/
 		/// </summary>
 		///
-		[ActionOutputCache(72000)] // Caches for 1 day
+		[ActionOutputCache((int)CacheTime.Index)] // Caches for 1 day
 		public ActionResult Index()
 		{
 			using (OdsRepository respository = new OdsRepository())
@@ -44,7 +57,7 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/All
 		/// </summary>
 		///
-		[ActionOutputCache(18000)] // Caches for 6 hours
+		[ActionOutputCache((int)CacheTime.AllClasses)] // Caches for 6 hours
 		public ActionResult AllClasses(string letter)
 		{
 
@@ -98,7 +111,7 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		///
 
-		[ActionOutputCache(18000)] // Caches for 6 hours
+		[ActionOutputCache((int)CacheTime.Subject)] // Caches for 6 hours
 		public ActionResult Subject(string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail)
 		{
 			ViewBag.Subject = Subject;
@@ -164,7 +177,7 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/{FriendlyYRQ}/
 		/// </summary>
 
-		[ActionOutputCache(1800)] // Caches for 30 minutes
+		[ActionOutputCache((int)CacheTime.YearQuarter)] // Caches for 30 minutes
 		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter)
 		{
 			ViewBag.WhichClasses = (letter == null || letter == "" ? " (All)" : " (" + letter.ToUpper() + ")");
@@ -249,7 +262,7 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
 
-		[ActionOutputCache(1800)] // Caches for 30 minutes
+		[ActionOutputCache((int)CacheTime.YearQuarterSubject)] // Caches for 30 minutes
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail)
 		{
 			setViewBagVars(YearQuarter, "", "", "", avail, "");
@@ -316,7 +329,7 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/All/{Subject}/{ClassNum}
 		/// </summary>
 		///
-		[ActionOutputCache(1800)] // Caches for 30 minutes
+		[ActionOutputCache((int)CacheTime.ClassDetails)] // Caches for 30 minutes
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 

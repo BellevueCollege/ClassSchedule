@@ -16,7 +16,7 @@ namespace CTCClassSchedule
 {
 	public class ActionOutputCacheAttribute : ActionFilterAttribute
 	{
-		// This hack is optional; I'll explain it later in the blog post
+		// This hack is optional;
 		private static MethodInfo _switchWriterMethod = typeof(HttpResponse).GetMethod("SwitchWriter", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
 
 		public ActionOutputCacheAttribute(int cacheDuration)
@@ -56,7 +56,7 @@ namespace CTCClassSchedule
 			foreach (var pair in filterContext.RouteData.Values)
 				keyBuilder.AppendFormat("rd{0}_{1}_", pair.Key.GetHashCode(), pair.Value.GetHashCode());
 			foreach (var pair in filterContext.ActionParameters)
-				keyBuilder.AppendFormat("ap{0}_{1}_", pair.Key.GetHashCode(), pair.Value == null ? 0 : pair.Value.GetHashCode()); //pair.Value.GetHashCode());
+				keyBuilder.AppendFormat("ap{0}_{1}_", pair.Key.GetHashCode(), pair.Value == null ? 0 : pair.Value.GetHashCode());
 			return keyBuilder.ToString();
 		}
 	}
