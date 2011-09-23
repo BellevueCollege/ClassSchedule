@@ -11,8 +11,8 @@ h1 {
 }
 
 h2{
-	font-size: 19px;
-
+	font-size: 21px;
+    margin-top: 21px;
 }
 
 h3{
@@ -28,7 +28,8 @@ a:visited {
 a:hover,  a:active {
 	color: #0281ff;
 }
-
+strong { font-weight: bold;
+}
 #bodyWrapper
 {
 	font-family: "Lucida Sans Unicode","Lucida Grande", Helvetica, Arial,  Sans-Serif;
@@ -247,7 +248,7 @@ textarea
     color: White;
     font-size: 12px;
     line-height: 13px;
-    margin-bottom: 14px;
+    margin: 0 0 14px 0;
 }
 
 
@@ -283,8 +284,18 @@ ul.subject li a
 #titlebar {
     height: 62px; width: 960px; margin: 0 auto;}
 
-#sitename { font-size: 34px; line-height: 34px; padding: 21px 0 0 20px}
-
+#sitename {
+    font-size: 34px;
+    line-height: 34px;
+    padding: 21px 0 0 20px
+    }
+#sitename a {
+    color: #333;
+    text-decoration: none;
+    }
+#sitename a:hover, #sitename a:focus {
+    color: #0281ff;
+    }
 #advancedFacetedSearch ul li,
 #basicFacetedSearch ul li {
 	padding: 0 5px 0 19px; /*ju*/
@@ -298,11 +309,11 @@ ul.subjectSearch li
 }
 
 
-#scheduleContent
-{
-	margin-left: 190px; /*ju*/
+#scheduleContent {
+	margin-left: 190px;
 	padding-top: 28px;
 	padding-bottom: 35px;
+    overflow: hidden;
 }
 
 #scheduleContentNoSidebar
@@ -601,9 +612,8 @@ li.active a
 /****** START SCHEDULE BLOCK CODE ******/
 #NotOffered h2
 {
-	margin-left: 190px;
-	color: #003D79;
-	text-decoration: underline;
+	background-color: #ddd;
+    margin-left: 190px;
 }
 
 
@@ -745,6 +755,7 @@ ul.class-description
 .times
 {
 	width: 120px;
+    font-s
 }
 .room
 {
@@ -904,6 +915,7 @@ ul.class-description
 	width: 640px;
 }
 #browse-credit h2 {
+    margin: 0;
     padding: 0 0 7px 20px;
     font-size: 21px}
 
@@ -1005,7 +1017,7 @@ ul.class-description
     width: 320px;
     padding: 0;
     }
-#other-classes h2 { font-size: 15px; padding: 0 20px 7px 20px;}
+#other-classes h2 { font-size: 15px; padding: 0 20px 7px 20px; margin: 0}
 #other-classes h3 { font-size: 13px; border-left: 1px solid #ccc; padding: 0 20px 0 19px; }
 #other-classes h3 .low-emphasis { font-weight: normal; font-size: 12px; }
 #other-classes p {color: #333;border-left: 1px solid #ccc; padding: 0 20px 14px 19px;}
