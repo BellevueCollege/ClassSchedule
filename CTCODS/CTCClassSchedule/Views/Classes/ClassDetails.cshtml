@@ -51,150 +51,160 @@
 <div id="scheduleMain">
 	@Html.Partial("quarterNavigation")
 	<div id="scheduleContentNoSidebar">
-		@foreach (var item in Model)
-	{
-		ViewBag.PageTitle = item.CourseSubject + " " + item.CourseNumber + " at Bellevue College";
-		int count = 0;
-		if (@ViewBag.titleDisplayed == false)
-		{
+        <div id="class-details">
+		    @foreach (var item in Model)
+	    {
+		    ViewBag.PageTitle = item.CourseSubject + " " + item.CourseNumber + " at Bellevue College";
+		    int count = 0;
+		    if (@ViewBag.titleDisplayed == false)
+		    {
 
-			<h1 class="course-title">
-				<span class="courseID">@item.CourseSubject @item.CourseNumber </span><span>@item.CourseTitle
-				</span><span>• @item.Credits
-					<abbr title="Credits ">
-						CR</abbr></span></h1>
-		<div id="programWebsite">
-			<a href="@ViewBag.ProgramUrl" class="programWebsite" target="_blank">Program Website</a>
-		</div>
-			<p class="prerequisite">
-			</p>
+			    <h1 class="course-title">
+				    <span class="courseID">@item.CourseSubject @item.CourseNumber </span><span>@item.CourseTitle
+				    </span><span>• @item.Credits
+					    <abbr title="Credits ">
+						    CR</abbr></span></h1>
 
-							ViewBag.titleDisplayed = true;
+			    <p class="prerequisite">
+			    </p>
 
-			<div id="courseDescription">
-				<h2>
-					Description:</h2>
-				@(item.CourseDescriptions.Count <= 0 || string.IsNullOrWhiteSpace(item.CourseDescriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : item.CourseDescriptions[0].Description)
-			</div>
+							    ViewBag.titleDisplayed = true;
 
-		if (!string.IsNullOrWhiteSpace(ViewBag.CourseOutcome))
-		{
-			<div id="courseOutcome">
-				<h2>Outcomes:</h2>
-				@Html.Raw(ViewBag.CourseOutcome)
-			</div>
-		}
+			    <div id="courseDescription">
+				    <h2>Description:</h2>
+                    <p>
+				    @(item.CourseDescriptions.Count <= 0 || string.IsNullOrWhiteSpace(item.CourseDescriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : item.CourseDescriptions[0].Description)
+			        </p>
+                </div>
 
-
-		}
-
-		if (@ViewBag.currentQuarter != item.ID.ToString().Substring(4, 4))
-		{
+		    if (!string.IsNullOrWhiteSpace(ViewBag.CourseOutcome))
+		    {
+			    <div id="courseOutcome">
+				    <h2>Outcomes:</h2>
+				    @Html.Raw(ViewBag.CourseOutcome)
+			    </div>
+		    }
 
 
-			<h2 class="course-YRQ">@item.Yrq.FriendlyName</h2>
-			ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
-			ViewBag.CourseTitle = "";
+		    }
+
+		    if (@ViewBag.currentQuarter != item.ID.ToString().Substring(4, 4))
+		    {
 
 
-		}
-
-		if(!item.CourseTitle.Equals(ViewBag.CourseTitle))
-		{
-			if (count == 0)
-			{
-				@Html.Raw("</ul>")
-				count++;
-			}
-			ViewBag.CourseTitle = item.CourseTitle;
-			<div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle • @item.Credits</div>
-			@Html.Raw("<ul class='course-block'>");
-		}
+			    <h2 class="course-YRQ">@item.Yrq.FriendlyName</h2>
+			    ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
+			    ViewBag.CourseTitle = "";
 
 
+		    }
 
-			<li class="section-listing"><span class="item-number"><span class="descriptor">Item
-				number: </span>@((item.ID).ToString().Substring(0, 4))</span>
-				<ul class="section-details">
-
-					<!--start of repeat offered information -->
-					@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
-		 {
-						<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
-						<li class="instructor"><span class="descriptor">Instructor:</span>
-							<ul>
-								<li>
-									@if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
-				 {
-					 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-					 { <text>TBD</text> }
-					 else
-					 { @offering.InstructorName	}
-				 }
-				 else
-				 {
-					 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-					 { <text>TBD</text> }
-					 else
-					 { <a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))" target="_blank">@offering.InstructorName</a>	}
-				 }
-								</li>
-							</ul>
-						</li>
-
-						<li><span class="descriptor">Meets: </span>
-							<ul class="meets">
-								<li><span class="days">
-									<abbr title="Days Offered">
-										@if (item.IsOnline == true)
-					{ <text>Online</text> }
-					else
-					{ @offering.Days }
-									</abbr></span> <span class="times">
-										<span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime)-@String.Format("{0:t}", offering.EndTime)
-									</span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
-								</li>
-							</ul>
-						</li>
+		    if(!item.CourseTitle.Equals(ViewBag.CourseTitle))
+		    {
+			    if (count == 0)
+			    {
+				    @Html.Raw("</ul>")
+				    count++;
+			    }
+			    ViewBag.CourseTitle = item.CourseTitle;
+			    <div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle • @item.Credits <abbr title="Credit(s) ">CR</abbr></div>
+			    @Html.Raw("<ul class='course-block'>");
+            }
 
 
-				if (ViewBag.seatAvailbilityDisplayed == false)
-				{
-							<li class="availability-@(item.ID.ToString())">
-								<span class="descriptor">Seat Availability:
-								</span>
-								@if (@item.WaitlistCount > 0)
-				{
-									<strong class="seatsAvailable">class full, @item.WaitlistCount on waitlist</strong>
-									<span class="course-updated"></span>
-				}
-				else
-				{
-									<strong class="seatsAvailable">@item.SeatsAvailable</strong>
-									<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">
-										[update]</a></span>
-				}
-							</li>
-				ViewBag.seatAvailbilityDisplayed = true;
-																																 }
 
-						<li class="section-notes"><span class="descriptor">Notes: </span>
-						@if (@item.Footnotes != null)
-			{
-							<ul>
-							@foreach (string note in item.Footnotes)
-			 {
-								<li><span class="label">@note</span></li>
-			 }
-							</ul>
-			}
-						</li>
-		 } <!--end of repeat offered information -->
+			    <li class="section-listing"><span class="item-number"><span class="descriptor">Item
+				    number: </span>@((item.ID).ToString().Substring(0, 4))</span>
+				    <ul class="section-details">
 
-				</ul>
-			</li>
-			ViewBag.seatAvailbilityDisplayed = false;
+					    <!--start of repeat offered information -->
+					    @foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
+         {
+						    <li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
+						    <li class="instructor"><span class="descriptor">Instructor:</span>
+							    <ul>
+								    <li>
+									    @if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
+             {
+                 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+                 { <text>TBD</text> }
+                 else
+                 { @offering.InstructorName	}
+             }
+             else
+             {
+                 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+                 { <text>TBD</text> }
+                 else
+                 { <a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))">@offering.InstructorName</a>	}
+             }
+								    </li>
+							    </ul>
+						    </li>
 
-		}
-	</div>
+						    <li><span class="descriptor">Meets: </span>
+							    <ul class="meets">
+								    <li><span class="days">
+									    <abbr title="Days Offered">
+										    @if (item.IsOnline == true)
+              { <text>Online</text> }
+              else
+              { @offering.Days }
+									    </abbr></span> <span class="times">
+										    <span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime).Replace(" ", "")-@String.Format("{0:t}", offering.EndTime).Replace(" ", "")
+									    </span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
+								    </li>
+							    </ul>
+						    </li>
+
+
+				    if (ViewBag.seatAvailbilityDisplayed == false)
+				    {
+							    <li class="availability-@(item.ID.ToString())">
+								    <span class="descriptor">Seats Available:
+								    </span>
+								    @if (@item.WaitlistCount > 0)
+				    {
+									    <strong class="seatsFull">class full, @item.WaitlistCount on waitlist</strong>
+									    <span class="course-updated"></span>
+				    }
+				    else
+				    {
+									    <strong class="seatsAvailable">@item.SeatsAvailable</strong>
+									    <span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">
+										    [update]</a></span>
+				    }
+							    </li>
+				    ViewBag.seatAvailbilityDisplayed = true;
+																																     }
+
+						    <li class="section-notes"><span class="descriptor">Notes: </span>
+						    @if (@item.Footnotes != null)
+			    {
+							    <ul>
+							    @foreach (string note in item.Footnotes)
+			     {
+								    <li><span class="label">@note</span></li>
+			     }
+							    </ul>
+			    }
+						    </li>
+		     } <!--end of repeat offered information -->
+
+				    </ul>
+			    </li>
+			    ViewBag.seatAvailbilityDisplayed = false;
+
+		    }
+	    </div> <!-- class-details -->
+
+        <div id="scheduleRightSidebar">
+
+            <div id="programWebsite">
+                <h2>Department</h2>
+			    <p><a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a></p>
+		    </div>
+
+       </div><!-- scheduleRightSidebar -->
+    </div>
 </div>
