@@ -61,9 +61,9 @@
 
 			    <h1 class="course-title">
 				    <span class="courseID">@item.CourseSubject @item.CourseNumber </span><span>@item.CourseTitle
-				    </span><span>• @item.Credits
-					    <abbr title="Credits ">
-						    CR</abbr></span></h1>
+				    </span><span>&#8226; @item.Credits
+					    <abbr title="Credit(s) ">
+						    Cr.</abbr></span></h1>
 
 			    <p class="prerequisite">
 			    </p>
@@ -107,7 +107,7 @@
 				    count++;
 			    }
 			    ViewBag.CourseTitle = item.CourseTitle;
-			    <div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle • @item.Credits <abbr title="Credit(s) ">CR</abbr></div>
+			    <div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle &#8226; @item.Credits <abbr title="Credit(s) ">Cr.</abbr></div>
 			    @Html.Raw("<ul class='course-block'>");
             }
 
