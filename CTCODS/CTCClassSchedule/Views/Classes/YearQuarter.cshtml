@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Ctc.Ods.Types.CoursePrefix>
 
 @{
-	ViewBag.PageTitle = ViewBag.FriendlyYRQ + " Credit Class Schedule "+ ViewBag.FriendlyYRQ.Substring(ViewBag.FriendlyYRQ.Length -4) +" at Bellevue College";
+	ViewBag.PageTitle = ViewBag.FriendlyYRQ + " Credit Class Schedule at Bellevue College";
 		String YearQuarter = ViewBag.YearQuarter;
 		String QueryStringAll = ViewBag.queryStringAll;
 }
@@ -69,13 +69,13 @@
 	 ViewBag.AlphabetCharacter++;
 		}
 
-			<div class="subject">
+			<li class="subject">
 				@{
 					routeParms.Remove("Subject");
 					routeParms.Add("Subject", item.Subject);
 				}
 				@Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null)
-			</div>
+			</li>
 		}
 
 			@if (ViewBag.ItemCount == 0) {

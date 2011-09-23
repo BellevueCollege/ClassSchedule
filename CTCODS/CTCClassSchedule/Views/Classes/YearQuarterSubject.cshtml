@@ -5,7 +5,7 @@
 	String YearQuarter = ViewBag.YearQuarter;
 	String subdir = ViewBag.currentAppSubdirectory;
 	String CourseTitle = "";
-	ViewBag.PageTitle = @ViewBag.YearQuarter + " " + ViewBag.Subject + " Credit Classes";
+    ViewBag.PageTitle = @ViewBag.YearQuarter + " " + ViewBag.Subject + " (" + @ViewBag.ProgramTitle + ") Credit Classes at Bellevue College";
 }
 <script type="text/javascript">
 
@@ -50,12 +50,14 @@
 <div id="scheduleMain">
 	@Html.Partial("quarterNavigation")
 	@Html.Partial("advancedFacetedSearch")
+    @Html.Partial("basicFacetedSearch")
 	<div id="scheduleContent">
 	<h1 class="course-title">
 		<span class="courseID">
 			@ViewBag.ProgramTitle
 		</span>
 	</h1>
+     @Html.Partial("subjectNavigation")
 		<div id="programWebsite">
 			<a href="@ViewBag.ProgramUrl" class="programWebsite" target="_blank">Program Website</a>
 		</div>
@@ -64,7 +66,7 @@
 		foreach (var course in Model.Select(c => new { c.CourseID, c.CourseSubject, c.CourseNumber, c.CourseTitle, c.Credits }).Distinct())
 		{
 		<h2 class="classHeading">
-			@Html.ActionLink(string.Format("{0} {1} {2} CR", course.CourseSubject, course.CourseNumber, course.CourseTitle, course.Credits),
+			@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", course.CourseSubject, course.CourseNumber, course.CourseTitle, course.Credits),
 											"ClassDetails",
 											"Classes",
 											new
@@ -135,7 +137,7 @@
 							</span>
 							<span class="times">
 								<span class="descriptor">at </span>
-								@String.Format("{0:t}", item.StartTime)-@String.Format("{0:t}", item.EndTime)
+								@String.Format("{0:t}", item.StartTime).Replace(" ", "")-@String.Format("{0:t}", item.EndTime).Replace(" ", "")
 							</span>
 							<span class="room">
 								<span class="descriptor">in </span>

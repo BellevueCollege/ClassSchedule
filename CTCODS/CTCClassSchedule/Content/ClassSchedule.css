@@ -225,6 +225,7 @@ textarea
 	font-size: 12px;
 	line-height: 21px;
     color: #333;
+    clear: left;
 }
 .sidenav h2 {
     background-color: #999;
@@ -833,14 +834,14 @@ ul.class-description
 
 .classDetails
 {
-	margin-bottom: 10px;
 }
 
-.classHeading
-{
-	margin-top: 20px;
+.classHeading {
+	font-size: 15px;
 }
-
+.classHeading a { text-decoration: none;}
+.classHeading a:hover,
+.classHeading a:focus { text-decoration: underline;}
 .course-updated a:hover
 {
 	cursor:pointer;
