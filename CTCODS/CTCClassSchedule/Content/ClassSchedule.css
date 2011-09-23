@@ -316,42 +316,45 @@ ul.subjectSearch li
     overflow: hidden;
 }
 
-#scheduleContentNoSidebar
-{
-	margin-left: 0px;
-	padding-top: 15px;
+#scheduleContentNoSidebar{
+    overflow: hidden;
+    padding-bottom: 35px;
+    padding-top: 28px;
 }
 
-#scheduleRightSidebar
-{
-	width: 200px;
+#scheduleRightSidebar{
+	width: 240px;
 	float: right;
-	display: inline;
-	margin-top: 80px;
-	font-size: 10px;
-
-
+	margin-top: 21px;
 }
+
 
 #scheduleRightSidebar li
 {
 	list-style: disc;
 	margin-left: 10px;
 }
+#class-details {
+    float: left;
+    padding: 0 20px;
+    width: 600px;
 
-#scheduleMiddle
-{
-	float: left;
-	width: 500px;
 }
+#scheduleMiddle {
+	float: left;
+	width: 500px;}
 
-#otherClassesMsg, #thanksMsg
-{
+#programWebsite {
+    padding: 0 20px;}
+
+#programWebsite h2 {
+    font-size: 13px; font-weight: bold;}
+
+#thanksMsg {
 	padding: 10px;
 	border: 1px solid #000;
-	margin: 20px 0px;
 }
-
+#thanksMsg h2 { margin-top:0;}
 #scheduleRightSidebar p
 {
 	margin: 6px 0px;
@@ -752,11 +755,10 @@ ul.class-description
 {
 	width: 76px;
 }
-.times
-{
+.times{
 	width: 120px;
-    font-s
-}
+    text-transform: lowercase;}
+
 .room
 {
 	width: 80px;
@@ -765,7 +767,8 @@ ul.class-description
 {
 	width: 276px;
 }
-
+.seatsAvailable {}
+.seatsFull {}
 
 
 .cancelled
@@ -859,11 +862,7 @@ ul.class-description
 	cursor:pointer;
 }
 
-#courseDescription
-{
-	font-size: 12px;
-	line-height: 14px;
-}
+#courseDescription{}
 
 #classes-footer {
 	border-top: 1px solid #ccc;
