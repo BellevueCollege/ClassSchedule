@@ -1161,20 +1161,50 @@ ul.class-description
 
 
 
-#pagerNums
-{
-	width: 200px;
-	margin-left: auto;
-	margin-right: auto;
+#pager {
+    border-top: 1px solid #D3D3D3;
+    overflow: hidden;
+    margin: 0 20px 35px 190px;
+}
+
+#pagerNums {
+    text-align: center;
 	font-weight: bold;
-
-
 }
 
 #pagerNums a
 {
-	text-decoration: underline;
 	color: #003D79;
+    display: inline-block;
+    padding: 0 4px;
+    text-decoration: underline;
+}
+#pagerNums.selected {
+    color: #003D79;
+    display: inline-block;
+    padding: 0 4px;
+}
+#pagerNums a:hover, #pagerNums a:focus {
+    background-color: #003d79;
+    color: White;
+}
+#pagerPages, #pagerArrowLeft, #pagerArrowRight {
+    background-color: #F0F0F0;
+    line-height: 20px;
+    display: inline-block;
+    padding: 0 8px;
+}
+
+#pagerPages{  padding-right: 4px;   }
+
+#pagerArrowLeft {
+    border-right: 1px solid white;
+    text-decoration: none;
+}
+
+#pagerArrowRight {
+    border-left: 1px solid white;
+    text-decoration: none;
 }
 
 #pagerInfo

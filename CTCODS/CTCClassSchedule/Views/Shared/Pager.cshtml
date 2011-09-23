@@ -32,26 +32,21 @@
 	<div id="pagerNums">
 	@if (ViewBag.ItemCount > 40) {
 
-		<a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@prev_offset"> &lt;</a> <text>| </text>
+		<a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@prev_offset" id="pagerArrowLeft">&lt; Previous</a> @Html.Raw("<span id='pagerPages'>Pages: ")
 		for (int i = 0; i < Math.Ceiling((double)ViewBag.ItemCount / 40.0); i++)
 		{
 			if (ViewBag.p_offset == i)
 			{
-				@(i + 1) <text>| </text>
+				<span class="selected">@(i + 1)</span>
 			}
 			else {
-				<a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@i"> @(i + 1)</a> <text>| </text>
+				<a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@i"> @(i + 1)</a>
 			}
 
 		}
-		<a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@next_offset"> &gt;</a>
+		@Html.Raw("</span>")
+        <a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@next_offset" id="pagerArrowRight">Next &gt;</a>
  }
-	</div>
-	<div id="pagerInfo">
-	@if (ViewBag.ItemCount > 40) {
-		<text>More Results</text>
-	}
-
 	</div>
 
 </div>
