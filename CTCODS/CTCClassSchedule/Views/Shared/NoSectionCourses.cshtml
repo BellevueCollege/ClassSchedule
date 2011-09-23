@@ -2,24 +2,20 @@
 
 
 
-<div id="NotOffered">
-<h2>Not Offered @ViewBag.quarter</h2>
+<div id="NotOfferedThisQuarter">  <!-- NATE/SHAWN: This entire div should not show if there are no classes to list below -->
+<h2>Classes not offered @ViewBag.quarter, but match your search:</h2> <!-- NATE/SHAWN: Can the quarter be set up to show a space between quarter and year? as in, Fall 2011 -->
 
 
-<ul class="course-block-no-section">
+<ul>
 @foreach (var item in Model.SearchResultNoSection) {
 
-
-	<li class="class-listing">
-		<span class="class-number">
-			<span class="descriptor">
-				Item	number:
-			</span>
-			@Html.DisplayFor(modelItem => item.CourseID)
-		</span>
-		<ul class="class-description">
-				<li class="Classdescription"><span class="descriptor">Description: </span>@Html.DisplayFor(modelItem => item.CourseDescription)</li>
-		</ul>
+	<li>
+        <a href="[LINK GOES HERE]">  <!-- NATE/SHAWN: add link to class details page -->
+        <span class="courseID">@Html.DisplayFor(modelItem => item.CourseID)</span>
+        <span class="courseTitle">[CourseTitle Goes HERE]</span>  <!-- NATE/SHAWN: add class title -->
+        <span class="courseCredits">&#8226; [CourseCredits Goes HERE] <abbr title="Credit(s) ">Cr.</abbr></span> <!-- NATE/SHAWN: add class credits -->
+        </a><br />
+        <span class="courseDescription">@Html.DisplayFor(modelItem => item.CourseDescription) </span>
 	</li>
 
 }

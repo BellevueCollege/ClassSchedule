@@ -598,13 +598,23 @@ li.active a
 
 
 /****** START SCHEDULE BLOCK CODE ******/
-#NotOffered h2
-{
-	background-color: #ddd;
-    margin-left: 190px;
+
+#NotOfferedThisQuarter {
+	background-color: #eee;
+    padding: 10px 20px 18px 20px;
+    margin-left: 170px;
+    margin-bottom: 35px;
 }
 
-
+#NotOfferedThisQuarter h2
+{
+    font-size: 15px;
+    margin-top: 0;
+}
+#NotOfferedThisQuarter li {
+    padding-top: 7px;
+}
+#NotOfferedThisQuarter em.keyword { font-weight: bold;}
 
 h2.course-title, h3.course-title
 {
@@ -1200,12 +1210,14 @@ ul.class-description
 {
 	float: left;
 	width: 590px;
+    font-size: 13px;
+
 }
 
 #searchPageNum
 {
 	float: right;
-	width: 180px;
+	margin-right: 20px;
 }
 
 #courseDescription em.keyword, a em.keyword

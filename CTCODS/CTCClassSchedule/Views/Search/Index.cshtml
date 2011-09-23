@@ -72,9 +72,9 @@
 	<div id="scheduleContent">
 
 	<div id="searchHeaderInfo">
-		<div id="searchResultsMsg">
-			"@(ViewBag.searchterm)" found @ViewBag.ItemCount @sectionDesc in @ViewBag.SubjectCount @classDesc
-		</div>
+		<h1 id="searchResultsMsg">
+			<strong>"@(ViewBag.searchterm)"</strong> found @ViewBag.ItemCount @sectionDesc in @ViewBag.SubjectCount @classDesc
+		</h1>
 		<div id="searchPageNum">
 			page @ViewBag.CurrentPage of @ViewBag.TotalPages
 		</div>
@@ -91,21 +91,18 @@
 				count++;
 			}
 			<h2 class="classHeading">
-				@Html.ActionLink(item.CourseSubject + " " + item.CourseNumber + " " + item.CourseTitle + " " + item.Credits, "ClassDetails", "Classes", new { YearQuarterID = quarter, Subject = item.CourseSubject, ClassNum = item.CourseNumber }, null)
+				@Html.ActionLink(item.CourseSubject + " " + item.CourseNumber + " " + item.CourseTitle + " • " + item.Credits + " Cr.", "ClassDetails", "Classes", new { YearQuarterID = quarter, Subject = item.CourseSubject, ClassNum = item.CourseNumber }, null)
 			</h2>
 
 
 
 
 
-			<div id="courseDescription">
+			<p id="courseDescription">
 				@*Html.Raw(item.CourseDescriptions[0].Description.Replace(ViewBag.searchterm, "<em class='keyword'>" + ViewBag.searchterm + "</em>"))) *@
 				@item.CourseDescriptions[0].Description
-			</div>
-			<p class="classDetails">
-				@Html.ActionLink("View Class Details", "ClassDetails",  "Classes", new { YearQuarterID = quarter, Subject = item.CourseSubject, ClassNum = item.CourseNumber }, null)
+                @Html.ActionLink("View Class Details", "ClassDetails",  "Classes", new { YearQuarterID = quarter, Subject = item.CourseSubject, ClassNum = item.CourseNumber }, null)
 			</p>
-
 
 			@Html.Raw("<ul class='course-block'>");
 		}
@@ -136,7 +133,7 @@
 						if (string.IsNullOrWhiteSpace(@offering.InstructorName))
 						{ <text>TBD</text> }
 						else
-						{ <a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))" target="_blank">@offering.InstructorName</a>	}
+						{ <a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))">@offering.InstructorName</a>	}
 					}
 								</li>
 							</ul>
@@ -156,7 +153,7 @@
 
 
 									</abbr></span> <span class="times">
-										<span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime)-@String.Format("{0:t}", offering.EndTime)
+										<span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime).Replace(" ", "")-@String.Format("{0:t}", offering.EndTime).Replace(" ", "")
 									</span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
 								</li>
 							</ul>
@@ -166,11 +163,11 @@
 																																	if (ViewBag.seatAvailbilityDisplayed == false)
 																																	{
 							<li class="availability-@(item.ID.ToString())">
-								<span class="descriptor">Seat Availability:
+								<span class="descriptor">Seats Available:
 								</span>
 								@if (@item.WaitlistCount > 0)
 				{
-									<strong class="seatsAvailable">class full, @item.WaitlistCount on waitlist</strong>
+									<strong class="seatsFull">class full, @item.WaitlistCount on waitlist</strong>
 									<span class="course-updated"></span>
 				}
 				else
@@ -225,11 +222,12 @@
 	</div>
 
 
-	@{Html.RenderPartial("Pager");}
-
-	@if(ViewBag.TotalPages == 1){
+    @if(ViewBag.TotalPages == 1){
 		Html.RenderPartial("NoSectionCourses");
 	}
+
+	@{Html.RenderPartial("Pager");}
+
 
 
 
