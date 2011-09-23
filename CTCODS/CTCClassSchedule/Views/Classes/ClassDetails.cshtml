@@ -58,11 +58,11 @@
 		if (@ViewBag.titleDisplayed == false)
 		{
 
-			<h3 class="course-title">
+			<h1 class="course-title">
 				<span class="courseID">@item.CourseSubject @item.CourseNumber </span><span>@item.CourseTitle
 				</span><span>• @item.Credits
 					<abbr title="Credits ">
-						CR</abbr></span></h3>
+						CR</abbr></span></h1>
 		<div id="programWebsite">
 			<a href="@ViewBag.ProgramUrl" class="programWebsite" target="_blank">Program Website</a>
 		</div>
@@ -72,15 +72,15 @@
 							ViewBag.titleDisplayed = true;
 
 			<div id="courseDescription">
-				<h3>
-					Description:</h3>
+				<h2>
+					Description:</h2>
 				@(item.CourseDescriptions.Count <= 0 || string.IsNullOrWhiteSpace(item.CourseDescriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : item.CourseDescriptions[0].Description)
 			</div>
 
 		if (!string.IsNullOrWhiteSpace(ViewBag.CourseOutcome))
 		{
 			<div id="courseOutcome">
-				<h3>Outcomes:</h3>
+				<h2>Outcomes:</h2>
 				@Html.Raw(ViewBag.CourseOutcome)
 			</div>
 		}
@@ -92,7 +92,7 @@
 		{
 
 
-			<h3 class="course-YRQ">@item.Yrq.FriendlyName</h3>
+			<h2 class="course-YRQ">@item.Yrq.FriendlyName</h2>
 			ViewBag.currentQuarter = item.ID.ToString().Substring(4, 4);
 			ViewBag.CourseTitle = "";
 
