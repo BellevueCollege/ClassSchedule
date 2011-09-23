@@ -1,6 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using System.Web.Routing;
-
+using MvcMiniProfiler;
 
 namespace CTCClassSchedule
 {
@@ -33,12 +34,48 @@ namespace CTCClassSchedule
 
 		}
 
+		/// <summary>
+		///
+		/// </summary>
 		protected void Application_Start()
 		{
 			AreaRegistration.RegisterAllAreas();
 
+#if ENABLE_PROFILING
+			// Add profiling view engine
+			var copy = ViewEngines.Engines.ToList();
+			ViewEngines.Engines.Clear();
+			foreach (var item in copy)
+			{
+					ViewEngines.Engines.Add(new ProfilingViewEngine(item));
+			}
+
+			// Add profiling action filter
+			GlobalFilters.Filters.Add(new ProfilingActionFilter());
+#endif
+
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		protected void Application_BeginRequest()
+		{
+#if ENABLE_PROFILING
+			MiniProfiler.Start();
+#endif
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		protected void Application_EndRequest()
+		{
+#if ENABLE_PROFILING
+			MiniProfiler.Stop();
+#endif
 		}
 	}
 }

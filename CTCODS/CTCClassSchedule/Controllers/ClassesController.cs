@@ -13,6 +13,7 @@ using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
 using CTCClassSchedule.Properties;
+using MvcMiniProfiler;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -20,6 +21,7 @@ namespace CTCClassSchedule.Controllers
 	{
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
+		readonly private MiniProfiler _profiler = MiniProfiler.Current;
 
 		#region controller actions
 
@@ -53,7 +55,11 @@ namespace CTCClassSchedule.Controllers
 			using (OdsRepository respository = new OdsRepository())
 			{
 				getCurrentFutureYRQs(respository);
-				IList<CoursePrefix> courses = respository.GetCourseSubjects();
+				IList<CoursePrefix> courses;
+				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
+				{
+					courses = respository.GetCourseSubjects();
+				}
 				IEnumerable<String> alphabet;
 
 				ViewBag.AlphabetArray = new bool[26];
@@ -123,8 +129,11 @@ namespace CTCClassSchedule.Controllers
 				getCurrentFutureYRQs(respository);
 
 				// TODO: GetCourses() can take a Subject parameter - returning a smaller dataset which doesn't need to be further filtered.
-				IList<Course> courses = respository.GetCourses(facets);
-
+				IList<Course> courses;
+				using (_profiler.Step("ODSAPI::GetCourses()"))
+				{
+					courses = respository.GetCourses(facets);
+				}
 				if (Subject != null)
 				{
 					IEnumerable<Course> coursesEnum;
@@ -172,11 +181,7 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.avail = avail;
 
-
 			ViewBag.LinkParams = getLinkParams();
-
-
-
 
 			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 
@@ -185,20 +190,25 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.YRQ = yrq.ToString();
 			ViewBag.FriendlyYRQ = yrq.FriendlyName;
 			ViewBag.Title = ViewBag.Subject + "Classes for " + @ViewBag.Yearquarter;
+
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
 			using (OdsRepository respository = new OdsRepository())
 			{
 				getCurrentFutureYRQs(respository);
 
-				IList<CoursePrefix> courses = respository.GetCourseSubjects(yrq, facets);
+				IList<CoursePrefix> courses;
+				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
+				{
+					courses = respository.GetCourseSubjects(yrq, facets);
+				}
 
 				IEnumerable<String> alphabet;
 				ViewBag.AlphabetArray = new bool[26];
 
 				alphabet = from c in courses
-									 orderby c.Title
-									 select c.Title.Substring(0, 1);
+										orderby c.Title
+										select c.Title.Substring(0, 1);
 
 				alphabet = alphabet.Distinct();
 				ViewBag.Alphabet = alphabet;
@@ -211,6 +221,7 @@ namespace CTCClassSchedule.Controllers
 												select c;
 
 					coursesEnum = coursesEnum.Distinct();
+
 					ViewBag.ItemCount = coursesEnum.Count();
 
 					return View(coursesEnum);
@@ -265,8 +276,11 @@ namespace CTCClassSchedule.Controllers
 				var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
 																	 select s);
 
-				IList<Section> sections = respository.GetSections(Subject, YRQ, facets);
-
+				IList<Section> sections;
+				using (_profiler.Step("ODSAPI::GetSections()"))
+				{
+					sections = respository.GetSections(Subject, YRQ, facets);
+				}
 				IEnumerable<SectionWithSeats> sectionsEnum;
 				sectionsEnum = (
 											from c in sections
@@ -316,8 +330,11 @@ namespace CTCClassSchedule.Controllers
 					// TODO: move this declaration somewhere it can more easily be re-used
 					IList<ISectionFacet> facets = new List<ISectionFacet> {new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay)};
 
-					IList<Section> sections = respository.GetSections(courseID, facetOptions: facets);
-
+					IList<Section> sections;
+					using (_profiler.Step("ODSAPI::GetSections()"))
+					{
+						sections = respository.GetSections(courseID, facetOptions: facets);
+					}
 					IEnumerable<SectionWithSeats> sectionsEnum;
 					sectionsEnum = (
 								from c in sections
@@ -429,23 +446,25 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		private void getCurrentFutureYRQs(OdsRepository respository)
 		{
-			IList<YearQuarter> currentFutureQuarters;
-			currentFutureQuarters = respository.GetRegistrationQuarters(4);
-			ViewBag.QuarterOne = currentFutureQuarters[0];
-			ViewBag.QuarterTwo = currentFutureQuarters[1];
-			ViewBag.QuarterThree = currentFutureQuarters[2];
-			ViewBag.QuarterFour = currentFutureQuarters[3];
+			using (_profiler.Step("getCurrentFutureYRQs()"))
+			{
+				IList<YearQuarter> currentFutureQuarters;
+				currentFutureQuarters = respository.GetRegistrationQuarters(4);
+				ViewBag.QuarterOne = currentFutureQuarters[0];
+				ViewBag.QuarterTwo = currentFutureQuarters[1];
+				ViewBag.QuarterThree = currentFutureQuarters[2];
+				ViewBag.QuarterFour = currentFutureQuarters[3];
 
-			ViewBag.QuarterOneFriendly = currentFutureQuarters[0].FriendlyName;
-			ViewBag.QuarterTwoFriendly = currentFutureQuarters[1].FriendlyName;
-			ViewBag.QuarterThreeFriendly = currentFutureQuarters[2].FriendlyName;
-			ViewBag.QuarterFourFriendly = currentFutureQuarters[3].FriendlyName;
+				ViewBag.QuarterOneFriendly = currentFutureQuarters[0].FriendlyName;
+				ViewBag.QuarterTwoFriendly = currentFutureQuarters[1].FriendlyName;
+				ViewBag.QuarterThreeFriendly = currentFutureQuarters[2].FriendlyName;
+				ViewBag.QuarterFourFriendly = currentFutureQuarters[3].FriendlyName;
 
-			ViewBag.QuarterOneURL = ViewBag.QuarterOneFriendly.Replace(" ", "");
-			ViewBag.QuarterTwoURL = ViewBag.QuarterTwoFriendly.Replace(" ", "");
-			ViewBag.QuarterThreeURL = ViewBag.QuarterThreeFriendly.Replace(" ", "");
-			ViewBag.QuarterFourURL = ViewBag.QuarterFourFriendly.Replace(" ", "");
-
+				ViewBag.QuarterOneURL = ViewBag.QuarterOneFriendly.Replace(" ", "");
+				ViewBag.QuarterTwoURL = ViewBag.QuarterTwoFriendly.Replace(" ", "");
+				ViewBag.QuarterThreeURL = ViewBag.QuarterThreeFriendly.Replace(" ", "");
+				ViewBag.QuarterFourURL = ViewBag.QuarterFourFriendly.Replace(" ", "");
+			}
 		}
 
 		// TODO: Jeremy, make optional AND configurable in web.config
