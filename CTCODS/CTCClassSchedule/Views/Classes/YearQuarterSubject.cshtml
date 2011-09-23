@@ -5,6 +5,8 @@
 	String YearQuarter = ViewBag.YearQuarter;
 	String subdir = ViewBag.currentAppSubdirectory;
 	String CourseTitle = "";
+	string PreviousCourseID = string.Empty;
+	string PreviousSectionID = string.Empty;
     ViewBag.PageTitle = @ViewBag.YearQuarter + " " + ViewBag.Subject + " (" + @ViewBag.ProgramTitle + ") Credit Classes at Bellevue College";
 }
 <script type="text/javascript">
@@ -61,19 +63,22 @@
 		<div id="programWebsite">
 			<a href="@ViewBag.ProgramUrl" class="programWebsite" target="_blank">Program Website</a>
 		</div>
-		@using (_profiler.Step("Rendering courses"))
+		@using (_profiler.Step("Rendering sections"))
 	{
-		foreach (var course in Model.Select(c => new { c.CourseID, c.CourseSubject, c.CourseNumber, c.CourseTitle, c.Credits }).Distinct())
+		foreach (var sec in Model)
 		{
+			if(sec.CourseID != PreviousCourseID)
+			{
+				<text>
 		<h2 class="classHeading">
-			@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", course.CourseSubject, course.CourseNumber, course.CourseTitle, course.Credits),
+			@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, sec.Credits),
 											"ClassDetails",
 											"Classes",
 											new
 											{
 												YearQuarterID = YearQuarter,
-												Subject = course.CourseSubject,
-												ClassNum = course.CourseNumber
+												Subject = sec.CourseSubject,
+												ClassNum = sec.CourseNumber
 											}, null)
 		</h2>
 		<p class="classDetails">
@@ -81,29 +86,27 @@
 											new
 											{
 												YearQuarterID = YearQuarter,
-												Subject = course.CourseSubject,
-												ClassNum = course.CourseNumber
+												Subject = sec.CourseSubject,
+												ClassNum = sec.CourseNumber
 											}, null)
 		</p>
 
 		<ul class='course-block'>
-		@using (_profiler.Step("Rendering sections"))
-	{
-		foreach (var sec in Model.Where(s => s.CourseID == course.CourseID).Select(s => s))
-		{
+		</text>
+		}
 			<li class="section-listing">
 			<span class="item-number"><span class="descriptor">Item number: </span>@(sec.ID.ItemNumber)</span>
 			<ul class="section-details">
-			@{
-																																			int rowCount = 0;
-		}
+
 		@using (_profiler.Step("Rendering offered items"))
 	{
 		foreach (var item in sec.Offered)
 		{
-			rowCount++;
-
-				<li class="section">@Html.Raw(rowCount <= 1 ? sec.SectionCode : "&nbsp;")</li>
+			if(sec.ID.ToString() != PreviousSectionID) {
+				<li class="section">@sec.SectionCode</li>
+		} else {
+				<li class="section">&nbsp;</li>
+			}
 				<li class="instructor">
 					<span class="descriptor">Instructor:</span>
 					<ul>
@@ -146,9 +149,8 @@
 						</li>
 					</ul>
 				</li>
-
-	 if (rowCount <= 1)
-	 {
+	if(sec.ID.ToString() != PreviousSectionID)
+ {
 				<li class="availability-@(sec.ID.ToString())">
 					<span class="descriptor">Seat Availability: </span>
 				@if (@sec.WaitlistCount > 0)
@@ -165,8 +167,9 @@
 	 }
 	 else
 	 {
-		 <li>&nbsp;</li>
+				<li>&nbsp;</li>
 	 }
+			PreviousSectionID = sec.ID.ToString();
 		} @* end foreach(item) *@
 	}
 				<li class="section-notes">
@@ -183,10 +186,12 @@
 				</li>
 			</ul>
 			</li>
+			if (sec.CourseID != PreviousCourseID)
+			{
+		@:</ul>
+			}
+			PreviousCourseID = sec.CourseID;
 		} @* end foreach(sec) *@
-	}
-		</ul>
-		} @* end foreach(course) *@
 	}
 
 		@if (ViewBag.ItemCount == 0)
