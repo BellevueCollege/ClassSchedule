@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Ctc.Ods.Types.Course>
 @{
-	ViewBag.PageTitle = ViewBag.Subject + "-" + ViewBag.Subject + " Classes at Bellevue College!";
+    ViewBag.PageTitle = ViewBag.Subject + "-" + @ViewBag.ProgramTitle + " Classes at Bellevue College";
 }
 
 <div id="scheduleMain">
@@ -64,6 +64,6 @@
 
 		    </div>
        </div><!-- scheduleRightSidebar -->
-	</div>
+
 </div>
 </div>
