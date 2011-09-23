@@ -8,6 +8,7 @@ using System.IO;
 using System.Web.UI;
 using System.Web.Caching;
 using System.Text;
+using System.Configuration;
 
 // from http://blog.stevensanderson.com/2008/10/15/partial-output-caching-in-aspnet-mvc/
 // hacked slightly to allow for 0 url parameter pages to be cached
@@ -19,9 +20,17 @@ namespace CTCClassSchedule
 		// This hack is optional;
 		private static MethodInfo _switchWriterMethod = typeof(HttpResponse).GetMethod("SwitchWriter", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
 
-		public ActionOutputCacheAttribute(int cacheDuration)
+		public ActionOutputCacheAttribute(string cacheDuration = "DefaultCacheTime")
 		{
-			_cacheDuration = cacheDuration;
+			if (cacheDuration == "DefaultCacheTime")
+			{
+				_cacheDuration = 1800;
+			}
+			else
+			{
+				_cacheDuration = Convert.ToInt32(ConfigurationManager.AppSettings[cacheDuration]);
+			}
+
 		}
 
 		private int _cacheDuration;
