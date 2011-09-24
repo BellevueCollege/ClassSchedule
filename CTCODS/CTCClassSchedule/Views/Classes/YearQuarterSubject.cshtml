@@ -4,10 +4,12 @@
 	MiniProfiler _profiler = MiniProfiler.Current;
 	String YearQuarter = ViewBag.YearQuarter;
 	String subdir = ViewBag.currentAppSubdirectory;
-	String CourseTitle = "";
+	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
+
 	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;
-    ViewBag.PageTitle = @ViewBag.YearQuarter + " " + ViewBag.Subject + " (" + @ViewBag.ProgramTitle + ") Credit Classes at Bellevue College";
+
+  ViewBag.PageTitle = YearQuarter + " " + ViewBag.Subject + " (" + @ViewBag.ProgramTitle + ") Credit Classes at Bellevue College";
 }
 <script type="text/javascript">
 
@@ -69,26 +71,19 @@
 		{
 			if(sec.CourseID != PreviousCourseID)
 			{
+				_routeValues["Subject"] = sec.CourseSubject;
+				_routeValues["ClassNum"] = sec.CourseNumber;
+
 				<text>
 		<h2 class="classHeading">
 			@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, sec.Credits),
 											"ClassDetails",
 											"Classes",
-											new
-											{
-												YearQuarterID = YearQuarter,
-												Subject = sec.CourseSubject,
-												ClassNum = sec.CourseNumber
-											}, null)
+											new RouteValueDictionary(_routeValues),
+											null)
 		</h2>
 		<p class="classDetails">
-			@Html.ActionLink("View Class Details", "ClassDetails", "Classes",
-											new
-											{
-												YearQuarterID = YearQuarter,
-												Subject = sec.CourseSubject,
-												ClassNum = sec.CourseNumber
-											}, null)
+			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
 		</p>
 
 		<ul class='course-block'>

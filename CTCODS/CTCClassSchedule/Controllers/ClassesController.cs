@@ -281,7 +281,6 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.LinkParams = getLinkParams();
 
-
 			ViewBag.displayedCourseNum = 0;
 			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.Subject = Subject;
@@ -295,6 +294,11 @@ namespace CTCClassSchedule.Controllers
 			{
 				getCurrentFutureYRQs(respository);
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
+
+				// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
+				IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
+				routeValues.Add("YearQuarterID", YearQuarter);
+				ViewBag.RouteValues = routeValues;
 
 				var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
 																	 select s);
@@ -591,6 +595,7 @@ namespace CTCClassSchedule.Controllers
 
 		}
 
+		//TODO: Combine getProgramUrl & getProgramTitle into a single call that returns both
 		private string getProgramUrl(string Subject)
 		{
 			string ProgramURL = "";
