@@ -344,11 +344,6 @@ namespace CTCClassSchedule.Controllers
 					ViewBag.ActiveFlexTelecourse = "";
 					ViewBag.ActiveFlexReducedTrip = "";
 					ViewBag.ActiveFlexAll = "";
-
-
-
-					ViewBag.QuarterURL = YearQuarter;
-
 				}
 
 				/// <summary>
