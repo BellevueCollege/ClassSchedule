@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Ctc.Ods;
 using Ctc.Ods.Data;
@@ -20,20 +21,32 @@ namespace CTCClassSchedule.Controllers
 	public class ClassesController : Controller
 	{
 		#region controller member vars
+		readonly private MiniProfiler _profiler = MiniProfiler.Current;
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
-		readonly private MiniProfiler _profiler = MiniProfiler.Current;
+		private string _currentAppSubdirectory;
 
-		//setting the cache time for each View in seconds
-		enum CacheTime {
-			Index = 72000,
-			AllClasses = 18000,
-			Subject = 18000,
-			YearQuarter = 1800,
-			YearQuarterSubject = 1800,
-			ClassDetails = 1800
+		/// <summary>
+		///
+		/// </summary>
+		private string CurrentAppSubdirectory
+		{
+			get
+			{
+				if (string.IsNullOrWhiteSpace(_currentAppSubdirectory))
+				{
+					if (ConfigurationManager.AppSettings != null)
+					{
+						_currentAppSubdirectory = ConfigurationManager.AppSettings["currentAppSubdirectory"] ?? string.Empty;
+					}
+					else
+					{
+						_currentAppSubdirectory = string.Empty;
+					}
+				}
+				return _currentAppSubdirectory;
+			}
 		}
-
 		#endregion
 
 		#region controller actions
@@ -61,7 +74,7 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult AllClasses(string letter)
 		{
 
-			setViewBagVars("", "", "", "", "", letter);
+			setViewBagVars("", "", letter);
 			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? " (All)" : " (" + letter.ToUpper() + ")");
 			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.AlphabetCharacter = 0;
@@ -115,7 +128,7 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult Subject(string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail)
 		{
 			ViewBag.Subject = Subject;
-			setViewBagVars("", "", "", "", avail, "");
+			setViewBagVars("", avail, "");
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
 			ViewBag.day_su = day_su;
@@ -141,8 +154,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.Title = "All " +  @Subject + " classes";
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
-			ViewBag.ProgramTitle = getProgramTitle(Subject);
-			ViewBag.ProgramUrl = getProgramUrl(Subject);
+			setProgramInfo(Subject);
 
 			using (OdsRepository respository = new OdsRepository())
 			{
@@ -181,7 +193,7 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter)
 		{
 			ViewBag.WhichClasses = (letter == null || letter == "" ? " (All)" : " (" + letter.ToUpper() + ")");
-			setViewBagVars(YearQuarter, "", "", "", avail, letter);
+			setViewBagVars(YearQuarter, avail, letter);
 
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
@@ -265,7 +277,7 @@ namespace CTCClassSchedule.Controllers
 		[ActionOutputCache("YearQuarterSubjectCacheTime")] // Caches for 30 minutes
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail)
 		{
-			setViewBagVars(YearQuarter, "", "", "", avail, "");
+			setViewBagVars(YearQuarter, avail, "");
 
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
@@ -285,8 +297,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.Subject = Subject;
 
-			ViewBag.ProgramTitle = getProgramTitle(Subject);
-			ViewBag.ProgramUrl = getProgramUrl(Subject);
+			setProgramInfo(Subject);
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
@@ -342,7 +353,8 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.CourseOutcome = getCourseOutcome(Subject, ClassNum);
 			ViewBag.Title = @Subject + " " + ClassNum + " sections";
-			ViewBag.ProgramUrl = getProgramUrl(Subject);
+
+			setProgramInfo(Subject);
 
 			ViewBag.LinkParams = getLinkParams();
 
@@ -570,78 +582,59 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// Sets all of the common ViewBag variables
 		/// </summary>
-		private void setViewBagVars(string YearQuarter, string flex, string time, string days, string avail, string letter)
+		private void setViewBagVars(string YearQuarter, string avail, string letter)
 		{
-			if (ConfigurationManager.AppSettings != null)
-			{
-				ViewBag.currentAppSubdirectory = ConfigurationManager.AppSettings["currentAppSubdirectory"];
-			}
+			ViewBag.currentAppSubdirectory = CurrentAppSubdirectory;
 			ViewBag.ErrorMsg = "";
 
-			ViewBag.YearQuarter = YearQuarter;
 			if (YearQuarter != "")
 			{
 				ViewBag.YearQuarterHP = Ctc.Ods.Types.YearQuarter.ToYearQuarterID(YearQuarter);
-
 			}
+			ViewBag.YearQuarter = YearQuarter ?? "all";
 
 			ViewBag.YearQuarter_a_to_z = "/" + YearQuarter;
 			ViewBag.letter = letter;
-			ViewBag.YearQuarter = YearQuarter ?? "all";
 			ViewBag.avail = avail ?? "all";
 			ViewBag.activeClass = " class=active";
 			ViewBag.currentUrl = Request.Url.AbsolutePath;
-			ViewBag.QuarterURL = YearQuarter;
-
 		}
 
-		//TODO: Combine getProgramUrl & getProgramTitle into a single call that returns both
-		private string getProgramUrl(string Subject)
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="Subject"></param>
+		private void setProgramInfo(string Subject)
 		{
-			string ProgramURL = "";
+			const string DEFAULT_TITLE = "** NO TITLE FOUND **";
+			const string DEFAULT_URL = "";
+
 			var specificProgramInfo = from s in _programdb.ProgramInformation
 																where s.Abbreviation == Subject
 																select s;
 
-			// TODO: should this be a loop? Only the last item is being used.
-			foreach (ProgramInformation program in specificProgramInfo)
+			if (specificProgramInfo.Count() > 0)
 			{
-				ProgramURL = program.Url;
-			}
+				var program = specificProgramInfo.Take(1).Single();
 
+				ViewBag.ProgramTitle = program.Title ?? DEFAULT_TITLE;
 
-			//if the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
-			//just return it, otherwise prepend iwth the current school url.
-			// TODO: should this be .StartsWith()?
-			if (ProgramURL.Contains("http://"))
-			{
-				return ProgramURL;
+				string url = program.Url ?? DEFAULT_URL;
+
+				//if the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
+				//just return it, otherwise prepend iwth the current school url.
+				if (!Regex.IsMatch(url, @"^https?://"))
+				{
+					url =  ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(CurrentAppSubdirectory).UriCombine(url);
+				}
+				ViewBag.ProgramUrl = url;
 			}
 			else
 			{
-				ProgramURL = ConfigurationManager.AppSettings["currentSchoolUrl"] + ConfigurationManager.AppSettings["currentAppSubdirectory"] + ProgramURL;
-
+				ViewBag.ProgramTitle = DEFAULT_TITLE;
+				ViewBag.ProgramUrl = DEFAULT_URL;
 			}
-
-			return ProgramURL;
 		}
-
-		private string getProgramTitle(string Subject)
-		{
-			string ProgramTitle = "";
-			var specificProgramInfo = from s in _programdb.ProgramInformation
-																where s.Abbreviation == Subject
-																select s;
-
-			// TODO: should this be a loop? Only the last item is being used.
-			foreach (ProgramInformation program in specificProgramInfo)
-			{
-				ProgramTitle = program.Title;
-			}
-
-			return ProgramTitle;
-		}
-
 		#endregion
 	}
 }
