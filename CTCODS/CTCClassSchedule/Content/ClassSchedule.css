@@ -403,7 +403,7 @@ ul.subjectSearch li
 	color: #fff;
 }
 
-#navbar {
+#site-navigation {
 	height: 31px;
 	clear: both;
 	margin-top: 0px;
@@ -452,7 +452,7 @@ ul.subjectSearch li
     width: 450px;
 }
 
-#navbar label { position: absolute; left: -9999px; top: -9999px}
+#site-navigation label { position: absolute; left: -9999px; top: -9999px}
 
 #seach-quarter-select {
 	margin-right: 6px;
@@ -467,7 +467,7 @@ ul.subjectSearch li
 }
 
 
-#navbar #search input.searchSubmit
+#site-navigation #search input.searchSubmit
 {
 	width: 50px;
 
@@ -1216,16 +1216,16 @@ ul.class-description
 	margin-top: 10px;
 }
 
-#navbar #browse a,
-#navbar #browse a:hover,
-#navbar #browse a:active,
-#navbar #browse a:visited
+#site-navigation #browse a,
+#site-navigation #browse a:hover,
+#site-navigation #browse a:active,
+#site-navigation #browse a:visited
 {
 	color: #fff;
 	text-decoration: none;
 }
 
-#navbar #browse a:hover
+#site-navigation #browse a:hover
 {
 	text-decoration: underline;
 }
