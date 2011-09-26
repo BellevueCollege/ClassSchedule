@@ -1,4 +1,4 @@
-﻿@model CTCClassSchedule.SearchResultsModel
+﻿@model IEnumerable<CTCClassSchedule.Common.SearchResultNoSection>
 
 
 
@@ -7,7 +7,7 @@
 
 
 <ul>
-@foreach (var item in Model.SearchResultNoSection) {
+@foreach (var item in Model) {
 
 	<li>
         <a href="[LINK GOES HERE]">  <!-- NATE/SHAWN: add link to class details page -->

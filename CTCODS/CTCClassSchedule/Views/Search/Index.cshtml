@@ -222,8 +222,8 @@
 	</div>
 
 
-    @if(ViewBag.TotalPages == 1){
-		Html.RenderPartial("NoSectionCourses");
+    @if(ViewBag.TotalPages == 1 && Model.SearchResultNoSection.Count() > 0){
+		Html.RenderPartial("NoSectionCourses", Model.SearchResultNoSection);
 	}
 
 	@{Html.RenderPartial("Pager");}
