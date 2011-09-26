@@ -51,11 +51,18 @@ namespace CTCClassSchedule
 		{
 			if (_originalWriter != null) // Must complete the caching
 			{
-				HtmlTextWriter cacheWriter = (HtmlTextWriter)_switchWriterMethod.Invoke(HttpContext.Current.Response, new object[] { _originalWriter });
-				string textWritten = ((StringWriter)cacheWriter.InnerWriter).ToString();
-				filterContext.HttpContext.Response.Write(textWritten);
+				//need the catch/finally in place to prevent the app from halting when the caching
+				// mechanism attempts to convert HttpWriter to HtmlTextWriter upon fresh page reads
+				try
+				{
+					HtmlTextWriter cacheWriter = (HtmlTextWriter)_switchWriterMethod.Invoke(HttpContext.Current.Response, new object[] { _originalWriter });
+					string textWritten = ((StringWriter)cacheWriter.InnerWriter).ToString();
+					filterContext.HttpContext.Response.Write(textWritten);
 
-				filterContext.HttpContext.Cache.Add(_cacheKey, textWritten, null, DateTime.Now.AddSeconds(_cacheDuration), Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
+					filterContext.HttpContext.Cache.Add(_cacheKey, textWritten, null, DateTime.Now.AddSeconds(_cacheDuration), Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
+				}
+				catch { }
+				finally { }
 			}
 		}
 
