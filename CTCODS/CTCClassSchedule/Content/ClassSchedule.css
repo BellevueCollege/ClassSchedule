@@ -176,10 +176,10 @@ textarea
 
 #a_to_z
 {
-	margin: 10px 0px;
+	margin: 7px 0px;
 }
 
-.classInfo  {}
+.classInfo  { padding-top: 7px;}
 .classInfo h2 {
     font-size: 15px;
 }
@@ -220,8 +220,7 @@ textarea
 	display: block;
 	border: 1px solid #999;
 	width: 158px;
-	margin-right: 10px;
-	margin-top: 33px;
+    margin: 28px 10px 35px 0;
 	font-size: 12px;
 	line-height: 21px;
     color: #333;
@@ -232,8 +231,8 @@ textarea
     padding: 0 0 1px 19px;
     color: White;
     font-size: 12px;
-    line-height: 13px;
-    margin: 0 0 14px 0;
+    line-height: 14px;
+    margin: 0 0 13px 0;
 }
 
 
@@ -272,12 +271,6 @@ textarea
 }
 
 
-ul.subjectSearch li
-{
-	margin: 0px;
-
-}
-
 
 #scheduleContent {
 	margin-left: 190px;
@@ -295,7 +288,7 @@ ul.subjectSearch li
 #scheduleRightSidebar{
 	width: 240px;
 	float: right;
-	margin-top: 21px;
+	margin-top: 28px;
 }
 
 
@@ -314,8 +307,7 @@ ul.subjectSearch li
 	float: left;
 	width: 500px;}
 
-#programWebsite {
-    padding: 0 20px;}
+#programWebsite { }
 
 #programWebsite h2 {
     font-size: 13px; font-weight: bold;}
@@ -492,10 +484,6 @@ ul.subjectSearch li
 
 /* end nav container */
 
-.subject
-{
-	margin: 5px 0px;
-}
 
 .active
 {
@@ -504,11 +492,11 @@ ul.subjectSearch li
 
 li.active
 {
-	list-style-image: url(images/right_small_arrow.gif);
+	list-style-image: url(images/right_small_arrow.png);
 	margin-left: 20px;
 }
 
-li.active a
+li.active a, li.active .notlink
 {
 	margin-left: -20px;
     text-decoration: none;
@@ -1217,9 +1205,8 @@ ul.class-description
 }
 
 
-#searchHeaderInfo
-{
-	margin-bottom: 40px;
+#searchHeaderInfo {
+	margin-bottom: 49px;
 }
 
 #searchResultsMsg
@@ -1240,3 +1227,6 @@ ul.class-description
 {
 	background-color: yellow;
 }
+
+.subjectchooser { font-size: 12px;}
+.subjectchooser a { color: #999}

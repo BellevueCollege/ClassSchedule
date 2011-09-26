@@ -11,7 +11,7 @@
 
 	<div id="scheduleContent">
         <div id="scheduleMiddle">
-		    <h1>@ViewBag.ProgramTitle</h1>
+		    <h1>@ViewBag.ProgramTitle <span class="subjectchooser">@Html.Partial("subjectNavigation")</span></h1>
 
 		    <div id="classInfoWrap">
 		    @foreach (var item in Model)
