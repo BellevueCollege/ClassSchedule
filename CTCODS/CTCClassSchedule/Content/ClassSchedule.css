@@ -237,21 +237,6 @@ textarea
 }
 
 
-.sidenav ul.subject
-{
-	margin-bottom: 0px;
-}
-
-ul.subject li
-{
-	margin-left: 19px;
-
-}
-
-ul.subject li a
-{
-	text-decoration: none;
-}
 
 .sidenav ul {
 	margin-bottom: 21px;
@@ -526,6 +511,7 @@ li.active
 li.active a
 {
 	margin-left: -20px;
+    text-decoration: none;
 }
 
 

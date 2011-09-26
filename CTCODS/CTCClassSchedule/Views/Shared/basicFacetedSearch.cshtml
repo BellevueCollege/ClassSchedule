@@ -1,16 +1,19 @@
 ﻿<div id="basicFacetedSearch" class="sidenav">
     <h2>Browse for classes</h2>
 	<h3>Subject</h3>
+    <ul class="subject">
 	@if (!string.IsNullOrWhiteSpace(ViewBag.Subject))
  {
-		<ul class="subject">
+
 			<li @(ViewBag.activeClass)>
 				<a href="" >@ViewBag.Subject</a>
 			</li>
-		</ul>
- }
- @Html.Partial("subjectNavigation")
 
+ }
+        <li>
+        @Html.Partial("subjectNavigation")
+        </li>
+	</ul>
 
 	@{
 		//viewbag variables are dynamic, so we need to convert to string to use with the Html.ActionLink

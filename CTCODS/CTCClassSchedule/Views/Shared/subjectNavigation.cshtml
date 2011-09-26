@@ -39,8 +39,8 @@
 	}
 }
 
-<ul>
-	<li>@Ajax.ActionLink("Change subject",
+
+    @Ajax.ActionLink("Change subject",
 											 "Subjects",
 											 "Api",
 											 new RouteValueDictionary(routeParms),
@@ -52,6 +52,5 @@
 												 OnBegin = "$('#nav-choose-subjects').dialog('open');",
 												 OnComplete = "spinner.stop();",
 											 })
-	</li>
-</ul>
+
 <div id="nav-choose-subjects"></div>

@@ -269,27 +269,8 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search")) {
 		<input type="submit" id="submit_days_times" name="submitbtn" value="Refine >" />
 	</div>
 </form>
-	<h3>Classes Offered</h3>
-	<ul>
-		<li @if (ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")
-			{ @(ViewBag.activeClass) }>
 
-			<a href="">All Credit Classes</a>
-		</li>
-		<li>
-			<a href="@Url.Content("~/Classes/")@(QuarterOneURL)">@QuarterOneFriendly</a>
-		</li>
-		<li>
-			<a href="@Url.Content("~/Classes/")@(QuarterTwoURL)">@QuarterTwoFriendly</a>
-		</li>
-		<li>
-			<a href="@Url.Content("~/Classes/")@(QuarterThreeURL)">@QuarterThreeFriendly</a>
-		</li>
-		<li>
-			<a href="@Url.Content("~/Classes/")@(QuarterFourURL)">@QuarterFourFriendly</a>
-		</li>
 
-	</ul>
 
 
 </div>
