@@ -3,7 +3,7 @@
 @using System.Text.RegularExpressions;
 
 @{
-	String quarter = ViewBag.quarter;
+	String quarter = Request.QueryString["quarter"];
 	String classDesc = ViewBag.SubjectCount == 1 ? "class" : "classes";
 	String sectionDesc = ViewBag.ItemCount == 1 ? "section" : "sections";
 	String description = "";

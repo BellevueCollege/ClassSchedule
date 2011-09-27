@@ -1,8 +1,12 @@
 ﻿@model IEnumerable<CTCClassSchedule.Common.SearchResultNoSection>
 @using CTCClassSchedule.Common
-
+@using Ctc.Ods.Types
+@{
+	string quarter = Request.QueryString["quarter"];
+	string yrq = ViewBag.YearQuarter;
+}
 <div id="NotOfferedThisQuarter">
-<h2>Classes not offered @ViewBag.quarter, but match your search:</h2> <!-- NATE/SHAWN: Can the quarter be set up to show a space between quarter and year? as in, Fall 2011 -->
+<h2>Classes not offered @(string.IsNullOrWhiteSpace(yrq) ? quarter : YearQuarter.ToFriendlyName(yrq)), but match your search:</h2>
 
 <ul>
 @foreach (var item in Model) {
@@ -18,6 +22,4 @@
 	</li>
 }
 </ul>
-
-
 </div>

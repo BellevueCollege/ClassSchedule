@@ -107,6 +107,8 @@
 
 		// construct the route values we'll pass to the ActionLink helper
 		IDictionary<string, object> routeParms = ViewBag.LinkParams;
+
+		string QuarterParam = Request.QueryString["quarter"];
 	}
 
 
@@ -120,14 +122,14 @@
 @if (string.IsNullOrWhiteSpace(@ViewBag.searchterm))
 {
 	<!-- Do Nothing.  Removed by Juan
-            <ul class="subject">
-		        <li @(ViewBag.activeClass)>
-			        <a href="" >@ViewBag.Subject</a>
-		        </li>
+	<ul class="subject">
+		<li @(ViewBag.activeClass)>
+			<a href="" >@ViewBag.Subject</a>
+		</li>
                 <li>
                      @Html.Partial("subjectNavigation")
                 </li>
-	        </ul>
+	</ul>
  -->
 }
 else {
@@ -137,9 +139,9 @@ else {
 	@foreach (var item in Model.Titles)
  {
      if (!string.IsNullOrWhiteSpace(ViewBag.Subject))
-     {
-         int firstChar = Request.QueryString.ToString().IndexOf("&Subject");
-         string modifiedQueryString = Request.QueryString.ToString().Remove(firstChar);
+		{
+			int firstChar = Request.QueryString.ToString().IndexOf("&Subject");
+			string modifiedQueryString = Request.QueryString.ToString().Remove(firstChar);
 			<li>
 				<a href="@Url.Content("~/Search/")?@modifiedQueryString">All</a>
 			</li>
@@ -147,16 +149,16 @@ else {
                 <span class="notlink">
 				@item
 			    </span>
-            </li>
-     }
-     else
-     {
+			</li>
+		}
+		else
+		{
 		 <li>
 				<a href="@Url.Content("~/Search/")?@Request.QueryString&Subject=@item">@item</a>
 			</li>
-     }
+		}
 
- }
+	}
 	</ul>
 }
 
@@ -168,7 +170,7 @@ else {
 		@if (routeParms.ContainsKey("letter"))
   {
 			<input type="hidden" name="letter" value="@routeParms["letter"]" />
-  }
+		}
 
 	</div>
 }
@@ -177,15 +179,15 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
 	<div>
 		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])" method="get">
 		<!-- hidden fields to include in form -->
-		@if (!string.IsNullOrWhiteSpace(ViewBag.quarter))
-  {
-			<input type="hidden" name="quarter" value="@ViewBag.quarter"/>
-  }
+		@if (!string.IsNullOrWhiteSpace(QuarterParam))
+		{
+			<input type="hidden" name="quarter" value="@QuarterParam"/>
+		}
 
 		@if (!string.IsNullOrWhiteSpace(ViewBag.Subject))
-  {
+		{
 			<input type="hidden" name="Subject" value="@ViewBag.Subject"/>
-  }
+		}
 		<input type="hidden" name="searchterm" value="@ViewBag.searchterm"/>
 
 
@@ -197,7 +199,7 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
 	<h3>Class Format</h3>
 	<div id="classformat">
 	@{
-        IList<ModalityFacetInfo> modalities = (IList<ModalityFacetInfo>)ViewBag.Modality;
+		IList<ModalityFacetInfo> modalities = (IList<ModalityFacetInfo>)ViewBag.Modality;
 	}
 	@if (modalities.Where(m => m.Selected == true).Count() > 0)
  {
@@ -225,37 +227,37 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
 			<div class="day">
 				<label class="daylabel weekend" for="day_su"><abbr title="Sunday ">S</abbr></label>
 					<input type="checkbox" name="day_su" id="day_su"  value="true" @if (@ViewBag.day_su == "true")
-                                                                    {  <text>checked="checked"</text> } />
+																											 {  <text>checked="checked"</text> } />
 			</div>
 			<div class="day">
 				<label class="daylabel" for="day_m"><abbr title="Monday ">M</abbr></label>
 				<input type="checkbox" name="day_m" id="day_m" value="true"  @if (@ViewBag.day_m == "true")
-                                                                 {  <text>checked="checked"</text> }/>
+																											{  <text>checked="checked"</text> }/>
 			</div>
 			<div class="day">
 				<label class="daylabel" for="day_t"><abbr title="Tuesday ">T</abbr></label>
 				<input type="checkbox" name="day_t" id="day_t" value="true"  @if (@ViewBag.day_t == "true")
-                                                                 {  <text>checked="checked"</text> }/>
+																											{  <text>checked="checked"</text> }/>
 			</div>
 			<div class="day">
 				<label class="daylabel" for="day_w"><abbr title="Wednesday ">W</abbr></label>
 				<input type="checkbox" name="day_w"  id="day_w" value="true" @if (@ViewBag.day_w == "true")
-                                                                 {  <text>checked="checked"</text> } />
+																											{  <text>checked="checked"</text> } />
 			</div>
 			<div class="day">
 				<label class="daylabel" for="day_th"><abbr title="Thursday ">T</abbr></label>
 				<input type="checkbox" name="day_th" id="day_th" value="true" @if (@ViewBag.day_th == "true")
-                                                                  {  <text>checked="checked"</text> } />
+																											{  <text>checked="checked"</text> } />
 			</div>
 			<div class="day">
 				<label class="daylabel" for="day_f"><abbr title="Friday ">F</abbr></label>
 				<input type="checkbox" name="day_f" id="day_f" value="true"  @if (@ViewBag.day_f == "true")
-                                                                 {  <text>checked="checked"</text> }/>
+																											{  <text>checked="checked"</text> }/>
 			</div>
 			<div class="day">
 				<label class="daylabel weekend" for="day_s"><abbr title="Saturday ">S</abbr></label>
 				<input type="checkbox" name="day_s" id="day_s" value="true"  @if (@ViewBag.day_s == "true")
-                                                                 {  <text>checked="checked"</text> }/>
+																											{  <text>checked="checked"</text> }/>
 			</div>
 
 			<div id="submitjquery">
@@ -270,9 +272,9 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
 
 
 		<li><label><input id="radio_all" type="radio" name="avail" value="All" @if (@ViewBag.avail == "All" || @ViewBag.avail == null)
-                                                                         {  <text> checked="checked"</text> } > All</label></li>
+																																	{  <text> checked="checked"</text> } > All</label></li>
 		<li><label></lable><input id="radio_open" type="radio" name="avail" value="Open"	@if (@ViewBag.avail == "Open")
-                                                                                   {  <text> checked="checked"</text> } > Open</label></li>
+																																		{  <text> checked="checked"</text> } > Open</label></li>
 	</ul>
 
 	<div id="submit">
