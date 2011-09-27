@@ -78,7 +78,6 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? " (All)" : " (" + letter.ToUpper() + ")");
 			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.AlphabetCharacter = 0;
-			ViewBag.Title = "All classes";
 
 			ViewBag.LinkParams = getLinkParams();
 
@@ -150,8 +149,6 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.LinkParams = getLinkParams();
 
-
-			ViewBag.Title = "All " +  @Subject + " classes";
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
 			setProgramInfo(Subject);
@@ -222,7 +219,6 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.AlphabetCharacter = 0;
 			ViewBag.YRQ = yrq.ToString();
 			ViewBag.FriendlyYRQ = yrq.FriendlyName;
-			ViewBag.Title = ViewBag.Subject + "Classes for " + @ViewBag.Yearquarter;
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
@@ -352,7 +348,6 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.titleDisplayed = false;
 			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.CourseOutcome = getCourseOutcome(Subject, ClassNum);
-			ViewBag.Title = @Subject + " " + ClassNum + " sections";
 
 			setProgramInfo(Subject);
 
