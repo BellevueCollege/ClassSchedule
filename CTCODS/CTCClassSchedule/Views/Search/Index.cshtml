@@ -1,6 +1,7 @@
 ﻿@model CTCClassSchedule.SearchResultsModel
 @using CTCClassSchedule.Common;
 @using System.Text.RegularExpressions;
+@using System.Globalization;
 
 @{
 	String quarter = Request.QueryString["quarter"];
@@ -16,15 +17,20 @@
 
 		//highlight all of the words that match the search term, respecting case.
 		var lowercase = "@(ViewBag.searchterm)".toLowerCase();
+		//alert(lowercase);
 		var uppercase = "@(ViewBag.searchterm)".toUpperCase();
+		//alert(uppercase);
 		var capitalized = "@(ViewBag.searchterm)".charAt(0).toUpperCase() + "@(ViewBag.searchterm)".substr(1);
+		//alert(capitalized);
 
-		$("*").each(function () {
-			if ($(this).children().length == 0) {
-				$(this).html($(this).html().replace(lowercase, '<em class="keyword">' + lowercase + '</em>'));
-				$(this).html($(this).html().replace(capitalized, '<em class="keyword">' + capitalized + '</em>'));
-				$(this).html($(this).html().replace(uppercase, '<em class="keyword">' + uppercase + '</em>'));
-			}
+		$(".classHeading,#courseDescription").each(function () {
+			//if ($(this).children().length == 0) {
+				$(this).html($(this).html().replace(/@(ViewBag.searchterm.ToLower())/, '<em class="keyword">' + @(ViewBag.searchterm.ToLower()) + '</em>'));
+				$(this).html($(this).html().replace(/@(ViewBag.searchterm.ToUpper())/, '<em class="keyword">' + @(ViewBag.searchterm.ToUpper()) + '</em>'));
+				$(this).html($(this).html().replace(/@(Char.ToUpper(ViewBag.searchterm[0]) + ViewBag.searchterm.ToLower().Substring(1))/, '<em class="keyword">' + @(Char.ToUpper(ViewBag.searchterm[0]) + ViewBag.searchterm.ToLower().Substring(1)) + '</em>'));
+				//$(this).html($(this).html().replace(/capitalized/, '<em class="keyword">' + capitalized + '</em>'));
+				//$(this).html($(this).html().replace(/uppercase/, '<em class="keyword">' + uppercase + '</em>'));
+			//}
 		});
 
 		//end of highlight
@@ -100,7 +106,7 @@
 
 			<p id="courseDescription">
 				@*Html.Raw(item.CourseDescriptions[0].Description.Replace(ViewBag.searchterm, "<em class='keyword'>" + ViewBag.searchterm + "</em>"))) *@
-				@item.CourseDescriptions[0].Description
+				@(item.CourseDescriptions.Count() == 0 ? "" : @item.CourseDescriptions[0].Description)
                 @Html.ActionLink("View Class Details", "ClassDetails",  "Classes", new { YearQuarterID = quarter, Subject = item.CourseSubject, ClassNum = item.CourseNumber }, null)
 			</p>
 

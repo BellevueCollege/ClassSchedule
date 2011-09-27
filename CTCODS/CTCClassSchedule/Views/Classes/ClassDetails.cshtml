@@ -61,7 +61,19 @@
 
 			    <h1 class="course-title">
 				    <span class="courseID">@item.CourseSubject @item.CourseNumber </span><span>@item.CourseTitle
-				    </span><span>&#8226; @item.Credits
+				    </span><span>&#8226;
+
+						@{
+							if (item.Credits % 1 == 0)
+							{
+								//then there is no decimal
+								ViewBag.credits = item.Credits.ToString().Substring(0, 1);
+							}
+							else {
+								ViewBag.credits = item.Credits.ToString();
+							}
+						}
+						@ViewBag.credits
 					    <abbr title="Credit(s) ">
 						    Cr.</abbr></span></h1>
 
@@ -107,7 +119,7 @@
 				    count++;
 			    }
 			    ViewBag.CourseTitle = item.CourseTitle;
-			    <div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle &#8226; @item.Credits <abbr title="Credit(s) ">Cr.</abbr></div>
+			    <div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle &#8226; @ViewBag.credits <abbr title="Credit(s) ">Cr.</abbr></div>
 			    @Html.Raw("<ul class='course-block'>");
             }
 

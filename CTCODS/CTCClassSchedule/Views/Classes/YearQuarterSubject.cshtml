@@ -5,6 +5,7 @@
 	String YearQuarter = ViewBag.YearQuarter;
 	String subdir = ViewBag.currentAppSubdirectory;
 	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
+	string credits = "";
 
 	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;
@@ -75,7 +76,19 @@
 
 				<text>
 		<h2 class="classHeading">
-			@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, sec.Credits),
+
+			@{
+					if (sec.Credits % 1 == 0)
+					{
+						//then there is no decimal
+						credits = sec.Credits.ToString().Substring(0, 1);
+					}
+					else {
+						credits = sec.Credits.ToString();
+					}
+				}
+
+			@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, credits),
 											"ClassDetails",
 											"Classes",
 											new RouteValueDictionary(_routeValues),
