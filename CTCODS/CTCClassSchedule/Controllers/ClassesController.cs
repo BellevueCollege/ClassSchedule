@@ -485,7 +485,10 @@ namespace CTCClassSchedule.Controllers
 			using (_profiler.Step("getCurrentFutureYRQs()"))
 			{
 				IList<YearQuarter> currentFutureQuarters;
-				currentFutureQuarters = respository.GetRegistrationQuarters(4);
+				using (_profiler.Step("API::GetRegistrationQuarters()"))
+				{
+					currentFutureQuarters = respository.GetRegistrationQuarters(4);
+				}
 				ViewBag.QuarterOne = currentFutureQuarters[0];
 				ViewBag.QuarterTwo = currentFutureQuarters[1];
 				ViewBag.QuarterThree = currentFutureQuarters[2];
@@ -503,7 +506,6 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 
-		// TODO: Jeremy, make optional AND configurable in web.config
 		/// <summary>
 		/// Gets the course outcome information by scraping the Bellevue College
 		/// course outcomes website
