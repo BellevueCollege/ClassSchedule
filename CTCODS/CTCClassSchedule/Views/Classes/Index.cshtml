@@ -1,4 +1,5 @@
-﻿<!--
+﻿@using Ctc.Ods.Types
+<!--
 	coin-slider effects:
 
 	width: 565, // width of slider panel
@@ -81,20 +82,7 @@
 <!-- TODO: Make the title configurable in web.config. Possible? -->
 @{
     ViewBag.PageTitle = "Classes at Bellevue College";
-
-		//viewbag variables are dynamic, so we need to convert to string to use with the Html.ActionLink
-		String QuarterOneFriendly = (String)ViewBag.QuarterOneFriendly;
-		String QuarterTwoFriendly = (String)ViewBag.QuarterTwoFriendly;
-		String QuarterThreeFriendly = (String)ViewBag.QuarterThreeFriendly;
-		String QuarterFourFriendly = (String)ViewBag.QuarterFourFriendly;
-
-		String QuarterOneURL = (String)ViewBag.QuarterOneURL;
-		String QuarterTwoURL = (String)ViewBag.QuarterTwoURL;
-		String QuarterThreeURL = (String)ViewBag.QuarterThreeURL;
-		String QuarterFourURL = (String)ViewBag.QuarterFourURL;
-
 }
-
 
 @Html.Partial("quarterNavigation")
 <div id="front_layout">
@@ -107,20 +95,12 @@
 			<div id="browse-quarter">
 				<p class="choose-quarter">Choose a quarter:</p>
 				<ul>
-					<li>
-						<a class="yrq" href="@Url.Content("~/Classes/")@(QuarterOneURL)">@QuarterOneFriendly</a>
-					</li>
-					<li>
-						<a class="yrq" href="@Url.Content("~/Classes/")@(QuarterTwoURL)">@QuarterTwoFriendly</a>
-					</li>
-					<li>
-						<a class="yrq" href="@Url.Content("~/Classes/")@(QuarterThreeURL)">@QuarterThreeFriendly</a>
-					</li>
-					<li>
-						<a class="yrq" href="@Url.Content("~/Classes/")@(QuarterFourURL)">@QuarterFourFriendly</a>
-					</li>
-
-
+	@foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
+ {
+				<li>
+					<a class="yrq" href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">@yrq.FriendlyName</a>
+				</li>
+ }
 				</ul>
 			</div>
 
@@ -128,7 +108,7 @@
 				<img src="@Url.Content("~/Content/images/or_divider.gif")" />
 			</div>
 			<div id="browse-all-classes">
-				<a href="@Url.Content("~/Classes/")All">Browse all classes with descriptions</a>
+				<a href="@Url.Action("AllClasses", "Classes")">Browse all classes with descriptions</a>
 			</div>
 			<div id="printable-schedules"> <!-- Bellevue specific and/or optional -->
 				You can also <a href="http://bellevuecollege.edu/about/publications/schedule/">Download PDF versions of the credit class schedule</a>.

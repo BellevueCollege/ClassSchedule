@@ -60,7 +60,7 @@ namespace CTCClassSchedule.Controllers
 		{
 			using (OdsRepository respository = new OdsRepository())
 			{
-				getCurrentFutureYRQs(respository);
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 			}
 			return View();
 		}
@@ -83,7 +83,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
-				getCurrentFutureYRQs(respository);
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 				IList<CoursePrefix> courses;
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
 				{
@@ -155,7 +155,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
-				getCurrentFutureYRQs(respository);
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
 				// TODO: GetCourses() can take a Subject parameter - returning a smaller dataset which doesn't need to be further filtered.
 				IList<Course> courses;
@@ -224,7 +224,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
-				getCurrentFutureYRQs(respository);
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
 				IList<CoursePrefix> courses;
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
@@ -299,7 +299,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
-				getCurrentFutureYRQs(respository);
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 
 				// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
@@ -355,7 +355,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository())
 			{
-				getCurrentFutureYRQs(respository);
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
 				if (courseID != null)
 				{
@@ -477,36 +477,6 @@ namespace CTCClassSchedule.Controllers
 		}
 
 		/// <summary>
-		/// Gets the current <see cref="YearQuarter"/> and assigns ViewBag variables
-		/// for the current, +1, +2 quarters. This drives the dynamic YRQ navigation bar
-		/// </summary>
-		private void getCurrentFutureYRQs(OdsRepository respository)
-		{
-			using (_profiler.Step("getCurrentFutureYRQs()"))
-			{
-				IList<YearQuarter> currentFutureQuarters;
-				using (_profiler.Step("API::GetRegistrationQuarters()"))
-				{
-					currentFutureQuarters = respository.GetRegistrationQuarters(4);
-				}
-				ViewBag.QuarterOne = currentFutureQuarters[0];
-				ViewBag.QuarterTwo = currentFutureQuarters[1];
-				ViewBag.QuarterThree = currentFutureQuarters[2];
-				ViewBag.QuarterFour = currentFutureQuarters[3];
-
-				ViewBag.QuarterOneFriendly = currentFutureQuarters[0].FriendlyName;
-				ViewBag.QuarterTwoFriendly = currentFutureQuarters[1].FriendlyName;
-				ViewBag.QuarterThreeFriendly = currentFutureQuarters[2].FriendlyName;
-				ViewBag.QuarterFourFriendly = currentFutureQuarters[3].FriendlyName;
-
-				ViewBag.QuarterOneURL = ViewBag.QuarterOneFriendly.Replace(" ", "");
-				ViewBag.QuarterTwoURL = ViewBag.QuarterTwoFriendly.Replace(" ", "");
-				ViewBag.QuarterThreeURL = ViewBag.QuarterThreeFriendly.Replace(" ", "");
-				ViewBag.QuarterFourURL = ViewBag.QuarterFourFriendly.Replace(" ", "");
-			}
-		}
-
-		/// <summary>
 		/// Gets the course outcome information by scraping the Bellevue College
 		/// course outcomes website
 		/// </summary>
@@ -586,7 +556,7 @@ namespace CTCClassSchedule.Controllers
 
 			if (YearQuarter != "")
 			{
-				ViewBag.YearQuarterHP = Ctc.Ods.Types.YearQuarter.ToYearQuarterID(YearQuarter);
+				ViewBag.QuarterViewing = Ctc.Ods.Types.YearQuarter.ToYearQuarterID(YearQuarter);
 			}
 			ViewBag.YearQuarter = YearQuarter ?? "all";
 

@@ -1,4 +1,6 @@
-﻿<div id="basicFacetedSearch" class="sidenav">
+﻿@using Ctc.Ods.Types
+
+<div id="basicFacetedSearch" class="sidenav">
     <h2>Browse for classes</h2>
 	<h3>Subject</h3>
     <ul class="subject">
@@ -16,47 +18,19 @@
 	</ul>
 
 	@{
-		//viewbag variables are dynamic, so we need to convert to string to use with the Html.ActionLink
-		String QuarterOneFriendly = (String)ViewBag.QuarterOneFriendly;
-		String QuarterTwoFriendly = (String)ViewBag.QuarterTwoFriendly;
-		String QuarterThreeFriendly = (String)ViewBag.QuarterThreeFriendly;
-		String QuarterFourFriendly = (String)ViewBag.QuarterFourFriendly;
-
-		String QuarterOneURL = (String)ViewBag.QuarterOneURL;
-		String QuarterTwoURL = (String)ViewBag.QuarterTwoURL;
-		String QuarterThreeURL = (String)ViewBag.QuarterThreeURL;
-		String QuarterFourURL = (String)ViewBag.QuarterFourURL;
-
+		string quarterViewing = ViewBag.QuarterViewing ?? string.Empty;
 	}
-
 
 	<h3>Classes Offered:</h3>
 	<ul>
-
-		<li @if (ViewBag.YearQuarter == "all" || ViewBag.YearQuarter == "")
-			{ @(ViewBag.activeClass) }>
-			<a href="@ViewBag.currentAppSubdirectory/Classes/All">All Credit Classes</a>
+		<li @if (string.IsNullOrWhiteSpace(quarterViewing) || quarterViewing.ToUpper() == "ALL") { <text> class="active" </text> }>
+			<a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a>
 		</li>
-		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterOne.ToString())
-			{ @(ViewBag.activeClass) }>
-			<a href="@Url.Content("~/Classes/")@(QuarterOneURL)">@QuarterOneFriendly</a>
+	@foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
+ {
+		<li @if (quarterViewing == yrq.ID) { <text> class="active" </text> }>
+			<a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">@yrq.FriendlyName</a>
 		</li>
-		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterTwo.ToString())
-			{ @(ViewBag.activeClass) }>
-			<a href="@Url.Content("~/Classes/")@(QuarterTwoURL)">@QuarterTwoFriendly</a>
-		</li>
-		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterThree.ToString())
-			{ @(ViewBag.activeClass) }>
-			<a href="@Url.Content("~/Classes/")@(QuarterThreeURL)">@QuarterThreeFriendly</a>
-		</li>
-		<li @if (ViewBag.YearQuarterHP == ViewBag.QuarterFour.ToString())
-			{ @(ViewBag.activeClass) }>
-			<a href="@Url.Content("~/Classes/")@(QuarterFourURL)">@QuarterFourFriendly</a>
-		</li>
-
-
-
-
+ }
 	</ul>
-
 </div>

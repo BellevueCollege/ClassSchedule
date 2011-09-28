@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Web.Mvc;
 using Ctc.Ods;
 using Ctc.Ods.Data;
@@ -25,7 +22,7 @@ namespace CTCClassSchedule.Controllers
 
 		//
 		// GET: /Search/
-		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, String YearQuarter = "", int p_offset = 0)
+		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, int p_offset = 0)
 		{
 			IEnumerable<SectionWithSeats> sectionsEnum;
 			IEnumerable<string> titles;
@@ -38,7 +35,7 @@ namespace CTCClassSchedule.Controllers
 				return null;
 			}
 
-			setViewBagVars(YearQuarter, "", "", "", avail, "");
+			setViewBagVars(quarter, "", "", "", avail, "");
 
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
@@ -94,7 +91,7 @@ namespace CTCClassSchedule.Controllers
 						ViewBag.YearQuarter = YRQ.ID;
 					}
 
-					getCurrentFutureYRQs(respository);
+					ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
 					var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
 																		 select s);
@@ -219,83 +216,7 @@ namespace CTCClassSchedule.Controllers
 
 
 		#region helper methods
-
-
-
-
-		/// <summary>
-		/// Gets the current <see cref="YearQuarter"/> and assigns ViewBag variables
-		/// for the current, +1, +2 quarters. This drives the dynamic YRQ navigation bar
-		/// </summary>
-		private void getCurrentFutureYRQs(OdsRepository respository)
-		{
-			IList<YearQuarter> currentFutureQuarters;
-			currentFutureQuarters = respository.GetRegistrationQuarters(4);
-			ViewBag.QuarterOne = currentFutureQuarters[0];
-			ViewBag.QuarterTwo = currentFutureQuarters[1];
-			ViewBag.QuarterThree = currentFutureQuarters[2];
-			ViewBag.QuarterFour = currentFutureQuarters[3];
-
-			ViewBag.QuarterOneFriendly = currentFutureQuarters[0].FriendlyName;
-			ViewBag.QuarterTwoFriendly = currentFutureQuarters[1].FriendlyName;
-			ViewBag.QuarterThreeFriendly = currentFutureQuarters[2].FriendlyName;
-			ViewBag.QuarterFourFriendly = currentFutureQuarters[3].FriendlyName;
-
-			ViewBag.QuarterOneURL = ViewBag.QuarterOneFriendly.Replace(" ", "");
-			ViewBag.QuarterTwoURL = ViewBag.QuarterTwoFriendly.Replace(" ", "");
-			ViewBag.QuarterThreeURL = ViewBag.QuarterThreeFriendly.Replace(" ", "");
-			ViewBag.QuarterFourURL = ViewBag.QuarterFourFriendly.Replace(" ", "");
-
-		}
-
 		// TODO: Find a way to make course outcomes optional through web.config settings
-		/// <summary>
-		/// Gets the course outcome information by scraping the Cellevue College
-		/// course outcomes website
-		/// </summary>
-		private dynamic getCourseOutcome(string Subject, string ClassNum)
-		{
-
-			string url = "http://bellevuecollege.edu/courseoutcomes/?CourseID=" + Subject + "%20" + ClassNum;
-			StringBuilder sb = new StringBuilder();
-
-			byte[] buffer = new byte[8000];
-			HttpWebRequest request = (HttpWebRequest)
-															 WebRequest.Create(url);
-
-			// execute the request
-			HttpWebResponse response = (HttpWebResponse)
-																 request.GetResponse();
-
-			// we will read data via the response stream
-			Stream resStream = response.GetResponseStream();
-
-			string tempString = null;
-			int count = 0;
-
-			do
-			{
-				// fill the buffer with data
-				count = resStream.Read(buffer, 0, buffer.Length);
-
-				// make sure we read some data
-				if (count != 0)
-				{
-					// translate from bytes to ASCII text
-					tempString = Encoding.ASCII.GetString(buffer, 0, count);
-
-					// continue building the string
-					sb.Append(tempString);
-				}
-			}
-			while (count > 0); // any more data to read?
-
-			// return course outcome page source
-			return sb.ToString();
-
-
-
-		}
 
 		/// <summary>
 		/// Sets all of the common ViewBag variables
@@ -311,7 +232,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.YearQuarter = YearQuarter;
 			if (YearQuarter != "")
 			{
-				ViewBag.YearQuarterHP = getYRQFromFriendlyDate(YearQuarter);
+				ViewBag.QuarterViewing = getYRQFromFriendlyDate(YearQuarter);
 
 			}
 

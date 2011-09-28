@@ -1,4 +1,6 @@
-﻿<script type="text/javascript">
+﻿@using Ctc.Ods.Types
+
+<script type="text/javascript">
 	$(document).ready(function () {
 		function showThrobber() {
 			var pageHeight = $(document).height();
@@ -18,19 +20,7 @@
 	});
 </script>
 @{
-	//viewbag variables are dynamic, so we need to convert to string to use with the Html.ActionLink
-	String QuarterOneFriendly = (String)ViewBag.QuarterOneFriendly;
-	String QuarterTwoFriendly = (String)ViewBag.QuarterTwoFriendly;
-	String QuarterThreeFriendly = (String)ViewBag.QuarterThreeFriendly;
-	String QuarterFourFriendly = (String)ViewBag.QuarterFourFriendly;
-
-	String QuarterOneURL = (String)ViewBag.QuarterOneURL;
-	String QuarterTwoURL = (String)ViewBag.QuarterTwoURL;
-	String QuarterThreeURL = (String)ViewBag.QuarterThreeURL;
-	String QuarterFourURL = (String)ViewBag.QuarterFourURL;
-
-	String selected = " selected";
-	String quarter = Request.QueryString["quarter"];
+	string quarterViewing = ViewBag.QuarterViewing ?? string.Empty;
 }
 <div id="site-navigation">
 @using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" })) {
@@ -40,13 +30,15 @@
 		<span id="search-text">Search</span>  <span id="search-tip">Tip: you can search by title, subject, courseid, item number or instructor.</span>
 		<label for="seach-quarter-select">Pick a quarter</label>
         <select name="quarter" id="seach-quarter-select">
-			<option value="@QuarterOneURL" @if (quarter == QuarterOneURL) { <text> selected</text>}>@QuarterOneFriendly</option>
-			<option value="@QuarterTwoURL" @if (quarter == QuarterTwoURL) { <text> selected</text>}>@QuarterTwoFriendly</option>
-			<option value="@QuarterThreeURL" @if (quarter == QuarterThreeURL) { <text> selected</text>}>@QuarterThreeFriendly</option>
-			<option value="@QuarterFourURL" @if (quarter == QuarterFourURL) { <text> selected</text>}>@QuarterFourFriendly</option>
+				@foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
+		{
+					<option value="@yrq.FriendlyName.Replace(" ", "")" @if (quarterViewing == yrq.ID) { <text> selected="selected" </text> }>@yrq.FriendlyName</option>
+		}
 			<option value="CE">Continuing Education</option>
-		</select><label for="searh-keyword">Keywords</label><input type="text" class="searchInput" id="searh-keyword" name="searchterm" value="@ViewBag.searchterm"/><input type="submit" class="searchSubmit"  name="submit" value="Go" />
-
+		</select>
+		<label for="searh-keyword">Keywords</label>
+		<input type="text" class="searchInput" id="searh-keyword" name="searchterm" value="@(Request.QueryString["searchterm"] ?? string.Empty)"/>
+		<input type="submit" class="searchSubmit"  name="submit" value="Go" />
 	</div>
     <div id="register"><a href="http://bellevuecollege.edu/enrollment/registration/register/">Register</a></div>
 }
