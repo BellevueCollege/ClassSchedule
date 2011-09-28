@@ -26,7 +26,7 @@ namespace CTCClassSchedule.Controllers
 		[HttpGet]
 		public ActionResult Subjects(string format)
 		{
-			using (OdsRepository db = new OdsRepository())
+			using (OdsRepository db = new OdsRepository(HttpContext))
 			{
 				IList<CoursePrefix> data = db.GetCourseSubjects();
 

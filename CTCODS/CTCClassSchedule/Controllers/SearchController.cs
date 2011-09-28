@@ -81,7 +81,7 @@ namespace CTCClassSchedule.Controllers
 				IEnumerable<SearchResultNoSection> NoSectionSearchResults = _programdb.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms2).
 						ToList();
 
-				using (OdsRepository respository = new OdsRepository())
+				using (OdsRepository respository = new OdsRepository(HttpContext))
 				{
 
 					YearQuarter YRQ = null;
