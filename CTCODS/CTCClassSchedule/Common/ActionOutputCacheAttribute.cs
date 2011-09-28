@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Reflection;
-using System.IO;
-using System.Web.UI;
-using System.Web.Caching;
-using System.Text;
 using System.Configuration;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Web;
+using System.Web.Caching;
+using System.Web.Mvc;
+using System.Web.UI;
 
 // from http://blog.stevensanderson.com/2008/10/15/partial-output-caching-in-aspnet-mvc/
 // hacked slightly to allow for 0 url parameter pages to be cached
@@ -61,7 +60,10 @@ namespace CTCClassSchedule
 
 					filterContext.HttpContext.Cache.Add(_cacheKey, textWritten, null, DateTime.Now.AddSeconds(_cacheDuration), Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
 				}
-				catch { }
+				catch(Exception ex)
+				{
+					Debug.Print("Intentionally ignoring exception: {0}", ex);
+				}
 				finally { }
 			}
 		}
