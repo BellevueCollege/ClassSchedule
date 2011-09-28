@@ -1,9 +1,9 @@
 ﻿@using Ctc.Ods.Types
 
 <div id="basicFacetedSearch" class="sidenav">
-    <h2>Browse for classes</h2>
+		<h2>Browse for classes</h2>
 	<h3>Subject</h3>
-    <ul class="subject">
+		<ul class="subject">
 	@if (!string.IsNullOrWhiteSpace(ViewBag.Subject))
  {
 
@@ -12,9 +12,9 @@
 			</li>
 
  }
-        <li>
-        @Html.Partial("subjectNavigation")
-        </li>
+				<li>
+				@Html.Partial("subjectNavigation")
+				</li>
 	</ul>
 
 	@{

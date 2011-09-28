@@ -579,7 +579,7 @@ namespace CTCClassSchedule.Controllers
 		/// <param name="Subject"></param>
 		private void setProgramInfo(string Subject)
 		{
-			const string DEFAULT_TITLE = "** NO TITLE FOUND **";
+			const string DEFAULT_TITLE = "";
 			const string DEFAULT_URL = "";
 
 			var specificProgramInfo = from s in _programdb.ProgramInformation
