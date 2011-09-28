@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
 using Ctc.Ods;
+using Ctc.Ods.Data;
+using Ctc.Ods.Types;
 
 namespace CTCClassSchedule.Common
 {
@@ -368,6 +370,16 @@ namespace CTCClassSchedule.Common
 			modality.Add(getModalityInfo("f_telecourse", "Telecourse", f_telecourse));
 
 			return modality;
+		}
+
+		/// <summary>
+		/// Gets the <see cref="YearQuarter"/> for the current, and previous 3 quarters.
+		/// This drives the dynamic YRQ navigation bar
+		/// </summary>
+		static public IList<YearQuarter> getYearQuarterListForMenus(OdsRepository respository)
+		{
+			IList<YearQuarter> currentFutureQuarters = respository.GetRegistrationQuarters(4);
+			return currentFutureQuarters;
 		}
 	}
 }
