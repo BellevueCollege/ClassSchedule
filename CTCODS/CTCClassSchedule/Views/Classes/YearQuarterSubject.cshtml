@@ -201,10 +201,10 @@
 				</li>
 			</ul>
 			</li>
-		 if (sec.CourseID != PreviousCourseID)
+		 if(sec.CourseID != PreviousCourseID)
 		 {
-		@:</ul>
-			}
+				@Html.Raw("</ul>")
+		 }
 		 PreviousCourseID = sec.CourseID;
 		} @* end foreach(sec) *@
 	}
