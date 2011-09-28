@@ -139,14 +139,14 @@
 									    @if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
              {
                  if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-                 { <text>TBD</text> }
+                 { <text>&nbsp;</text> }
                  else
                  { @offering.InstructorName	}
              }
              else
              {
                  if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-                 { <text>TBD</text> }
+                 { <text>^&nbsp;</text> }
                  else
                  { <a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))">@offering.InstructorName</a>	}
              }

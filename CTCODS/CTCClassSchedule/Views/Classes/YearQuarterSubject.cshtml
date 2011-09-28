@@ -1,4 +1,5 @@
 ﻿@using MvcMiniProfiler;
+@using CTCClassSchedule.Common;
 @model IEnumerable<CTCClassSchedule.SectionWithSeats>
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;
@@ -118,14 +119,21 @@
 					<span class="descriptor">Instructor:</span>
 					<ul>
 						<li>
-						@if (string.IsNullOrWhiteSpace(item.InstructorEmail))
-			{
-							@Html.Raw(string.IsNullOrWhiteSpace(item.InstructorName) ? "&nbsp;" : item.InstructorName)
-			}
-			else
-			{
-							<a href="mailto:@item.InstructorEmail">@item.InstructorName</a>
-			}
+
+
+							@if (string.IsNullOrWhiteSpace(item.InstructorEmail))
+							{
+								@Html.Raw(string.IsNullOrWhiteSpace(item.InstructorName) ? "&nbsp;" : item.InstructorName)
+							}
+							else
+							{
+								if (string.IsNullOrWhiteSpace(item.InstructorName))
+								{ <text>&nbsp;</text> }
+								else
+								{ <a href="@Helpers.getProfileURL(Convert.ToString(item.InstructorID))">@item.InstructorName</a>	}
+							}
+
+
 						</li>
 					</ul>
 				</li>
@@ -156,8 +164,8 @@
 						</li>
 					</ul>
 				</li>
-	if(sec.ID.ToString() != PreviousSectionID)
- {
+	 if (sec.ID.ToString() != PreviousSectionID)
+	 {
 				<li class="availability-@(sec.ID.ToString())">
 					<span class="descriptor">Seat Availability: </span>
 				@if (@sec.WaitlistCount > 0)
@@ -176,7 +184,7 @@
 	 {
 				<li>&nbsp;</li>
 	 }
-			PreviousSectionID = sec.ID.ToString();
+	 PreviousSectionID = sec.ID.ToString();
 		} @* end foreach(item) *@
 	}
 				<li class="section-notes">
@@ -193,11 +201,11 @@
 				</li>
 			</ul>
 			</li>
-			if (sec.CourseID != PreviousCourseID)
-			{
+		 if (sec.CourseID != PreviousCourseID)
+		 {
 		@:</ul>
 			}
-			PreviousCourseID = sec.CourseID;
+		 PreviousCourseID = sec.CourseID;
 		} @* end foreach(sec) *@
 	}
 
