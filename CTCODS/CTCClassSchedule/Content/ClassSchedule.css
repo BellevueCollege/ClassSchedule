@@ -637,20 +637,8 @@ p.course-details-link
 
 }
 
-.course-block ul
-{
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-.course-block li
-{
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	line-height: 14px;
 
-}
+
 .section-listing
 {
 	border-top: 1px solid #eee;
@@ -760,10 +748,10 @@ ul.class-description
 	font-weight: bold;
 }
 
-.course-block li.section-notes
+ul.section-details li.section-notes
 {
 	color: #666;
-	padding-left: 51px;
+
 	padding-top: 3px;
 	padding-bottom: 3px;
 	clear: left;
