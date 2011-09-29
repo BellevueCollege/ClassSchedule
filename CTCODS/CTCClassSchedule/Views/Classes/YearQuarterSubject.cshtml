@@ -162,13 +162,13 @@
 							</span>
 							<span class="room">
 								<span class="descriptor">in </span>
-								@item.Room
+								@Html.Raw(string.IsNullOrWhiteSpace(item.Room) ? "-" : item.Room)
 							</span>
 						</li>
 					</ul>
 				</li>
-	if(sec.ID.ToString() != PreviousSectionID)
- {
+						 if (sec.ID.ToString() != PreviousSectionID)
+						 {
 				<li class="availability-@(sec.ID.ToString())">
 					<span class="descriptor">Seat Availability: </span>
 				@if (@sec.WaitlistCount > 0)
@@ -182,12 +182,12 @@
 					<span class="course-updated"><em>updated @sec.LastUpdated</em> <a id="@(sec.ID.ToString())">[update]</a></span>
 		}
 				</li>
-	 }
-	 else
-	 {
+						 }
+						 else
+						 {
 				<li>&nbsp;</li>
-	 }
-			PreviousSectionID = sec.ID.ToString();
+						 }
+						 PreviousSectionID = sec.ID.ToString();
 		} @* end foreach(item) *@
 	}
 				<li class="section-notes">
@@ -204,7 +204,7 @@
 				</li>
 			</ul>
 			</li>
-			PreviousCourseID = sec.CourseID;
+		 PreviousCourseID = sec.CourseID;
 		} @* end foreach(sec) *@
 	}
 		</ul> <!-- end "course-block" (final) -->

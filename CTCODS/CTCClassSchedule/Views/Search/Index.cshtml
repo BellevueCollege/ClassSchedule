@@ -1,13 +1,23 @@
 ﻿@model CTCClassSchedule.SearchResultsModel
 @using CTCClassSchedule.Common;
+@using MvcMiniProfiler;
 @using System.Text.RegularExpressions;
 @using System.Globalization;
 
 @{
+	MiniProfiler _profiler = MiniProfiler.Current;
+
 	String quarter = Request.QueryString["quarter"];
 	String classDesc = ViewBag.SubjectCount == 1 ? "class" : "classes";
 	String sectionDesc = ViewBag.ItemCount == 1 ? "section" : "sections";
 	String description = "";
+
+	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
+	string credits = "";
+
+
+	string PreviousCourseID = string.Empty;
+	string PreviousSectionID = string.Empty;
 }
 
 
@@ -22,7 +32,7 @@
 		//alert(uppercase);
 		var capitalized = "@(ViewBag.searchterm)".charAt(0).toUpperCase() + "@(ViewBag.searchterm)".substr(1);
 		//alert(capitalized);
-
+		/*
 		$(".classHeading,#courseDescription").each(function () {
 			//if ($(this).children().length == 0) {
 				$(this).html($(this).html().replace(/@(ViewBag.searchterm.ToLower())/, '<em class="keyword">' + @(ViewBag.searchterm.ToLower()) + '</em>'));
@@ -32,7 +42,7 @@
 				//$(this).html($(this).html().replace(/uppercase/, '<em class="keyword">' + uppercase + '</em>'));
 			//}
 		});
-
+		*/
 		//end of highlight
 
 		//call the getSeats method when any of the [update] links are clicked.
@@ -45,11 +55,11 @@
 
 
 			//load the throbber
-			$(availability).html('<img src="/Content/images/ajax-loader.gif" title="loading_seats_available" alt="loading_seats_available" />');
+			$(availability).html('<img src="@(ViewBag.currentAppSubdirectory)/Content/images/ajax-loader.gif" title="loading_seats_available" alt="loading_seats_available" />');
 
 			//post the ajax call to get the available seats and update the UI
 			$.ajax({
-				url: '/Classes/getseats',
+				url: '@(ViewBag.currentAppSubdirectory)/Classes/getseats',
 				type: 'POST',
 				data: { courseIdPlusYRQ: courseIdPlusYRQ },
 				timeout: 4000,
@@ -75,7 +85,11 @@
 <div id="scheduleMain">
 	@Html.Partial("quarterNavigation")
 	@Html.Partial("advancedFacetedSearch")
+    @Html.Partial("basicFacetedSearch")
+
+
 	<div id="scheduleContent">
+
 
 	<div id="searchHeaderInfo">
 		<h1 id="searchResultsMsg">
@@ -86,137 +100,148 @@
 		</div>
 	</div>
 
-	@foreach (var item in Model.Section)
+		@using (_profiler.Step("Rendering sections"))
 	{
-		int count = 0;
-		if(@ViewBag.displayedCourseNum != item.CourseNumber)
+		foreach (var sec in Model.Section)
 		{
-			if (count == 0)
+			if(sec.CourseID != PreviousCourseID)
 			{
-				@Html.Raw("</ul>")
-				count++;
-			}
-			<h2 class="classHeading">
-				@Html.ActionLink(item.CourseSubject + " " + item.CourseNumber + " " + item.CourseTitle + " • " + item.Credits + " Cr.", "ClassDetails", "Classes", new { YearQuarterID = quarter, Subject = item.CourseSubject, ClassNum = item.CourseNumber }, null)
-			</h2>
-
-
-
-
-
-			<p id="courseDescription">
-				@*Html.Raw(item.CourseDescriptions[0].Description.Replace(ViewBag.searchterm, "<em class='keyword'>" + ViewBag.searchterm + "</em>"))) *@
-				@(item.CourseDescriptions.Count() == 0 ? "" : @item.CourseDescriptions[0].Description)
-                @Html.ActionLink("View Class Details", "ClassDetails",  "Classes", new { YearQuarterID = quarter, Subject = item.CourseSubject, ClassNum = item.CourseNumber }, null)
-			</p>
-
-			@Html.Raw("<ul class='course-block'>");
-		}
-
-
-
-
-			<li class="section-listing"><span class="item-number"><span class="descriptor">Item
-				number: </span>@((item.ID).ToString().Substring(0, 4))</span>
-				<ul class="section-details">
-
-					<!--start of repeat offered information -->
-					@foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
-					{
-						<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
-						<li class="instructor"><span class="descriptor">Instructor:</span>
-							<ul>
-								<li>
-										@if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
-					{
-						if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-						{ <text>TBD</text> }
-						else
-						{ @offering.InstructorName	}
-					}
-					else
-					{
-						if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-						{ <text>TBD</text> }
-						else
-						{ <a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))">@offering.InstructorName</a>	}
-					}
-								</li>
-							</ul>
-						</li>
-
-						<li><span class="descriptor">Meets: </span>
-							<ul class="meets">
-								<li><span class="days">
-									<abbr title="Mondays and Wednesdays">
-										@if (item.IsOnline == true)
-										{
-											<text>Online</text>
-										}
-										else {
-											@offering.Days
-										}
-
-
-									</abbr></span> <span class="times">
-										<span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime).Replace(" ", "")-@String.Format("{0:t}", offering.EndTime).Replace(" ", "")
-									</span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
-								</li>
-							</ul>
-						</li>
-
-
-																																	if (ViewBag.seatAvailbilityDisplayed == false)
-																																	{
-							<li class="availability-@(item.ID.ToString())">
-								<span class="descriptor">Seats Available:
-								</span>
-								@if (@item.WaitlistCount > 0)
+				// close the previous UL before starting another
+				if (!string.IsNullOrEmpty(PreviousCourseID))
 				{
-									<strong class="seatsFull">class full, @item.WaitlistCount on waitlist</strong>
-									<span class="course-updated"></span>
+					@:</ul>	<!-- end "course-block" -->
+				}
+
+				_routeValues["Subject"] = sec.CourseSubject;
+				_routeValues["ClassNum"] = sec.CourseNumber;
+
+				<text>
+		<h2 class="classHeading">
+
+			@{
+					// TODO: use Html.CreditValue() to display credits. This code won't account for ex: 15.0 credits
+					if (sec.Credits % 1 == 0)
+					{
+						//then there is no decimal
+						credits = sec.Credits.ToString().Substring(0, 1);
+					}
+					else {
+						credits = sec.Credits.ToString();
+					}
+				}
+
+			@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, credits),
+											"ClassDetails",
+											"Classes",
+											new RouteValueDictionary(_routeValues),
+											null)
+		</h2>
+		<p class="classDetails">
+			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
+		</p>
+
+		<ul class='course-block'>
+		</text>
+		}
+			<li class="section-listing">
+			<span class="item-number"><span class="descriptor">Item number: </span>@(sec.ID.ItemNumber)</span>
+			<ul class="section-details">
+
+		@using (_profiler.Step("Rendering offered items"))
+	{
+		foreach (var item in sec.Offered)
+		{
+			if(sec.ID.ToString() != PreviousSectionID) {
+				<li class="section">@sec.SectionCode</li>
+		} else {
+				<li class="section">&nbsp;</li>
+			}
+				<li class="instructor">
+					<span class="descriptor">Instructor:</span>
+					<ul>
+						<li>
+						@if (string.IsNullOrWhiteSpace(item.InstructorEmail))
+			{
+							@Html.Raw(string.IsNullOrWhiteSpace(item.InstructorName) ? "&nbsp;" : item.InstructorName)
+			}
+			else
+			{
+								if (string.IsNullOrWhiteSpace(item.InstructorName))
+								{ <text>&nbsp;</text> }
+								else
+								{ <a href="@Helpers.getProfileURL(Convert.ToString(item.InstructorID))">@item.InstructorName</a>	}
+			}
+						</li>
+					</ul>
+				</li>
+				<li>
+					<span class="descriptor">Meets: </span>
+					<ul>
+						<li>
+							<span class="days">
+								<abbr title="** TITLE GOES HERE **">
+								@if (sec.IsOnline)
+				{
+									<text>Online</text>
 				}
 				else
 				{
-									<strong class="seatsAvailable">@item.SeatsAvailable</strong>
-									<span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">
-										[update]</a></span>
+						@item.Days
 				}
-							</li>
-				ViewBag.seatAvailbilityDisplayed = true;
-																																	}
-
-
-
-
-						<li class="section-notes"><span class="descriptor">Notes: </span>
-						@if (@item.Footnotes != null && @item.Footnotes.Count() > 0)
-			{
-							<ul>
-							@foreach (string note in @item.Footnotes)
-				{
-								<li><span class="label">@note</span></li>
-				}
-							</ul>
-			}
+								</abbr>
+							</span>
+							<span class="times">
+								<span class="descriptor">at </span>
+								@String.Format("{0:t}", item.StartTime).Replace(" ", "")-@String.Format("{0:t}", item.EndTime).Replace(" ", "")
+							</span>
+							<span class="room">
+								<span class="descriptor">in </span>
+								@Html.Raw(string.IsNullOrWhiteSpace(item.Room) ? "-" : item.Room)
+							</span>
 						</li>
-					}
-
-					<!--end of repeat offered information -->
-				</ul>
-			</li>
-			ViewBag.seatAvailbilityDisplayed = false;
-
-
-
-
-			if (String.Compare(@ViewBag.displayedCourseNum, item.CourseNumber) < 0)
-			{
-				ViewBag.displayedCourseNum = item.CourseNumber;
-			}
-
-
+					</ul>
+				</li>
+						 if (sec.ID.ToString() != PreviousSectionID)
+						 {
+				<li class="availability-@(sec.ID.ToString())">
+					<span class="descriptor">Seat Availability: </span>
+				@if (@sec.WaitlistCount > 0)
+		{
+					<strong class="seatsAvailable">class full, @sec.WaitlistCount on waitlist</strong>
+					<span class="course-updated"></span>
+		}
+		else
+		{
+					<strong class="seatsAvailable">@sec.SeatsAvailable</strong>
+					<span class="course-updated"><em>updated @sec.LastUpdated</em> <a id="@(sec.ID.ToString())">[update]</a></span>
+		}
+				</li>
+						 }
+						 else
+						 {
+				<li>&nbsp;</li>
+						 }
+						 PreviousSectionID = sec.ID.ToString();
+		} @* end foreach(item) *@
 	}
+				<li class="section-notes">
+					<span class="descriptor">Notes: </span>
+					@if (@sec.Footnotes != null && @sec.Footnotes.Count() > 0)
+		 {
+					<ul>
+					@foreach (string note in @sec.Footnotes)
+		 {
+						<li><span class="label">@note</span></li>
+		 }
+					</ul>
+		 }
+				</li>
+			</ul>
+			</li>
+		 PreviousCourseID = sec.CourseID;
+		} @* end foreach(sec) *@
+	}
+		</ul> <!-- end "course-block" (final) -->
 
 	@if (ViewBag.ItemCount == 0)
 	{

@@ -66,6 +66,11 @@ namespace CTCClassSchedule.Controllers
 			IList<ISectionFacet> facets = addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s,
 																							f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
+			// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
+			IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
+			routeValues.Add("YearQuarterID", quarter);
+			ViewBag.RouteValues = routeValues;
+
 			if (searchterm != null && !ceRedirect)
 			{
 				SqlParameter[] parms = {

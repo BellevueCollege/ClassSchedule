@@ -276,7 +276,7 @@ textarea
 	margin-left: 190px;
 	padding-top: 28px;
 	padding-bottom: 35px;
-    overflow: hidden;
+  /*  overflow: hidden;  messes up chrome's display... */
 }
 
 #scheduleContentNoSidebar{
@@ -1199,16 +1199,21 @@ ul.section-details li.section-notes
 
 #searchResultsMsg
 {
-	float: left;
+	/* float: left;*/
 	width: 590px;
+	min-width: 590px;
     font-size: 13px;
+    display: inline;
 
 }
 
 #searchPageNum
 {
-	float: right;
-	margin-right: 20px;
+	/*float: right; */
+
+
+	text-align: right;
+	margin-top: -20px;
 }
 
 #courseDescription em.keyword, a em.keyword
