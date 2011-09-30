@@ -129,7 +129,7 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		///
 
-		[ActionOutputCache("SubjectCacheTime")] // Caches for 6 hours
+		[ActionOutputCache("SubjectCacheTime")]
 		public ActionResult Subject(string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail)
 		{
 			ViewBag.Subject = Subject;
@@ -156,6 +156,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.LinkParams = getLinkParams();
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
+			facets.Add(new RegistrationQuartersFacet(4));
 
 			setProgramInfo(Subject);
 
@@ -163,25 +164,19 @@ namespace CTCClassSchedule.Controllers
 			{
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
-				// TODO: GetCourses() can take a Subject parameter - returning a smaller dataset which doesn't need to be further filtered.
-				IList<Course> courses;
-				using (_profiler.Step("ODSAPI::GetCourses()"))
-				{
-					courses = respository.GetCourses(facets);
-				}
 				if (Subject != null)
 				{
-					IEnumerable<Course> coursesEnum;
-					coursesEnum = (from c in courses
-												where c.Subject == Subject.ToUpper()
-												select c).OrderBy(c => c.Subject).ThenBy(c => c.Number).Distinct();
+					IEnumerable<Course> coursesEnum = respository.GetCourses(Subject, facets).Distinct();
 					ViewBag.ItemCount = coursesEnum.Count();
 
-					return View(coursesEnum);
+					return View(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number));
 				}
 				else
 				{
-					return View();
+					IEnumerable<Course> coursesEnum = respository.GetCourses(facets).Distinct();
+					ViewBag.ItemCount = coursesEnum.Count();
+
+					return View(coursesEnum);
 				}
 			}
 		}
@@ -192,7 +187,7 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/{FriendlyYRQ}/
 		/// </summary>
 
-		[ActionOutputCache("YearQuarterCacheTime")] // Caches for 30 minutes
+		[ActionOutputCache("YearQuarterCacheTime")]
 		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter)
 		{
 			ViewBag.WhichClasses = (letter == null || letter == "" ? " (All)" : " (" + letter.ToUpper() + ")");
