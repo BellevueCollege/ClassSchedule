@@ -156,7 +156,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.LinkParams = getLinkParams();
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
-			facets.Add(new RegistrationQuartersFacet(4));
+			facets.Add(new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay));
 
 			setProgramInfo(Subject);
 
@@ -309,6 +309,7 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.RouteValues = routeValues;
 
 				var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
+																	 where s.ClassID.Substring(4) == YRQ.ID
 																	 select s);
 
 				IList<Section> sections;
@@ -341,7 +342,7 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/All/{Subject}/{ClassNum}
 		/// </summary>
 		///
-		[ActionOutputCache("ClassDetailsCacheTime")] // Caches for 30 minutes
+		[ActionOutputCache("ClassDetailsCacheTime")]
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 
@@ -356,12 +357,17 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(respository);
+				ViewBag.QuarterNavMenu = yrqRange;
 
 				if (courseID != null)
 				{
-					// TODO: if we joined the seat availablility lookup w/ the sections, would it return faster?
+					string lastYrqInRange = yrqRange.Select(y => y.ID).Max();
+					string firstYrqInRange = yrqRange.Select(y => y.ID).Min();
+
 					var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
+																		 where s.ClassID.Substring(4).CompareTo(lastYrqInRange) <= 0
+																		 && s.ClassID.Substring(4).CompareTo(firstYrqInRange) >= 0
 					                           select s);
 
 					// TODO: move this declaration somewhere it can more easily be re-used
