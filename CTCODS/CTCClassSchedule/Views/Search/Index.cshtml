@@ -26,23 +26,15 @@
 	$(document).ready(function () {
 
 		//highlight all of the words that match the search term, respecting case.
-		var lowercase = "@(ViewBag.searchterm)".toLowerCase();
-		//alert(lowercase);
-		var uppercase = "@(ViewBag.searchterm)".toUpperCase();
-		//alert(uppercase);
-		var capitalized = "@(ViewBag.searchterm)".charAt(0).toUpperCase() + "@(ViewBag.searchterm)".substr(1);
-		//alert(capitalized);
-		/*
 		$(".classHeading,#courseDescription").each(function () {
 			//if ($(this).children().length == 0) {
-				$(this).html($(this).html().replace(/@(ViewBag.searchterm.ToLower())/, '<em class="keyword">' + @(ViewBag.searchterm.ToLower()) + '</em>'));
-				$(this).html($(this).html().replace(/@(ViewBag.searchterm.ToUpper())/, '<em class="keyword">' + @(ViewBag.searchterm.ToUpper()) + '</em>'));
-				$(this).html($(this).html().replace(/@(Char.ToUpper(ViewBag.searchterm[0]) + ViewBag.searchterm.ToLower().Substring(1))/, '<em class="keyword">' + @(Char.ToUpper(ViewBag.searchterm[0]) + ViewBag.searchterm.ToLower().Substring(1)) + '</em>'));
-				//$(this).html($(this).html().replace(/capitalized/, '<em class="keyword">' + capitalized + '</em>'));
-				//$(this).html($(this).html().replace(/uppercase/, '<em class="keyword">' + uppercase + '</em>'));
+				$(this).html($(this).html().replace(/@(ViewBag.searchterm.ToLower())/g, '<em class="keyword">@(ViewBag.searchterm.ToLower())</em>'));
+				$(this).html($(this).html().replace(/@(ViewBag.searchterm.ToUpper())/g, '<em class="keyword">@(ViewBag.searchterm.ToUpper())</em>'));
+				$(this).html($(this).html().replace(/@(Char.ToUpper(ViewBag.searchterm[0]) + ViewBag.searchterm.ToLower().Substring(1))/g, '<em class="keyword">@(Char.ToUpper(ViewBag.searchterm[0]) + ViewBag.searchterm.ToLower().Substring(1))</em>'));
+
 			//}
 		});
-		*/
+
 		//end of highlight
 
 		//call the getSeats method when any of the [update] links are clicked.
@@ -139,6 +131,12 @@
 		<p class="classDetails">
 			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
 		</p>
+
+		<p id="courseDescription">
+				@*Html.Raw(item.CourseDescriptions[0].Description.Replace(ViewBag.searchterm, "<em class='keyword'>" + ViewBag.searchterm + "</em>"))) *@
+				@(sec.CourseDescriptions.Count() == 0 ? "" : @sec.CourseDescriptions[0].Description)
+                @Html.ActionLink("View Class Details", "ClassDetails",  "Classes", new { YearQuarterID = quarter, Subject = sec.CourseSubject, ClassNum = sec.CourseNumber }, null)
+			</p>
 
 		<ul class='course-block'>
 		</text>
