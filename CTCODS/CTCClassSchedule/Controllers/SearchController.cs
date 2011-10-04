@@ -99,6 +99,7 @@ namespace CTCClassSchedule.Controllers
 					ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
 					var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
+																		 where s.ClassID.Substring(4) == YRQ.ID
 																		 select s);
 
 					IList<Section> sections = null;
