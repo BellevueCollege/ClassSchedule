@@ -68,6 +68,7 @@
 		</p>
 		@using (_profiler.Step("Rendering sections"))
 	{
+		_routeValues["YearQuarterID"] = "All";
 		foreach (var sec in Model)
 		{
 			if(sec.CourseID != PreviousCourseID)
