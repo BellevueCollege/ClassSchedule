@@ -13,6 +13,7 @@ namespace CTCClassSchedule.Controllers
 		/// Returns an array of <see cref="Course"/> Subjects
 		/// </summary>
 		/// <param name="format"></param>
+		///<param name="yrq"></param>
 		///<returns>
 		///		Either a <see cref="PartialViewResult"/> which can be embedded in an MVC View,
 		///		or the list of <see cref="Course"/> Subjects as a JSON array.
@@ -24,11 +25,12 @@ namespace CTCClassSchedule.Controllers
 		///		</example>
 		/// </remarks>
 		[HttpGet]
-		public ActionResult Subjects(string format)
+		public ActionResult Subjects(string format, string yrq)
 		{
 			using (OdsRepository db = new OdsRepository(HttpContext))
 			{
-				IList<CoursePrefix> data = db.GetCourseSubjects();
+				IList<CoursePrefix> data;
+				data = string.IsNullOrWhiteSpace(yrq) ? db.GetCourseSubjects() : db.GetCourseSubjects(YearQuarter.FromFriendlyName(yrq));
 
 				if (format == "json")
 				{
