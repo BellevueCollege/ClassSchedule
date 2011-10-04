@@ -8,19 +8,18 @@ using Ctc.Ods.Types;
 
 namespace Ctc.Wcf
 {
-	[ServiceContract]
 	[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
 	[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall)]
-	public class Service
+	public class Service : IService
 	{
-		//5/25/2011 - Not currently returning results
-		[WebGet(UriTemplate = "Course/{YearQuarterID}/{courseID}")]
-		public IList<Section> GetSectionsByYQcourseId(string YearQuarterID, string courseID)
+		IList<Course> IService.GetCoursesByCourseID(string courseID)
 		{
 			// TODO: include RegistrationQuartersFacet in GetSections() call - to limit range of quarters returned
-			IList<Section> sections = new OdsRepository().GetSections(CourseID.FromString(courseID), YearQuarter.FromString(YearQuarterID));
+            using (OdsRepository repository = new OdsRepository())
+            {
+                return repository.GetCourses();
+            }
 
-			return sections;
 		}
 
 	}

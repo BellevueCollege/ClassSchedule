@@ -69,8 +69,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\IService.cs" />
     <Compile Include="Service.cs" />
-    <Compile Include="SampleItem.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
