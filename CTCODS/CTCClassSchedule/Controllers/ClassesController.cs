@@ -349,7 +349,13 @@ namespace CTCClassSchedule.Controllers
 			ICourseID courseID = CourseID.FromString(Subject, ClassNum);
 			ViewBag.titleDisplayed = false;
 			ViewBag.seatAvailbilityDisplayed = false;
-			ViewBag.CourseOutcome = getCourseOutcome(Subject, ClassNum);
+			string courseOutcome = getCourseOutcome(Subject, ClassNum);
+			if (courseOutcome.Length == 0)
+			{
+				courseOutcome = getCourseOutcome(Subject + "&", ClassNum);
+			}
+
+			ViewBag.CourseOutcome = courseOutcome;
 
 			setProgramInfo(Subject);
 
@@ -492,6 +498,7 @@ namespace CTCClassSchedule.Controllers
 			const string SETTING_KEY = "IncludeCourseOutcomes";
 			bool includeCourseOutcomes = false;
 			string returnString = "";
+			string url = "";
 
 			if (ConfigurationManager.AppSettings.AllKeys.Contains(SETTING_KEY))
 			{
@@ -500,7 +507,15 @@ namespace CTCClassSchedule.Controllers
 
 			if (includeCourseOutcomes)
 			{
-				string url = "http://bellevuecollege.edu/courseoutcomes/?CourseID=" + Subject + "%20" + ClassNum;
+				if (Subject.Contains("&"))
+				{
+					url = "http://bellevuecollege.edu/courseoutcomes/?CourseID=" + Subject.Replace("&", "") + "^" + ClassNum;
+				}
+				else
+				{
+					url = "http://bellevuecollege.edu/courseoutcomes/?CourseID=" + Subject + "%20" + ClassNum;
+				}
+
 				StringBuilder sb = new StringBuilder();
 
 				byte[] buffer = new byte[8000];
