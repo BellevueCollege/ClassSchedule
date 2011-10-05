@@ -172,7 +172,7 @@
 						 {
 				<li class="availability-@(sec.ID.ToString())">
 					<span class="descriptor">Seat Availability: </span>
-				@if (@sec.WaitlistCount > 0)
+				@if (@sec.SeatsAvailable <= 0 || sec.WaitlistCount > 0)
 		{
 					<strong class="seatsAvailable">class full, @sec.WaitlistCount on waitlist</strong>
 					<span class="course-updated"></span>
