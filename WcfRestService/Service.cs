@@ -17,9 +17,8 @@ namespace Ctc.Wcf
 			// TODO: include RegistrationQuartersFacet in GetSections() call - to limit range of quarters returned
             using (OdsRepository repository = new OdsRepository())
             {
-                return repository.GetCourses();
+                return repository.GetCourses(CourseID.FromString(courseID));
             }
-
 		}
 
 	}
