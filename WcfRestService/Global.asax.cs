@@ -14,8 +14,7 @@ namespace Ctc.Wcf
 
 		private void RegisterRoutes()
 		{
-			// Edit the base address of Service1 by replacing the "Service1" string below
-			RouteTable.Routes.Add(new ServiceRoute("Service", new WebServiceHostFactory(), typeof(Service)));
+			RouteTable.Routes.Add(new ServiceRoute("rest", new WebServiceHostFactory(), typeof(Service)));
 		}
 	}
 }
