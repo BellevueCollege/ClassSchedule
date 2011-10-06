@@ -9,6 +9,9 @@
 h1 {
     font-size: 27px;
 }
+h1.course-title {
+    width: 920px;
+}
 
 h2{
 	font-size: 21px;
