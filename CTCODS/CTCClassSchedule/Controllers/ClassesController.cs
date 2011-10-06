@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Ctc.Ods;
+using Ctc.Ods.Config;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
@@ -23,6 +24,8 @@ namespace CTCClassSchedule.Controllers
 	{
 		#region controller member vars
 		readonly private MiniProfiler _profiler = MiniProfiler.Current;
+		private readonly ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
+
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
 		private string _currentAppSubdirectory;
@@ -345,65 +348,49 @@ namespace CTCClassSchedule.Controllers
 		[ActionOutputCache("ClassDetailsCacheTime")]
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
-
 			ICourseID courseID = CourseID.FromString(Subject, ClassNum);
-			ViewBag.titleDisplayed = false;
-			ViewBag.seatAvailbilityDisplayed = false;
-			string courseOutcome = getCourseOutcome(Subject, ClassNum);
-			if (courseOutcome.Length == 0)
-			{
-				courseOutcome = getCourseOutcome(Subject + "&", ClassNum);
-			}
-
-			ViewBag.CourseOutcome = courseOutcome;
 
 			setProgramInfo(Subject);
-
-			ViewBag.LinkParams = getLinkParams();
 
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{
 				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(respository);
 				ViewBag.QuarterNavMenu = yrqRange;
 
-				if (courseID != null)
+				string currentYrq = yrqRange[0].ID;
+				var seatsAvailableLocal = from s in _scheduledb.vw_SeatAvailability
+																	where s.ClassID.Substring(4) == currentYrq
+					                        select s;
+
+				// TODO: move this declaration somewhere it can more easily be re-used
+				IList<ISectionFacet> facets = new List<ISectionFacet> {new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay)};
+
+				IList<Section> sections;
+				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
-					string lastYrqInRange = yrqRange.Select(y => y.ID).Max();
-					string firstYrqInRange = yrqRange.Select(y => y.ID).Min();
-
-					var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
-																		 where s.ClassID.Substring(4).CompareTo(lastYrqInRange) <= 0
-																		 && s.ClassID.Substring(4).CompareTo(firstYrqInRange) >= 0
-					                           select s);
-
-					// TODO: move this declaration somewhere it can more easily be re-used
-					IList<ISectionFacet> facets = new List<ISectionFacet> {new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay)};
-
-					IList<Section> sections;
-					using (_profiler.Step("ODSAPI::GetSections()"))
-					{
-						sections = respository.GetSections(courseID, facetOptions: facets);
-					}
-					IEnumerable<SectionWithSeats> sectionsEnum;
-					sectionsEnum = (
-								from c in sections
-								join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
-								where c.CourseSubject == Subject.ToUpper()
-														orderby c.Yrq.ID descending
-								select new SectionWithSeats
-									{
-																				ParentObject = c,
-											SeatsAvailable = d.SeatsAvailable,
-											LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-									}
-					               );
-
-					return View(sectionsEnum);
+					sections = respository.GetSections(courseID, facetOptions: facets);
 				}
-				else
+
+				Section courseInfo = sections.First();
+				ViewBag.CourseInfo = courseInfo;
+				using (_profiler.Step("Retrieving course outcomes"))
 				{
-					return View();
+					ViewBag.CourseOutcome = getCourseOutcome(courseInfo.IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, ClassNum);
 				}
+				IEnumerable<SectionWithSeats> sectionsEnum = (
+									from c in sections
+									join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID into cd
+									from d in cd.DefaultIfEmpty()	// include all sections, even if don't have an associated seatsAvailable
+									orderby c.Yrq.ID descending
+									select new SectionWithSeats
+										{
+												ParentObject = c,
+												SeatsAvailable = d == null ? int.MinValue : d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
+												LastUpdated = d == null ? string.Empty : Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
+										}
+				                           );
+
+				return View(sectionsEnum);
 			}
 		}
 
@@ -595,33 +582,36 @@ namespace CTCClassSchedule.Controllers
 		/// <param name="Subject"></param>
 		private void setProgramInfo(string Subject)
 		{
-			const string DEFAULT_TITLE = "";
-			const string DEFAULT_URL = "";
-
-			var specificProgramInfo = from s in _programdb.ProgramInformation
-																where s.Abbreviation == Subject
-																select s;
-
-			if (specificProgramInfo.Count() > 0)
+			using (_profiler.Step("Retrieving course program information"))
 			{
-				var program = specificProgramInfo.Take(1).Single();
+				const string DEFAULT_TITLE = "";
+				const string DEFAULT_URL = "";
 
-				ViewBag.ProgramTitle = program.Title ?? DEFAULT_TITLE;
+				var specificProgramInfo = from s in _programdb.ProgramInformation
+				                          where s.Abbreviation == Subject
+				                          select s;
 
-				string url = program.Url ?? DEFAULT_URL;
-
-				//if the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
-				//just return it, otherwise prepend iwth the current school url.
-				if (!Regex.IsMatch(url, @"^https?://"))
+				if (specificProgramInfo.Count() > 0)
 				{
-					url =  ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(CurrentAppSubdirectory).UriCombine(url);
+					var program = specificProgramInfo.Take(1).Single();
+
+					ViewBag.ProgramTitle = program.Title ?? DEFAULT_TITLE;
+
+					string url = program.Url ?? DEFAULT_URL;
+
+					//if the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
+					//just return it, otherwise prepend iwth the current school url.
+					if (!Regex.IsMatch(url, @"^https?://"))
+					{
+						url =  ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(CurrentAppSubdirectory).UriCombine(url);
+					}
+					ViewBag.ProgramUrl = url;
 				}
-				ViewBag.ProgramUrl = url;
-			}
-			else
-			{
-				ViewBag.ProgramTitle = DEFAULT_TITLE;
-				ViewBag.ProgramUrl = DEFAULT_URL;
+				else
+				{
+					ViewBag.ProgramTitle = DEFAULT_TITLE;
+					ViewBag.ProgramUrl = DEFAULT_URL;
+				}
 			}
 		}
 		#endregion

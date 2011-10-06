@@ -627,6 +627,11 @@ p.course-details-link
 
 }
 
+.course-block-past-quarter
+{
+	background:  url(images/course-block-header-noseats.png) 0 9px no-repeat;
+}
+
 .course-block-no-section
 {
 	font-size: 12px;
@@ -640,7 +645,15 @@ p.course-details-link
 
 }
 
+.course-YRQ
+{
+	/* no styles currently specified */
+}
 
+.course-YRQ-past-quarter
+{
+	/* no styles currently specified */
+}
 
 .section-listing
 {
