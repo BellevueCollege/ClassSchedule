@@ -5,6 +5,7 @@
 @{
 	String subdir = ViewBag.currentAppSubdirectory;
 	ViewBag.CourseTitle = "";
+	string PreviousSectionID = string.Empty;
 	//Page Title is set during Model iteration:
 }
 
@@ -132,24 +133,36 @@
 					    <!--start of repeat offered information -->
 					    @foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
          {
-						    <li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
+
+
+					 if(item.ID.ToString() != PreviousSectionID) {
+						<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
+					 }
+					 else
+					 {
+							<li class="section">&nbsp;</li>
+					 }
+
+
+
+
 						    <li class="instructor"><span class="descriptor">Instructor:</span>
 							    <ul>
 								    <li>
 									    @if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
-             {
-                 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-                 { <text>&nbsp;</text> }
-                 else
-                 { @offering.InstructorName	}
-             }
-             else
-             {
-                 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-                 { <text>^&nbsp;</text> }
-                 else
-                 { <a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))">@offering.InstructorName</a>	}
-             }
+						 {
+							 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+							 { <text>&nbsp;</text> }
+							 else
+							 { @offering.InstructorName	}
+						 }
+						 else
+						 {
+							 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
+							 { <text>^&nbsp;</text> }
+							 else
+							 { <a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))">@offering.InstructorName</a>	}
+						 }
 								    </li>
 							    </ul>
 						    </li>
@@ -159,9 +172,9 @@
 								    <li><span class="days">
 									    <abbr title="Days Offered">
 										    @if (item.IsOnline == true)
-              { <text>Online</text> }
-              else
-              { @offering.Days }
+							{ <text>Online</text> }
+							else
+							{ @offering.Days }
 									    </abbr></span> <span class="times">
 										    <span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime).Replace(" ", "")-@String.Format("{0:t}", offering.EndTime).Replace(" ", "")
 									    </span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
@@ -170,44 +183,48 @@
 						    </li>
 
 
-				    if (ViewBag.seatAvailbilityDisplayed == false)
-				    {
+																																		 if (ViewBag.seatAvailbilityDisplayed == false)
+																																		 {
 							    <li class="availability-@(item.ID.ToString())">
 								    <span class="descriptor">Seats Available:
 								    </span>
 								    @if (@item.SeatsAvailable <= 0 || item.WaitlistCount > 0)
-				    {
+						{
 									    <strong class="seatsFull">class full, @item.WaitlistCount on waitlist</strong>
 									    <span class="course-updated"></span>
-				    }
-				    else
-				    {
+						}
+						else
+						{
 									    <strong class="seatsAvailable">@item.SeatsAvailable</strong>
 									    <span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">
 										    [update]</a></span>
-				    }
+						}
 							    </li>
-				    ViewBag.seatAvailbilityDisplayed = true;
-																																     }
+						ViewBag.seatAvailbilityDisplayed = true;
+																																		 }
 
 						    <li class="section-notes"><span class="descriptor">Notes: </span>
 						    @if (@item.Footnotes != null)
-			    {
+					{
 							    <ul>
 							    @foreach (string note in item.Footnotes)
-			     {
+					 {
 								    <li><span class="label">@note</span></li>
-			     }
+					 }
 							    </ul>
-			    }
+					}
 						    </li>
-		     } <!--end of repeat offered information -->
+					 PreviousSectionID = item.ID.ToString();
+				 }
+
+
+				 <!--end of repeat offered information -->
 
 				    </ul>
 			    </li>
-			    ViewBag.seatAvailbilityDisplayed = false;
+				 ViewBag.seatAvailbilityDisplayed = false;
 
-		    }
+			}
 	    </div> <!-- class-details -->
 
         <div id="scheduleRightSidebar">
