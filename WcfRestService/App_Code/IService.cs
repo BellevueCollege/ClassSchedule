@@ -13,7 +13,7 @@ namespace Ctc.Wcf
     [ServiceContract]
     public interface IService
     {
-        [WebGet(UriTemplate = "Course/{courseID}")]
+        [WebGet(UriTemplate = "Courses/{courseID}")]
         [OperationContract]
         IList<Course> GetCoursesByCourseID(string courseID);
     }
