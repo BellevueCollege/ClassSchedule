@@ -10,8 +10,6 @@
 
 	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;
-
-  ViewBag.PageTitle = YearQuarter + " " + ViewBag.Subject + " (" + @ViewBag.ProgramTitle + ") Credit Classes at Bellevue College";
 }
 <script type="text/javascript">
 
@@ -58,20 +56,28 @@
 	@Html.Partial("advancedFacetedSearch")
     @Html.Partial("basicFacetedSearch")
 	<div id="scheduleContent">
-	<h1 class="program-title">
-			@ViewBag.ProgramTitle
-            <span class="subjectchooser">@Html.Partial("subjectNavigation")</span>
-	</h1>
+		@if (Model.Count() == 0)
+	{
+			<h3>No classes found.</h3>
+	}
+	else
+	{
+		<h1 class="program-title">
+				@ViewBag.ProgramTitle
+							<span class="subjectchooser">@Html.Partial("subjectNavigation")</span>
+		</h1>
 
 		<p id="programWebsite">
 			<a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a>
 		</p>
+	}
+
 		@using (_profiler.Step("Rendering sections"))
 	{
 		_routeValues["YearQuarterID"] = "All";
 		foreach (var sec in Model)
 		{
-			if(sec.CourseID != PreviousCourseID)
+			if (sec.CourseID != PreviousCourseID)
 			{
 				// close the previous UL before starting another
 				if (!string.IsNullOrEmpty(PreviousCourseID))
@@ -86,15 +92,16 @@
 		<h2 class="classHeading">
 
 			@{
-					// TODO: use Html.CreditValue() to display credits. This code won't account for ex: 15.0 credits
-					if (sec.Credits % 1 == 0)
-					{
-						//then there is no decimal
-						credits = sec.Credits.ToString().Substring(0, 1);
-					}
-					else {
-						credits = sec.Credits.ToString();
-					}
+				// TODO: use Html.CreditValue() to display credits. This code won't account for ex: 15.0 credits
+				if (sec.Credits % 1 == 0)
+				{
+					//then there is no decimal
+					credits = sec.Credits.ToString().Substring(0, 1);
+				}
+				else
+				{
+					credits = sec.Credits.ToString();
+				}
 				}
 
 			@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, credits),
@@ -109,7 +116,7 @@
 
 		<ul class='course-block'>
 		</text>
-		}
+			}
 			<li class="section-listing">
 			<span class="item-number"><span class="descriptor">Item number: </span>@(sec.ID.ItemNumber)</span>
 			<ul class="section-details">
@@ -118,9 +125,12 @@
 	{
 		foreach (var item in sec.Offered)
 		{
-			if(sec.ID.ToString() != PreviousSectionID) {
+			if (sec.ID.ToString() != PreviousSectionID)
+			{
 				<li class="section">@sec.SectionCode</li>
-		} else {
+			}
+			else
+			{
 				<li class="section">&nbsp;</li>
 			}
 				<li class="instructor">
@@ -133,10 +143,10 @@
 			}
 			else
 			{
-								if (string.IsNullOrWhiteSpace(item.InstructorName))
-								{ <text>&nbsp;</text> }
-								else
-								{ <a href="@Helpers.getProfileURL(Convert.ToString(item.InstructorID))">@item.InstructorName</a>	}
+				if (string.IsNullOrWhiteSpace(item.InstructorName))
+				{ <text>&nbsp;</text> }
+				else
+				{ <a href="@Helpers.getProfileURL(Convert.ToString(item.InstructorID))">@item.InstructorName</a>	}
 			}
 						</li>
 					</ul>
@@ -168,8 +178,8 @@
 						</li>
 					</ul>
 				</li>
-						 if (sec.ID.ToString() != PreviousSectionID)
-						 {
+	 if (sec.ID.ToString() != PreviousSectionID)
+	 {
 				<li class="availability-@(sec.ID.ToString())">
 					<span class="descriptor">Seat Availability: </span>
 				@if (@sec.SeatsAvailable <= 0 || sec.WaitlistCount > 0)
@@ -183,12 +193,12 @@
 					<span class="course-updated"><em>updated @sec.LastUpdated</em> <a id="@(sec.ID.ToString())">[update]</a></span>
 		}
 				</li>
-						 }
-						 else
-						 {
+	 }
+	 else
+	 {
 				<li>&nbsp;</li>
-						 }
-						 PreviousSectionID = sec.ID.ToString();
+	 }
+	 PreviousSectionID = sec.ID.ToString();
 		} @* end foreach(item) *@
 	}
 				<li class="section-notes">
@@ -209,13 +219,5 @@
 		} @* end foreach(sec) *@
 	}
 		</ul> <!-- end "course-block" (final) -->
-
-		@if (ViewBag.ItemCount == 0)
-	{
-			<text>
-			<h3>
-				No classes found.</h3>
-			</text>
-	}
 	</div>
 </div>

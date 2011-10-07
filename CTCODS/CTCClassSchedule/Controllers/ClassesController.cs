@@ -293,8 +293,6 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.LinkParams = getLinkParams();
 
-			ViewBag.displayedCourseNum = 0;
-			ViewBag.seatAvailbilityDisplayed = false;
 			ViewBag.Subject = Subject;
 
 			setProgramInfo(Subject);
@@ -336,7 +334,6 @@ namespace CTCClassSchedule.Controllers
 
 				ViewBag.Modality = Helpers.ConstructModalityList(sectionsEnum, f_oncampus, f_online, f_hybrid, f_telecourse);
 
-				ViewBag.ItemCount = sectionsEnum.Count();
 				return View(sectionsEnum);
 			}
 		}
