@@ -89,18 +89,6 @@
 
 
 	@{
-
-		//viewbag variables are dynamic, so we need to convert to string to use with the Html.ActionLink
-		String QuarterOneFriendly = (String)ViewBag.QuarterOneFriendly;
-		String QuarterTwoFriendly = (String)ViewBag.QuarterTwoFriendly;
-		String QuarterThreeFriendly = (String)ViewBag.QuarterThreeFriendly;
-		String QuarterFourFriendly = (String)ViewBag.QuarterFourFriendly;
-
-		String QuarterOneURL = (String)ViewBag.QuarterOneURL;
-		String QuarterTwoURL = (String)ViewBag.QuarterTwoURL;
-		String QuarterThreeURL = (String)ViewBag.QuarterThreeURL;
-		String QuarterFourURL = (String)ViewBag.QuarterFourURL;
-
 		if (ViewBag.Subject == "All") {
 			ViewBag.Subject = "";
 		}
@@ -111,29 +99,13 @@
 		string QuarterParam = Request.QueryString["quarter"];
 	}
 
-
-
-
 <div id="advancedFacetedSearch" class="sidenav">
         <h2>Refine</h2>
 
 
 @* if the user has browsed vs. searched for a term, display a different subject chooser UI  *@
-@if (string.IsNullOrWhiteSpace(@ViewBag.searchterm))
+@if (!string.IsNullOrWhiteSpace(@ViewBag.searchterm))
 {
-	<!-- Do Nothing.  Removed by Juan
-	<ul class="subject">
-		<li @(ViewBag.activeClass)>
-			<a href="" >@ViewBag.Subject</a>
-		</li>
-                <li>
-                     @Html.Partial("subjectNavigation")
-                </li>
-	</ul>
- -->
-}
-else {
-
     <h3>Subject</h3>
 	<ul class="subject">
 	@foreach (var item in Model.Titles)
@@ -200,6 +172,7 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
 	<div id="classformat">
 	@{
 		IList<ModalityFacetInfo> modalities = (IList<ModalityFacetInfo>)ViewBag.Modality;
+		bool showDaysAndTimes = true;
 	}
 	@if (modalities.Where(m => m.Selected == true).Count() > 0)
  {
@@ -209,6 +182,9 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
  }
  @foreach (ModalityFacetInfo m in modalities)
  {
+	 @* Determine whether or not we should display Days & Times options *@
+	 if (m.Title.ToUpper() == "ONLINE" && m.Selected && modalities.Where(o => o.Title.ToUpper() != "ONLINE" && o.Selected).Count() == 0) { showDaysAndTimes = false; }
+
 		<p class="label_checkbox_pair">
 			<input class="clear" type="checkbox" name="@m.ID" id="@m.ID" value="true" @if (m.Selected)
                                                                              { <text>checked='checked'</text> } />
@@ -218,7 +194,8 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
 	</div>
 
 
-
+	@if (showDaysAndTimes)
+ {
 		<h3>Days & Times</h3>
 		<div id="times">
 		    <label><span title="Start Time" class="time-text">START</span><input id="timestart"  name="timestart" type="text" value="@ViewBag.timestart" /></label><span class="time-separator">-</span><label><span title="End Time" class="time-text">END</span><input id="timeend" name="timeend" type="text" value="@ViewBag.timeend" /></label>
@@ -259,11 +236,11 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
 				<input type="checkbox" name="day_s" id="day_s" value="true"  @if (@ViewBag.day_s == "true")
 																											{  <text>checked="checked"</text> }/>
 			</div>
-
 			<div id="submitjquery">
 
 			</div>
 		</div>
+}
 
 
 
