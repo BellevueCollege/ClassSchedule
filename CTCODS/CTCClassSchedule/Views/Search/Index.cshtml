@@ -27,12 +27,7 @@
 
 		//highlight all of the words that match the search term, respecting case.
 		$(".classHeading,#courseDescription").each(function () {
-			//if ($(this).children().length == 0) {
-				$(this).html($(this).html().replace(/@(ViewBag.searchterm.ToLower())/g, '<em class="keyword">@(ViewBag.searchterm.ToLower())</em>'));
-				$(this).html($(this).html().replace(/@(ViewBag.searchterm.ToUpper())/g, '<em class="keyword">@(ViewBag.searchterm.ToUpper())</em>'));
-				$(this).html($(this).html().replace(/@(Char.ToUpper(ViewBag.searchterm[0]) + ViewBag.searchterm.ToLower().Substring(1))/g, '<em class="keyword">@(Char.ToUpper(ViewBag.searchterm[0]) + ViewBag.searchterm.ToLower().Substring(1))</em>'));
-
-			//}
+			$(this).html($(this).html().replace(/([^\/])(@(ViewBag.searchterm))([^\/]??)/ig, '$1<em class="keyword">$2</em>'));
 		});
 
 		//end of highlight
