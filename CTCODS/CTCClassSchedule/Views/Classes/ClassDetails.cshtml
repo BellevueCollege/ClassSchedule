@@ -90,7 +90,7 @@
 		    {
 					<text>
 			    <h2 class="course-YRQ@(item.SeatsAvailable == int.MinValue ? Html.Raw(" course-YRQ-past-quarter") : Html.Raw(string.Empty))">@item.Yrq.FriendlyName</h2>
-			    <div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle &#8226; @ViewBag.credits <abbr title="Credit(s) ">Cr.</abbr></div>
+			    <div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle &#8226; @Html.CreditsValue(course.Credits) <abbr title="Credit(s) ">Cr.</abbr></div>
 					<ul class="course-block@(item.SeatsAvailable == int.MinValue ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
 					</text>
 		    }

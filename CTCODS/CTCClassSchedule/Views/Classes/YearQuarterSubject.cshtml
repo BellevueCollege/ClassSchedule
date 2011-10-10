@@ -95,8 +95,9 @@
 				// TODO: use Html.CreditValue() to display credits. This code won't account for ex: 15.0 credits
 				if (sec.Credits % 1 == 0)
 				{
-					//then there is no decimal
-					credits = sec.Credits.ToString().Substring(0, 1);
+					//then there is no decimal. trim to 1 or 2 digits depending on credit nums
+					credits = sec.Credits > 9 ? sec.Credits.ToString().Substring(0, 2) : sec.Credits.ToString().Substring(0, 1);
+
 				}
 				else
 				{
