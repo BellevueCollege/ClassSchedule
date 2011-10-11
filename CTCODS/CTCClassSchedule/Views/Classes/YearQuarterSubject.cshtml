@@ -124,7 +124,7 @@
 
 		@using (_profiler.Step("Rendering offered items"))
 	{
-		foreach (var item in sec.Offered)
+		foreach (var item in sec.Offered.OrderBy(o => o.SequenceOrder))
 		{
 			if (sec.ID.ToString() != PreviousSectionID)
 			{
