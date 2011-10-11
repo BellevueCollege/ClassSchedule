@@ -600,7 +600,7 @@ namespace CTCClassSchedule.Controllers
 					//just return it, otherwise prepend iwth the current school url.
 					if (!Regex.IsMatch(url, @"^https?://"))
 					{
-						url =  ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(CurrentAppSubdirectory).UriCombine(url);
+						url =  ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(url);
 					}
 					ViewBag.ProgramUrl = url;
 				}
