@@ -9,6 +9,8 @@ using System.Net;
 using System;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Ctc.Wcf
 {
@@ -43,31 +45,38 @@ namespace Ctc.Wcf
             {
                 queryParams = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.QueryParameters;
 
-                // Set web response format
-                SetResponseFormat(queryParams["format"]);
-
-                // Build facet list from query strings
+                // Build facet list from query strings, and handle other applicable parameters
                 string paramValue;
+                ISectionFacet tempFacet;
                 foreach (string param in queryParams.AllKeys)
                 {
                     paramValue = queryParams[param];
+                    tempFacet = null;
                     switch (param)
                     {
                         case "availability":
-                            addAvailabilityFacet(paramValue);
+                            tempFacet = createAvailabilityFacet(paramValue);
                             break;
                         case "days":
-                            addDaysFacet(paramValue);
+                            tempFacet = createDaysFacet(paramValue);
                             break;
                         case "modality":
-                            addModalityFacet(paramValue);
+                            tempFacet = createModalityFacet(paramValue);
                             break;
                         case "quarters":
-                            addQuartersFacet(paramValue);
+                            tempFacet = createQuartersFacet(paramValue);
                             break;
                         case "time":
-                            addTimeFacet(paramValue); // TODO: Implement time facets. Determine best wayt o pass times with querystrings
+                            tempFacet = createTimeFacet(paramValue); // TODO: Implement time facets. Determine best way to pass times with querystrings
                             break;
+                        case "format":
+                            SetResponseFormat(queryParams["format"]);
+                            break;
+                    }
+
+                    if (tempFacet != null)
+                    {
+                        incomingFacets.Add(tempFacet);
                     }
                 }
             }
@@ -78,16 +87,119 @@ namespace Ctc.Wcf
 
 
         #region GetCourse Members
-        IList<Course> IService.GetCoursesByCourseID(string courseID)
-		{
+        IList<Course> IService.GetAllCourses()
+        {
+            IList<Course> courses;
             using (OdsRepository repository = new OdsRepository())
             {
-
-                IList<Course> courses = repository.GetCourses(CourseID.FromString(courseID));
-                return courses;
+                courses = repository.GetCourses(incomingFacets);
             }
+
+            return courses;
+        }
+
+        IList<Course> IService.GetCoursesByCourseID(string courseID)
+		{
+            IList<Course> courses;
+            using (OdsRepository repository = new OdsRepository())
+            {
+                courses = repository.GetCourses(CourseID.FromString(courseID), incomingFacets);
+            }
+
+            return courses;
 		}
+
+        IList<Course> IService.GetCoursesBySubject(string subject)
+        {
+            IList<Course> courses;
+            using (OdsRepository repository = new OdsRepository())
+            {
+                courses = repository.GetCourses(subject, incomingFacets);
+            }
+
+            return courses;
+        }
+
+        IList<CourseDescription> IService.GetCourseDescription(string courseID, string yearQuarterID)
+        {
+            IList<CourseDescription> descriptions;
+            using (OdsRepository repository = new OdsRepository())
+            {
+                if (yearQuarterID != null)
+                {
+                    try
+                    {
+                        descriptions = repository.GetCourseDescription(CourseID.FromString(courseID), YearQuarter.FromString(yearQuarterID));
+                    }
+                    catch (ArgumentOutOfRangeException er)
+                    {
+                        // Invalid YearQuarterID
+                        throw new WebFaultException<string>(string.Format("The value '{0}' is not a valid YearQuarterID.", yearQuarterID), HttpStatusCode.BadRequest);
+                    }
+                }
+                else
+                {
+                    descriptions = repository.GetCourseDescription(CourseID.FromString(courseID));
+                }
+            }
+
+            return descriptions;
+        }
         #endregion
+
+
+        #region GetRegistrationQuarters Members
+        IList<YearQuarter> IService.GetRegistrationQuarters(string count)
+        {
+            IList<YearQuarter> quarters;
+            int quarterCount = 0;
+            using (OdsRepository repository = new OdsRepository())
+            {
+                // Try to convert the COUNT parameter
+                try
+                {
+                    quarterCount = Convert.ToInt32(count);
+                }
+                catch (FormatException er)
+                {
+                    throw new WebFaultException<string>(string.Format("The value '{0}' is not a valid integer.", count), HttpStatusCode.BadRequest);
+                }
+
+                // Throw an exception if the COUNT is negative
+                if (quarterCount < 0)
+                {
+                    throw new WebFaultException<string>(string.Format("The value '{0}' is not a valid quarter count. Count must be non-negative.", count), HttpStatusCode.BadRequest);
+                }
+
+                quarters = repository.GetRegistrationQuarters(quarterCount);
+            }
+
+            return quarters;
+        }
+
+        IList<YearQuarter> IService.GetCurrentRegistrationQuarters()
+        {
+            IList<YearQuarter> quarters;
+            using (OdsRepository repository = new OdsRepository())
+            {
+                quarters = repository.GetRegistrationQuarters();
+            }
+
+            return quarters;
+        }
+
+        YearQuarter IService.GetCurrentQuarter()
+        {
+            YearQuarter quarter;
+            using (OdsRepository repository = new OdsRepository())
+            {
+                quarter = repository.CurrentYearQuarter;
+            }
+
+            return quarter;
+        }
+        #endregion
+
 
         #region GetSection Members
 
@@ -118,18 +230,37 @@ namespace Ctc.Wcf
             }
         }
 
-        #region AddFacet Members
-        private void addAvailabilityFacet(string options)
+
+        #region CreateFacet Members
+        /// <summary>
+        /// Creates an instance of an AvailabilityFacet from a single string of parameters. Meant to ease the creation of a facet from a single querystring.
+        /// </summary>
+        /// <param name="options">String of option(s) that define the facet. The accepted values are case insensitive. <see cref="AvailabilityFacet.Options"/>.<br />
+        /// Accepted values: <ul><li>options = "all"; accepted, but will return a null instance. Filtering by all is the same as not filtering.</li><li>options = "open"</li></ul>
+        /// </param>
+        /// <returns>An instance of AvailabilityFacet that reflects the options passed to the method. Returns a null instance if no applicable options were found.</returns>
+        private AvailabilityFacet createAvailabilityFacet(string options)
         {
+            AvailabilityFacet resultFacet = null;
             if (options.Equals("open", StringComparison.OrdinalIgnoreCase))
             {
-                incomingFacets.Add(new AvailabilityFacet(AvailabilityFacet.Options.Open));
+                resultFacet = new AvailabilityFacet(AvailabilityFacet.Options.Open);
             }
-        }
-        private void addDaysFacet(string options)
-        {
 
+            return resultFacet;
+        }
+
+        /// <summary>
+        /// Creates an instance of a DaysFacet from a single string of parameters. Meant to ease the creation of a facet from a single querystring.
+        /// </summary>
+        /// <param name="options">String of concatenated option(s) that define the facet. The accepted values are case insensitive. <see cref="DaysFacet.Options"/>.<br />
+        /// Sample values: <ul><li>options = "MW"</li><li>options = "TTh"</li><li>options = "MWF"</li><li>options = "All"; accepted, but will return a null instance. Filtering by all is the same as not filtering.</li></ul>
+        /// </param>
+        /// <returns>An instance of DaysFacet that reflects the options passed to the method. Returns a null instance if no applicable options were found.</returns>
+        private DaysFacet createDaysFacet(string options)
+        {
             options = options.ToUpper();
+            DaysFacet resultFacet = null;
             List<string> days = new List<string>("ALL,TH,SA,SU,M,T,W,F".Split(','));
             DaysFacet.Options daysToSelect = DaysFacet.Options.All;
             foreach (string day in days)
@@ -140,7 +271,8 @@ namespace Ctc.Wcf
                     switch (day)
                     {
                         case "ALL":
-                            return;
+                            daysToSelect = daysToSelect | DaysFacet.Options.All;
+                            break;
                         case "TH":
                             daysToSelect = daysToSelect | DaysFacet.Options.Thursday;
                             break;
@@ -172,17 +304,23 @@ namespace Ctc.Wcf
             // If all days were selected, don't filter by days
             if (daysToSelect != DaysFacet.Options.All)
             {
-                incomingFacets.Add(new DaysFacet(daysToSelect));
-            }
-            else
-            {
-                return;
+                resultFacet = new DaysFacet(daysToSelect);
             }
 
+            return resultFacet;
         }
-        private void addModalityFacet(string options)
+
+        /// <summary>
+        /// Creates an instance of a ModalityFacet from a single string of parameters. Meant to ease the creation of a facet from a single querystring.
+        /// </summary>
+        /// <param name="options">String of concatenated option(s) that define the facet. The accepted values are case insensitive. <see cref="ModalityFacet.Options"/>.<br />
+        /// Sample values: <ul><li>options = "Online"</li><li>options = "OnCampus"</li><li>options = "OnlineTelecourseOnCampus"</li><li>options = "Online,OnCampus"</li><li>options = "All"; accepted, but will return a null instance. Filtering by all is the same as not filtering.</li></ul>
+        /// </param>
+        /// <returns>An instance of ModalityFacet that reflects the options passed to the method. Returns a null instance if no applicable options were found.</returns>
+        private ModalityFacet createModalityFacet(string options)
         {
             options = options.ToUpper();
+            ModalityFacet resultFacet = null;
             List<string> modalities = new List<string>("ALL,ONLINE,HYBRID,TELECOURSE,ONCAMPUS".Split(','));
             ModalityFacet.Options modalitiesToSelect = ModalityFacet.Options.All;
             foreach (string modality in modalities)
@@ -193,7 +331,8 @@ namespace Ctc.Wcf
                     switch (modality)
                     {
                         case "ALL":
-                            return;
+                            modalitiesToSelect = modalitiesToSelect | ModalityFacet.Options.All;
+                            break;
                         case "ONLINE":
                             modalitiesToSelect = modalitiesToSelect | ModalityFacet.Options.Online;
                             break;
@@ -216,31 +355,44 @@ namespace Ctc.Wcf
             // If all days were selected, don't filter by days
             if (modalitiesToSelect != ModalityFacet.Options.All)
             {
-                incomingFacets.Add(new ModalityFacet(modalitiesToSelect));
+                resultFacet = new ModalityFacet(modalitiesToSelect);
             }
-            else
-            {
-                return;
-            }
+
+            return resultFacet;
         }
-        private void addQuartersFacet(string options)
+
+        /// <summary>
+        /// Creates an instance of a RegistrationQuartersFacet from a single string of parameters. Meant to ease the creation of a facet from a single querystring.
+        /// </summary>
+        /// <param name="options">A number that represents how many quarters from the current quarter you wish to look into the future (positive number) or past (negative), where 1 looks at the current quarter.</param>
+        /// <returns>An instance of RegistrationQuartersFacet that reflects the options passed to the method. Returns a null instance if no applicable options were found.</returns>
+        private RegistrationQuartersFacet createQuartersFacet(string options)
         {
             int quarterCount;
+            RegistrationQuartersFacet resultFacet = null;
             try
             {
                 quarterCount = Convert.ToInt32(options);
+                resultFacet = new RegistrationQuartersFacet(quarterCount);
             }
-            catch
+            catch(FormatException er)
             {
                 throw new WebFaultException<string>(string.Format("The value '{0}' is not a valid integer.", options), HttpStatusCode.BadRequest);
             }
 
-            incomingFacets.Add(new RegistrationQuartersFacet(quarterCount));
+            return resultFacet;
         }
-        private void addTimeFacet(string options)
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        private TimeFacet createTimeFacet(string options)
         {
             // TODO: Determine how the user should specify TIME
-
+            TimeFacet resultFacet = null;
+            return resultFacet;
         }
         #endregion
     }
