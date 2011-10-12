@@ -326,6 +326,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Views\Shared\Sections.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">
