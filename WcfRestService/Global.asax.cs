@@ -14,7 +14,7 @@ namespace Ctc.Wcf
 
 		private void RegisterRoutes()
 		{
-			RouteTable.Routes.Add(new ServiceRoute("rest", new WebServiceHostFactory(), typeof(Service)));
+			RouteTable.Routes.Add(new ServiceRoute("", new WebServiceHostFactory(), typeof(Service)));
 		}
 	}
 }
