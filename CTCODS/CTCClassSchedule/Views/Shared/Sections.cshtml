@@ -1,1 +1,163 @@
-﻿@model CTCClassSchedule.SectionWithSeats
+﻿@using Ctc.Ods.Types
+@using CTCClassSchedule
+@using CTCClassSchedule.Common
+@model IEnumerable<CTCClassSchedule.SectionWithSeats>
+@{
+	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
+
+	string PreviousCourseID = string.Empty;
+	string PreviousSectionID = string.Empty;
+	// TODO: replace this with MVC mechanisms
+	string subdir = ViewBag.currentAppSubdirectory;
+
+	// TODO: make this configurable, based on our context (e.g. = ViewBag.CurrentQuarter ?? "All" ?)
+	_routeValues["YearQuarterID"] = "All";
+}
+<script type="text/javascript">
+
+	$(document).ready(function () {
+
+		$('.course-updated a').click(function () {
+
+			var courseIdPlusYRQ = this.id;
+			var availability = '#availability-' + courseIdPlusYRQ + ' .seatsAvailable';
+			var courseUpdated = '#availability-' + courseIdPlusYRQ + ' .course-updated em';
+			var originalSeatsAvailable = $(availability).html();
+
+
+			//load the throbber
+			$(availability).html('<img src="@Url.Content("~/Content/images/ajax-loader.gif")" title="loading_seats_available" alt="loading_seats_available" />');
+
+			//post the ajax call to get the available seats and update the UI
+			$.ajax({
+				url: '@(subdir)/Classes/getseats',
+				type: 'POST',
+				data: { courseIdPlusYRQ: courseIdPlusYRQ },
+				timeout: 4000,
+				success: function (result) {
+					var indexOfPipe = result.indexOf("|");
+					var seatsAvailable = result.substring(0, indexOfPipe);
+					var friendlyTime = "updated " + result.substring(indexOfPipe + 1, result.length);
+
+					$(availability).html(seatsAvailable);
+					$(courseUpdated).html(friendlyTime);
+				},
+				error: function (x, t, m) {
+					//alert("got timeout");
+					$(availability).html(originalSeatsAvailable);
+					$(courseUpdated).html("server busy, try again");
+				}
+
+			});
+		});
+	});
+
+</script>
+@foreach (SectionWithSeats sec in Model)
+{
+	string sectionID = sec.ID.ToString();
+
+	if (sec.CourseID != PreviousCourseID)
+	{
+		// close the previous UL before starting another
+		if (!string.IsNullOrEmpty(PreviousCourseID))
+		{
+	@:</ul> <!-- end "course-block" -->
+		}
+		_routeValues["Subject"] = sec.CourseSubject;
+		_routeValues["ClassNum"] = sec.CourseNumber;
+
+	<text>
+	<h2 class="classHeading">
+		@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)),
+										"ClassDetails",
+										"Classes",
+										new RouteValueDictionary(_routeValues),
+										null)
+	</h2>
+	<p class="classDetails">
+		@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
+	</p>
+	<ul class='course-block'>
+		</text>
+	}
+		<li class="section-listing"><span class="item-number"><span class="descriptor">Item
+			number: </span>@sec.ID.ItemNumber</span>
+			<ul class="section-details">
+				<li class="section"><span class="descriptor">Section: </span>@sec.SectionCode</li>
+				<li class="instructor"><span class="descriptor">Instructors:</span>
+					<ul>
+						@foreach (OfferedItem item in sec.Offered.OrderBy(o => o.SequenceOrder))
+			{
+				// instructors
+				if (!string.IsNullOrWhiteSpace(item.InstructorName))
+				{
+							<li><a href="@Helpers.getProfileURL(Convert.ToString(item.InstructorID))">@item.InstructorName</a></li>
+				}
+				else
+				{
+							<li>&nbsp;</li>
+				}
+			}
+					</ul>
+				</li>
+				<li><span class="descriptor">Meets: </span>
+					<ul class="meets">
+						@foreach (OfferedItem item in sec.Offered.OrderBy(o => o.SequenceOrder))
+			{
+				// meeting times
+							<li>
+								@if (sec.IsOnline)
+				{
+									<span class="online">Online</span>
+				}
+				else
+				{
+									<span class="days">
+										<abbr title="** TITLE GOES HERE **">@item.Days</abbr></span>
+									<span class="times"><span class="descriptor">at </span>@String.Format("{0:t}", item.StartTime).Replace(" ", "")-@String.Format("{0:t}", item.EndTime).Replace(" ", "")</span>
+									<span class="room"><span class="descriptor">in </span>@item.Room</span>
+				}
+							</li>
+			}
+					</ul>
+				</li>
+				@if (sectionID != PreviousSectionID)
+		{
+					<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
+						Availability: </span>
+						@if (@sec.SeatsAvailable <= 0 || sec.WaitlistCount > 0)
+			{
+							<strong class="seatsAvailable">class full, @sec.WaitlistCount on waitlist</strong>
+							<span class="course-updated"></span>
+			}
+			else
+			{
+							<strong class="seatsAvailable">@sec.SeatsAvailable</strong>
+							<span class="course-updated"><em>updated @sec.LastUpdated</em> <a id="@sectionID">
+								[update]</a></span>
+			}
+					</li>
+
+					<li class="section-notes"><span class="descriptor">Notes: </span>
+						<ul>
+							@if (@sec.Footnotes != null && @sec.Footnotes.Count() > 0)
+			 {
+				 foreach (string note in @sec.Footnotes)
+				 {
+								<li><span class="label">@note</span></li>
+				 }
+			 }
+			 else
+			 {
+								<li><span class="label">&nbsp;</span></li>
+			 }
+						</ul>
+					</li>
+		}
+			</ul>
+		</li>
+
+	PreviousSectionID = sectionID;
+	PreviousCourseID = sec.CourseID;
+}
