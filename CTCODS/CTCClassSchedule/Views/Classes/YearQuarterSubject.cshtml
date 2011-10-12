@@ -1,16 +1,4 @@
-﻿@using MvcMiniProfiler;
-@using CTCClassSchedule.Common;
-@model IEnumerable<CTCClassSchedule.SectionWithSeats>
-@{
-	MiniProfiler _profiler = MiniProfiler.Current;
-	String YearQuarter = ViewBag.YearQuarter;
-	String subdir = ViewBag.currentAppSubdirectory;
-	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
-	string credits = "";
-
-	string PreviousCourseID = string.Empty;
-	string PreviousSectionID = string.Empty;
-}
+﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
 <div id="scheduleMain">
 	@Html.Partial("quarterNavigation")
 	@Html.Partial("advancedFacetedSearch")
