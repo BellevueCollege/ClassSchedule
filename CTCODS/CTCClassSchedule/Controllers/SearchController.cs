@@ -229,10 +229,6 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		private void setViewBagVars(string YearQuarter, string flex, string time, string days, string avail, string letter)
 		{
-			if (ConfigurationManager.AppSettings != null)
-			{
-				ViewBag.currentAppSubdirectory = ConfigurationManager.AppSettings["currentAppSubdirectory"];
-			}
 			ViewBag.ErrorMsg = "";
 
 			ViewBag.YearQuarter = YearQuarter;

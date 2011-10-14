@@ -29,28 +29,6 @@ namespace CTCClassSchedule.Controllers
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
 		private string _currentAppSubdirectory;
-
-		/// <summary>
-		///
-		/// </summary>
-		private string CurrentAppSubdirectory
-		{
-			get
-			{
-				if (string.IsNullOrWhiteSpace(_currentAppSubdirectory))
-				{
-					if (ConfigurationManager.AppSettings != null)
-					{
-						_currentAppSubdirectory = ConfigurationManager.AppSettings["currentAppSubdirectory"] ?? string.Empty;
-					}
-					else
-					{
-						_currentAppSubdirectory = string.Empty;
-					}
-				}
-				return _currentAppSubdirectory;
-			}
-		}
 		#endregion
 
 		public ClassesController()
@@ -391,7 +369,11 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 
-
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="courseIdPlusYRQ"></param>
+		/// <returns></returns>
 		[HttpPost]
 		public ActionResult getSeats(string courseIdPlusYRQ)
 		{
@@ -557,7 +539,6 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		private void setViewBagVars(string YearQuarter, string avail, string letter)
 		{
-			ViewBag.currentAppSubdirectory = CurrentAppSubdirectory;
 			ViewBag.ErrorMsg = "";
 
 			if (YearQuarter != "")
