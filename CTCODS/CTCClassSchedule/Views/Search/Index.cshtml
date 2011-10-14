@@ -1,26 +1,22 @@
-﻿@model CTCClassSchedule.SearchResultsModel
-@using CTCClassSchedule.Common;
+﻿@using CTCClassSchedule.Common;
 @using MvcMiniProfiler;
 @using System.Text.RegularExpressions;
 @using System.Globalization;
+@model CTCClassSchedule.SearchResultsModel
 
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;
 
-	String quarter = Request.QueryString["quarter"];
-	String classDesc = ViewBag.SubjectCount == 1 ? "class" : "classes";
-	String sectionDesc = ViewBag.ItemCount == 1 ? "section" : "sections";
-	String description = "";
+	int itemCount = ViewBag.ItemCount;
+	int subjectCount = ViewBag.SubjectCount;
+	String classDesc = subjectCount == 1 ? "class" : "classes";
+	String sectionDesc = itemCount == 1 ? "section" : "sections";
 
 	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
-	string credits = "";
-
 
 	string PreviousCourseID = string.Empty;
-	string PreviousSectionID = string.Empty;
 }
-
-
+<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
 <script type="text/javascript">
 
 	$(document).ready(function () {
@@ -31,41 +27,6 @@
 		});
 
 		//end of highlight
-
-		//call the getSeats method when any of the [update] links are clicked.
-		$('.course-updated a').click(function () {
-
-			var courseIdPlusYRQ = this.id;
-			var availability = '.availability-' + courseIdPlusYRQ + ' .seatsAvailable';
-			var courseUpdated = '.availability-' + courseIdPlusYRQ + ' .course-updated em';
-			var originalSeatsAvailable = $(availability).html();
-
-
-			//load the throbber
-			$(availability).html('<img src="@(ViewBag.currentAppSubdirectory)/Content/images/ajax-loader.gif" title="loading_seats_available" alt="loading_seats_available" />');
-
-			//post the ajax call to get the available seats and update the UI
-			$.ajax({
-				url: '@(ViewBag.currentAppSubdirectory)/Classes/getseats',
-				type: 'POST',
-				data: { courseIdPlusYRQ: courseIdPlusYRQ },
-				timeout: 4000,
-				success: function (result) {
-					var indexOfPipe = result.indexOf("|");
-					var seatsAvailable = result.substring(0, indexOfPipe);
-					var friendlyTime = "updated " + result.substring(indexOfPipe + 1, result.length);
-
-					$(availability).html(seatsAvailable);
-					$(courseUpdated).html(friendlyTime);
-				},
-				error: function (x, t, m) {
-					//alert("got timeout");
-					$(availability).html(originalSeatsAvailable);
-					$(courseUpdated).html("server busy, try again");
-				}
-
-			});
-		});
 	});
 
 </script>
@@ -74,50 +35,32 @@
 	@Html.Partial("advancedFacetedSearch")
     @Html.Partial("basicFacetedSearch")
 
-
 	<div id="scheduleContent">
-
 
 	<div id="searchHeaderInfo">
 		<h1 id="searchResultsMsg">
-			<strong>"@(ViewBag.searchterm)"</strong> found @ViewBag.ItemCount @sectionDesc in @ViewBag.SubjectCount @classDesc
+			<strong>"@(ViewBag.searchterm)"</strong> found @itemCount @sectionDesc in @subjectCount @classDesc
 		</h1>
 		<div id="searchPageNum">
 			page @ViewBag.CurrentPage of @ViewBag.TotalPages
 		</div>
 	</div>
 
-		@using (_profiler.Step("Rendering sections"))
+	@if (itemCount == 0)
+	{
+			<h3>No classes found.</h3>
+	}
+	else
+	{
+		using (_profiler.Step("Rendering sections from search results"))
 	{
 		foreach (var sec in Model.Section)
 		{
-			if(sec.CourseID != PreviousCourseID)
-			{
-				// close the previous UL before starting another
-				if (!string.IsNullOrEmpty(PreviousCourseID))
-				{
-					@:</ul>	<!-- end "course-block" -->
-				}
+			_routeValues["Subject"] = sec.CourseSubject;
+			_routeValues["ClassNum"] = sec.CourseNumber;
 
-				_routeValues["Subject"] = sec.CourseSubject;
-				_routeValues["ClassNum"] = sec.CourseNumber;
-
-				<text>
 		<h2 class="classHeading">
-
-			@{
-					// TODO: use Html.CreditValue() to display credits. This code won't account for ex: 15.0 credits
-					if (sec.Credits % 1 == 0)
-					{
-						//then there is no decimal
-						credits = sec.Credits.ToString().Substring(0, 1);
-					}
-					else {
-						credits = sec.Credits.ToString();
-					}
-				}
-
-			@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, credits),
+			@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)),
 											"ClassDetails",
 											"Classes",
 											new RouteValueDictionary(_routeValues),
@@ -128,131 +71,23 @@
 		</p>
 
 		<p id="courseDescription">
-				@*Html.Raw(item.CourseDescriptions[0].Description.Replace(ViewBag.searchterm, "<em class='keyword'>" + ViewBag.searchterm + "</em>"))) *@
 				@(sec.CourseDescriptions.Count() == 0 ? "" : @sec.CourseDescriptions[0].Description)
-                @Html.ActionLink("View Class Details", "ClassDetails",  "Classes", new { YearQuarterID = quarter, Subject = sec.CourseSubject, ClassNum = sec.CourseNumber }, null)
-			</p>
+		</p>
 
 		<ul class='course-block'>
-		</text>
-		}
-			<li class="section-listing">
-			<span class="item-number"><span class="descriptor">Item number: </span>@(sec.ID.ItemNumber)</span>
-			<ul class="section-details">
+			@Html.Partial("Sections", Model.Section.Where(s => s.CourseID == sec.CourseID))
+		</ul>
 
-		@using (_profiler.Step("Rendering offered items"))
-	{
-		foreach (var item in sec.Offered)
-		{
-			if(sec.ID.ToString() != PreviousSectionID) {
-				<li class="section">@sec.SectionCode</li>
-		} else {
-				<li class="section">&nbsp;</li>
-			}
-				<li class="instructor">
-					<span class="descriptor">Instructor:</span>
-					<ul>
-						<li>
-						@if (string.IsNullOrWhiteSpace(item.InstructorEmail))
-			{
-							@Html.Raw(string.IsNullOrWhiteSpace(item.InstructorName) ? "&nbsp;" : item.InstructorName)
-			}
-			else
-			{
-								if (string.IsNullOrWhiteSpace(item.InstructorName))
-								{ <text>&nbsp;</text> }
-								else
-								{ <a href="@Helpers.getProfileURL(Convert.ToString(item.InstructorID))">@item.InstructorName</a>	}
-			}
-						</li>
-					</ul>
-				</li>
-				<li>
-					<span class="descriptor">Meets: </span>
-					<ul>
-						<li>
-							<span class="days">
-								<abbr title="** TITLE GOES HERE **">
-								@if (sec.IsOnline)
-				{
-									<text>Online</text>
-				}
-				else
-				{
-						@item.Days
-				}
-								</abbr>
-							</span>
-							<span class="times">
-								<span class="descriptor">at </span>
-								@String.Format("{0:t}", item.StartTime).Replace(" ", "")-@String.Format("{0:t}", item.EndTime).Replace(" ", "")
-							</span>
-							<span class="room">
-								<span class="descriptor">in </span>
-								@Html.Raw(string.IsNullOrWhiteSpace(item.Room) ? "-" : item.Room)
-							</span>
-						</li>
-					</ul>
-				</li>
-						 if (sec.ID.ToString() != PreviousSectionID)
-						 {
-				<li class="availability-@(sec.ID.ToString())">
-					<span class="descriptor">Seat Availability: </span>
-				@if (@sec.WaitlistCount > 0)
-		{
-					<strong class="seatsAvailable">class full, @sec.WaitlistCount on waitlist</strong>
-					<span class="course-updated"></span>
-		}
-		else
-		{
-					<strong class="seatsAvailable">@sec.SeatsAvailable</strong>
-					<span class="course-updated"><em>updated @sec.LastUpdated</em> <a id="@(sec.ID.ToString())">[update]</a></span>
-		}
-				</li>
-						 }
-						 else
-						 {
-				<li>&nbsp;</li>
-						 }
-						 PreviousSectionID = sec.ID.ToString();
-		} @* end foreach(item) *@
-	}
-				<li class="section-notes">
-					<span class="descriptor">Notes: </span>
-					@if (@sec.Footnotes != null && @sec.Footnotes.Count() > 0)
-		 {
-					<ul>
-					@foreach (string note in @sec.Footnotes)
-		 {
-						<li><span class="label">@note</span></li>
-		 }
-					</ul>
-		 }
-				</li>
-			</ul>
-			</li>
-		 PreviousCourseID = sec.CourseID;
 		} @* end foreach(sec) *@
 	}
-		</ul> <!-- end "course-block" (final) -->
-
-	@if (ViewBag.ItemCount == 0)
-	{
-			<text>
-			<h3>
-				No classes found.</h3>
-			</text>
 	}
-	</div>
 
+	</div>
 
     @if(ViewBag.TotalPages == 1 && Model.SearchResultNoSection.Count() > 0){
 		Html.RenderPartial("NoSectionCourses", Model.SearchResultNoSection);
 	}
 
 	@{Html.RenderPartial("Pager");}
-
-
-
 
 </div>
