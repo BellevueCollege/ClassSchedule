@@ -20,9 +20,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Research", "Research", "{73
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTCWCF", "CTCWCF\CTCWCF.csproj", "{A5E11A22-DB5A-44E9-B563-055B4161DED9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTCWCF.Tests", "CTCWCF.Tests\CTCWCF.Tests.csproj", "{D214BE30-C162-4829-901D-88E92FCC8E30}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5E11A22-DB5A-44E9-B563-055B4161DED9} = {A5E11A22-DB5A-44E9-B563-055B4161DED9}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfsvs.wacollabcoop.org/tfs/bellevuecollege
 		SccLocalPath0 = .
@@ -38,6 +43,9 @@ Global
 		SccProjectUniqueName4 = CTCWCF\\CTCWCF.csproj
 		SccProjectName4 = CTCWCF
 		SccLocalPath4 = CTCWCF
+		SccProjectUniqueName5 = CTCWCF.Tests\\CTCWCF.Tests.csproj
+		SccProjectName5 = CTCWCF.Tests
+		SccLocalPath5 = CTCWCF.Tests
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ODSAPI.vsmdi
@@ -63,6 +71,10 @@ Global
 		{A5E11A22-DB5A-44E9-B563-055B4161DED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5E11A22-DB5A-44E9-B563-055B4161DED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5E11A22-DB5A-44E9-B563-055B4161DED9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D214BE30-C162-4829-901D-88E92FCC8E30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D214BE30-C162-4829-901D-88E92FCC8E30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D214BE30-C162-4829-901D-88E92FCC8E30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D214BE30-C162-4829-901D-88E92FCC8E30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
