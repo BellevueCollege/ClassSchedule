@@ -1,4 +1,19 @@
-﻿@model IEnumerable<CTCClassSchedule.SectionWithSeats>
+﻿@using CTCClassSchedule
+@using CTCClassSchedule.Common
+@using CTCClassSchedule.Controllers
+@using MvcMiniProfiler;
+@model IEnumerable<CTCClassSchedule.SectionWithSeats>
+@{
+	MiniProfiler _profiler = MiniProfiler.Current;
+
+	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
+	_routeValues["YearQuarterID"] = "All";
+
+	string PreviousCourseID = string.Empty;
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
+
 <div id="scheduleMain">
 	@Html.Partial("quarterNavigation")
 	@Html.Partial("advancedFacetedSearch")
@@ -18,8 +33,28 @@
 		<p id="programWebsite">
 			<a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a>
 		</p>
+		using (_profiler.Step("Rendering sections by course"))
+		{
+			foreach (var sec in Model.Select(c => new { c.CourseID, c.CourseSubject, c.CourseNumber, c.CourseTitle, c.Credits }).Distinct())
+			{
+				_routeValues["Subject"] = sec.CourseSubject;
+				_routeValues["ClassNum"] = sec.CourseNumber;
 
-		@Html.Partial("Sections", Model)
-	}
+		<h2 class="classHeading">
+		@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)),
+										"ClassDetails",
+										"Classes",
+										new RouteValueDictionary(_routeValues),
+										null)
+		</h2>
+		<p class="classDetails">
+			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
+		</p>
+		<ul class='course-block'>
+			@Html.Partial("Sections", Model.Where(c => c.CourseID == sec.CourseID))
+		</ul>
+			}
+		}
+}
 	</div>
 </div>

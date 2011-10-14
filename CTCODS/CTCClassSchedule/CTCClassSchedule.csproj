@@ -196,6 +196,7 @@
     <Content Include="Content\timepickerui\jquery-ui-timepicker.css" />
     <Content Include="Content\timepickerui\jquery.ui.timepicker.js" />
     <Content Include="Content\timepickerui\releases.txt" />
+    <Content Include="Scripts\CtcClassSchedule.js" />
     <Content Include="Scripts\jquery.ui.timepicker.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />

@@ -3,84 +3,13 @@
 @using CTCClassSchedule.Common
 @model IEnumerable<CTCClassSchedule.SectionWithSeats>
 @{
-	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
-
-	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;
-	// TODO: replace this with MVC mechanisms
-	string subdir = ViewBag.currentAppSubdirectory;
-
-	// TODO: make this configurable, based on our context (e.g. = ViewBag.CurrentQuarter ?? "All" ?)
-	_routeValues["YearQuarterID"] = "All";
 }
-<script type="text/javascript">
 
-	$(document).ready(function () {
-
-		$('.course-updated a').click(function () {
-
-			var courseIdPlusYRQ = this.id;
-			var availability = '#availability-' + courseIdPlusYRQ + ' .seatsAvailable';
-			var courseUpdated = '#availability-' + courseIdPlusYRQ + ' .course-updated em';
-			var originalSeatsAvailable = $(availability).html();
-
-
-			//load the throbber
-			$(availability).html('<img src="@Url.Content("~/Content/images/ajax-loader.gif")" title="loading_seats_available" alt="loading_seats_available" />');
-
-			//post the ajax call to get the available seats and update the UI
-			$.ajax({
-				url: '@(subdir)/Classes/getseats',
-				type: 'POST',
-				data: { courseIdPlusYRQ: courseIdPlusYRQ },
-				timeout: 4000,
-				success: function (result) {
-					var indexOfPipe = result.indexOf("|");
-					var seatsAvailable = result.substring(0, indexOfPipe);
-					var friendlyTime = "updated " + result.substring(indexOfPipe + 1, result.length);
-
-					$(availability).html(seatsAvailable);
-					$(courseUpdated).html(friendlyTime);
-				},
-				error: function (x, t, m) {
-					//alert("got timeout");
-					$(availability).html(originalSeatsAvailable);
-					$(courseUpdated).html("server busy, try again");
-				}
-
-			});
-		});
-	});
-
-</script>
 @foreach (SectionWithSeats sec in Model)
 {
 	string sectionID = sec.ID.ToString();
 
-	if (sec.CourseID != PreviousCourseID)
-	{
-		// close the previous UL before starting another
-		if (!string.IsNullOrEmpty(PreviousCourseID))
-		{
-	@:</ul> <!-- end "course-block" -->
-		}
-		_routeValues["Subject"] = sec.CourseSubject;
-		_routeValues["ClassNum"] = sec.CourseNumber;
-
-	<text>
-	<h2 class="classHeading">
-		@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)),
-										"ClassDetails",
-										"Classes",
-										new RouteValueDictionary(_routeValues),
-										null)
-	</h2>
-	<p class="classDetails">
-		@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
-	</p>
-	<ul class='course-block'>
-		</text>
-	}
 		<li class="section-listing"><span class="item-number"><span class="descriptor">Item
 			number: </span>@sec.ID.ItemNumber</span>
 			<ul class="section-details">
@@ -124,6 +53,8 @@
 				</li>
 				@if (sectionID != PreviousSectionID)
 		{
+				if (sec.SeatsAvailable != int.MinValue)
+		{
 					<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
 						Availability: </span>
 						@if (@sec.SeatsAvailable <= 0 || sec.WaitlistCount > 0)
@@ -138,6 +69,7 @@
 								[update]</a></span>
 			}
 					</li>
+		}
 
 					<li class="section-notes"><span class="descriptor">Notes: </span>
 						<ul>
@@ -157,7 +89,5 @@
 		}
 			</ul>
 		</li>
-
 	PreviousSectionID = sectionID;
-	PreviousCourseID = sec.CourseID;
 }

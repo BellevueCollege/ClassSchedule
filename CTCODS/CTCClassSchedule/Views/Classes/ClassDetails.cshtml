@@ -6,52 +6,16 @@
 
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;
-	String subdir = ViewBag.currentAppSubdirectory;
-	string PreviousSectionID = string.Empty;
+
 	Section course = (Section)ViewBag.CourseInfo;
+	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
+	string currentYrq = yrqList[0].ID;
+
 	string PreviousYrq = string.Empty;
 }
 
-<script type="text/javascript">
+<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
 
-	$(document).ready(function () {
-
-		$('.course-updated a').click(function () {
-
-			var courseIdPlusYRQ = this.id;
-			var availability = '.availability-' + courseIdPlusYRQ + ' .seatsAvailable';
-			var courseUpdated = '.availability-' + courseIdPlusYRQ + ' .course-updated em';
-			var originalSeatsAvailable = $(availability).html();
-
-
-			//load the throbber
-			$(availability).html('<img src="@(subdir)/Content/images/ajax-loader.gif" title="loading_seats_available" alt="loading_seats_available" />');
-
-			//post the ajax call to get the available seats and update the UI
-			$.ajax({
-				url: '@(subdir)/Classes/getseats',
-				type: 'POST',
-				data: { courseIdPlusYRQ: courseIdPlusYRQ },
-				timeout: 4000,
-				success: function (result) {
-					var indexOfPipe = result.indexOf("|");
-					var seatsAvailable = result.substring(0, indexOfPipe);
-					var friendlyTime = "updated " + result.substring(indexOfPipe + 1, result.length);
-
-					$(availability).html(seatsAvailable);
-					$(courseUpdated).html(friendlyTime);
-				},
-				error: function (x, t, m) {
-					//alert("got timeout");
-					$(availability).html(originalSeatsAvailable);
-					$(courseUpdated).html("server busy, try again");
-				}
-
-			});
-		});
-	});
-
-</script>
 <div id="scheduleMain">
 	@Html.Partial("quarterNavigation")
 	<div id="scheduleContentNoSidebar">
@@ -81,114 +45,22 @@
 			    </div>
 		    }
 
-
-				@using(_profiler.Step("Rendering sections"))
+				@using (_profiler.Step("Rendering sections by YRQ"))
 		{
-		    foreach (var item in Model)
-	    {
-		    if (item.Yrq.ID != PreviousYrq)
-		    {
-					<text>
-			    <h2 class="course-YRQ@(item.SeatsAvailable == int.MinValue ? Html.Raw(" course-YRQ-past-quarter") : Html.Raw(string.Empty))">@item.Yrq.FriendlyName</h2>
-			    <div class="YRQClassTitle">@item.CourseSubject @item.CourseNumber - @item.CourseTitle &#8226; @Html.CreditsValue(course.Credits) <abbr title="Credit(s) ">Cr.</abbr></div>
-					<ul class="course-block@(item.SeatsAvailable == int.MinValue ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
-					</text>
-		    }
-			    <li class="section-listing">
-						<span class="item-number"><span class="descriptor">Item number: </span>@item.ID.ItemNumber</span>
-				    <ul class="section-details">
+			foreach (YearQuarter yrq in yrqList)
+			{
+				string thisYrq = yrq.ID;
 
-					    @foreach (Ctc.Ods.Types.OfferedItem offering in item.Offered)
-         {
-					 if(item.ID.ToString() != PreviousSectionID) {
-						<li class="section"><span class="descriptor">Section: </span>@item.SectionCode</li>
-					 }
-					 else
-					 {
-							<li class="section">&nbsp;</li>
-					 }
-						    <li class="instructor"><span class="descriptor">Instructor:</span>
-							    <ul>
-								    <li>
-									    @if (string.IsNullOrWhiteSpace(@offering.InstructorEmail))
-						 {
-							 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-							 { <text>&nbsp;</text> }
-							 else
-							 { @offering.InstructorName	}
-						 }
-						 else
-						 {
-							 if (string.IsNullOrWhiteSpace(@offering.InstructorName))
-							 { <text>^&nbsp;</text> }
-							 else
-							 { <a href="@Helpers.getProfileURL(Convert.ToString(offering.InstructorID))">@offering.InstructorName</a>	}
-						 }
-								    </li>
-							    </ul>
-						    </li>
+			  <h2 class="course-YRQ@(currentYrq != thisYrq ? Html.Raw(" course-YRQ-past-quarter") : Html.Raw(string.Empty))">@yrq.FriendlyName</h2>
+			  <div class="YRQClassTitle">@course.CourseSubject @course.CourseNumber - @course.CourseTitle &#8226; @Html.CreditsValue(course.Credits) <abbr title="Credit(s) ">Cr.</abbr></div>
 
-						    <li><span class="descriptor">Meets: </span>
-							    <ul class="meets">
-								    <li><span class="days">
-									    <abbr title="Days Offered">
-										    @if (item.IsOnline == true)
-							{ <text>Online</text> }
-							else
-							{ @offering.Days }
-									    </abbr></span> <span class="times">
-										    <span class="descriptor">at </span>@String.Format("{0:t}", offering.StartTime).Replace(" ", "")-@String.Format("{0:t}", offering.EndTime).Replace(" ", "")
-									    </span><span class="room"><span class="descriptor">in </span>@offering.Room</span>
-								    </li>
-							    </ul>
-						    </li>
-					 if (item.SeatsAvailable != int.MinValue)
-					 {
-						 if (item.ID.ToString() != PreviousSectionID)
-						 {
-							    <li class="availability-@(item.ID.ToString())">
-								    <span class="descriptor">Seats Available:
-								    </span>
-						    @if (@item.SeatsAvailable <= 0 || item.WaitlistCount > 0)
-								{
-									    <strong class="seatsFull">class full, @item.WaitlistCount on waitlist</strong>
-									    <span class="course-updated"></span>
-								}
-								else
-								{
-									    <strong class="seatsAvailable">@item.SeatsAvailable</strong>
-									    <span class="course-updated"><em>updated @item.LastUpdated</em> <a id="@(item.ID.ToString())">
-										    [update]</a></span>
-								}
-							    </li>
-						 }
-						 else
-						 {
-									<li>&nbsp;</li>
-						 }
-					 }
-					 PreviousSectionID = item.ID.ToString();
-				 } @* end foreach(offering) *@
-						    <li class="section-notes"><span class="descriptor">Notes: </span>
-						    @if (@item.Footnotes != null)
-					{
-							    <ul>
-							    @foreach (string note in item.Footnotes)
-					 {
-								    <li><span class="label">@note</span></li>
-					 }
-							    </ul>
-					}
-						    </li>
-				    </ul>
-			    </li>
-				if (item.Yrq.ID != PreviousYrq)
-				{
-				@:</ul>
-				}
-				PreviousYrq = item.Yrq.ID;
-			} @* end foreach(item) *@
+				<ul class="course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
+
+				@Html.Partial("Sections", Model.Where(s => s.Yrq.ID == thisYrq))
+
+				</ul>
 			}
+		}
 	    </div> <!-- class-details -->
 
         <div id="scheduleRightSidebar">

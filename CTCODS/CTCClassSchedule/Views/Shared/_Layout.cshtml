@@ -2,29 +2,30 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
+	<title>@ViewBag.PageTitle</title>
+	<!-- TODO: Any hope for making this page configurable? -->
+	<link href="http://bellevuecollege.edu/globals/btheme_v0.1/css/btheme_v0.1.css" rel="stylesheet" type="text/css" />
 
-<title>@ViewBag.PageTitle</title>
-<!-- TODO: Any hope for making this page configurable? -->
-<link href="http://bellevuecollege.edu/globals/btheme_v0.1/css/btheme_v0.1.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.16/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.unobtrusive-ajax.min.js"></script>
+	<script type="text/javascript" src="http://bellevuecollege.edu/globals/btheme_v0.1/js/searchbox.js"></script>
+	<script type="text/javascript" src="@Url.Content("~/Scripts/spin.min.js")"></script>	<!-- from http://fgnass.github.com/spin.js/ -->
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.16/jquery-ui.min.js"></script>
-<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.unobtrusive-ajax.min.js"></script>
-<script type="text/javascript" src="http://bellevuecollege.edu/globals/btheme_v0.1/js/searchbox.js"></script>
-<script type="text/javascript" src="@Url.Content("~/Scripts/spin.min.js")"></script>	<!-- from http://fgnass.github.com/spin.js/ -->
+	<link href="@Url.Content("~/Content/ClassSchedule.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/grids.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/automatic-image-slider.css")" rel="stylesheet" type="text/css" />
 
+	<link rel="stylesheet" href="@Url.Content("~/Content/timepickerui/include/jquery-ui-1.8.14.custom.css")" type="text/css" />
+	<link rel="stylesheet" href="@Url.Content("~/Content/timepickerui/jquery-ui-timepicker.css?v=0.2.4")" type="text/css" />
 
-		<link href="@Url.Content("~/Content/ClassSchedule.css")" rel="stylesheet" type="text/css" />
-		<link href="@Url.Content("~/Content/grids.css")" rel="stylesheet" type="text/css" />
-		<link href="@Url.Content("~/Content/automatic-image-slider.css")" rel="stylesheet" type="text/css" />
-
-
-
-	  <link rel="stylesheet" href="@Url.Content("~/Content/timepickerui/include/jquery-ui-1.8.14.custom.css")" type="text/css" />
-    <link rel="stylesheet" href="@Url.Content("~/Content/timepickerui/jquery-ui-timepicker.css?v=0.2.4")" type="text/css" />
-
-    <script type="text/javascript" src="@Url.Content("~/Content/timepickerui/jquery.ui.timepicker.js?v=0.2.4")"></script>
-		@MvcMiniProfiler.MiniProfiler.RenderIncludes()
+	<script type="text/javascript" src="@Url.Content("~/Content/timepickerui/jquery.ui.timepicker.js?v=0.2.4")"></script>
+	<script type="text/javascript">
+		// global values used by multiple client scripts
+		var g_ajaxLoaderImgPath = "@Url.Content("~/Content/images/ajax-loader.gif")";
+		var g_getSeatsUrl = "@Url.Action("getSeats")";
+	</script>
+	@MvcMiniProfiler.MiniProfiler.RenderIncludes()
 </head>
 <body>
 	<div id="betaBar">
