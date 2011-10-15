@@ -575,7 +575,7 @@ namespace CTCClassSchedule.Controllers
 
 					ViewBag.ProgramTitle = program.Title ?? DEFAULT_TITLE;
 
-					string url = program.Url ?? DEFAULT_URL;
+					string url = program.ProgramURL ?? DEFAULT_URL;
 
 					//if the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
 					//just return it, otherwise prepend iwth the current school url.

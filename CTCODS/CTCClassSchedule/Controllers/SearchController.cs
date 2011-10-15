@@ -818,7 +818,7 @@ namespace CTCClassSchedule.Controllers
 
 			foreach (ProgramInformation program in specificProgramInfo)
 			{
-				ProgramURL = program.Url;
+				ProgramURL = program.ProgramURL;
 			}
 
 

@@ -156,30 +156,6 @@ namespace CTCClassSchedule.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String Url
-        {
-            get
-            {
-                return _Url;
-            }
-            set
-            {
-                OnUrlChanging(value);
-                ReportPropertyChanging("Url");
-                _Url = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Url");
-                OnUrlChanged();
-            }
-        }
-        private global::System.String _Url;
-        partial void OnUrlChanging(global::System.String value);
-        partial void OnUrlChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
         public global::System.String Title
         {
             get
@@ -198,30 +174,6 @@ namespace CTCClassSchedule.Models
         private global::System.String _Title;
         partial void OnTitleChanging(global::System.String value);
         partial void OnTitleChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Department
-        {
-            get
-            {
-                return _Department;
-            }
-            set
-            {
-                OnDepartmentChanging(value);
-                ReportPropertyChanging("Department");
-                _Department = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Department");
-                OnDepartmentChanged();
-            }
-        }
-        private global::System.String _Department;
-        partial void OnDepartmentChanging(global::System.String value);
-        partial void OnDepartmentChanged();
 
         /// <summary>
         /// No Metadata Documentation available.
@@ -270,6 +222,102 @@ namespace CTCClassSchedule.Models
         private global::System.String _ContactPhone;
         partial void OnContactPhoneChanging(global::System.String value);
         partial void OnContactPhoneChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String URL
+        {
+            get
+            {
+                return _URL;
+            }
+            set
+            {
+                OnURLChanging(value);
+                ReportPropertyChanging("URL");
+                _URL = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("URL");
+                OnURLChanged();
+            }
+        }
+        private global::System.String _URL;
+        partial void OnURLChanging(global::System.String value);
+        partial void OnURLChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ProgramURL
+        {
+            get
+            {
+                return _ProgramURL;
+            }
+            set
+            {
+                OnProgramURLChanging(value);
+                ReportPropertyChanging("ProgramURL");
+                _ProgramURL = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ProgramURL");
+                OnProgramURLChanged();
+            }
+        }
+        private global::System.String _ProgramURL;
+        partial void OnProgramURLChanging(global::System.String value);
+        partial void OnProgramURLChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Division
+        {
+            get
+            {
+                return _Division;
+            }
+            set
+            {
+                OnDivisionChanging(value);
+                ReportPropertyChanging("Division");
+                _Division = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Division");
+                OnDivisionChanged();
+            }
+        }
+        private global::System.String _Division;
+        partial void OnDivisionChanging(global::System.String value);
+        partial void OnDivisionChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Intro
+        {
+            get
+            {
+                return _Intro;
+            }
+            set
+            {
+                OnIntroChanging(value);
+                ReportPropertyChanging("Intro");
+                _Intro = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Intro");
+                OnIntroChanged();
+            }
+        }
+        private global::System.String _Intro;
+        partial void OnIntroChanging(global::System.String value);
+        partial void OnIntroChanged();
 
         #endregion
 
