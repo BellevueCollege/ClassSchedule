@@ -54,8 +54,10 @@
 	{
 		using (_profiler.Step("Rendering sections from search results"))
 	{
-		foreach (var sec in Model.Section)
+		foreach (var sec in Model.Section.Select(s => new {s.CourseID, s.CourseSubject, s.CourseNumber, s.CourseTitle, s.Credits, s.CourseDescriptions}))
 		{
+			if (PreviousCourseID != sec.CourseID)
+			{
 			_routeValues["Subject"] = sec.CourseSubject;
 			_routeValues["ClassNum"] = sec.CourseNumber;
 
@@ -77,6 +79,8 @@
 		<ul class='course-block'>
 			@Html.Partial("Sections", Model.Section.Where(s => s.CourseID == sec.CourseID))
 		</ul>
+	 }
+			PreviousCourseID = sec.CourseID;
 
 		} @* end foreach(sec) *@
 	}
