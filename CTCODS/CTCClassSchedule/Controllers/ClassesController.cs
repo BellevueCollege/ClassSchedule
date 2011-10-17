@@ -592,6 +592,19 @@ namespace CTCClassSchedule.Controllers
 				}
 			}
 		}
+
+		private List<string> getPrefix(string URLprefix)
+		{
+			List<string> prefixList = new List<string>();
+
+			prefixList = (	from s in _programdb.ProgramInformation
+											where s.URL == URLprefix
+											select s.Abbreviation).ToList();
+
+
+			return prefixList;
+		}
+
 		#endregion
 	}
 }
