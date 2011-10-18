@@ -1,4 +1,5 @@
-﻿@using CTCClassSchedule.Common;
+﻿@using CTCClassSchedule;
+@using CTCClassSchedule.Common;
 @using MvcMiniProfiler;
 @using System.Text.RegularExpressions;
 @using System.Globalization;
@@ -15,6 +16,7 @@
 	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
 
 	string PreviousCourseID = string.Empty;
+	string PreviousSectionID = string.Empty;
 }
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
 <script type="text/javascript">
@@ -54,13 +56,17 @@
 	{
 		using (_profiler.Step("Rendering sections from search results"))
 	{
-		foreach (var sec in Model.Section.Select(s => new {s.CourseID, s.CourseSubject, s.CourseNumber, s.CourseTitle, s.Credits, s.CourseDescriptions}))
+		foreach (SectionWithSeats sec in Model.Section)
 		{
-			if (PreviousCourseID != sec.CourseID)
+			string courseID = sec.CourseID;
+			string sectionID = sec.ID.ToString();
+
+			if (PreviousCourseID != courseID)
 			{
 			_routeValues["Subject"] = sec.CourseSubject;
 			_routeValues["ClassNum"] = sec.CourseNumber;
 
+				<text>
 		<h2 class="classHeading">
 			@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)),
 											"ClassDetails",
@@ -77,10 +83,20 @@
 		</p>
 
 		<ul class='course-block'>
-			@Html.Partial("Sections", Model.Section.Where(s => s.CourseID == sec.CourseID))
-		</ul>
+		</text>
 	 }
-			PreviousCourseID = sec.CourseID;
+
+	 if (sectionID != PreviousSectionID)
+	 {
+			Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+	 }
+
+	 if (courseID != PreviousCourseID)
+	 {
+		@:</ul>
+	 }
+			PreviousSectionID = sectionID;
+			PreviousCourseID = courseID;
 
 		} @* end foreach(sec) *@
 	}

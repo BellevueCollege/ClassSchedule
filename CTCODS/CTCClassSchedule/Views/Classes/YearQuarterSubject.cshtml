@@ -10,6 +10,7 @@
 	_routeValues["YearQuarterID"] = "All";
 
 	string PreviousCourseID = string.Empty;
+	string PreviousSectionID = string.Empty;
 }
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
@@ -35,11 +36,17 @@
 		</p>
 		using (_profiler.Step("Rendering sections by course"))
 		{
-			foreach (var sec in Model.Select(c => new { c.CourseID, c.CourseSubject, c.CourseNumber, c.CourseTitle, c.Credits }).Distinct())
+			foreach (var sec in Model.OrderBy(c => c.CourseNumber).ThenBy(c => c.ID.ItemNumber))
 			{
+				string courseID = sec.CourseID;
+				string sectionID = sec.ID.ToString();
+
+				if (courseID != PreviousCourseID)
+				{
 				_routeValues["Subject"] = sec.CourseSubject;
 				_routeValues["ClassNum"] = sec.CourseNumber;
 
+					<text>
 		<h2 class="classHeading">
 		@Html.ActionLink(string.Format("{0} {1} {2} • {3} Cr.", sec.CourseSubject, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)),
 										"ClassDetails",
@@ -51,8 +58,20 @@
 			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
 		</p>
 		<ul class='course-block'>
-			@Html.Partial("Sections", Model.Where(c => c.CourseID == sec.CourseID))
-		</ul>
+		</text>
+		}
+
+		if (PreviousSectionID != sectionID)
+		{
+			Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+		}
+
+				if (courseID != PreviousCourseID)
+				{
+		@:</ul>
+		}
+			PreviousSectionID = sectionID;
+			PreviousCourseID = courseID;
 			}
 		}
 }

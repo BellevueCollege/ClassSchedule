@@ -12,6 +12,7 @@
 	string currentYrq = yrqList[0].ID;
 
 	string PreviousYrq = string.Empty;
+	string PreviousSectionID = string.Empty;
 }
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
@@ -47,18 +48,32 @@
 
 				@using (_profiler.Step("Rendering sections by YRQ"))
 		{
-			foreach (YearQuarter yrq in yrqList)
+			foreach (SectionWithSeats sec in Model)
 			{
-				string thisYrq = yrq.ID;
+				string thisYrq = sec.Yrq.ID;
+				string sectionID = sec.ID.ToString();
 
-			  <h2 class="course-YRQ@(currentYrq != thisYrq ? Html.Raw(" course-YRQ-past-quarter") : Html.Raw(string.Empty))">@yrq.FriendlyName</h2>
+				if (thisYrq != PreviousYrq)
+				{
+					<text>
+			  <h2 class="course-YRQ@(currentYrq != thisYrq ? Html.Raw(" course-YRQ-past-quarter") : Html.Raw(string.Empty))">@sec.Yrq.FriendlyName</h2>
 			  <div class="YRQClassTitle">@course.CourseSubject @course.CourseNumber - @course.CourseTitle &#8226; @Html.CreditsValue(course.Credits) <abbr title="Credit(s) ">Cr.</abbr></div>
 
 				<ul class="course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
+				</text>
+				}
 
-				@Html.Partial("Sections", Model.Where(s => s.Yrq.ID == thisYrq))
+				if (sectionID != PreviousSectionID)
+		{
+			Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+		}
 
-				</ul>
+			if (thisYrq != PreviousYrq)
+			{
+				@:</ul>
+			}
+				PreviousSectionID = sectionID;
+				PreviousYrq = thisYrq;
 			}
 		}
 	    </div> <!-- class-details -->

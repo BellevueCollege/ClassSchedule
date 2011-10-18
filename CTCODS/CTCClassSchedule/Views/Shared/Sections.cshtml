@@ -1,22 +1,18 @@
 ﻿@using Ctc.Ods.Types
 @using CTCClassSchedule
 @using CTCClassSchedule.Common
-@model IEnumerable<CTCClassSchedule.SectionWithSeats>
+@model SectionWithSeats
 @{
-	string PreviousSectionID = string.Empty;
+	string PreviousSectionID = ViewData["PreviousSectionID"] as string;
+	string sectionID = Model.ID.ToString();
 }
-
-@foreach (SectionWithSeats sec in Model)
-{
-	string sectionID = sec.ID.ToString();
-
 		<li class="section-listing"><span class="item-number"><span class="descriptor">Item
-			number: </span>@sec.ID.ItemNumber</span>
+			number: </span>@Model.ID.ItemNumber</span>
 			<ul class="section-details">
-				<li class="section"><span class="descriptor">Section: </span>@sec.SectionCode</li>
+				<li class="section"><span class="descriptor">Section: </span>@Model.SectionCode</li>
 				<li class="instructor"><span class="descriptor">Instructors:</span>
 					<ul>
-						@foreach (OfferedItem item in sec.Offered.OrderBy(o => o.SequenceOrder))
+						@foreach (OfferedItem item in Model.Offered.OrderBy(o => o.SequenceOrder))
 			{
 				// instructors
 				if (!string.IsNullOrWhiteSpace(item.InstructorName))
@@ -32,11 +28,11 @@
 				</li>
 				<li><span class="descriptor">Meets: </span>
 					<ul class="meets">
-						@foreach (OfferedItem item in sec.Offered.OrderBy(o => o.SequenceOrder))
+						@foreach (OfferedItem item in Model.Offered.OrderBy(o => o.SequenceOrder))
 			{
 				// meeting times
 							<li>
-								@if (sec.IsOnline)
+								@if (Model.IsOnline)
 				{
 									<span class="online">Online</span>
 				}
@@ -53,19 +49,19 @@
 				</li>
 				@if (sectionID != PreviousSectionID)
 		{
-				if (sec.SeatsAvailable != int.MinValue)
+				if (Model.SeatsAvailable != int.MinValue)
 		{
 					<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
 						Availability: </span>
-						@if (@sec.SeatsAvailable <= 0 || sec.WaitlistCount > 0)
+						@if (Model.SeatsAvailable <= 0 || Model.WaitlistCount > 0)
 			{
-							<strong class="seatsAvailable">class full, @sec.WaitlistCount on waitlist</strong>
+							<strong class="seatsAvailable">class full, @Model.WaitlistCount on waitlist</strong>
 							<span class="course-updated"></span>
 			}
 			else
 			{
-							<strong class="seatsAvailable">@sec.SeatsAvailable</strong>
-							<span class="course-updated"><em>updated @sec.LastUpdated</em> <a id="@sectionID">
+							<strong class="seatsAvailable">@Model.SeatsAvailable</strong>
+							<span class="course-updated"><em>updated @Model.LastUpdated</em> <a id="@sectionID">
 								[update]</a></span>
 			}
 					</li>
@@ -73,9 +69,9 @@
 
 					<li class="section-notes"><span class="descriptor">Notes: </span>
 						<ul>
-							@if (@sec.Footnotes != null && @sec.Footnotes.Count() > 0)
+							@if (@Model.Footnotes != null && @Model.Footnotes.Count() > 0)
 			 {
-				 foreach (string note in @sec.Footnotes)
+				 foreach (string note in @Model.Footnotes)
 				 {
 								<li><span class="label">@note</span></li>
 				 }
@@ -89,5 +85,3 @@
 		}
 			</ul>
 		</li>
-	PreviousSectionID = sectionID;
-}

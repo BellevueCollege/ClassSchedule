@@ -17,7 +17,7 @@
 
 
 		    <div id="classInfoWrap">
-		    @foreach (var item in Model)
+		    @foreach (var item in Model.OrderBy(c => c.Number))
 			{
 
 			    <div class="classInfo">
