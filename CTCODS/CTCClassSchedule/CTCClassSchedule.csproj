@@ -116,6 +116,7 @@
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
+    <Compile Include="Common\ScheduleCoursePrefix.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Common\ProfilingActionFilter.cs" />
     <Compile Include="Common\ProfilingViewEngine.cs" />

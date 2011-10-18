@@ -220,9 +220,9 @@ namespace CTCClassSchedule.Controllers
 				progInfo = (from s in _programdb.ProgramInformation
 											select s).ToList();
 
-				var coursesLocalEnum = (from p in progInfo
-														where courses.Select(c => c.Subject).Contains(p.Abbreviation.Trim('&'))
-														select new CoursePrefix
+				IEnumerable<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
+														where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
+														select new ScheduleCoursePrefix
 													{
 														Subject = p.URL,
 														Title = p.Title
@@ -243,7 +243,7 @@ namespace CTCClassSchedule.Controllers
 
 				if (letter != null)
 				{
-					IEnumerable<CoursePrefix> coursesEnum;
+					IEnumerable<ScheduleCoursePrefix> coursesEnum;
 					coursesEnum = from c in coursesLocalEnum
 												where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
 												select c;
