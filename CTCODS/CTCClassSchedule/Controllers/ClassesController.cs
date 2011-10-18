@@ -208,10 +208,28 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
 				IList<CoursePrefix> courses;
+				IList<ProgramInformation> progInfo;
+				//IEnumerable<CoursePrefix> coursesLocalEnum;
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
 				{
 					courses = respository.GetCourseSubjects(yrq, facets);
 				}
+
+
+
+				progInfo = (from s in _programdb.ProgramInformation
+											select s).ToList();
+
+				var coursesLocalEnum = (from p in progInfo
+														where courses.Select(c => c.Subject).Contains(p.Abbreviation.Trim('&'))
+														select new CoursePrefix
+													{
+														Subject = p.URL,
+														Title = p.Title
+													});
+				coursesLocalEnum = coursesLocalEnum.ToList().Distinct();
+
+
 
 				IEnumerable<String> alphabet;
 				ViewBag.AlphabetArray = new bool[26];
@@ -226,7 +244,7 @@ namespace CTCClassSchedule.Controllers
 				if (letter != null)
 				{
 					IEnumerable<CoursePrefix> coursesEnum;
-					coursesEnum = from c in courses
+					coursesEnum = from c in coursesLocalEnum
 												where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
 												select c;
 
@@ -238,9 +256,9 @@ namespace CTCClassSchedule.Controllers
 				}
 				else
 				{
-					ViewBag.ItemCount = courses.Count();
+					ViewBag.ItemCount = coursesLocalEnum.Count();
 
-					return View(courses);
+					return View(coursesLocalEnum);
 				}
 			}
 		}
@@ -293,7 +311,7 @@ namespace CTCClassSchedule.Controllers
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
-					sections = respository.GetSections(Subject, YRQ, facets);
+					sections = respository.GetSections(getPrefix(Subject), YRQ, facets);
 				}
 				IEnumerable<SectionWithSeats> sectionsEnum;
 				sectionsEnum = (
