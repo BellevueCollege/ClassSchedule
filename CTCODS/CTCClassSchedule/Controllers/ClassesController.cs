@@ -28,7 +28,6 @@ namespace CTCClassSchedule.Controllers
 
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
-		private string _currentAppSubdirectory;
 		#endregion
 
 		public ClassesController()
