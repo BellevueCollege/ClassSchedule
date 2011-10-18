@@ -1,4 +1,5 @@
-﻿@using CTCClassSchedule.Common;
+﻿@using Ctc.Ods.Types;
+@using CTCClassSchedule.Common;
 <script type="text/javascript">
 	$(document).ready(function () {
 		$('#timestart').timepicker();
@@ -89,6 +90,8 @@
 
 
 	@{
+		YearQuarter yrq = ViewBag.YearQuarter;
+
 		if (ViewBag.Subject == "All") {
 			ViewBag.Subject = "";
 		}
@@ -137,7 +140,7 @@
 @if (ViewContext.RouteData.Values["Controller"].Equals("Classes"))
 {
 	<div>
-		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])/@ViewBag.YearQuarter/@ViewBag.Subject" method="get">
+		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])/@(yrq != null ? yrq.FriendlyName.Replace(" ","") : "All")/@ViewBag.Subject" method="get">
 
 		@if (routeParms.ContainsKey("letter"))
   {

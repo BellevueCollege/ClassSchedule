@@ -195,11 +195,10 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.LinkParams = getLinkParams();
 
 			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
+			ViewBag.YearQuarter = yrq;
 
 			ViewBag.Subject = "All";
 			ViewBag.AlphabetCharacter = 0;
-			ViewBag.YRQ = yrq.ToString();
-			ViewBag.FriendlyYRQ = yrq.FriendlyName;
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
@@ -557,17 +556,11 @@ namespace CTCClassSchedule.Controllers
 		{
 			ViewBag.ErrorMsg = "";
 
-			if (YearQuarter != "")
-			{
-				ViewBag.QuarterViewing = Ctc.Ods.Types.YearQuarter.ToYearQuarterID(YearQuarter);
-			}
-			ViewBag.YearQuarter = YearQuarter ?? "all";
+			ViewBag.YearQuarter = string.IsNullOrWhiteSpace(YearQuarter) ? null : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 
-			ViewBag.YearQuarter_a_to_z = "/" + YearQuarter;
 			ViewBag.letter = letter;
 			ViewBag.avail = avail ?? "all";
 			ViewBag.activeClass = " class=active";
-			ViewBag.currentUrl = Request.Url.AbsolutePath;
 		}
 
 		/// <summary>

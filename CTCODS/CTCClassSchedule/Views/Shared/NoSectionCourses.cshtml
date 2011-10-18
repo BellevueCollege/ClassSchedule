@@ -3,10 +3,9 @@
 @using Ctc.Ods.Types
 @{
 	string quarter = Request.QueryString["quarter"];
-	string yrq = ViewBag.YearQuarter;
 }
 <div id="NotOfferedThisQuarter">
-<h2>Classes not offered @(string.IsNullOrWhiteSpace(yrq) ? quarter : YearQuarter.ToFriendlyName(yrq)), but match your search:</h2>
+<h2>Classes not offered @quarter, but match your search:</h2>
 
 <ul>
 @foreach (var item in Model) {

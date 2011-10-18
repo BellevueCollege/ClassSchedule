@@ -1,4 +1,6 @@
-﻿<script type="text/javascript">
+﻿@using Ctc.Ods.Types
+
+<script type="text/javascript">
 	var opts = {
 		lines: 12, // The number of lines to draw
 		length: 7, // The length of each line
@@ -30,12 +32,19 @@
 @{
 	IDictionary<string, object> routeParms = new Dictionary<string, object>(Request.QueryString.Count + 2);
 	routeParms.Add("format", string.Empty);
-	routeParms.Add("yrq", ViewBag.YearQuarter);
+	routeParms.Add("yrq", ViewBag.YearQuarter != null ? (ViewBag.YearQuarter as YearQuarter).FriendlyName.Replace(" ","") : "all");
 
 	// TODO: move building the query string collection into the controller
 	foreach(string key in Request.QueryString.AllKeys)
 	{
-		routeParms.Add(key, Request.QueryString[key]);
+		if (!routeParms.Keys.Contains(key))
+		{
+			routeParms.Add(key, Request.QueryString[key]);
+		}
+		else
+		{
+			routeParms[key] = Request.QueryString[key];
+		}
 	}
 }
 

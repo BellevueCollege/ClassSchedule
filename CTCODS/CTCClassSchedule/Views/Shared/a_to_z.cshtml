@@ -1,24 +1,11 @@
 ﻿<div id="a_to_z">
 
 @{
-	String letter = ViewBag.letter;
-	String YearQuarter = ViewBag.YearQuarter;
-	String time = ViewBag.time;
-	String days = ViewBag.days;
-	String flex = ViewBag.flex;
-	String avail = ViewBag.avail;
-
-
 	// construct the route values we'll pass to the ActionLink helper
 	IDictionary<string, object> routeParms = ViewBag.LinkParams;
 
-
-
 	string Controller = ViewContext.RouteData.Values["Controller"].ToString();
 	string Action = ViewContext.RouteData.Values["Action"].ToString();
-
-
-
 }
 
 @* print out the ascii values for a-z  *@

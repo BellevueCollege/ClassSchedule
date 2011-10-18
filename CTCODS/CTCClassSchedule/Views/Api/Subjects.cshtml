@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Ctc.Ods.Types.CoursePrefix>
+﻿@using Ctc.Ods.Types
+@model IEnumerable<Ctc.Ods.Types.CoursePrefix>
 @{
 	int columnCount = (ViewBag.SubjectsColumns != null ? (int)ViewBag.SubjectsColumns : 1);
 	IEnumerable<char> alphabet = Model.Select(s => s.Title.First()).Distinct();
@@ -33,13 +34,11 @@
 }
 </div>
 @{
+	YearQuarter yrq = ViewBag.YearQuarter;
 	// construct the route values we'll pass to the ActionLink helper
 	IDictionary<string, object> routeParms = ViewBag.LinkParams;
 	routeParms.Add("Subject", string.Empty);
-
-	if(!string.IsNullOrWhiteSpace(ViewBag.YearQuarter)) {
-		routeParms.Add("YearQuarter", ViewBag.YearQuarter);
-	}
+	routeParms.Add("YearQuarter", yrq != null ? yrq.FriendlyName.Replace(" ","") : "all");
 }
 <div id="subjects-list">
 	@foreach (char letter in alphabet) {

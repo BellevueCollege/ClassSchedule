@@ -14,6 +14,7 @@
 	String sectionDesc = itemCount == 1 ? "section" : "sections";
 
 	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
+	_routeValues["YearQuarterID"] = "All";
 
 	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;

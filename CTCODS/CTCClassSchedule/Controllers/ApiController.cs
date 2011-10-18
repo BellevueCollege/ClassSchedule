@@ -30,7 +30,7 @@ namespace CTCClassSchedule.Controllers
 			using (OdsRepository db = new OdsRepository(HttpContext))
 			{
 				IList<CoursePrefix> data;
-				data = string.IsNullOrWhiteSpace(yrq) ? db.GetCourseSubjects() : db.GetCourseSubjects(YearQuarter.FromFriendlyName(yrq));
+				data = string.IsNullOrWhiteSpace(yrq) || yrq.ToUpper() == "ALL" ? db.GetCourseSubjects() : db.GetCourseSubjects(YearQuarter.FromFriendlyName(yrq));
 
 				if (format == "json")
 				{
@@ -44,10 +44,15 @@ namespace CTCClassSchedule.Controllers
 				{
 					if (key != "X-Requested-With")
 					{
-						if (key == "yrq") {
-							ViewBag.YearQuarter = Request.QueryString[key];
-						} else {
-							linkParams.Add(key, Request.QueryString[key]);
+						string value = Request.QueryString[key];
+
+						if (key == "yrq" && value.ToUpper() != "ALL")
+						{
+							ViewBag.YearQuarter =  YearQuarter.FromFriendlyName(value);
+						}
+						else
+						{
+							linkParams.Add(key, value);
 						}
 					}
 				}

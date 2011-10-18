@@ -18,17 +18,17 @@
 	</ul>
 
 	@{
-		string quarterViewing = ViewBag.QuarterViewing ?? string.Empty;
+		YearQuarter quarterViewing = ViewBag.YearQuarter;
 	}
 
 	<h3>Classes Offered:</h3>
 	<ul>
-		<li @if (string.IsNullOrWhiteSpace(quarterViewing) || quarterViewing.ToUpper() == "ALL") { <text> class="active" </text> }>
+		<li @if (quarterViewing == null) { <text> class="active" </text> }>
 			<a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a>
 		</li>
 	@foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
  {
-		<li @if (quarterViewing == yrq.ID) { <text> class="active" </text> }>
+		<li @if (quarterViewing != null && quarterViewing == yrq) { <text> class="active" </text> }>
 			<a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">@yrq.FriendlyName</a>
 		</li>
  }
