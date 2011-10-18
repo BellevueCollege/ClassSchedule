@@ -317,8 +317,7 @@ namespace CTCClassSchedule.Controllers
 				sectionsEnum = (
 											from c in sections
 											join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
-											where c.CourseSubject == Subject.ToUpper()
-											&& c.Yrq.ToString() == YRQ.ToString()
+
 											select new SectionWithSeats
 											{
 													ParentObject = c,
