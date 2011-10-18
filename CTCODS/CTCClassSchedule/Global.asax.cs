@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcMiniProfiler;
@@ -12,12 +13,16 @@ namespace CTCClassSchedule
 	{
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters)
 		{
-			filters.Add(new HandleErrorAttribute());
+			filters.Add(new HandleErrorAttribute
+					{
+							View = "ScheduleError"
+					});
 		}
 
 		public static void RegisterRoutes(RouteCollection routes)
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+			routes.IgnoreRoute("ScheduleError.aspx");
 
 			// API calls the application exposes
 			routes.MapRoute("ApiSubjects", "Api/Subjects", new {controller = "Api", action = "Subjects"});
@@ -76,6 +81,25 @@ namespace CTCClassSchedule
 #if ENABLE_PROFILING
 			MiniProfiler.Stop();
 #endif
+		}
+
+		/// <summary>
+		/// Part of the non-MVC error handling system
+		/// </summary>
+		/// <remarks>
+		/// This method is part of the non-MVC error handling. For MVC-specific error handling, see <see cref="RegisterGlobalFilters"/>.
+		/// </remarks>
+		/// <seealso cref="RegisterGlobalFilters"/>
+		protected void Application_Error()
+		{
+			if (Server.GetLastError() != null)
+			{
+// ReSharper disable ConstantNullCoalescingCondition
+				Exception ex = Server.GetLastError().GetBaseException() ?? Server.GetLastError();
+// ReSharper restore ConstantNullCoalescingCondition
+
+				Application["LastError"] = ex;
+			}
 		}
 	}
 }
