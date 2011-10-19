@@ -311,6 +311,7 @@ namespace CTCClassSchedule.Controllers
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
 					sections = respository.GetSections(getPrefix(Subject), YRQ, facets);
+
 				}
 				IEnumerable<SectionWithSeats> sectionsEnum;
 				sectionsEnum = (
@@ -606,12 +607,24 @@ namespace CTCClassSchedule.Controllers
 		{
 			List<string> prefixList = new List<string>();
 
-			prefixList = (	from s in _programdb.ProgramInformation
-											where s.URL == URLprefix
-											select s.Abbreviation).ToList();
+			prefixList = (from s in _programdb.ProgramInformation
+										where s.URL == URLprefix
+										select s.Abbreviation).ToList();
 
 
 			return prefixList;
+		}
+
+		private List<string> getSubjectFromURL(string URLprefix)
+		{
+			List<string> subjectList = new List<string>();
+
+			subjectList = (from s in _programdb.ProgramInformation
+										where s.URL == URLprefix
+										select s.Title).ToList();
+
+
+			return subjectList;
 		}
 
 		#endregion
