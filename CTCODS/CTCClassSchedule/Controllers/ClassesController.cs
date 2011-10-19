@@ -71,10 +71,24 @@ namespace CTCClassSchedule.Controllers
 			{
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 				IList<CoursePrefix> courses;
+				IList<ProgramInformation> progInfo;
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
 				{
 					courses = respository.GetCourseSubjects();
 				}
+
+				progInfo = (from s in _programdb.ProgramInformation
+										select s).ToList();
+
+				IEnumerable<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
+																															where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
+																															select new ScheduleCoursePrefix
+																															{
+																																Subject = p.URL,
+																																Title = p.Title
+																															});
+				coursesLocalEnum = coursesLocalEnum.ToList().Distinct();
+
 				IEnumerable<String> alphabet;
 
 				ViewBag.AlphabetArray = new bool[26];
@@ -90,8 +104,8 @@ namespace CTCClassSchedule.Controllers
 
 				if (letter != null)
 				{
-					IEnumerable<CoursePrefix> coursesEnum;
-					coursesEnum = from c in courses
+					IEnumerable<ScheduleCoursePrefix> coursesEnum;
+					coursesEnum = from c in coursesLocalEnum
 												where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
 												select c;
 
@@ -99,7 +113,7 @@ namespace CTCClassSchedule.Controllers
 				}
 				else
 				{
-					return View(courses);
+					return View(coursesLocalEnum);
 				}
 			}
 		}
@@ -576,7 +590,7 @@ namespace CTCClassSchedule.Controllers
 				const string DEFAULT_URL = "";
 
 				var specificProgramInfo = from s in _programdb.ProgramInformation
-				                          where s.Abbreviation == Subject
+				                          where s.URL == Subject
 				                          select s;
 
 				if (specificProgramInfo.Count() > 0)
