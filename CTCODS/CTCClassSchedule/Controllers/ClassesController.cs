@@ -87,7 +87,7 @@ namespace CTCClassSchedule.Controllers
 																																Subject = p.URL,
 																																Title = p.Title
 																															});
-				coursesLocalEnum = coursesLocalEnum.ToList().Distinct();
+				coursesLocalEnum = coursesLocalEnum.ToList().Distinct().OrderBy(p => p.Title);
 
 				IEnumerable<String> alphabet;
 
@@ -234,12 +234,12 @@ namespace CTCClassSchedule.Controllers
 											select s).ToList();
 
 				IEnumerable<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
-														where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
-														select new ScheduleCoursePrefix
-													{
-														Subject = p.URL,
-														Title = p.Title
-													});
+																															where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
+																															select new ScheduleCoursePrefix
+																														{
+																															Subject = p.URL,
+																															Title = p.Title
+																														});
 				coursesLocalEnum = coursesLocalEnum.ToList().Distinct();
 
 
