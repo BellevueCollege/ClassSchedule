@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using CTCClassSchedule.Common;
 
 namespace CTCClassSchedule
@@ -12,6 +9,6 @@ namespace CTCClassSchedule
 
 		public IEnumerable<SearchResultNoSection> SearchResultNoSection { get; set; }
 
-		public IEnumerable<string> Titles { get; set; }
+		public IEnumerable<ScheduleCoursePrefix> Titles { get; set; }
 	}
 }

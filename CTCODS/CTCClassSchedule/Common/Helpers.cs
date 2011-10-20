@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using Ctc.Ods;
 using Ctc.Ods.Data;
@@ -380,6 +381,42 @@ namespace CTCClassSchedule.Common
 		{
 			IList<YearQuarter> currentFutureQuarters = respository.GetRegistrationQuarters(4);
 			return currentFutureQuarters;
+		}
+
+		/// <summary>
+		/// Gets the current http get/post params and assigns them to an IDictionary<string, object>
+		/// This is mainly used to set a Viewbag variable so these can be passed into action links in the views.
+		/// </summary>
+		/// <param name="httpRequest"></param>
+		static public IDictionary<string, object> getLinkParams(HttpRequestBase httpRequest)
+		{
+			IDictionary<string, object> linkParams = new Dictionary<string, object>(httpRequest.QueryString.Count);
+			foreach (string key in httpRequest.QueryString.AllKeys)
+			{
+				if (key != "X-Requested-With")
+				{
+					if (linkParams.ContainsKey(key))
+					{
+						linkParams[key] = httpRequest.QueryString[key];
+					}
+					else
+					{
+						linkParams.Add(key, httpRequest.QueryString[key]);
+					}
+				}
+			}
+			foreach (string key in httpRequest.Form.AllKeys)
+			{
+				if (linkParams.ContainsKey(key))
+				{
+					linkParams[key] = httpRequest.Form[key];
+				}
+				else
+				{
+					linkParams.Add(key, httpRequest.Form[key]);
+				}
+			}
+			return linkParams;
 		}
 	}
 }

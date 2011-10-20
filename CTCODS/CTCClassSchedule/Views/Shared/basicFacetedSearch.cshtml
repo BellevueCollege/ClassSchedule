@@ -1,14 +1,29 @@
-﻿@using Ctc.Ods.Types
+﻿@using CTCClassSchedule
+@using Ctc.Ods.Types
+@{
+	YearQuarter quarterViewing = ViewBag.YearQuarter;
+	string subject = string.Empty;
+
+	if (Model != null)
+	{
+		IEnumerable<SectionWithSeats> sections = (Model as IEnumerable<SectionWithSeats>);
+		if (sections != null && sections.Count() > 0)
+		{
+			IList<string> subjects = (Model as IEnumerable<SectionWithSeats>).Select(s => s.CourseSubject).Distinct().ToList();
+			subject = subjects.Count == 1 ? subjects[0] : string.Empty;
+		}
+	}
+}
 
 <div id="basicFacetedSearch" class="sidenav">
 		<h2>Browse for classes</h2>
 	<h3>Subject</h3>
 		<ul class="subject">
-	@if (!string.IsNullOrWhiteSpace(ViewBag.Subject))
+	@if (!string.IsNullOrWhiteSpace(subject))
  {
 
 			<li @(ViewBag.activeClass)>
-				<a href="" >@ViewBag.Subject</a>
+				<span class="notlink">@subject</span>
 			</li>
 
  }
@@ -16,10 +31,6 @@
 				@Html.Partial("subjectNavigation")
 				</li>
 	</ul>
-
-	@{
-		YearQuarter quarterViewing = ViewBag.YearQuarter;
-	}
 
 	<h3>Classes Offered:</h3>
 	<ul>

@@ -65,7 +65,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.AlphabetArray = new bool[26];
 			ViewBag.AlphabetCharacter = 0;
 
-			ViewBag.LinkParams = getLinkParams();
+			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{
@@ -147,7 +147,7 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.avail = avail;
 
-			ViewBag.LinkParams = getLinkParams();
+			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 			facets.Add(new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay));
@@ -206,7 +206,7 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.avail = avail;
 
-			ViewBag.LinkParams = getLinkParams();
+			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
 			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 			ViewBag.YearQuarter = yrq;
@@ -299,8 +299,7 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.avail = avail;
 
-			ViewBag.LinkParams = getLinkParams();
-
+			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 			ViewBag.Subject = Subject;
 
 			setProgramInfo(Subject);
@@ -317,28 +316,26 @@ namespace CTCClassSchedule.Controllers
 				routeValues.Add("YearQuarterID", YearQuarter);
 				ViewBag.RouteValues = routeValues;
 
-				var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
-																	 where s.ClassID.Substring(4) == YRQ.ID
-																	 select s);
+				IQueryable<vw_SeatAvailability> seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
+																															 where s.ClassID.Substring(4) == YRQ.ID
+																															 select s);
 
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
 					sections = respository.GetSections(getPrefix(Subject), YRQ, facets);
-
 				}
-				IEnumerable<SectionWithSeats> sectionsEnum;
-				sectionsEnum = (
-											from c in sections
-											join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
+				IEnumerable<SectionWithSeats> sectionsEnum = (
+									from c in sections
+									join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
 
-											select new SectionWithSeats
-											{
-													ParentObject = c,
-													SeatsAvailable = d.SeatsAvailable,
-													LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-											}
-				               );
+									select new SectionWithSeats
+										{
+												ParentObject = c,
+												SeatsAvailable = d.SeatsAvailable,
+												LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
+										}
+				                           );
 
 				ViewBag.Modality = Helpers.ConstructModalityList(sectionsEnum, f_oncampus, f_online, f_hybrid, f_telecourse);
 
@@ -467,24 +464,6 @@ namespace CTCClassSchedule.Controllers
 
 
 		#region helper methods
-
-		/// <summary>
-		/// Gets the current http get/post params and assigns them to an IDictionary<string, object>
-		/// This is mainly used to set a Viewbag variable so these can be passed into action links in the views.
-		/// </summary>
-		private IDictionary<string, object> getLinkParams()
-		{
-			IDictionary<string, object> linkParams = new Dictionary<string, object>(Request.QueryString.Count);
-			foreach (string key in Request.QueryString.AllKeys)
-			{
-				if (key != "X-Requested-With")
-				{
-					linkParams.Add(key, Request.QueryString[key]);
-				}
-			}
-			return linkParams;
-		}
-
 		/// <summary>
 		/// Gets the course outcome information by scraping the Bellevue College
 		/// course outcomes website

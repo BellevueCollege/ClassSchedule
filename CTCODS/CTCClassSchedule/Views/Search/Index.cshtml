@@ -8,8 +8,8 @@
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;
 
-	int itemCount = ViewBag.ItemCount;
-	int subjectCount = ViewBag.SubjectCount;
+	int itemCount = ViewBag.ItemCount ?? 0;
+	int subjectCount = ViewBag.SubjectCount ?? 0;
 	String classDesc = subjectCount == 1 ? "class" : "classes";
 	String sectionDesc = itemCount == 1 ? "section" : "sections";
 
@@ -35,7 +35,7 @@
 </script>
 <div id="scheduleMain">
 	@Html.Partial("quarterNavigation")
-	@Html.Partial("advancedFacetedSearch")
+	@Html.Partial("advancedFacetedSearch", Model.Titles)
     @Html.Partial("basicFacetedSearch")
 
 	<div id="scheduleContent">

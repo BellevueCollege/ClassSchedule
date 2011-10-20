@@ -14,23 +14,18 @@ namespace CTCClassSchedule.Controllers
 {
 	public class SearchController : Controller
 	{
-
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
-
 
 		//
 		// GET: /Search/
 		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, int p_offset = 0)
 		{
-			IEnumerable<SectionWithSeats> sectionsEnum;
-			IEnumerable<string> titles;
-			bool ceRedirect = false;
 			int itemCount = 0;
 
 			if (quarter == "CE")
 			{
-				System.Web.HttpContext.Current.Response.Redirect("http://www.campusce.net/BC/Search/Search.aspx?q=" + searchterm, true);
+				Response.Redirect("http://www.campusce.net/BC/Search/Search.aspx?q=" + searchterm, true);
 				return null;
 			}
 
@@ -68,136 +63,94 @@ namespace CTCClassSchedule.Controllers
 			routeValues.Add("YearQuarterID", quarter);
 			ViewBag.RouteValues = routeValues;
 
-			if (searchterm != null && !ceRedirect)
-			{
-				SqlParameter[] parms = {
-									new SqlParameter("SearchWord", searchterm),
-									new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
-					                       };
-				SqlParameter[] parms2 = {
-										new SqlParameter("SearchWord", searchterm),
-										new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
-					                        };
+			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
-				IList<SearchResult> SearchResults = _programdb.ExecuteStoreQuery<SearchResult>("usp_ClassSearch @SearchWord, @YearQuarterID", parms).ToList();
-				IList<SearchResultNoSection> NoSectionSearchResults = _programdb.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms2).ToList();
-
-				using (OdsRepository respository = new OdsRepository(HttpContext))
-				{
-					YearQuarter YRQ = string.IsNullOrWhiteSpace(quarter) ? null : YearQuarter.FromFriendlyName(quarter);
-
-					ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
-
-					var seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
-																		 where s.ClassID.Substring(4) == YRQ.ID
-																		 select s);
-
-					IList<Section> sections = null;
-
-
-					//since there are multiple search scenarios (e.g. searching All, or Fall2011 Art) we need to have a few if statements.
-					if (YRQ == null && Subject == null)
-					{
-						sections = respository.GetSections(facetOptions: facets);
-						sectionsEnum = (
-															from c in sections
-															join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
-															join e in SearchResults on c.ID.ToString() equals e.ClassID
-															orderby e.SearchRank descending
-															select new SectionWithSeats
-																			{
-																				ParentObject = c,
-																				SeatsAvailable = d.SeatsAvailable,
-																				LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-																			}
-													 );
-					}
-					else
-						if (YRQ != null && Subject == null)
-						{
-							sections = respository.GetSections(YRQ, facetOptions: facets);
-							sectionsEnum = (
-																from c in sections
-																join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
-																join e in SearchResults on c.ID.ToString() equals e.ClassID
-																orderby e.SearchRank descending
-																where c.Yrq.ToString() == YRQ.ToString()
-																select new SectionWithSeats
-																				{
-																					ParentObject = c,
-																					SeatsAvailable = d.SeatsAvailable,
-																					LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-																				}
-														 );
-						}
-						else
-							if (YRQ == null && Subject != null)
-							{
-								sections = respository.GetSections(Subject, facetOptions: facets);
-								sectionsEnum = (
-																	from c in sections
-																	join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
-																	join e in SearchResults on c.ID.ToString() equals e.ClassID
-																	orderby e.SearchRank descending
-																	where c.CourseSubject == Subject.ToUpper()
-																	select new SectionWithSeats
-																					{
-																						ParentObject = c,
-																						SeatsAvailable = d.SeatsAvailable,
-																						LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-																					}
-															 );
-							}
-							else
-							{
-								sections = respository.GetSections(Subject, YRQ, facetOptions: facets);
-								sectionsEnum = (
-																	from c in sections
-																	join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
-																	join e in SearchResults on c.ID.ToString() equals e.ClassID
-																	orderby e.SearchRank descending
-																	where c.CourseSubject == Subject.ToUpper()
-																				&& c.Yrq.ToString() == YRQ.ToString()
-																	select new SectionWithSeats
-																					{
-																						ParentObject = c,
-																						SeatsAvailable = d.SeatsAvailable,
-																						LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-																					}
-															 );
-
-							}
-
-					itemCount = sectionsEnum.Count();
-					ViewBag.ItemCount = itemCount;
-					titles = (from s in sectionsEnum
-										orderby s.CourseSubject ascending
-										select s.CourseSubject
-									 ).Distinct();
-
-					ViewBag.SubjectCount = titles.Count();
-					sectionsEnum = (
-														from c in sectionsEnum
-														join d in SearchResults on c.ID.ToString() equals d.ClassID
-														orderby d.SearchRank descending
-														select c).Skip(p_offset * 40).Take(40);
-
-					ViewBag.TotalPages = Math.Ceiling((double)itemCount / 40.0);
-					ViewBag.CurrentPage = p_offset + 1;
-
-					var model = new SearchResultsModel
-												{
-													Section = sectionsEnum,
-													SearchResultNoSection = NoSectionSearchResults,
-													Titles = titles
-												};
-
-					return View(model);
-				}
-			}
-			else
+			if (searchterm == null)
 			{
 				return View();
+			}
+
+			// We have a valid searchterm - continue processing the search
+			SqlParameter[] parms = {
+							new SqlParameter("SearchWord", searchterm),
+							new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
+			                       };
+			SqlParameter[] parms2 = {
+								new SqlParameter("SearchWord", searchterm),
+								new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
+			                        };
+
+			IList<SearchResult> SearchResults =
+					_programdb.ExecuteStoreQuery<SearchResult>("usp_ClassSearch @SearchWord, @YearQuarterID", parms).ToList();
+			IList<SearchResultNoSection> NoSectionSearchResults =
+					_programdb.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms2).ToList
+							();
+
+			using (OdsRepository respository = new OdsRepository(HttpContext))
+			{
+				YearQuarter YRQ = string.IsNullOrWhiteSpace(quarter) ? respository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
+				ViewBag.YearQuarter = YRQ;
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+
+				IQueryable<vw_SeatAvailability> seatsAvailableLocal = from s in _scheduledb.vw_SeatAvailability
+				                                                      where s.ClassID.Substring(4) == YRQ.ID
+				                                                      select s;
+
+				IList<Section> sections;
+				if (Subject != null)
+				{
+					// ensure that we are getting ALL the subject records - including the Common Course ones
+					IList<string> subjects = new List<string> {Subject, string.Concat(Subject, "&")};
+
+					sections = YRQ != null ? respository.GetSections(subjects, YRQ, facets) : respository.GetSections(subjects, facetOptions: facets);
+				}
+				else // Subject == null
+				{
+					sections = YRQ != null ? respository.GetSections(YRQ, facets) : respository.GetSections(facets);
+				}
+
+				IEnumerable<SectionWithSeats> sectionsEnum = (from c in sections
+				                                              join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
+				                                              join e in SearchResults on c.ID.ToString() equals e.ClassID
+				                                              orderby e.SearchRank descending
+				                                              select new SectionWithSeats
+											{
+													ParentObject = c,
+													SeatsAvailable = d.SeatsAvailable,
+													LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
+											}).ToList();
+
+				itemCount = sectionsEnum.Count();
+				ViewBag.ItemCount = itemCount;
+
+				IList<ProgramInformation> progInfo = _programdb.ProgramInformation.ToList();
+
+				// NOTE: the following LINQ statement could modify sectionsEnum, so we need to make a copy to work with
+				IEnumerable<SectionWithSeats> sectionsCopy = sectionsEnum;
+
+				IList<ScheduleCoursePrefix> titles = (from p in progInfo
+																							where sectionsCopy.Select(c => c.CourseSubject).Contains(p.Abbreviation.TrimEnd('&'))
+																							select new ScheduleCoursePrefix
+																													{
+																														Subject = p.URL,
+																														Title = p.Title
+																													}
+																							).Distinct().ToList();
+
+				ViewBag.SubjectCount = titles.Count;
+				sectionsEnum = sectionsEnum.Skip(p_offset * 40).Take(40);
+
+				ViewBag.TotalPages = Math.Ceiling(itemCount / 40.0);
+				ViewBag.CurrentPage = p_offset + 1;
+
+				SearchResultsModel model = new SearchResultsModel
+														{
+															Section = sectionsEnum,
+															SearchResultNoSection = NoSectionSearchResults,
+															Titles = titles
+														};
+
+				return View(model);
 			}
 		}
 
