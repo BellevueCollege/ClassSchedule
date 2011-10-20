@@ -221,7 +221,6 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
 				IList<CoursePrefix> courses;
-				IList<ProgramInformation> progInfo;
 				//IEnumerable<CoursePrefix> coursesLocalEnum;
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
 				{
@@ -230,8 +229,8 @@ namespace CTCClassSchedule.Controllers
 
 
 
-				progInfo = (from s in _programdb.ProgramInformation
-											select s).ToList();
+				IList<ProgramInformation> progInfo = (from s in _programdb.ProgramInformation
+																							select s).ToList();
 
 				IEnumerable<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
 																															where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
