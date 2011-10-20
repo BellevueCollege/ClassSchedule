@@ -32,7 +32,7 @@
 @{
 	IDictionary<string, object> routeParms = new Dictionary<string, object>(Request.QueryString.Count + 2);
 	routeParms.Add("format", string.Empty);
-	routeParms.Add("yrq", ViewBag.YearQuarter != null ? (ViewBag.YearQuarter as YearQuarter).FriendlyName.Replace(" ","") : "all");
+	routeParms.Add("YearQuarter", ViewBag.YearQuarter != null ? (ViewBag.YearQuarter as YearQuarter).FriendlyName.Replace(" ","") : "All");
 
 	// TODO: move building the query string collection into the controller
 	foreach(string key in Request.QueryString.AllKeys)
@@ -62,4 +62,4 @@
 												 OnComplete = "spinner.stop();",
 											 })
 
-<div id="nav-choose-subjects"></div>
+<div id="nav-choose-subjects" title="Select new course subject"></div>
