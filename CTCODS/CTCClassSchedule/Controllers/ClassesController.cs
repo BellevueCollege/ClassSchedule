@@ -160,7 +160,7 @@ namespace CTCClassSchedule.Controllers
 
 				if (Subject != null)
 				{
-					IEnumerable<Course> coursesEnum = respository.GetCourses(Subject, facets).Distinct();
+					IEnumerable<Course> coursesEnum = respository.GetCourses(getPrefix(Subject), facets).Distinct();
 					ViewBag.ItemCount = coursesEnum.Count();
 
 					return View(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number));

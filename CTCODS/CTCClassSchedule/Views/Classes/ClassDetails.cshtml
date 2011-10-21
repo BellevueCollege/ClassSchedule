@@ -22,7 +22,7 @@
 	<div id="scheduleContentNoSidebar">
         <div id="class-details">
 			    <h1 class="course-title">
-				    <span class="courseID">@course.CourseSubject @course.CourseNumber</span>
+				    <span class="courseID">@(string.Format("{0}{1} {2}", course.CourseSubject, course.IsCommonCourse ? "&" : string.Empty, course.CourseNumber))</span>
 						<span>@course.CourseTitle</span>
 						<span>&#8226; @Html.CreditsValue(course.Credits)
 
@@ -57,7 +57,11 @@
 				{
 					<text>
 			  <h2 class="course-YRQ@(currentYrq != thisYrq ? Html.Raw(" course-YRQ-past-quarter") : Html.Raw(string.Empty))">@sec.Yrq.FriendlyName</h2>
-			  <div class="YRQClassTitle">@course.CourseSubject @course.CourseNumber - @course.CourseTitle &#8226; @Html.CreditsValue(course.Credits) <abbr title="Credit(s) ">Cr.</abbr></div>
+			  <div class="YRQClassTitle">
+					@Html.Raw(string.Format("{0}{1} {2} - {3} &#8226; ", course.CourseSubject, course.IsCommonCourse ? "&amp;" : string.Empty, course.CourseNumber, course.CourseTitle))
+					@Html.CreditsValue(course.Credits)
+					<abbr title="Credit(s) ">Cr.</abbr>
+				</div>
 
 				<ul class="course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
 				</text>

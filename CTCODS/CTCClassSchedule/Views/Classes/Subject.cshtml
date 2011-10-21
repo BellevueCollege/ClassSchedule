@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Ctc.Ods.Types.Course>
+﻿@using CTCClassSchedule.Common
+@model IEnumerable<Ctc.Ods.Types.Course>
 @{
     ViewBag.PageTitle = ViewBag.Subject + "-" + @ViewBag.ProgramTitle + " Classes at Bellevue College";
 }
@@ -19,15 +20,20 @@
 		    <div id="classInfoWrap">
 		    @foreach (var item in Model.OrderBy(c => c.Number))
 			{
+				string courseID = string.Format("{0}{1} {2}", item.Subject, item.IsCommonCourse ? "&" : string.Empty, item.Number);
 
 			    <div class="classInfo">
                     <h2>
 				    <span class="classNumber">
-					    @Html.ActionLink(item.Subject + " " + item.Number + " " + item.Title, "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number }, null)
+					    @Html.ActionLink(string.Format("{0} {1}", courseID, item.Title),
+															"ClassDetails",
+															"Classes",
+															new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number },
+															null)
 				    </span>
 
 				    <span class="classCredits">&#8226;
-					    @item.Credits
+					    @Html.CreditsValue(item.Credits)
 				        <abbr title=" credit(s) ">Cr.</abbr>
                     </span>
                     </h2>
@@ -44,7 +50,11 @@
 				}
 
                     <p class="classDetailsLink">
-				        @Html.ActionLink("View Details for " + item.Subject + " " + item.Number, "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number }, null)
+				        @Html.ActionLink("View Details for " + courseID,
+																"ClassDetails",
+																"Classes",
+																new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number },
+																null)
 		            </p>
 
                 </div>

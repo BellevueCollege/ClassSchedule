@@ -25,6 +25,7 @@ namespace CTCClassSchedule
 				SectionCode = value.SectionCode;
 				WaitlistCount = value.WaitlistCount;
 				Yrq = value.Yrq;
+				IsCommonCourse = value.IsCommonCourse;
 				IsOnline = value.IsOnline;
 				IsOnCampus = value.IsOnCampus;
 				IsHybrid = value.IsHybrid;
