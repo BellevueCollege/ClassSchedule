@@ -6,6 +6,8 @@ namespace CTCClassSchedule
 	{
 		public int? SeatsAvailable { get; set; }
 		public string LastUpdated { get; set; }
+		public string CourseFootnotes { get; set; }
+		public string SectionFootnotes { get; set; }
 
 		/// <summary>
 		/// Provides a means to set protected values of the parent object.

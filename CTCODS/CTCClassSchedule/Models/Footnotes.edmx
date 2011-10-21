@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ClassScheduleFootnoteModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="ClassScheduleFootnoteModelStoreContainer">
+          <EntitySet Name="CourseFootnote" EntityType="ClassScheduleFootnoteModel.Store.CourseFootnote" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SectionFootnote" EntityType="ClassScheduleFootnoteModel.Store.SectionFootnote" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="CourseFootnote">
+          <Key>
+            <PropertyRef Name="CourseID" />
+          </Key>
+          <Property Name="CourseID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Footnote" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="SectionFootnote">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="8" />
+          <Property Name="Footnote" Type="varchar(max)" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ClassScheduleFootnoteModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="ClassScheduleFootnoteEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CourseFootnote" EntityType="ClassScheduleFootnoteModel.CourseFootnote" />
+          <EntitySet Name="SectionFootnote" EntityType="ClassScheduleFootnoteModel.SectionFootnote" />
+        </EntityContainer>
+        <EntityType Name="CourseFootnote">
+          <Key>
+            <PropertyRef Name="CourseID" />
+          </Key>
+          <Property Name="CourseID" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="Footnote" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="SectionFootnote">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Name="ClassID" Type="String" Nullable="false" MaxLength="8" Unicode="false" FixedLength="false" />
+          <Property Name="Footnote" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ClassScheduleFootnoteModelStoreContainer" CdmEntityContainer="ClassScheduleFootnoteEntities">
+          <EntitySetMapping Name="CourseFootnote"><EntityTypeMapping TypeName="ClassScheduleFootnoteModel.CourseFootnote"><MappingFragment StoreEntitySet="CourseFootnote">
+            <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+            <ScalarProperty Name="Footnote" ColumnName="Footnote" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="SectionFootnote"><EntityTypeMapping TypeName="ClassScheduleFootnoteModel.SectionFootnote"><MappingFragment StoreEntitySet="SectionFootnote">
+            <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+            <ScalarProperty Name="Footnote" ColumnName="Footnote" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Footnotes">
+        <EntityTypeShape EntityType="ClassScheduleFootnoteModel.CourseFootnote" Width="2.375" PointX="3.625" PointY="1.875" Height="1.4033821614583331" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClassScheduleFootnoteModel.SectionFootnote" Width="1.5" PointX="8.75" PointY="1.875" Height="1.4033821614583335" IsExpanded="true" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

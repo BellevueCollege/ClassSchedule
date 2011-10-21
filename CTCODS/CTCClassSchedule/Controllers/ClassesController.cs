@@ -28,6 +28,7 @@ namespace CTCClassSchedule.Controllers
 
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
+		private ClassScheduleFootnoteEntities _footnotedb = new ClassScheduleFootnoteEntities();
 		#endregion
 
 		public ClassesController()
@@ -363,6 +364,9 @@ namespace CTCClassSchedule.Controllers
 																	where s.ClassID.Substring(4) == currentYrq
 					                        select s;
 
+				var sectionFootnoteInformation =	from f in _footnotedb.SectionFootnote
+																					select f;
+
 				// TODO: move this declaration somewhere it can more easily be re-used
 				IList<ISectionFacet> facets = new List<ISectionFacet> {new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay)};
 
@@ -382,12 +386,15 @@ namespace CTCClassSchedule.Controllers
 									from c in sections
 									join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID into cd
 									from d in cd.DefaultIfEmpty()	// include all sections, even if don't have an associated seatsAvailable
+																			join s in sectionFootnoteInformation on c.ID.ToString() equals s.ClassID into cs
+																			from s in cs.DefaultIfEmpty()
 									orderby c.Yrq.ID descending
 									select new SectionWithSeats
 										{
 												ParentObject = c,
 												SeatsAvailable = d == null ? int.MinValue : d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
 												LastUpdated = d == null ? string.Empty : Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
+																									SectionFootnotes = s == null? string.Empty : s.Footnote,
 										}
 				                           );
 
