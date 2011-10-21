@@ -84,10 +84,13 @@
 
         <div id="scheduleRightSidebar">
 
-            <div id="programWebsite">
+				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
+		{
+        <div id="programWebsite">
                 <h2>Department</h2>
 			    <p><a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a></p>
 		    </div>
+		}
 
        </div><!-- scheduleRightSidebar -->
     </div>

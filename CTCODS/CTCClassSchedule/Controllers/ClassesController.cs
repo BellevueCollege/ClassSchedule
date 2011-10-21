@@ -587,8 +587,8 @@ namespace CTCClassSchedule.Controllers
 					string url = program.ProgramURL ?? DEFAULT_URL;
 
 					//if the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
-					//just return it, otherwise prepend iwth the current school url.
-					if (!Regex.IsMatch(url, @"^https?://"))
+					//or empty just return it, otherwise prepend iwth the current school url.
+					if (!string.IsNullOrWhiteSpace(url) && !Regex.IsMatch(url, @"^https?://"))
 					{
 						url =  ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(url);
 					}
@@ -602,30 +602,19 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="URLprefix"></param>
+		/// <returns></returns>
 		private List<string> getPrefix(string URLprefix)
 		{
-			List<string> prefixList = new List<string>();
-
-			prefixList = (from s in _programdb.ProgramInformation
-										where s.URL == URLprefix
-										select s.Abbreviation).ToList();
-
+			List<string> prefixList = (from s in _programdb.ProgramInformation
+																 where s.URL == URLprefix
+																 select s.Abbreviation).ToList();
 
 			return prefixList;
 		}
-
-		private List<string> getSubjectFromURL(string URLprefix)
-		{
-			List<string> subjectList = new List<string>();
-
-			subjectList = (from s in _programdb.ProgramInformation
-										where s.URL == URLprefix
-										select s.Title).ToList();
-
-
-			return subjectList;
-		}
-
 		#endregion
 	}
 }

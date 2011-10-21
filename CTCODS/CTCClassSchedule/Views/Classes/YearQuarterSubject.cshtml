@@ -31,9 +31,13 @@
 							<span class="subjectchooser">@Html.Partial("subjectNavigation")</span>
 		</h1>
 
+		if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
+		{
 		<p id="programWebsite">
 			<a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a>
 		</p>
+		}
+
 		using (_profiler.Step("Rendering sections by course"))
 		{
 			foreach (var sec in Model.OrderBy(c => c.CourseNumber).ThenBy(c => c.ID.ItemNumber))
