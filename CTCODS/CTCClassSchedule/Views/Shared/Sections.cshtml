@@ -1,6 +1,7 @@
 ﻿@using Ctc.Ods.Types
 @using CTCClassSchedule
 @using CTCClassSchedule.Common
+@using Microsoft.Security.Application
 @model SectionWithSeats
 @{
 	string PreviousSectionID = ViewData["PreviousSectionID"] as string;
@@ -69,17 +70,7 @@
 
 					<li class="section-notes"><span class="descriptor">Notes: </span>
 						<ul>
-							@if (@Model.Footnotes != null && @Model.Footnotes.Count() > 0)
-			 {
-				 foreach (string note in @Model.Footnotes)
-				 {
-								<li><span class="label">@note</span></li>
-				 }
-			 }
-			 else
-			 {
-								<li><span class="label">&nbsp;</span></li>
-			 }
+								<li><span class="label">@Html.Raw(string.IsNullOrWhiteSpace(Model.SectionFootnotes) ? "&nbsp;" : Encoder.HtmlEncode(Model.SectionFootnotes))</span></li>
 						</ul>
 					</li>
 		}

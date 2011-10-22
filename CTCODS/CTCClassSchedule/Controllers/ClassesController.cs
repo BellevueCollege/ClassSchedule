@@ -228,10 +228,8 @@ namespace CTCClassSchedule.Controllers
 					courses = respository.GetCourseSubjects(yrq, facets);
 				}
 
-
-
-				IList<ProgramInformation> progInfo = (from s in _programdb.ProgramInformation
-																							select s).ToList();
+				var progInfo = (from s in _programdb.ProgramInformation
+												select new {s.Abbreviation, s.URL, s.Title}).ToList();
 
 				IEnumerable<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
 																															where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
@@ -241,8 +239,6 @@ namespace CTCClassSchedule.Controllers
 																															Title = p.Title
 																														});
 				coursesLocalEnum = coursesLocalEnum.ToList().Distinct();
-
-
 
 				IEnumerable<String> alphabet;
 				ViewBag.AlphabetArray = new bool[26];
@@ -308,7 +304,8 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(respository);
+				ViewBag.QuarterNavMenu = yrqRange;
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 
 				// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
@@ -316,26 +313,17 @@ namespace CTCClassSchedule.Controllers
 				routeValues.Add("YearQuarterID", YearQuarter);
 				ViewBag.RouteValues = routeValues;
 
-				IQueryable<vw_SeatAvailability> seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
-																															 where s.ClassID.Substring(4) == YRQ.ID
-																															 select s);
-
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
 					sections = respository.GetSections(getPrefix(Subject), YRQ, facets);
 				}
-				IEnumerable<SectionWithSeats> sectionsEnum = (
-									from c in sections
-									join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
 
-									select new SectionWithSeats
-										{
-												ParentObject = c,
-												SeatsAvailable = d.SeatsAvailable,
-												LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-										}
-				                           );
+				IEnumerable<SectionWithSeats> sectionsEnum;
+				using (_profiler.Step("Getting app-specific Section records from the DB"))
+				{
+					sectionsEnum = getSectionsWithSeats(yrqRange[0].ID, sections);
+				}
 
 				ViewBag.Modality = Helpers.ConstructModalityList(sectionsEnum, f_oncampus, f_online, f_hybrid, f_telecourse);
 
@@ -359,14 +347,6 @@ namespace CTCClassSchedule.Controllers
 				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(respository);
 				ViewBag.QuarterNavMenu = yrqRange;
 
-				string currentYrq = yrqRange[0].ID;
-				var seatsAvailableLocal = from s in _scheduledb.vw_SeatAvailability
-																	where s.ClassID.Substring(4) == currentYrq
-					                        select s;
-
-				var sectionFootnoteInformation =	from f in _footnotedb.SectionFootnote
-																					select f;
-
 				// TODO: move this declaration somewhere it can more easily be re-used
 				IList<ISectionFacet> facets = new List<ISectionFacet> {new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay)};
 
@@ -377,26 +357,17 @@ namespace CTCClassSchedule.Controllers
 				}
 
 				Section courseInfo = sections.First();
-				ViewBag.CourseInfo = courseInfo;
 				using (_profiler.Step("Retrieving course outcomes"))
 				{
 					ViewBag.CourseOutcome = getCourseOutcome(courseInfo.IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, ClassNum);
 				}
-				IEnumerable<SectionWithSeats> sectionsEnum = (
-									from c in sections
-									join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID into cd
-									from d in cd.DefaultIfEmpty()	// include all sections, even if don't have an associated seatsAvailable
-																			join s in sectionFootnoteInformation on c.ID.ToString() equals s.ClassID into cs
-																			from s in cs.DefaultIfEmpty()
-									orderby c.Yrq.ID descending
-									select new SectionWithSeats
-										{
-												ParentObject = c,
-												SeatsAvailable = d == null ? int.MinValue : d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
-												LastUpdated = d == null ? string.Empty : Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-																									SectionFootnotes = s == null? string.Empty : s.Footnote,
-										}
-				                           );
+				ViewBag.CourseInfo = courseInfo;
+
+				IEnumerable<SectionWithSeats> sectionsEnum;
+				using (_profiler.Step("Getting app-specific Section records from the DB"))
+				{
+					sectionsEnum = getSectionsWithSeats(yrqRange[0].ID, sections);
+				}
 
 				return View(sectionsEnum);
 			}
@@ -470,6 +441,41 @@ namespace CTCClassSchedule.Controllers
 
 
 		#region helper methods
+		/// <summary>
+		/// Common method to retrieve <see cref="SectionWithSeats"/> records
+		/// </summary>
+		/// <param name="currentYrq"></param>
+		/// <param name="sections"></param>
+		/// <returns></returns>
+		private IEnumerable<SectionWithSeats> getSectionsWithSeats(string currentYrq, IList<Section> sections)
+		{
+				IQueryable<vw_SeatAvailability> seatsAvailableLocal = from s in _scheduledb.vw_SeatAvailability
+																															where s.ClassID.Substring(4) == currentYrq
+																															select s;
+
+				IEnumerable<SectionWithSeats> sectionsEnum =
+									from c in sections
+									join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID into cd
+									from d in cd.DefaultIfEmpty()	// include all sections, even if don't have an associated seatsAvailable
+									orderby c.Yrq.ID descending
+									select new SectionWithSeats
+										{
+												ParentObject = c,
+												SeatsAvailable = d == null ? int.MinValue : d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
+												LastUpdated = d == null ? string.Empty : Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
+																									// retrieve all the Section and Course footnotes and flatten them into one string
+																									SectionFootnotes = string.Join(" ", _footnotedb.SectionFootnote.Where(f => f.ClassID == string.Concat(c.ID.ItemNumber, c.ID.YearQuarter))
+																																																								 .Select(f => f.Footnote )
+																																																								 .Distinct()),
+																									CourseFootnotes = string.Join(" ", _footnotedb.CourseFootnote.Where(f => f.CourseID.Substring(0, 5).Trim() == (c.IsCommonCourse
+																																																														? string.Concat(c.CourseSubject, _apiSettings.RegexPatterns.CommonCourseChar)
+																																																														: c.CourseSubject) && f.CourseID.Substring(5).Trim() == c.CourseNumber)
+																																																								.Distinct()
+																																																								.Select(f => f.Footnote))
+										};
+			return sectionsEnum;
+		}
+
 		/// <summary>
 		/// Gets the course outcome information by scraping the Bellevue College
 		/// course outcomes website

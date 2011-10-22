@@ -36,7 +36,13 @@
                     <p>
 				    @(course.CourseDescriptions.Count <= 0 || string.IsNullOrWhiteSpace(course.CourseDescriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : course.CourseDescriptions[0].Description)
 			        </p>
-                </div>
+          </div>
+
+			    <div id="courseFootnotes">
+               <p>
+									@Model.First().CourseFootnotes
+			        </p>
+          </div>
 
 		    @if (!string.IsNullOrWhiteSpace(ViewBag.CourseOutcome))
 		    {
