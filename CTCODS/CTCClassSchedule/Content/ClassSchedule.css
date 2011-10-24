@@ -666,6 +666,7 @@ li.section-listing
 {
 	padding-top: 5px;
 	padding-bottom: 5px;
+	list-style: none;
 }
 
 .item-number
