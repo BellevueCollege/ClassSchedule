@@ -340,8 +340,6 @@ namespace CTCClassSchedule.Controllers
 		{
 			ICourseID courseID = CourseID.FromString(Subject, ClassNum);
 
-			setProgramInfo(Subject);
-
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{
 				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(respository);
@@ -368,6 +366,9 @@ namespace CTCClassSchedule.Controllers
 				{
 					sectionsEnum = getSectionsWithSeats(yrqRange[0].ID, sections);
 				}
+
+				// Use the real abbreviation as the lookup since we're not longer doing the translation workaround at this level.
+				setProgramInfo(sectionsEnum.First().IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, true);
 
 				return View(sectionsEnum);
 			}
@@ -573,20 +574,32 @@ namespace CTCClassSchedule.Controllers
 		///
 		/// </summary>
 		/// <param name="Subject"></param>
-		private void setProgramInfo(string Subject)
+		/// <param name="useRealAbbreviation"></param>
+		private void setProgramInfo(string Subject, bool useRealAbbreviation = false)
 		{
 			using (_profiler.Step("Retrieving course program information"))
 			{
 				const string DEFAULT_TITLE = "";
 				const string DEFAULT_URL = "";
 
-				var specificProgramInfo = from s in _programdb.ProgramInformation
-				                          where s.URL == Subject
-				                          select s;
+				IQueryable<ProgramInformation> specificProgramInfo;
+				if (useRealAbbreviation)
+				{
+					specificProgramInfo = from s in _programdb.ProgramInformation
+																where s.Abbreviation == Subject
+																select s;
+				}
+				else
+				{
+					specificProgramInfo = from s in _programdb.ProgramInformation
+					                      where s.URL == Subject
+					                      select s;
+
+				}
 
 				if (specificProgramInfo.Count() > 0)
 				{
-					var program = specificProgramInfo.Take(1).Single();
+					ProgramInformation program = specificProgramInfo.Take(1).Single();
 
 					ViewBag.ProgramTitle = program.Title ?? DEFAULT_TITLE;
 
