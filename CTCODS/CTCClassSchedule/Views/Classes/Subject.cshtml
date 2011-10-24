@@ -32,10 +32,20 @@
 															null)
 				    </span>
 
+						@if (item.IsVariableCredits)
+			{
+				    <span class="classCredits">&#8226;
+					    V1-@Html.CreditsValue(item.Credits)
+				        <abbr title=" variable credit(s) ">Cr.</abbr>
+            </span>
+			}
+			else
+			{
 				    <span class="classCredits">&#8226;
 					    @Html.CreditsValue(item.Credits)
 				        <abbr title=" credit(s) ">Cr.</abbr>
-                    </span>
+            </span>
+			}
                     </h2>
 				    @if (@item.Descriptions != null && @item.Descriptions.Count() > 0)
 				{
