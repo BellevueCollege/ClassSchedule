@@ -34,7 +34,7 @@
 			    <div id="courseDescription">
 				    <h2>Description:</h2>
                     <p>
-				    @(course.CourseDescriptions.Count <= 0 || string.IsNullOrWhiteSpace(course.CourseDescriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : course.CourseDescriptions[0].Description)
+				    @(course.CourseDescriptions.Count <= 0 || string.IsNullOrWhiteSpace(course.CourseDescriptions[1].Description) ? (string.IsNullOrWhiteSpace(course.CourseDescriptions[0].Description) ? "No Description Found" : course.CourseDescriptions[0].Description ) : course.CourseDescriptions[1].Description)
 			        </p>
           </div>
 
