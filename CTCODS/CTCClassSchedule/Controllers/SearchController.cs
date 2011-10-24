@@ -8,14 +8,19 @@ using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
+using Ctc.Ods.Config;
+using System.Configuration;
 
 
 namespace CTCClassSchedule.Controllers
 {
 	public class SearchController : Controller
 	{
+		private ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
+		private ClassScheduleFootnoteEntities _footnotedb = new ClassScheduleFootnoteEntities();
+
 
 		//
 		// GET: /Search/
@@ -92,36 +97,79 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.YearQuarter = YRQ;
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
+
+
+				IList<ISectionID> searchSections = new List<ISectionID>();
+				List<String> searchResultsClassIDs = new List<String>();
+				//iterate through the search results, building a list of course ids
+				foreach(SearchResult result in SearchResults) {
+					searchSections.Add(SectionID.FromString(result.ClassID));
+					searchResultsClassIDs.Add(result.ClassID);
+				}
+
+
 				IQueryable<vw_SeatAvailability> seatsAvailableLocal = from s in _scheduledb.vw_SeatAvailability
-				                                                      where s.ClassID.Substring(4) == YRQ.ID
-				                                                      select s;
+																															where searchResultsClassIDs.Contains(s.ClassID)
+																															select s;
+
 
 				IList<Section> sections;
-				if (Subject != null)
-				{
-					// ensure that we are getting ALL the subject records - including the Common Course ones
-					IList<string> subjects = new List<string> {Subject, string.Concat(Subject, "&")};
+				sections = respository.GetSections(searchSections, facets);
 
-					sections = YRQ != null ? respository.GetSections(subjects, YRQ, facets) : respository.GetSections(subjects, facetOptions: facets);
-				}
-				else // Subject == null
-				{
-					sections = YRQ != null ? respository.GetSections(YRQ, facets) : respository.GetSections(facets);
-				}
+				//IEnumerable<SectionWithSeats>  sectionsEnumGeneric = Helpers.getSectionsWithSeats(YRQ.ID, sections);
 
-				IEnumerable<SectionWithSeats>  sectionsEnumGeneric = Helpers.getSectionsWithSeats(YRQ.ID, sections);
+				//IEnumerable<SectionWithSeats> sectionsEnum = (from c in sectionsEnumGeneric
+				//                                              join e in SearchResults on c.ID.ToString() equals e.ClassID
+				//                                              orderby e.SearchRank descending
+				//                                              select new SectionWithSeats
+				//                                              {
+				//                                                ParentObject = c,
+				//                                                SeatsAvailable = c.SeatsAvailable,
+				//                                                LastUpdated = c.LastUpdated,
+				//                                                CourseFootnotes = c.CourseFootnotes,
+				//                                                SectionFootnotes = c.SectionFootnotes,
+				//                                              }).ToList();
 
-				IEnumerable<SectionWithSeats> sectionsEnum = (from c in sectionsEnumGeneric
-																											join e in SearchResults on c.ID.ToString() equals e.ClassID
-																											orderby e.SearchRank descending
-																											select new SectionWithSeats
-																											{
-																												ParentObject = c,
-																												SeatsAvailable = c.SeatsAvailable,
-																												LastUpdated = c.LastUpdated,
-																												CourseFootnotes = c.CourseFootnotes,
-																												SectionFootnotes = c.SectionFootnotes,
-																											}).ToList();
+				IEnumerable<SectionWithSeats> sectionsEnum =
+																			from c in sections
+																			join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID into cd
+																			join e in SearchResults on c.ID.ToString() equals e.ClassID
+																			from d in cd.DefaultIfEmpty()	// include all sections, even if don't have an associated seatsAvailable
+
+																			orderby c.Yrq.ID descending
+																			select new SectionWithSeats
+																			{
+																				ParentObject = c,
+																				SeatsAvailable = d == null ? int.MinValue : d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
+																				LastUpdated = d == null ? string.Empty : Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
+																				// retrieve all the Section and Course footnotes and flatten them into one string
+																				SectionFootnotes = string.Join(" ", _footnotedb.SectionFootnote.Where(f => f.ClassID == string.Concat(c.ID.ItemNumber, c.ID.YearQuarter))
+																																																			 .Select(f => f.Footnote)
+																																																			 .Distinct()),
+																				CourseFootnotes = string.Join(" ", _footnotedb.CourseFootnote.Where(f => f.CourseID.Substring(0, 5).Trim() == (c.IsCommonCourse
+																																																									? string.Concat(c.CourseSubject, _apiSettings.RegexPatterns.CommonCourseChar)
+																																																									: c.CourseSubject) && f.CourseID.Substring(5).Trim() == c.CourseNumber)
+																																																			.Distinct()
+																																																			.Select(f => f.Footnote))
+																			};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 				itemCount = sectionsEnum.Count();
@@ -130,15 +178,15 @@ namespace CTCClassSchedule.Controllers
 				IList<ProgramInformation> progInfo = _programdb.ProgramInformation.ToList();
 
 				// NOTE: the following LINQ statement could modify sectionsEnum, so we need to make a copy to work with
-				IEnumerable<SectionWithSeats> sectionsCopy = sectionsEnum;
+				IEnumerable<string> sectionsCopy = sectionsEnum.Select(s => s.CourseSubject).Distinct();
 
 				IList<ScheduleCoursePrefix> titles = (from p in progInfo
-																							where sectionsCopy.Select(c => c.CourseSubject).Contains(p.Abbreviation.TrimEnd('&'))
+																							where sectionsCopy.Contains(p.Abbreviation.TrimEnd('&'))
 																							select new ScheduleCoursePrefix
-																													{
-																														Subject = p.URL,
-																														Title = p.Title
-																													}
+																							{
+																								Subject = p.URL,
+																								Title = p.Title
+                                              }
 																							).Distinct().ToList();
 
 				ViewBag.SubjectCount = titles.Count;
