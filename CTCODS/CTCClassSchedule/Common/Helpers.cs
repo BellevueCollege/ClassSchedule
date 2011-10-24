@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Ctc.Ods;
+using Ctc.Ods.Config;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
+using CTCClassSchedule.Common;
+using CTCClassSchedule.Models;
+using CTCClassSchedule.Properties;
+using System.Linq;
 
 namespace CTCClassSchedule.Common
 {
 	public static class Helpers
 	{
+
+
+
 		public static MvcHtmlString IncludePageURL(this HtmlHelper htmlHelper, string url)
 		{
 			return MvcHtmlString.Create(new WebClient().DownloadString(url));
@@ -418,5 +427,46 @@ namespace CTCClassSchedule.Common
 			}
 			return linkParams;
 		}
+
+		/// <summary>
+		/// Common method to retrieve <see cref="SectionWithSeats"/> records
+		/// </summary>
+		/// <param name="currentYrq"></param>
+		/// <param name="sections"></param>
+		/// <returns></returns>
+		public static IEnumerable<SectionWithSeats> getSectionsWithSeats(string currentYrq, IList<Section> sections)
+		{
+			ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
+			ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
+			ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
+			ClassScheduleFootnoteEntities _footnotedb = new ClassScheduleFootnoteEntities();
+
+			IQueryable<vw_SeatAvailability> seatsAvailableLocal = from s in _scheduledb.vw_SeatAvailability
+																														where s.ClassID.Substring(4) == currentYrq
+																														select s;
+
+			IEnumerable<SectionWithSeats> sectionsEnum =
+																		from c in sections
+																		join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID into cd
+																		from d in cd.DefaultIfEmpty()	// include all sections, even if don't have an associated seatsAvailable
+																		orderby c.Yrq.ID descending
+																		select new SectionWithSeats
+																		{
+																			ParentObject = c,
+																			SeatsAvailable = d == null ? int.MinValue : d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
+																			LastUpdated = d == null ? string.Empty : Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
+																			// retrieve all the Section and Course footnotes and flatten them into one string
+																			SectionFootnotes = string.Join(" ", _footnotedb.SectionFootnote.Where(f => f.ClassID == string.Concat(c.ID.ItemNumber, c.ID.YearQuarter))
+																																																		 .Select(f => f.Footnote)
+																																																		 .Distinct()),
+																			CourseFootnotes = string.Join(" ", _footnotedb.CourseFootnote.Where(f => f.CourseID.Substring(0, 5).Trim() == (c.IsCommonCourse
+																																																								? string.Concat(c.CourseSubject, _apiSettings.RegexPatterns.CommonCourseChar)
+																																																								: c.CourseSubject) && f.CourseID.Substring(5).Trim() == c.CourseNumber)
+																																																		.Distinct()
+																																																		.Select(f => f.Footnote))
+																		};
+			return sectionsEnum;
+		}
+
 	}
 }

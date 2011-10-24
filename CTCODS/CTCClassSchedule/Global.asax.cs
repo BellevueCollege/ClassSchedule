@@ -15,7 +15,7 @@ namespace CTCClassSchedule
 		{
 			filters.Add(new HandleErrorAttribute
 					{
-							View = "ScheduleError"
+							//View = "ScheduleError"
 					});
 		}
 

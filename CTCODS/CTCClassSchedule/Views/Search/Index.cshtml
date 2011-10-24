@@ -83,8 +83,12 @@
 			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
 		</p>
 
-		<p id="courseDescription">
+		<p class="courseDescription">
 				@(sec.CourseDescriptions.Count() == 0 ? "" : @sec.CourseDescriptions[0].Description)
+		</p>
+
+		<p class="courseFootnotes">
+				@(sec.CourseFootnotes == null ? "" : @sec.CourseFootnotes)
 		</p>
 
 		<ul class='course-block'>

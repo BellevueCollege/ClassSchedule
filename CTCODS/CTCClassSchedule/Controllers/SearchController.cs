@@ -109,16 +109,20 @@ namespace CTCClassSchedule.Controllers
 					sections = YRQ != null ? respository.GetSections(YRQ, facets) : respository.GetSections(facets);
 				}
 
-				IEnumerable<SectionWithSeats> sectionsEnum = (from c in sections
-				                                              join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID
-				                                              join e in SearchResults on c.ID.ToString() equals e.ClassID
-				                                              orderby e.SearchRank descending
-				                                              select new SectionWithSeats
-											{
-													ParentObject = c,
-													SeatsAvailable = d.SeatsAvailable,
-													LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-											}).ToList();
+				IEnumerable<SectionWithSeats>  sectionsEnumGeneric = Helpers.getSectionsWithSeats(YRQ.ID, sections);
+
+				IEnumerable<SectionWithSeats> sectionsEnum = (from c in sectionsEnumGeneric
+																											join e in SearchResults on c.ID.ToString() equals e.ClassID
+																											orderby e.SearchRank descending
+																											select new SectionWithSeats
+																											{
+																												ParentObject = c,
+																												SeatsAvailable = c.SeatsAvailable,
+																												LastUpdated = c.LastUpdated,
+																												CourseFootnotes = c.CourseFootnotes,
+																												SectionFootnotes = c.SectionFootnotes,
+																											}).ToList();
+
 
 				itemCount = sectionsEnum.Count();
 				ViewBag.ItemCount = itemCount;
