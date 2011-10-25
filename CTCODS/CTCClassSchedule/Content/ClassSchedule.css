@@ -837,6 +837,11 @@ ul.section-details li.section-notes
 }
 
 #courseDescription{}
+#courseDescriptionUpcoming{ color: #666}
+#courseDescriptionUpcoming h3 {
+    font-size: 13px;
+    margin-top: 21px;
+}
 
 #classes-footer {
 	border-top: 1px solid #ccc;
