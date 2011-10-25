@@ -282,7 +282,8 @@ textarea
   /*  overflow: hidden;  messes up chrome's display... */
 }
 
-#scheduleContentNoSidebar{
+
+#container.nosidebar{
     overflow: hidden;
     padding-bottom: 35px;
     padding-top: 28px;
