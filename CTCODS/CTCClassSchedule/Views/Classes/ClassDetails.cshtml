@@ -29,8 +29,6 @@
 					    <abbr title="Credit(s) ">
 						    Cr.</abbr></span></h1>
 
-			    <p class="prerequisite">
-			    </p>
 			    <div id="courseDescription">
 				    <h2>Description:</h2>
                     <p>
@@ -41,7 +39,7 @@
 					@if (course.CourseDescriptions.Count > 1)
 		 {
 			 <div id="courseDescriptionUpcoming">
-				<h2>New description starting @course.CourseDescriptions[1].YearQuarterBegin.FriendlyName</h2>
+				<h3>New description starting @course.CourseDescriptions[1].YearQuarterBegin.FriendlyName</h3>
 				<p>
 					@(string.IsNullOrWhiteSpace(course.CourseDescriptions[1].Description) ? "* NO DESCRIPTION FOUND*" : course.CourseDescriptions[1].Description)
 				</p>
