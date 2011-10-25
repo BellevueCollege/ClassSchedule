@@ -2,8 +2,12 @@
 @using CTCClassSchedule.Common
 <script type="text/javascript">
 	$(document).ready(function () {
-		$('#timestart').timepicker();
-		$('#timeend').timepicker();
+		$('#timestart').timepicker({
+			numberOfMonths: 0
+		});
+		$('#timeend').timepicker({
+			numberOfMonths: 0
+		});
 
 		$('#submitjquery').html('<input type="submit" id="submit_days_times" name="submitbtn" value="Refine >" />');
 		$('#submit').html('');
