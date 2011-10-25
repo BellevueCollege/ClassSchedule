@@ -38,6 +38,16 @@
 			        </p>
           </div>
 
+					@if (course.CourseDescriptions.Count > 1)
+		 {
+			 <div id="courseDescriptionUpcoming">
+				<p>New description starting @course.CourseDescriptions[1].YearQuarterBegin.FriendlyName</p>
+				<p>
+					@(string.IsNullOrWhiteSpace(course.CourseDescriptions[1].Description) ? "* NO DESCRIPTION FOUND*" : course.CourseDescriptions[1].Description)
+				</p>
+			 </div>
+		 }
+
 			    <div id="courseFootnotes">
                <p>
 									@Model.First().CourseFootnotes
