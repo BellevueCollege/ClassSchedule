@@ -175,18 +175,19 @@ namespace CTCClassSchedule.Controllers
 				itemCount = sectionsEnum.Count();
 				ViewBag.ItemCount = itemCount;
 
-				IList<ProgramInformation> progInfo = _programdb.ProgramInformation.ToList();
-
 				// NOTE: the following LINQ statement could modify sectionsEnum, so we need to make a copy to work with
 				IEnumerable<string> sectionsCopy = sectionsEnum.Select(s => s.CourseSubject).Distinct();
 
-				IList<ScheduleCoursePrefix> titles = (from p in progInfo
-																							where sectionsCopy.Contains(p.Abbreviation.TrimEnd('&'))
+
+
+
+				IList<ScheduleCoursePrefix> titles = (from p in _programdb.vw_ProgramInformation
+																							where sectionsCopy.Contains(p.AbbreviationTrimmed)
 																							select new ScheduleCoursePrefix
 																							{
 																								Subject = p.URL,
 																								Title = p.Title
-                                              }
+																							}
 																							).Distinct().ToList();
 
 				ViewBag.SubjectCount = titles.Count;

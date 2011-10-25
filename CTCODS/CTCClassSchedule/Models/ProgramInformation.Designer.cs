@@ -81,6 +81,22 @@ namespace CTCClassSchedule.Models
         }
         private ObjectSet<ProgramInformation> _ProgramInformation;
 
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<vw_ProgramInformation> vw_ProgramInformation
+        {
+            get
+            {
+                if ((_vw_ProgramInformation == null))
+                {
+                    _vw_ProgramInformation = base.CreateObjectSet<vw_ProgramInformation>("vw_ProgramInformation");
+                }
+                return _vw_ProgramInformation;
+            }
+        }
+        private ObjectSet<vw_ProgramInformation> _vw_ProgramInformation;
+
         #endregion
         #region AddTo Methods
 
@@ -90,6 +106,14 @@ namespace CTCClassSchedule.Models
         public void AddToProgramInformation(ProgramInformation programInformation)
         {
             base.AddObject("ProgramInformation", programInformation);
+        }
+
+        /// <summary>
+        /// Deprecated Method for adding a new object to the vw_ProgramInformation EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTovw_ProgramInformation(vw_ProgramInformation vw_ProgramInformation)
+        {
+            base.AddObject("vw_ProgramInformation", vw_ProgramInformation);
         }
 
         #endregion
@@ -294,6 +318,253 @@ namespace CTCClassSchedule.Models
         private global::System.String _Division;
         partial void OnDivisionChanging(global::System.String value);
         partial void OnDivisionChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Intro
+        {
+            get
+            {
+                return _Intro;
+            }
+            set
+            {
+                OnIntroChanging(value);
+                ReportPropertyChanging("Intro");
+                _Intro = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Intro");
+                OnIntroChanged();
+            }
+        }
+        private global::System.String _Intro;
+        partial void OnIntroChanging(global::System.String value);
+        partial void OnIntroChanged();
+
+        #endregion
+
+    }
+
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="ClassScheduleDevModel1", Name="vw_ProgramInformation")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class vw_ProgramInformation : EntityObject
+    {
+        #region Factory Method
+
+        /// <summary>
+        /// Create a new vw_ProgramInformation object.
+        /// </summary>
+        /// <param name="abbreviation">Initial value of the Abbreviation property.</param>
+        public static vw_ProgramInformation Createvw_ProgramInformation(global::System.String abbreviation)
+        {
+            vw_ProgramInformation vw_ProgramInformation = new vw_ProgramInformation();
+            vw_ProgramInformation.Abbreviation = abbreviation;
+            return vw_ProgramInformation;
+        }
+
+        #endregion
+        #region Primitive Properties
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String AbbreviationTrimmed
+        {
+            get
+            {
+                return _AbbreviationTrimmed;
+            }
+            set
+            {
+                OnAbbreviationTrimmedChanging(value);
+                ReportPropertyChanging("AbbreviationTrimmed");
+                _AbbreviationTrimmed = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("AbbreviationTrimmed");
+                OnAbbreviationTrimmedChanged();
+            }
+        }
+        private global::System.String _AbbreviationTrimmed;
+        partial void OnAbbreviationTrimmedChanging(global::System.String value);
+        partial void OnAbbreviationTrimmedChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Abbreviation
+        {
+            get
+            {
+                return _Abbreviation;
+            }
+            set
+            {
+                if (_Abbreviation != value)
+                {
+                    OnAbbreviationChanging(value);
+                    ReportPropertyChanging("Abbreviation");
+                    _Abbreviation = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("Abbreviation");
+                    OnAbbreviationChanged();
+                }
+            }
+        }
+        private global::System.String _Abbreviation;
+        partial void OnAbbreviationChanging(global::System.String value);
+        partial void OnAbbreviationChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String URL
+        {
+            get
+            {
+                return _URL;
+            }
+            set
+            {
+                OnURLChanging(value);
+                ReportPropertyChanging("URL");
+                _URL = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("URL");
+                OnURLChanged();
+            }
+        }
+        private global::System.String _URL;
+        partial void OnURLChanging(global::System.String value);
+        partial void OnURLChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ProgramURL
+        {
+            get
+            {
+                return _ProgramURL;
+            }
+            set
+            {
+                OnProgramURLChanging(value);
+                ReportPropertyChanging("ProgramURL");
+                _ProgramURL = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ProgramURL");
+                OnProgramURLChanged();
+            }
+        }
+        private global::System.String _ProgramURL;
+        partial void OnProgramURLChanging(global::System.String value);
+        partial void OnProgramURLChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Title
+        {
+            get
+            {
+                return _Title;
+            }
+            set
+            {
+                OnTitleChanging(value);
+                ReportPropertyChanging("Title");
+                _Title = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Title");
+                OnTitleChanged();
+            }
+        }
+        private global::System.String _Title;
+        partial void OnTitleChanging(global::System.String value);
+        partial void OnTitleChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Division
+        {
+            get
+            {
+                return _Division;
+            }
+            set
+            {
+                OnDivisionChanging(value);
+                ReportPropertyChanging("Division");
+                _Division = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Division");
+                OnDivisionChanged();
+            }
+        }
+        private global::System.String _Division;
+        partial void OnDivisionChanging(global::System.String value);
+        partial void OnDivisionChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ContactName
+        {
+            get
+            {
+                return _ContactName;
+            }
+            set
+            {
+                OnContactNameChanging(value);
+                ReportPropertyChanging("ContactName");
+                _ContactName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ContactName");
+                OnContactNameChanged();
+            }
+        }
+        private global::System.String _ContactName;
+        partial void OnContactNameChanging(global::System.String value);
+        partial void OnContactNameChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ContactPhone
+        {
+            get
+            {
+                return _ContactPhone;
+            }
+            set
+            {
+                OnContactPhoneChanging(value);
+                ReportPropertyChanging("ContactPhone");
+                _ContactPhone = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ContactPhone");
+                OnContactPhoneChanged();
+            }
+        }
+        private global::System.String _ContactPhone;
+        partial void OnContactPhoneChanging(global::System.String value);
+        partial void OnContactPhoneChanged();
 
         /// <summary>
         /// No Metadata Documentation available.
