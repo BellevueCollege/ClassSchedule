@@ -7,19 +7,6 @@
     <Schema Namespace="ClassScheduleDevModel1.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="ClassScheduleDevModel1StoreContainer">
           <EntitySet Name="ProgramInformation" EntityType="ClassScheduleDevModel1.Store.ProgramInformation" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="vw_ProgramInformation" EntityType="ClassScheduleDevModel1.Store.vw_ProgramInformation" store:Type="Views" store:Schema="dbo" store:Name="vw_ProgramInformation">
-            <DefiningQuery>SELECT
-      [vw_ProgramInformation].[AbbreviationTrimmed] AS [AbbreviationTrimmed],
-      [vw_ProgramInformation].[Abbreviation] AS [Abbreviation],
-      [vw_ProgramInformation].[URL] AS [URL],
-      [vw_ProgramInformation].[ProgramURL] AS [ProgramURL],
-      [vw_ProgramInformation].[Title] AS [Title],
-      [vw_ProgramInformation].[Division] AS [Division],
-      [vw_ProgramInformation].[ContactName] AS [ContactName],
-      [vw_ProgramInformation].[ContactPhone] AS [ContactPhone],
-      [vw_ProgramInformation].[Intro] AS [Intro]
-      FROM [dbo].[vw_ProgramInformation] AS [vw_ProgramInformation]</DefiningQuery>
-          </EntitySet>
         </EntityContainer>
         <EntityType Name="ProgramInformation">
           <Key>
@@ -37,27 +24,12 @@
         <!--Errors Found During Generation:
       warning 6002: The table/view 'ClassScheduleDev.dbo.vw_ProgramInformation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
-        <EntityType Name="vw_ProgramInformation">
-          <Key>
-            <PropertyRef Name="Abbreviation" />
-          </Key>
-          <Property Name="AbbreviationTrimmed" Type="varchar" />
-          <Property Name="Abbreviation" Type="varchar" Nullable="false" MaxLength="5" />
-          <Property Name="URL" Type="varchar" MaxLength="50" />
-          <Property Name="ProgramURL" Type="varchar" MaxLength="255" />
-          <Property Name="Title" Type="varchar" MaxLength="255" />
-          <Property Name="Division" Type="varchar" MaxLength="255" />
-          <Property Name="ContactName" Type="varchar" MaxLength="255" />
-          <Property Name="ContactPhone" Type="varchar" MaxLength="255" />
-          <Property Name="Intro" Type="varchar(max)" />
-        </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ClassScheduleDevModel1" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="ClassScheduleDevProgramEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ProgramInformation" EntityType="ClassScheduleDevModel1.ProgramInformation" />
-          <EntitySet Name="vw_ProgramInformation" EntityType="ClassScheduleDevModel1.vw_ProgramInformation" />
         </EntityContainer>
         <EntityType Name="ProgramInformation">
           <Key>
@@ -70,20 +42,6 @@
           <Property Type="String" Name="URL" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProgramURL" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Division" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Intro" MaxLength="Max" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="vw_ProgramInformation">
-          <Key>
-            <PropertyRef Name="Abbreviation" />
-          </Key>
-          <Property Type="String" Name="AbbreviationTrimmed" MaxLength="8000" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Abbreviation" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="URL" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ProgramURL" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Title" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Division" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ContactName" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ContactPhone" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Intro" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
@@ -102,21 +60,6 @@
             <ScalarProperty Name="ContactName" ColumnName="ContactName" />
             <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="vw_ProgramInformation">
-            <EntityTypeMapping TypeName="ClassScheduleDevModel1.vw_ProgramInformation">
-              <MappingFragment StoreEntitySet="vw_ProgramInformation">
-                <ScalarProperty Name="Intro" ColumnName="Intro" />
-                <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
-                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
-                <ScalarProperty Name="Division" ColumnName="Division" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="ProgramURL" ColumnName="ProgramURL" />
-                <ScalarProperty Name="URL" ColumnName="URL" />
-                <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
-                <ScalarProperty Name="AbbreviationTrimmed" ColumnName="AbbreviationTrimmed" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -139,7 +82,6 @@
     <Diagrams>
       <Diagram Name="ProgramInformation">
         <EntityTypeShape EntityType="ClassScheduleDevModel1.ProgramInformation" Width="1.5" PointX="0.75" PointY="0.75" Height="2.2496956380208331" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClassScheduleDevModel1.vw_ProgramInformation" Width="1.5" PointX="3.375" PointY="0.75" Height="2.7494921874999996" />
       </Diagram>
     </Diagrams>
   </Designer>
