@@ -87,26 +87,26 @@
 				if (thisYrq != PreviousYrq)
 				{
 					<text>
-			  <h2 class="course-YRQ@(currentYrq != thisYrq ? Html.Raw(" course-YRQ-past-quarter") : Html.Raw(string.Empty))">@sec.Yrq.FriendlyName</h2>
-			  <div class="YRQClassTitle">
-					@Html.Raw(string.Format("{0}{1} {2} - {3} &#8226; ", course.CourseSubject, course.IsCommonCourse ? "&amp;" : string.Empty, course.CourseNumber, course.CourseTitle))
-					@Html.CreditsValue(course.Credits)
-					<abbr title="Credit(s) ">Cr.</abbr>
-				</div>
+			        <h2 class="course-YRQ@(currentYrq != thisYrq ? Html.Raw(" course-YRQ-past-quarter") : Html.Raw(string.Empty))">@sec.Yrq.FriendlyName</h2>
+			        <div class="YRQClassTitle">
+					    @Html.Raw(string.Format("{0}{1} {2} - {3} &#8226; ", course.CourseSubject, course.IsCommonCourse ? "&amp;" : string.Empty, course.CourseNumber, course.CourseTitle))
+					    @Html.CreditsValue(course.Credits)
+					    <abbr title="Credit(s) ">Cr.</abbr>
+				    </div>
 
-				<ul class="course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
-				</text>
+				    <ul class="course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
+				    </text>
 				}
 
 				if (sectionID != PreviousSectionID)
-		{
-			Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
-		}
+		        {
+			        Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+		        }
 
-			if (thisYrq != PreviousYrq)
-			{
-				@:</ul> <!-- course-block -->
-			}
+			    if (thisYrq != PreviousYrq)
+			    {
+				    @:</ul> <!-- course-block -->
+			    }
 				PreviousSectionID = sectionID;
 				PreviousYrq = thisYrq;
 			}
