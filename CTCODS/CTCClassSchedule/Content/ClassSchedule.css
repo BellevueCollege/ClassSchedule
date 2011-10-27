@@ -3,15 +3,14 @@
 	background-color: #fff;
     font-size: 13px;
     line-height: 21px;
-    color: #333;
+    color: #222;
 }
 
 h1 {
     font-size: 27px;
 }
-h1.course-title {
-    width: 920px;
-}
+
+
 
 h2{
 	font-size: 21px;
@@ -39,7 +38,7 @@ abbr:hover {
 
 #bodyWrapper
 {
-	font-family: "Lucida Sans Unicode","Lucida Grande", Helvetica, Arial,  Sans-Serif;
+	font-family: Helvetica, Arial,  Sans-Serif;
 	background-color: #fff;
 	margin-right: auto;
 	margin-left: auto;
@@ -282,6 +281,8 @@ textarea
   /*  overflow: hidden;  messes up chrome's display... */
 }
 
+#content { padding: 0 20px;}
+#pageTitle {}
 
 #container.nosidebar{
     overflow: hidden;
@@ -289,23 +290,17 @@ textarea
     padding-top: 28px;
 }
 
-#scheduleRightSidebar{
+.aside{
 	width: 240px;
 	float: right;
-	margin-top: 28px;
 }
 
-
-#scheduleRightSidebar li
-{
-	list-style: disc;
-	margin-left: 10px;
-}
 #class-details {
-    float: left;
-    padding: 0 20px;
     width: 600px;
+}
 
+#allSectionsbyQuarter {
+    float
 }
 #scheduleMiddle {
 	float: left;
@@ -321,16 +316,7 @@ textarea
 	border: 1px solid #000;
 }
 #thanksMsg h2 { margin-top:0;}
-#scheduleRightSidebar p
-{
-	margin: 6px 0px;
-	line-height: 12px;
-}
 
-#scheduleRightSidebar strong
-{
-	font-weight: bold;
-}
 
 #bigfoot
 {
@@ -388,7 +374,6 @@ textarea
 	height: 31px;
 	clear: both;
 	margin-top: 0px;
-	float: left;
     position: relative;
 }
 

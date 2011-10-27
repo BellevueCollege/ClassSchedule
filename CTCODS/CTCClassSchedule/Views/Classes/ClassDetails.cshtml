@@ -23,21 +23,31 @@
 	@Html.Partial("quarterNavigation")
 	<div id="container" class="nosidebar">
         <div id="content">
-        <div id="class-details">
-			    <h1 class="course-title">
-				    <span class="courseID">@(string.Format("{0}{1} {2}", course.CourseSubject, course.IsCommonCourse ? "&" : string.Empty, course.CourseNumber))</span>
-						<span>@course.CourseTitle</span>
-						<span>&#8226; @Html.CreditsValue(course.Credits)
+            <h1 id="pageTitle">
+                <span class="courseID">@(string.Format("{0}{1} {2}", course.CourseSubject, course.IsCommonCourse ? "&" : string.Empty, course.CourseNumber))</span>
+				<span>@course.CourseTitle</span>
+				<span>&#8226; @Html.CreditsValue(course.Credits)
+				<abbr title="Credit(s) ">Cr.</abbr></span>
+            </h1>
 
-					    <abbr title="Credit(s) ">
-						    Cr.</abbr></span></h1>
+             <div class="aside">
+				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
+                {
+                    <div id="programWebsite">
+                        <h2>Department</h2>
+			            <p><a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a></p>
+		            </div>
+		        }
+            </div><!-- aside -->
 
-			    <div id="courseDescription">
+
+            <div id="class-details">
+                <div id="courseDescription">
 				    <h2>Description:</h2>
                     <p>
 				    @(course.CourseDescriptions.Count <= 0 || string.IsNullOrWhiteSpace(course.CourseDescriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : course.CourseDescriptions[0].Description)
 			        </p>
-          </div>
+                </div>
 
 					@if (course.CourseDescriptions.Count > 1)
 		 {
@@ -63,6 +73,9 @@
 				    @Html.Raw(ViewBag.CourseOutcome)
 			    </div>
 		    }
+
+            </div> <!-- class-details -->
+            <div id="allSectionsbyQuarter">
 
 				@using (_profiler.Step("Rendering sections by YRQ"))
 		{
@@ -98,19 +111,8 @@
 				PreviousYrq = thisYrq;
 			}
 		}
-	    </div> <!-- class-details -->
+	    </div> <!-- allSectionsbyQuarter -->
 
-        <div id="scheduleRightSidebar">
-
-				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
-		{
-        <div id="programWebsite">
-                <h2>Department</h2>
-			    <p><a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a></p>
-		    </div>
-		}
-
-       </div><!-- scheduleRightSidebar -->
     </div>
 
     </div> <!-- container -->
