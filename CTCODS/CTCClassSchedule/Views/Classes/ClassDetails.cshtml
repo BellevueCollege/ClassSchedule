@@ -7,6 +7,8 @@
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;
 
+	ViewBag.PageTitle = ViewBag.Subject + " " + @ViewBag.ClassNum + " at Bellevue College";
+
 	Section course = (Section)ViewBag.CourseInfo;
 	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
 	string currentYrq = yrqList[0].ID;

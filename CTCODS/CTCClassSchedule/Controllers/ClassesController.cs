@@ -339,6 +339,8 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 			ICourseID courseID = CourseID.FromString(Subject, ClassNum);
+			ViewBag.Subject = Subject;
+			ViewBag.ClassNum = ClassNum;
 
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{
