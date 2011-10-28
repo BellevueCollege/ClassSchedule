@@ -258,7 +258,7 @@ textarea
 {
 	display: block;
 	border: 1px solid #999;
-    margin: 35px 0 35px 0;
+    margin: 28px 0 35px;
 	font-size: 12px;
 	line-height: 21px;
     color: #333;
@@ -1240,7 +1240,10 @@ ul.section-details li.section-notes
 	background-color: yellow;
 }
 
-.subjectchooser { font-size: 12px;}
+.subjectchooser {
+    font-size: 12px;
+    line-height: 12px;
+    padding-left: 5px;}
 .subjectchooser a { color: #999}
 
 /* css for timepicker */
