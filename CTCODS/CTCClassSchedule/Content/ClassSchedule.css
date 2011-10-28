@@ -410,7 +410,7 @@ textarea
     display: block;
     font-size: 12px;
     height: 22px;
-    left: 428px;
+    left: 435px;
     line-height: 21px;
     padding-left: 35px;
     position: absolute;
@@ -810,7 +810,7 @@ ul.section-details li.section-notes
 .classHeading {
 	font-size: 15px;
 }
-.classHeading a { text-decoration: none;}
+.classHeading a { text-decoration: none; font-weight: bold;}
 .classHeading a:hover,
 .classHeading a:focus { text-decoration: underline;}
 .course-updated a:hover
