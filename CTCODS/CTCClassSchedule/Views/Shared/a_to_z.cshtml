@@ -1,4 +1,4 @@
-﻿<div id="a_to_z">
+﻿<p id="a_to_z">
 
 @{
 	// construct the route values we'll pass to the ActionLink helper
@@ -26,6 +26,7 @@
 	routeParms.Remove("letter");
 }
 @Html.ActionLink("View All", Action, new RouteValueDictionary(routeParms))
-</div>
+</p>
+
 
 
