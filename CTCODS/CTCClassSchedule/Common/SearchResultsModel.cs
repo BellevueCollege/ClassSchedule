@@ -9,5 +9,7 @@ namespace CTCClassSchedule
 
 		public IEnumerable<SearchResultNoSection> SearchResultNoSection { get; set; }
 
+		public IEnumerable<string> Subjects { get; set; }
+
 	}
 }

@@ -102,7 +102,7 @@
 		if (subject.ToUpper() == "ALL") {
 			subject = string.Empty;
 		}
-
+		string lastSubject = "";
 		// construct the route values we'll pass to the ActionLink helper
 		IDictionary<string, object> routeParms = ViewBag.LinkParams;
 
@@ -126,24 +126,29 @@
 			</li>
 		 }
 	@foreach (SectionWithSeats item in Model)
- {
-     if (item.CourseSubject.ToUpper() == (subject ?? string.Empty).ToUpper())
-		{
-			<li @(ViewBag.activeClass)>
-                <span class="notlink">@item.CourseSubject</span>
-			</li>
-		}
-		else
-		{
-			routeParms["Subject"] = item.CourseSubject;
-		 <li>
-				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@item.CourseSubject</a>
-			</li>
-		}
+	{
 
-	}
+
+		if (lastSubject != item.CourseSubject.ToUpper()) {
+			if (item.CourseSubject.ToUpper() == (subject ?? string.Empty).ToUpper())
+			{
+			<li @(ViewBag.activeClass)>
+						<span class="notlink">@item.CourseSubject</span>
+			</li>
+			}
+			else
+			{
+				routeParms["Subject"] = item.CourseSubject;
+				<li>
+				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@item.CourseSubject</a>
+				</li>
+			}
+
+			lastSubject = item.CourseSubject.ToUpper();
+			}
+		}
 	</ul>
-}
+	}
 
 @if (ViewContext.RouteData.Values["Controller"].Equals("Classes"))
 {

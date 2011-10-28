@@ -144,6 +144,15 @@ namespace CTCClassSchedule.Controllers
 
 				ViewBag.SubjectCount = 0; //DO A COUNT OF THE SECTION OBJECT HERE
 
+				IList<string> allSubjects;
+
+				//using (_profiler.Step("Getting distinct list of subjects"))
+				//{
+				//  allSubjects = (from c in sectionsEnum
+				//                            select c.CourseSubject
+				//                            ).Distinct().ToList();
+				//}
+
 				using (_profiler.Step("Getting just records for page"))
 				{
 				  sectionsEnum = sectionsEnum.Skip(p_offset * 40).Take(40).ToList();
@@ -151,11 +160,14 @@ namespace CTCClassSchedule.Controllers
 
 				ViewBag.TotalPages = Math.Ceiling(itemCount / 40.0);
 
+
+
 				SearchResultsModel model = new SearchResultsModel
-								{
-										Section = sectionsEnum, //sectionsEnum.Skip(p_offset * 40).Take(40),
-										SearchResultNoSection = NoSectionSearchResults,
-								};
+				{
+				    Section = sectionsEnum, //sectionsEnum.Skip(p_offset * 40).Take(40),
+				    SearchResultNoSection = NoSectionSearchResults,
+						//Subjects = allSubjects
+				};
 
 				ViewBag.CurrentPage = p_offset + 1;
 
