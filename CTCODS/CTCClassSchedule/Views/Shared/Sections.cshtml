@@ -2,8 +2,11 @@
 @using CTCClassSchedule
 @using CTCClassSchedule.Common
 @using Microsoft.Security.Application
+@using MvcMiniProfiler;
 @model SectionWithSeats
 @{
+	MiniProfiler _profiler = MiniProfiler.Current;
+
 	string PreviousSectionID = ViewData["PreviousSectionID"] as string;
 	string sectionID = Model.ID.ToString();
 }
@@ -29,7 +32,9 @@
 				</li>
 				<li><span class="descriptor">Meets: </span>
 					<ul class="meets">
-						@foreach (OfferedItem item in Model.Offered.OrderBy(o => o.SequenceOrder))
+					@using (_profiler.Step("Rendering offered items"))
+		 {
+						foreach (OfferedItem item in Model.Offered.OrderBy(o => o.SequenceOrder))
 			{
 				// meeting times
 							<li>
@@ -46,6 +51,7 @@
 				}
 							</li>
 			}
+		 }
 					</ul>
 				</li>
 				@if (sectionID != PreviousSectionID)
