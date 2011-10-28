@@ -8,6 +8,7 @@
 
 h1 {
     font-size: 27px;
+    line-height: 28px;
 }
 
 
@@ -176,10 +177,7 @@ textarea
 
 
 
-#a_to_z
-{
-	margin: 7px 0px;
-}
+#a_to_z{}
 
 .classInfo  { padding-top: 7px;}
 .classInfo h2 {
@@ -216,32 +214,7 @@ textarea
 	width: 100%;
 }
 
-.sidenav
-{
-	float: left;
-	display: block;
-	border: 1px solid #999;
-	width: 158px;
-    margin: 28px 10px 35px 0;
-	font-size: 12px;
-	line-height: 21px;
-    color: #333;
-    clear: left;
-}
-.sidenav h2 {
-    background-color: #999;
-    padding: 0 0 1px 19px;
-    color: White;
-    font-size: 12px;
-    line-height: 14px;
-    margin: 0 0 13px 0;
-}
 
-
-
-.sidenav ul {
-	margin-bottom: 21px;
-}
 
 #classformat { margin-bottom: 21px;}
 #classformat label,
@@ -281,14 +254,55 @@ textarea
   /*  overflow: hidden;  messes up chrome's display... */
 }
 
+#sidebar {
+    float: left;
+    width: 160px;
+    }
+.sidenav
+{
+	display: block;
+	border: 1px solid #999;
+    margin: 35px 0 35px 0;
+	font-size: 12px;
+	line-height: 21px;
+    color: #333;
+    clear: left;
+}
+.sidenav h2 {
+    background-color: #999;
+    padding: 0 0 0 19px;
+    color: White;
+    font-size: 12px;
+    margin: 0 0 20px 0;
+}
+
+.sidenav ul {
+	margin-bottom: 21px;
+}
+
+
+
+#container { overflow: hidden; padding-bottom: 35px;
+    padding-top: 28px;}
+
+
+#container.nosidebar{}
+#container.sidebar{}
+#container.home{}
 #content { padding: 0 20px;}
+#sidebar {}
+
+#container.sidebar #content {
+    float: left;
+    width: 760px;}
 #pageTitle {}
 
-#container.nosidebar{
-    overflow: hidden;
-    padding-bottom: 35px;
-    padding-top: 28px;
-}
+#scheduleMiddle { /*TO DELETE*/
+	float: left;
+	width: 500px;}
+
+li.subject { list-style-type: none;}
+
 
 .aside{
 	width: 240px;
@@ -302,9 +316,7 @@ textarea
 #allSectionsbyQuarter {
     float
 }
-#scheduleMiddle {
-	float: left;
-	width: 500px;}
+
 
 #programWebsite { }
 

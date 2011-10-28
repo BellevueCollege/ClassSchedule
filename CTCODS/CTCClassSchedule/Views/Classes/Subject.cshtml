@@ -4,17 +4,25 @@
     ViewBag.PageTitle = ViewBag.Subject + "-" + @ViewBag.ProgramTitle + " Classes at Bellevue College";
 }
 
+
 <div id="scheduleMain">
-	@Html.Partial("quarterNavigation")
-	@Html.Partial("basicFacetedSearch")
+    @Html.Partial("quarterNavigation")
+    <div id="container" class="sidebar">
+        <div id="sidebar">
+            @Html.Partial("basicFacetedSearch")
+        </div> <!-- #sidebar -->
 
+        <div id="content">
 
-
-	<div id="scheduleContent">
-        <div id="scheduleMiddle">
 				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle)) {
-					<h1>@ViewBag.ProgramTitle Classes<span class="subjectchooser">@Html.Partial("subjectNavigation")</span></h1>
+					<h1 id="pageTitle">@ViewBag.ProgramTitle Classes<span class="subjectchooser">@Html.Partial("subjectNavigation")</span></h1>
 				}
+                @if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
+		        {
+		            <p id="programWebsite">
+			            <a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a>
+		            </p>
+		        }
 
 
 		    <div id="classInfoWrap">
@@ -77,18 +85,12 @@
 			    </text>
 		 }
 	    </div>
-        </div> <!-- #scheduleMiddle -->
+        </div> <!-- #content -->
 
-         <div id="scheduleRightSidebar">
-            @if (!string.IsNullOrWhiteSpace(@ViewBag.ProgramUrl))
-						{
-							<div id="programWebsite">
-                <h2>Department</h2>
-								<p><a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a></p>
-							</div>
-						}
 
-       </div><!-- scheduleRightSidebar -->
 
-</div>
-</div>
+
+
+
+</div> <!-- #container -->
+</div> <!-- schedulemain -->

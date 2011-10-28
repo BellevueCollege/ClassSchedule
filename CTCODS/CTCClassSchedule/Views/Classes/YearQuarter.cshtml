@@ -18,21 +18,20 @@
 }
 
 <div id="scheduleMain">
+    @Html.Partial("quarterNavigation")
+    <div id="container" class="sidebar">
+        <div id="sidebar">
+            @Html.Partial("advancedFacetedSearch")
+        </div> <!-- #sidebar -->
 
+        <div id="content">
 
-@Html.Partial("quarterNavigation")
-
-@Html.Partial("advancedFacetedSearch")
-
-
-<div id="scheduleContent">
-	<div id="scheduleMiddle">
 		@if (ViewBag.ErrorMsg.Length > 0) {
 			@Html.Partial("ErrorMsg")
 		}
 
 
-		<h1>@yrq.FriendlyName Credit Classes</h1>
+		<h1 id="pageTitle">@yrq.FriendlyName Credit Classes</h1>
 
 		@Html.Partial("a_to_z")
 
@@ -82,13 +81,11 @@
 				</text>
 			}
 
-	</div>
 
-	<div id="scheduleRightSidebar">
-	@*Html.Partial("rightSidebar")*@
-</div>
+        </div> <!-- #content -->
+    </div> <!-- #container -->
 
-</div>
+
 
 
 

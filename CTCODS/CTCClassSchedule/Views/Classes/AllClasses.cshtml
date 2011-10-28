@@ -8,22 +8,21 @@
 }
 
 <div id="scheduleMain">
+    @Html.Partial("quarterNavigation")
+    <div id="container" class="sidebar">
+        <div id="sidebar">
+            @Html.Partial("basicFacetedSearch")
+        </div> <!-- #sidebar -->
 
+        <div id="content">
 
-@Html.Partial("quarterNavigation")
-
-@Html.Partial("basicFacetedSearch")
-
-
-<div id="scheduleContent">
-	<div id="scheduleMiddle">
 
 		@if (ViewBag.WhichClasses == " (All)")
 	{
-			<h1>All Credit Classes</h1>
+			<h1 id="pageTitle">All Credit Classes</h1>
 	}
 	else {
-		<h1>Credit Classes @ViewBag.WhichClasses</h1>
+		<h1 id="pageTitle">Credit Classes @ViewBag.WhichClasses</h1>
 	}
 
 
@@ -77,13 +76,10 @@
 
 
 
-	</div>
+	</div> <!-- #content -->
+    </div> <!-- #container -->
 
-	<div id="scheduleRightSidebar">
-	@*Html.Partial("rightSidebar") *@
-</div>
 
-</div>
 
 
 
