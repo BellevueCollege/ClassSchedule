@@ -107,7 +107,15 @@ namespace CTCClassSchedule.Controllers
 				IList<Section> sections;
 				using (_profiler.Step("API::GetSections()"))
 				{
-					sections = respository.GetSections(YRQ, facets);
+					if (string.IsNullOrWhiteSpace(Subject))
+					{
+						sections = respository.GetSections(YRQ, facets);
+					}
+					else
+					{
+						IList<string> subjects = new List<string> {Subject, string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar)};
+						sections = respository.GetSections(subjects, YRQ, facets);
+					}
 				}
 
 				IList<vw_ClassScheduleData> classScheduleData;
@@ -132,7 +140,7 @@ namespace CTCClassSchedule.Controllers
 													select new SectionWithSeats
 					                  {
 					                      ParentObject = c,
-					                      SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// allows us to identify past quarters (with no availability info)
+					                      SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// MinValue allows us to identify past quarters (with no availability info)
 					                      LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
 					                      SectionFootnotes = d != null ? d.SectionFootnote : string.Empty,
 					                      CourseFootnotes = d != null ? d.CourseFootnote : string.Empty
@@ -146,24 +154,22 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.SubjectCount = 0;
 				string courseid = "";
 
-				foreach (SectionWithSeats temp in sectionsEnum)
+				using (_profiler.Step("Counting subjects (courseIDs)"))
 				{
-					if(temp.CourseID != courseid) {
-						ViewBag.SubjectCount++;
+					foreach (SectionWithSeats temp in sectionsEnum)
+					{
+						if(temp.CourseID != courseid) {
+							ViewBag.SubjectCount++;
+						}
+						courseid = temp.CourseID;
 					}
-					courseid = temp.CourseID;
 				}
 
-
-
-				IList<string> allSubjects;
-
-				//using (_profiler.Step("Getting distinct list of subjects"))
-				//{
-				//  allSubjects = (from c in sectionsEnum
-				//                            select c.CourseSubject
-				//                            ).Distinct().ToList();
-				//}
+				IEnumerable<string> allSubjects;
+				using (_profiler.Step("Getting distinct list of subjects"))
+				{
+					allSubjects = sectionsEnum.Select(c => c.CourseSubject).Distinct();
+				}
 
 				using (_profiler.Step("Getting just records for page"))
 				{
@@ -172,13 +178,11 @@ namespace CTCClassSchedule.Controllers
 
 				ViewBag.TotalPages = Math.Ceiling(itemCount / 40.0);
 
-
-
 				SearchResultsModel model = new SearchResultsModel
 				{
-				    Section = sectionsEnum, //sectionsEnum.Skip(p_offset * 40).Take(40),
+				    Section = sectionsEnum,
 				    SearchResultNoSection = NoSectionSearchResults,
-						//Subjects = allSubjects
+						Subjects = allSubjects
 				};
 
 				ViewBag.CurrentPage = p_offset + 1;

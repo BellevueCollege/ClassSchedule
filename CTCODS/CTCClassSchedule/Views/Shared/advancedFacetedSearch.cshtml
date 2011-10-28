@@ -125,26 +125,20 @@
 				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">All</a>
 			</li>
 		 }
-	@foreach (SectionWithSeats item in Model)
+	@foreach (string sub in Model)
 	{
-
-
-		if (lastSubject != item.CourseSubject.ToUpper()) {
-			if (item.CourseSubject.ToUpper() == (subject ?? string.Empty).ToUpper())
+			if (sub.ToUpper() == (subject ?? string.Empty).ToUpper())
 			{
-			<li @(ViewBag.activeClass)>
-						<span class="notlink">@item.CourseSubject</span>
+			<li class="active">
+						<span class="notlink">@sub</span>
 			</li>
 			}
 			else
 			{
-				routeParms["Subject"] = item.CourseSubject;
+				routeParms["Subject"] = sub;
 				<li>
-				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@item.CourseSubject</a>
+				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@sub</a>
 				</li>
-			}
-
-			lastSubject = item.CourseSubject.ToUpper();
 			}
 		}
 	</ul>
