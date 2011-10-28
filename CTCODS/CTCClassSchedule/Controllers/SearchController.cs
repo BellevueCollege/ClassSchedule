@@ -119,7 +119,6 @@ namespace CTCClassSchedule.Controllers
 															).ToList();
 				}
 
-
 				IList<SectionWithSeats> sectionsEnum;
 				using (_profiler.Step("Retrieving joined SectionWithSeats"))
 				{
@@ -127,36 +126,38 @@ namespace CTCClassSchedule.Controllers
 													join d in classScheduleData on c.ID.ToString() equals d.ClassID into cd
 													from d in cd.DefaultIfEmpty()
 													join e in SearchResults on c.ID.ToString() equals e.ClassID into ce
-													from e in ce.DefaultIfEmpty()
+													from e in ce
 													where e.ClassID == c.ID.ToString()
 													orderby c.Yrq.ID descending
 													select new SectionWithSeats
 					                  {
 					                      ParentObject = c,
-					                      SeatsAvailable = d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
+					                      SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// allows us to identify past quarters (with no availability info)
 					                      LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-					                      SectionFootnotes = d.SectionFootnote,
-					                      CourseFootnotes = d.CourseFootnote
+					                      SectionFootnotes = d != null ? d.SectionFootnote : string.Empty,
+					                      CourseFootnotes = d != null ? d.CourseFootnote : string.Empty
 					                  }).ToList();
 
-					itemCount = sectionsEnum.Count();
 				}
+				itemCount = sectionsEnum.Count;
 				ViewBag.ItemCount = itemCount;
-
-
 
 				ViewBag.SubjectCount = 0; //DO A COUNT OF THE SECTION OBJECT HERE
 
-				//sectionsEnum = sectionsEnum.Skip(p_offset * 40).Take(40);
+				using (_profiler.Step("Getting just records for page"))
+				{
+				  sectionsEnum = sectionsEnum.Skip(p_offset * 40).Take(40).ToList();
+				}
 
 				ViewBag.TotalPages = Math.Ceiling(itemCount / 40.0);
-				ViewBag.CurrentPage = p_offset + 1;
 
 				SearchResultsModel model = new SearchResultsModel
-														{
-															Section = sectionsEnum,
-															SearchResultNoSection = NoSectionSearchResults,
-														};
+								{
+										Section = sectionsEnum, //sectionsEnum.Skip(p_offset * 40).Take(40),
+										SearchResultNoSection = NoSectionSearchResults,
+								};
+
+				ViewBag.CurrentPage = p_offset + 1;
 
 				return View(model);
 			}
