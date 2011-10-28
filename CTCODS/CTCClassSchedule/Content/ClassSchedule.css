@@ -179,10 +179,11 @@ textarea
 
 #a_to_z{}
 
-.classInfo  { padding-top: 7px;}
 .classInfo h2 {
     font-size: 15px;
+    font-weight: bold;
 }
+.classInfo p { width: 600px;}
 #classInfoWrap {}
 
 
