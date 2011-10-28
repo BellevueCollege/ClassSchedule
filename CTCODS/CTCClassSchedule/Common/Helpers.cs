@@ -19,6 +19,7 @@ namespace CTCClassSchedule.Common
 		readonly private static ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
 		readonly private static ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		readonly private static ClassScheduleFootnoteEntities _footnotedb = new ClassScheduleFootnoteEntities();
+        readonly private static ClassScheduleDataEntities _scheduledatadb = new ClassScheduleDataEntities();
 
 		public static MvcHtmlString IncludePageURL(this HtmlHelper htmlHelper, string url)
 		{
@@ -438,39 +439,36 @@ namespace CTCClassSchedule.Common
 		public static IList<SectionWithSeats> getSectionsWithSeats(string currentYrq, IList<Section> sections)
 		{
 			MiniProfiler profiler = MiniProfiler.Current;
-
-			IList<vw_SeatAvailability> seatsAvailableLocal;
-			using (profiler.Step("Retrieving available seats"))
+            IList<SectionWithSeats> sectionsEnum;
+            string yrqID = YearQuarter.FromString(currentYrq).ID;
+            using (OdsRepository respository = new OdsRepository())
 			{
-				seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
-				                       where s.ClassID.Substring(4) == currentYrq
-				                       select s).ToList();
-			}
+                IList<vw_ClassScheduleData> classScheduleData;
+                using (profiler.Step("API::Get Class Schedule Specific Data()"))
+                {
+                    classScheduleData = (from c in _scheduledatadb.vw_ClassScheduleData
+                                         where c.YearQuarterID == yrqID
+                                         select c
+                                        ).ToList();
+                }
 
-			IList<SectionWithSeats> sectionsEnum;
-			using (profiler.Step("Joining all data"))
-			{
-				sectionsEnum = (
-							from c in sections
-							join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID into cd
-							from d in cd.DefaultIfEmpty()	// include all sections, even if don't have an associated seatsAvailable
-							orderby c.Yrq.ID descending
-							select new SectionWithSeats
-								{
-										ParentObject = c,
-										SeatsAvailable = d == null ? int.MinValue : d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
-										LastUpdated = d == null ? string.Empty : getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-										// retrieve all the Section and Course footnotes and flatten them into one string
-										SectionFootnotes = string.Join(" ", _footnotedb.SectionFootnote.Where(f => f.ClassID == string.Concat(c.ID.ItemNumber, c.ID.YearQuarter))
-																.Select(f => f.Footnote)
-																.Distinct()),
-										CourseFootnotes = string.Join(" ", _footnotedb.CourseFootnote.Where(f => f.CourseID.Substring(0, 5).Trim() == (c.IsCommonCourse
-																									? string.Concat(c.CourseSubject, _apiSettings.RegexPatterns.CommonCourseChar)
-																									: c.CourseSubject) && f.CourseID.Substring(5).Trim() == c.CourseNumber)
-																.Distinct()
-																.Select(f => f.Footnote))
-								}).ToList();
-			}
+			    using (profiler.Step("Joining all data"))
+			    {
+				    sectionsEnum = (
+                                    from c in sections
+                                    join d in classScheduleData on c.ID.ToString() equals d.ClassID into cd
+                                    from d in cd.DefaultIfEmpty()
+                                    orderby c.Yrq.ID descending
+                                    select new SectionWithSeats
+				                    {
+                                        ParentObject = c,
+                                        SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// allows us to identify past quarters (with no availability info)
+                                        LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
+                                        SectionFootnotes = d != null ? d.SectionFootnote : string.Empty,
+                                        CourseFootnotes = d != null ? d.CourseFootnote : string.Empty
+                                    }).ToList();
+			    }
+            }
 
 			return sectionsEnum;
 		}
