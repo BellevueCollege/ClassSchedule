@@ -208,11 +208,7 @@ textarea
 
 
 
-#scheduleMain
-{
-	float: left;
-	width: 100%;
-}
+
 
 
 
@@ -281,6 +277,11 @@ textarea
 }
 
 
+#scheduleMain { /*TO DELETE, create an empty called pagewrapper */
+	float: left;
+	width: 100%;
+}
+
 
 #container { overflow: hidden; padding-bottom: 35px;
     padding-top: 28px;}
@@ -297,9 +298,8 @@ textarea
     width: 760px;}
 #pageTitle {}
 
-#scheduleMiddle { /*TO DELETE*/
-	float: left;
-	width: 500px;}
+
+
 
 li.subject { list-style-type: none;}
 
@@ -873,13 +873,15 @@ ul.section-details li.section-notes
     border-left: 1px solid #ccc;
 }
 
+
+#pageWrapper {}
 /*  Front page css */
 
-#front_layout { overflow: hidden;}
+.homepage #content {padding: 0;}
 #home-main-content{
 	margin-top: 30px;
+    overflow: hidden;
 }
-
 
 #browse-credit
 {
@@ -932,6 +934,7 @@ ul.section-details li.section-notes
     font-size: 15px;
 	line-height: 28px;
     color: #003d79;
+    font-weight: bold;
 }
 
 #browse-quarter a:hover, #browse-quarter a:focus {
