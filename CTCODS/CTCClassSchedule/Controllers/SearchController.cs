@@ -142,7 +142,19 @@ namespace CTCClassSchedule.Controllers
 				itemCount = sectionsEnum.Count;
 				ViewBag.ItemCount = itemCount;
 
-				ViewBag.SubjectCount = 0; //DO A COUNT OF THE SECTION OBJECT HERE
+				//DO A COUNT OF THE SECTION OBJECT HERE
+				ViewBag.SubjectCount = 0;
+				string courseid = "";
+
+				foreach (SectionWithSeats temp in sectionsEnum)
+				{
+					if(temp.CourseID != courseid) {
+						ViewBag.SubjectCount++;
+					}
+					courseid = temp.CourseID;
+				}
+
+
 
 				IList<string> allSubjects;
 
