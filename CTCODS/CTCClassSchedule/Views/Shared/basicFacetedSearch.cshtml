@@ -4,14 +4,15 @@
 	YearQuarter quarterViewing = ViewBag.YearQuarter;
 	string subject = string.Empty;
 
-	if (Model != null)
+	//ICollection<string> foo = ViewData.Keys;
+	//RouteValueDictionary bar = ViewContext.RouteData.DataTokens;
+	if (ViewContext.RouteData.Values.ContainsKey("Subject"))
 	{
-		IEnumerable<SectionWithSeats> sections = (Model as IEnumerable<SectionWithSeats>);
-		if (sections != null && sections.Count() > 0)
-		{
-			IList<string> subjects = (Model as IEnumerable<SectionWithSeats>).Select(s => s.CourseSubject).Distinct().ToList();
-			subject = subjects.Count == 1 ? subjects[0] : string.Empty;
-		}
+		subject = ViewContext.RouteData.Values["Subject"].ToString();
+	}
+	else if (ViewData.Keys.Contains("Subject"))
+	{
+		subject = ViewData["Subject"].ToString();
 	}
 }
 
@@ -21,11 +22,9 @@
 		<ul class="subject">
 	@if (!string.IsNullOrWhiteSpace(subject))
  {
-
 			<li @(ViewBag.activeClass)>
 				<span class="notlink">@subject</span>
 			</li>
-
  }
 				<li>
 				@Html.Partial("subjectNavigation")
