@@ -159,19 +159,20 @@ namespace CTCClassSchedule.Controllers
 			{
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
+				IEnumerable<Course> coursesEnum;
 				if (Subject != null)
 				{
-					IEnumerable<Course> coursesEnum = respository.GetCourses(getPrefix(Subject), facets).Distinct();
+					coursesEnum = respository.GetCourses(getPrefix(Subject), facets).Distinct();
 					ViewBag.ItemCount = coursesEnum.Count();
 
 					return View(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number));
 				}
 				else
 				{
-					IEnumerable<Course> coursesEnum = respository.GetCourses(facets).Distinct();
+					coursesEnum = respository.GetCourses(facets).Distinct();
 					ViewBag.ItemCount = coursesEnum.Count();
 
-					return View(coursesEnum);
+					return View(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number));
 				}
 			}
 		}
@@ -319,8 +320,8 @@ namespace CTCClassSchedule.Controllers
 					sections = respository.GetSections(getPrefix(Subject), YRQ, facets);
 				}
 
-				IEnumerable<SectionWithSeats> sectionsEnum;
-				using (_profiler.Step("Getting app-specific Section records from the DB"))
+				IList<SectionWithSeats> sectionsEnum;
+				using (_profiler.Step("Getting app-specific Section records from DB"))
 				{
 					sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections);
 				}

@@ -2,25 +2,31 @@
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Controllers
 @using MvcMiniProfiler;
-@model IEnumerable<CTCClassSchedule.SectionWithSeats>
+@model IList<CTCClassSchedule.SectionWithSeats>
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;
 
 	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
 	_routeValues["YearQuarterID"] = "All";
+	_routeValues["Subject"] = Model.First().CourseSubject;
+	RouteValueDictionary route = new RouteValueDictionary(_routeValues);
 
+	string courseID = string.Empty;
+	string sectionID = string.Empty;
 	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;
-}
 
+}
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
 
 <div id="scheduleMain">
-	@Html.Partial("quarterNavigation")
-	@Html.Partial("advancedFacetedSearch")
-    @Html.Partial("basicFacetedSearch")
+@{
+	Html.RenderPartial("quarterNavigation");
+	Html.RenderPartial("advancedFacetedSearch");
+	Html.RenderPartial("basicFacetedSearch");
+}
 	<div id="scheduleContent">
-		@if (Model.Count() == 0)
+		@if (Model.Count == 0)
 	{
 			<h3>No classes found.</h3>
 	}
@@ -38,28 +44,27 @@
 		</p>
 		}
 
-		using (_profiler.Step("Rendering sections by course"))
+		using (_profiler.Step("Rendering Sections by Course (outer loop)"))
 		{
-			foreach (var sec in Model.OrderBy(c => c.CourseNumber).ThenBy(c => c.ID.ItemNumber))
+			foreach (SectionWithSeats sec in Model)
 			{
-				string courseID = sec.CourseID;
-				string sectionID = sec.ID.ToString();
+				courseID = sec.CourseID;
+				sectionID = sec.ID.ToString();
 
 				if (courseID != PreviousCourseID)
 				{
-				_routeValues["Subject"] = sec.CourseSubject;
-				_routeValues["ClassNum"] = sec.CourseNumber;
+				route["ClassNum"] = sec.CourseNumber;
 
-					<text>
+				<text>
 		<h2 class="classHeading">
-		@Html.ActionLink(string.Format("{0}{1} {2} {3} • {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)),
-										"ClassDetails",
-										"Classes",
-										new RouteValueDictionary(_routeValues),
-										null)
+			@Html.ActionLink(string.Format("{0}{1} {2} {3} • {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)),
+											"ClassDetails",
+											"Classes",
+											route,
+											null)
 		</h2>
 		<p class="classDetails">
-			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
+			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", route, null)
 		</p>
 		<ul class='course-block'>
 		</text>

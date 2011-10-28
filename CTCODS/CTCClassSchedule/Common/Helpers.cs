@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -8,17 +9,16 @@ using Ctc.Ods;
 using Ctc.Ods.Config;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
-using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
-using CTCClassSchedule.Properties;
-using System.Linq;
+using MvcMiniProfiler;
 
 namespace CTCClassSchedule.Common
 {
 	public static class Helpers
 	{
-
-
+		readonly private static ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
+		readonly private static ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
+		readonly private static ClassScheduleFootnoteEntities _footnotedb = new ClassScheduleFootnoteEntities();
 
 		public static MvcHtmlString IncludePageURL(this HtmlHelper htmlHelper, string url)
 		{
@@ -434,37 +434,43 @@ namespace CTCClassSchedule.Common
 		/// <param name="currentYrq"></param>
 		/// <param name="sections"></param>
 		/// <returns></returns>
-		public static IEnumerable<SectionWithSeats> getSectionsWithSeats(string currentYrq, IList<Section> sections)
+		public static IList<SectionWithSeats> getSectionsWithSeats(string currentYrq, IList<Section> sections)
 		{
-			ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
-			ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
-			ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
-			ClassScheduleFootnoteEntities _footnotedb = new ClassScheduleFootnoteEntities();
+			MiniProfiler profiler = MiniProfiler.Current;
 
-			IQueryable<vw_SeatAvailability> seatsAvailableLocal = from s in _scheduledb.vw_SeatAvailability
-																														where s.ClassID.Substring(4) == currentYrq
-																														select s;
+			IList<vw_SeatAvailability> seatsAvailableLocal;
+			using (profiler.Step("Retrieving available seats"))
+			{
+				seatsAvailableLocal = (from s in _scheduledb.vw_SeatAvailability
+				                       where s.ClassID.Substring(4) == currentYrq
+				                       select s).ToList();
+			}
 
-			IEnumerable<SectionWithSeats> sectionsEnum =
-																		from c in sections
-																		join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID into cd
-																		from d in cd.DefaultIfEmpty()	// include all sections, even if don't have an associated seatsAvailable
-																		orderby c.Yrq.ID descending
-																		select new SectionWithSeats
-																		{
-																			ParentObject = c,
-																			SeatsAvailable = d == null ? int.MinValue : d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
-																			LastUpdated = d == null ? string.Empty : Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-																			// retrieve all the Section and Course footnotes and flatten them into one string
-																			SectionFootnotes = string.Join(" ", _footnotedb.SectionFootnote.Where(f => f.ClassID == string.Concat(c.ID.ItemNumber, c.ID.YearQuarter))
-																																																		 .Select(f => f.Footnote)
-																																																		 .Distinct()),
-																			CourseFootnotes = string.Join(" ", _footnotedb.CourseFootnote.Where(f => f.CourseID.Substring(0, 5).Trim() == (c.IsCommonCourse
-																																																								? string.Concat(c.CourseSubject, _apiSettings.RegexPatterns.CommonCourseChar)
-																																																								: c.CourseSubject) && f.CourseID.Substring(5).Trim() == c.CourseNumber)
-																																																		.Distinct()
-																																																		.Select(f => f.Footnote))
-																		};
+			IList<SectionWithSeats> sectionsEnum;
+			using (profiler.Step("Joining all data"))
+			{
+				sectionsEnum = (
+							from c in sections
+							join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID into cd
+							from d in cd.DefaultIfEmpty()	// include all sections, even if don't have an associated seatsAvailable
+							orderby c.Yrq.ID descending
+							select new SectionWithSeats
+								{
+										ParentObject = c,
+										SeatsAvailable = d == null ? int.MinValue : d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
+										LastUpdated = d == null ? string.Empty : getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
+										// retrieve all the Section and Course footnotes and flatten them into one string
+										SectionFootnotes = string.Join(" ", _footnotedb.SectionFootnote.Where(f => f.ClassID == string.Concat(c.ID.ItemNumber, c.ID.YearQuarter))
+																.Select(f => f.Footnote)
+																.Distinct()),
+										CourseFootnotes = string.Join(" ", _footnotedb.CourseFootnote.Where(f => f.CourseID.Substring(0, 5).Trim() == (c.IsCommonCourse
+																									? string.Concat(c.CourseSubject, _apiSettings.RegexPatterns.CommonCourseChar)
+																									: c.CourseSubject) && f.CourseID.Substring(5).Trim() == c.CourseNumber)
+																.Distinct()
+																.Select(f => f.Footnote))
+								}).ToList();
+			}
+
 			return sectionsEnum;
 		}
 
