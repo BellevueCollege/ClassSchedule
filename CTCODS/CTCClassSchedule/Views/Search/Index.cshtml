@@ -38,11 +38,16 @@
 
 </script>
 <div id="scheduleMain">
-	@Html.Partial("quarterNavigation")
-	@Html.Partial("advancedFacetedSearch", Model.Section)
-    @Html.Partial("basicFacetedSearch")
+    @Html.Partial("quarterNavigation")
+    <div id="container" class="sidebar">
+        <div id="sidebar">
+            @Html.Partial("advancedFacetedSearch", Model.Section)
+            @Html.Partial("basicFacetedSearch")
+        </div> <!-- #sidebar -->
 
-	<div id="scheduleContent">
+        <div id="content">
+
+
 
 	<div id="searchHeaderInfo">
 		<h1 id="searchResultsMsg">
@@ -111,7 +116,7 @@
 	}
 	}
 
-	</div>
+	</div> <!-- #content -->
 
     @if(ViewBag.TotalPages == 1 && Model.SearchResultNoSection.Count() > 0){
 		Html.RenderPartial("NoSectionCourses", Model.SearchResultNoSection);
@@ -119,4 +124,5 @@
 
 	@{Html.RenderPartial("Pager");}
 
+    </div> <!-- #container -->
 </div>
