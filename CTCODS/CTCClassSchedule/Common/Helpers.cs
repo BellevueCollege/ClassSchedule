@@ -22,6 +22,7 @@ namespace CTCClassSchedule.Common
 
 		public static MvcHtmlString IncludePageURL(this HtmlHelper htmlHelper, string url)
 		{
+
 			return MvcHtmlString.Create(new WebClient().DownloadString(url));
 
 		}

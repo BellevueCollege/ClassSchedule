@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ClassScheduleDataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="ClassScheduleDataModelStoreContainer">
+          <EntitySet Name="vw_ClassScheduleData" EntityType="ClassScheduleDataModel.Store.vw_ClassScheduleData" store:Type="Views" store:Schema="dbo" store:Name="vw_ClassScheduleData">
+            <DefiningQuery>SELECT
+      [vw_ClassScheduleData].[ClassID] AS [ClassID],
+      [vw_ClassScheduleData].[YearQuarterID] AS [YearQuarterID],
+      [vw_ClassScheduleData].[CourseID] AS [CourseID],
+      [vw_ClassScheduleData].[SeatsAvailable] AS [SeatsAvailable],
+      [vw_ClassScheduleData].[LastUpdated] AS [LastUpdated],
+      [vw_ClassScheduleData].[CourseFootnote] AS [CourseFootnote],
+      [vw_ClassScheduleData].[SectionFootnote] AS [SectionFootnote],
+      [vw_ClassScheduleData].[Abbreviation] AS [Abbreviation],
+      [vw_ClassScheduleData].[ProgramURL] AS [ProgramURL],
+      [vw_ClassScheduleData].[Title] AS [Title],
+      [vw_ClassScheduleData].[URL] AS [URL],
+      [vw_ClassScheduleData].[Division] AS [Division],
+      [vw_ClassScheduleData].[ContactName] AS [ContactName],
+      [vw_ClassScheduleData].[ContactPhone] AS [ContactPhone],
+      [vw_ClassScheduleData].[Intro] AS [Intro]
+      FROM [dbo].[vw_ClassScheduleData] AS [vw_ClassScheduleData]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'ClassScheduleDev.dbo.vw_ClassScheduleData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="vw_ClassScheduleData">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Name="ClassID" Type="char" Nullable="false" MaxLength="8" />
+          <Property Name="YearQuarterID" Type="char" MaxLength="4" />
+          <Property Name="CourseID" Type="varchar" MaxLength="10" />
+          <Property Name="SeatsAvailable" Type="int" />
+          <Property Name="LastUpdated" Type="datetime" />
+          <Property Name="CourseFootnote" Type="varchar(max)" />
+          <Property Name="SectionFootnote" Type="varchar(max)" />
+          <Property Name="Abbreviation" Type="varchar" MaxLength="5" />
+          <Property Name="ProgramURL" Type="varchar" MaxLength="255" />
+          <Property Name="Title" Type="varchar" MaxLength="255" />
+          <Property Name="URL" Type="varchar" MaxLength="50" />
+          <Property Name="Division" Type="varchar" MaxLength="255" />
+          <Property Name="ContactName" Type="varchar" MaxLength="255" />
+          <Property Name="ContactPhone" Type="varchar" MaxLength="255" />
+          <Property Name="Intro" Type="varchar(max)" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ClassScheduleDataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="ClassScheduleDataEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="vw_ClassScheduleData" EntityType="ClassScheduleDataModel.vw_ClassScheduleData" />
+        </EntityContainer>
+        <EntityType Name="vw_ClassScheduleData">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Name="ClassID" Type="String" Nullable="false" MaxLength="8" Unicode="false" FixedLength="true" />
+          <Property Name="YearQuarterID" Type="String" MaxLength="4" Unicode="false" FixedLength="true" />
+          <Property Name="CourseID" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="SeatsAvailable" Type="Int32" />
+          <Property Name="LastUpdated" Type="DateTime" />
+          <Property Name="CourseFootnote" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="SectionFootnote" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="Abbreviation" Type="String" MaxLength="5" Unicode="false" FixedLength="false" />
+          <Property Name="ProgramURL" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="Title" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="URL" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Division" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="ContactName" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="ContactPhone" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="Intro" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ClassScheduleDataModelStoreContainer" CdmEntityContainer="ClassScheduleDataEntities">
+          <EntitySetMapping Name="vw_ClassScheduleData"><EntityTypeMapping TypeName="ClassScheduleDataModel.vw_ClassScheduleData"><MappingFragment StoreEntitySet="vw_ClassScheduleData">
+            <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+            <ScalarProperty Name="YearQuarterID" ColumnName="YearQuarterID" />
+            <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+            <ScalarProperty Name="SeatsAvailable" ColumnName="SeatsAvailable" />
+            <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+            <ScalarProperty Name="CourseFootnote" ColumnName="CourseFootnote" />
+            <ScalarProperty Name="SectionFootnote" ColumnName="SectionFootnote" />
+            <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
+            <ScalarProperty Name="ProgramURL" ColumnName="ProgramURL" />
+            <ScalarProperty Name="Title" ColumnName="Title" />
+            <ScalarProperty Name="URL" ColumnName="URL" />
+            <ScalarProperty Name="Division" ColumnName="Division" />
+            <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+            <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
+            <ScalarProperty Name="Intro" ColumnName="Intro" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="ClassScheduleData">
+        <EntityTypeShape EntityType="ClassScheduleDataModel.vw_ClassScheduleData" Width="1.5" PointX="0.75" PointY="0.75" Height="3.9033007812499996" IsExpanded="true" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -120,6 +120,11 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Common\ProfilingActionFilter.cs" />
     <Compile Include="Common\ProfilingViewEngine.cs" />
+    <Compile Include="Models\ClassScheduleData.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClassScheduleData.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\Footnotes.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -306,6 +311,10 @@
     <EntityDeploy Include="Models\Footnotes.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Footnotes.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <EntityDeploy Include="Models\ClassScheduleData.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ClassScheduleData.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

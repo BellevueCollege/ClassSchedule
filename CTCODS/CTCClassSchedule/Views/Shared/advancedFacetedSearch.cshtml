@@ -1,5 +1,7 @@
 ﻿@using Ctc.Ods.Types
 @using CTCClassSchedule.Common
+@using CTCClassSchedule.Models
+@using CTCClassSchedule
 <script type="text/javascript">
 	$(document).ready(function () {
 		$('#timestart').timepicker({
@@ -123,19 +125,19 @@
 				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">All</a>
 			</li>
 		 }
-	@foreach (ScheduleCoursePrefix item in Model)
+	@foreach (SectionWithSeats item in Model)
  {
-     if (item.Subject.ToUpper() == (subject ?? string.Empty).ToUpper())
+     if (item.CourseSubject.ToUpper() == (subject ?? string.Empty).ToUpper())
 		{
 			<li @(ViewBag.activeClass)>
-                <span class="notlink">@item.Subject</span>
+                <span class="notlink">@item.CourseSubject</span>
 			</li>
 		}
 		else
 		{
-			routeParms["Subject"] = item.Subject;
+			routeParms["Subject"] = item.CourseSubject;
 		 <li>
-				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@item.Subject</a>
+				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@item.CourseSubject</a>
 			</li>
 		}
 

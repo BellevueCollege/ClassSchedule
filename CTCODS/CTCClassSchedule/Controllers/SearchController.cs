@@ -21,6 +21,7 @@ namespace CTCClassSchedule.Controllers
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
 		private ClassScheduleFootnoteEntities _footnotedb = new ClassScheduleFootnoteEntities();
+		private ClassScheduleDataEntities _scheduledatadb = new ClassScheduleDataEntities();
 
 
 		//
@@ -103,75 +104,50 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.YearQuarter = YRQ;
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
-
-
-				IList<ISectionID> searchSections = new List<ISectionID>();
-				List<String> searchResultsClassIDs = new List<String>();
-				//iterate through the search results, building a list of course ids
-				foreach(SearchResult result in SearchResults) {
-					searchSections.Add(SectionID.FromString(result.ClassID));
-					searchResultsClassIDs.Add(result.ClassID);
-				}
-
-
-				IQueryable<vw_SeatAvailability> seatsAvailableLocal = from s in _scheduledb.vw_SeatAvailability
-																															where searchResultsClassIDs.Contains(s.ClassID)
-																															select s;
-
-
 				IList<Section> sections;
 				using (_profiler.Step("API::GetSections()"))
 				{
-					sections = respository.GetSections(searchSections, facets);
+					sections = respository.GetSections(YRQ, facets);
 				}
 
-				IEnumerable<SectionWithSeats> sectionsEnum;
+				IList<vw_ClassScheduleData> classScheduleData;
+				using (_profiler.Step("API::Get Class Schedule Specific Data()"))
+				{
+				classScheduleData = (from c in _scheduledatadb.vw_ClassScheduleData
+														 where c.YearQuarterID == YRQ.ID
+														 select c
+															).ToList();
+				}
+
+
+				IList<SectionWithSeats> sectionsEnum;
 				using (_profiler.Step("Retrieving joined SectionWithSeats"))
 				{
-					sectionsEnum = from c in sections
-					               join d in seatsAvailableLocal on c.ID.ToString() equals d.ClassID into cd
-					               join e in SearchResults on c.ID.ToString() equals e.ClassID
-					               from d in cd.DefaultIfEmpty()	// include all sections, even if don't have an associated seatsAvailable
-
-					               orderby c.Yrq.ID descending
-					               select new SectionWithSeats
-								{
-										ParentObject = c,
-										SeatsAvailable = d == null ? int.MinValue : d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
-										LastUpdated = d == null ? string.Empty : Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
-										// retrieve all the Section and Course footnotes and flatten them into one string
-										SectionFootnotes = string.Join(" ", _footnotedb.SectionFootnote.Where(f => f.ClassID == string.Concat(c.ID.ItemNumber, c.ID.YearQuarter))
-																.Select(f => f.Footnote)
-																.Distinct()),
-										CourseFootnotes = string.Join(" ", _footnotedb.CourseFootnote.Where(f => f.CourseID.Substring(0, 5).Trim() == (c.IsCommonCourse
-																									? string.Concat(c.CourseSubject, _apiSettings.RegexPatterns.CommonCourseChar)
-																									: c.CourseSubject) && f.CourseID.Substring(5).Trim() == c.CourseNumber)
-																.Distinct()
-																.Select(f => f.Footnote))
-								};
+					sectionsEnum = (from c in sections
+													join d in classScheduleData on c.ID.ToString() equals d.ClassID into cd
+													from d in cd.DefaultIfEmpty()
+													join e in SearchResults on c.ID.ToString() equals e.ClassID into ce
+													from e in ce.DefaultIfEmpty()
+													where e.ClassID == c.ID.ToString()
+													orderby c.Yrq.ID descending
+													select new SectionWithSeats
+					                  {
+					                      ParentObject = c,
+					                      SeatsAvailable = d.SeatsAvailable,	// allows us to identify past quarters (with no availability info)
+					                      LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
+					                      SectionFootnotes = d.SectionFootnote,
+					                      CourseFootnotes = d.CourseFootnote
+					                  }).ToList();
 
 					itemCount = sectionsEnum.Count();
 				}
 				ViewBag.ItemCount = itemCount;
 
-				// NOTE: the following LINQ statement could modify sectionsEnum, so we need to make a copy to work with
-				IEnumerable<string> sectionsCopy = sectionsEnum.Select(s => s.CourseSubject).Distinct();
 
-				IList<ScheduleCoursePrefix> titles;
-				using (_profiler.Step("Retrieving subjects/urls/titles"))
-				{
-					titles = (from p in _programdb.ProgramInformation
-					          where sectionsCopy.Contains(p.Abbreviation.Trim().Replace(_apiSettings.RegexPatterns.CommonCourseChar, ""))
-					          select new ScheduleCoursePrefix
-								{
-										Subject = p.URL,
-										Title = p.Title
-								}
-					         ).Distinct().ToList();
-				}
 
-				ViewBag.SubjectCount = titles.Count;
-				sectionsEnum = sectionsEnum.Skip(p_offset * 40).Take(40);
+				ViewBag.SubjectCount = 0; //DO A COUNT OF THE SECTION OBJECT HERE
+
+				//sectionsEnum = sectionsEnum.Skip(p_offset * 40).Take(40);
 
 				ViewBag.TotalPages = Math.Ceiling(itemCount / 40.0);
 				ViewBag.CurrentPage = p_offset + 1;
@@ -180,7 +156,6 @@ namespace CTCClassSchedule.Controllers
 														{
 															Section = sectionsEnum,
 															SearchResultNoSection = NoSectionSearchResults,
-															Titles = titles
 														};
 
 				return View(model);

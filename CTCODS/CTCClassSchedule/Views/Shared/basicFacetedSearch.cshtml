@@ -10,10 +10,11 @@
 	{
 		subject = ViewContext.RouteData.Values["Subject"].ToString();
 	}
-	else if (ViewData.Keys.Contains("Subject"))
+	@*else if (ViewData.Keys.Contains("Subject"))
 	{
 		subject = ViewData["Subject"].ToString();
 	}
+	*@
 }
 
 <div id="basicFacetedSearch" class="sidenav">
