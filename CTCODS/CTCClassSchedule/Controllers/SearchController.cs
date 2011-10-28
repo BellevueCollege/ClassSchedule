@@ -141,7 +141,7 @@ namespace CTCClassSchedule.Controllers
 					                  {
 					                      ParentObject = c,
 					                      SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// MinValue allows us to identify past quarters (with no availability info)
-					                      LastUpdated = Helpers.getFriendlyTime(d.LastUpdated.GetValueOrDefault()),
+					                      LastUpdated = Helpers.getFriendlyTime(d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue),
 					                      SectionFootnotes = d != null ? d.SectionFootnote : string.Empty,
 					                      CourseFootnotes = d != null ? d.CourseFootnote : string.Empty
 					                  }).ToList();
