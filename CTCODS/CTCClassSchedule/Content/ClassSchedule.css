@@ -797,19 +797,11 @@ ul.section-details li.section-notes
 
 
 /*END COURSE DESCRIPTION BLOCK CODE*/
-#courseOutcome li
-{
+#courseOutcome li{
 	background: url("images/right_small_arrow.png") no-repeat scroll 5px 8px transparent;
     line-height: 14px;
     list-style-type: none;
     padding: 3px 0 4px 20px;
-
-}
-
-
-#courseOutcome p
-{
-	display: none;
 }
 
 
