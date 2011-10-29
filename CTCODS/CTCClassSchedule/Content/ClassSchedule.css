@@ -818,8 +818,7 @@ ul.section-details li.section-notes
 .classHeading a { text-decoration: none; font-weight: bold;}
 .classHeading a:hover,
 .classHeading a:focus { text-decoration: underline;}
-.course-updated a:hover
-{
+.course-updated a:hover {
 	cursor:pointer;
 }
 
