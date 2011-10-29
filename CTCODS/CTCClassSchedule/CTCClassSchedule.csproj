@@ -321,7 +321,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Content Include="Views\Shared\Sections.cshtml" />
-    <Content Include="Views\Classes\ScheduleError.cshtml" />
+    <Content Include="Views\Shared\ScheduleError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">

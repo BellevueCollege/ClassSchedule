@@ -12,19 +12,16 @@
 				{
 					<p><strong>Controller:</strong> @Model.ControllerName</p>
 					<p><strong>Action:</strong> @Model.ActionName</p>
-					<p>@Model.Exception.ToString()</p>
+					<p>@Model.Exception.Message</p>
+<!-- Exception stack trace ******************************************************************************************
+
+@Model.Exception.ToString()
+
+****************************************************************************************************************** -->
 				}
 				else
 				{
-					<p>Hello</p>
-					@*if (Application["LastError"] != null)
-					{
-						<p>@((Application["LastError"] as Exception).ToString())</p>
-					}
-					else
-					{
-						<p>An error occurred, but there is no error information!</p>
-					}*@
+					<p>Unfortunately, I didn't receive any details about the error :-(</p>
 				}
     </div>
 </body>
