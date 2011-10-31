@@ -104,8 +104,7 @@
 	 {
 			Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
 	 }
-
-	 if (courseID != PreviousCourseID)
+	 if (courseID != PreviousCourseID && PreviousCourseID != "")
 	 {
 		@:</ul>
 	 }

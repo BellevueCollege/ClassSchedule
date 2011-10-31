@@ -103,7 +103,7 @@
 			        Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
 		        }
 
-			    if (thisYrq != PreviousYrq)
+					if (thisYrq != PreviousYrq && PreviousYrq != "")
 			    {
 				    @:</ul> <!-- course-block -->  <!-- BUG! THIS UL CLOSES AFTER THE FIRST PASS  -->
 			    }
