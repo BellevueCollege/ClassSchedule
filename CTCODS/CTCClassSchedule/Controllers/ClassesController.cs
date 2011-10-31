@@ -517,13 +517,32 @@ namespace CTCClassSchedule.Controllers
 				else
 				{
 					returnString = sb.ToString();
+					returnString = stripTitle(returnString);
 				}
+
 
 				// return course outcome page source
 				return returnString;
 			}
 
 			return string.Empty;
+		}
+
+		private static string stripTitle(string returnString)
+		{
+			string temp = returnString;
+			string search1 = "<title>";
+			string search2 = "</title>";
+			int location1 = returnString.IndexOf(search1);
+			int location2 = returnString.IndexOf(search2);
+
+			if (location1 > 0 && location2 > 0) {
+				int range = location2 - location1 + search2.Length;
+				temp = temp.Remove(location1, range);
+			}
+
+
+			return temp;
 		}
 
 		/// <summary>
