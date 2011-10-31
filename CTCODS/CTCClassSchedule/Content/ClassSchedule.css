@@ -11,8 +11,6 @@ h1 {
     line-height: 28px;
 }
 
-
-
 h2{
 	font-size: 21px;
     margin-top: 21px;
@@ -579,13 +577,12 @@ li.active a, li.active .notlink
 
 #NotOfferedThisQuarter {
 	background-color: #eee;
-    padding: 10px 20px 18px 20px;
-    margin-left: 170px;
-    margin-bottom: 35px;
+    padding: 21px 20px 21px 20px;
 }
 
 #NotOfferedThisQuarter h2
 {
+    font-weight: bold;
     font-size: 15px;
     margin-top: 0;
 }
@@ -1139,7 +1136,7 @@ ul.section-details li.section-notes
 #pager {
     border-top: 1px solid #D3D3D3;
     overflow: hidden;
-    margin: 0 20px 35px 190px;
+    margin-top: 21px;
 }
 
 #pagerNums {
@@ -1206,27 +1203,24 @@ ul.section-details li.section-notes
 }
 
 
-#searchHeaderInfo {
-	margin-bottom: 49px;
-}
+#searchHeaderInfo { overflow: hidden;}
 
 #searchResultsMsg
 {
-	/* float: left;*/
-	width: 590px;
-	min-width: 590px;
+	display: inline;
+    float: left;
     font-size: 13px;
-    display: inline;
+    line-height: 21px;
+    margin-top: 7px;
+    min-width: 590px;
+    width: 590px;
 
 }
 
 #searchPageNum
 {
-	/*float: right; */
-
-
-	text-align: right;
-	margin-top: -20px;
+	float: right;
+    margin-top: 7px;
 }
 
 #courseDescription em.keyword, a em.keyword
