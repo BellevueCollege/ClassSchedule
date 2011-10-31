@@ -577,7 +577,8 @@ li.active a, li.active .notlink
 
 #NotOfferedThisQuarter {
 	background-color: #eee;
-    padding: 21px 20px 21px 20px;
+    margin-top: 21px;
+    padding: 14px 20px 21px 20px;
 }
 
 #NotOfferedThisQuarter h2
@@ -587,7 +588,10 @@ li.active a, li.active .notlink
     margin-top: 0;
 }
 #NotOfferedThisQuarter li {
-    padding-top: 7px;
+    padding-top: 14px;
+}
+#NotOfferedThisQuarter a {
+    font-weight: bold;
 }
 #NotOfferedThisQuarter em.keyword { font-weight: bold;}
 
