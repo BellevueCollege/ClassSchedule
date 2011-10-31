@@ -191,6 +191,71 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 
+
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="courseIdPlusYRQ"></param>
+		/// <returns></returns>
+		[HttpPost]
+		public ActionResult getSeats(string courseIdPlusYRQ)
+		{
+			int? seats = null;
+			string friendlyTime = "";
+
+			string classID = courseIdPlusYRQ.Substring(0, 4);
+			string yrq = courseIdPlusYRQ.Substring(4, 4);
+
+
+			CourseHPQuery query = new CourseHPQuery();
+			int HPseats = query.findOpenSeats(classID, yrq);
+
+			var seatsAvailableLocal = from s in _scheduledb.SeatAvailabilities
+																where s.ClassID == courseIdPlusYRQ
+																select s;
+			int rows = seatsAvailableLocal.Count();
+
+			if (rows == 0)
+			{
+				//insert the value
+				SeatAvailability newseat = new SeatAvailability();
+				newseat.ClassID = courseIdPlusYRQ;
+				newseat.SeatsAvailable = HPseats;
+				newseat.LastUpdated = DateTime.Now;
+
+				_scheduledb.SeatAvailabilities.AddObject(newseat);
+			}
+			else
+			{
+				//update the value
+				foreach (SeatAvailability seat in seatsAvailableLocal)
+				{
+					seat.SeatsAvailable = HPseats;
+					seat.LastUpdated = DateTime.Now;
+				}
+
+			}
+
+			_scheduledb.SaveChanges();
+
+			var seatsAvailable = from s in _scheduledb.vw_SeatAvailability
+													 where s.ClassID == courseIdPlusYRQ
+													 select s;
+
+			foreach (var seat in seatsAvailable)
+			{
+				seats = seat.SeatsAvailable;
+				friendlyTime = Helpers.getFriendlyTime(seat.LastUpdated.GetValueOrDefault());
+			}
+
+
+			var jsonReturnValue = seats.ToString() + "|" + friendlyTime;
+			return Json(jsonReturnValue);
+		}
+
+
+
 		#region helper methods
 		/// <summary>
 		/// Sets all of the common ViewBag variables

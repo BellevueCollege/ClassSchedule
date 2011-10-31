@@ -296,7 +296,9 @@ textarea
 
 #container.sidebar #content {
     float: left;
-    width: 760px;}
+    width: 760px;
+		background-color: #fff;
+}
 #pageTitle {}
 
 
