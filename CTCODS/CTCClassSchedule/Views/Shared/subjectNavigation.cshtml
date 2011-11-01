@@ -1,6 +1,7 @@
 ﻿@using Ctc.Ods.Types
 
 <script type="text/javascript">
+	/* "processing" spinner */
 	var opts = {
 		lines: 12, // The number of lines to draw
 		length: 7, // The length of each line
@@ -13,18 +14,23 @@
 	};
 	var spinner = new Spinner(opts);
 
+	/* subject chooser pop-up dialog */
 	$(document).ready(function () {
 		$("div#nav-choose-subjects").dialog({
 			autoOpen: false,
 			height: 500,
 			width: 600,
 			modal: true,
+			resizable: false,
 			open: function () {
 				// only show the spinner if we don't already have data in the dialog
 				if ($("div#nav-choose-subjects").html() == '') {
 					spinner.spin(document.getElementById('nav-choose-subjects'))
 				}
-			}
+			},
+//			Cancel: function() {
+//				$(this).dialog("close");
+//			},
 		})
 	});
 </script>
