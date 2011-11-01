@@ -1244,3 +1244,15 @@ ul.section-details li.section-notes
 .ui-timepicker-div dl dt{ height: 25px; }
 .ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }
 .ui-timepicker-div td { font-size: 90%; }
+
+/* css for subject chooser dialog */
+div#nav-choose-subjects
+{
+	display: none;
+	overflow: scroll;
+}
+
+a.ui-dialog-titlebar-close
+{
+	float: right;
+}
