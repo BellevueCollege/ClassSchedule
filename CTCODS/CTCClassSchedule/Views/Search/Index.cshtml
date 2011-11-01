@@ -75,7 +75,10 @@
 			{
 			_routeValues["Subject"] = sec.CourseSubject;
 			_routeValues["ClassNum"] = sec.CourseNumber;
-
+			 if (courseID != PreviousCourseID && PreviousCourseID != "")
+			 {
+				@:</ul>
+			 }
 				<text>
 		<h2 class="classHeading">
 			@Html.ActionLink(string.Format("{0}{1} {2} {3} • {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)),
@@ -98,16 +101,13 @@
 
 		<ul class='course-block'>
 		</text>
-	 }
+			}
 
-	 if (sectionID != PreviousSectionID)
-	 {
-			Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
-	 }
-	 if (courseID != PreviousCourseID && PreviousCourseID != "")
-	 {
-		@:</ul>
-	 }
+			if (sectionID != PreviousSectionID)
+			{
+				Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+			}
+
 			PreviousSectionID = sectionID;
 			PreviousCourseID = courseID;
 
@@ -117,9 +117,10 @@
 
 
 
-    @if(ViewBag.TotalPages == 1 && Model.SearchResultNoSection.Count() > 0){
-		Html.RenderPartial("NoSectionCourses", Model.SearchResultNoSection);
-	}
+    @if (ViewBag.TotalPages == 1 && Model.SearchResultNoSection.Count() > 0)
+		{
+			Html.RenderPartial("NoSectionCourses", Model.SearchResultNoSection);
+		}
 
 	@{Html.RenderPartial("Pager");}
 

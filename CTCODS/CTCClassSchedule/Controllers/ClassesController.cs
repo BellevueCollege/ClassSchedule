@@ -323,7 +323,7 @@ namespace CTCClassSchedule.Controllers
 				IList<SectionWithSeats> sectionsEnum;
 				using (_profiler.Step("Getting app-specific Section records from DB"))
 				{
-					sectionsEnum = Helpers.getSectionsWithSeats(yrqRange, sections);
+					sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections);
 				}
 
 				ViewBag.Modality = Helpers.ConstructModalityList(sectionsEnum, f_oncampus, f_online, f_hybrid, f_telecourse);
@@ -367,7 +367,7 @@ namespace CTCClassSchedule.Controllers
 				IEnumerable<SectionWithSeats> sectionsEnum;
 				using (_profiler.Step("Getting app-specific Section records from the DB"))
 				{
-					sectionsEnum = Helpers.getSectionsWithSeats(yrqRange, sections);
+					sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections);
 				}
 
 				// Use the real abbreviation as the lookup since we're not longer doing the translation workaround at this level.

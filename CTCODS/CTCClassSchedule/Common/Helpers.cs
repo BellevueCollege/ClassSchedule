@@ -436,25 +436,20 @@ namespace CTCClassSchedule.Common
 		/// <param name="currentYrq"></param>
 		/// <param name="sections"></param>
 		/// <returns></returns>
-		public static IList<SectionWithSeats> getSectionsWithSeats(IList<YearQuarter> yrqRange, IList<Section> sections)
+		public static IList<SectionWithSeats> getSectionsWithSeats(string currentYrq, IList<Section> sections)
 		{
 			MiniProfiler profiler = MiniProfiler.Current;
             IList<SectionWithSeats> sectionsEnum;
-						List<string> YRQs = new List<string>();
-						foreach (YearQuarter yrq in yrqRange)
-						{
-							YRQs.Add(YearQuarter.FromString(yrq.ID).ID);
-						}
 
-            //string yrqID = YearQuarter.FromString(currentYrq).ID;
+            string yrqID = YearQuarter.FromString(currentYrq).ID;
             using (OdsRepository respository = new OdsRepository())
 			{
                 IList<vw_ClassScheduleData> classScheduleData;
                 using (profiler.Step("API::Get Class Schedule Specific Data()"))
                 {
                     classScheduleData = (from c in _scheduledatadb.vw_ClassScheduleData
-                                         where YRQs.Contains(c.YearQuarterID)
-																					 //where c.YearQuarterID == yrqID
+
+																					where c.YearQuarterID == yrqID
                                          select c
                                         ).ToList();
                 }
