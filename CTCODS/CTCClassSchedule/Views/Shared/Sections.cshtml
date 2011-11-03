@@ -7,6 +7,7 @@
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;
 
+
 	string PreviousSectionID = ViewData["PreviousSectionID"] as string;
 	string sectionID = Model.ID.ToString();
 }
@@ -45,7 +46,7 @@
 				else
 				{
 									<span class="days">
-										<abbr title="** TITLE GOES HERE **">@item.Days</abbr></span>
+										<abbr title="@Helpers.getFriendlyDayRange(item.Days, Helpers.getDayDictionary())">@item.Days</abbr></span>
 									<span class="times"><span class="descriptor">at </span>@String.Format("{0:t}", item.StartTime).Replace(" ", "")-@String.Format("{0:t}", item.EndTime).Replace(" ", "")</span>
 									<span class="room"><span class="descriptor">in </span>@item.Room</span>
 				}

@@ -475,5 +475,124 @@ namespace CTCClassSchedule.Common
 			return sectionsEnum;
 		}
 
+		public static string getFriendlyDayRange(string dayString, Dictionary<string, string> dict)
+		{
+			string friendlyName = string.Empty;
+			if (dict.ContainsKey(dayString))
+			{
+				friendlyName = dict[dayString];
+			}
+			else
+			{
+				friendlyName = dayString;
+			}
+			return friendlyName;
+		}
+
+		public static Dictionary<string, string> getDayDictionary(){
+			Dictionary<string, string> dict = new Dictionary<string, string>();
+
+			dict.Add("M", "Monday");
+			dict.Add("T", "Tuesday");
+			dict.Add("W", "Wednesday");
+			dict.Add("Th", "Thursday");
+			dict.Add("F", "Friday");
+			dict.Add("Sa", "Saturday");
+			dict.Add("DAILY", "Daily");
+			dict.Add("MWF", "Monday/Wednesday/Friday");
+			dict.Add("TTh", "Tuesday/Thursday");
+			dict.Add("MWThF", "Monday/Wednesday/Thursday/Friday");
+			dict.Add("MTWTh", "Monday/Tuesday/Wednesday/Thursday");
+			dict.Add("MW", "Monday/Wednesday");
+			dict.Add("WF", "Wednesday/Friday");
+			dict.Add("TF", "Tuesday/Friday");
+			dict.Add("MF", "Monday/Friday");
+			dict.Add("ThF", "Thursday/Friday");
+			dict.Add("MWTh", "Monday/Wednesday/Thursday");
+			dict.Add("MTWF", "Monday/Tuesday/Wednesday/Friday");
+			dict.Add("MTTh", "Monday/Tuesday/Thursday");
+			dict.Add("WTh", "Wednesday/Thursday");
+			dict.Add("MTF", "Monday/Tuesday/Friday");
+			dict.Add("MT", "Monday/Tuesday");
+			dict.Add("TWThF", "Tuesday/Wednesday/Thursday/Friday");
+			dict.Add("ARRANGED", "Arranged");
+			dict.Add("Su", "Sunday");
+			dict.Add("TThF", "Tuesday/Thursday/Friday");
+			dict.Add("TW", "Tuesday/Wednesday");
+			dict.Add("MTh", "Monday/Thursday");
+			dict.Add("MTW", "Monday/Tuesday/Wednesday");
+			dict.Add("MThF", "Monday/Thursday/Friday");
+			dict.Add("TWTh", "Tuesday/Wednesday/Thursday");
+			dict.Add("TWF", "Tuesday/Wednesday/Friday");
+			dict.Add("WThF", "Wednesday/Thursday/Friday");
+			dict.Add("MTThF", "Monday/Tuesday/Thursday/Friday");
+			dict.Add("TSa", "Tuesday/Saturday");
+			dict.Add("ThSa", "Thursday/Saturday");
+			dict.Add("FSa", "Friday/Saturday");
+			dict.Add("ThSu", "Thursday/Sunday");
+			dict.Add("MSu", "Monday/Sunday");
+			dict.Add("WSa", "Wednesday/Saturday");
+			dict.Add("MWSa", "Monday/Wednesday/Saturday");
+			dict.Add("TThSa", "Tuesday/Thursday/Saturday");
+			dict.Add("WThSa", "Wednesday/Thursday/Saturday");
+			dict.Add("SaSu", "Monday");
+			dict.Add("WSu", "Wednesday/Sunday");
+			dict.Add("TWThSa", "Tuesday/Wednesday/Thursday/Saturday");
+			dict.Add("MTWThFSaSu", "Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday");
+			dict.Add("WFSa", "Wednesday/Friday/Saturday");
+			dict.Add("MTWThSa", "Monday/Tuesday/Wednesday/Thursday/Saturday");
+			dict.Add("MTSaSu", "Monday/Tuesday/Saturday/Sunday");
+			dict.Add("FSaSu", "Friday/Saturday/Sunday");
+			dict.Add("MFSa", "Monday/Friday/Saturday");
+			dict.Add("ThFSa", "Thursday/Friday/Saturday");
+			dict.Add("MTWThFSa", "Monday/Tuesday/Wednesday/Thursday/Friday/Saturday");
+			dict.Add("MSa", "Monday/Saturday");
+			dict.Add("TSu", "Tuesday/Sunday");
+			dict.Add("TWFSa", "Tuesday/Wednesday/Friday/Saturday");
+			dict.Add("TFSu", "Tuesday/Friday/Sunday");
+			dict.Add("TThSu", "Tuesday/Thursday/Sunday");
+			dict.Add("TThSaSu", "Tuesday/Thursday/Saturday/Sunday");
+			dict.Add("MWFSa", "Monday/Wednesday/Friday/Saturday");
+			dict.Add("TWThSaSu", "Tuesday/Wednesday/Thursday/Saturday/Sunday");
+			dict.Add("TWFSaSu", "Tuesday/Wednesday/Friday/Saturday/Sunday");
+			dict.Add("MTSu", "Monday/Tuesday/Sunday");
+			dict.Add("TFSa", "Tuesday/Friday/Saturday");
+			dict.Add("TWThFSa", "Tuesday/Wednesday/Thursday/Friday/Saturday");
+			dict.Add("TFSaSu", "Tuesday/Friday/Saturday/Sunday");
+			dict.Add("TWSa", "Tuesday/Wednesday/Saturday");
+			dict.Add("ThSaSu", "Thursday/Saturday/Sunday");
+			dict.Add("MTWSa", "Monday/Tuesday/Wednesday/Saturday");
+			dict.Add("MWSaSu", "Monday/Wednesday/Saturday/Sunday");
+			dict.Add("FSu", "Friday/Sunday");
+			dict.Add("WThFSa", "Wednesday/Thursday/Friday/Saturday");
+			dict.Add("TWThSu", "Tuesday/Wednesday/Thursday/Sunday");
+			dict.Add("TWThFSu", "Tuesday/Wednesday/Thursday/Friday/Sunday");
+			dict.Add("MWThSa", "Monday/Wednesday/Thursday/Saturday");
+			dict.Add("ThFSaSu", "Thursday/Friday/Saturday/Sunday");
+			dict.Add("ThFSu", "Thursday/Friday/Sunday");
+			dict.Add("MTWThFSu", "Monday/Tuesday/Wednesday/Thursday/Friday/Sunday");
+			dict.Add("TSaSu", "Tuesday/Saturday/Sunday");
+			dict.Add("WFSu", "Wednesday/Friday/Sunday");
+			dict.Add("MTThSa", "Monday/Tuesday/Thursday/Saturday");
+			dict.Add("MTWThSaSu", "Monday/Tuesday/Wednesday/Thursday/Saturday/Sunday");
+			dict.Add("MTSa", "Monday/Tuesday/Saturday");
+			dict.Add("WFSaSu", "Wednesday/Friday/Saturday/Sunday");
+			dict.Add("MSaSu", "Monday/Saturday/Sunday");
+			dict.Add("MThSa", "Monday/Thursday/Saturday");
+			dict.Add("MFSaSu", "Monday/Friday/Saturday/Sunday");
+			dict.Add("TWSu", "Tuesday/Wednesday/Sunday");
+			dict.Add("TThFSa", "Tuesday/Thursday/Friday/Saturday");
+			dict.Add("MTWFSa", "Monday/Tuesday/Wednesday/Friday/Saturday");
+			dict.Add("MTWThSu", "Monday/Tuesday/Wednesday/Thursday/Sunday");
+			dict.Add("TThFSaSu", "Tuesday/Thursday/Friday/Saturday/Sunday");
+			dict.Add("MTWSu", "Monday/Tuesday/Wednesday/Sunday");
+			dict.Add("MWSu", "Monday/Wednesday/Sunday");
+			dict.Add("MTFSaSu", "Monday/Tuesday/Friday/Saturday/Sunday");
+			dict.Add("MTFSa", "Monday/Tuesday/Friday/Saturday");
+			dict.Add("MWThFSa", "Monday/Wednesday/Thursday/Friday/Saturday");
+
+			return dict;
+		}
+
 	}
 }
