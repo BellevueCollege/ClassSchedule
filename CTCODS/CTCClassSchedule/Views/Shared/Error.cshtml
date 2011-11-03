@@ -1,18 +1,30 @@
-﻿@{
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Error</title>
+    <title>Oops, an error has occurred</title>
 </head>
 <body>
-    <h2>
-       This is an Error page.
-    </h2>
-    <p>An error occurred while processing your request</p>
-    <p><strong>We are embarrased.</strong></p>
-    <p>Error code: 3D3N</p>
+    <h2>Oops, an error has occurred</h2>
+		<div>
+        @if (Model != null)
+				{
+					<p><strong>Controller:</strong> @Model.ControllerName</p>
+					<p><strong>Action:</strong> @Model.ActionName</p>
+					<p>@Model.Exception.Message</p>
+<!-- Exception stack trace ******************************************************************************************
+
+@Model.Exception.ToString()
+
+****************************************************************************************************************** -->
+				}
+				else
+				{
+					<p>Unfortunately, I didn't receive any details about the error :-(</p>
+				}
+    </div>
 </body>
 </html>

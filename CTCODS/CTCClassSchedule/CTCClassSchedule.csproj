@@ -171,12 +171,12 @@
     <Compile Include="Common\SearchResult.cs" />
     <Compile Include="Common\SearchResultsModel.cs" />
     <Compile Include="Common\SectionWithSeats.cs" />
-    <Compile Include="ScheduleError.aspx.cs">
-      <DependentUpon>ScheduleError.aspx</DependentUpon>
+    <Compile Include="Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ScheduleError.aspx.designer.cs">
-      <DependentUpon>ScheduleError.aspx</DependentUpon>
+    <Compile Include="Error.aspx.designer.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -222,7 +222,7 @@
     <Content Include="Content\js\jquery-1.6.4.min.js" />
     <Content Include="Content\js\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Content\js\jquery-ui-timepicker-addon.js" />
-    <Content Include="ScheduleError.aspx" />
+    <Content Include="Error.aspx" />
     <Content Include="Scripts\CtcClassSchedule.js" />
     <Content Include="Scripts\jquery.ui.timepicker.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -363,7 +363,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Content Include="Views\Shared\Sections.cshtml" />
-    <Content Include="Views\Shared\ScheduleError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTCODS.Tests\CTCODS.Tests.csproj">
