@@ -1256,3 +1256,7 @@ a.ui-dialog-titlebar-close
 {
 	float: right;
 }
+
+.ui-dialog .ui-icon-grip-diagonal-se {
+    margin: 0 0 0 auto;
+}
