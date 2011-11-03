@@ -43,6 +43,10 @@
 	} else {
 		routeParms.Add("Subject", string.Empty);
 	}
+
+	IDictionary<string, object> linkAttributes = new Dictionary<string, object>(1);
+	// close the dialog window when a subject link is clicked
+	linkAttributes.Add("onClick", "$('#nav-choose-subjects').dialog('close');");
 }
 <div id="subjects-list">
 	@foreach (char letter in alphabet) {
@@ -71,11 +75,11 @@
 					<div class="subject">
 				@if (routeParms.Keys.Contains("YearQuarter") && routeParms["YearQuarter"] != null && !routeParms["YearQuarter"].ToString().IsEmpty() && routeParms["YearQuarter"].ToString().ToUpper() != "ALL")
 		{
-					Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null));
+					Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), linkAttributes));
 				}
 		else
 		{
-					Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
+					Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), linkAttributes));
 				}
 			</div>
 			}
