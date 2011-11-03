@@ -8,7 +8,7 @@
 
 	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
 	_routeValues["YearQuarterID"] = "All";
-	_routeValues["Subject"] = Model.First().CourseSubject;
+	_routeValues["Subject"] = Model.First().CourseSubject != null ? Model.First().CourseSubject : null;
 	RouteValueDictionary route = new RouteValueDictionary(_routeValues);
 
 	string courseID = string.Empty;
@@ -60,7 +60,13 @@
 
 				if (courseID != PreviousCourseID)
 				{
-				route["ClassNum"] = sec.CourseNumber;
+					if (PreviousCourseID != "")
+					{
+						@:</ul>
+					}
+
+
+					route["ClassNum"] = sec.CourseNumber;
 
 				<text>
 		<h2 class="classHeading">
@@ -82,10 +88,7 @@
 			Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
 		}
 
-				if (courseID != PreviousCourseID && PreviousCourseID != "")
-				{
-		@:</ul>
-		}
+
 			PreviousSectionID = sectionID;
 			PreviousCourseID = courseID;
 			}
