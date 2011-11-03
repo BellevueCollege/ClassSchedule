@@ -2,6 +2,7 @@
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Controllers
 @using MvcMiniProfiler;
+@using Ctc.Ods.Types
 @model IList<CTCClassSchedule.SectionWithSeats>
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;
@@ -15,19 +16,30 @@
 	string sectionID = string.Empty;
 	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;
+	string FriendlyYRQ = string.Empty;
+
+foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
+ {
+	 if (ViewBag.YearQuarter != null && ViewBag.YearQuarter == yrq) {
+		 FriendlyYRQ = yrq.FriendlyName;
+	 }
+
+ }
+
+ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Schedule at Bellevue College";
 
 }
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
 
 <div id="scheduleMain">
     @{
-	    Html.RenderPartial("quarterNavigation");
+			Html.RenderPartial("quarterNavigation");
     }
 	<div id="container" class="sidebar">
         <div id="sidebar">
             @{
-	            Html.RenderPartial("advancedFacetedSearch");
-	            Html.RenderPartial("basicFacetedSearch");
+							Html.RenderPartial("advancedFacetedSearch");
+							Html.RenderPartial("basicFacetedSearch");
             }
         </div> <!-- #sidebar -->
 
@@ -38,35 +50,35 @@
 			<h1>No classes found.</h1>
 	}
 	else
-  {
+	{
 		<h1 id="pageTitle">
 				@ViewBag.ProgramTitle
 							<span class="subjectchooser">@Html.Partial("subjectNavigation")</span>
 		</h1>
 
-		if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
-		{
+															 if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
+															 {
 		<p id="programWebsite">
 			<a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a>
 		</p>
-		}
+															 }
 
-		using (_profiler.Step("Rendering Sections by Course (outer loop)"))
-		{
-			foreach (SectionWithSeats sec in Model)
-			{
-				courseID = sec.CourseID;
-				sectionID = sec.ID.ToString();
+															 using (_profiler.Step("Rendering Sections by Course (outer loop)"))
+															 {
+																 foreach (SectionWithSeats sec in Model)
+																 {
+																	 courseID = sec.CourseID;
+																	 sectionID = sec.ID.ToString();
 
-				if (courseID != PreviousCourseID)
-				{
-					if (PreviousCourseID != "")
-					{
+																	 if (courseID != PreviousCourseID)
+																	 {
+																		 if (PreviousCourseID != "")
+																		 {
 						@:</ul>
 					}
 
 
-					route["ClassNum"] = sec.CourseNumber;
+																		 route["ClassNum"] = sec.CourseNumber;
 
 				<text>
 		<h2 class="classHeading">
@@ -81,19 +93,19 @@
 		</p>
 		<ul class='course-block'>
 		</text>
-		}
+																	 }
 
-		if (PreviousSectionID != sectionID)
-		{
-			Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
-		}
+																	 if (PreviousSectionID != sectionID)
+																	 {
+																		 Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+																	 }
 
 
-			PreviousSectionID = sectionID;
-			PreviousCourseID = courseID;
-			}
-		}
-}
+																	 PreviousSectionID = sectionID;
+																	 PreviousCourseID = courseID;
+																 }
+															 }
+	}
 	</div>  <!-- content -->
     </div>  <!-- container -->
 </div> <!-- #scheduleMain -->
