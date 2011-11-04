@@ -41,7 +41,9 @@
 							<li>
 								@if (Model.IsOnline)
 				{
-									<span class="online">Online</span>
+
+									<span class="days">
+										<abbr title="@Helpers.getFriendlyDayRange("Online", dict)">Online</abbr></span>
 				}
 				else
 				{
@@ -57,8 +59,8 @@
 				</li>
 				@if (sectionID != PreviousSectionID)
 		{
-				if (Model.SeatsAvailable != int.MinValue)
-		{
+			if (Model.SeatsAvailable != int.MinValue)
+			{
 					<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
 						Availability: </span>
 						@if (Model.SeatsAvailable <= 0 || Model.WaitlistCount > 0)
@@ -73,7 +75,7 @@
 								[update]</a></span>
 			}
 					</li>
-		}
+			}
 
 					<li class="section-notes"><span class="descriptor">Notes: </span>
 						<ul>

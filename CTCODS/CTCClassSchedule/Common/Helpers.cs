@@ -492,6 +492,7 @@ namespace CTCClassSchedule.Common
 		public static Dictionary<string, string> getDayDictionary(){
 			Dictionary<string, string> dict = new Dictionary<string, string>();
 
+			dict.Add("Online", "Online");
 			dict.Add("M", "Monday");
 			dict.Add("T", "Tuesday");
 			dict.Add("W", "Wednesday");
