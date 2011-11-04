@@ -42,8 +42,10 @@
 								@if (Model.IsOnline)
 				{
 
-									<span class="days">
+										<span class="days">
 										<abbr title="@Helpers.getFriendlyDayRange("Online", dict)">Online</abbr></span>
+										<span class="times"><span class="descriptor">&nbsp;</span>&nbsp;</span>
+										<span class="room"><span class="descriptor">&nbsp;</span>&nbsp;</span>
 				}
 				else
 				{
