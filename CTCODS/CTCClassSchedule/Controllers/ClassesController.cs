@@ -299,6 +299,9 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 			ViewBag.Subject = Subject;
 
+			//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
+			TempData["DayDictionary"] = Helpers.getDayDictionary();
+
 			setProgramInfo(Subject);
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
@@ -342,6 +345,9 @@ namespace CTCClassSchedule.Controllers
 			ICourseID courseID = CourseID.FromString(Subject, ClassNum);
 			ViewBag.Subject = Subject;
 			ViewBag.ClassNum = ClassNum;
+
+			//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
+			TempData["DayDictionary"] = Helpers.getDayDictionary();
 
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{

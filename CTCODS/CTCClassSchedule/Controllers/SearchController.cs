@@ -58,6 +58,8 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.avail = avail;
 			ViewBag.p_offset = p_offset;
 
+			//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
+			TempData["DayDictionary"] = Helpers.getDayDictionary();
 
 			ViewBag.Subject = Subject;
 			ViewBag.searchterm = searchterm;
