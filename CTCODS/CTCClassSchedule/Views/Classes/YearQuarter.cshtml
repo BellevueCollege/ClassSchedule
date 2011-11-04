@@ -60,22 +60,28 @@
 
 		if (ViewBag.AlphabetCharacter <= 25 && ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] == false && (char)(ViewBag.AlphabetCharacter + 65) == Convert.ToChar(item.Subject.Substring(0, 1)))
 		{
+			if((ViewBag.AlphabetCharacter + 65).ToString() != "A"){
+				@:</ul>
+			}
+
 			<h2>@((char)(ViewBag.AlphabetCharacter + 65))</h2>
+			@:<ul class="subject">
 
 	 ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
 	 ViewBag.AlphabetCharacter++;
 		}
 
-			<li class="subject">
+			<li class="title">
 				@{
-					routeParms.Remove("Subject");
-					routeParms.Add("Subject", item.Subject);
+		routeParms.Remove("Subject");
+		routeParms.Add("Subject", item.Subject);
 				}
 				@Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null)
 			</li>
-		}
+	}
 
-			@if (ViewBag.ItemCount == 0) {
+			@if (ViewBag.ItemCount == 0)
+	 {
 				<text>
 					<h3>No classes found.</h3>
 				</text>
