@@ -223,6 +223,50 @@
     <Content Include="Content\js\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Content\js\jquery-ui-timepicker-addon.js" />
     <Content Include="Error.aspx" />
+    <Content Include="globals\btheme_v0.1\asp\footer_big.asp" />
+    <Content Include="globals\btheme_v0.1\asp\footer_small.asp" />
+    <Content Include="globals\btheme_v0.1\asp\header_big.asp" />
+    <Content Include="globals\btheme_v0.1\asp\header_menu.asp" />
+    <Content Include="globals\btheme_v0.1\asp\header_small.asp" />
+    <Content Include="globals\btheme_v0.1\asp\index.asp" />
+    <Content Include="globals\btheme_v0.1\asp\narrow.asp" />
+    <Content Include="globals\btheme_v0.1\asp\thick.html" />
+    <Content Include="globals\btheme_v0.1\common\bigfoot_content.html" />
+    <Content Include="globals\btheme_v0.1\common\header_bottom_big.html" />
+    <Content Include="globals\btheme_v0.1\common\header_bottom_small.html" />
+    <Content Include="globals\btheme_v0.1\common\header_top_big.html" />
+    <Content Include="globals\btheme_v0.1\common\header_top_small.html" />
+    <Content Include="globals\btheme_v0.1\common\legallinks.html" />
+    <Content Include="globals\btheme_v0.1\css\btheme0.5.css" />
+    <Content Include="globals\btheme_v0.1\css\btheme_v0.1.css" />
+    <Content Include="globals\btheme_v0.1\html_raw\narrow.html" />
+    <Content Include="globals\btheme_v0.1\html_raw\thick.html" />
+    <Content Include="globals\btheme_v0.1\img\bellevuecollege-bigblue.png" />
+    <Content Include="globals\btheme_v0.1\img\bellevuecollege-idbar.png" />
+    <Content Include="globals\btheme_v0.1\img\divider.png" />
+    <Content Include="globals\btheme_v0.1\img\facebook.png" />
+    <Content Include="globals\btheme_v0.1\img\flickr.png" />
+    <Content Include="globals\btheme_v0.1\img\foot-bg-wide.jpg" />
+    <Content Include="globals\btheme_v0.1\img\foot-bg.jpg" />
+    <Content Include="globals\btheme_v0.1\img\foot-col-sep.png" />
+    <Content Include="globals\btheme_v0.1\img\foot-legal-sep.gif" />
+    <Content Include="globals\btheme_v0.1\img\foot-shadow-bot.png" />
+    <Content Include="globals\btheme_v0.1\img\foot-shadow-top.png" />
+    <Content Include="globals\btheme_v0.1\img\foot-shadow.png" />
+    <Content Include="globals\btheme_v0.1\img\foot-square-sep.gif" />
+    <Content Include="globals\btheme_v0.1\img\head-botline.png" />
+    <Content Include="globals\btheme_v0.1\img\headbg.jpg" />
+    <Content Include="globals\btheme_v0.1\img\headbgshadow.png" />
+    <Content Include="globals\btheme_v0.1\img\headbgwide.jpg" />
+    <Content Include="globals\btheme_v0.1\img\headbgwidetile.jpg" />
+    <Content Include="globals\btheme_v0.1\img\homepage.png" />
+    <Content Include="globals\btheme_v0.1\img\linkedin.png" />
+    <Content Include="globals\btheme_v0.1\img\nav-highlight.png" />
+    <Content Include="globals\btheme_v0.1\img\search-loop-btn.png" />
+    <Content Include="globals\btheme_v0.1\img\translucentpixel.png" />
+    <Content Include="globals\btheme_v0.1\img\twitter.png" />
+    <Content Include="globals\btheme_v0.1\img\youtube.png" />
+    <Content Include="globals\btheme_v0.1\js\searchbox.js" />
     <Content Include="Scripts\CtcClassSchedule.js" />
     <Content Include="Scripts\jquery.ui.timepicker.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -254,31 +298,6 @@
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="Content\ClassSchedule.css" />
     <Content Include="Global.asax" />
-    <Content Include="globals\btheme_v0.1\img\bellevuecollege-bigblue.png" />
-    <Content Include="globals\btheme_v0.1\img\bellevuecollege-idbar.png" />
-    <Content Include="globals\btheme_v0.1\img\divider.png" />
-    <Content Include="globals\btheme_v0.1\img\facebook.png" />
-    <Content Include="globals\btheme_v0.1\img\flickr.png" />
-    <Content Include="globals\btheme_v0.1\img\foot-bg-wide.jpg" />
-    <Content Include="globals\btheme_v0.1\img\foot-bg.jpg" />
-    <Content Include="globals\btheme_v0.1\img\foot-col-sep.png" />
-    <Content Include="globals\btheme_v0.1\img\foot-legal-sep.gif" />
-    <Content Include="globals\btheme_v0.1\img\foot-shadow-bot.png" />
-    <Content Include="globals\btheme_v0.1\img\foot-shadow-top.png" />
-    <Content Include="globals\btheme_v0.1\img\foot-shadow.png" />
-    <Content Include="globals\btheme_v0.1\img\foot-square-sep.gif" />
-    <Content Include="globals\btheme_v0.1\img\head-botline.png" />
-    <Content Include="globals\btheme_v0.1\img\headbg.jpg" />
-    <Content Include="globals\btheme_v0.1\img\headbgshadow.png" />
-    <Content Include="globals\btheme_v0.1\img\headbgwide.jpg" />
-    <Content Include="globals\btheme_v0.1\img\headbgwidetile.jpg" />
-    <Content Include="globals\btheme_v0.1\img\homepage.png" />
-    <Content Include="globals\btheme_v0.1\img\linkedin.png" />
-    <Content Include="globals\btheme_v0.1\img\nav-highlight.png" />
-    <Content Include="globals\btheme_v0.1\img\search-loop-btn.png" />
-    <Content Include="globals\btheme_v0.1\img\translucentpixel.png" />
-    <Content Include="globals\btheme_v0.1\img\twitter.png" />
-    <Content Include="globals\btheme_v0.1\img\youtube.png" />
     <Content Include="Scripts\jquery-1.5.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.5.1.js" />
     <Content Include="Scripts\jquery-1.5.1.min.js" />
@@ -308,12 +327,17 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="globals\btheme_v0.1\dotNET\" />
+    <Folder Include="globals\btheme_v0.1\drupal\" />
+    <Folder Include="globals\btheme_v0.1\moodle\" />
+    <Folder Include="globals\btheme_v0.1\plone\" />
+    <Folder Include="globals\btheme_v0.1\wp\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="globals\btheme_v0.1\img\Thumbs.db" />
     <Content Include="Views\Classes\YearQuarter.cshtml" />
     <Content Include="Views\Classes\YearQuarterSubject.cshtml" />
     <EntityDeploy Include="Models\AvailableSeats.edmx">
@@ -358,6 +382,18 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ClassScheduleData.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="globals\btheme_v0.1\dotNET_MVC\header_small.cshtml" />
+    <Content Include="globals\btheme_v0.1\dotNET_MVC\footer_big.cshtml" />
+    <None Include="globals\btheme_v0.1\html_raw\.tmp_narrow.html.42343~" />
+    <None Include="globals\btheme_v0.1\html_raw\.tmp_thick.html.70928~" />
+    <None Include="globals\btheme_v0.1\php\footer_big.php" />
+    <None Include="globals\btheme_v0.1\php\footer_small.php" />
+    <None Include="globals\btheme_v0.1\php\header_big.php" />
+    <None Include="globals\btheme_v0.1\php\header_menu.php" />
+    <None Include="globals\btheme_v0.1\php\header_small.php" />
+    <None Include="globals\btheme_v0.1\php\index.php" />
+    <None Include="globals\btheme_v0.1\php\narrow.php" />
+    <None Include="globals\btheme_v0.1\php\thick.php" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
