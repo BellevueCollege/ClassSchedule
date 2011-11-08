@@ -439,6 +439,10 @@ namespace CTCClassSchedule.Controllers
 				friendlyTime = Helpers.getFriendlyTime(seat.LastUpdated.GetValueOrDefault());
 			}
 
+			if (friendlyTime.Equals("not yet"))
+			{
+				friendlyTime = "0 seconds ago";
+			}
 
 			var jsonReturnValue = seats.ToString() + "|" + friendlyTime;
 			return Json(jsonReturnValue);

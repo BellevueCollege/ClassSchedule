@@ -534,7 +534,7 @@ namespace CTCClassSchedule.Common
 			dict.Add("MWSa", "Monday/Wednesday/Saturday");
 			dict.Add("TThSa", "Tuesday/Thursday/Saturday");
 			dict.Add("WThSa", "Wednesday/Thursday/Saturday");
-			dict.Add("SaSu", "Monday");
+			dict.Add("SaSu", "Saturday/Sunday");
 			dict.Add("WSu", "Wednesday/Sunday");
 			dict.Add("TWThSa", "Tuesday/Wednesday/Thursday/Saturday");
 			dict.Add("MTWThFSaSu", "Monday/Tuesday/Wednesday/Thursday/Friday/Saturday/Sunday");
