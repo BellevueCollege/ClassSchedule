@@ -83,12 +83,16 @@ ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Sc
 
 				<text>
 		<h2 class="classHeading">
-			@Html.ActionLink(string.Format("{0}{1} {2} {3} • {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)),
+			@Html.ActionLink(string.Format("{0}{1} {2} {3}", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle) + " · " + string.Format("{0} Cr.", Html.CreditsValue(sec.Credits)),
+
 											"ClassDetails",
 											"Classes",
 											route,
 											null)
 		</h2>
+		<div class="CourseFootnotes">
+			@sec.CourseFootnotes
+		</div>
 		<p class="classDetails">
 			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", route, null)
 		</p>
