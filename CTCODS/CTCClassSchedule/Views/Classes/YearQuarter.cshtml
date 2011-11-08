@@ -74,7 +74,7 @@
 			<li class="title">
 				@{
 		routeParms.Remove("Subject");
-		routeParms.Add("Subject", item.Subject);
+		routeParms.Add("Subject", item.Subject.Trim());
 				}
 				@Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null)
 			</li>

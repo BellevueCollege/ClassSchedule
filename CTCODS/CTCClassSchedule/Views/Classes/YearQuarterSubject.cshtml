@@ -9,7 +9,7 @@
 
 	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
 	_routeValues["YearQuarterID"] = "All";
-	_routeValues["Subject"] = Model.Count > 0 ? Model.First().CourseSubject : null;
+	_routeValues["Subject"] = Model.Count > 0 ? Model.First().CourseSubject.Trim() : null;
 	RouteValueDictionary route = new RouteValueDictionary(_routeValues);
 
 
