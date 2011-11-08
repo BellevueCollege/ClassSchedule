@@ -439,38 +439,36 @@ namespace CTCClassSchedule.Common
 		public static IList<SectionWithSeats> getSectionsWithSeats(string currentYrq, IList<Section> sections)
 		{
 			MiniProfiler profiler = MiniProfiler.Current;
-            IList<SectionWithSeats> sectionsEnum;
+      IList<SectionWithSeats> sectionsEnum;
 
-            string yrqID = YearQuarter.FromString(currentYrq).ID;
-            using (OdsRepository respository = new OdsRepository())
-			{
-                IList<vw_ClassScheduleData> classScheduleData;
-                using (profiler.Step("API::Get Class Schedule Specific Data()"))
-                {
-                    classScheduleData = (from c in _scheduledatadb.vw_ClassScheduleData
+      string yrqID = YearQuarter.FromString(currentYrq).ID;
 
-																					where c.YearQuarterID == yrqID
-                                         select c
-                                        ).ToList();
-                }
+			IList<vw_ClassScheduleData> classScheduleData;
+      using (profiler.Step("API::Get Class Schedule Specific Data()"))
+      {
+        classScheduleData = (from c in _scheduledatadb.vw_ClassScheduleData
 
-			    using (profiler.Step("Joining all data"))
-			    {
-				    sectionsEnum = (
-                                    from c in sections
-                                    join d in classScheduleData on c.ID.ToString() equals d.ClassID into cd
-                                    from d in cd.DefaultIfEmpty()
-                                    orderby c.Yrq.ID descending
-                                    select new SectionWithSeats
-				                    {
-                                        ParentObject = c,
-                                        SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// allows us to identify past quarters (with no availability info)
-                                        LastUpdated = getFriendlyTime(d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue),
-                                        SectionFootnotes = d != null ? d.SectionFootnote : string.Empty,
-                                        CourseFootnotes = d != null ? d.CourseFootnote : string.Empty
-                                    }).ToList();
-			    }
-            }
+			              where c.YearQuarterID == yrqID
+			              select c
+			            ).ToList();
+      }
+
+      using (profiler.Step("Joining all data"))
+      {
+        sectionsEnum = (
+			          from c in sections
+			          join d in classScheduleData on c.ID.ToString() equals d.ClassID into cd
+			          from d in cd.DefaultIfEmpty()
+			          orderby c.Yrq.ID descending
+			          select new SectionWithSeats
+						{
+						    ParentObject = c,
+						    SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// allows us to identify past quarters (with no availability info)
+						    LastUpdated = getFriendlyTime(d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue),
+						    SectionFootnotes = d != null ? d.SectionFootnote : string.Empty,
+						    CourseFootnotes = d != null ? d.CourseFootnote : string.Empty
+						}).ToList();
+      }
 
 			return sectionsEnum;
 		}
