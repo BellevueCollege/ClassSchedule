@@ -29,7 +29,7 @@
 	$(document).ready(function () {
 
 		//highlight all of the words that match the search term, respecting case.
-		$(".classHeading,#courseDescription").each(function () {
+		$(".classHeading,.courseDescription").each(function () {
 			$(this).html($(this).html().replace(/([^\/])(@(ViewBag.searchterm))([^\/]??)/ig, '$1<em class="keyword">$2</em>'));
 		});
 

@@ -1227,7 +1227,7 @@ ul.section-details li.section-notes
     margin-top: 7px;
 }
 
-#courseDescription em.keyword, a em.keyword
+.courseDescription em.keyword, a em.keyword
 {
 	background-color: yellow;
 }
