@@ -1,4 +1,4 @@
-﻿body
+body
 {
 	background-color: #fff;
     font-size: 13px;
@@ -49,9 +49,9 @@ abbr:hover {
 #betaBar
 {
 	background-color: #FAFAD2;
-	height: 16px;
-	font-size: 10px;
-	line-height: 16px;
+	height: 20px;
+	font-size: 14px;
+	line-height: 18px;
 }
 
 #betaBarWrapper
@@ -64,7 +64,7 @@ abbr:hover {
 #betaInfo
 {
 	display: inline;
-	padding-left: 300px;
+	padding-left: 250px;
 }
 
 #betaFeedback
