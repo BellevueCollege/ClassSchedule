@@ -10,13 +10,14 @@
 <ul>
 @foreach (var item in Model) {
 	<li>
-        <a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.CourseID.Substring(0, 4).Trim(), ClassNum = item.CourseID.Substring(4).Trim() })">
+			<strong>
         <span class="courseID">@Html.DisplayFor(modelItem => item.CourseID)</span>
         <span class="courseTitle">@item.CourseTitle</span>
         <span class="courseCredits">&#8226; @Html.CreditsValue(item.Credits, "<span class='error'>UNK</span>") @* Remove any trailing zero-decimals *@
 					<abbr title="Credit(s) ">Cr.</abbr>
 				</span>
-        </a><br />
+			</strong>
+        <br />
         <span class="courseDescription">@Html.DisplayFor(modelItem => item.CourseDescription) </span>
 	</li>
 }
