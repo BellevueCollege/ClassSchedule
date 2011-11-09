@@ -18,50 +18,52 @@
 	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;
 	string FriendlyYRQ = string.Empty;
+	string thisYrq = string.Empty;
 
-foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
- {
-	 if (ViewBag.YearQuarter != null && ViewBag.YearQuarter == yrq) {
-		 FriendlyYRQ = yrq.FriendlyName;
-	 }
+	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
+	string currentYrq = yrqList[0].ID;
 
- }
+	if (ViewBag.YearQuarter != null)
+	{
+		YearQuarter yrq = ViewBag.YearQuarter;
+		thisYrq = yrq.ID;
+		FriendlyYRQ = yrq.FriendlyName;
+	}
 
 ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Schedule at Bellevue College";
 
 }
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
-
 <div id="scheduleMain">
-    @{
+	@{
 			Html.RenderPartial("quarterNavigation");
-    }
+	}
 	<div id="container" class="sidebar">
-        <div id="sidebar">
-            @{
+		<div id="sidebar">
+			@{
 							Html.RenderPartial("advancedFacetedSearch");
 							Html.RenderPartial("basicFacetedSearch");
-            }
-        </div> <!-- #sidebar -->
-
-        <div id="content">
-
-		@if (Model.Count == 0)
+			}
+		</div>
+		<!-- #sidebar -->
+		<div id="content">
+			@if (Model.Count == 0)
 	{
-			<h1>No classes found.</h1>
+				<h1>
+					No classes found.</h1>
 	}
 	else
 	{
-		<h1 id="pageTitle">
-				@ViewBag.ProgramTitle
-							<span class="subjectchooser">@Html.Partial("subjectNavigation")</span>
-		</h1>
+				<h1 id="pageTitle">
+					@ViewBag.ProgramTitle
+					<span class="subjectchooser">@Html.Partial("subjectNavigation")</span>
+				</h1>
 
 															 if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
 															 {
-		<p id="programWebsite">
-			<a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a>
-		</p>
+				<p id="programWebsite">
+					<a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a>
+				</p>
 															 }
 
 															 using (_profiler.Step("Rendering Sections by Course (outer loop)"))
@@ -75,26 +77,26 @@ ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Sc
 																	 {
 																		 if (PreviousCourseID != "")
 																		 {
-						@:</ul>
+				@:</ul>
 					}
 
 
 																		 route["ClassNum"] = sec.CourseNumber;
 
 				<text>
-		<h2 class="classHeading">
-			<a href="@Url.Action("ClassDetails", "Classes", route)">
-				@Html.Raw(string.Format("{0}{1} {2} {3} &#8226; {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)))
-			</a>
-		</h2>
-		<div class="CourseFootnotes">
-			@sec.CourseFootnotes
-		</div>
-		<p class="classDetails">
-			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", route, null)
-		</p>
-		<ul class='course-block'>
-		</text>
+				<h2 class="classHeading">
+					<a href="@Url.Action("ClassDetails", "Classes", route)">
+						@Html.Raw(string.Format("{0}{1} {2} {3} &#8226; {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)))
+					</a>
+				</h2>
+				<div class="CourseFootnotes">
+					@sec.CourseFootnotes
+				</div>
+				<p class="classDetails">
+					@Html.ActionLink("View Class Details", "ClassDetails", "Classes", route, null)
+				</p>
+				<ul class='course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))'>
+				</text>
 																	 }
 
 																	 if (PreviousSectionID != sectionID)
@@ -108,6 +110,9 @@ ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Sc
 																 }
 															 }
 	}
-	</div>  <!-- content -->
-    </div>  <!-- container -->
-</div> <!-- #scheduleMain -->
+		</div>
+		<!-- content -->
+	</div>
+	<!-- container -->
+</div>
+<!-- #scheduleMain -->
