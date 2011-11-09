@@ -81,11 +81,9 @@
 			 }
 				<text>
 		<h2 class="classHeading">
-			@Html.ActionLink(string.Format("{0}{1} {2} {3} • {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)),
-											"ClassDetails",
-											"Classes",
-											new RouteValueDictionary(_routeValues),
-											null)
+			<a href="@Url.Action("ClassDetails", "Classes", new RouteValueDictionary(_routeValues))">
+				@Html.Raw(string.Format("{0}{1} {2} {3} &#8226; {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)))
+			</a>
 		</h2>
 		<p class="classDetails">
 			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)

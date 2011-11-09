@@ -74,7 +74,7 @@
 		}
 
 			<li class="title">
-				@Html.ActionLink(item.Title, "Subject", "Classes", new { item.Subject }, null)
+				@Html.ActionLink(item.Title, "Subject", "Classes", new { Subject = item.Subject.Trim() }, null)
 
 			</li>
 	}

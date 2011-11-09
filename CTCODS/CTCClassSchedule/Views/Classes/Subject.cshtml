@@ -32,28 +32,29 @@
 
 			    <div class="classInfo">
                     <h2>
-				    <span class="classNumber">
-					    @Html.ActionLink(string.Format("{0} {1}", courseID, item.Title),
-															"ClassDetails",
-															"Classes",
-															new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number },
-															null)
-				    </span>
+							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number })">
+
+							<span class="classNumber">
+								@Html.Raw(string.Format("{0} {1}", courseID, item.Title))
+							</span>
+
+							&#8226;
 
 						@if (item.IsVariableCredits)
 			{
-				    <span class="classCredits">&#8226;
+				    <span class="classCredits">
 					    V1-@Html.CreditsValue(item.Credits)
 				        <abbr title=" variable credit(s) ">Cr.</abbr>
             </span>
 			}
 			else
 			{
-				    <span class="classCredits">&#8226;
+				    <span class="classCredits">
 					    @Html.CreditsValue(item.Credits)
 				        <abbr title=" credit(s) ">Cr.</abbr>
             </span>
 			}
+					</a>
                     </h2>
 				    @if (@item.Descriptions != null && @item.Descriptions.Count() > 0)
 				{
