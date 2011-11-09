@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Ctc.Ods;
 using Ctc.Ods.Config;
@@ -62,7 +63,7 @@ namespace CTCClassSchedule.Controllers
 			TempData["DayDictionary"] = Helpers.getDayDictionary();
 
 			ViewBag.Subject = Subject;
-			ViewBag.searchterm = searchterm;
+			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s,
 																											f_oncampus, f_online, f_hybrid, f_telecourse, avail);
