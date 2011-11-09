@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web.Mvc;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
@@ -11,6 +12,11 @@ namespace CTCClassSchedule.Controllers
 	public class ApiController : Controller
 	{
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
+
+		public ApiController()
+		{
+			ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+		}
 
 		//
 		// GET: /Api/Subjects

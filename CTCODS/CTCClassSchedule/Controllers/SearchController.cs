@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Ctc.Ods;
@@ -21,9 +22,12 @@ namespace CTCClassSchedule.Controllers
 		private ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
-		private ClassScheduleFootnoteEntities _footnotedb = new ClassScheduleFootnoteEntities();
 		private ClassScheduleDataEntities _scheduledatadb = new ClassScheduleDataEntities();
 
+		public SearchController()
+		{
+			ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+		}
 
 		//
 		// GET: /Search/

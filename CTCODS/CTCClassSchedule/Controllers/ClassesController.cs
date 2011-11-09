@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
@@ -33,7 +34,7 @@ namespace CTCClassSchedule.Controllers
 
 		public ClassesController()
 		{
-			Debug.Print("==> instatiating ClassesController()...");
+			ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		}
 
 		#region controller actions
