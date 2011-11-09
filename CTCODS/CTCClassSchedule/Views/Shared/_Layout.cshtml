@@ -1,12 +1,9 @@
-@using System.Reflection;
 @using CTCClassSchedule.Common;
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-	<!-- VERSION: @Html.Raw(ViewBag.Version) -->
-
 	<title>@ViewBag.PageTitle</title>
-	@* TODO: Any hope for making this page configurable? *@
+	<!-- TODO: Any hope for making this page configurable? -->
 	<link rel="stylesheet" href="http://bellevuecollege.edu/globals/btheme_v0.1/css/btheme_v0.1.css" type="text/css" />
 	<link rel="stylesheet" href="@Url.Content("~/Content/grids.css")" type="text/css" />
 	<link rel="stylesheet" href="@Url.Content("~/Content/automatic-image-slider.css")" type="text/css" />
@@ -51,7 +48,7 @@
 	<div id="betaBar">
 		<div id="betaBarWrapper">
 			<div id="betaInfo">You are using the <strong>class schedule</strong> BETA - <a href="http://bellevuecollege.edu/schedule/">Return to classic view</a></div>
-			<div id="betaFeedback"><a href="http://bellevuecollege.edu/classesfeedback/">GIVE US FEEDBACK</a></div><div id="feedbackdialog" title="Feedback"></div>
+			<div id="betaFeedback"><a href="http://bellevuecollege.edu/classesfeedback/"><img alt="Give Feedback" title="Give Feedback" src="http://bellevuecollege.edu/classesbeta/Content/images/btn-feedback.png" /></a></div><div id="feedbackdialog" title="Feedback"></div>
 		</div>
 
 	</div>

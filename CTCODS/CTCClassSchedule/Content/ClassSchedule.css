@@ -49,9 +49,9 @@ abbr:hover {
 #betaBar
 {
 	background-color: #FAFAD2;
-	height: 20px;
+	height: 36px;
 	font-size: 14px;
-	line-height: 18px;
+	line-height: 36px;
 }
 
 #betaBarWrapper
@@ -70,6 +70,8 @@ abbr:hover {
 #betaFeedback
 {
 	float: right;
+	width: 150px;
+	padding-top: 5px;
 }
 
 
