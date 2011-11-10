@@ -177,7 +177,10 @@ textarea
 
 
 
-#a_to_z{}
+#a_to_z
+{
+	text-align: center;
+}
 
 .classInfo h2 {
     font-size: 15px;
