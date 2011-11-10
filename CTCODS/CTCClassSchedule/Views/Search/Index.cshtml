@@ -29,8 +29,9 @@
 	$(document).ready(function () {
 
 		//highlight all of the words that match the search term, respecting case.
-		$(".classHeading,.courseDescription").each(function () {
-			$(this).html($(this).html().replace(/([^\/])(@(ViewBag.searchterm))([^\/"])/ig, '$1<em class="keyword">$2</em>$3'));
+		// TODO: this works for everything except .item-number
+		$(".classHeading,.courseDescription,.item-number,li.instructor ul li,p.courseFootnotes,p.section-notes").each(function () {
+			$(this).html($(this).html().replace(/([^\/])(@(ViewBag.searchterm))([^\/"]|$)/ig, '$1<em class="keyword">$2</em>$3'));
 		});
 
 		//end of highlight
