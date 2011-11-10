@@ -55,7 +55,7 @@
 
 	</div>
 
-	@RenderPage("~/globals/btheme_v0.1/dotNET_MVC/header_small.cshtml")
+	@Html.Include(Server.MapPath("/globals/btheme_v0.1/asp/header_small.asp"))
 
 	<div id="bodyWrapper">
         <div id="titlebar">
@@ -66,9 +66,9 @@
 
 		@(Html.Partial("Footer"))
 
-		</div>
+	</div>
 
-		@RenderPage("~/globals/btheme_v0.1/dotNET_MVC/footer_big.cshtml")
+	@Html.Include(Server.MapPath("/globals/btheme_v0.1/asp/footer_big.asp"))
 
 </body>
 </html>
