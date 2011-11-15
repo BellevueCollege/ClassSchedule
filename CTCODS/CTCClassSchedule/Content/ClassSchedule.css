@@ -598,7 +598,6 @@ li.active a, li.active .notlink
 #NotOfferedThisQuarter a {
     font-weight: bold;
 }
-#NotOfferedThisQuarter em.keyword { font-weight: bold;}
 
 h2.course-title, h3.course-title
 {
@@ -1236,7 +1235,8 @@ ul.section-details li.section-notes
 a em.keyword,
 span.item-number em.keyword,
 p.courseFootnotes em.keyword,
-p.section-notes em.keyword
+p.section-notes em.keyword,
+div#NotOfferedThisQuarter em.keyword
 {
 	background-color: yellow;
 }

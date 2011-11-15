@@ -1,8 +1,12 @@
-﻿@model IEnumerable<CTCClassSchedule.Common.SearchResultNoSection>
-@using CTCClassSchedule.Common
+﻿@using CTCClassSchedule.Common
 @using Ctc.Ods.Types
+@using Microsoft.Security.Application
+@model IEnumerable<CTCClassSchedule.Common.SearchResultNoSection>
 @{
 	string quarter = Request.QueryString["quarter"];
+
+	// at the moment, this view is only used in search results. 11/15/2011, shawn.south@bellevuecollege.edu
+	string _searchTerm = ViewBag.searchterm;
 }
 <div id="NotOfferedThisQuarter">
 <h2>Classes not offered @quarter, but match your search:</h2>
@@ -11,14 +15,14 @@
 @foreach (var item in Model) {
 	<li>
 			<strong>
-        <span class="courseID">@Html.DisplayFor(modelItem => item.CourseID)</span>
-        <span class="courseTitle">@item.CourseTitle</span>
+        <span class="courseID">@Html.FormatWithSearchTerm(_searchTerm, item.CourseID)</span>
+        <span class="courseTitle">@Html.FormatWithSearchTerm(_searchTerm, item.CourseTitle)</span>
         <span class="courseCredits">&#8226; @Html.CreditsValue(item.Credits, "<span class='error'>UNK</span>") @* Remove any trailing zero-decimals *@
 					<abbr title="Credit(s) ">Cr.</abbr>
 				</span>
 			</strong>
         <br />
-        <span class="courseDescription">@Html.DisplayFor(modelItem => item.CourseDescription) </span>
+        <span class="courseDescription">@Html.FormatWithSearchTerm(_searchTerm, Encoder.HtmlEncode(item.CourseDescription)) </span>
 	</li>
 }
 </ul>

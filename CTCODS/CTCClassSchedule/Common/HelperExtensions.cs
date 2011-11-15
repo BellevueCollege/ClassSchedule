@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using Ctc.Ods.Types;
@@ -125,6 +126,31 @@ namespace CTCClassSchedule.Common
 			return fileContents;
 		}
 
+		#endregion
+
+		#region FormatWithSearchTerm()
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="html"></param>
+		/// <param name="searchTerm"></param>
+		/// <param name="buffer"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
+		public static IHtmlString FormatWithSearchTerm(this HtmlHelper html, string searchTerm, string buffer, params object[] args)
+		{
+			if (string.IsNullOrWhiteSpace(buffer) || string.IsNullOrWhiteSpace(searchTerm))
+			{
+				return html.Raw(buffer);
+			}
+
+			if (args != null && args.Length > 0)
+			{
+				buffer = string.Format(buffer, args);
+			}
+			string output = Regex.Replace(buffer, searchTerm, @"<em class='keyword'>$&</em>", RegexOptions.IgnoreCase);
+			return html.Raw(output);
+		}
 		#endregion
 	}
 }

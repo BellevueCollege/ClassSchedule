@@ -10,80 +10,93 @@
 
 	string PreviousSectionID = ViewData["PreviousSectionID"] as string;
 	string sectionID = Model.ID.ToString();
-}
-		<li class="section-listing"><span class="item-number"><span class="descriptor">Item
-			number: </span>@Model.ID.ItemNumber</span>
-			<ul class="section-details">
-				<li class="section"><span class="descriptor">Section: </span>@Model.SectionCode</li>
-				<li class="instructor"><span class="descriptor">Instructors:</span>
-					<ul>
-						@foreach (OfferedItem item in Model.Offered.OrderBy(o => o.SequenceOrder))
-			{
-				// instructors
-				if (!string.IsNullOrWhiteSpace(item.InstructorName))
-				{
-							<li><a href="@Helpers.getProfileURL(Convert.ToString(item.InstructorID))">@item.InstructorName</a></li>
-				}
-				else
-				{
-							<li>&nbsp;</li>
-				}
-			}
-					</ul>
-				</li>
-				<li><span class="descriptor">Meets: </span>
-					<ul class="meets">
-					@using (_profiler.Step("Rendering offered items"))
-		 {
-						foreach (OfferedItem item in Model.Offered.OrderBy(o => o.SequenceOrder))
-			{
-				// meeting times
-							<li>
-								@if (Model.IsOnline)
-				{
 
-										<span class="days">
-										<abbr title="@Helpers.getFriendlyDayRange("Online", dict)">Online</abbr></span>
-										<span class="times"><span class="descriptor">&nbsp;</span>&nbsp;</span>
-										<span class="room"><span class="descriptor">&nbsp;</span>&nbsp;</span>
-				}
-				else
-				{
-									<span class="days">
-										<abbr title="@Helpers.getFriendlyDayRange(item.Days, dict)">@item.Days</abbr></span>
-									<span class="times"><span class="descriptor">at </span>@String.Format("{0:t}", item.StartTime).Replace(" ", "")-@String.Format("{0:t}", item.EndTime).Replace(" ", "")</span>
-									<span class="room"><span class="descriptor">in </span>@item.Room</span>
-				}
-							</li>
-			}
-		 }
-					</ul>
-				</li>
-				@if (sectionID != PreviousSectionID)
+	string _searchTerm = Request.QueryString["searchterm"];
+}
+<!-- SEARCHTERM: @_searchTerm -->
+<li class="section-listing"><span class="item-number"><span class="descriptor">Item
+	number: </span>@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? Model.ID.ItemNumber : Html.FormatWithSearchTerm(_searchTerm, Model.ID.ItemNumber).ToString())</span>
+	<ul class="section-details">
+		<li class="section"><span class="descriptor">Section: </span>@Model.SectionCode</li>
+		<li class="instructor"><span class="descriptor">Instructors:</span>
+			<ul>
+				@foreach (OfferedItem item in Model.Offered.OrderBy(o => o.SequenceOrder))
 		{
-			if (Model.SeatsAvailable != int.MinValue)
+			// instructors
+			if (!string.IsNullOrWhiteSpace(item.InstructorName))
 			{
-					<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
-						Availability: </span>
-						@if (Model.SeatsAvailable <= 0 || Model.WaitlistCount > 0)
-			{
-							<strong class="seatsAvailable">class full, @Model.WaitlistCount on waitlist</strong>
-							<span class="course-updated"></span>
+					<li><a href="@Helpers.getProfileURL(Convert.ToString(item.InstructorID))">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a></li>
 			}
 			else
 			{
-							<strong class="seatsAvailable">@Model.SeatsAvailable</strong>
-							<span class="course-updated"><em>updated @Model.LastUpdated</em> <a id="@sectionID">
-								[update]</a></span>
+					<li>&nbsp;</li>
 			}
-					</li>
-			}
-
-					<li class="section-notes"><span class="descriptor">Notes: </span>
-						<ul>
-								<li><span class="label">@Html.Raw(string.IsNullOrWhiteSpace(Model.SectionFootnotes) ? "&nbsp;" : Encoder.HtmlEncode(Model.SectionFootnotes))</span></li>
-						</ul>
-					</li>
 		}
 			</ul>
 		</li>
+		<li><span class="descriptor">Meets: </span>
+			<ul class="meets">
+				@using (_profiler.Step("Rendering offered items"))
+		{
+			foreach (OfferedItem item in Model.Offered.OrderBy(o => o.SequenceOrder))
+			{
+				// meeting times
+					<li>
+						@if (Model.IsOnline)
+			{
+
+							<span class="days">
+								<abbr title="@Helpers.getFriendlyDayRange("Online", dict)">
+									Online</abbr></span>
+							<span class="times"><span class="descriptor">&nbsp;</span>&nbsp;</span>
+							<span class="room"><span class="descriptor">&nbsp;</span>&nbsp;</span>
+			}
+			else
+			{
+							<span class="days">
+								<abbr title="@Helpers.getFriendlyDayRange(item.Days, dict)">@item.Days</abbr></span>
+							<span class="times"><span class="descriptor">at </span>@String.Format("{0:t}", item.StartTime).Replace(" ", "")-@String.Format("{0:t}", item.EndTime).Replace(" ", "")</span>
+							<span class="room"><span class="descriptor">in </span>@item.Room</span>
+			}
+					</li>
+			}
+		}
+			</ul>
+		</li>
+		@if (sectionID != PreviousSectionID)
+	{
+		if (Model.SeatsAvailable != int.MinValue)
+		{
+			<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
+				Availability: </span>
+				@if (Model.SeatsAvailable <= 0 || Model.WaitlistCount > 0)
+		{
+					<strong class="seatsAvailable">class full, @Model.WaitlistCount on waitlist</strong>
+					<span class="course-updated"></span>
+		}
+		else
+		{
+					<strong class="seatsAvailable">@Model.SeatsAvailable</strong>
+					<span class="course-updated"><em>updated @Model.LastUpdated</em> <a id="@sectionID">
+						[update]</a></span>
+		}
+			</li>
+		}
+
+			<li class="section-notes"><span class="descriptor">Notes: </span>
+				<ul>
+					<li><span class="label">
+						@if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
+			{
+				Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? Encoder.HtmlEncode(Model.SectionFootnotes) : Html.FormatWithSearchTerm(_searchTerm, Encoder.HtmlEncode(Model.SectionFootnotes)).ToString());
+			}
+			else
+			{
+				Html.Raw("&nbsp;");
+			}
+					</span></li>
+				</ul>
+			</li>
+	}
+	</ul>
+</li>
