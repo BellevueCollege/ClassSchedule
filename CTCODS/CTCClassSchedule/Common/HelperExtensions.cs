@@ -130,25 +130,25 @@ namespace CTCClassSchedule.Common
 
 		#region FormatWithSearchTerm()
 		/// <summary>
-		///
+		/// Applies keyword markup to all instances of the <paramref name="searchTerm"/> found in the provided <paramref name="text"/>
 		/// </summary>
 		/// <param name="html"></param>
 		/// <param name="searchTerm"></param>
-		/// <param name="buffer"></param>
+		/// <param name="text"></param>
 		/// <param name="args"></param>
 		/// <returns></returns>
-		public static IHtmlString FormatWithSearchTerm(this HtmlHelper html, string searchTerm, string buffer, params object[] args)
+		public static IHtmlString FormatWithSearchTerm(this HtmlHelper html, string searchTerm, string text, params object[] args)
 		{
-			if (string.IsNullOrWhiteSpace(buffer) || string.IsNullOrWhiteSpace(searchTerm))
+			if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(searchTerm))
 			{
-				return html.Raw(buffer);
+				return html.Raw(text);
 			}
 
 			if (args != null && args.Length > 0)
 			{
-				buffer = string.Format(buffer, args);
+				text = string.Format(text, args);
 			}
-			string output = Regex.Replace(buffer, searchTerm, @"<em class='keyword'>$&</em>", RegexOptions.IgnoreCase);
+			string output = Regex.Replace(text, searchTerm, @"<em class='keyword'>$&</em>", RegexOptions.IgnoreCase);
 			return html.Raw(output);
 		}
 		#endregion
