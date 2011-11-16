@@ -1,25 +1,21 @@
-﻿<p id="a_to_z">
-
+﻿@model IEnumerable<char>
 @{
 	// construct the route values we'll pass to the ActionLink helper
 	IDictionary<string, object> routeParms = ViewBag.LinkParams;
-
-	string Controller = ViewContext.RouteData.Values["Controller"].ToString();
 	string Action = ViewContext.RouteData.Values["Action"].ToString();
 }
+<p id="a_to_z">
 
-@* print out the ascii values for a-z  *@
-@foreach (string let in ViewBag.Alphabet)
+@foreach (char lttr in Model)
 {
-	routeParms.Remove("letter");
-	routeParms.Add("letter", let.ToString());
+	if (routeParms.Keys.Contains("letter")) {
+		routeParms["letter"] = lttr.ToString();
+	} else {
+		routeParms.Add("letter", lttr.ToString());
+	}
 
-	@Html.ActionLink(let.ToString(), Action, new RouteValueDictionary(routeParms)) <text>| </text>
-
-
-	@*Html.ActionLink(let.ToString(), Controller, Action, new RouteValueDictionary(routeParms), null) <text>| </text> 	*@
-
-
+	@Html.ActionLink(lttr.ToString(), Action, new RouteValueDictionary(routeParms))
+	@: |
 }
 
 @{

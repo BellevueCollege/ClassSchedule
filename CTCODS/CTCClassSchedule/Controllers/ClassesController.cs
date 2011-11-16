@@ -82,27 +82,17 @@ namespace CTCClassSchedule.Controllers
 				progInfo = (from s in _programdb.ProgramInformation
 										select s).ToList();
 
-				IEnumerable<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
+				IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
 																															where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
+																															orderby p.Title
 																															select new ScheduleCoursePrefix
 																															{
 																																Subject = p.URL,
 																																Title = p.Title
-																															});
-				coursesLocalEnum = coursesLocalEnum.ToList().Distinct().OrderBy(p => p.Title);
+																															}).Distinct().ToList();
 
-				IEnumerable<String> alphabet;
-
-				ViewBag.AlphabetArray = new bool[26];
-
-
-				alphabet = from c in courses
-									 orderby c.Title
-									 select c.Title.Substring(0, 1);
-
-				alphabet = alphabet.Distinct();
+				IList<char> alphabet = coursesLocalEnum.Select(c => c.Title.First()).Distinct().ToList();
 				ViewBag.Alphabet = alphabet;
-
 
 				if (letter != null)
 				{

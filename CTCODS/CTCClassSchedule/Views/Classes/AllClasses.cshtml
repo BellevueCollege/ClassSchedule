@@ -1,12 +1,13 @@
-﻿@*model IEnumerable<Ctc.Ods.Types.CoursePrefix> *@
-
-@using Ctc.Ods.Types
+﻿@using Ctc.Ods.Types
 @model IEnumerable<Ctc.Ods.Types.ICoursePrefix>
 
 @{
     ViewBag.PageTitle = "All Classes at Bellevue College";
-}
+		// TODO: provide a default alphabet if the ViewBag is empty
+		IEnumerable<char> alphabet = ViewBag.Alphabet;
 
+		char PreviousLetter = '\0';
+}
 <div id="scheduleMain">
     @Html.Partial("quarterNavigation")
     <div id="container" class="sidebar">
@@ -16,7 +17,6 @@
 
         <div id="content">
 
-
 		@if (ViewBag.WhichClasses == " (All)")
 	{
 			<h1 id="pageTitle">All Credit Classes</h1>
@@ -24,63 +24,46 @@
 	else {
 		<h1 id="pageTitle">Credit Classes @ViewBag.WhichClasses</h1>
 	}
+	@{
+	 Html.RenderPartial("a_to_z", alphabet);
 
+	// construct the route values we'll pass to the ActionLink helper
+	IDictionary<string, object> routeParms = ViewBag.LinkParams;
 
-		@Html.Partial("a_to_z")
-
-
-
-
-	@if (ViewBag.whichclasses != " (All)")
- {
-
- }
-
-		@foreach (var item in Model)
-	{
-
-				@*  if there is a break between the characters, e.g. from J to M,
-				make sure the alphabet array is updated and incremented.
-		*@
-
-		while ((char)(ViewBag.AlphabetCharacter + 65) < Convert.ToChar(item.Title.Substring(0, 1)))
-		{
-			ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
-			ViewBag.AlphabetCharacter++;
-		}
-
-
-		@*
-			Check if the array is in bound (less than 26 letters in alphabet).
-			Check if the boolean value in the alphabet array is false (means that letter hasn't been printed yet)
-			Check if the current letter is the same as the first letter of the current title
-			If so, then display a letter, otherwise skip, as this is the same letter title as before and we only
-			want a single letter printed per grouping of like titles.
-
-		 *@
-
-		if (ViewBag.AlphabetCharacter <= 25 && ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] == false && (char)(ViewBag.AlphabetCharacter + 65) == Convert.ToChar(item.Subject.Substring(0, 1)))
-		{
-			if((ViewBag.AlphabetCharacter + 65).ToString() != "A"){
-				@:</ul>
-			}
-
-
-            <h2>@((char)(ViewBag.AlphabetCharacter + 65))</h2>
-						@:<ul class="subject">
-	 ViewBag.AlphabetArray[ViewBag.AlphabetCharacter] = true;
-	 ViewBag.AlphabetCharacter++;
-
-		}
-
-			<li class="title">
-				@Html.ActionLink(item.Title, "Subject", "Classes", new { Subject = item.Subject.Trim() }, null)
-
-			</li>
+	// make sure the Subject parameter exists, so we can assign to it later
+	if (!routeParms.Keys.Contains("Subject")) {
+		routeParms.Add("Subject", string.Empty);
 	}
 
+	int count = 0;
+	}
+	@foreach (var item in Model)
+ {
+	char letter = item.Title.First();
 
+	 if (letter != PreviousLetter) {
+		 if (count++ > 0)
+		 {
+			 @:</ul>
+		 }
+		<h2>@letter</h2>
+		@:<ul class="subject">
+	 }
 
+				routeParms["Subject"] = item.Subject.Trim();
+						<li class="title">
+				@if (routeParms.Keys.Contains("YearQuarter") && routeParms["YearQuarter"] != null && !routeParms["YearQuarter"].ToString().IsEmpty() && routeParms["YearQuarter"].ToString().ToUpper() != "ALL")
+		{
+					Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null));
+				}
+		else
+		{
+					Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
+				}
+				</li>
+		PreviousLetter = letter;
+	}
+	</ul>
 	</div> <!-- #content -->
     </div> <!-- #container -->
 
