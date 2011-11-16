@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Ctc.Ods.Types.ICoursePrefix>
+
+	@{
+	// construct the route values we'll pass to the ActionLink helper
+	IDictionary<string, object> routeParms = ViewBag.LinkParams;
+	// make sure the Subject parameter exists, so we can assign to it later
+	if (!routeParms.Keys.Contains("Subject")) {
+		routeParms.Add("Subject", string.Empty);
+	}
+
+	char PreviousLetter = '\0';
+
+	int count = 0;
+	string FriendlyYrq = ViewContext.RouteData.Values.Keys.Contains("YearQuarter") ? ViewContext.RouteData.Values["YearQuarter"].ToString() : "ALL";
+	}
+	@foreach (var item in Model)
+ {
+	char letter = item.Title.First();
+
+	 if (letter != PreviousLetter) {
+		 if (count++ > 0)
+		 {
+			 @:</ul>
+		 }
+		<h2>@letter</h2>
+		@:<ul class="subject">
+	 }
+
+				routeParms["Subject"] = item.Subject.Trim();
+						<li class="title">
+				@if (FriendlyYrq != "ALL")
+		{
+				if (routeParms.Keys.Contains("YearQuarter")) {
+					routeParms["YearQuarter"] = FriendlyYrq;
+				} else {
+					routeParms.Add("YearQuarter", FriendlyYrq);
+				}
+					Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null));
+				}
+		else
+		{
+					Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
+				}
+				</li>
+		PreviousLetter = letter;
+	}
+	</ul>

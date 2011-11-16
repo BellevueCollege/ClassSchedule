@@ -5,8 +5,6 @@
     ViewBag.PageTitle = "All Classes at Bellevue College";
 		// TODO: provide a default alphabet if the ViewBag is empty
 		IEnumerable<char> alphabet = ViewBag.Alphabet;
-
-		char PreviousLetter = '\0';
 }
 <div id="scheduleMain">
     @Html.Partial("quarterNavigation")
@@ -24,51 +22,10 @@
 	else {
 		<h1 id="pageTitle">Credit Classes @ViewBag.WhichClasses</h1>
 	}
-	@{
-	 Html.RenderPartial("a_to_z", alphabet);
 
-	// construct the route values we'll pass to the ActionLink helper
-	IDictionary<string, object> routeParms = ViewBag.LinkParams;
+	 @Html.Partial("a_to_z", alphabet)
+	 @Html.Partial("subjectList", Model)
 
-	// make sure the Subject parameter exists, so we can assign to it later
-	if (!routeParms.Keys.Contains("Subject")) {
-		routeParms.Add("Subject", string.Empty);
-	}
-
-	int count = 0;
-	}
-	@foreach (var item in Model)
- {
-	char letter = item.Title.First();
-
-	 if (letter != PreviousLetter) {
-		 if (count++ > 0)
-		 {
-			 @:</ul>
-		 }
-		<h2>@letter</h2>
-		@:<ul class="subject">
-	 }
-
-				routeParms["Subject"] = item.Subject.Trim();
-						<li class="title">
-				@if (routeParms.Keys.Contains("YearQuarter") && routeParms["YearQuarter"] != null && !routeParms["YearQuarter"].ToString().IsEmpty() && routeParms["YearQuarter"].ToString().ToUpper() != "ALL")
-		{
-					Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null));
-				}
-		else
-		{
-					Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
-				}
-				</li>
-		PreviousLetter = letter;
-	}
-	</ul>
 	</div> <!-- #content -->
     </div> <!-- #container -->
-
-
-
-
-
 </div>

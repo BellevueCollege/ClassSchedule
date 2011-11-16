@@ -177,7 +177,7 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "YearQuarterCacheTime")]
 		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter)
 		{
-			ViewBag.WhichClasses = (letter == null || letter == "" ? " (All)" : " (" + letter.ToUpper() + ")");
+			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? " (All)" : " (" + letter.ToUpper() + ")");
 			setViewBagVars(YearQuarter, avail, letter);
 
 			ViewBag.timestart = timestart;
@@ -205,7 +205,6 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.YearQuarter = yrq;
 
 			ViewBag.Subject = "All";
-			ViewBag.AlphabetCharacter = 0;
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
 
@@ -220,26 +219,19 @@ namespace CTCClassSchedule.Controllers
 					courses = respository.GetCourseSubjects(yrq, facets);
 				}
 
+				// TODO: refactor SetProgramInfo() to handle all Subjects instead of just one
 				var progInfo = (from s in _programdb.ProgramInformation
 												select new {s.Abbreviation, s.URL, s.Title}).ToList();
 
-				IEnumerable<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
-																															where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
-																															select new ScheduleCoursePrefix
-																														{
-																															Subject = p.URL,
-																															Title = p.Title
-																														});
-				coursesLocalEnum = coursesLocalEnum.ToList().Distinct();
+				IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
+																												where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
+																												select new ScheduleCoursePrefix
+																											{
+																												Subject = p.URL,
+																												Title = p.Title
+																											}).Distinct().ToList();
 
-				IEnumerable<String> alphabet;
-				ViewBag.AlphabetArray = new bool[26];
-
-				alphabet = from c in courses
-										orderby c.Title
-										select c.Title.Substring(0, 1);
-
-				alphabet = alphabet.Distinct();
+				IList<char> alphabet = coursesLocalEnum.Select(c => c.Title.First()).Distinct().ToList();
 				ViewBag.Alphabet = alphabet;
 
 				if (letter != null)
