@@ -61,11 +61,8 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "AllClassesCacheTime")] // Caches for 6 hours
 		public ActionResult AllClasses(string letter)
 		{
-
 			setViewBagVars("", "", letter);
 			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? " (All)" : " (" + letter.ToUpper() + ")");
-			ViewBag.AlphabetArray = new bool[26];
-			ViewBag.AlphabetCharacter = 0;
 
 			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
