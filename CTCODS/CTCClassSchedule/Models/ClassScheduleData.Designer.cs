@@ -12,6 +12,7 @@ using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using System.Data.EntityClient;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
 
@@ -24,6 +25,7 @@ namespace CTCClassSchedule.Models
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [DebuggerDisplay("ClassID = {ClassID}")]
     public partial class ClassScheduleDataEntities : ObjectContext
     {
         #region Constructors

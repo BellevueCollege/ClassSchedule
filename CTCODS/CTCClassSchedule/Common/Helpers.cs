@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Objects;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -441,6 +442,10 @@ namespace CTCClassSchedule.Common
 			MiniProfiler profiler = MiniProfiler.Current;
       IList<SectionWithSeats> sectionsEnum;
 
+			// ensure we're ALWAYS getting the latest data from the database
+			// Reference: http://forums.asp.net/post/2848021.aspx
+			_scheduledatadb.vw_ClassScheduleData.MergeOption = MergeOption.OverwriteChanges;
+
       string yrqID = YearQuarter.FromString(currentYrq).ID;
 
 			IList<vw_ClassScheduleData> classScheduleData;
@@ -448,7 +453,7 @@ namespace CTCClassSchedule.Common
       {
         classScheduleData = (from c in _scheduledatadb.vw_ClassScheduleData
 
-			              where c.YearQuarterID == yrqID
+			              where c.YearQuarterID == yrqID // && c.ClassID == "0917B123"
 			              select c
 			            ).ToList();
       }
