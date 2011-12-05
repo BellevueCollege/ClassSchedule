@@ -29,7 +29,6 @@ namespace CTCClassSchedule.Controllers
 
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
 		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
-		private ClassScheduleFootnoteEntities _footnotedb = new ClassScheduleFootnoteEntities();
 		#endregion
 
 		public ClassesController()

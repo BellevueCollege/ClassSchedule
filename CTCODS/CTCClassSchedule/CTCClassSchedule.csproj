@@ -152,11 +152,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ClassScheduleData.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Footnotes.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Footnotes.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -388,10 +383,6 @@
     <Content Include="Views\Shared\subjectNavigation.cshtml" />
     <Content Include="Views\Api\Subjects.cshtml" />
     <Content Include="Views\Shared\Pager.cshtml" />
-    <EntityDeploy Include="Models\Footnotes.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Footnotes.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <EntityDeploy Include="Models\ClassScheduleData.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ClassScheduleData.Designer.cs</LastGenOutput>

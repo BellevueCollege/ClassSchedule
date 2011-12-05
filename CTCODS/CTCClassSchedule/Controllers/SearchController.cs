@@ -21,7 +21,6 @@ namespace CTCClassSchedule.Controllers
 		readonly private MiniProfiler _profiler = MiniProfiler.Current;
 		private ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
 		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
-		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
 		private ClassScheduleDataEntities _scheduledatadb = new ClassScheduleDataEntities();
 
 		public SearchController()
@@ -97,12 +96,12 @@ namespace CTCClassSchedule.Controllers
 			IList<SearchResult> SearchResults;
 			using (_profiler.Step("Executing search stored procedure"))
 			{
-				SearchResults = _programdb.ExecuteStoreQuery<SearchResult>("usp_ClassSearch @SearchWord, @YearQuarterID", parms).ToList();
+				SearchResults = _scheduledatadb.ExecuteStoreQuery<SearchResult>("usp_ClassSearch @SearchWord, @YearQuarterID", parms).ToList();
 			}
 			IList<SearchResultNoSection> NoSectionSearchResults;
 			using (_profiler.Step("Executing 'other classes' stored procedure"))
 			{
-				NoSectionSearchResults = _programdb.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms2).ToList();
+				NoSectionSearchResults = _scheduledatadb.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms2).ToList();
 			}
 
 			using (OdsRepository respository = new OdsRepository(HttpContext))

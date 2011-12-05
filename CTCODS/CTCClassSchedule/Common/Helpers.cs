@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.Objects;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Ctc.Ods;
-using Ctc.Ods.Config;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Models;
@@ -17,10 +15,7 @@ namespace CTCClassSchedule.Common
 {
 	public static class Helpers
 	{
-		readonly private static ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
-		readonly private static ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
-		readonly private static ClassScheduleFootnoteEntities _footnotedb = new ClassScheduleFootnoteEntities();
-        readonly private static ClassScheduleDataEntities _scheduledatadb = new ClassScheduleDataEntities();
+		readonly private static ClassScheduleDataEntities _scheduledatadb = new ClassScheduleDataEntities();
 
 		public static MvcHtmlString IncludePageURL(this HtmlHelper htmlHelper, string url)
 		{
