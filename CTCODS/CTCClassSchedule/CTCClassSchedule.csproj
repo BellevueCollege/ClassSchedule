@@ -147,10 +147,10 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Common\ProfilingActionFilter.cs" />
     <Compile Include="Common\ProfilingViewEngine.cs" />
-    <Compile Include="Models\ClassScheduleData.Designer.cs">
+    <Compile Include="Models\ClassScheduleDb.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ClassScheduleData.edmx</DependentUpon>
+      <DependentUpon>ClassScheduleDb.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -161,16 +161,6 @@
     <Compile Include="Common\CourseHPQuery.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AvailableSeats.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AvailableSeats.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ProgramInformation.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ProgramInformation.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\SearchResult.cs" />
@@ -343,16 +333,16 @@
     <Folder Include="globals\btheme_v0.1\wp\" />
   </ItemGroup>
   <ItemGroup>
+    <EntityDeploy Include="Models\ClassScheduleDb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ClassScheduleDb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
     <None Include="packages.config" />
     <Content Include="Views\Shared\subjectList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Classes\YearQuarter.cshtml" />
     <Content Include="Views\Classes\YearQuarterSubject.cshtml" />
-    <EntityDeploy Include="Models\AvailableSeats.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AvailableSeats.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <Content Include="Views\Classes\Subject.cshtml" />
     <Content Include="Views\Classes\AllClasses.cshtml" />
     <Content Include="Views\Shared\a_to_z.cshtml" />
@@ -363,10 +353,6 @@
     <Content Include="Views\Shared\ErrorMsg.cshtml" />
     <Content Include="Views\Shared\rightSidebar.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
-    <EntityDeploy Include="Models\ProgramInformation.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ProgramInformation.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Shared\NoSectionCourses.cshtml" />
     <Content Include="web.config" />
@@ -383,10 +369,6 @@
     <Content Include="Views\Shared\subjectNavigation.cshtml" />
     <Content Include="Views\Api\Subjects.cshtml" />
     <Content Include="Views\Shared\Pager.cshtml" />
-    <EntityDeploy Include="Models\ClassScheduleData.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ClassScheduleData.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <Content Include="globals\btheme_v0.1\dotNET_MVC\header_small.cshtml" />
     <Content Include="globals\btheme_v0.1\dotNET_MVC\footer_big.cshtml" />
     <None Include="globals\btheme_v0.1\html_raw\.tmp_narrow.html.42343~" />

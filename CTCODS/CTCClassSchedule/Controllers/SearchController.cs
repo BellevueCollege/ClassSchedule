@@ -20,8 +20,6 @@ namespace CTCClassSchedule.Controllers
 	{
 		readonly private MiniProfiler _profiler = MiniProfiler.Current;
 		private ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
-		private ClassScheduleDevEntities _scheduledb = new ClassScheduleDevEntities();
-		private ClassScheduleDataEntities _scheduledatadb = new ClassScheduleDataEntities();
 
 		public SearchController()
 		{
@@ -83,27 +81,6 @@ namespace CTCClassSchedule.Controllers
 				return View();
 			}
 
-			// We have a valid searchterm - continue processing the search
-			SqlParameter[] parms = {
-							new SqlParameter("SearchWord", searchterm),
-							new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
-			                       };
-			SqlParameter[] parms2 = {
-								new SqlParameter("SearchWord", searchterm),
-								new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
-			                        };
-
-			IList<SearchResult> SearchResults;
-			using (_profiler.Step("Executing search stored procedure"))
-			{
-				SearchResults = _scheduledatadb.ExecuteStoreQuery<SearchResult>("usp_ClassSearch @SearchWord, @YearQuarterID", parms).ToList();
-			}
-			IList<SearchResultNoSection> NoSectionSearchResults;
-			using (_profiler.Step("Executing 'other classes' stored procedure"))
-			{
-				NoSectionSearchResults = _scheduledatadb.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms2).ToList();
-			}
-
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{
 				YearQuarter YRQ = string.IsNullOrWhiteSpace(quarter) ? respository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
@@ -125,16 +102,24 @@ namespace CTCClassSchedule.Controllers
 				}
 
 				IList<vw_ClassScheduleData> classScheduleData;
-				using (_profiler.Step("API::Get Class Schedule Specific Data()"))
-				{
-				classScheduleData = (from c in _scheduledatadb.vw_ClassScheduleData
-														 where c.YearQuarterID == YRQ.ID
-														 select c
-															).ToList();
-				}
+				IList<SearchResult> SearchResults;
+				IList<SearchResultNoSection> NoSectionSearchResults;
 
+				using (ClassScheduleDb db = new ClassScheduleDb())
+				{
+					SearchResults = GetSearchResults(db, searchterm, quarter);
+					NoSectionSearchResults = GetNoSectionSearchResults(db, searchterm, quarter);
+
+					using (_profiler.Step("API::Get Class Schedule Specific Data()"))
+					{
+						classScheduleData = (from c in db.vw_ClassScheduleData
+						                     where c.YearQuarterID == YRQ.ID
+						                     select c
+						                    ).ToList();
+					}
+				}
 				IList<SectionWithSeats> sectionsEnum;
-				using (_profiler.Step("Retrieving joined SectionWithSeats"))
+				using (_profiler.Step("Joining SectionWithSeats (in memory)"))
 				{
 					sectionsEnum = (from c in sections
 													join d in classScheduleData on c.ID.ToString() equals d.ClassID into cd
@@ -197,76 +182,114 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 
+		///// <summary>
+		/////
+		///// </summary>
+		///// <param name="courseIdPlusYRQ"></param>
+		///// <returns></returns>
+		//[HttpPost]
+		//public ActionResult getSeats(string courseIdPlusYRQ)
+		//{
+		//  int? seats = null;
+		//  string friendlyTime = "";
+
+		//  string classID = courseIdPlusYRQ.Substring(0, 4);
+		//  string yrq = courseIdPlusYRQ.Substring(4, 4);
 
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="courseIdPlusYRQ"></param>
-		/// <returns></returns>
-		[HttpPost]
-		public ActionResult getSeats(string courseIdPlusYRQ)
-		{
-			int? seats = null;
-			string friendlyTime = "";
+		//  CourseHPQuery query = new CourseHPQuery();
+		//  int HPseats = query.findOpenSeats(classID, yrq);
 
-			string classID = courseIdPlusYRQ.Substring(0, 4);
-			string yrq = courseIdPlusYRQ.Substring(4, 4);
+		//  var seatsAvailableLocal = from s in _classScheduleDb.SeatAvailabilities
+		//                            where s.ClassID == courseIdPlusYRQ
+		//                            select s;
+		//  int rows = seatsAvailableLocal.Count();
 
+		//  if (rows == 0)
+		//  {
+		//    //insert the value
+		//    SeatAvailability newseat = new SeatAvailability();
+		//    newseat.ClassID = courseIdPlusYRQ;
+		//    newseat.SeatsAvailable = HPseats;
+		//    newseat.LastUpdated = DateTime.Now;
 
-			CourseHPQuery query = new CourseHPQuery();
-			int HPseats = query.findOpenSeats(classID, yrq);
+		//    _classScheduleDb.SeatAvailabilities.AddObject(newseat);
+		//  }
+		//  else
+		//  {
+		//    //update the value
+		//    foreach (SeatAvailability seat in seatsAvailableLocal)
+		//    {
+		//      seat.SeatsAvailable = HPseats;
+		//      seat.LastUpdated = DateTime.Now;
+		//    }
 
-			var seatsAvailableLocal = from s in _scheduledb.SeatAvailabilities
-																where s.ClassID == courseIdPlusYRQ
-																select s;
-			int rows = seatsAvailableLocal.Count();
+		//  }
 
-			if (rows == 0)
-			{
-				//insert the value
-				SeatAvailability newseat = new SeatAvailability();
-				newseat.ClassID = courseIdPlusYRQ;
-				newseat.SeatsAvailable = HPseats;
-				newseat.LastUpdated = DateTime.Now;
+		//  _classScheduleDb.SaveChanges();
 
-				_scheduledb.SeatAvailabilities.AddObject(newseat);
-			}
-			else
-			{
-				//update the value
-				foreach (SeatAvailability seat in seatsAvailableLocal)
-				{
-					seat.SeatsAvailable = HPseats;
-					seat.LastUpdated = DateTime.Now;
-				}
+		//  var seatsAvailable = from s in _classScheduleDb.vw_SeatAvailability
+		//                       where s.ClassID == courseIdPlusYRQ
+		//                       select s;
 
-			}
+		//  foreach (var seat in seatsAvailable)
+		//  {
+		//    seats = seat.SeatsAvailable;
+		//    friendlyTime = Helpers.getFriendlyTime(seat.LastUpdated.GetValueOrDefault());
+		//  }
 
-			_scheduledb.SaveChanges();
+		//  if (friendlyTime.Equals("not yet"))
+		//  {
+		//    friendlyTime = "0 seconds ago";
+		//  }
 
-			var seatsAvailable = from s in _scheduledb.vw_SeatAvailability
-													 where s.ClassID == courseIdPlusYRQ
-													 select s;
-
-			foreach (var seat in seatsAvailable)
-			{
-				seats = seat.SeatsAvailable;
-				friendlyTime = Helpers.getFriendlyTime(seat.LastUpdated.GetValueOrDefault());
-			}
-
-			if (friendlyTime.Equals("not yet"))
-			{
-				friendlyTime = "0 seconds ago";
-			}
-
-			var jsonReturnValue = seats.ToString() + "|" + friendlyTime;
-			return Json(jsonReturnValue);
-		}
+		//  var jsonReturnValue = seats.ToString() + "|" + friendlyTime;
+		//  return Json(jsonReturnValue);
+		//}
 
 
 
 		#region helper methods
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="db"></param>
+		/// <param name="searchterm"></param>
+		/// <param name="quarter"></param>
+		/// <returns></returns>
+		private IList<SearchResultNoSection> GetNoSectionSearchResults(ClassScheduleDb db, string searchterm, string quarter)
+		{
+			SqlParameter[] parms = {
+								new SqlParameter("SearchWord", searchterm),
+								new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
+															};
+
+			using (_profiler.Step("Executing 'other classes' stored procedure"))
+			{
+				return db.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms).ToList();
+			}
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="db"></param>
+		/// <param name="searchterm"></param>
+		/// <param name="quarter"></param>
+		/// <returns></returns>
+		private IList<SearchResult> GetSearchResults(ClassScheduleDb db, string searchterm, string quarter)
+		{
+			SqlParameter[] parms = {
+							new SqlParameter("SearchWord", searchterm),
+							new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
+			                       };
+
+			using (_profiler.Step("Executing search stored procedure"))
+			{
+				return db.ExecuteStoreQuery<SearchResult>("usp_ClassSearch @SearchWord, @YearQuarterID", parms).ToList();
+			}
+		}
+
 		/// <summary>
 		/// Sets all of the common ViewBag variables
 		/// </summary>

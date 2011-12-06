@@ -11,8 +11,6 @@ namespace CTCClassSchedule.Controllers
 {
 	public class ApiController : Controller
 	{
-		private ClassScheduleDevProgramEntities _programdb = new ClassScheduleDevProgramEntities();
-
 		public ApiController()
 		{
 			ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -43,9 +41,11 @@ namespace CTCClassSchedule.Controllers
 				IList<CoursePrefix> data;
 				data = string.IsNullOrWhiteSpace(YearQuarter) || YearQuarter.ToUpper() == "ALL" ? db.GetCourseSubjects() : db.GetCourseSubjects(Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter));
 
-				IList<ProgramInformation> progInfo = (from s in _programdb.ProgramInformation
-																							select s).ToList();
-
+				IList<vw_ProgramInformation> progInfo;
+				using (ClassScheduleDb classScheduleDb = new ClassScheduleDb())
+				{
+					progInfo = (from s in classScheduleDb.vw_ProgramInformation select s).ToList();
+				}
 				IList<ScheduleCoursePrefix> subjectList = (from p in progInfo
 																									where data.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
 																									select new ScheduleCoursePrefix

@@ -15,8 +15,6 @@ namespace CTCClassSchedule.Common
 {
 	public static class Helpers
 	{
-		readonly private static ClassScheduleDataEntities _scheduledatadb = new ClassScheduleDataEntities();
-
 		public static MvcHtmlString IncludePageURL(this HtmlHelper htmlHelper, string url)
 		{
 
@@ -431,22 +429,23 @@ namespace CTCClassSchedule.Common
 		/// </summary>
 		/// <param name="currentYrq"></param>
 		/// <param name="sections"></param>
+		/// <param name="db"></param>
 		/// <returns></returns>
-		public static IList<SectionWithSeats> getSectionsWithSeats(string currentYrq, IList<Section> sections)
+		public static IList<SectionWithSeats> getSectionsWithSeats(string currentYrq, IList<Section> sections, ClassScheduleDb db)
 		{
 			MiniProfiler profiler = MiniProfiler.Current;
       IList<SectionWithSeats> sectionsEnum;
 
 			// ensure we're ALWAYS getting the latest data from the database
 			// Reference: http://forums.asp.net/post/2848021.aspx
-			_scheduledatadb.vw_ClassScheduleData.MergeOption = MergeOption.OverwriteChanges;
+			db.vw_ClassScheduleData.MergeOption = MergeOption.OverwriteChanges;
 
       string yrqID = YearQuarter.FromString(currentYrq).ID;
 
 			IList<vw_ClassScheduleData> classScheduleData;
       using (profiler.Step("API::Get Class Schedule Specific Data()"))
       {
-        classScheduleData = (from c in _scheduledatadb.vw_ClassScheduleData
+        classScheduleData = (from c in db.vw_ClassScheduleData
 
 			              where c.YearQuarterID == yrqID // && c.ClassID == "0917B123"
 			              select c
@@ -475,7 +474,7 @@ namespace CTCClassSchedule.Common
 
 		public static string getFriendlyDayRange(string dayString, Dictionary<string, string> dict)
 		{
-			string friendlyName = string.Empty;
+			string friendlyName;
 			if (dict.ContainsKey(dayString))
 			{
 				friendlyName = dict[dayString];
