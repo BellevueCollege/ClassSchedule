@@ -88,7 +88,14 @@
 					<li><span class="label">
 						@if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
 			{
-				Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? Encoder.HtmlEncode(Model.SectionFootnotes) : Html.FormatWithSearchTerm(_searchTerm, Encoder.HtmlEncode(Model.SectionFootnotes)).ToString());
+				if (string.IsNullOrWhiteSpace(_searchTerm))
+				{
+					@Model.SectionFootnotes
+				}
+				else
+				{
+					Html.FormatWithSearchTerm(_searchTerm, Model.SectionFootnotes);
+				}
 			}
 			else
 			{
