@@ -23,7 +23,7 @@
 	z-index: 100; /*--Assures the paging stays on the top layer--*/
 	text-align: center;
 	line-height: 40px;
-	background: url(paging_bg2.png) no-repeat;
+	/*background: url(paging_bg2.png) no-repeat; */
 	display: none; /*--Hidden by default, will be later shown with jQuery--*/
 }
 .paging a {

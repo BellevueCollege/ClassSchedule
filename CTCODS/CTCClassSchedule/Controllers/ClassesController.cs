@@ -551,7 +551,7 @@ namespace CTCClassSchedule.Controllers
 		private void setViewBagVars(string YearQuarter, string avail, string letter)
 		{
 			ViewBag.ErrorMsg = "";
-
+			var debug = HttpContext.Request;
 			ViewBag.YearQuarter = string.IsNullOrWhiteSpace(YearQuarter) ? null : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 
 			ViewBag.letter = letter;
