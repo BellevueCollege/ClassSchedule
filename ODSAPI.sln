@@ -1,10 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTCODS", "CTCODS\CTCODS\CTCODS.csproj", "{D4697354-CBB8-4376-BB92-65A21760C752}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTCODS.Tests", "CTCODS\CTCODS.Tests\CTCODS.Tests.csproj", "{63DA4B74-842D-411A-B939-1E586CA127D5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTCClassSchedule", "CTCODS\CTCClassSchedule\CTCClassSchedule.csproj", "{D0DFD430-8A10-440D-A564-4E113D57A079}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{305B62EE-42FA-4AB2-861C-63F72E5AAEDC}"
@@ -29,28 +25,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OdsRepositoryStressTest", "
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfsvs.wacollabcoop.org/tfs/bellevuecollege
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = CTCODS\\CTCODS\\CTCODS.csproj
-		SccProjectName1 = CTCODS/CTCODS
-		SccLocalPath1 = CTCODS\\CTCODS
-		SccProjectUniqueName2 = CTCODS\\CTCODS.Tests\\CTCODS.Tests.csproj
-		SccProjectName2 = CTCODS/CTCODS.Tests
-		SccLocalPath2 = CTCODS\\CTCODS.Tests
-		SccProjectUniqueName3 = CTCODS\\CTCClassSchedule\\CTCClassSchedule.csproj
-		SccProjectName3 = CTCODS/CTCClassSchedule
-		SccLocalPath3 = CTCODS\\CTCClassSchedule
-		SccProjectUniqueName4 = CTCWCF\\CTCWCF.csproj
-		SccProjectName4 = CTCWCF
-		SccLocalPath4 = CTCWCF
-		SccProjectUniqueName5 = CTCWCF.Tests\\CTCWCF.Tests.csproj
-		SccProjectName5 = CTCWCF.Tests
-		SccLocalPath5 = CTCWCF.Tests
-		SccProjectUniqueName6 = OdsRepositoryStressTest\\OdsRepositoryStressTest.csproj
-		SccProjectName6 = OdsRepositoryStressTest
-		SccLocalPath6 = OdsRepositoryStressTest
+		SccProjectUniqueName1 = CTCODS\\CTCClassSchedule\\CTCClassSchedule.csproj
+		SccProjectName1 = CTCODS/CTCClassSchedule
+		SccLocalPath1 = CTCODS\\CTCClassSchedule
+		SccProjectUniqueName2 = CTCWCF\\CTCWCF.csproj
+		SccProjectName2 = CTCWCF
+		SccLocalPath2 = CTCWCF
+		SccProjectUniqueName3 = CTCWCF.Tests\\CTCWCF.Tests.csproj
+		SccProjectName3 = CTCWCF.Tests
+		SccLocalPath3 = CTCWCF.Tests
+		SccProjectUniqueName4 = OdsRepositoryStressTest\\OdsRepositoryStressTest.csproj
+		SccProjectName4 = OdsRepositoryStressTest
+		SccLocalPath4 = OdsRepositoryStressTest
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ODSAPI.vsmdi
@@ -61,18 +51,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D4697354-CBB8-4376-BB92-65A21760C752}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4697354-CBB8-4376-BB92-65A21760C752}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4697354-CBB8-4376-BB92-65A21760C752}.Release with Profiling|Any CPU.ActiveCfg = Release|Any CPU
-		{D4697354-CBB8-4376-BB92-65A21760C752}.Release with Profiling|Any CPU.Build.0 = Release|Any CPU
-		{D4697354-CBB8-4376-BB92-65A21760C752}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4697354-CBB8-4376-BB92-65A21760C752}.Release|Any CPU.Build.0 = Release|Any CPU
-		{63DA4B74-842D-411A-B939-1E586CA127D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63DA4B74-842D-411A-B939-1E586CA127D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63DA4B74-842D-411A-B939-1E586CA127D5}.Release with Profiling|Any CPU.ActiveCfg = Release|Any CPU
-		{63DA4B74-842D-411A-B939-1E586CA127D5}.Release with Profiling|Any CPU.Build.0 = Release|Any CPU
-		{63DA4B74-842D-411A-B939-1E586CA127D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63DA4B74-842D-411A-B939-1E586CA127D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0DFD430-8A10-440D-A564-4E113D57A079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0DFD430-8A10-440D-A564-4E113D57A079}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0DFD430-8A10-440D-A564-4E113D57A079}.Release with Profiling|Any CPU.ActiveCfg = Release with Profiling|Any CPU
