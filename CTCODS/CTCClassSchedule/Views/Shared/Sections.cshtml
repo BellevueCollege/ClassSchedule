@@ -54,53 +54,63 @@
 			else
 			{
 							<span class="days">
-								<abbr title="@Helpers.getFriendlyDayRange(item.Days, dict)">@item.Days</abbr></span>
+								<abbr title="@Helpers.getFriendlyDayRange(item.Days, dict)">
+                                @if (item.Days == "ARRANGED")
+                                {
+                                    @Helpers.getFriendlyDayRange(item.Days, dict)
+                                }
+                                else
+                                {
+                                    @item.Days
+                                }
+                                </abbr>
+                            </span>
 							<span class="times"><span class="descriptor">at </span>@String.Format("{0:t}", item.StartTime).Replace(" ", "")-@String.Format("{0:t}", item.EndTime).Replace(" ", "")</span>
 							<span class="room"><span class="descriptor">in </span>@item.Room</span>
-			}
+            }
 					</li>
-			}
-		}
+            }
+        }
 			</ul>
 		</li>
 		@if (sectionID != PreviousSectionID)
-	{
-		if (Model.SeatsAvailable != int.MinValue)
-		{
+  {
+      if (Model.SeatsAvailable != int.MinValue)
+      {
 			<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
 				Availability: </span>
 				@if (Model.SeatsAvailable <= 0 || Model.WaitlistCount > 0)
-		{
+    {
 					<strong class="seatsAvailable">class full, @Model.WaitlistCount on waitlist</strong>
 					<span class="course-updated"></span>
-		}
-		else
-		{
+    }
+    else
+    {
 					<strong class="seatsAvailable">@Model.SeatsAvailable</strong>
 					<span class="course-updated"><em>updated @Model.LastUpdated</em> <a id="@sectionID">
 						[update]</a></span>
-		}
+    }
 			</li>
-		}
+      }
 
 			<li class="section-notes"><span class="descriptor">Notes: </span>
 				<ul>
 					<li><span class="label">
 						@if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
-			{
-				if (string.IsNullOrWhiteSpace(_searchTerm))
-				{
+      {
+          if (string.IsNullOrWhiteSpace(_searchTerm))
+          {
 					@Model.SectionFootnotes
-				}
-				else
-				{
-					Html.FormatWithSearchTerm(_searchTerm, Model.SectionFootnotes);
-				}
-			}
-			else
-			{
-				Html.Raw("&nbsp;");
-			}
+          }
+          else
+          {
+              Html.FormatWithSearchTerm(_searchTerm, Model.SectionFootnotes);
+          }
+      }
+      else
+      {
+          Html.Raw("&nbsp;");
+      }
 					</span></li>
 				</ul>
 			</li>
