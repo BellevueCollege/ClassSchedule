@@ -15,11 +15,14 @@
 
 	string courseID = string.Empty;
 	string sectionID = string.Empty;
+    decimal credits = 0;
 	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;
+    decimal PreviousCredits = 0;
 	string FriendlyYRQ = string.Empty;
 	string thisYrq = string.Empty;
 
+    IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenBy(s => s.Credits).ToList();
 	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
 	string currentYrq = yrqList[0].ID;
 
@@ -68,12 +71,13 @@ ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Sc
 
 															 using (_profiler.Step("Rendering Sections by Course (outer loop)"))
 															 {
-																 foreach (SectionWithSeats sec in Model)
+                                                                 foreach (SectionWithSeats sec in orderedModel)
 																 {
 																	 courseID = sec.CourseID;
 																	 sectionID = sec.ID.ToString();
+                                                                     credits = sec.Credits;
 
-																	 if (courseID != PreviousCourseID)
+                                                                     if (courseID != PreviousCourseID || (courseID == PreviousCourseID && credits != PreviousCredits))
 																	 {
 																		 if (PreviousCourseID != "")
 																		 {
@@ -104,7 +108,7 @@ ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Sc
 																		 Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
 																	 }
 
-
+                                                                     PreviousCredits = sec.Credits;
 																	 PreviousSectionID = sectionID;
 																	 PreviousCourseID = courseID;
 																 }
