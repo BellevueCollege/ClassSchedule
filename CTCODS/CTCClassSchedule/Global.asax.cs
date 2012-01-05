@@ -32,14 +32,18 @@ namespace CTCClassSchedule
 			routes.MapRoute("ApiSubjects", "Api/Subjects", new {controller = "Api", action = "Subjects"});
 
 			// default application routes
+
 			routes.MapRoute("getSeats", "{Controller}/getseats", new { controller = "Classes", action = "getSeats" });
 			routes.MapRoute("ClassDetails", "{YearQuarterID}/{Subject}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
 			routes.MapRoute("Subject", "All/{Subject}", new { controller = "Classes", action = "Subject" });
+
 			routes.MapRoute("YearQuarterSubject", "{YearQuarter}/{Subject}", new { controller = "Classes", action = "YearQuarterSubject" });
 			routes.MapRoute("AllClasses", "All", new { controller = "Classes", action = "AllClasses" });
+			routes.MapRoute("Search", "Search", new { controller = "Search", action = "Index" });
 			routes.MapRoute("YearQuarter", "{YearQuarter}", new { controller = "Classes", action = "YearQuarter" });
 			routes.MapRoute("Default", "", new { controller = "Classes", action = "Index" });
-			routes.MapRoute("Search", "Search/{quarter}", new { controller = "Search", action = "Index" });
+
+
 		}
 
 		/// <summary>
