@@ -73,6 +73,7 @@
     </Reference>
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Glimpse.Core">
       <HintPath>..\..\packages\Glimpse.0.86\lib\net40\Glimpse.Core.dll</HintPath>
