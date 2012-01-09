@@ -91,29 +91,34 @@
 						[update]</a></span>
     }
 			</li>
-      }
 
+      }
+			 <li class="editing">
+			<a class="edit_link" href="#"><span class="edit_button">Edit</span></a>
+		</li>
 			<li class="section-notes"><span class="descriptor">Notes: </span>
 				<ul>
 					<li><span class="label">
 						@if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
-      {
-          if (string.IsNullOrWhiteSpace(_searchTerm))
-          {
+			{
+				if (string.IsNullOrWhiteSpace(_searchTerm))
+				{
 					@Model.SectionFootnotes
-          }
-          else
-          {
-              Html.FormatWithSearchTerm(_searchTerm, Model.SectionFootnotes);
-          }
-      }
-      else
-      {
-          Html.Raw("&nbsp;");
-      }
+				}
+				else
+				{
+					Html.FormatWithSearchTerm(_searchTerm, Model.SectionFootnotes);
+				}
+			}
+			else
+			{
+				Html.Raw("&nbsp;");
+			}
 					</span></li>
+
 				</ul>
 			</li>
+
 	}
 	</ul>
 </li>

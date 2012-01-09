@@ -1274,3 +1274,19 @@ div.subjects-letter h2
 {
 	clear: left;
 }
+
+
+.edit_button
+{
+	float: right;
+	width: 53px;
+	height: 20px;
+	margin: 0px 5px;
+	padding-left: 20px;
+	background: transparent url(images/edit_button.png) top left no-repeat;
+}
+
+a.edit_link
+{
+	text-decoration: none;
+}
