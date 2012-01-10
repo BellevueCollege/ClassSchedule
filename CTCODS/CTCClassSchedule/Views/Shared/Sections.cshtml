@@ -12,7 +12,31 @@
 	string sectionID = Model.ID.ToString();
 
 	string _searchTerm = Request.QueryString["searchterm"];
+	YearQuarter quarterViewing = ViewBag.YearQuarter;
+
+
 }
+
+
+<script type="text/javascript">
+	/* subject chooser pop-up dialog */
+	$(document).ready(function () {
+		$(".edit_ton").dialog({
+			autoOpen: false,
+			height: 600,
+			width: 300,
+			modal: true,
+			resizable: true,
+			open: function () {
+				// only show the spinner if we don't already have data in the dialog
+				if ($("div#nav-choose-subjects").html() == '') {
+					spinner.spin(document.getElementById('nav-choose-subjects'));
+				}
+			},
+		})
+	});
+</script>
+
 <!-- SEARCHTERM: @_searchTerm -->
 <li class="section-listing"><span class="item-number"><span class="descriptor">Item
 	number: </span>@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? Model.ID.ItemNumber : Html.FormatWithSearchTerm(_searchTerm, Model.ID.ItemNumber).ToString())</span>
@@ -94,8 +118,31 @@
 
       }
 			 <li class="editing">
-			<a class="edit_link" href="#"><span class="edit_button">Edit</span></a>
+
+
+			@Ajax.ActionLink("Edit",
+											 "Subjects",
+											 "Api",
+											 new { itemNumber = Model.ID.ItemNumber.ToString(), yrq = Model.ID.YearQuarter.ToString() },
+											 new AjaxOptions
+											 {
+												 UpdateTargetId = "edit-section-" + Model.ID.ItemNumber,
+												 HttpMethod = "GET",
+												 InsertionMode = InsertionMode.Replace,
+												 OnBegin = "$('#edit-section-" + Model.ID.ItemNumber + "').dialog('open');",
+												 OnComplete = "spinner.stop();",
+											 },
+											 new  {@class="edit_button" })
+
+		<div title="Edit Section @Model.ID.ItemNumber" id="edit-section-@Model.ID.ItemNumber"></div>
+
 		</li>
+
+
+
+
+
+
 			<li class="section-notes"><span class="descriptor">Notes: </span>
 				<ul>
 					<li><span class="label">
