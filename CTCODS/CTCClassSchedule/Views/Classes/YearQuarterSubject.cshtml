@@ -114,6 +114,30 @@ ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Sc
 																 }
 															 }
 	}
+
+
+<script type="text/javascript">
+	/* subject chooser pop-up dialog */
+	$(document).ready(function () {
+
+		var dialog = $("#edit-section").dialog({
+			autoOpen: false,
+			height: 400,
+			width: 500,
+		});
+
+		$('.edit_button').click(function(e){
+			dialog.dialog('open');
+			return false;
+
+
+		});
+
+	});
+</script>
+
+	<div title="Edit Section" id="edit-section"></div>
+
 		</div>
 		<!-- content -->
 	</div>

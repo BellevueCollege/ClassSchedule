@@ -18,24 +18,7 @@
 }
 
 
-<script type="text/javascript">
-	/* subject chooser pop-up dialog */
-	$(document).ready(function () {
-		$(".edit_ton").dialog({
-			autoOpen: false,
-			height: 600,
-			width: 300,
-			modal: true,
-			resizable: true,
-			open: function () {
-				// only show the spinner if we don't already have data in the dialog
-				if ($("div#nav-choose-subjects").html() == '') {
-					spinner.spin(document.getElementById('nav-choose-subjects'));
-				}
-			},
-		})
-	});
-</script>
+
 
 <!-- SEARCHTERM: @_searchTerm -->
 <li class="section-listing"><span class="item-number"><span class="descriptor">Item
@@ -134,7 +117,7 @@
 											 },
 											 new  {@class="edit_button" })
 
-		<div title="Edit Section @Model.ID.ItemNumber" id="edit-section-@Model.ID.ItemNumber"></div>
+
 
 		</li>
 
