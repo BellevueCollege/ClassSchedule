@@ -103,15 +103,23 @@
 			 <li class="editing">
 
 
+	 @*
+		If you view the HTML source for the Edit button, you'll see that the href attribute is empty,
+		which means clicking the link will just reload the existing page. It's been my experience that
+		if Razor has *any* problem creating the ActionLink it will just leave the href empty.
+	*@
 			@Ajax.ActionLink("Edit",
 											 "SectionEdit",
 											 "Api",
 											 new { itemNumber = Model.ID.ItemNumber.ToString(), yrq = Model.ID.YearQuarter.ToString() },
 											 new AjaxOptions
 											 {
+												 /* I don't see an HTML element with an ID of "edit-section" - that's where the results of
+												  * Action call are going to be put. */
 												 UpdateTargetId = "edit-section",
 												 HttpMethod = "GET",
 												 InsertionMode = InsertionMode.Replace,
+												 /* Same as above - you need an "edit-section" element to "open". */
 												 OnBegin = "$('#edit-section').dialog('open');",
 												 OnComplete = "spinner.stop();",
 											 },

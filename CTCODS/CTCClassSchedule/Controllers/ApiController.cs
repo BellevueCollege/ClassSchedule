@@ -98,8 +98,11 @@ namespace CTCClassSchedule.Controllers
 
 
 			}
-
 			//return PartialView(sectionSpecificData);
+/*
+ * It looks like you're missing a SectionEdit View - that's what will be returned by the Ajax call
+ * and placed into the HTML element specified by the UpdateTargetId (see Sections.cshtml)
+ */
 			return PartialView();
 		}
 
@@ -116,6 +119,9 @@ namespace CTCClassSchedule.Controllers
 			{
 				// TODO: Add update logic here
 
+/*
+ * There's no Index View for Api. You'll want to include the Controller name here too.
+ */
 				return RedirectToAction("Index");
 			}
 			catch
