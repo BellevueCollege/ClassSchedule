@@ -71,42 +71,59 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 
-		public ActionResult SectionEdit(string itemNumber, string format = "json")
+
+		//Generation of the
+		public ActionResult SectionEdit(string itemNumber, string yrq)
 		{
-			using (OdsRepository db = new OdsRepository(HttpContext))
+			string courseIdPlusYRQ = itemNumber + yrq;
+
+			using (ClassScheduleDb db = new ClassScheduleDb())
 			{
-				IList<CoursePrefix> data;
-				data = db.GetCourseSubjects();
+				IList<vw_ClassScheduleData> sectionSpecificData = (from s in db.vw_ClassScheduleData
+																													 where s.ClassID == courseIdPlusYRQ
+																													 select s).ToList();
 
-				IList<vw_ProgramInformation> progInfo;
-				using (ClassScheduleDb classScheduleDb = new ClassScheduleDb())
-				{
-					progInfo = (from s in classScheduleDb.vw_ProgramInformation select s).ToList();
-				}
-				IList<ScheduleCoursePrefix> subjectList = (from p in progInfo
-																									 where data.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
-																									 select new ScheduleCoursePrefix
-																									 {
-																										 Subject = p.URL,
-																										 Title = p.Title
-																									 })
-																									.OrderBy(s => s.Title)
-																									.Distinct()
-																									.ToList();
 
-				if (format == "json")
-				{
-					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
-					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-					return Json(subjectList, JsonRequestBehavior.AllowGet);
-				}
 
-				ViewBag.LinkParams = Helpers.getLinkParams(Request);
-				ViewBag.SubjectsColumns = 2;
 
-				return PartialView(subjectList);
+
+
+				//if (format == "json")
+				//{
+				//  // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+				//  // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+				//  return Json(sectionSpecificData, JsonRequestBehavior.AllowGet);
+				//}
+
+
+
+			}
+
+			//return PartialView(sectionSpecificData);
+			return PartialView();
+		}
+
+
+
+
+		//
+		// POST after submit is clicked
+
+		[HttpPost]
+		public ActionResult SectionEdit(int id, FormCollection collection)
+		{
+			try
+			{
+				// TODO: Add update logic here
+
+				return RedirectToAction("Index");
+			}
+			catch
+			{
+				return View();
 			}
 		}
+
 
 	}
 }

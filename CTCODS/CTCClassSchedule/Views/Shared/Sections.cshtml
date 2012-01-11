@@ -104,15 +104,15 @@
 
 
 			@Ajax.ActionLink("Edit",
-											 "Subjects",
+											 "SectionEdit",
 											 "Api",
 											 new { itemNumber = Model.ID.ItemNumber.ToString(), yrq = Model.ID.YearQuarter.ToString() },
 											 new AjaxOptions
 											 {
-												 UpdateTargetId = "edit-section-" + Model.ID.ItemNumber,
+												 UpdateTargetId = "edit-section",
 												 HttpMethod = "GET",
 												 InsertionMode = InsertionMode.Replace,
-												 OnBegin = "$('#edit-section-" + Model.ID.ItemNumber + "').dialog('open');",
+												 OnBegin = "$('#edit-section').dialog('open');",
 												 OnComplete = "spinner.stop();",
 											 },
 											 new  {@class="edit_button" })
