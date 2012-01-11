@@ -129,6 +129,10 @@
 			<li class="section-notes"><span class="descriptor">Notes: </span>
 				<ul>
 					<li><span class="label">
+                        @if (Model.IsHybrid)
+                        {
+                            Model.SectionFootnotes += String.Format("{0}Hybrid class: This class meets in person and online.", (Model.SectionFootnotes != String.Empty)?(" "):(String.Empty));
+                        }
 						@if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
 			{
 				if (string.IsNullOrWhiteSpace(_searchTerm))
