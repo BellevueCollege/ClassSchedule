@@ -29,7 +29,8 @@ namespace CTCClassSchedule
 			routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
 			// API calls the application exposes
-			routes.MapRoute("ApiSubjects", "Api/Subjects", new {controller = "Api", action = "Subjects"});
+			routes.MapRoute("ApiSubjects", "Api/Subjects", new { controller = "Api", action = "Subjects" });
+			routes.MapRoute("ApiSectionEdit", "Api/SectionEdit", new { controller = "Api", action = "SectionEdit" });
 
 			// Authentication
 			routes.MapRoute("LogOn", "Account/{action}", new {controller = "Account"});

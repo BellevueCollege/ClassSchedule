@@ -6,6 +6,8 @@ using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
+using CTCClassSchedule.Properties;
+using System;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -77,13 +79,21 @@ namespace CTCClassSchedule.Controllers
 		{
 			string courseIdPlusYRQ = itemNumber + yrq;
 
+
+
+
+
 			using (ClassScheduleDb db = new ClassScheduleDb())
 			{
-				IList<vw_ClassScheduleData> sectionSpecificData = (from s in db.vw_ClassScheduleData
-																													 where s.ClassID == courseIdPlusYRQ
-																													 select s).ToList();
+				IList<SectionWithSeats> sectionSpecificData = (
+																from s in db.vw_ClassScheduleData
+																where s.ClassID == courseIdPlusYRQ
 
-
+																select new SectionWithSeats
+																	{
+																		LastUpdated = s.LastUpdated.ToString(),
+																		SectionFootnotes = s != null ? s.SectionFootnote ?? string.Empty : string.Empty,
+																	}).ToList();
 
 
 
@@ -95,15 +105,12 @@ namespace CTCClassSchedule.Controllers
 				//  return Json(sectionSpecificData, JsonRequestBehavior.AllowGet);
 				//}
 
-
+				return PartialView(sectionSpecificData);
 
 			}
-			//return PartialView(sectionSpecificData);
-/*
- * It looks like you're missing a SectionEdit View - that's what will be returned by the Ajax call
- * and placed into the HTML element specified by the UpdateTargetId (see Sections.cshtml)
- */
+
 			return PartialView();
+
 		}
 
 

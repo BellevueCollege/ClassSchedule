@@ -349,6 +349,7 @@
     </EntityDeploy>
     <None Include="packages.config" />
     <Content Include="Views\Shared\subjectList.cshtml" />
+    <Content Include="Views\Api\SectionEdit.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
   </ItemGroup>
   <ItemGroup>
