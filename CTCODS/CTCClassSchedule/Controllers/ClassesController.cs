@@ -21,7 +21,7 @@ using MvcMiniProfiler;
 
 namespace CTCClassSchedule.Controllers
 {
-	public class ClassesController : Controller
+	public partial class ClassesController : Controller
 	{
 		#region controller member vars
 		readonly private MiniProfiler _profiler = MiniProfiler.Current;

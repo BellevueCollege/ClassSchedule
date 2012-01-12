@@ -31,6 +31,10 @@ namespace CTCClassSchedule
 			// API calls the application exposes
 			routes.MapRoute("ApiSubjects", "Api/Subjects", new {controller = "Api", action = "Subjects"});
 
+			// Authentication
+			routes.MapRoute("LogOn", "Account/{action}", new {controller = "Account"});
+			routes.MapRoute("Authentication", "{action}", new {controller = "Classes"});
+
 			// default application routes
 
 			routes.MapRoute("getSeats", "{Controller}/getseats", new { controller = "Classes", action = "getSeats" });
