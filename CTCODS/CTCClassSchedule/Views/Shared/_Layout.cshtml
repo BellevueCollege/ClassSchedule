@@ -59,7 +59,12 @@
 
 	<div id="bodyWrapper">
 		<div style="float:right;">
-			@Html.ActionLink("Log On", "Authenticate", "Classes")
+	@if(Context.User.Identity.IsAuthenticated) {
+			<text>[ Welcome <b>@Context.User.Identity.Name</b>! ]</text>
+	}
+	else {
+			@:[ @Html.ActionLink("Log On", "Authenticate", "Classes") ]
+	}
 		</div>
     <div id="titlebar">
 		    <h1 id="sitename"><a href="@Url.Content("~/")">Classes</a></h1>
