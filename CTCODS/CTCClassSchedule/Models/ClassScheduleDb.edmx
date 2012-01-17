@@ -71,6 +71,14 @@
       [vw_SeatAvailability].[LastUpdated] AS [LastUpdated]
       FROM [dbo].[vw_SeatAvailability] AS [vw_SeatAvailability]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="vw_SectionFootnote" EntityType="ClassSchedule.Models.Store.vw_SectionFootnote" store:Type="Views" store:Schema="dbo" store:Name="vw_SectionFootnote">
+            <DefiningQuery>SELECT
+      [vw_SectionFootnote].[ClassID] AS [ClassID],
+      [vw_SectionFootnote].[Footnote] AS [Footnote],
+      [vw_SectionFootnote].[LastUpdatedBy] AS [LastUpdatedBy],
+      [vw_SectionFootnote].[LastUpdated] AS [LastUpdated]
+      FROM [dbo].[vw_SectionFootnote] AS [vw_SectionFootnote]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
         <EntityType Name="SeatAvailability">
           <Key>
@@ -164,6 +172,18 @@
           <Property Name="SeatsAvailable" Type="int" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'ClassScheduleDev.dbo.vw_SectionFootnote' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="vw_SectionFootnote">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Name="ClassID" Type="char" Nullable="false" MaxLength="8" />
+          <Property Name="Footnote" Type="varchar(max)" />
+          <Property Name="LastUpdatedBy" Type="nchar" MaxLength="40" />
+          <Property Name="LastUpdated" Type="datetime" />
+        </EntityType>
         <Function Name="usp_ClassSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SearchWord" Type="nvarchar" Mode="In" />
           <Parameter Name="YearQuarterID" Type="char" Mode="In" />
@@ -187,6 +207,7 @@
           <EntitySet Name="vw_ProgramInformation" EntityType="ClassSchedule.Models.vw_ProgramInformation" />
           <EntitySet Name="vw_SeatAvailability" EntityType="ClassSchedule.Models.vw_SeatAvailability" />
           <EntitySet Name="SeatAvailabilities" EntityType="ClassSchedule.Models.SeatAvailability" />
+          <EntitySet Name="vw_SectionFootnote" EntityType="ClassSchedule.Models.vw_SectionFootnote" />
         </EntityContainer>
         <EntityType Name="vw_ClassScheduleData">
           <Key>
@@ -265,6 +286,15 @@
           <Property Type="Int32" Name="SeatsAvailable" />
           <Property Type="DateTime" Name="LastUpdated" />
         </EntityType>
+        <EntityType Name="vw_SectionFootnote">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="Footnote" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastUpdatedBy" MaxLength="40" FixedLength="true" Unicode="true" />
+          <Property Type="DateTime" Name="LastUpdated" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -334,6 +364,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="vw_SectionFootnote">
+            <EntityTypeMapping TypeName="ClassSchedule.Models.vw_SectionFootnote">
+              <MappingFragment StoreEntitySet="vw_SectionFootnote">
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="Footnote" ColumnName="Footnote" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -361,6 +401,7 @@
         <EntityTypeShape EntityType="ClassSchedule.Models.vw_ProgramInformation" Width="1.5" PointX="2.75" PointY="4.75" Height="2.4140429687499996" IsExpanded="true" />
         <EntityTypeShape EntityType="ClassSchedule.Models.vw_SeatAvailability" Width="1.5" PointX="4.75" PointY="3.75" Height="1.4279589843749996" IsExpanded="true" />
         <EntityTypeShape EntityType="ClassSchedule.Models.SeatAvailability" Width="1.5" PointX="7.5" PointY="2.875" Height="1.4279589843749996" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.vw_SectionFootnote" Width="1.5" PointX="9.5" PointY="2.125" Height="1.7879850260416674" />
       </Diagram>
     </Diagrams>
   </Designer>

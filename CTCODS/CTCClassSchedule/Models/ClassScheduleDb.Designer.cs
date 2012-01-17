@@ -161,6 +161,22 @@ namespace CTCClassSchedule.Models
         }
         private ObjectSet<SeatAvailability> _SeatAvailabilities;
 
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<vw_SectionFootnote> vw_SectionFootnote
+        {
+            get
+            {
+                if ((_vw_SectionFootnote == null))
+                {
+                    _vw_SectionFootnote = base.CreateObjectSet<vw_SectionFootnote>("vw_SectionFootnote");
+                }
+                return _vw_SectionFootnote;
+            }
+        }
+        private ObjectSet<vw_SectionFootnote> _vw_SectionFootnote;
+
         #endregion
         #region AddTo Methods
 
@@ -210,6 +226,14 @@ namespace CTCClassSchedule.Models
         public void AddToSeatAvailabilities(SeatAvailability seatAvailability)
         {
             base.AddObject("SeatAvailabilities", seatAvailability);
+        }
+
+        /// <summary>
+        /// Deprecated Method for adding a new object to the vw_SectionFootnote EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTovw_SectionFootnote(vw_SectionFootnote vw_SectionFootnote)
+        {
+            base.AddObject("vw_SectionFootnote", vw_SectionFootnote);
         }
 
         #endregion
@@ -1505,6 +1529,133 @@ namespace CTCClassSchedule.Models
         private Nullable<global::System.Int32> _SeatsAvailable;
         partial void OnSeatsAvailableChanging(Nullable<global::System.Int32> value);
         partial void OnSeatsAvailableChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> LastUpdated
+        {
+            get
+            {
+                return _LastUpdated;
+            }
+            set
+            {
+                OnLastUpdatedChanging(value);
+                ReportPropertyChanging("LastUpdated");
+                _LastUpdated = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LastUpdated");
+                OnLastUpdatedChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _LastUpdated;
+        partial void OnLastUpdatedChanging(Nullable<global::System.DateTime> value);
+        partial void OnLastUpdatedChanged();
+
+        #endregion
+
+    }
+
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="ClassSchedule.Models", Name="vw_SectionFootnote")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class vw_SectionFootnote : EntityObject
+    {
+        #region Factory Method
+
+        /// <summary>
+        /// Create a new vw_SectionFootnote object.
+        /// </summary>
+        /// <param name="classID">Initial value of the ClassID property.</param>
+        public static vw_SectionFootnote Createvw_SectionFootnote(global::System.String classID)
+        {
+            vw_SectionFootnote vw_SectionFootnote = new vw_SectionFootnote();
+            vw_SectionFootnote.ClassID = classID;
+            return vw_SectionFootnote;
+        }
+
+        #endregion
+        #region Primitive Properties
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ClassID
+        {
+            get
+            {
+                return _ClassID;
+            }
+            set
+            {
+                if (_ClassID != value)
+                {
+                    OnClassIDChanging(value);
+                    ReportPropertyChanging("ClassID");
+                    _ClassID = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("ClassID");
+                    OnClassIDChanged();
+                }
+            }
+        }
+        private global::System.String _ClassID;
+        partial void OnClassIDChanging(global::System.String value);
+        partial void OnClassIDChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Footnote
+        {
+            get
+            {
+                return _Footnote;
+            }
+            set
+            {
+                OnFootnoteChanging(value);
+                ReportPropertyChanging("Footnote");
+                _Footnote = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Footnote");
+                OnFootnoteChanged();
+            }
+        }
+        private global::System.String _Footnote;
+        partial void OnFootnoteChanging(global::System.String value);
+        partial void OnFootnoteChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LastUpdatedBy
+        {
+            get
+            {
+                return _LastUpdatedBy;
+            }
+            set
+            {
+                OnLastUpdatedByChanging(value);
+                ReportPropertyChanging("LastUpdatedBy");
+                _LastUpdatedBy = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LastUpdatedBy");
+                OnLastUpdatedByChanged();
+            }
+        }
+        private global::System.String _LastUpdatedBy;
+        partial void OnLastUpdatedByChanging(global::System.String value);
+        partial void OnLastUpdatedByChanged();
 
         /// <summary>
         /// No Metadata Documentation available.
