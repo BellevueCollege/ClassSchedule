@@ -34,7 +34,7 @@ namespace CTCClassSchedule
 
 			// Authentication
 			routes.MapRoute("LogOn", "Account/{action}", new {controller = "Account"});
-			routes.MapRoute("Authentication", "{action}", new {controller = "Classes"});
+			//routes.MapRoute("Authentication", "{action}", new {controller = "Classes"});
 
 			// default application routes
 

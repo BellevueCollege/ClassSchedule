@@ -1290,3 +1290,30 @@ a.edit_button
 {
 	text-decoration: none;
 }
+
+
+
+#lastModifiedBy
+{
+	float: right;
+	color: #777;
+	font-size: .8em;
+	margin-right: 10px;
+}
+
+.editor-label
+{
+	font-weight: bold;
+}
+
+.editor-field
+{
+	margin-top: 0px;
+}
+
+#edit-section fieldset
+{
+	border: none;
+}
+
+/* end section edit */

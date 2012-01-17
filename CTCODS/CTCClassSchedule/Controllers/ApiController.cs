@@ -2,12 +2,21 @@
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
+using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
 using CTCClassSchedule.Properties;
 using System;
+
+
+
+
+
+
+
+
 
 namespace CTCClassSchedule.Controllers
 {
@@ -75,42 +84,41 @@ namespace CTCClassSchedule.Controllers
 
 
 		//Generation of the
-		public ActionResult SectionEdit(string itemNumber, string yrq)
+		public ActionResult SectionEdit(string itemNumber, string yrq, string subject, string classNum)
 		{
 			string courseIdPlusYRQ = itemNumber + yrq;
 
-
-
-
-
-			using (ClassScheduleDb db = new ClassScheduleDb())
+			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{
-				IList<SectionWithSeats> sectionSpecificData = (
-																from s in db.vw_ClassScheduleData
-																where s.ClassID == courseIdPlusYRQ
+				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(respository);
+				ViewBag.QuarterNavMenu = yrqRange;
 
-																select new SectionWithSeats
-																	{
-																		LastUpdated = s.LastUpdated.ToString(),
-																		SectionFootnotes = s != null ? s.SectionFootnote ?? string.Empty : string.Empty,
-																	}).ToList();
+				ICourseID courseID = CourseID.FromString(subject, classNum);
+				IList<Section> sections;
+				sections = respository.GetSections(courseID);
 
+				Section editSection = null;
+				foreach (Section section in sections)
+				{
+					if (section.ID.ToString() == courseIdPlusYRQ)
+					{
+						editSection = section;
+					}
+				}
 
+				sections.Clear();
+				sections.Add(editSection);
 
+				IEnumerable<SectionWithSeats> sectionsEnum;
+				using (ClassScheduleDb db = new ClassScheduleDb())
+				{
+					sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections, db);
 
-				//if (format == "json")
-				//{
-				//  // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
-				//  // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-				//  return Json(sectionSpecificData, JsonRequestBehavior.AllowGet);
-				//}
-
-				return PartialView(sectionSpecificData);
-
+					return PartialView(sectionsEnum);
+				}
 			}
 
 			return PartialView();
-
 		}
 
 
@@ -120,11 +128,22 @@ namespace CTCClassSchedule.Controllers
 		// POST after submit is clicked
 
 		[HttpPost]
-		public ActionResult SectionEdit(int id, FormCollection collection)
+		public ActionResult SectionEdit(FormCollection collection)
 		{
+
+			string CourseSubject = collection["CourseSubject"];
+			string CourseNumber = collection["CourseNumber"];
+			string ItemNumber = collection["ItemNumber"];
+			string Yrq = collection["Yrq"];
+			string Username = collection["Username"];
+			string SectionFootnotes = collection["section.SectionFootnotes"];
+
 			try
 			{
 				// TODO: Add update logic here
+
+
+
 
 /*
  * There's no Index View for Api. You'll want to include the Controller name here too.
