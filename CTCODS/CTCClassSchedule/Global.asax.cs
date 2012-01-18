@@ -33,8 +33,7 @@ namespace CTCClassSchedule
 			routes.MapRoute("ApiSectionEdit", "Api/SectionEdit", new { controller = "Api", action = "SectionEdit" });
 
 			// Authentication
-			routes.MapRoute("LogOn", "Account/{action}", new {controller = "Account"});
-			//routes.MapRoute("Authentication", "{action}", new {controller = "Classes"});
+			routes.MapRoute("LogOn", "Authenticate", new { controller = "Classes", action = "Authenticate" });
 
 			// default application routes
 
@@ -47,8 +46,6 @@ namespace CTCClassSchedule
 			routes.MapRoute("Search", "Search", new { controller = "Search", action = "Index" });
 			routes.MapRoute("YearQuarter", "{YearQuarter}", new { controller = "Classes", action = "YearQuarter" });
 			routes.MapRoute("Default", "", new { controller = "Classes", action = "Index" });
-
-
 		}
 
 		/// <summary>
@@ -85,13 +82,22 @@ namespace CTCClassSchedule
 #endif
 		}
 
+		protected void Application_AuthenticateRequest(Object sender, EventArgs e)
+		{
+#if ENABLE_PROFILING
+			// MiniProfiler is having issues w/ DotNetCasClient
+			// (specifically, it doesn't seem to be able to find it)
+			MiniProfiler.Stop(discardResults: true);
+#endif
+		}
+
 		/// <summary>
 		///
 		/// </summary>
 		protected void Application_EndRequest()
 		{
 #if ENABLE_PROFILING
-			MiniProfiler.Stop();
+			MiniProfiler.Stop(discardResults: true);
 #endif
 		}
 

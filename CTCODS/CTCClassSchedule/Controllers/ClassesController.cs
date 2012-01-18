@@ -33,6 +33,13 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		}
 
+      public ActionResult Authenticate()
+			{
+//				Response.Redirect("http://localhost:61074/", true);
+//				return Content("Success!");
+				return RedirectToRoute("Default");
+			}
+
 		#region controller actions
 
 		/// <summary>

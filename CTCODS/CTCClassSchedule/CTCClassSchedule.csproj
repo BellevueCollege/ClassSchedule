@@ -69,8 +69,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\AntiXssLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="CtcOdsApi">
-      <HintPath>..\..\packages\CtcOdsApi.0.9\lib\net40\CtcOdsApi.dll</HintPath>
+    <Reference Include="CtcOdsApi, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\CtcOdsApi.0.9.1\lib\net40\CtcOdsApi.dll</HintPath>
     </Reference>
     <Reference Include="DotNetCasClient">
       <HintPath>..\..\packages\DotNetCasClient.1.0.1\lib\DotNetCasClient.dll</HintPath>
@@ -78,12 +79,6 @@
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Glimpse.Core">
-      <HintPath>..\..\packages\Glimpse.0.86\lib\net40\Glimpse.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Glimpse.Mvc3">
-      <HintPath>..\..\packages\Glimpse.Mvc3.0.86\lib\net40\Glimpse.Mvc3.dll</HintPath>
     </Reference>
     <Reference Include="HtmlSanitizationLibrary, Version=4.2.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -184,8 +179,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Readme\glimpse.mvc3.readme.txt" />
-    <Content Include="App_Readme\glimpse.readme.txt" />
     <Content Include="Content\automatic-image-slider.css" />
     <Content Include="Content\grids.css" />
     <Content Include="Content\images\ajax-loader.gif" />
@@ -349,8 +342,8 @@
     </EntityDeploy>
     <None Include="packages.config" />
     <Content Include="Views\Shared\subjectList.cshtml" />
-    <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Api\SectionEdit.cshtml" />
+    <Content Include="Views\Account\LogOn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Classes\YearQuarter.cshtml" />
@@ -367,12 +360,15 @@
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Shared\NoSectionCourses.cshtml" />
-    <Content Include="web.config" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </Content>
     <Content Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="web.Dev.config">
       <DependentUpon>web.config</DependentUpon>
@@ -414,12 +410,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>61074</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost/classes</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
