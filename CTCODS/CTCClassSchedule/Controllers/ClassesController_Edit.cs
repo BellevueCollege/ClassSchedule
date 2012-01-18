@@ -27,12 +27,12 @@ namespace CTCClassSchedule.Controllers
 			/// accessing protected data/functionality. For example; in response to the user clicking a "Log in"
 			/// button.
 			/// </remarks>
-//      [Authorize]
-//      public ActionResult Authenticate()
-//      {
-////				Response.Redirect("http://localhost:61074/", true);
-////				return Content("Success!");
-//        return RedirectToRoute("Default");
-//      }
+      [Authorize]
+      public ActionResult Authenticate()
+      {
+//				Response.Redirect("http://localhost:61074/", true);
+//				return Content("Success!");
+        return RedirectToRoute("Default");
+      }
     }
 }
