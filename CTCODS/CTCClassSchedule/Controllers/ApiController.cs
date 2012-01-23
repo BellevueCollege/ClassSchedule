@@ -86,7 +86,7 @@ namespace CTCClassSchedule.Controllers
 		//Generation of the
 		public ActionResult SectionEdit(string itemNumber, string yrq, string subject, string classNum)
 		{
-			string courseIdPlusYRQ = itemNumber + yrq;
+			string classID = itemNumber + yrq;
 
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{
@@ -100,7 +100,7 @@ namespace CTCClassSchedule.Controllers
 				Section editSection = null;
 				foreach (Section section in sections)
 				{
-					if (section.ID.ToString() == courseIdPlusYRQ)
+					if (section.ID.ToString() == classID)
 					{
 						editSection = section;
 					}
@@ -110,11 +110,26 @@ namespace CTCClassSchedule.Controllers
 				sections.Add(editSection);
 
 				IEnumerable<SectionWithSeats> sectionsEnum;
+				SectionFootnote itemToUpdate = null;
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections, db);
 
-					return PartialView(sectionsEnum);
+					try
+					{
+						itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
+					}
+					catch
+					{
+
+					}
+					var LocalSections = (from s in sectionsEnum
+															 select new SectionWithSeats {
+																	ParentObject = s,
+												SectionFootnotes = itemToUpdate != null ? itemToUpdate.Footnote ?? string.Empty : string.Empty,
+															 }).ToList();
+
+					return PartialView(LocalSections);
 				}
 			}
 
@@ -130,32 +145,28 @@ namespace CTCClassSchedule.Controllers
 		[HttpPost]
 		public ActionResult SectionEdit(FormCollection collection)
 		{
-
-			string CourseSubject = collection["CourseSubject"];
-			string CourseNumber = collection["CourseNumber"];
 			string ItemNumber = collection["ItemNumber"];
 			string Yrq = collection["Yrq"];
 			string Username = collection["Username"];
 			string SectionFootnotes = collection["section.SectionFootnotes"];
-
-			try
-			{
-				// TODO: Add update logic here
+			string classID = ItemNumber + Yrq;
+			string referrer = collection["referrer"];
 
 
+			if(ModelState.IsValid) {
+				using (ClassScheduleDb db = new ClassScheduleDb()) {
 
+					var itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
+					itemToUpdate.Footnote = SectionFootnotes;
+					itemToUpdate.LastUpdated = DateTime.Now;
+					itemToUpdate.LastUpdatedBy = Username;
 
-/*
- * There's no Index View for Api. You'll want to include the Controller name here too.
- */
-				return RedirectToAction("Index");
+					db.SaveChanges();
+				}
 			}
-			catch
-			{
-				return View();
-			}
+
+			return Redirect(referrer);
+
 		}
-
-
 	}
 }

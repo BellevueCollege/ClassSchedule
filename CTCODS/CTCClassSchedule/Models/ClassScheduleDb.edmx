@@ -6,7 +6,22 @@
     <edmx:StorageModels>
     <Schema Namespace="ClassSchedule.Models.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="ClassScheduleModelsStoreContainer">
+          <EntitySet Name="ClassSearch" EntityType="ClassSchedule.Models.Store.ClassSearch" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CourseFootnote" EntityType="ClassSchedule.Models.Store.CourseFootnote" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CourseSearch" EntityType="ClassSchedule.Models.Store.CourseSearch" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProgramInformation" EntityType="ClassSchedule.Models.Store.ProgramInformation" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProgramInformation_OLD" EntityType="ClassSchedule.Models.Store.ProgramInformation_OLD" store:Type="Tables" store:Schema="dbo" store:Name="ProgramInformation.OLD">
+            <DefiningQuery>SELECT
+      [ProgramInformation_OLD].[Abbreviation] AS [Abbreviation],
+      [ProgramInformation_OLD].[Url] AS [Url],
+      [ProgramInformation_OLD].[Title] AS [Title],
+      [ProgramInformation_OLD].[Department] AS [Department],
+      [ProgramInformation_OLD].[ContactName] AS [ContactName],
+      [ProgramInformation_OLD].[ContactPhone] AS [ContactPhone]
+      FROM [dbo].[ProgramInformation.OLD] AS [ProgramInformation_OLD]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="SeatAvailability" EntityType="ClassSchedule.Models.Store.SeatAvailability" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SectionFootnote" EntityType="ClassSchedule.Models.Store.SectionFootnote" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="vw_ClassScheduleData" EntityType="ClassSchedule.Models.Store.vw_ClassScheduleData" store:Type="Views" store:Schema="dbo" store:Name="vw_ClassScheduleData">
             <DefiningQuery>SELECT
       [vw_ClassScheduleData].[ClassID] AS [ClassID],
@@ -80,12 +95,74 @@
       FROM [dbo].[vw_SectionFootnote] AS [vw_SectionFootnote]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
+        <EntityType Name="ClassSearch">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Name="ClassID" Type="char" Nullable="false" MaxLength="8" />
+          <Property Name="SearchGroup1" Type="varchar" MaxLength="81" />
+          <Property Name="SearchGroup2" Type="varchar" MaxLength="4065" />
+          <Property Name="SearchGroup3" Type="varchar" MaxLength="265" />
+          <Property Name="SearchGroup4" Type="varchar" MaxLength="4411" />
+        </EntityType>
+        <EntityType Name="CourseFootnote">
+          <Key>
+            <PropertyRef Name="CourseID" />
+          </Key>
+          <Property Name="CourseID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="Footnote" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="CourseSearch">
+          <Key>
+            <PropertyRef Name="CourseKey" />
+          </Key>
+          <Property Name="CourseKey" Type="varchar" Nullable="false" MaxLength="14" />
+          <Property Name="YearQuarterID" Type="char" Nullable="false" MaxLength="4" />
+          <Property Name="CourseID" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="CourseInfo" Type="varchar" MaxLength="4065" />
+        </EntityType>
+        <EntityType Name="ProgramInformation">
+          <Key>
+            <PropertyRef Name="Abbreviation" />
+          </Key>
+          <Property Name="Abbreviation" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="URL" Type="varchar" MaxLength="50" />
+          <Property Name="ProgramURL" Type="varchar" MaxLength="255" />
+          <Property Name="Title" Type="varchar" MaxLength="255" />
+          <Property Name="Division" Type="varchar" MaxLength="255" />
+          <Property Name="ContactName" Type="varchar" MaxLength="255" />
+          <Property Name="ContactPhone" Type="varchar" MaxLength="255" />
+          <Property Name="Intro" Type="varchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'ClassScheduleDev.dbo.ProgramInformation.OLD' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="ProgramInformation_OLD">
+          <Key>
+            <PropertyRef Name="Abbreviation" />
+          </Key>
+          <Property Name="Abbreviation" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="Url" Type="varchar" MaxLength="255" />
+          <Property Name="Title" Type="varchar" MaxLength="255" />
+          <Property Name="Department" Type="varchar" MaxLength="255" />
+          <Property Name="ContactName" Type="varchar" MaxLength="255" />
+          <Property Name="ContactPhone" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="SeatAvailability">
           <Key>
             <PropertyRef Name="ClassID" />
           </Key>
           <Property Name="ClassID" Type="char" Nullable="false" MaxLength="8" />
           <Property Name="SeatsAvailable" Type="int" />
+          <Property Name="LastUpdated" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SectionFootnote">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Name="ClassID" Type="char" Nullable="false" MaxLength="8" />
+          <Property Name="Footnote" Type="varchar(max)" />
+          <Property Name="LastUpdatedBy" Type="nchar" MaxLength="40" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
@@ -196,6 +273,13 @@
           <Parameter Name="ClassID" Type="char" Mode="In" />
           <Parameter Name="SeatsAvailable" Type="int" Mode="In" />
         </Function>
+        <!--Errors Found During Generation:
+      warning 6013: The table/view 'ClassScheduleDev.dbo.SectionFootnoteW' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+
+      <EntityType Name="SectionFootnoteW">
+        <Property Name="ClassID" Type="varchar" MaxLength="8" />
+        <Property Name="Footnote" Type="varchar" MaxLength="4000" />
+      </EntityType>-->
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -208,6 +292,12 @@
           <EntitySet Name="vw_SeatAvailability" EntityType="ClassSchedule.Models.vw_SeatAvailability" />
           <EntitySet Name="SeatAvailabilities" EntityType="ClassSchedule.Models.SeatAvailability" />
           <EntitySet Name="vw_SectionFootnote" EntityType="ClassSchedule.Models.vw_SectionFootnote" />
+          <EntitySet Name="ClassSearches" EntityType="ClassSchedule.Models.ClassSearch" />
+          <EntitySet Name="CourseFootnotes" EntityType="ClassSchedule.Models.CourseFootnote" />
+          <EntitySet Name="CourseSearches" EntityType="ClassSchedule.Models.CourseSearch" />
+          <EntitySet Name="ProgramInformations" EntityType="ClassSchedule.Models.ProgramInformation" />
+          <EntitySet Name="ProgramInformation_OLD" EntityType="ClassSchedule.Models.ProgramInformation_OLD" />
+          <EntitySet Name="SectionFootnotes" EntityType="ClassSchedule.Models.SectionFootnote" />
         </EntityContainer>
         <EntityType Name="vw_ClassScheduleData">
           <Key>
@@ -295,6 +385,65 @@
           <Property Type="String" Name="LastUpdatedBy" MaxLength="40" FixedLength="true" Unicode="true" />
           <Property Type="DateTime" Name="LastUpdated" />
         </EntityType>
+        <EntityType Name="ClassSearch">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="SearchGroup1" MaxLength="81" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchGroup2" MaxLength="4065" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchGroup3" MaxLength="265" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchGroup4" MaxLength="4411" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CourseFootnote">
+          <Key>
+            <PropertyRef Name="CourseID" />
+          </Key>
+          <Property Type="String" Name="CourseID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Footnote" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CourseSearch">
+          <Key>
+            <PropertyRef Name="CourseKey" />
+          </Key>
+          <Property Type="String" Name="CourseKey" Nullable="false" MaxLength="14" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="YearQuarterID" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="CourseID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CourseInfo" MaxLength="4065" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ProgramInformation">
+          <Key>
+            <PropertyRef Name="Abbreviation" />
+          </Key>
+          <Property Type="String" Name="Abbreviation" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="URL" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ProgramURL" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Title" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Division" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ContactName" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ContactPhone" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Intro" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ProgramInformation_OLD">
+          <Key>
+            <PropertyRef Name="Abbreviation" />
+          </Key>
+          <Property Type="String" Name="Abbreviation" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Url" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Title" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Department" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ContactName" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ContactPhone" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SectionFootnote">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="Footnote" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastUpdatedBy" MaxLength="40" FixedLength="true" Unicode="true" />
+          <Property Type="DateTime" Name="LastUpdated" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -374,6 +523,71 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ClassSearches">
+            <EntityTypeMapping TypeName="ClassSchedule.Models.ClassSearch">
+              <MappingFragment StoreEntitySet="ClassSearch">
+                <ScalarProperty Name="SearchGroup4" ColumnName="SearchGroup4" />
+                <ScalarProperty Name="SearchGroup3" ColumnName="SearchGroup3" />
+                <ScalarProperty Name="SearchGroup2" ColumnName="SearchGroup2" />
+                <ScalarProperty Name="SearchGroup1" ColumnName="SearchGroup1" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CourseFootnotes">
+            <EntityTypeMapping TypeName="ClassSchedule.Models.CourseFootnote">
+              <MappingFragment StoreEntitySet="CourseFootnote">
+                <ScalarProperty Name="Footnote" ColumnName="Footnote" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CourseSearches">
+            <EntityTypeMapping TypeName="ClassSchedule.Models.CourseSearch">
+              <MappingFragment StoreEntitySet="CourseSearch">
+                <ScalarProperty Name="CourseInfo" ColumnName="CourseInfo" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="YearQuarterID" ColumnName="YearQuarterID" />
+                <ScalarProperty Name="CourseKey" ColumnName="CourseKey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProgramInformations">
+            <EntityTypeMapping TypeName="ClassSchedule.Models.ProgramInformation">
+              <MappingFragment StoreEntitySet="ProgramInformation">
+                <ScalarProperty Name="Intro" ColumnName="Intro" />
+                <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="Division" ColumnName="Division" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ProgramURL" ColumnName="ProgramURL" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProgramInformation_OLD">
+            <EntityTypeMapping TypeName="ClassSchedule.Models.ProgramInformation_OLD">
+              <MappingFragment StoreEntitySet="ProgramInformation_OLD">
+                <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SectionFootnotes">
+            <EntityTypeMapping TypeName="ClassSchedule.Models.SectionFootnote">
+              <MappingFragment StoreEntitySet="SectionFootnote">
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="Footnote" ColumnName="Footnote" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -395,13 +609,19 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="ClassScheduleDb">
-        <EntityTypeShape EntityType="ClassSchedule.Models.vw_ClassScheduleData" Width="1.5" PointX="0.75" PointY="0.75" Height="3.4001269531249996" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.vw_ClassSearch" Width="1.5" PointX="2.75" PointY="0.75" Height="2.5783902994791665" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.vw_CourseSearch" Width="1.5" PointX="4.75" PointY="0.75" Height="2.0853483072916656" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.vw_ProgramInformation" Width="1.5" PointX="2.75" PointY="4.75" Height="2.4140429687499996" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.vw_SeatAvailability" Width="1.5" PointX="4.75" PointY="3.75" Height="1.4279589843749996" IsExpanded="true" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.SeatAvailability" Width="1.5" PointX="7.5" PointY="2.875" Height="1.4279589843749996" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.vw_SectionFootnote" Width="1.5" PointX="9.5" PointY="2.125" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.vw_ClassScheduleData" Width="1.5" PointX="0.5" PointY="0.5" Height="3.9033007812499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.vw_ClassSearch" Width="1.5" PointX="2" PointY="0.5" Height="2.9417936197916665" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.vw_CourseSearch" Width="1.5" PointX="3.625" PointY="0.5" Height="2.3648893229166665" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.vw_ProgramInformation" Width="1.5" PointX="5.125" PointY="2.125" Height="2.7494921874999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.vw_SeatAvailability" Width="1.5" PointX="5.125" PointY="0.5" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.SeatAvailability" Width="1.5" PointX="7.875" PointY="0.5" Height="1.5956835937499996" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.vw_SectionFootnote" Width="1.5" PointX="3.625" PointY="3" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.ClassSearch" Width="1.5" PointX="7.875" PointY="3.625" Height="1.9802864583333317" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.CourseFootnote" Width="1.5" PointX="7.875" PointY="2.125" Height="1.4033821614583317" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.CourseSearch" Width="1.5" PointX="9.5" PointY="0.5" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.ProgramInformation" Width="1.5" PointX="11.125" PointY="0.625" Height="2.5571907552083317" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.ProgramInformation_OLD" Width="1.5" PointX="9.625" PointY="4.125" Height="2.1725878906250031" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.SectionFootnote" Width="1.5" PointX="9.5" PointY="2.25" Height="1.7879850260416674" />
       </Diagram>
     </Diagrams>
   </Designer>

@@ -22,6 +22,21 @@
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
 
+
+<script type="text/javascript">
+	/* subject chooser pop-up dialog */
+	$(document).ready(function () {
+
+		$("#edit-section").dialog({
+			autoOpen: false,
+			height: 400,
+			width: 500,
+		});
+	});
+</script>
+
+	<div title="Edit Section" id="edit-section"></div>
+
 <div id="scheduleMain">
 	@Html.Partial("quarterNavigation")
 	<div id="container" class="nosidebar">
