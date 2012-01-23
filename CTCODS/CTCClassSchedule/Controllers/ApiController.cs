@@ -127,6 +127,7 @@ namespace CTCClassSchedule.Controllers
 															 select new SectionWithSeats {
 																	ParentObject = s,
 												SectionFootnotes = itemToUpdate != null ? itemToUpdate.Footnote ?? string.Empty : string.Empty,
+																	LastUpdated = itemToUpdate != null ? itemToUpdate.LastUpdated.ToString() ?? string.Empty : string.Empty
 															 }).ToList();
 
 					return PartialView(LocalSections);
@@ -152,14 +153,29 @@ namespace CTCClassSchedule.Controllers
 			string classID = ItemNumber + Yrq;
 			string referrer = collection["referrer"];
 
-
+			SectionFootnote itemToUpdate = new SectionFootnote();
+			SectionFootnote itemToInsert = new SectionFootnote();
+			bool itemFound = false;
 			if(ModelState.IsValid) {
 				using (ClassScheduleDb db = new ClassScheduleDb()) {
+					try
+					{
+						itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
+						itemFound = true;
+					}
+					catch
+					{
+					}
 
-					var itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
+					itemToUpdate.ClassID = classID;
 					itemToUpdate.Footnote = SectionFootnotes;
 					itemToUpdate.LastUpdated = DateTime.Now;
 					itemToUpdate.LastUpdatedBy = Username;
+
+					if (itemFound == false)
+					{
+						db.AddToSectionFootnotes(itemToUpdate);
+					}
 
 					db.SaveChanges();
 				}

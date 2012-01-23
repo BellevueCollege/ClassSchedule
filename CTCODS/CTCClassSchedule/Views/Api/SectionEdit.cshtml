@@ -56,7 +56,10 @@
 
 
 				<div id="lastModifiedBy">
-					Last modified by somebody @(section.LastUpdated)
+				@if(section.LastUpdated != ""){
+					<text>Last modified by somebody</text> @(section.LastUpdated)
+				}
+
 				</div>
 				<p class="clear"></p>
         <p>
