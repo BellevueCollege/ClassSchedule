@@ -31,6 +31,9 @@ namespace CTCClassSchedule
 				IsOnline = value.IsOnline;
 				IsOnCampus = value.IsOnCampus;
 				IsHybrid = value.IsHybrid;
+                IsLateStart = value.IsLateStart;
+                IsContinuousEnrollment = value.IsContinuousEnrollment;
+                IsVariableCredits = IsVariableCredits;
 				IsTelecourse = value.IsTelecourse;
 				Footnotes = value.Footnotes;
 			}
