@@ -1,4 +1,5 @@
 @using CTCClassSchedule.Common;
+@using Ctc.Web.Security;
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -58,14 +59,22 @@
 	@Html.Include(Server.MapPath("/globals/btheme_v0.1/asp/header_small.asp"))
 
 	<div id="bodyWrapper">
+
+
+		<!-- PROTOTYPE: This block of code only exists to prove that authentication/authorization works. -->
+		<!-- ******************************************************************************************* -->
 		<div style="float:right;">
 	@if(Context.User.Identity.IsAuthenticated) {
-			<text>[ Welcome <b>@Context.User.Identity.Name</b>! ]</text>
+			<text>[ Welcome <b>@Context.User.Identity.Name</b>! ] @(ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") ? "(DEV)" : "(0)") </text>
 	}
 	else {
 			@:[ @Html.ActionLink("Log On", "Authenticate", "Classes") ]
 	}
 		</div>
+		<!-- ******************************************************************************************* -->
+		<!-- END PROTOTYPE -->
+
+
     <div id="titlebar">
 		    <h1 id="sitename"><a href="@Url.Content("~/")">Classes</a></h1>
 		</div>

@@ -91,6 +91,8 @@
       <HintPath>..\..\packages\MiniProfiler.1.9\lib\net40\MvcMiniProfiler.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -138,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\ActionOutputCacheAttribute.cs" />
+    <Compile Include="Common\ActiveDirectoryRoleProvider.cs" />
     <Compile Include="Common\Encryption64.cs" />
     <Compile Include="Common\HelperContainers.cs" />
     <Compile Include="Common\HelperExtensions.cs" />
