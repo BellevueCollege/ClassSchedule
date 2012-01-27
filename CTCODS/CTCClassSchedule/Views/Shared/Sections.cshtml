@@ -62,14 +62,7 @@
 			{
 							<span class="days">
 								<abbr title="@Helpers.getFriendlyDayRange(item.Days, dict)">
-                                @if (item.Days == "ARRANGED")
-                                {
-                                    @Helpers.getFriendlyDayRange(item.Days, dict)
-                                }
-                                else
-                                {
                                     @item.Days
-                                }
                                 </abbr>
                             </span>
 							<span class="times"><span class="descriptor">at </span>@String.Format("{0:t}", item.StartTime).Replace(" ", "")-@String.Format("{0:t}", item.EndTime).Replace(" ", "")</span>
@@ -104,23 +97,24 @@
 
 
 			@Ajax.ActionLink("Edit",
-											 "SectionEdit",
-											 "Api",
-											 new {
-												 itemNumber = Model.ID.ItemNumber.ToString(),
-												 yrq = Model.ID.YearQuarter.ToString(),
-												 subject = Model.CourseSubject.ToString(),
-												 classNum = Model.CourseNumber.ToString()
-											 },
-											 new AjaxOptions
-											 {
-												 UpdateTargetId = "edit-section",
-												 HttpMethod = "GET",
-												 InsertionMode = InsertionMode.Replace,
-												 OnBegin = "$('#edit-section').dialog('open');",
-												 OnComplete = "spinner.stop();",
-											 },
-											 new  {@class="edit_button" })
+                                             "SectionEdit",
+                                             "Api",
+                                             new
+                                             {
+                                                 itemNumber = Model.ID.ItemNumber.ToString(),
+                                                 yrq = Model.ID.YearQuarter.ToString(),
+                                                 subject = Model.CourseSubject.ToString(),
+                                                 classNum = Model.CourseNumber.ToString()
+                                             },
+                                             new AjaxOptions
+                                             {
+                                                 UpdateTargetId = "edit-section",
+                                                 HttpMethod = "GET",
+                                                 InsertionMode = InsertionMode.Replace,
+                                                 OnBegin = "$('#edit-section').dialog('open');",
+                                                 OnComplete = "spinner.stop();",
+                                             },
+                                             new { @class = "edit_button" })
 
 
 
@@ -134,25 +128,22 @@
 			<li class="section-notes"><span class="descriptor">Notes: </span>
 				<ul>
 					<li><span class="label">
-                        @if (Model.IsHybrid)
-                        {
-                            Model.SectionFootnotes += String.Format("{0}Hybrid class: This class meets in person and online.", (Model.SectionFootnotes != String.Empty)?(" "):(String.Empty));
-                        }
+                        @{ Model.SectionFootnotes += AutomatedFootnotesConfig.getAutomatedFootnotesText(Model); }
 						@if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
-			{
-				if (string.IsNullOrWhiteSpace(_searchTerm))
-				{
-					@Model.SectionFootnotes
-				}
-				else
-				{
-					Html.FormatWithSearchTerm(_searchTerm, Model.SectionFootnotes);
-				}
-			}
-			else
-			{
-				Html.Raw("&nbsp;");
-			}
+			            {
+				            if (string.IsNullOrWhiteSpace(_searchTerm))
+				            {
+					            @Model.SectionFootnotes
+				            }
+				            else
+				            {
+					            Html.FormatWithSearchTerm(_searchTerm, Model.SectionFootnotes);
+				            }
+			            }
+			            else
+			            {
+				            Html.Raw("&nbsp;");
+			            }
 					</span></li>
 
 				</ul>
