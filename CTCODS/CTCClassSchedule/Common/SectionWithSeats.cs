@@ -26,6 +26,8 @@ namespace CTCClassSchedule
 				Offered = value.Offered;
 				SectionCode = value.SectionCode;
 				WaitlistCount = value.WaitlistCount;
+                StartDate = value.StartDate;
+                EndDate = value.EndDate;
 				Yrq = value.Yrq;
 				IsCommonCourse = value.IsCommonCourse;
 				IsOnline = value.IsOnline;
