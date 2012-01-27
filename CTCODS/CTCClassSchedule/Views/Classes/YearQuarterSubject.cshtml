@@ -88,6 +88,24 @@ ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Sc
 																		 route["ClassNum"] = sec.CourseNumber;
 
 				<text>
+				<div class="classinfo">
+				@Ajax.ActionLink("Edit",
+									"ClassEdit",
+									"Api",
+									new {
+										CourseNumber = sec.CourseNumber.ToString(),
+										Subject = sec.CourseSubject.ToString(),
+										IsCommonCourse = sec.IsCommonCourse,
+									},
+									new AjaxOptions
+									{
+										UpdateTargetId = "edit-class",
+										HttpMethod = "GET",
+										InsertionMode = InsertionMode.Replace,
+										OnBegin = "$('#edit-class').dialog('open');",
+										OnComplete = "spinner.stop();",
+									},
+									new  {@class="edit_button" })
 				<h2 class="classHeading">
 					<a href="@Url.Action("ClassDetails", "Classes", route)">
 						@Html.Raw(string.Format("{0}{1} {2} {3} &#8226; {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)))
@@ -100,6 +118,11 @@ ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Sc
 					@Html.ActionLink("View class details", "ClassDetails", "Classes", route, null)
 				</p>
 				<ul class='course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))'>
+
+
+
+
+				</div>
 				</text>
 																	 }
 
@@ -125,10 +148,17 @@ ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Sc
 			height: 375,
 			width: 560,
 		});
+
+		$("#edit-class").dialog({
+			autoOpen: false,
+			height: 375,
+			width: 560,
+		});
 	});
 </script>
 
 	<div title="Edit Section" id="edit-section"></div>
+	<div title="Edit Class" id="edit-class"></div>
 
 		</div>
 		<!-- content -->

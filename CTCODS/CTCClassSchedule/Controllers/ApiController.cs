@@ -126,7 +126,7 @@ namespace CTCClassSchedule.Controllers
 					var LocalSections = (from s in sectionsEnum
 															 select new SectionWithSeats {
 																	ParentObject = s,
-												SectionFootnotes = itemToUpdate != null ? itemToUpdate.Footnote ?? string.Empty : string.Empty,
+																	SectionFootnotes = itemToUpdate != null ? itemToUpdate.Footnote ?? string.Empty : string.Empty,
 																	LastUpdated = itemToUpdate != null ? itemToUpdate.LastUpdated.ToString() ?? string.Empty : string.Empty
 															 }).ToList();
 
@@ -154,7 +154,7 @@ namespace CTCClassSchedule.Controllers
 			string referrer = collection["referrer"];
 
 			SectionFootnote itemToUpdate = new SectionFootnote();
-			SectionFootnote itemToInsert = new SectionFootnote();
+
 			bool itemFound = false;
 			if(ModelState.IsValid) {
 				using (ClassScheduleDb db = new ClassScheduleDb()) {
@@ -184,5 +184,114 @@ namespace CTCClassSchedule.Controllers
 			return Redirect(referrer);
 
 		}
+
+
+		//Generation of the
+		public ActionResult ClassEdit(string CourseNumber, string Subject, bool IsCommonCourse)
+		{
+			ICourseID courseID = CourseID.FromString(Subject, CourseNumber);
+			string UpdatingCourseID = courseID.ToString(); //IsCommonCourse ? Subject + "&" + CourseNumber : Subject + " " + CourseNumber;
+			CourseFootnote itemToUpdate = null;
+			var HPFootnotes = "";
+			using (ClassScheduleDb db = new ClassScheduleDb())
+			{
+				try
+				{
+					itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID == UpdatingCourseID);
+					//var footnotesHP  = db.
+				}
+				catch
+				{
+
+				}
+
+				using (OdsRepository respository = new OdsRepository(HttpContext))
+				{
+					var QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+					Course coursesEnum = new Course();
+					try
+					{
+						coursesEnum = respository.GetCourses().Single(s => s.CourseID == UpdatingCourseID);
+						foreach (CourseDescription footnote in coursesEnum.Descriptions)
+						{
+							HPFootnotes += footnote.Description + " ";
+						}
+					}
+					catch
+					{
+
+					}
+
+
+				}
+
+				ClassFootnote LocalClass = new ClassFootnote();
+				LocalClass.CourseID = itemToUpdate != null ? itemToUpdate.CourseID : "";
+				LocalClass.Footnote = itemToUpdate != null ? itemToUpdate.Footnote : "";
+				LocalClass.HPFootnote = HPFootnotes;
+				LocalClass.LastUpdated = itemToUpdate != null ? Convert.ToString(itemToUpdate.LastUpdated) : "";
+				LocalClass.LastUpdatedBy = itemToUpdate != null ? itemToUpdate.LastUpdatedBy : "";
+
+
+
+
+				return PartialView(LocalClass);
+			}
+
+			return PartialView();
+		}
+
+
+
+
+
+
+		//
+		// POST after submit is clicked
+
+		[HttpPost]
+		public ActionResult ClassEdit(FormCollection collection)
+		{
+			string CourseID = collection["CourseID"];
+			string Username = collection["Username"];
+			string Footnote = collection["Footnote"];
+			string referrer = collection["referrer"];
+
+
+			CourseFootnote itemToUpdate = new CourseFootnote();
+			bool itemFound = false;
+			if (ModelState.IsValid)
+			{
+				using (ClassScheduleDb db = new ClassScheduleDb())
+				{
+					try
+					{
+						itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID == CourseID);
+
+						itemFound = true;
+					}
+					catch
+					{
+					}
+
+					itemToUpdate.CourseID = CourseID;
+					itemToUpdate.Footnote = Footnote;
+					itemToUpdate.LastUpdated = DateTime.Now;
+					itemToUpdate.LastUpdatedBy = Username;
+
+					if (itemFound == false)
+					{
+						db.AddToCourseFootnotes(itemToUpdate);
+					}
+
+					db.SaveChanges();
+				}
+			}
+
+			return Redirect(referrer);
+
+		}
+
+
 	}
 }

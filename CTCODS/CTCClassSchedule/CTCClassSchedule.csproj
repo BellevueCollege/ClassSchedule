@@ -141,6 +141,7 @@
   <ItemGroup>
     <Compile Include="Common\ActionOutputCacheAttribute.cs" />
     <Compile Include="Common\ActiveDirectoryRoleProvider.cs" />
+    <Compile Include="Common\ClassFootnote.cs" />
     <Compile Include="Common\Encryption64.cs" />
     <Compile Include="Common\HelperContainers.cs" />
     <Compile Include="Common\HelperExtensions.cs" />
@@ -347,6 +348,7 @@
     <Content Include="Views\Shared\subjectList.cshtml" />
     <Content Include="Views\Api\SectionEdit.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Api\ClassEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Classes\YearQuarter.cshtml" />

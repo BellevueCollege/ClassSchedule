@@ -111,6 +111,8 @@
           </Key>
           <Property Name="CourseID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Footnote" Type="varchar(max)" />
+          <Property Name="LastUpdatedBy" Type="nvarchar" MaxLength="40" />
+          <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
         <EntityType Name="CourseSearch">
           <Key>
@@ -273,13 +275,6 @@
           <Parameter Name="ClassID" Type="char" Mode="In" />
           <Parameter Name="SeatsAvailable" Type="int" Mode="In" />
         </Function>
-        <!--Errors Found During Generation:
-      warning 6013: The table/view 'ClassScheduleDev.dbo.SectionFootnoteW' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-
-      <EntityType Name="SectionFootnoteW">
-        <Property Name="ClassID" Type="varchar" MaxLength="8" />
-        <Property Name="Footnote" Type="varchar" MaxLength="4000" />
-      </EntityType>-->
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -401,6 +396,8 @@
           </Key>
           <Property Type="String" Name="CourseID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Footnote" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastUpdatedBy" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="LastUpdated" />
         </EntityType>
         <EntityType Name="CourseSearch">
           <Key>
@@ -537,6 +534,8 @@
           <EntitySetMapping Name="CourseFootnotes">
             <EntityTypeMapping TypeName="ClassSchedule.Models.CourseFootnote">
               <MappingFragment StoreEntitySet="CourseFootnote">
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
                 <ScalarProperty Name="Footnote" ColumnName="Footnote" />
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
               </MappingFragment>
