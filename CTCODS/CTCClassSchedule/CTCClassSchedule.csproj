@@ -141,6 +141,8 @@
   <ItemGroup>
     <Compile Include="Common\ActionOutputCacheAttribute.cs" />
     <Compile Include="Common\ActiveDirectoryRoleProvider.cs" />
+    <Compile Include="Common\AutomatedFootnotesConfig.cs" />
+    <Compile Include="Common\AutomatedFootnotesSection.cs" />
     <Compile Include="Common\ClassFootnote.cs" />
     <Compile Include="Common\Encryption64.cs" />
     <Compile Include="Common\HelperContainers.cs" />

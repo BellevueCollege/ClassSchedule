@@ -21,11 +21,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTCWCF.Tests", "CTCWCF.Test
 		{A5E11A22-DB5A-44E9-B563-055B4161DED9} = {A5E11A22-DB5A-44E9-B563-055B4161DED9}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OdsRepositoryStressTest", "OdsRepositoryStressTest\OdsRepositoryStressTest.csproj", "{954C7591-1A10-4396-91C4-6D7588DC9F31}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfsvs.wacollabcoop.org/tfs/bellevuecollege
 		SccLocalPath0 = .
@@ -38,9 +36,6 @@ Global
 		SccProjectUniqueName3 = CTCWCF.Tests\\CTCWCF.Tests.csproj
 		SccProjectName3 = CTCWCF.Tests
 		SccLocalPath3 = CTCWCF.Tests
-		SccProjectUniqueName4 = OdsRepositoryStressTest\\OdsRepositoryStressTest.csproj
-		SccProjectName4 = OdsRepositoryStressTest
-		SccLocalPath4 = OdsRepositoryStressTest
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = ODSAPI.vsmdi
@@ -69,12 +64,6 @@ Global
 		{D214BE30-C162-4829-901D-88E92FCC8E30}.Release with Profiling|Any CPU.Build.0 = Release|Any CPU
 		{D214BE30-C162-4829-901D-88E92FCC8E30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D214BE30-C162-4829-901D-88E92FCC8E30}.Release|Any CPU.Build.0 = Release|Any CPU
-		{954C7591-1A10-4396-91C4-6D7588DC9F31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{954C7591-1A10-4396-91C4-6D7588DC9F31}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{954C7591-1A10-4396-91C4-6D7588DC9F31}.Release with Profiling|Any CPU.ActiveCfg = Release|Any CPU
-		{954C7591-1A10-4396-91C4-6D7588DC9F31}.Release with Profiling|Any CPU.Build.0 = Release|Any CPU
-		{954C7591-1A10-4396-91C4-6D7588DC9F31}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{954C7591-1A10-4396-91C4-6D7588DC9F31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
