@@ -95,27 +95,28 @@
       }
 			 <li class="editing">
 
-
-			@Ajax.ActionLink("Edit",
-                                             "SectionEdit",
-                                             "Api",
-                                             new
-                                             {
-                                                 itemNumber = Model.ID.ItemNumber.ToString(),
-                                                 yrq = Model.ID.YearQuarter.ToString(),
-                                                 subject = Model.CourseSubject.ToString(),
-                                                 classNum = Model.CourseNumber.ToString()
-                                             },
-                                             new AjaxOptions
-                                             {
-                                                 UpdateTargetId = "edit-section",
-                                                 HttpMethod = "GET",
-                                                 InsertionMode = InsertionMode.Replace,
-                                                 OnBegin = "$('#edit-section').dialog('open');",
-                                                 OnComplete = "spinner.stop();",
-                                             },
-                                             new { @class = "edit_button" })
-
+				@if (Context.User.Identity.Name.Length > 0)
+				{
+					@Ajax.ActionLink("Edit",
+														"SectionEdit",
+														"Api",
+														new
+														{
+															itemNumber = Model.ID.ItemNumber.ToString(),
+															yrq = Model.ID.YearQuarter.ToString(),
+															subject = Model.CourseSubject.ToString(),
+															classNum = Model.CourseNumber.ToString()
+														},
+														new AjaxOptions
+														{
+															UpdateTargetId = "edit-section",
+															HttpMethod = "GET",
+															InsertionMode = InsertionMode.Replace,
+															OnBegin = "$('#edit-section').dialog('open');",
+															OnComplete = "spinner.stop();",
+														},
+														new { @class = "edit_button" })
+				}
 
 
 		</li>

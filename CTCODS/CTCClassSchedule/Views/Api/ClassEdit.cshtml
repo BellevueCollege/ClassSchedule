@@ -19,7 +19,7 @@
 		@Html.ValidationSummary(true)
 		<fieldset>
 				@Html.Hidden("CourseID", Model.CourseID)
-				@Html.Hidden("Username", "test.user")
+
 				@Html.Hidden("referrer", Request.UrlReferrer.ToString())
 
 
@@ -43,8 +43,8 @@
 
 				<div id="lastModifiedBy">
 				@if(Model.LastUpdated != null){
-					<text>Last modified by somebody</text> @Model.LastUpdated
-				}
+					<text>Last modified by </text>@Model.LastUpdatedBy<text> on </text>@Model.LastUpdated
+		}
 
 				</div>
 				<p class="clear"></p>
@@ -54,6 +54,3 @@
 		</fieldset>
 }
 
-<div>
-		@Html.ActionLink("Back to List", "Index")
-</div>

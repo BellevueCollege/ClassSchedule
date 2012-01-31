@@ -9,7 +9,7 @@ using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
 using CTCClassSchedule.Properties;
 using System;
-
+using Ctc.Web.Security;
 
 
 
@@ -84,56 +84,61 @@ namespace CTCClassSchedule.Controllers
 
 
 		//Generation of the
+		[Authorize(Roles = "Developers")]
 		public ActionResult SectionEdit(string itemNumber, string yrq, string subject, string classNum)
 		{
 			string classID = itemNumber + yrq;
 
-			using (OdsRepository respository = new OdsRepository(HttpContext))
+			if (HttpContext.User.Identity.IsAuthenticated == true)
 			{
-				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(respository);
-				ViewBag.QuarterNavMenu = yrqRange;
 
-				ICourseID courseID = CourseID.FromString(subject, classNum);
-				IList<Section> sections;
-				sections = respository.GetSections(courseID);
-
-				Section editSection = null;
-				foreach (Section section in sections)
+				using (OdsRepository respository = new OdsRepository(HttpContext))
 				{
-					if (section.ID.ToString() == classID)
+					IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(respository);
+					ViewBag.QuarterNavMenu = yrqRange;
+
+					ICourseID courseID = CourseID.FromString(subject, classNum);
+					IList<Section> sections;
+					sections = respository.GetSections(courseID);
+
+					Section editSection = null;
+					foreach (Section section in sections)
 					{
-						editSection = section;
+						if (section.ID.ToString() == classID)
+						{
+							editSection = section;
+						}
 					}
-				}
 
-				sections.Clear();
-				sections.Add(editSection);
+					sections.Clear();
+					sections.Add(editSection);
 
-				IEnumerable<SectionWithSeats> sectionsEnum;
-				SectionFootnote itemToUpdate = null;
-				using (ClassScheduleDb db = new ClassScheduleDb())
-				{
-					sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections, db);
-
-					try
+					IEnumerable<SectionWithSeats> sectionsEnum;
+					SectionFootnote itemToUpdate = null;
+					using (ClassScheduleDb db = new ClassScheduleDb())
 					{
-						itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
-					}
-					catch
-					{
+						sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections, db);
 
-					}
-					var LocalSections = (from s in sectionsEnum
-															 select new SectionWithSeats {
-																	ParentObject = s,
-																	SectionFootnotes = itemToUpdate != null ? itemToUpdate.Footnote ?? string.Empty : string.Empty,
-																	LastUpdated = itemToUpdate != null ? itemToUpdate.LastUpdated.ToString() ?? string.Empty : string.Empty
-															 }).ToList();
+						try
+						{
+							itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
+						}
+						catch
+						{
 
-					return PartialView(LocalSections);
+						}
+						var LocalSections = (from s in sectionsEnum
+																 select new SectionWithSeats
+																 {
+																	 ParentObject = s,
+																	 SectionFootnotes = itemToUpdate != null ? itemToUpdate.Footnote ?? string.Empty : string.Empty,
+																	 LastUpdated = itemToUpdate != null ? itemToUpdate.LastUpdated.ToString() ?? string.Empty : string.Empty
+																 }).ToList();
+
+						return PartialView(LocalSections);
+					}
 				}
 			}
-
 			return PartialView();
 		}
 
@@ -144,98 +149,111 @@ namespace CTCClassSchedule.Controllers
 		// POST after submit is clicked
 
 		[HttpPost]
+		[Authorize(Roles = "Developers")]
 		public ActionResult SectionEdit(FormCollection collection)
 		{
-			string ItemNumber = collection["ItemNumber"];
-			string Yrq = collection["Yrq"];
-			string Username = collection["Username"];
-			string SectionFootnotes = collection["section.SectionFootnotes"];
-			string classID = ItemNumber + Yrq;
 			string referrer = collection["referrer"];
 
-			SectionFootnote itemToUpdate = new SectionFootnote();
+			if (HttpContext.User.Identity.IsAuthenticated == true)
+			{
+				string ItemNumber = collection["ItemNumber"];
+				string Yrq = collection["Yrq"];
+				string Username = HttpContext.User.Identity.Name;
+				string SectionFootnotes = collection["section.SectionFootnotes"];
+				string classID = ItemNumber + Yrq;
 
-			bool itemFound = false;
-			if(ModelState.IsValid) {
-				using (ClassScheduleDb db = new ClassScheduleDb()) {
-					try
+
+				SectionFootnote itemToUpdate = new SectionFootnote();
+
+				bool itemFound = false;
+				if (ModelState.IsValid)
+				{
+					using (ClassScheduleDb db = new ClassScheduleDb())
 					{
-						itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
-						itemFound = true;
-					}
-					catch
-					{
-					}
+						try
+						{
+							itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
+							itemFound = true;
+						}
+						catch
+						{
+						}
 
-					itemToUpdate.ClassID = classID;
-					itemToUpdate.Footnote = SectionFootnotes;
-					itemToUpdate.LastUpdated = DateTime.Now;
-					itemToUpdate.LastUpdatedBy = Username;
+						itemToUpdate.ClassID = classID;
+						itemToUpdate.Footnote = SectionFootnotes;
+						itemToUpdate.LastUpdated = DateTime.Now;
+						itemToUpdate.LastUpdatedBy = Username;
 
-					if (itemFound == false)
-					{
-						db.AddToSectionFootnotes(itemToUpdate);
+						if (itemFound == false)
+						{
+							db.AddToSectionFootnotes(itemToUpdate);
+						}
+
+						db.SaveChanges();
 					}
-
-					db.SaveChanges();
 				}
+
+
 			}
-
 			return Redirect(referrer);
-
 		}
 
 
 		//Generation of the
+		[Authorize(Roles = "Developers")]  //TODO: Make this configurable
 		public ActionResult ClassEdit(string CourseNumber, string Subject, bool IsCommonCourse)
 		{
-			ICourseID courseID = CourseID.FromString(Subject, CourseNumber);
-			string UpdatingCourseID = courseID.ToString(); //IsCommonCourse ? Subject + "&" + CourseNumber : Subject + " " + CourseNumber;
-			CourseFootnote itemToUpdate = null;
-			var HPFootnotes = "";
-			using (ClassScheduleDb db = new ClassScheduleDb())
+
+			if (HttpContext.User.Identity.IsAuthenticated == true)
 			{
-				try
+				ICourseID courseID = CourseID.FromString(Subject, CourseNumber);
+				string UpdatingCourseID = courseID.ToString(); //IsCommonCourse ? Subject + "&" + CourseNumber : Subject + " " + CourseNumber;
+				CourseFootnote itemToUpdate = null;
+				var HPFootnotes = "";
+				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID == UpdatingCourseID);
-					//var footnotesHP  = db.
-				}
-				catch
-				{
-
-				}
-
-				using (OdsRepository respository = new OdsRepository(HttpContext))
-				{
-					var QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
-					Course coursesEnum = new Course();
 					try
 					{
-						coursesEnum = respository.GetCourses().Single(s => s.CourseID == UpdatingCourseID);
-						foreach (CourseDescription footnote in coursesEnum.Descriptions)
-						{
-							HPFootnotes += footnote.Description + " ";
-						}
+						itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID == UpdatingCourseID);
+						//var footnotesHP  = db.
 					}
 					catch
 					{
 
 					}
 
+					using (OdsRepository respository = new OdsRepository(HttpContext))
+					{
+						var QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+						Course coursesEnum = new Course();
+						try
+						{
+							coursesEnum = respository.GetCourses().Single(s => s.CourseID == UpdatingCourseID);
+							foreach (CourseDescription footnote in coursesEnum.Descriptions)
+							{
+								HPFootnotes += footnote.Description + " ";
+							}
+						}
+						catch
+						{
 
+						}
+
+
+					}
+
+					ClassFootnote LocalClass = new ClassFootnote();
+					LocalClass.CourseID = itemToUpdate != null ? itemToUpdate.CourseID : "";
+					LocalClass.Footnote = itemToUpdate != null ? itemToUpdate.Footnote : "";
+					LocalClass.HPFootnote = HPFootnotes;
+					LocalClass.LastUpdated = itemToUpdate != null ? Convert.ToString(itemToUpdate.LastUpdated) : "";
+					LocalClass.LastUpdatedBy = itemToUpdate != null ? itemToUpdate.LastUpdatedBy : "";
+
+
+
+
+					return PartialView(LocalClass);
 				}
-
-				ClassFootnote LocalClass = new ClassFootnote();
-				LocalClass.CourseID = itemToUpdate != null ? itemToUpdate.CourseID : "";
-				LocalClass.Footnote = itemToUpdate != null ? itemToUpdate.Footnote : "";
-				LocalClass.HPFootnote = HPFootnotes;
-				LocalClass.LastUpdated = itemToUpdate != null ? Convert.ToString(itemToUpdate.LastUpdated) : "";
-				LocalClass.LastUpdatedBy = itemToUpdate != null ? itemToUpdate.LastUpdatedBy : "";
-
-
-
-
-				return PartialView(LocalClass);
 			}
 
 			return PartialView();
@@ -250,48 +268,53 @@ namespace CTCClassSchedule.Controllers
 		// POST after submit is clicked
 
 		[HttpPost]
+		[Authorize(Roles = "Developers")]  //TODO: Make this configurable
 		public ActionResult ClassEdit(FormCollection collection)
 		{
-			string CourseID = collection["CourseID"];
-			string Username = collection["Username"];
-			string Footnote = collection["Footnote"];
 			string referrer = collection["referrer"];
 
-
-			CourseFootnote itemToUpdate = new CourseFootnote();
-			bool itemFound = false;
-			if (ModelState.IsValid)
+			if (HttpContext.User.Identity.IsAuthenticated == true)
 			{
-				using (ClassScheduleDb db = new ClassScheduleDb())
+				string CourseID = collection["CourseID"];
+				string Username = HttpContext.User.Identity.Name;
+				string Footnote = collection["Footnote"];
+
+
+
+
+				CourseFootnote itemToUpdate = new CourseFootnote();
+				bool itemFound = false;
+				if (ModelState.IsValid)
 				{
-					try
+					using (ClassScheduleDb db = new ClassScheduleDb())
 					{
-						itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID == CourseID);
+						try
+						{
+							itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID == CourseID);
 
-						itemFound = true;
+							itemFound = true;
+						}
+						catch
+						{
+						}
+
+						itemToUpdate.CourseID = CourseID;
+						itemToUpdate.Footnote = Footnote;
+						itemToUpdate.LastUpdated = DateTime.Now;
+						itemToUpdate.LastUpdatedBy = Username;
+
+						if (itemFound == false)
+						{
+							db.AddToCourseFootnotes(itemToUpdate);
+						}
+
+						db.SaveChanges();
 					}
-					catch
-					{
-					}
-
-					itemToUpdate.CourseID = CourseID;
-					itemToUpdate.Footnote = Footnote;
-					itemToUpdate.LastUpdated = DateTime.Now;
-					itemToUpdate.LastUpdatedBy = Username;
-
-					if (itemFound == false)
-					{
-						db.AddToCourseFootnotes(itemToUpdate);
-					}
-
-					db.SaveChanges();
 				}
 			}
 
 			return Redirect(referrer);
-
 		}
-
 
 	}
 }
