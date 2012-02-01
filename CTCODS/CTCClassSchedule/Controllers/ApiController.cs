@@ -83,7 +83,7 @@ namespace CTCClassSchedule.Controllers
 		}
 
 
-		//Generation of the
+		//Generation of the Section Edit dialog box
 		[Authorize(Roles = "Developers")]
 		public ActionResult SectionEdit(string itemNumber, string yrq, string subject, string classNum)
 		{
@@ -199,7 +199,7 @@ namespace CTCClassSchedule.Controllers
 		}
 
 
-		//Generation of the
+		//Generation of the Class Edit dialog box
 		[Authorize(Roles = "Developers")]  //TODO: Make this configurable
 		public ActionResult ClassEdit(string CourseNumber, string Subject, bool IsCommonCourse)
 		{
@@ -315,6 +315,96 @@ namespace CTCClassSchedule.Controllers
 
 			return Redirect(referrer);
 		}
+
+
+
+		//Generation of the Program Edit dialog box
+		[Authorize(Roles = "Developers")]  //TODO: Make this configurable
+		public ActionResult ProgramEdit(string Subject)
+		{
+
+			if (HttpContext.User.Identity.IsAuthenticated == true)
+			{
+				//ProgramInformation itemToUpdate = new ProgramInformation();
+				using (ClassScheduleDb db = new ClassScheduleDb())
+				{
+					try
+					{
+						var itemToUpdate = db.ProgramInformations.Single(s => s.URL == Subject);
+						return PartialView(itemToUpdate);
+					}
+					catch
+					{
+
+					}
+
+
+				}
+			}
+
+			return PartialView();
+		}
+
+
+
+
+
+
+		//
+		// POST after submit is clicked
+
+		[HttpPost]
+		[Authorize(Roles = "Developers")]  //TODO: Make this configurable
+		public ActionResult ProgramEdit(FormCollection collection)
+		{
+			string referrer = collection["referrer"];
+
+			if (HttpContext.User.Identity.IsAuthenticated == true)
+			{
+				string CourseID = collection["CourseID"];
+				string Username = HttpContext.User.Identity.Name;
+				string Footnote = collection["Footnote"];
+
+
+
+
+				CourseFootnote itemToUpdate = new CourseFootnote();
+				bool itemFound = false;
+				if (ModelState.IsValid)
+				{
+					using (ClassScheduleDb db = new ClassScheduleDb())
+					{
+						try
+						{
+							itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID == CourseID);
+
+							itemFound = true;
+						}
+						catch
+						{
+						}
+
+						itemToUpdate.CourseID = CourseID;
+						itemToUpdate.Footnote = Footnote;
+						itemToUpdate.LastUpdated = DateTime.Now;
+						itemToUpdate.LastUpdatedBy = Username;
+
+						if (itemFound == false)
+						{
+							db.AddToCourseFootnotes(itemToUpdate);
+						}
+
+						db.SaveChanges();
+					}
+				}
+			}
+
+			return Redirect(referrer);
+		}
+
+
+
+
 
 	}
 }

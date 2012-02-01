@@ -1317,3 +1317,25 @@ a.edit_button
 }
 
 /* end section edit */
+
+
+/* start program edit */
+#ProgramEdit .left,
+#ProgramEdit .right
+{
+	width: 420px;
+	float: left;
+}
+
+
+
+#ProgramEdit .SubjectTextfield
+{
+	width: 380px;
+}
+
+
+
+
+
+/* end program edit */

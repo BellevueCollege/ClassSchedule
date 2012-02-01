@@ -1016,6 +1016,102 @@ namespace CTCClassSchedule.Models
         partial void OnIntroChanging(global::System.String value);
         partial void OnIntroChanged();
 
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String AcademicProgram
+        {
+            get
+            {
+                return _AcademicProgram;
+            }
+            set
+            {
+                OnAcademicProgramChanging(value);
+                ReportPropertyChanging("AcademicProgram");
+                _AcademicProgram = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("AcademicProgram");
+                OnAcademicProgramChanged();
+            }
+        }
+        private global::System.String _AcademicProgram;
+        partial void OnAcademicProgramChanging(global::System.String value);
+        partial void OnAcademicProgramChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DivisionURL
+        {
+            get
+            {
+                return _DivisionURL;
+            }
+            set
+            {
+                OnDivisionURLChanging(value);
+                ReportPropertyChanging("DivisionURL");
+                _DivisionURL = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DivisionURL");
+                OnDivisionURLChanged();
+            }
+        }
+        private global::System.String _DivisionURL;
+        partial void OnDivisionURLChanging(global::System.String value);
+        partial void OnDivisionURLChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> LastUpdated
+        {
+            get
+            {
+                return _LastUpdated;
+            }
+            set
+            {
+                OnLastUpdatedChanging(value);
+                ReportPropertyChanging("LastUpdated");
+                _LastUpdated = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LastUpdated");
+                OnLastUpdatedChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _LastUpdated;
+        partial void OnLastUpdatedChanging(Nullable<global::System.DateTime> value);
+        partial void OnLastUpdatedChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String LastUpdatedBy
+        {
+            get
+            {
+                return _LastUpdatedBy;
+            }
+            set
+            {
+                OnLastUpdatedByChanging(value);
+                ReportPropertyChanging("LastUpdatedBy");
+                _LastUpdatedBy = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("LastUpdatedBy");
+                OnLastUpdatedByChanged();
+            }
+        }
+        private global::System.String _LastUpdatedBy;
+        partial void OnLastUpdatedByChanging(global::System.String value);
+        partial void OnLastUpdatedByChanged();
+
         #endregion
 
     }

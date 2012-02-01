@@ -351,6 +351,7 @@
     <Content Include="Views\Api\SectionEdit.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Api\ClassEdit.cshtml" />
+    <Content Include="Views\Api\ProgramEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Classes\YearQuarter.cshtml" />

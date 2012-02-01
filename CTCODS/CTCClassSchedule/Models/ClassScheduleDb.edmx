@@ -135,6 +135,10 @@
           <Property Name="ContactName" Type="varchar" MaxLength="255" />
           <Property Name="ContactPhone" Type="varchar" MaxLength="255" />
           <Property Name="Intro" Type="varchar(max)" />
+          <Property Name="AcademicProgram" Type="varchar" MaxLength="50" />
+          <Property Name="DivisionURL" Type="varchar" MaxLength="255" />
+          <Property Name="LastUpdated" Type="datetime" />
+          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'ClassScheduleDev.dbo.ProgramInformation.OLD' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -420,6 +424,10 @@
           <Property Type="String" Name="ContactName" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ContactPhone" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Intro" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="AcademicProgram" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DivisionURL" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LastUpdated" />
+          <Property Type="String" Name="LastUpdatedBy" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ProgramInformation_OLD">
           <Key>
@@ -554,6 +562,10 @@
           <EntitySetMapping Name="ProgramInformations">
             <EntityTypeMapping TypeName="ClassSchedule.Models.ProgramInformation">
               <MappingFragment StoreEntitySet="ProgramInformation">
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="DivisionURL" ColumnName="DivisionURL" />
+                <ScalarProperty Name="AcademicProgram" ColumnName="AcademicProgram" />
                 <ScalarProperty Name="Intro" ColumnName="Intro" />
                 <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
                 <ScalarProperty Name="ContactName" ColumnName="ContactName" />

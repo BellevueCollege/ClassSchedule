@@ -41,6 +41,32 @@
 		{
 					Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
 				}
+
+				@if (Context.User.Identity.Name.Length > 0)
+				{
+
+
+
+					@Ajax.ActionLink("Edit",
+											"ProgramEdit",
+											"Api",
+											new
+											{
+												Subject = item.Subject.ToString()
+											},
+											new AjaxOptions
+											{
+												UpdateTargetId = "edit-program",
+												HttpMethod = "GET",
+												InsertionMode = InsertionMode.Replace,
+												OnBegin = "$('#edit-program').dialog('open');",
+												OnComplete = "spinner.stop();",
+											},
+											new { @class = "edit_button" })
+
+				}
+
+
 				</li>
 		PreviousLetter = letter;
 	}
