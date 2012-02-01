@@ -11,7 +11,8 @@
         <legend>ProgramInformation</legend>
 
         @Html.HiddenFor(model => model.Abbreviation)
-
+				@Html.HiddenFor(model => model.URL)
+				@Html.Hidden("referrer", Request.UrlReferrer.ToString())
 
 
 				<div class="left">

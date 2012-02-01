@@ -361,14 +361,21 @@ namespace CTCClassSchedule.Controllers
 
 			if (HttpContext.User.Identity.IsAuthenticated == true)
 			{
-				string CourseID = collection["CourseID"];
+
 				string Username = HttpContext.User.Identity.Name;
-				string Footnote = collection["Footnote"];
 
 
+				string DivisionURL = collection["DivisionURL"];
+				string Division = collection["Division"];
+				string ProgramURL = collection["ProgramURL"];
+				string AcademicProgram = collection["AcademicProgram"];
+				string Intro = collection["Intro"];
+				string Title = collection["Title"];
+				string Abbreviation	 = collection["Abbreviation"];
+				string URL = collection["URL"];
 
 
-				CourseFootnote itemToUpdate = new CourseFootnote();
+				ProgramInformation itemToUpdate = new ProgramInformation();
 				bool itemFound = false;
 				if (ModelState.IsValid)
 				{
@@ -376,7 +383,7 @@ namespace CTCClassSchedule.Controllers
 					{
 						try
 						{
-							itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID == CourseID);
+							itemToUpdate = db.ProgramInformations.Single(s => s.URL == URL);
 
 							itemFound = true;
 						}
@@ -384,16 +391,24 @@ namespace CTCClassSchedule.Controllers
 						{
 						}
 
-						itemToUpdate.CourseID = CourseID;
-						itemToUpdate.Footnote = Footnote;
 						itemToUpdate.LastUpdated = DateTime.Now;
 						itemToUpdate.LastUpdatedBy = Username;
+						itemToUpdate.DivisionURL = DivisionURL;
+						itemToUpdate.Division = Division;
+						itemToUpdate.ProgramURL = ProgramURL;
+						itemToUpdate.AcademicProgram = AcademicProgram;
+						itemToUpdate.Intro = Intro;
+						itemToUpdate.Title = Title;
+						itemToUpdate.Abbreviation = Abbreviation;
+						itemToUpdate.URL = URL;
 
+						//add the item to the database if it doesn't exist.
 						if (itemFound == false)
 						{
-							db.AddToCourseFootnotes(itemToUpdate);
+							db.AddToProgramInformations(itemToUpdate);
 						}
 
+						//save to the db (whether item existed or not)
 						db.SaveChanges();
 					}
 				}
