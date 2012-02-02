@@ -26,18 +26,20 @@ namespace CTCClassSchedule
 				Offered = value.Offered;
 				SectionCode = value.SectionCode;
 				WaitlistCount = value.WaitlistCount;
-                StartDate = value.StartDate;
-                EndDate = value.EndDate;
+				StartDate = value.StartDate;
+				EndDate = value.EndDate;
 				Yrq = value.Yrq;
 				IsCommonCourse = value.IsCommonCourse;
 				IsOnline = value.IsOnline;
 				IsOnCampus = value.IsOnCampus;
 				IsHybrid = value.IsHybrid;
-                IsLateStart = value.IsLateStart;
-                IsContinuousEnrollment = value.IsContinuousEnrollment;
-                IsVariableCredits = IsVariableCredits;
+				IsLateStart = value.IsLateStart;
+				IsContinuousEnrollment = value.IsContinuousEnrollment;
+				IsVariableCredits = IsVariableCredits;
 				IsTelecourse = value.IsTelecourse;
 				Footnotes = value.Footnotes;
+				IsLinked = value.IsLinked;
+				LinkedTo = value.LinkedTo;
 			}
 		}
 	}

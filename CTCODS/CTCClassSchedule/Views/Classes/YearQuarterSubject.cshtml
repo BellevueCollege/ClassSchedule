@@ -77,24 +77,23 @@
 				 sectionID = sec.ID.ToString();
 				 credits = sec.Credits;
 
-				 if (courseID != PreviousCourseID || (courseID == PreviousCourseID && credits != PreviousCredits))
+				 if (!sec.IsLinked)
 				 {
-					 if (PreviousCourseID != "")
+					 if (courseID != PreviousCourseID || (courseID == PreviousCourseID && credits != PreviousCredits))
 					 {
+						 if (PreviousCourseID != "")
+						 {
 				@:</ul>
 					}
 
-					 route["Subject"] = sec.CourseSubject.Trim();
-					 route["ClassNum"] = sec.CourseNumber;
+						 route["Subject"] = sec.CourseSubject.Trim();
+						 route["ClassNum"] = sec.CourseNumber;
 
 				<text>
 				<div class="classinfo">
 
 				@if (Context.User.Identity.Name.Length > 0)
-				{
-
-
-
+		{
 					@Ajax.ActionLink("Edit",
 											"ClassEdit",
 											"Api",
@@ -114,11 +113,25 @@
 											},
 											new { @class = "edit_button" })
 
-				}
+		}
 				<h2 class="classHeading">
 					<a href="@Url.Action("ClassDetails", "Classes", route)">
-						@Html.Raw(string.Format("{0}{1} {2} {3} &#8226; {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits)))
+						@Html.Raw(string.Format("{0}{1} {2} {3}", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle))
 					</a>
+
+				@{
+				IEnumerable<SectionWithSeats> linkedSections = orderedModel.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber);
+				int foo = linkedSections.Count();
+				}
+				@foreach(SectionWithSeats linkedSec in linkedSections)
+		{
+			<br/>
+			<a href="@Url.Action("ClassDetails", "Classes", new {YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber})">
+				@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
+			</a>
+		}
+
+					&#8226; @Html.CreditsValue(sec.Credits) Cr.
 				</h2>
 				<div class="CourseFootnotes">
 					@sec.CourseFootnotes
@@ -128,16 +141,14 @@
 				</p>
 				<ul class='course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))'>
 
-
-
-
 				</div>
 				</text>
-				 }
+					 }
 
-				 if (PreviousSectionID != sectionID)
-				 {
-					 Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+					 if (PreviousSectionID != sectionID)
+					 {
+						 Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+					 }
 				 }
 
 				 PreviousCredits = sec.Credits;
