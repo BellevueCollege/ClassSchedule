@@ -38,6 +38,7 @@ namespace CTCClassSchedule
 				IsVariableCredits = IsVariableCredits;
 				IsTelecourse = value.IsTelecourse;
 				Footnotes = value.Footnotes;
+                IsDifferentEndDate = value.IsDifferentEndDate;
 				IsLinked = value.IsLinked;
 				LinkedTo = value.LinkedTo;
 			}

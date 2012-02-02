@@ -30,17 +30,30 @@ namespace CTCClassSchedule
             string dateText;
             AutomatedFootnoteElement footnote;
             string wSpace = section.Footnotes.Count() == 0 ? string.Empty : " ";
+
+            // If the section has a late start
             if (section.IsLateStart)
             {
                 footnote = Footnotes("lateStart");
                 dateText = section.StartDate.GetValueOrDefault(DateTime.Now).ToString(footnote.StringFormat);
                 footnoteTextResult += wSpace + Footnotes("lateStart").Text.Replace(dateParam, dateText);
             }
-            // add diff end date flag
+
+            // If the section has a different end date than usual
+            if (section.IsDifferentEndDate)
+            {
+                footnote = Footnotes("lateStart");
+                dateText = section.EndDate.GetValueOrDefault(DateTime.Now).ToString(footnote.StringFormat);
+                footnoteTextResult += wSpace + Footnotes("endDate").Text.Replace(dateParam, dateText);
+            }
+
+            // If the section is a hybrid section
             if (section.IsHybrid)
             {
                 footnoteTextResult += wSpace + Footnotes("hybrid").Text;
             }
+
+            // If the section is a continuous enrollment section
             if (section.IsContinuousEnrollment)
             {
                 footnote = Footnotes("continuousEnrollment");
