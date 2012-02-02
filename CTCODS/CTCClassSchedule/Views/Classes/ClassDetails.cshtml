@@ -102,9 +102,12 @@
 				string thisYrq = sec.Yrq.ID;
 				string sectionID = sec.ID.ToString();
 
-				if (thisYrq != PreviousYrq)
+				if (!sec.IsLinked)
 				{
-					if (PreviousYrq != string.Empty) {
+					if (thisYrq != PreviousYrq)
+					{
+						if (PreviousYrq != string.Empty)
+						{
 						@: </ul>
 					}
 
@@ -119,18 +122,21 @@
 
 				    <ul class="course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
 				    </text>
+					}
+
+					if (sectionID != PreviousSectionID)
+					{
+						Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+					}
+
+					@*
+					if (thisYrq != PreviousYrq && PreviousYrq != string.Empty)
+					{
+				    </ul>  <!-- course-block -->  <!-- BUG! THIS UL CLOSES AFTER THE FIRST PASS  -->
+
+					}
+					*@
 				}
-
-				if (sectionID != PreviousSectionID)
-		        {
-			        Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
-		        }
-
-			    if (thisYrq != PreviousYrq && PreviousYrq != string.Empty)
-			    {
-				    @*</ul> *@ <!-- course-block -->  <!-- BUG! THIS UL CLOSES AFTER THE FIRST PASS  -->
-
-			    }
 				PreviousSectionID = sectionID;
 				PreviousYrq = thisYrq;
 			}
