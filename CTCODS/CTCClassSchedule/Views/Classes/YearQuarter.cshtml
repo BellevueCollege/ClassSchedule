@@ -1,5 +1,6 @@
 ﻿@using Ctc.Ods.Types
-@model IEnumerable<ICoursePrefix>
+@using CTCClassSchedule.Common
+@model IEnumerable<ScheduleCoursePrefix>
 @{
 	YearQuarter yrq = ViewBag.YearQuarter;
 
@@ -42,6 +43,7 @@
 			autoOpen: false,
 			height: 455,
 			width: 900,
+
 		});
 	});
 </script>
@@ -66,7 +68,10 @@
 	});
 </script>
 
-	<div title="Edit Program" id="edit-program"></div>
+	<div title="Edit Subject Information" id="edit-program"></div>
+
+
+
 
         </div> <!-- #content -->
     </div> <!-- #container -->

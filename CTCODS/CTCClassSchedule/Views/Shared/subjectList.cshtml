@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Ctc.Ods.Types.ICoursePrefix>
+﻿@using CTCClassSchedule.Common
+@model IEnumerable<ScheduleCoursePrefix>
 
 	@{
 	// construct the route values we'll pass to the ActionLink helper
@@ -52,7 +53,7 @@
 											"Api",
 											new
 											{
-												Subject = item.Subject.ToString()
+												Abbreviation = item.Subject.ToString() //this Subject is actually the Abbreviation.
 											},
 											new AjaxOptions
 											{

@@ -9,7 +9,13 @@ namespace CTCClassSchedule.Common
 		/// The five-character abbreviation which identifies a course of study (e.g. ENGL)
 		/// </summary>
 		/// <seealso cref="ICoursePrefix.Title"/>
-		public string Subject { get;set;}
+		public string Subject { get; set; }
+
+		/// <summary>
+		/// The five-character abbreviation which is mapped to a URL of a course of study (e.g. ENGL). It handles the merged courses functionality.
+		/// </summary>
+		/// <seealso cref="ICoursePrefix.Title"/>
+		public string URL { get; set; }
 
 		/// <summary>
 		/// The full name of a course of study (e.g. English)

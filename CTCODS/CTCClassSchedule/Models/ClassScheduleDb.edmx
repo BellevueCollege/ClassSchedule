@@ -100,7 +100,7 @@
             <PropertyRef Name="ClassID" />
           </Key>
           <Property Name="ClassID" Type="char" Nullable="false" MaxLength="8" />
-          <Property Name="SearchGroup1" Type="varchar" MaxLength="81" />
+          <Property Name="SearchGroup1" Type="varchar" MaxLength="200" />
           <Property Name="SearchGroup2" Type="varchar" MaxLength="4065" />
           <Property Name="SearchGroup3" Type="varchar" MaxLength="265" />
           <Property Name="SearchGroup4" Type="varchar" MaxLength="4411" />
@@ -139,6 +139,7 @@
           <Property Name="DivisionURL" Type="varchar" MaxLength="255" />
           <Property Name="LastUpdated" Type="datetime" />
           <Property Name="LastUpdatedBy" Type="varchar" MaxLength="50" />
+          <Property Name="MergedSubjects" Type="varchar" MaxLength="255" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'ClassScheduleDev.dbo.ProgramInformation.OLD' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -428,6 +429,7 @@
           <Property Type="String" Name="DivisionURL" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastUpdated" />
           <Property Type="String" Name="LastUpdatedBy" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="MergedSubjects" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ProgramInformation_OLD">
           <Key>
@@ -562,6 +564,7 @@
           <EntitySetMapping Name="ProgramInformations">
             <EntityTypeMapping TypeName="ClassSchedule.Models.ProgramInformation">
               <MappingFragment StoreEntitySet="ProgramInformation">
+                <ScalarProperty Name="MergedSubjects" ColumnName="MergedSubjects" />
                 <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
                 <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
                 <ScalarProperty Name="DivisionURL" ColumnName="DivisionURL" />

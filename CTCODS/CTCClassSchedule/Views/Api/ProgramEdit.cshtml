@@ -1,17 +1,29 @@
-﻿@model CTCClassSchedule.Models.ProgramInformation
+﻿@model CTCClassSchedule.ProgramEditModel
 
 <script src="@Url.Content("~/Scripts/jquery-1.5.1.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
+
+<script type="text/javascript">
+	/* change the title of the dialog box to include the URL value (ALDAC) */
+	$(document).ready(function () {
+		var url = $("input#itemToUpdate_Abbreviation").val();
+		var titleHTML = "Edit Subject Information - " + url;
+		$("span.ui-dialog-title").html(titleHTML);
+	});
+</script>
+
+
+
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
     <fieldset id="ProgramEdit">
-        <legend>ProgramInformation</legend>
 
-        @Html.HiddenFor(model => model.Abbreviation)
-				@Html.HiddenFor(model => model.URL)
+
+        @Html.HiddenFor(model => model.itemToUpdate.Abbreviation)
+				@Html.HiddenFor(model => model.itemToUpdate.URL)
 				@Html.Hidden("referrer", Request.UrlReferrer.ToString())
 
 
@@ -19,19 +31,80 @@
 
 
 					<div class="editor-label">
-							@Html.LabelFor(model => model.Title)
+							@Html.LabelFor(model => model.itemToUpdate.Title)
 					</div>
 					<div class="editor-field">
-							@Html.TextBoxFor(model => model.Title, new { @class = "SubjectTextfield" })
-							@Html.ValidationMessageFor(model => model.Title)
+							@Html.TextBoxFor(model => model.itemToUpdate.Title, new { @class = "SubjectTextfield" })
+							@Html.ValidationMessageFor(model => model.itemToUpdate.Title)
 					</div>
 
 					 <div class="editor-label">
-							@Html.LabelFor(model => model.Intro)
+					 @{
+							if ((Model.MergedClasses.Count() > 0 && Model.itemToUpdate.Abbreviation != Model.itemToUpdate.URL) || Model.MergedClasses.Count() > 1)
+							{
+								@Html.LabelFor(model => model.itemToUpdate.MergedSubjects, "Subjects merged with " + Model.itemToUpdate.URL);
+							}
+							else
+							{
+								@Html.LabelFor(model => model.MergeSubjectChoices, "Merge with another subject (enter abbr)");
+							}
+					}
 					</div>
 					<div class="editor-field">
-							 @Html.TextAreaFor(model => Model.Intro, new { @class = "SubjectTextarea", @cols = 60, @rows = 7 })
-							@Html.ValidationMessageFor(model => model.Intro)
+						@{
+								if ((Model.MergedClasses.Count() > 0 && Model.itemToUpdate.Abbreviation != Model.itemToUpdate.URL) || Model.MergedClasses.Count() > 1)
+								{
+									//there are merged subjects. display ajax actionlinks
+									foreach (string url in Model.MergedClasses)
+									{
+										if (url != Model.itemToUpdate.Abbreviation)
+										{
+										@Ajax.ActionLink(url.Trim(),
+											"ProgramEdit",
+											"Api",
+											new
+											{
+												Abbreviation = url
+											},
+											new AjaxOptions
+											{
+												UpdateTargetId = "edit-program",
+												HttpMethod = "GET",
+												InsertionMode = InsertionMode.Replace,
+												OnBegin = "$('#edit-program').html(' ');",
+												OnComplete = "spinner.stop();",
+											},
+											new { @class = "merged-subject-link" }
+										);
+										}
+
+									}
+								}
+								else
+								{
+									//there aren't any merged subjects. display a select list of subjects they can choose to merge with the current subject
+									//foreach (string subject in Model.MergeSubjectChoices) {
+
+									//}
+
+								@Html.DropDownList("MergeWith", new SelectList(Model.MergeSubjectChoices))
+
+								}
+
+
+						}
+
+
+
+					</div>
+
+
+					<div class="editor-label">
+							@Html.LabelFor(model => model.itemToUpdate.Intro)
+					</div>
+					<div class="editor-field">
+							 @Html.TextAreaFor(model => Model.itemToUpdate.Intro, new { @class = "SubjectTextarea", @cols = 60, @rows = 7 })
+							@Html.ValidationMessageFor(model => model.itemToUpdate.Intro)
 
 
 
@@ -43,39 +116,39 @@
 				<div class="right">
 
 					<div class="editor-label">
-							@Html.LabelFor(model => model.AcademicProgram, "Academic Program (if different than subject)")
+							@Html.LabelFor(model => model.itemToUpdate.AcademicProgram, "Academic Program (if different than subject)")
 					</div>
 					<div class="editor-field">
-							@Html.TextBoxFor(model => model.AcademicProgram, new { @class = "SubjectTextfield" })
-							@Html.ValidationMessageFor(model => model.AcademicProgram)
+							@Html.TextBoxFor(model => model.itemToUpdate.AcademicProgram, new { @class = "SubjectTextfield" })
+							@Html.ValidationMessageFor(model => model.itemToUpdate.AcademicProgram)
 					</div>
 
 
 					<div class="editor-label">
-							@Html.LabelFor(model => model.ProgramURL, "Academic Program Website")
+							@Html.LabelFor(model => model.itemToUpdate.ProgramURL, "Academic Program Website")
 					</div>
 					<div class="editor-field">
-							@Html.TextBoxFor(model => model.ProgramURL, new { @class = "SubjectTextfield" })
-							@Html.ValidationMessageFor(model => model.ProgramURL)
+							@Html.TextBoxFor(model => model.itemToUpdate.ProgramURL, new { @class = "SubjectTextfield" })
+							@Html.ValidationMessageFor(model => model.itemToUpdate.ProgramURL)
 					</div>
 
 
 
 
 					<div class="editor-label">
-							@Html.LabelFor(model => model.Division)
+							@Html.LabelFor(model => model.itemToUpdate.Division)
 					</div>
 					<div class="editor-field">
-							@Html.TextBoxFor(model => model.Division, new { @class = "SubjectTextfield" })
-							@Html.ValidationMessageFor(model => model.Division)
+							@Html.TextBoxFor(model => model.itemToUpdate.Division, new { @class = "SubjectTextfield" })
+							@Html.ValidationMessageFor(model => model.itemToUpdate.Division)
 					</div>
 
 					<div class="editor-label">
-							@Html.LabelFor(model => model.DivisionURL)
+							@Html.LabelFor(model => model.itemToUpdate.DivisionURL)
 					</div>
 					<div class="editor-field">
-							@Html.TextBoxFor(model => model.DivisionURL, new { @class = "SubjectTextfield" })
-							@Html.ValidationMessageFor(model => model.DivisionURL)
+							@Html.TextBoxFor(model => model.itemToUpdate.DivisionURL, new { @class = "SubjectTextfield" })
+							@Html.ValidationMessageFor(model => model.itemToUpdate.DivisionURL)
 					</div>
 
 
@@ -83,9 +156,9 @@
         </div>
        </fieldset>
 	<div id="lastModifiedBy">
-				@if (Model.LastUpdated != null)
+				@if (Model.itemToUpdate.LastUpdated != null)
 		{
-					<text>Last modified by </text>@Model.LastUpdatedBy<text> on </text>@Model.LastUpdated
+					<text>Last modified by </text>@Model.itemToUpdate.LastUpdatedBy<text> on </text>@Model.itemToUpdate.LastUpdated
 		}
 
 				</div>

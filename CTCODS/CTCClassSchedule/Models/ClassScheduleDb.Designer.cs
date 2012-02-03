@@ -1112,6 +1112,30 @@ namespace CTCClassSchedule.Models
         partial void OnLastUpdatedByChanging(global::System.String value);
         partial void OnLastUpdatedByChanged();
 
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String MergedSubjects
+        {
+            get
+            {
+                return _MergedSubjects;
+            }
+            set
+            {
+                OnMergedSubjectsChanging(value);
+                ReportPropertyChanging("MergedSubjects");
+                _MergedSubjects = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("MergedSubjects");
+                OnMergedSubjectsChanged();
+            }
+        }
+        private global::System.String _MergedSubjects;
+        partial void OnMergedSubjectsChanging(global::System.String value);
+        partial void OnMergedSubjectsChanged();
+
         #endregion
 
     }

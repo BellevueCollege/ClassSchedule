@@ -218,16 +218,22 @@ namespace CTCClassSchedule.Controllers
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					// TODO: refactor SetProgramInfo() to handle all Subjects instead of just one
-					var progInfo = (from s in db.vw_ProgramInformation
-					                select new {s.Abbreviation, s.URL, s.Title}).ToList();
+					var progInfo = (from s in db.ProgramInformations
+													select new { s.URL }).Distinct().ToList();
 
 					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
-					                                                where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
+					                                                where courses.Select(c => c.Subject).Contains(p.URL)
+																													join d in db.ProgramInformations on p.URL equals d.Abbreviation into cd
+																													from d in cd.DefaultIfEmpty()
 					                                                select new ScheduleCoursePrefix
 												{
-														Subject = p.URL,
-														Title = p.Title
+														Title = d.Title,
+																																			URL = p.URL,
+																																			Subject = d.Abbreviation
+
 												}).Distinct().ToList();
+
+
 
 					IList<char> alphabet = coursesLocalEnum.Select(c => c.Title.First()).Distinct().ToList();
 					ViewBag.Alphabet = alphabet;

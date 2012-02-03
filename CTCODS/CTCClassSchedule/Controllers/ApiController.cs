@@ -320,7 +320,7 @@ namespace CTCClassSchedule.Controllers
 
 		//Generation of the Program Edit dialog box
 		[Authorize(Roles = "Developers")]  //TODO: Make this configurable
-		public ActionResult ProgramEdit(string Subject)
+		public ActionResult ProgramEdit(string Abbreviation)
 		{
 
 			if (HttpContext.User.Identity.IsAuthenticated == true)
@@ -330,8 +330,29 @@ namespace CTCClassSchedule.Controllers
 				{
 					try
 					{
-						var itemToUpdate = db.ProgramInformations.Single(s => s.URL == Subject);
-						return PartialView(itemToUpdate);
+						var itemToUpdate = db.ProgramInformations.First(s => s.Abbreviation == Abbreviation);
+
+						var subjectChoices = (	from c in db.ProgramInformations
+																		orderby c.Abbreviation ascending
+																		select c.Abbreviation
+																		).ToList();
+						subjectChoices.Insert(0, "");
+
+						var mergedClasses = (from c in db.ProgramInformations
+																	where c.URL == Abbreviation
+																	select c.Abbreviation
+																		).ToList();
+
+
+						ProgramEditModel model = new ProgramEditModel
+						{
+							itemToUpdate = itemToUpdate,
+							MergeSubjectChoices = subjectChoices,
+							MergedClasses = mergedClasses
+
+						};
+
+						return PartialView(model);
 					}
 					catch
 					{
@@ -365,14 +386,15 @@ namespace CTCClassSchedule.Controllers
 				string Username = HttpContext.User.Identity.Name;
 
 
-				string DivisionURL = collection["DivisionURL"];
-				string Division = collection["Division"];
-				string ProgramURL = collection["ProgramURL"];
-				string AcademicProgram = collection["AcademicProgram"];
-				string Intro = collection["Intro"];
-				string Title = collection["Title"];
-				string Abbreviation	 = collection["Abbreviation"];
-				string URL = collection["URL"];
+				string DivisionURL = collection["itemToUpdate.DivisionURL"];
+				string Division = collection["itemToUpdate.Division"];
+				string ProgramURL = collection["itemToUpdate.ProgramURL"];
+				string AcademicProgram = collection["itemToUpdate.AcademicProgram"];
+				string Intro = collection["itemToUpdate.Intro"];
+				string Title = collection["itemToUpdate.Title"];
+				string Abbreviation = collection["itemToUpdate.Abbreviation"];
+				string URL = collection["itemToUpdate.URL"];
+				string MergeWith = collection["MergeWith"] == "" ? null : collection["MergeWith"];
 
 
 				ProgramInformation itemToUpdate = new ProgramInformation();
@@ -383,7 +405,7 @@ namespace CTCClassSchedule.Controllers
 					{
 						try
 						{
-							itemToUpdate = db.ProgramInformations.Single(s => s.URL == URL);
+							itemToUpdate = db.ProgramInformations.First(s => s.Abbreviation == Abbreviation);
 
 							itemFound = true;
 						}
@@ -399,12 +421,24 @@ namespace CTCClassSchedule.Controllers
 						itemToUpdate.AcademicProgram = AcademicProgram;
 						itemToUpdate.Intro = Intro;
 						itemToUpdate.Title = Title;
-						itemToUpdate.Abbreviation = Abbreviation;
-						itemToUpdate.URL = URL;
+
+
+						if (MergeWith != null)
+						{
+							itemToUpdate.URL = MergeWith;
+						}
+						else
+						{
+							itemToUpdate.URL = Abbreviation;
+						}
 
 						//add the item to the database if it doesn't exist.
 						if (itemFound == false)
 						{
+							//add the primary key only to inserts
+							itemToUpdate.Abbreviation = Abbreviation;
+
+							//add the newly created item to the entity update queue
 							db.AddToProgramInformations(itemToUpdate);
 						}
 
