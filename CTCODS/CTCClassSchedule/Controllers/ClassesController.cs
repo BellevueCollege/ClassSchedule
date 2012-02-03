@@ -209,7 +209,7 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 
 				IList<CoursePrefix> courses;
-				//IEnumerable<CoursePrefix> coursesLocalEnum;
+
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
 				{
 					courses = respository.GetCourseSubjects(yrq, facets);
@@ -217,10 +217,12 @@ namespace CTCClassSchedule.Controllers
 
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					// TODO: refactor SetProgramInfo() to handle all Subjects instead of just one
+					// gets a distinct list of URL's from the program information table. this couldn't be combined with coursesLocalEnum
+					// because the distinct doesn't work due to merged classes having potentially different names
 					var progInfo = (from s in db.ProgramInformations
 													select new { s.URL }).Distinct().ToList();
 
+					//grab the details for the ScheduleCoursePrefix item for each program from the same table, starting with a distinct list of URL's.
 					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
 					                                                where courses.Select(c => c.Subject).Contains(p.URL)
 																													join d in db.ProgramInformations on p.URL equals d.Abbreviation into cd
