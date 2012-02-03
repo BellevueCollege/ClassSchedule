@@ -224,16 +224,17 @@ namespace CTCClassSchedule.Controllers
 
 					//grab the details for the ScheduleCoursePrefix item for each program from the same table, starting with a distinct list of URL's.
 					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
-					                                                where courses.Select(c => c.Subject).Contains(p.URL)
-																													join d in db.ProgramInformations on p.URL equals d.Abbreviation into cd
-																													from d in cd.DefaultIfEmpty()
+					                                                //where courses.Select(c => c.Subject).Contains(p.URL)
+																													join d in db.ProgramInformations on p.URL equals d.Abbreviation
 					                                                select new ScheduleCoursePrefix
-												{
-														Title = d.Title,
-																																			URL = p.URL,
-																																			Subject = d.Abbreviation
+					                                                {
+					                                                    Title = d.Title,
+																															URL = p.URL,
+																															Subject = d.Abbreviation
 
-												}).Distinct().ToList();
+					                                                }).Distinct().ToList();
+
+
 
 
 
