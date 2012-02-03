@@ -121,7 +121,7 @@
 
 				@{
 				IEnumerable<SectionWithSeats> linkedSections = orderedModel.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber);
-				int foo = linkedSections.Count();
+				bool hasLinked = linkedSections.Count() > 0;
 				}
 				@foreach(SectionWithSeats linkedSec in linkedSections)
 		{
@@ -130,14 +130,30 @@
 				@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
 			</a>
 		}
-
-					&#8226; @Html.CreditsValue(sec.Credits) Cr.
+		&#8226;
+			@if (sec.IsVariableCredits)
+			{
+				    <span class="classCredits">
+					    V1-@Html.CreditsValue(sec.Credits)
+				        <abbr title=" variable credit(s) ">Cr.</abbr>
+            </span>
+			}
+			else
+			{
+				    <span class="classCredits">
+					    @Html.CreditsValue(sec.Credits)
+				        <abbr title=" credit(s) ">Cr.</abbr>
+            </span>
+			}
 				</h2>
 				<div class="CourseFootnotes">
 					@sec.CourseFootnotes
 				</div>
 				<p class="classDetails">
+				@if (hasLinked)
+				{
 					@Html.ActionLink("View class details", "ClassDetails", "Classes", route, null)
+				}
 				</p>
 				<ul class='course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))'>
 

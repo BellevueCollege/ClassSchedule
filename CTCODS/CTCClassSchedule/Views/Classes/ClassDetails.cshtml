@@ -9,15 +9,12 @@
 
 	ViewBag.PageTitle = ViewBag.Subject + " " + @ViewBag.ClassNum + " at Bellevue College";
 
-	Section course = (Section)ViewBag.CourseInfo;
+	Course course = (Course)ViewBag.CourseInfo;
 	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
 	string currentYrq = yrqList[0].ID;
 
 	string PreviousYrq = string.Empty;
 	string PreviousSectionID = string.Empty;
-
-
-
 }
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
@@ -42,10 +39,24 @@
 	<div id="container" class="nosidebar">
         <div id="content">
             <h1 id="pageTitle">
-                <span class="courseID">@(string.Format("{0}{1} {2}", course.CourseSubject, course.IsCommonCourse ? "&" : string.Empty, course.CourseNumber))</span>
-				<span>@course.CourseTitle</span>
-				<span>&#8226; @Html.CreditsValue(course.Credits)
-				<abbr title="Credit(s) ">Cr.</abbr></span>
+                <span class="courseID">@(string.Format("{0}{1} {2}", course.Subject, course.IsCommonCourse ? "&" : string.Empty, course.Number))</span>
+				<span>@course.Title</span>
+
+				&#8226;
+				@if (course.IsVariableCredits)
+				{
+							<span class="classCredits">
+								V1-@Html.CreditsValue(course.Credits)
+									<abbr title=" variable credit(s) ">Cr.</abbr>
+							</span>
+				}
+				else
+				{
+							<span class="classCredits">
+								@Html.CreditsValue(course.Credits)
+									<abbr title=" credit(s) ">Cr.</abbr>
+							</span>
+				}
             </h1>
 
              <div class="aside">
@@ -63,16 +74,19 @@
                 <div id="courseDescription">
 				    <h2>Description:</h2>
                     <p>
-				    @(course.CourseDescriptions.Count <= 0 || string.IsNullOrWhiteSpace(course.CourseDescriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : course.CourseDescriptions[0].Description)
+										@{
+											IList<CourseDescription> descriptions = course.Descriptions.ToList();
+											Html.Encode(descriptions.Count <= 0 || string.IsNullOrWhiteSpace(descriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : descriptions[0].Description);
+										}
 			        </p>
                 </div>
 
-					@if (course.CourseDescriptions.Count > 1)
+					@if (descriptions.Count > 1)
 		 {
 			 <div id="courseDescriptionUpcoming">
-				<h3>New description starting @course.CourseDescriptions[1].YearQuarterBegin.FriendlyName</h3>
+				<h3>New description starting @descriptions[1].YearQuarterBegin.FriendlyName</h3>
 				<p>
-					@(string.IsNullOrWhiteSpace(course.CourseDescriptions[1].Description) ? "* NO DESCRIPTION FOUND*" : course.CourseDescriptions[1].Description)
+					@(string.IsNullOrWhiteSpace(descriptions[1].Description) ? "* NO DESCRIPTION FOUND*" : descriptions[1].Description)
 				</p>
 			 </div>
 		 }
@@ -115,9 +129,23 @@
 					<text>
 			        <h2 class="course-YRQ@(currentYrq != thisYrq ? Html.Raw(" course-YRQ-past-quarter") : Html.Raw(string.Empty))">@sec.Yrq.FriendlyName</h2>
 			        <div class="YRQClassTitle">
-					    @Html.Raw(string.Format("{0}{1} {2} - {3} &#8226; ", course.CourseSubject, course.IsCommonCourse ? "&amp;" : string.Empty, course.CourseNumber, course.CourseTitle))
-					    @Html.CreditsValue(course.Credits)
-					    <abbr title="Credit(s) ">Cr.</abbr>
+					    @Html.Raw(string.Format("{0}{1} {2} - {3}", sec.CourseSubject, sec.IsCommonCourse ? "&amp;" : string.Empty, sec.CourseNumber, sec.CourseTitle))
+
+							&#8226;
+							@if (sec.IsVariableCredits)
+							{
+										<span class="classCredits">
+											V1-@Html.CreditsValue(sec.Credits)
+												<abbr title=" variable credit(s) ">Cr.</abbr>
+										</span>
+							}
+							else
+							{
+										<span class="classCredits">
+											@Html.CreditsValue(sec.Credits)
+												<abbr title=" credit(s) ">Cr.</abbr>
+										</span>
+							}
 				    </div>
 
 				    <ul class="course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
@@ -128,14 +156,6 @@
 					{
 						Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
 					}
-
-					@*
-					if (thisYrq != PreviousYrq && PreviousYrq != string.Empty)
-					{
-				    </ul>  <!-- course-block -->  <!-- BUG! THIS UL CLOSES AFTER THE FIRST PASS  -->
-
-					}
-					*@
 				}
 				PreviousSectionID = sectionID;
 				PreviousYrq = thisYrq;

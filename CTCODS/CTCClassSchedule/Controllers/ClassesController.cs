@@ -337,9 +337,9 @@ namespace CTCClassSchedule.Controllers
 			//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
 			TempData["DayDictionary"] = Helpers.getDayDictionary();
 
-			using (OdsRepository respository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(respository);
+				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
 				ViewBag.QuarterNavMenu = yrqRange;
 
 				// TODO: move this declaration somewhere it can more easily be re-used
@@ -348,15 +348,20 @@ namespace CTCClassSchedule.Controllers
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
-					sections = respository.GetSections(courseID, facetOptions: facets);
+					sections = repository.GetSections(courseID, facetOptions: facets);
 				}
 
-				Section courseInfo = sections.First();
+				ICourse courseInfo;
+				using (_profiler.Step("ODSAPI::GetCourses() - course information"))
+				{
+					courseInfo = repository.GetCourses(CourseID.FromString(sections.First().CourseID)).First();
+				}
+				ViewBag.CourseInfo = courseInfo;
+
 				using (_profiler.Step("Retrieving course outcomes"))
 				{
 					ViewBag.CourseOutcome = getCourseOutcome(courseInfo.IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, ClassNum);
 				}
-				ViewBag.CourseInfo = courseInfo;
 
 				IEnumerable<SectionWithSeats> sectionsEnum;
 				using (ClassScheduleDb db = new ClassScheduleDb())
