@@ -44,29 +44,38 @@
 			<strong>"@(ViewBag.searchterm)"</strong> found @itemCount @sectionDesc in @subjectCount @classDesc for @(yrq != null ? yrq.FriendlyName : "ERROR")
 		</h1>
 		<div id="searchPageNum">
-			page @ViewBag.CurrentPage of @ViewBag.TotalPages
+
+		@if (ViewBag.TotalPages == 0)
+		{
+			<text>page 0 of @ViewBag.TotalPages</text>
+		}
+		else
+		{
+			<text>page @ViewBag.CurrentPage of @ViewBag.TotalPages</text>
+		}
+
 		</div>
 	</div>
 
 	@if (itemCount == 0)
-	{
+ {
 			<h3>No classes found.</h3>
-	}
-	else
-	{
-		using (_profiler.Step("Rendering sections from search results"))
-	{
-		foreach (SectionWithSeats sec in Model.Section)
-		{
-			string courseID = sec.CourseID;
-			string sectionID = sec.ID.ToString();
+ }
+ else
+ {
+	 using (_profiler.Step("Rendering sections from search results"))
+	 {
+		 foreach (SectionWithSeats sec in Model.Section)
+		 {
+			 string courseID = sec.CourseID;
+			 string sectionID = sec.ID.ToString();
 
-			if (PreviousCourseID != courseID)
-			{
-			_routeValues["Subject"] = sec.CourseSubject;
-			_routeValues["ClassNum"] = sec.CourseNumber;
-			 if (courseID != PreviousCourseID && PreviousCourseID != "")
+			 if (PreviousCourseID != courseID)
 			 {
+				 _routeValues["Subject"] = sec.CourseSubject;
+				 _routeValues["ClassNum"] = sec.CourseNumber;
+				 if (courseID != PreviousCourseID && PreviousCourseID != "")
+				 {
 				@:</ul>
 			 }
 				<text>
@@ -89,19 +98,19 @@
 
 		<ul class='course-block'>
 		</text>
-			}
+			 }
 
-			if (sectionID != PreviousSectionID)
-			{
-				Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
-			}
+			 if (sectionID != PreviousSectionID)
+			 {
+				 Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+			 }
 
-			PreviousSectionID = sectionID;
-			PreviousCourseID = courseID;
+			 PreviousSectionID = sectionID;
+			 PreviousCourseID = courseID;
 
-		} @* end foreach(sec) *@
-	}
-	}
+		 } @* end foreach(sec) *@
+	 }
+ }
 
 
 
