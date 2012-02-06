@@ -37,7 +37,7 @@
 			<option value="CE">Continuing Education</option>
 		</select>
 		<label for="searh-keyword">Keywords</label>
-		<input type="text" class="searchInput" id="searh-keyword" name="searchterm" maxlength="40" value="@(Request.QueryString["searchterm"] ?? string.Empty)"/>
+		<input type="text" class="searchInput" id="search-keyword" name="searchterm" maxlength="40" value="@(Request.QueryString["searchterm"] ?? string.Empty)"/>
 		<input type="submit" class="searchSubmit"  name="submit" value="Go" />
 	</div>
     <div id="register"><a href="http://bellevuecollege.edu/enrollment/registration/register/">Register</a></div>

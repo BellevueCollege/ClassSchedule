@@ -77,6 +77,9 @@
 										@{
 											IList<CourseDescription> descriptions = course.Descriptions.ToList();
 											Html.Encode(descriptions.Count <= 0 || string.IsNullOrWhiteSpace(descriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : descriptions[0].Description);
+
+
+
 										}
 			        </p>
                 </div>
@@ -94,17 +97,21 @@
 			    <div id="courseFootnotes">
                <p>
 									@Model.First().CourseFootnotes
+									@if (descriptions[0].Description.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0 || Model.First().CourseFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
+									{
+										<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">How to clear prerequisites?</a>
+									}
 			        </p>
           </div>
 
 		    @if (!string.IsNullOrWhiteSpace(ViewBag.CourseOutcome))
-		    {
+			{
 			    <div id="courseOutcome">
 				    <h2>Outcomes:</h2>
                     <!-- <p>After completing this course, students should be able to:</p>-->
 				    @Html.Raw(ViewBag.CourseOutcome)
 			    </div>
-		    }
+			}
 
             </div> <!-- class-details -->
             <div id="allSectionsbyQuarter">
@@ -133,19 +140,19 @@
 
 							&#8226;
 							@if (sec.IsVariableCredits)
-							{
+			 {
 										<span class="classCredits">
 											V1-@Html.CreditsValue(sec.Credits)
 												<abbr title=" variable credit(s) ">Cr.</abbr>
 										</span>
-							}
-							else
-							{
+			 }
+			 else
+			 {
 										<span class="classCredits">
 											@Html.CreditsValue(sec.Credits)
 												<abbr title=" credit(s) ">Cr.</abbr>
 										</span>
-							}
+			 }
 				    </div>
 
 				    <ul class="course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
