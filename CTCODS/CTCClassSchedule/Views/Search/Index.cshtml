@@ -23,6 +23,12 @@
 
 	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;
+	string courseBlockClass = "";
+
+	if (yrq.ToString() != Request.QueryString["currentQuarter"])
+	{
+		courseBlockClass = "course-block-past-quarter";
+	}
 
 	string _searchTerm = ViewBag.searchterm;
 }
@@ -96,7 +102,7 @@
 				@Html.Raw(sec.CourseFootnotes == null ? "" : Html.FormatWithSearchTerm(_searchTerm, Encoder.HtmlEncode(sec.CourseFootnotes)).ToString())
 		</p>
 
-		<ul class='course-block'>
+		<ul class='course-block @(courseBlockClass)'>
 		</text>
 			 }
 

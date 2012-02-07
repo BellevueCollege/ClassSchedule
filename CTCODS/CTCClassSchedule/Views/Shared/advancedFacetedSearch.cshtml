@@ -147,7 +147,7 @@
 @if (ViewContext.RouteData.Values["Controller"].Equals("Classes"))
 {
 	<div>
-		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])/@(yrq != null ? yrq.FriendlyName.Replace(" ","") : "All")/@subject" method="get">
+		<form id="daystimesform" action="@Url.Content("~/")@(yrq != null ? yrq.FriendlyName.Replace(" ","") : "All")/@subject" method="get">
 
 		@if (routeParms.ContainsKey("letter"))
   {

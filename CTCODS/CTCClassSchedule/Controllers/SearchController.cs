@@ -28,7 +28,7 @@ namespace CTCClassSchedule.Controllers
 
 		//
 		// GET: /Search/
-		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, int p_offset = 0)
+		public ActionResult Index(string searchterm, string Subject, string currentQuarter, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, int p_offset = 0)
 		{
 			int itemCount = 0;
 
@@ -86,6 +86,12 @@ namespace CTCClassSchedule.Controllers
 				YearQuarter YRQ = string.IsNullOrWhiteSpace(quarter) ? respository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
 				ViewBag.YearQuarter = YRQ;
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+				bool IsPreviousQuarter = false;
+
+				if (ViewBag.QuarterNavMenu[0].ToString() != YRQ.ToString())
+				{
+					IsPreviousQuarter = true;
+				}
 
 				IList<Section> sections;
 				using (_profiler.Step("API::GetSections()"))
@@ -174,6 +180,7 @@ namespace CTCClassSchedule.Controllers
 				    Section = sectionsEnum,
 				    SearchResultNoSection = NoSectionSearchResults,
 						Subjects = allSubjects
+
 				};
 
 				ViewBag.CurrentPage = p_offset + 1;

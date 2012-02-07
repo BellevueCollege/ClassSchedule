@@ -10,12 +10,17 @@
 
 	string PreviousSectionID = ViewData["PreviousSectionID"] as string;
 	string sectionID = Model.ID.ToString();
-
 	string _searchTerm = Request.QueryString["searchterm"];
+	bool? displaySeatsAvailable = true;
 	YearQuarter quarterViewing = ViewBag.YearQuarter;
-
-
+	if (Request.AppRelativeCurrentExecutionFilePath == "~/Search")
+	{
+		if (@Model.Yrq.ToString() != Request.QueryString["currentQuarter"]) {
+			displaySeatsAvailable = false;
+		}
+	}
 }
+
 
 
 
@@ -74,24 +79,23 @@
 			</ul>
 		</li>
 		@if (sectionID != PreviousSectionID)
-  {
-      if (Model.SeatsAvailable != int.MinValue)
+		{
+			if (Model.SeatsAvailable != int.MinValue && displaySeatsAvailable == true)
       {
-			<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
+				<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
 				Availability: </span>
 				@if (Model.SeatsAvailable <= 0 || Model.WaitlistCount > 0)
-    {
+				{
 					<strong class="seatsAvailable">class full, @Model.WaitlistCount on waitlist</strong>
 					<span class="course-updated"></span>
-    }
-    else
-    {
+				}
+				else
+				{
 					<strong class="seatsAvailable">@Model.SeatsAvailable</strong>
 					<span class="course-updated"><em>updated @Model.LastUpdated</em> <a id="@sectionID">
 						[update]</a></span>
-    }
-			</li>
-
+				}
+				</li>
       }
 			 <li class="editing">
 

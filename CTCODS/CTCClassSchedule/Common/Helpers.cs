@@ -591,6 +591,5 @@ namespace CTCClassSchedule.Common
 
 			return dict;
 		}
-
 	}
 }
