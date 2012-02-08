@@ -227,6 +227,7 @@
     <Content Include="Content\images\ui-icons_ffd27a_256x240.png" />
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jquery-ui-1.8.16.custom.css" />
+    <Content Include="Content\js\classes.js" />
     <Content Include="Content\js\jquery-1.6.4.min.js" />
     <Content Include="Content\js\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Content\js\jquery-ui-timepicker-addon.js" />
