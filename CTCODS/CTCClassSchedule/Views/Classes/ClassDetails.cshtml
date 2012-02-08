@@ -42,6 +42,10 @@
                 <span class="courseID">@(string.Format("{0}{1} {2}", course.Subject, course.IsCommonCourse ? "&" : string.Empty, course.Number))</span>
 				<span>@course.Title</span>
 
+				@*
+				// TODO: Display any upcoming course title change, if detected
+				*@
+
 				&#8226;
 				@if (course.IsVariableCredits)
 				{
@@ -64,7 +68,7 @@
                 {
                     <div id="programWebsite">
                         <h2>Department</h2>
-			            <p><a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a></p>
+			            <p><a href="@ViewBag.ProgramUrl" class="programWebsite">@course.Subject</a></p>
 		            </div>
 		        }
             </div><!-- aside -->
@@ -77,9 +81,6 @@
 										@{
 											IList<CourseDescription> descriptions = course.Descriptions.ToList();
 											Html.Encode(descriptions.Count <= 0 || string.IsNullOrWhiteSpace(descriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : descriptions[0].Description);
-
-
-
 										}
 			        </p>
                 </div>
@@ -95,6 +96,7 @@
 		 }
 
 			    <div id="courseFootnotes">
+				    <h2>Details:</h2>
                <p>
 									@Model.First().CourseFootnotes
 									@if (descriptions[0].Description.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0 || Model.First().CourseFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
@@ -105,19 +107,42 @@
           </div>
 
 		    @if (!string.IsNullOrWhiteSpace(ViewBag.CourseOutcome))
-			{
+		    {
 			    <div id="courseOutcome">
 				    <h2>Outcomes:</h2>
                     <!-- <p>After completing this course, students should be able to:</p>-->
 				    @Html.Raw(ViewBag.CourseOutcome)
 			    </div>
-			}
+		    }
 
             </div> <!-- class-details -->
             <div id="allSectionsbyQuarter">
 
 				@using (_profiler.Step("Rendering sections by YRQ"))
 		{
+			var yrqs = (from s in Model
+															where s.Yrq.ID.CompareTo(currentYrq) >= 0
+															group s by s.Yrq.FriendlyName into g
+															select new {
+																						YRQ = g.Key
+																						,Sections = g.Count()
+																					}).Take(4);
+
+			<div>
+				<h2>Offered on</h2>
+				<ul>
+				@foreach (var y in yrqs.OrderBy(q => q.YRQ))
+		{
+			if (y.Sections > 0)
+			{
+					<li>@y.YRQ</li>
+			}
+		}
+				</ul>
+			</div>
+@*
+// The block of code below is being replaced by the aggregate display above. - 2/07/2012, shawn.south@bellevuecollege.edu
+
 			foreach (SectionWithSeats sec in Model)
 			{
 				string thisYrq = sec.Yrq.ID;
@@ -140,19 +165,19 @@
 
 							&#8226;
 							@if (sec.IsVariableCredits)
-			 {
+							{
 										<span class="classCredits">
 											V1-@Html.CreditsValue(sec.Credits)
 												<abbr title=" variable credit(s) ">Cr.</abbr>
 										</span>
-			 }
-			 else
-			 {
+							}
+							else
+							{
 										<span class="classCredits">
 											@Html.CreditsValue(sec.Credits)
 												<abbr title=" credit(s) ">Cr.</abbr>
 										</span>
-			 }
+							}
 				    </div>
 
 				    <ul class="course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
@@ -167,10 +192,15 @@
 				PreviousSectionID = sectionID;
 				PreviousYrq = thisYrq;
 			}
+*@
+
+
+
+
 		}
 	    </div> <!-- allSectionsbyQuarter -->
 
-    </div>
+    </div> <!-- content -->
 
     </div> <!-- container -->
 </div>
