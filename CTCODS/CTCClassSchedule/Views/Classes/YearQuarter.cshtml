@@ -26,6 +26,12 @@
 
 		@Html.Partial("a_to_z", alphabet)
 
+
+		@if(Ctc.Web.Security.ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") == true) {
+				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
+		}
+
+
 			@if (ViewBag.ItemCount == 0)
 	 {
 					<h3>No classes found.</h3>

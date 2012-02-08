@@ -1346,8 +1346,20 @@ a.edit_button
 
 .yellow-dashed
 {
-	border-color: yellow;
+	border-color: #fdd425;
 	border-style: dashed;
 	border-width: 2px;
 	padding: 3px;
+}
+
+.message
+{
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	border: 2px solid #fdd425;
+	padding: 10px;
+	padding-left: 50px;
+	margin-top: 10px;
+	background: #fef5be url(images/alert.gif) 10px 10px no-repeat;
+
 }
