@@ -38,7 +38,7 @@ namespace CTCClassSchedule.Common
 		/// passed into the app by the user clicking on the faceted search left pane
 		/// facets accepted: flex, time, days, availability
 		/// </summary>
-		static public IList<ISectionFacet> addFacets(string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail)
+		static public IList<ISectionFacet> addFacets(string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
 		{
 			IList<ISectionFacet> facets = new List<ISectionFacet>();
 
@@ -129,6 +129,33 @@ namespace CTCClassSchedule.Common
 					facets.Add(new AvailabilityFacet(AvailabilityFacet.Options.Open));
 				}
 			}
+
+			if (!String.IsNullOrWhiteSpace(latestart))
+			{
+				if (latestart == "true")
+				{
+					facets.Add(new LateStartFacet());
+				}
+			}
+
+
+			if (!String.IsNullOrWhiteSpace(numcredits))
+			{
+				int credits;
+				try
+				{
+					credits = Convert.ToInt16(numcredits);
+					facets.Add(new CreditsFacet(credits));
+				}
+				catch
+				{
+					throw new System.FormatException("Number of credits was not a valid integer");
+				}
+
+			}
+
+
+
 
 			return facets;
 		}

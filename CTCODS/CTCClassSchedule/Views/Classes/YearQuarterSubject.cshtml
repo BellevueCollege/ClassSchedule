@@ -193,6 +193,27 @@
 			height: 375,
 			width: 560,
 		});
+
+			$('li.section-listing').hover(
+				function () {
+					$(this).children('ul.section-details').children('li.editing').children('a.edit_button').show();
+					$(this).addClass('yellow-dashed');
+				},
+				function () {
+					$(this).children('ul.section-details').children('li.editing').children('a.edit_button').hide();
+					$(this).removeClass('yellow-dashed');
+			});
+
+			$('.classinfo').hover(
+				function () {
+					$(this).children('a.edit_button').show();
+					$(this).addClass('yellow-dashed');
+				},
+				function () {
+					$(this).children('a.edit_button').hide();
+					$(this).removeClass('yellow-dashed');
+			});
+
 	});
 </script>
 

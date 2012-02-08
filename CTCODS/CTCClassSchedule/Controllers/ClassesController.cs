@@ -18,6 +18,7 @@ using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
 using CTCClassSchedule.Properties;
 using MvcMiniProfiler;
+using System.Globalization;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -112,7 +113,7 @@ namespace CTCClassSchedule.Controllers
 		///
 
 		[OutputCache(CacheProfile = "SubjectCacheTime")]
-		public ActionResult Subject(string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail)
+		public ActionResult Subject(string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
 		{
 			ViewBag.Subject = Subject;
 			setViewBagVars("", avail, "");
@@ -137,7 +138,7 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
+			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 			facets.Add(new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay));
 
 			setProgramInfo(Subject);
@@ -171,7 +172,7 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 
 		[OutputCache(CacheProfile = "YearQuarterCacheTime")]
-		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter)
+		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter, string latestart, string numcredits)
 		{
 			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? " (All)" : " (" + letter.ToUpper() + ")");
 			setViewBagVars(YearQuarter, avail, letter);
@@ -185,6 +186,8 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.day_th = day_th;
 			ViewBag.day_f = day_f;
 			ViewBag.day_s = day_s;
+			ViewBag.latestart = latestart;
+			ViewBag.numcredits = numcredits;
 
 			IList<ModalityFacetInfo> modality = new List<ModalityFacetInfo>(4);
 			modality.Add(Helpers.getModalityInfo("f_oncampus", "On Campus", f_oncampus) );
@@ -202,7 +205,7 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.Subject = "All";
 
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
+			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{
@@ -226,9 +229,10 @@ namespace CTCClassSchedule.Controllers
 					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
 					                                                //where courses.Select(c => c.Subject).Contains(p.URL)
 																													join d in db.ProgramInformations on p.URL equals d.Abbreviation
+																													orderby d.Title ascending
 					                                                select new ScheduleCoursePrefix
 					                                                {
-					                                                    Title = d.Title,
+					                                                    Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(d.Title),
 																															URL = p.URL,
 																															Subject = d.Abbreviation
 
@@ -271,7 +275,7 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 
 		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")] // Caches for 30 minutes
-		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail)
+		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
 		{
 			setViewBagVars(YearQuarter, avail, "");
 
@@ -284,8 +288,9 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.day_th = day_th;
 			ViewBag.day_f = day_f;
 			ViewBag.day_s = day_s;
-
 			ViewBag.avail = avail;
+			ViewBag.numcredits = numcredits;
+			ViewBag.latestart = latestart;
 
 			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 			ViewBag.Subject = Subject;
@@ -293,7 +298,7 @@ namespace CTCClassSchedule.Controllers
 			//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
 			TempData["DayDictionary"] = Helpers.getDayDictionary();
 
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail);
+			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{

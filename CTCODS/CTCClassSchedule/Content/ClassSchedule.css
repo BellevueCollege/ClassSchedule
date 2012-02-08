@@ -1045,7 +1045,7 @@ ul.section-details li.section-notes
 
 /* facet css  */
 
-#days, #classformat, #times
+#days, #classformat, #times, #latestart-facet, #numcredits-facet
 {
 	padding-left: 19px;
 }
@@ -1289,6 +1289,7 @@ div.subjects-letter h2
 a.edit_button
 {
 	text-decoration: none;
+	display: none;
 }
 
 
@@ -1342,3 +1343,11 @@ a.edit_button
 
 
 /* end program edit */
+
+.yellow-dashed
+{
+	border-color: yellow;
+	border-style: dashed;
+	border-width: 3px;
+	padding: 5px;
+}

@@ -73,6 +73,17 @@
 			$('#daystimesform').submit();
 		});
 
+		$('#latestart').click(function () {
+			showThrobber();
+			$('#daystimesform').submit();
+		});
+
+		$('#numcredits').change(function () {
+			showThrobber();
+			$('#daystimesform').submit();
+		});
+
+
 		//when the user clicks uncheck all formats, uncheck them and resubmit the form.
 		$('#uncheckFormat').click(function (event) {
 			event.preventDefault();
@@ -251,6 +262,27 @@ else
 		</div>
 }
 
+		<h3>Credits</h3>
+	<div id="numcredits-facet">
+		<p class="label_checkbox_pair">
+			<select class="clear"name="numcredits" id="numcredits" value="true">
+				@for (int i = 1; i <= 15; i++){
+					<option @if (@Convert.ToInt16(ViewBag.numcredits) == i)
+						{ <text>selected='selected'</text> }>@i</option>
+				}
+			</select>
+
+		</p>
+	</div>
+
+	<h3>Other Options</h3>
+	<div id="latestart-facet">
+		<p class="label_checkbox_pair">
+			<input class="clear" type="checkbox" name="latestart" id="latestart" value="true" @if (@ViewBag.latestart == "true")
+                                                                             { <text>checked='checked'</text> } />
+			<label for="latestart">Late Start</label>
+		</p>
+	</div>
 
 
 	<h3>Availability</h3>
@@ -262,6 +294,7 @@ else
 		<li><label><input id="radio_open" type="radio" name="avail" value="Open"	@if (@ViewBag.avail == "Open")
 																																		{  <text> checked="checked"</text> } /> Open</label></li>
 	</ul>
+
 
 	<div id="submit">
 		<input type="submit" id="submit_days_times" name="submitbtn" value="Refine >" />

@@ -45,6 +45,8 @@
 			width: 900,
 
 		});
+
+
 	});
 </script>
 
@@ -56,13 +58,22 @@
 
 		/*
 		$(".cancelEdit").click(function (e) {
-			e.preventDefault();
-			window.location.href = $(location).attr('href');
+		e.preventDefault();
+		window.location.href = $(location).attr('href');
 		});
 		*/
 
 		$("span.ui-icon-closethick").click(function () {
 			window.location.href = $(location).attr('href');
+		});
+
+		$('li.title').hover(function () {
+			$(this).children('a.edit_button').show();
+			$(this).addClass('yellow-dashed');
+			},
+			function () {
+				$(this).children('a.edit_button').hide();
+				$(this).removeClass('yellow-dashed');
 		});
 
 	});
