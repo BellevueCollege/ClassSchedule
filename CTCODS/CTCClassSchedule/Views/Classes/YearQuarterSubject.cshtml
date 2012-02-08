@@ -16,13 +16,16 @@
 	string courseID = string.Empty;
 	string sectionID = string.Empty;
 	decimal credits = 0;
-	string PreviousCourseID = string.Empty;
-	string PreviousSectionID = string.Empty;
-	decimal PreviousCredits = 0;
+	bool isVariableCredit = false;
+	string PreviousCourseID = courseID;
+	string PreviousSectionID = sectionID;
+	decimal PreviousCredits = credits;
+	bool PreviousIsVariableCredit = isVariableCredit;
+
 	string FriendlyYRQ = string.Empty;
 	string thisYrq = string.Empty;
 
-	IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenBy(s => s.Credits).ToList();
+	IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenByDescending(s => s.IsVariableCredits).ThenBy(s => s.Credits).ToList();
 	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
 	string currentYrq = yrqList[0].ID;
 
@@ -76,10 +79,11 @@
 				 courseID = sec.CourseID;
 				 sectionID = sec.ID.ToString();
 				 credits = sec.Credits;
+				 isVariableCredit = sec.IsVariableCredits;
 
 				 if (!sec.IsLinked)
 				 {
-					 if (courseID != PreviousCourseID || (courseID == PreviousCourseID && credits != PreviousCredits))
+					 if (courseID != PreviousCourseID || (courseID == PreviousCourseID && credits != PreviousCredits) || (courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit))
 					 {
 						 if (PreviousCourseID != "")
 						 {
@@ -131,7 +135,7 @@
 			</a>
 		}
 		&#8226;
-			@if (sec.IsVariableCredits)
+			@if (isVariableCredit)
 			{
 				    <span class="classCredits">
 					    V1-@Html.CreditsValue(sec.Credits)
@@ -173,6 +177,7 @@
 				 PreviousCredits = sec.Credits;
 				 PreviousSectionID = sectionID;
 				 PreviousCourseID = courseID;
+				 PreviousIsVariableCredit = isVariableCredit;
 			 }
 		 }
 	 }
