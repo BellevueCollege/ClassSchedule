@@ -222,17 +222,16 @@ namespace CTCClassSchedule.Controllers
 				{
 					// gets a distinct list of URL's from the program information table. this couldn't be combined with coursesLocalEnum
 					// because the distinct doesn't work due to merged classes having potentially different names
-					var progInfo = (from s in db.ProgramInformations
+					var progInfo = (from s in db.vw_ProgramInformation
 													select new { s.URL }).Distinct().ToList();
 
 					//grab the details for the ScheduleCoursePrefix item for each program from the same table, starting with a distinct list of URL's.
 					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
 					                                                //where courses.Select(c => c.Subject).Contains(p.URL)
-																													join d in db.ProgramInformations on p.URL equals d.Abbreviation
-																													orderby d.Title ascending
+																													join d in db.vw_ProgramInformation on p.URL equals d.Abbreviation
 					                                                select new ScheduleCoursePrefix
 					                                                {
-					                                                    Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(d.Title),
+					                                                    Title = d.Title,
 																															URL = p.URL,
 																															Subject = d.Abbreviation
 
@@ -288,6 +287,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.day_th = day_th;
 			ViewBag.day_f = day_f;
 			ViewBag.day_s = day_s;
+
 			ViewBag.avail = avail;
 			ViewBag.numcredits = numcredits;
 			ViewBag.latestart = latestart;
@@ -368,7 +368,10 @@ namespace CTCClassSchedule.Controllers
 				ICourse courseInfo;
 				using (_profiler.Step("ODSAPI::GetCourses() - course information"))
 				{
-					courseInfo = repository.GetCourses(CourseID.FromString(sections.First().CourseID)).First();
+					string cidString = sections.First().CourseID;
+					ICourseID cid = CourseID.FromString(cidString);
+					IList<Course> foo = repository.GetCourses(cid);
+					courseInfo = foo.First();
 				}
 				ViewBag.CourseInfo = courseInfo;
 
