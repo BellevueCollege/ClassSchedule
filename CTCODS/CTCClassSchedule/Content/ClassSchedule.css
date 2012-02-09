@@ -304,7 +304,14 @@ textarea
 }
 #pageTitle {}
 
-
+#sectionTitle
+{
+    margin-top: -21px;
+}
+#sectionTitle a
+{
+    color: #999;
+}
 
 
 li.subject { list-style-type: none;}
@@ -784,6 +791,7 @@ ul.class-description
 .course-updated .ui-icon
 {
     left: 0;
+    top: 0;
     position: absolute;
 }
 
