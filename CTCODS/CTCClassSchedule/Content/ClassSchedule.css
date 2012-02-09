@@ -768,7 +768,7 @@ ul.class-description
 }
 .course-updated a
 {
-	font-weight: bold;
+	text-decoration: underline;
 }
 
 ul.section-details li.section-notes
