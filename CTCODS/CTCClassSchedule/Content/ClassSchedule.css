@@ -743,9 +743,10 @@ ul.class-description
 {
 	width: 80px;
 }
-.online, .tv
+.online
 {
-	width: 276px;
+    width: 56px;
+    padding-left: 20px;
 }
 .seatsAvailable {}
 .seatsFull {}
@@ -765,11 +766,27 @@ ul.class-description
 {
 	font-size: 11px;
 	color: #666;
+
 }
 .course-updated a
 {
-	text-decoration: underline;
+    text-decoration: none;
+    color: #666;
+    position: relative;
+    padding-left: 18px;
+
 }
+.course-updated a:hover, .course-updated a:focus
+{
+    text-decoration: underline;
+    color: #003d79;
+}
+.course-updated .ui-icon
+{
+    left: 0;
+    position: absolute;
+}
+
 
 ul.section-details li.section-notes
 {

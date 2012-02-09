@@ -53,18 +53,17 @@
 			foreach (OfferedItem item in Model.Offered.OrderBy(o => o.SequenceOrder))
 			{
 				// meeting times
-					<li>
-						@if (Model.IsOnline)
-			{
+				<li>
+				@if (Model.IsOnline)
+			    {
 
-							<span class="days">
-								<abbr title="@Helpers.getFriendlyDayRange("Online", dict)">
-									Online</abbr></span>
+							<span class="days online">
+									Online</span>
 							<span class="times"><span class="descriptor">&nbsp;</span>&nbsp;</span>
 							<span class="room"><span class="descriptor">&nbsp;</span>&nbsp;</span>
-			}
-			else
-			{
+			    }
+			    else
+			    {
 							<span class="days">
 								<abbr title="@Helpers.getFriendlyDayRange(item.Days, dict)">
                                     @item.Days
@@ -72,8 +71,8 @@
                             </span>
 							<span class="times"><span class="descriptor">at </span>@String.Format("{0:t}", item.StartTime).Replace(" ", "")-@String.Format("{0:t}", item.EndTime).Replace(" ", "")</span>
 							<span class="room"><span class="descriptor">in </span>@item.Room</span>
-            }
-					</li>
+                }
+				</li>
             }
         }
 			</ul>
@@ -92,8 +91,7 @@
 				else
 				{
 					<strong class="seatsAvailable">@Model.SeatsAvailable</strong>
-					<span class="course-updated"><em>updated @Model.LastUpdated</em> <a id="@sectionID">
-						[update]</a></span>
+					<span class="course-updated"><a id="@sectionID"><span class="ui-icon ui-icon-refresh"></span>updated @Model.LastUpdated</a></span>
 				}
 				</li>
       }
