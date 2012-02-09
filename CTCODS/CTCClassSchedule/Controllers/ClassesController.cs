@@ -229,6 +229,7 @@ namespace CTCClassSchedule.Controllers
 					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
 					                                                //where courses.Select(c => c.Subject).Contains(p.URL)
 																													join d in db.vw_ProgramInformation on p.URL equals d.Abbreviation
+																													orderby d.Title ascending
 					                                                select new ScheduleCoursePrefix
 					                                                {
 					                                                    Title = d.Title,
