@@ -73,14 +73,18 @@
 			window.location.href = $(location).attr('href');
 		});
 
-		$('li.title').hover(function () {
-			$(this).children('a.edit_button').show();
-			$(this).addClass('yellow-dashed');
-			},
-			function () {
-				$(this).children('a.edit_button').hide();
-				$(this).removeClass('yellow-dashed');
-		});
+		@if(Ctc.Web.Security.ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") == true) {
+
+			<text>$('li.title').hover(function () {
+				$(this).children('a.edit_button').show();
+				$(this).addClass('yellow-dashed');
+				},
+				function () {
+					$(this).children('a.edit_button').hide();
+					$(this).removeClass('yellow-dashed');
+			});
+			</text>
+		}
 
 	});
 </script>

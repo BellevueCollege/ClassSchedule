@@ -208,6 +208,9 @@
 			width: 560,
 		});
 
+		@if(Ctc.Web.Security.ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") == true) {
+
+			<text>
 			$('li.section-listing').hover(
 				function () {
 					$(this).children('ul.section-details').children('li.editing').children('a.edit_button').show();
@@ -227,7 +230,8 @@
 					$(this).children('a.edit_button').hide();
 					$(this).removeClass('yellow-dashed');
 			});
-
+			</text>
+		}
 	});
 </script>
 
