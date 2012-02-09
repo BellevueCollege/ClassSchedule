@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 		var courseIdPlusYRQ = this.id;
 		var availability = '#availability-' + courseIdPlusYRQ + ' .seatsAvailable';
-		var courseUpdated = '#availability-' + courseIdPlusYRQ + ' .course-updated em';
+		var courseUpdated = '#availability-' + courseIdPlusYRQ + ' .course-updated .update-time';
 		var originalSeatsAvailable = $(availability).html();
 
 		//load the throbber
@@ -24,7 +24,7 @@ $(document).ready(function () {
 			success: function (result) {
 				var indexOfPipe = result.indexOf("|");
 				var seatsAvailable = result.substring(0, indexOfPipe);
-				var friendlyTime = "updated " + result.substring(indexOfPipe + 1, result.length);
+				var friendlyTime = result.substring(indexOfPipe + 1, result.length);
 
 				$(availability).html(seatsAvailable);
 				$(courseUpdated).html(friendlyTime);

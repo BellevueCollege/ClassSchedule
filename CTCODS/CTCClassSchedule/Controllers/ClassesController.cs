@@ -453,13 +453,10 @@ namespace CTCClassSchedule.Controllers
 				foreach (var seat in seatsAvailable)
 				{
 					seats = seat.SeatsAvailable;
-					friendlyTime = Helpers.getFriendlyTime(seat.LastUpdated.GetValueOrDefault());
+					friendlyTime = seat.LastUpdated.GetValueOrDefault().ToString("h:mm tt").ToLower();
 				}
 			}
-			if (friendlyTime.Equals("not yet"))
-			{
-				friendlyTime = "0 seconds ago";
-			}
+
 
 			var jsonReturnValue = seats.ToString() + "|" + friendlyTime;
 			return Json(jsonReturnValue);
