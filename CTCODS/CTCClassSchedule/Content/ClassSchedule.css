@@ -330,7 +330,6 @@ li.subject { list-style-type: none;}
 }
 
 #allSectionsbyQuarter {
-    float
 }
 
 
@@ -453,7 +452,7 @@ li.subject { list-style-type: none;}
     width: 180px;
 }
 
-#searh-keyword {
+#search-keyword {
 	height: 16px;
     margin-right: 5px;
     padding: 0 10px;

@@ -63,13 +63,16 @@
 	 }
 	 else
 	 {
-				<!-- Shawn/Nate hook me up with a link below it should go to the parent page-->
                 <p id="sectionTitle"><a href="#">@FriendlyYRQ Credit Classes</a></p>
                 <h1 id="pageTitle">
 					@ViewBag.ProgramTitle
 					<span class="subjectchooser">@Html.Partial("subjectNavigation")</span>
 				</h1>
 
+       <!-- ***Note to Shawn/Nate: Add code to include CMS subject info here only if it's available ***
+        <p class="subjectdesc">INSERT SUBJECT DESCRIPTION HERE</p>
+
+       -->
 		 if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
 		 {
 				<p id="programWebsite">
