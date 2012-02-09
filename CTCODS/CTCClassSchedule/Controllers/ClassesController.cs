@@ -354,6 +354,7 @@ namespace CTCClassSchedule.Controllers
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
 				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
+				ViewBag.ActiveQuarter = repository.CurrentYearQuarter.FriendlyName;
 				ViewBag.QuarterNavMenu = yrqRange;
 
 				// TODO: move this declaration somewhere it can more easily be re-used

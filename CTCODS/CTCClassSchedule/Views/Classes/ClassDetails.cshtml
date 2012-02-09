@@ -11,7 +11,8 @@
 
 	Course course = (Course)ViewBag.CourseInfo;
 	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
-	string currentYrq = yrqList[0].ID;
+	YearQuarter currentYrq = yrqList[0];
+	string currentYrqID = currentYrq.ID;
 
 	string PreviousYrq = string.Empty;
 	string PreviousSectionID = string.Empty;
@@ -80,8 +81,8 @@
                     <p>
 										@{
 											IList<CourseDescription> descriptions = course.Descriptions.ToList();
-											Html.Encode(descriptions.Count <= 0 || string.IsNullOrWhiteSpace(descriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : descriptions[0].Description);
 										}
+										@(descriptions.Count <= 0 || string.IsNullOrWhiteSpace(descriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : descriptions[0].Description)
 			        </p>
                 </div>
 
@@ -120,83 +121,35 @@
 
 				@using (_profiler.Step("Rendering sections by YRQ"))
 		{
+			bool isPastQuarter = false;
 			var yrqs = (from s in Model
-															where s.Yrq.ID.CompareTo(currentYrq) >= 0
+															where s.Yrq.ID.CompareTo(currentYrqID) <= 0
+															orderby s.Yrq.ID descending
 															group s by s.Yrq.FriendlyName into g
 															select new {
 																						YRQ = g.Key
 																						,Sections = g.Count()
 																					}).Take(4);
 
-			<div>
-				<h2>Offered on</h2>
+			<div class="offeredQuarters">
+				<h2>Offered on:</h2>
 				<ul>
-				@foreach (var y in yrqs.OrderBy(q => q.YRQ))
+				@foreach (var y in yrqs)
 		{
 			if (y.Sections > 0)
 			{
-					<li>@y.YRQ</li>
+					<li class="@(isPastQuarter ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
+						@Html.ActionLink(y.YRQ, "YearQuarterSubject", new { YearQuarter = y.YRQ, Subject = course.Subject })
+						@if (ViewBag.ActiveQuarter.CompareTo(y.YRQ) == 0)
+						{
+							<span>(current quarter)</span>
+							isPastQuarter = true; // for next iteration
+						}
+					</li>
 			}
 		}
 				</ul>
-			</div>
-@*
-// The block of code below is being replaced by the aggregate display above. - 2/07/2012, shawn.south@bellevuecollege.edu
-
-			foreach (SectionWithSeats sec in Model)
-			{
-				string thisYrq = sec.Yrq.ID;
-				string sectionID = sec.ID.ToString();
-
-				if (!sec.IsLinked)
-				{
-					if (thisYrq != PreviousYrq)
-					{
-						if (PreviousYrq != string.Empty)
-						{
-						@: </ul>
-					}
-
-
-					<text>
-			        <h2 class="course-YRQ@(currentYrq != thisYrq ? Html.Raw(" course-YRQ-past-quarter") : Html.Raw(string.Empty))">@sec.Yrq.FriendlyName</h2>
-			        <div class="YRQClassTitle">
-					    @Html.Raw(string.Format("{0}{1} {2} - {3}", sec.CourseSubject, sec.IsCommonCourse ? "&amp;" : string.Empty, sec.CourseNumber, sec.CourseTitle))
-
-							&#8226;
-							@if (sec.IsVariableCredits)
-							{
-										<span class="classCredits">
-											V1-@Html.CreditsValue(sec.Credits)
-												<abbr title=" variable credit(s) ">Cr.</abbr>
-										</span>
-							}
-							else
-							{
-										<span class="classCredits">
-											@Html.CreditsValue(sec.Credits)
-												<abbr title=" credit(s) ">Cr.</abbr>
-										</span>
-							}
-				    </div>
-
-				    <ul class="course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))">
-				    </text>
-					}
-
-					if (sectionID != PreviousSectionID)
-					{
-						Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
-					}
-				}
-				PreviousSectionID = sectionID;
-				PreviousYrq = thisYrq;
-			}
-*@
-
-
-
-
+			</div> <!-- offeredQuarters -->
 		}
 	    </div> <!-- allSectionsbyQuarter -->
 
