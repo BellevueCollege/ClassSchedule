@@ -16,10 +16,9 @@
 
 				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle)) {
 
-                    <!-- Shawn/Nate hook me up with a link below.  It should go to the all classes page  -->
-                    <p id="sectionTitle"<a href="#">All Credit Classes</a></p>
+                    <p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>
                     <h1 id="pageTitle">@ViewBag.ProgramTitle</h1>
-    }
+                }
                 @if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
                 {
 		            <p id="programWebsite">

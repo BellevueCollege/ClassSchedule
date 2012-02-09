@@ -287,8 +287,11 @@ textarea
 }
 
 
-#container { overflow: hidden; padding-bottom: 35px;
-    padding-top: 28px;}
+#container
+{
+    overflow: hidden;
+    padding-bottom: 35px;
+    padding-top: 35px;}
 
 
 #container.nosidebar{}
