@@ -42,7 +42,7 @@
 					 @{
 							if ((Model.MergedClasses.Count() > 0 && Model.itemToUpdate.Abbreviation != Model.itemToUpdate.URL) || Model.MergedClasses.Count() > 1)
 							{
-								@Html.LabelFor(model => model.itemToUpdate.MergedSubjects, "Subjects merged with " + Model.itemToUpdate.URL);
+								@Html.LabelFor(model => model.itemToUpdate.URL, "Subjects merged with " + Model.itemToUpdate.URL);
 							}
 							else
 							{

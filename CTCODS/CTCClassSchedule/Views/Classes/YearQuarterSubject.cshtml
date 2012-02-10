@@ -63,16 +63,15 @@
 	 }
 	 else
 	 {
-                <p id="sectionTitle"><a href="#">@FriendlyYRQ Credit Classes</a></p>
+                <p id="sectionTitle"><a href="@Url.Action("YearQuarter", "Classes")">@FriendlyYRQ Credit Classes</a></p>
                 <h1 id="pageTitle">
 					@ViewBag.ProgramTitle
 					<span class="subjectchooser">@Html.Partial("subjectNavigation")</span>
 				</h1>
 
-       <!-- ***Note to Shawn/Nate: Add code to include CMS subject info here only if it's available ***
-        <p class="subjectdesc">INSERT SUBJECT DESCRIPTION HERE</p>
+        <p class="subjectdesc">@ViewBag.SubjectIntro</p>
 
-       -->
+
 		 if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
 		 {
 				<p id="programWebsite">

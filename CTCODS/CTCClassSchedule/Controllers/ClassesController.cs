@@ -216,12 +216,15 @@ namespace CTCClassSchedule.Controllers
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
 				{
 					courses = respository.GetCourseSubjects(yrq, facets);
+
 				}
 
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					// gets a distinct list of URL's from the program information table. this couldn't be combined with coursesLocalEnum
 					// because the distinct doesn't work due to merged classes having potentially different names
+
+
 					var progInfo = (from s in db.vw_ProgramInformation
 													select new { s.URL }).Distinct().ToList();
 
@@ -595,6 +598,7 @@ namespace CTCClassSchedule.Controllers
 			{
 				const string DEFAULT_TITLE = "";
 				const string DEFAULT_URL = "";
+				const string DEFAULT_INTRO = "";
 				bool disposeDb = false;
 
 				if (db == null)
@@ -625,6 +629,7 @@ namespace CTCClassSchedule.Controllers
 						vw_ProgramInformation program = specificProgramInfo.Take(1).Single();
 
 						ViewBag.ProgramTitle = program.Title ?? DEFAULT_TITLE;
+						ViewBag.SubjectIntro = program.Intro ?? DEFAULT_INTRO;
 
 						string url = program.ProgramURL ?? DEFAULT_URL;
 

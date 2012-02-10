@@ -139,7 +139,6 @@
           <Property Name="DivisionURL" Type="varchar" MaxLength="255" />
           <Property Name="LastUpdated" Type="datetime" />
           <Property Name="LastUpdatedBy" Type="varchar" MaxLength="50" />
-          <Property Name="MergedSubjects" Type="varchar" MaxLength="255" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'ClassScheduleDev.dbo.ProgramInformation.OLD' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -429,7 +428,6 @@
           <Property Type="String" Name="DivisionURL" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastUpdated" />
           <Property Type="String" Name="LastUpdatedBy" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="MergedSubjects" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ProgramInformation_OLD">
           <Key>
@@ -564,7 +562,6 @@
           <EntitySetMapping Name="ProgramInformations">
             <EntityTypeMapping TypeName="ClassSchedule.Models.ProgramInformation">
               <MappingFragment StoreEntitySet="ProgramInformation">
-                <ScalarProperty Name="MergedSubjects" ColumnName="MergedSubjects" />
                 <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
                 <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
                 <ScalarProperty Name="DivisionURL" ColumnName="DivisionURL" />
@@ -633,7 +630,7 @@
         <EntityTypeShape EntityType="ClassSchedule.Models.ClassSearch" Width="1.5" PointX="7.875" PointY="3.625" Height="1.9802864583333317" />
         <EntityTypeShape EntityType="ClassSchedule.Models.CourseFootnote" Width="1.5" PointX="7.875" PointY="2.125" Height="1.4033821614583317" />
         <EntityTypeShape EntityType="ClassSchedule.Models.CourseSearch" Width="1.5" PointX="9.5" PointY="0.5" Height="1.7879850260416674" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.ProgramInformation" Width="1.5" PointX="11.125" PointY="0.625" Height="2.5571907552083317" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.ProgramInformation" Width="1.5" PointX="11.125" PointY="0.625" Height="3.326396484375" />
         <EntityTypeShape EntityType="ClassSchedule.Models.ProgramInformation_OLD" Width="1.5" PointX="9.625" PointY="4.125" Height="2.1725878906250031" />
         <EntityTypeShape EntityType="ClassSchedule.Models.SectionFootnote" Width="1.5" PointX="9.5" PointY="2.25" Height="1.7879850260416674" />
       </Diagram>
