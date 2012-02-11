@@ -31,10 +31,11 @@
 				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
 		}
 
-
 			@if (ViewBag.ItemCount == 0)
 	 {
-					<h3>No classes found.</h3>
+		 string letter = Request.QueryString["letter"];
+				<h2>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h2>
+				<p><em>TIP:</em> Information for @yrq.FriendlyName may not be available yet.</p>
 	 }
 	 else
 	 {

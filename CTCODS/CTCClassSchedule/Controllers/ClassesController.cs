@@ -371,18 +371,32 @@ namespace CTCClassSchedule.Controllers
 				}
 
 				ICourse courseInfo;
-				using (_profiler.Step("ODSAPI::GetCourses() - course information"))
+				if (sections != null && sections.Count > 0)
 				{
-					string cidString = sections.First().CourseID;
-					ICourseID cid = CourseID.FromString(cidString);
-					IList<Course> foo = repository.GetCourses(cid);
-					courseInfo = foo.First();
+					using (_profiler.Step("ODSAPI::GetCourses() - course information"))
+					{
+						string cidString = sections.First().CourseID;
+						ICourseID cid = CourseID.FromString(cidString);
+						IList<Course> foo = repository.GetCourses(cid);
+						courseInfo = foo.First();
+					}
+				}
+				else
+				{
+					courseInfo = null;
 				}
 				ViewBag.CourseInfo = courseInfo;
 
-				using (_profiler.Step("Retrieving course outcomes"))
+				if (courseInfo != null)
 				{
-					ViewBag.CourseOutcome = getCourseOutcome(courseInfo.IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, ClassNum);
+					using (_profiler.Step("Retrieving course outcomes"))
+					{
+						ViewBag.CourseOutcome = getCourseOutcome(courseInfo.IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, ClassNum);
+					}
+				}
+				else
+				{
+					ViewBag.CourseOutcome = null;
 				}
 
 				IEnumerable<SectionWithSeats> sectionsEnum;
@@ -393,9 +407,11 @@ namespace CTCClassSchedule.Controllers
 						sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections, db);
 					}
 
-					// Use the real abbreviation as the lookup since we're not longer doing the translation workaround at this level.
-					setProgramInfo(sectionsEnum.First().IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, db, true);
-
+					if (sectionsEnum != null && sectionsEnum.Count() > 0)
+					{
+						// Use the real abbreviation as the lookup since we're not longer doing the translation workaround at this level.
+						setProgramInfo(sectionsEnum.First().IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, db, true);
+					}
 					return View(sectionsEnum);
 				}
 			}

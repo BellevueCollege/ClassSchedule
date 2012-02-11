@@ -39,6 +39,8 @@
 	@Html.Partial("quarterNavigation")
 	<div id="container" class="nosidebar">
         <div id="content">
+				@if (course != null)
+		{
             <h1 id="pageTitle">
                 <span class="courseID">@(string.Format("{0}{1} {2}", course.Subject, course.IsCommonCourse ? "&" : string.Empty, course.Number))</span>
 				<span>@course.Title</span>
@@ -49,29 +51,29 @@
 
 				&#8226;
 				@if (course.IsVariableCredits)
-				{
+		{
 							<span class="classCredits">
 								V1-@Html.CreditsValue(course.Credits)
 									<abbr title=" variable credit(s) ">Cr.</abbr>
 							</span>
-				}
-				else
-				{
+		}
+		else
+		{
 							<span class="classCredits">
 								@Html.CreditsValue(course.Credits)
 									<abbr title=" credit(s) ">Cr.</abbr>
 							</span>
-				}
+		}
             </h1>
 
              <div class="aside">
 				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
-                {
+		{
                     <div id="programWebsite">
                         <h2>Department</h2>
 			            <p><a href="@ViewBag.ProgramUrl" class="programWebsite">@course.Subject</a></p>
 		            </div>
-		        }
+		}
             </div><!-- aside -->
 
 
@@ -80,7 +82,7 @@
 				    <h2>Description:</h2>
                     <p>
 										@{
-											IList<CourseDescription> descriptions = course.Descriptions.ToList();
+		IList<CourseDescription> descriptions = course.Descriptions.ToList();
 										}
 										@(descriptions.Count <= 0 || string.IsNullOrWhiteSpace(descriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : descriptions[0].Description)
 			        </p>
@@ -101,20 +103,20 @@
                <p>
 									@Model.First().CourseFootnotes
 									@if (descriptions[0].Description.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0 || Model.First().CourseFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
-									{
+				 {
 										<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">How to clear prerequisites?</a>
-									}
+				 }
 			        </p>
           </div>
 
 		    @if (!string.IsNullOrWhiteSpace(ViewBag.CourseOutcome))
-		    {
+			{
 			    <div id="courseOutcome">
 				    <h2>Outcomes:</h2>
                     <!-- <p>After completing this course, students should be able to:</p>-->
 				    @Html.Raw(ViewBag.CourseOutcome)
 			    </div>
-		    }
+			}
 
             </div> <!-- class-details -->
             <div id="allSectionsbyQuarter">
@@ -123,13 +125,15 @@
 		{
 			bool isPastQuarter = false;
 			var yrqs = (from s in Model
-															where s.Yrq.ID.CompareTo(currentYrqID) <= 0
-															orderby s.Yrq.ID descending
-															group s by s.Yrq.FriendlyName into g
-															select new {
-																						YRQ = g.Key
-																						,Sections = g.Count()
-																					}).Take(4);
+									where s.Yrq.ID.CompareTo(currentYrqID) <= 0
+									orderby s.Yrq.ID descending
+									group s by s.Yrq.FriendlyName into g
+									select new
+									{
+										YRQ = g.Key
+										 ,
+										Sections = g.Count()
+									}).Take(4);
 
 			<div class="offeredQuarters">
 				<h2>Offered on:</h2>
@@ -141,10 +145,10 @@
 					<li class="@(isPastQuarter ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
 						@Html.ActionLink(y.YRQ, "YearQuarterSubject", new { YearQuarter = y.YRQ, Subject = course.Subject })
 						@if (ViewBag.ActiveQuarter.CompareTo(y.YRQ) == 0)
-						{
+			{
 							<span>(current quarter)</span>
-							isPastQuarter = true; // for next iteration
-						}
+				isPastQuarter = true; // for next iteration
+			}
 					</li>
 			}
 		}
@@ -153,6 +157,13 @@
 		}
 	    </div> <!-- allSectionsbyQuarter -->
 
+		}
+		else
+		{
+		 string subject = ViewContext.RouteData.Values["Subject"].ToString();
+		 string number = ViewContext.RouteData.Values["ClassNum"].ToString();
+				<h1>Sorry, we don't appear to have any courses with the ID &quot;@string.Format("{0} {1}", subject, number)&quot;</h1>
+		}
     </div> <!-- content -->
 
     </div> <!-- container -->

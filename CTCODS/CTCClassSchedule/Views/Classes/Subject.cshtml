@@ -13,14 +13,22 @@
         </div> <!-- #sidebar -->
 
         <div id="content">
+	    @if (ViewBag.ItemCount == 0)
+     {
+				string subject = ViewContext.RouteData.Values["Subject"].ToString();
+				<h1>No @subject classes were found</h1>
+				<p><strong>TIP:</strong> Try changing the <strong>Subject</strong> to the left.</p>
+		 }
+		 else
+		 {
 				<p class="subjectdesc">@ViewBag.SubjectIntro</p>
 
-				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle)) {
+				if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle)) {
 
                     <p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>
                     <h1 id="pageTitle">@ViewBag.ProgramTitle</h1>
                 }
-                @if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
+                if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
                 {
 		            <p id="programWebsite">
 			            <a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a>
@@ -88,13 +96,8 @@
                 </div>
 
       }
-	    @if (ViewBag.ItemCount == 0)
-     {
-			    <text>
-			    <p class="error">No classes found.</p>
-			    </text>
+	    </div> <!-- #classInfoWrap -->
 		 }
-	    </div>
         </div> <!-- #content -->
 
 

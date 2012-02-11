@@ -43,32 +43,25 @@
 
         <div id="content">
 
-
-
-	<div id="searchHeaderInfo">
-		<h1 id="searchResultsMsg">
-			<strong>"@(ViewBag.searchterm)"</strong> found @itemCount @sectionDesc in @subjectCount @classDesc for @(yrq != null ? yrq.FriendlyName : "ERROR")
-		</h1>
-		<div id="searchPageNum">
-
-		@if (ViewBag.TotalPages == 0)
-		{
-			<text>page 0 of @ViewBag.TotalPages</text>
-		}
-		else
-		{
-			<text>page @ViewBag.CurrentPage of @ViewBag.TotalPages</text>
-		}
-
-		</div>
-	</div>
-
 	@if (itemCount == 0)
  {
-			<h3>No classes found.</h3>
+			<h1>No classes were found for &quot;@_searchTerm&quot;</h1>
+			<p><strong>TIP:</strong> Try searching for something else, or selecting fewer <span style="background-color:#999999;color:White; padding:2px;">Refine</span> criteria to the left.</p>
  }
  else
  {
+	<div id="searchHeaderInfo">
+		<h1 id="searchResultsMsg">
+			<strong>&quot;@_searchTerm&quot;</strong> found @itemCount @sectionDesc in @subjectCount @classDesc for @(yrq != null ? yrq.FriendlyName : "ERROR: Unknown quarter")
+		</h1>
+		<div id="searchPageNum">
+
+		@if (ViewBag.TotalPages > 0)
+		{
+			<text>page @ViewBag.CurrentPage of @ViewBag.TotalPages</text>
+		}
+		</div>
+	</div>
 	 using (_profiler.Step("Rendering sections from search results"))
 	 {
 		 foreach (SectionWithSeats sec in Model.Section)
