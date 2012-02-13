@@ -235,14 +235,19 @@ namespace CTCClassSchedule.Controllers
 					IList<ScheduleCoursePrefix> coursesLocalEnum = (from v in db.vw_ProgramInformation
 																													where progInfo.Contains(v.Abbreviation)
 														&& innerQuery.Contains(v.Abbreviation)
-																													orderby v.Title ascending
-					                                                select new ScheduleCoursePrefix
-					                                                {
-					                                                    Title = v.Title,
-																															URL = v.URL,
-																															Subject = v.Abbreviation
 
-					                                                }).Distinct().ToList();
+																													select new ScheduleCoursePrefix
+					                                                {
+																														Title = v.Title,
+																														URL = v.URL,
+																														Subject = v.Abbreviation
+
+					                                                }).Distinct().OrderBy(v => v.Title).ToList();
+
+					foreach (ScheduleCoursePrefix course in coursesLocalEnum)
+					{
+						course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title);
+					}
 
 					//this code is definitely not how we want to do things. This is because the Accounting people won't
 					//rename their ACCT& course prefix...talk to Juan for full details
@@ -513,7 +518,6 @@ namespace CTCClassSchedule.Controllers
 			int pos = coursesLocalEnum.IndexOf(acct);
 			if (pos != -1)
 			{
-				coursesLocalEnum.Add(acctp);
 				coursesLocalEnum.Insert(pos + 1, acctp);
 			}
 		}
@@ -703,6 +707,8 @@ namespace CTCClassSchedule.Controllers
 				}
 			}
 		}
+
+
 
 		/// <summary>
 		///

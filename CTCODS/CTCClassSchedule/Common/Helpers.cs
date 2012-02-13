@@ -10,6 +10,7 @@ using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Models;
 using MvcMiniProfiler;
+using Ctc.Web.Security;
 
 namespace CTCClassSchedule.Common
 {
@@ -20,6 +21,25 @@ namespace CTCClassSchedule.Common
 
 			return MvcHtmlString.Create(new WebClient().DownloadString(url));
 
+		}
+
+		public static string getBodyClasses(HttpContextBase Context)
+		{
+			string classes = "";
+
+			if (Context.User.Identity.IsAuthenticated)
+			{
+
+				classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") ? "role-developer" : "";
+				classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "role-schedule-editors") ? " role-schedule-editors " : "";
+				classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "role-admin") ? " role-admin " : "";
+			}
+			else
+			{
+				classes = "not-logged-in";
+			}
+
+			return classes;
 		}
 
 		// TODO: Jeremy, another optional/BCC specific way of getting data - find another way?

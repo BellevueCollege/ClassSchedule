@@ -1,5 +1,6 @@
 @using CTCClassSchedule.Common;
 @using Ctc.Web.Security;
+@using CTCClassSchedule.Common;
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
@@ -51,7 +52,7 @@
 
 
 
-<body class="@(ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") ? "role-developer" : "")@(ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "role-schedule-editors") ? " role-schedule-editors " : "")@(ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "role-admin") ? " role-admin " : "")">
+<body class="@(Helpers.getBodyClasses(Context))">
 	<div id="betaBar">
 		<div id="betaBarWrapper">
 			<div id="betaInfo">You are using the <strong>class schedule</strong> BETA - <a href="http://bellevuecollege.edu/schedule/">Return to classic view</a></div>
