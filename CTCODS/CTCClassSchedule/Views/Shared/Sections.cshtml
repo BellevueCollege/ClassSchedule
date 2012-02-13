@@ -19,11 +19,8 @@
 			displaySeatsAvailable = false;
 		}
 	}
+	bool firstIteration = true;
 }
-
-
-
-
 
 <!-- SEARCHTERM: @_searchTerm -->
 <li class="section-listing"><span class="item-number"><span class="descriptor">Item
@@ -35,14 +32,22 @@
 				@foreach (OfferedItem item in Model.Offered.OrderBy(o => o.SequenceOrder))
 		{
 			// instructors
-			if (!string.IsNullOrWhiteSpace(item.InstructorName))
+			if (firstIteration && string.IsNullOrWhiteSpace(item.InstructorName))
 			{
-					<li><a href="@Helpers.getProfileURL(Convert.ToString(item.InstructorID))">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a></li>
+				<li>Staff</li>
 			}
 			else
 			{
+				if (!string.IsNullOrWhiteSpace(item.InstructorName))
+				{
+					<li><a href="@Helpers.getProfileURL(Convert.ToString(item.InstructorID))">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a></li>
+				}
+				else
+				{
 					<li>&nbsp;</li>
+				}
 			}
+			firstIteration = false;
 		}
 			</ul>
 		</li>
