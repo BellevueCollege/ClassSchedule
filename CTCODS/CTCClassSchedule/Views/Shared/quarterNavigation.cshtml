@@ -25,8 +25,32 @@
 <div id="site-navigation">
 @using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" })) {
 
-	<div id="browse"><a href="@Url.Content("~/")">Browse Classes</a></div>
-	<div id="search">
+	<div id="browse"><a href="@Url.Content("~/")" class="home roundcorners">Browse Classes</a>
+
+        <div class="nav-dropdown roundcorners">
+            <div id="nav-credit-options"><p>Credit Classes</p>
+                <ul>
+
+                    @foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
+                     {
+				        <li>
+					        <a class="yrq" href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})"><em>@yrq.FriendlyName</em> <span class="clarify">(upcoming)</span></a>
+				        </li>
+                     }
+
+                     <li class="browse-all-classes"><a href="@Url.Action("AllClasses", "Classes")"><em>Browse all classes</em> <span class="clarify">(with Descriptions)</span></a></li>
+                </ul>
+            </div>
+            <div id="nav-other-options"><p>Other classes and workshops</p>
+                <ul>
+                    <li><a href="http://www.campusce.net/BC/Search/Search.aspx"><em>Continuing Education</em> <span class="clarify">(non-credit)</span></a></li>
+                    <li><a href="http://bellevuecollege.edu/careers/sac_classes.html"><em>Center for Career Connections classes &amp; workshops</em></a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+	<div id="search" class="roundcorners">
 		<span id="search-text">Search</span>  <span id="search-tip"><strong>Tip:</strong> you can search by course, title, subject, item number or instructor.</span>
 		<label for="seach-quarter-select">Pick a quarter</label>
         <select name="quarter" id="seach-quarter-select">
@@ -38,11 +62,15 @@
 		</select>
 
 		<label for="searh-keyword">Keywords</label>
-		<input type="text" class="searchInput" id="search-keyword" name="searchterm" maxlength="40" value="@(Request.QueryString["searchterm"] ?? string.Empty)"/>
-		<input type="hidden" id="search-currentQuarter" name="currentQuarter" value="@(ViewBag.QuarterNavMenu[0])" />
-		<input type="submit" class="searchSubmit"  name="submit" value="Go" />
+        <div id="searchfield-wrap" class="roundcorners">
+		    <input type="text" class="searchInput" id="search-keyword" name="searchterm" maxlength="40" value="@(Request.QueryString["searchterm"] ?? string.Empty)"/>
+		    <input type="hidden" id="search-currentQuarter" name="currentQuarter" value="@(ViewBag.QuarterNavMenu[0])" />
+		    <div id="searchbutton-wrap">
+                <input type="submit" class="searchSubmit"  name="submit" value="Search" />
+            </div>
+        </div> <!-- searchfield-wrap -->
 	</div>
-    <div id="register"><a href="http://bellevuecollege.edu/enrollment/registration/register/">Register</a></div>
+    <div id="register"><a href="http://bellevuecollege.edu/enrollment/registration/register/"  class="roundcorners">Register</a></div>
 }
 <div class="clearer"></div>
 
