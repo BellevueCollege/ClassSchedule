@@ -225,25 +225,28 @@ namespace CTCClassSchedule.Controllers
 					// because the distinct doesn't work due to merged classes having potentially different names
 
 
-					var progInfo = (from s in db.vw_ProgramInformation
-													select new { s.URL }).Distinct().ToList();
+					IEnumerable<string> progInfo = (from s in db.vw_ProgramInformation
+																					select s.URL).Distinct();
+
+					var innerQuery = from c in courses
+													 select c.Subject;
 
 					//grab the details for the ScheduleCoursePrefix item for each program from the same table, starting with a distinct list of URL's.
-					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
-					                                                //where courses.Select(c => c.Subject).Contains(p.URL)
-																													join d in db.vw_ProgramInformation on p.URL equals d.Abbreviation
-																													orderby d.Title ascending
+					IList<ScheduleCoursePrefix> coursesLocalEnum = (from v in db.vw_ProgramInformation
+																													where progInfo.Contains(v.Abbreviation)
+														&& innerQuery.Contains(v.Abbreviation)
+																													orderby v.Title ascending
 					                                                select new ScheduleCoursePrefix
 					                                                {
-					                                                    Title = d.Title,
-																															URL = p.URL,
-																															Subject = d.Abbreviation
+					                                                    Title = v.Title,
+																															URL = v.URL,
+																															Subject = v.Abbreviation
 
 					                                                }).Distinct().ToList();
 
-
-
-
+					//this code is definitely not how we want to do things. This is because the Accounting people won't
+					//rename their ACCT& course prefix...talk to Juan for full details
+					AddAccounting(ref coursesLocalEnum);
 
 					IList<char> alphabet = coursesLocalEnum.Select(c => c.Title.First()).Distinct().ToList();
 					ViewBag.Alphabet = alphabet;
@@ -270,6 +273,7 @@ namespace CTCClassSchedule.Controllers
 				}
 			}
 		}
+
 
 
 
@@ -404,7 +408,7 @@ namespace CTCClassSchedule.Controllers
 				{
 					using (_profiler.Step("Getting app-specific Section records from the DB"))
 					{
-						sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections, db);
+						sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections, db); //this isn't looking at the ProgramInformation table's URL values when getting classes, resulting in CJ showing up but CJ& not showing up
 					}
 
 					if (sectionsEnum != null && sectionsEnum.Count() > 0)
@@ -416,6 +420,10 @@ namespace CTCClassSchedule.Controllers
 				}
 			}
 		}
+
+
+
+
 
 		/// <summary>
 		///
@@ -488,6 +496,28 @@ namespace CTCClassSchedule.Controllers
 
 
 		#region helper methods
+
+
+
+		public static void AddAccounting(ref IList<ScheduleCoursePrefix> coursesLocalEnum)
+		{
+			ScheduleCoursePrefix acctp = new ScheduleCoursePrefix
+			{
+				Title = "Accounting-Transfer",
+				URL = "ACCT&",
+				Subject = "ACCT&"
+			};
+
+			ScheduleCoursePrefix acct = coursesLocalEnum.Single(c => c.URL == "ACCT");
+
+			int pos = coursesLocalEnum.IndexOf(acct);
+			if (pos != -1)
+			{
+				coursesLocalEnum.Add(acctp);
+				coursesLocalEnum.Insert(pos + 1, acctp);
+			}
+		}
+
 
 
 		/// <summary>

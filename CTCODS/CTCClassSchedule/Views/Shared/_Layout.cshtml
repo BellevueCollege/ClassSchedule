@@ -48,7 +48,10 @@
 	</script>
 	@MvcMiniProfiler.MiniProfiler.RenderIncludes()
 </head>
-<body>
+
+
+
+<body class="@(ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") ? "role-developer" : "")@(ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "role-schedule-editors") ? " role-schedule-editors " : "")@(ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "role-admin") ? " role-admin " : "")">
 	<div id="betaBar">
 		<div id="betaBarWrapper">
 			<div id="betaInfo">You are using the <strong>class schedule</strong> BETA - <a href="http://bellevuecollege.edu/schedule/">Return to classic view</a></div>
