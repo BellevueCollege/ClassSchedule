@@ -40,6 +40,60 @@
 
 }
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
+
+
+<script type="text/javascript">
+
+	/* subject chooser pop-up dialog */
+	$(document).ready(function () {
+
+		$("#edit-section").dialog({
+			autoOpen: false,
+			height: 375,
+			width: 560
+		});
+
+		$("#edit-class").dialog({
+			autoOpen: false,
+			height: 375,
+			width: 560
+		});
+
+			@if (Helpers.isEditor(Context))
+			{
+
+				<text>
+				$('li.section-listing').hover(
+					function () {
+						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').show();
+						$(this).addClass('yellow-dashed');
+					},
+					function () {
+						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').hide();
+						$(this).removeClass('yellow-dashed');
+				});
+				</text>
+			}
+
+
+			@if (Helpers.isAdmin(Context))
+			{
+				<text>
+				$('.classinfo').hover(
+					function () {
+						$(this).children('a.edit_button').show();
+						$(this).addClass('yellow-dashed');
+					},
+					function () {
+						$(this).children('a.edit_button').hide();
+						$(this).removeClass('yellow-dashed');
+				});
+				</text>
+			}
+
+	});
+</script>
+
 <div id="scheduleMain">
 	@{
 		Html.RenderPartial("quarterNavigation");
@@ -87,32 +141,35 @@
 
 				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
 			}
+			else if(Helpers.isEditor(Context)){
+				<div class="message">@Context.User.Identity.Name! You have editor access to this section.</div>
+			}
 
-		using (_profiler.Step("Rendering Sections by Course (outer loop)"))
-		{
-			foreach (SectionWithSeats sec in orderedModel)
+			using (_profiler.Step("Rendering Sections by Course (outer loop)"))
 			{
-				courseID = sec.CourseID;
-				sectionID = sec.ID.ToString();
-				credits = sec.Credits;
-				isVariableCredit = sec.IsVariableCredits;
-
-				if (!sec.IsLinked)
+				foreach (SectionWithSeats sec in orderedModel)
 				{
-					if (courseID != PreviousCourseID || (courseID == PreviousCourseID && credits != PreviousCredits) || (courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit))
+					courseID = sec.CourseID;
+					sectionID = sec.ID.ToString();
+					credits = sec.Credits;
+					isVariableCredit = sec.IsVariableCredits;
+
+					if (!sec.IsLinked)
 					{
-						if (PreviousCourseID != "")
+						if (courseID != PreviousCourseID || (courseID == PreviousCourseID && credits != PreviousCredits) || (courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit))
 						{
+							if (PreviousCourseID != "")
+							{
 				@:</ul>
 					}
 
-						route["Subject"] = sec.CourseSubject.Trim();
-						route["ClassNum"] = sec.CourseNumber;
+							route["Subject"] = sec.CourseSubject.Trim();
+							route["ClassNum"] = sec.CourseNumber;
 
 				<text>
 				<div class="classinfo">
 
-				@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
+				@if (Helpers.isAdmin(Context))
 		{
 					@Ajax.ActionLink("Edit",
 											"ClassEdit",
@@ -183,69 +240,24 @@
 
 				</div>
 				</text>
-					 }
+						}
 
-					 if (PreviousSectionID != sectionID)
-					 {
-						 Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
-					 }
-				 }
+						if (PreviousSectionID != sectionID)
+						{
+							Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+						}
+					}
 
-				 PreviousCredits = sec.Credits;
-				 PreviousSectionID = sectionID;
-				 PreviousCourseID = courseID;
-				 PreviousIsVariableCredit = isVariableCredit;
-			 }
-		 }
+					PreviousCredits = sec.Credits;
+					PreviousSectionID = sectionID;
+					PreviousCourseID = courseID;
+					PreviousIsVariableCredit = isVariableCredit;
+				}
+			}
 	 }
 
 
-<script type="text/javascript">
-	/* subject chooser pop-up dialog */
-	$(document).ready(function () {
 
-		$("#edit-section").dialog({
-			autoOpen: false,
-			height: 375,
-			width: 560,
-		});
-
-		$("#edit-class").dialog({
-			autoOpen: false,
-			height: 375,
-			width: 560,
-		});
-
-		@if(Context.User.Identity.Name.Length > 0 && Helpers.isEditor(Context)) {
-
-			<text>
-			$('li.section-listing').hover(
-				function () {
-					$(this).children('ul.section-details').children('li.editing').children('a.edit_button').show();
-					$(this).addClass('yellow-dashed');
-				},
-				function () {
-					$(this).children('ul.section-details').children('li.editing').children('a.edit_button').hide();
-					$(this).removeClass('yellow-dashed');
-			});
-			}
-			</text>
-
-			if(Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context)) {
-			<text>
-			$('.classinfo').hover(
-				function () {
-					$(this).children('a.edit_button').show();
-					$(this).addClass('yellow-dashed');
-				},
-				function () {
-					$(this).children('a.edit_button').hide();
-					$(this).removeClass('yellow-dashed');
-			});
-			</text>
-		}
-	});
-</script>
 
 	<div title="Edit Section" id="edit-section"></div>
 	<div title="Edit Class" id="edit-class"></div>
