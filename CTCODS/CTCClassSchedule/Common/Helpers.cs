@@ -11,6 +11,7 @@ using Ctc.Ods.Types;
 using CTCClassSchedule.Models;
 using MvcMiniProfiler;
 using Ctc.Web.Security;
+using System.Configuration;
 
 namespace CTCClassSchedule.Common
 {
@@ -31,8 +32,8 @@ namespace CTCClassSchedule.Common
 			{
 
 				classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") ? "role-developer" : "";
-				classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "role-schedule-editors") ? " role-schedule-editors " : "";
-				classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "role-admin") ? " role-admin " : "";
+				classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "InApp-Classes-Schedule-Editor") ? " role-schedule-editors " : "";
+				classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "InApp-Classes-Admin") ? " role-admin " : "";
 			}
 			else
 			{
@@ -41,6 +42,44 @@ namespace CTCClassSchedule.Common
 
 			return classes;
 		}
+
+
+		public static bool isAdmin(HttpContextBase Context)
+		{
+			bool isAdmin = false;
+			if (Context.User.Identity.IsAuthenticated)
+			{
+				isAdmin = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, ConfigurationManager.AppSettings["ApplicationDeveloper"]) ? true : false;
+				if (isAdmin == false)
+				{
+					isAdmin = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, ConfigurationManager.AppSettings["ApplicationAdmin"]) ? true : false;
+				}
+
+			}
+			return isAdmin;
+		}
+
+		public static bool isEditor(HttpContextBase Context)
+		{
+			bool isEditor = false;
+			if (Context.User.Identity.IsAuthenticated)
+			{
+
+				isEditor = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, ConfigurationManager.AppSettings["ApplicationDeveloper"]) ? true : false;
+				if (isEditor == false)
+				{
+					isEditor = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, ConfigurationManager.AppSettings["ApplicationAdmin"]) ? true : false;
+				}
+				if (isEditor == false)
+				{
+					isEditor = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, ConfigurationManager.AppSettings["ApplicationEditor"]) ? true : false;
+				}
+
+
+			}
+			return isEditor;
+		}
+
 
 		// TODO: Jeremy, another optional/BCC specific way of getting data - find another way?
 		public static String getProfileURL(string SID)

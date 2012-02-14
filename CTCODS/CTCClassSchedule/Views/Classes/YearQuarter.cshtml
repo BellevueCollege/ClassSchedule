@@ -27,7 +27,8 @@
 		@Html.Partial("a_to_z", alphabet)
 
 
-		@if(Ctc.Web.Security.ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") == true) {
+		@if (Helpers.isAdmin(Context))
+	{
 				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
 		}
 
@@ -74,7 +75,7 @@
 			window.location.href = $(location).attr('href');
 		});
 
-		@if(Ctc.Web.Security.ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") == true) {
+		@if(Helpers.isAdmin(Context))  {
 
 			<text>$('li.title').hover(function () {
 				$(this).children('a.edit_button').show();

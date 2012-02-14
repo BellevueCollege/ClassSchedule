@@ -102,7 +102,7 @@
       }
 			 <li class="editing">
 
-				@if (Context.User.Identity.Name.Length > 0)
+				@if (Context.User.Identity.Name.Length > 0 && Helpers.isEditor(Context))
 				{
 					@Ajax.ActionLink("Edit",
 														"SectionEdit",

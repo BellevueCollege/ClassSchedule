@@ -83,10 +83,10 @@
 				</p>
 		 }
 
-			if (Ctc.Web.Security.ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") == true)
-		{
+			if(Helpers.isAdmin(Context))  {
+
 				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
-		}
+			}
 
 		using (_profiler.Step("Rendering Sections by Course (outer loop)"))
 		{
@@ -112,7 +112,7 @@
 				<text>
 				<div class="classinfo">
 
-				@if (Context.User.Identity.Name.Length > 0)
+				@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
 		{
 					@Ajax.ActionLink("Edit",
 											"ClassEdit",
@@ -216,7 +216,7 @@
 			width: 560,
 		});
 
-		@if(Ctc.Web.Security.ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") == true) {
+		@if(Context.User.Identity.Name.Length > 0 && Helpers.isEditor(Context)) {
 
 			<text>
 			$('li.section-listing').hover(
@@ -228,7 +228,11 @@
 					$(this).children('ul.section-details').children('li.editing').children('a.edit_button').hide();
 					$(this).removeClass('yellow-dashed');
 			});
+			}
+			</text>
 
+			if(Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context)) {
+			<text>
 			$('.classinfo').hover(
 				function () {
 					$(this).children('a.edit_button').show();

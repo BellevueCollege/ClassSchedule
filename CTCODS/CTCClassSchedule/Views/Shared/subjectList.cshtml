@@ -43,7 +43,7 @@
 					Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
 				}
 
-				@if (Context.User.Identity.Name.Length > 0)
+				@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
 				{
 
 
