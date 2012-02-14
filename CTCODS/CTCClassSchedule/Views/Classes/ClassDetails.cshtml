@@ -13,6 +13,7 @@
 	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
 	YearQuarter currentYrq = yrqList[0];
 	string currentYrqID = currentYrq.ID;
+	YearQuarter activeQuarter = ViewBag.CurrentYearQuarter;
 
 	string PreviousYrq = string.Empty;
 	string PreviousSectionID = string.Empty;
@@ -144,7 +145,7 @@
 			{
 					<li class="@(isPastQuarter ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
 						@Html.ActionLink(y.YRQ, "YearQuarterSubject", new { YearQuarter = y.YRQ, Subject = course.Subject })
-						@if (ViewBag.ActiveQuarter.CompareTo(y.YRQ) == 0)
+						@if (activeQuarter.FriendlyName.CompareTo(y.YRQ) == 0)
 			{
 							<span>(current quarter)</span>
 				isPastQuarter = true; // for next iteration

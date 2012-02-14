@@ -82,6 +82,8 @@
 <!-- TODO: Make the title configurable in web.config. Possible? -->
 @{
     ViewBag.PageTitle = "Classes at Bellevue College";
+
+		YearQuarter currentQuarter = ViewBag.CurrentYearQuarter;
 }
 
 <div id="page-wrapper" class="homepage">
@@ -100,6 +102,19 @@
  {
 				<li>
 					<a class="yrq" href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">@yrq.FriendlyName</a>
+		@{
+		int yrqComparison = yrq.ID.CompareTo(currentQuarter.ID);
+		}
+		@if (yrqComparison >= 0)
+		{
+					<span class="clarify">
+			@if (yrqComparison > 0) {
+						@:(upcoming)
+			} else {
+						@:(current quarter)
+			}
+					</span>
+		}
 				</li>
  }
 				</ul>

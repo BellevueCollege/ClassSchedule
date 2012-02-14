@@ -21,6 +21,7 @@
 </script>
 @{
 	YearQuarter quarterViewing = ViewBag.YearQuarter;
+	YearQuarter currentQuarter = ViewBag.CurrentYearQuarter;
 }
 <div id="site-navigation">
 @using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" })) {
@@ -31,14 +32,28 @@
             <div id="nav-credit-options"><p>Credit Classes</p>
                 <ul>
 
-                    @foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
-                     {
-				        <li>
-					        <a class="yrq" href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})"><em>@yrq.FriendlyName</em> <span class="clarify">(upcoming)</span></a>
-				        </li>
-                     }
-
-                     <li class="browse-all-classes"><a href="@Url.Action("AllClasses", "Classes")"><em>Browse all classes</em> <span class="clarify">(with Descriptions)</span></a></li>
+                @foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
+                {
+									<li>
+										<a class="yrq" href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">
+											<em>@yrq.FriendlyName</em>
+										@{
+										int yrqComparison = yrq.ID.CompareTo(currentQuarter.ID);
+										}
+										@if (yrqComparison >= 0)
+										{
+											<span class="clarify">
+											@if (yrqComparison > 0) {
+													@:(upcoming)
+											} else {
+													@:(current quarter)
+											}
+											</span>
+										}
+										</a>
+									</li>
+                }
+									<li class="browse-all-classes"><a href="@Url.Action("AllClasses", "Classes")"><em>Browse all classes</em> <span class="clarify">(with Descriptions)</span></a></li>
                 </ul>
             </div>
             <div id="nav-other-options"><p>Other classes and workshops</p>

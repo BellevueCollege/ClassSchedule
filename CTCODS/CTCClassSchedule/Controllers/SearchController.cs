@@ -38,8 +38,6 @@ namespace CTCClassSchedule.Controllers
 				return null;
 			}
 
-			setViewBagVars("", "", "", avail, "");
-
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
 			ViewBag.day_su = day_su;
@@ -83,11 +81,13 @@ namespace CTCClassSchedule.Controllers
 				return View();
 			}
 
-			using (OdsRepository respository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				YearQuarter YRQ = string.IsNullOrWhiteSpace(quarter) ? respository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
+				setViewBagVars("", "", "", avail, "", repository);
+
+				YearQuarter YRQ = string.IsNullOrWhiteSpace(quarter) ? repository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
 				ViewBag.YearQuarter = YRQ;
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 				bool IsPreviousQuarter = false;
 
 				if (ViewBag.QuarterNavMenu[0].ToString() != YRQ.ToString())
@@ -100,12 +100,12 @@ namespace CTCClassSchedule.Controllers
 				{
 					if (string.IsNullOrWhiteSpace(Subject))
 					{
-						sections = respository.GetSections(YRQ, facets);
+						sections = repository.GetSections(YRQ, facets);
 					}
 					else
 					{
 						IList<string> subjects = new List<string> {Subject, string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar)};
-						sections = respository.GetSections(subjects, YRQ, facets);
+						sections = repository.GetSections(subjects, YRQ, facets);
 					}
 				}
 
@@ -302,9 +302,10 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// Sets all of the common ViewBag variables
 		/// </summary>
-		private void setViewBagVars(string flex, string time, string days, string avail, string letter)
+		private void setViewBagVars(string flex, string time, string days, string avail, string letter, OdsRepository repository)
 		{
 			ViewBag.ErrorMsg = "";
+			ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
 
 			ViewBag.letter = letter;
 			ViewBag.flex = flex ?? "all";

@@ -45,6 +45,7 @@ namespace CTCClassSchedule.Controllers
 		{
 			using (OdsRepository respository = new OdsRepository(HttpContext))
 			{
+				ViewBag.CurrentYearQuarter = respository.CurrentYearQuarter;
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 			}
 			return View();
@@ -58,19 +59,19 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "AllClassesCacheTime")] // Caches for 6 hours
 		public ActionResult AllClasses(string letter)
 		{
-			setViewBagVars("", "", letter);
 			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? " (All)" : " (" + letter.ToUpper() + ")");
 
 			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
-			using (OdsRepository respository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+				setViewBagVars("", "", letter, repository);
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 				IList<CoursePrefix> courses;
 				IList<vw_ProgramInformation> progInfo;
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
 				{
-					courses = respository.GetCourseSubjects();
+					courses = repository.GetCourseSubjects();
 				}
 
 				using (ClassScheduleDb db = new ClassScheduleDb())
@@ -116,7 +117,6 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult Subject(string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
 		{
 			ViewBag.Subject = Subject;
-			setViewBagVars("", avail, "");
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
 			ViewBag.day_su = day_su;
@@ -143,21 +143,22 @@ namespace CTCClassSchedule.Controllers
 
 			setProgramInfo(Subject);
 
-			using (OdsRepository respository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+				setViewBagVars("", avail, "", repository);
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 
 				IEnumerable<Course> coursesEnum;
 				if (Subject != null)
 				{
-					coursesEnum = respository.GetCourses(getPrefix(Subject), facets).Distinct();
+					coursesEnum = repository.GetCourses(getPrefix(Subject), facets).Distinct();
 					ViewBag.ItemCount = coursesEnum.Count();
 
 					return View(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number));
 				}
 				else
 				{
-					coursesEnum = respository.GetCourses(facets).Distinct();
+					coursesEnum = repository.GetCourses(facets).Distinct();
 					ViewBag.ItemCount = coursesEnum.Count();
 
 					return View(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number));
@@ -175,7 +176,6 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter, string latestart, string numcredits)
 		{
 			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? " (All)" : " (" + letter.ToUpper() + ")");
-			setViewBagVars(YearQuarter, avail, letter);
 
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
@@ -200,22 +200,23 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
-			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
-			ViewBag.YearQuarter = yrq;
+			//YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
+			//ViewBag.YearQuarter = yrq;
 
 			ViewBag.Subject = "All";
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
-			using (OdsRepository respository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+				setViewBagVars(YearQuarter, avail, letter, repository);
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 
 				IList<CoursePrefix> courses;
 
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
 				{
-					courses = respository.GetCourseSubjects(yrq, facets);
+					courses = repository.GetCourseSubjects(ViewBag.YearQuarter as YearQuarter, facets);
 
 				}
 
@@ -289,8 +290,6 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")] // Caches for 30 minutes
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
 		{
-			setViewBagVars(YearQuarter, avail, "");
-
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
 			ViewBag.day_su = day_su;
@@ -313,9 +312,10 @@ namespace CTCClassSchedule.Controllers
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
-			using (OdsRepository respository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(respository);
+				setViewBagVars(YearQuarter, avail, "", repository);
+				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
 				ViewBag.QuarterNavMenu = yrqRange;
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 
@@ -330,7 +330,7 @@ namespace CTCClassSchedule.Controllers
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
-					sections = respository.GetSections(getPrefix(Subject), YRQ, facets);
+					sections = repository.GetSections(getPrefix(Subject), YRQ, facets);
 				}
 
 				using (ClassScheduleDb db = new ClassScheduleDb())
@@ -366,8 +366,8 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
+				ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
 				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
-				ViewBag.ActiveQuarter = repository.CurrentYearQuarter.FriendlyName;
 				ViewBag.QuarterNavMenu = yrqRange;
 
 				// TODO: move this declaration somewhere it can more easily be re-used
@@ -625,11 +625,12 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// Sets all of the common ViewBag variables
 		/// </summary>
-		private void setViewBagVars(string YearQuarter, string avail, string letter)
+		private void setViewBagVars(string YearQuarter, string avail, string letter, OdsRepository repository)
 		{
 			ViewBag.ErrorMsg = "";
 			var debug = HttpContext.Request;
 			ViewBag.YearQuarter = string.IsNullOrWhiteSpace(YearQuarter) ? null : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
+			ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
 
 			ViewBag.letter = letter;
 			ViewBag.avail = avail ?? "all";
