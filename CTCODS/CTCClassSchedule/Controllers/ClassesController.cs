@@ -68,7 +68,6 @@ namespace CTCClassSchedule.Controllers
 				setViewBagVars("", "", letter, repository);
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 				IList<CoursePrefix> courses;
-				IList<vw_ProgramInformation> progInfo;
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
 				{
 					courses = repository.GetCourseSubjects();
@@ -76,8 +75,8 @@ namespace CTCClassSchedule.Controllers
 
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					progInfo = (from s in db.vw_ProgramInformation
-					            select s).ToList();
+					IList<vw_ProgramInformation> progInfo = (from s in db.vw_ProgramInformation
+					                                         select s).ToList();
 
 					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
 					                                                where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
@@ -222,37 +221,17 @@ namespace CTCClassSchedule.Controllers
 
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					// gets a distinct list of URL's from the program information table. this couldn't be combined with coursesLocalEnum
-					// because the distinct doesn't work due to merged classes having potentially different names
+					IList<vw_ProgramInformation> progInfo = (from s in db.vw_ProgramInformation
+					                                         select s).ToList();
 
-
-					IEnumerable<string> progInfo = (from s in db.vw_ProgramInformation
-																					select s.URL).Distinct();
-
-					var innerQuery = from c in courses
-													 select c.Subject;
-
-					//grab the details for the ScheduleCoursePrefix item for each program from the same table, starting with a distinct list of URL's.
-					IList<ScheduleCoursePrefix> coursesLocalEnum = (from v in db.vw_ProgramInformation
-																													where progInfo.Contains(v.Abbreviation)
-														&& innerQuery.Contains(v.Abbreviation)
-
-																													select new ScheduleCoursePrefix
-					                                                {
-																														Title = v.Title,
-																														URL = v.URL,
-																														Subject = v.Abbreviation
-
-					                                                }).Distinct().OrderBy(v => v.Title).ToList();
-
-					foreach (ScheduleCoursePrefix course in coursesLocalEnum)
-					{
-						course.Title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(course.Title);
-					}
-
-					//this code is definitely not how we want to do things. This is because the Accounting people won't
-					//rename their ACCT& course prefix...talk to Juan for full details
-					AddAccounting(ref coursesLocalEnum);
+					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
+					                                                where courses.Select(c => c.Subject).Contains(p.AbbreviationTrimmed)
+					                                                orderby p.Title
+					                                                select new ScheduleCoursePrefix
+												{
+														Subject = p.URL,
+														Title = p.Title,
+												}).Distinct().ToList();
 
 					IList<char> alphabet = coursesLocalEnum.Select(c => c.Title.First()).Distinct().ToList();
 					ViewBag.Alphabet = alphabet;
@@ -501,29 +480,6 @@ namespace CTCClassSchedule.Controllers
 
 
 		#region helper methods
-
-
-
-		public static void AddAccounting(ref IList<ScheduleCoursePrefix> coursesLocalEnum)
-		{
-			ScheduleCoursePrefix acctp = new ScheduleCoursePrefix
-			{
-				Title = "Accounting-Transfer",
-				URL = "ACCT&",
-				Subject = "ACCT&"
-			};
-
-			ScheduleCoursePrefix acct = coursesLocalEnum.Single(c => c.URL == "ACCT");
-
-			int pos = coursesLocalEnum.IndexOf(acct);
-			if (pos != -1)
-			{
-				coursesLocalEnum.Insert(pos + 1, acctp);
-			}
-		}
-
-
-
 		/// <summary>
 		/// Gets the course outcome information by scraping the Bellevue College
 		/// course outcomes website
