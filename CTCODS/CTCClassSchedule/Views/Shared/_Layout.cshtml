@@ -70,7 +70,7 @@
 		<!-- ******************************************************************************************* -->
 		<div style="float:right;">
 	@if(Context.User.Identity.IsAuthenticated) {
-			<text>[ Welcome <b>@Context.User.Identity.Name</b>! ] @(ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") ? "(DEV)" : "(0)") </text>
+			<text>[ Welcome <b>@Context.User.Identity.Name</b>! ] @(Helpers.isAdmin(Context) ? " - Admin" : "") @(!Helpers.isAdmin(Context) && Helpers.isEditor(Context) ? " - Editor" : "")</text>
 	}
 	else {
 			@:[ @Html.ActionLink("Log On", "Authenticate", "Classes") ]
