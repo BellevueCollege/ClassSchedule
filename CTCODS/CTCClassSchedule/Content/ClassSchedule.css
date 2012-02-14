@@ -890,8 +890,9 @@ ul.class-description
 }
 .online
 {
-    width: 56px;
-    padding-left: 20px;
+    width: 61px;
+    padding-left: 15px;
+    background: transparent url("images/online.gif") no-repeat left 48%
 }
 .seatsAvailable {}
 .seatsFull {}
@@ -1000,12 +1001,18 @@ ul.section-details li.section-notes
 }
 
 #classes-footer {
-	border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
 	margin-top: 35px;
     overflow: hidden;
-    background-color: #eee;
     clear: both;
+    background: #244281; /* Old browsers */
+    background: -moz-linear-gradient(top,  #244281 0%, #3258a3 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#244281), color-stop(100%,#3258a3)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #244281 0%,#3258a3 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #244281 0%,#3258a3 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #244281 0%,#3258a3 100%); /* IE10+ */
+    background: linear-gradient(top,  #244281 0%,#3258a3 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#244281', endColorstr='#3258a3',GradientType=0 ); /* IE6-9 */
+
 }
 #classes-footer h2 {
     position: absolute;
@@ -1022,18 +1029,15 @@ ul.section-details li.section-notes
 
 #classes-footer .block
 {
-	padding: 7px 19px 0 20px;
-    width: 200px;
+	margin: 5px;
+	padding: 5px 5px 10px 15px;
+    width: 210px;
     float: left;
-    border-right: 1px solid #ccc;
-	height: 119px;
+	min-height: 110px;
+	background-color: White;
+	background-color: rgba(255,255,255,0.9);
 }
 
-#classes-footer .first
-{
-	padding-left:19px;
-    border-left: 1px solid #ccc;
-}
 
 
 #pageWrapper {}
