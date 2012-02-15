@@ -10,6 +10,8 @@ using CTCClassSchedule.Models;
 using CTCClassSchedule.Properties;
 using System;
 using Ctc.Web.Security;
+using System.Text.RegularExpressions;
+using System.Text;
 
 
 
@@ -207,7 +209,16 @@ namespace CTCClassSchedule.Controllers
 			if (HttpContext.User.Identity.IsAuthenticated == true)
 			{
 				ICourseID courseID = CourseID.FromString(Subject, CourseNumber);
-				string UpdatingCourseID = courseID.ToString(); //IsCommonCourse ? Subject + "&" + CourseNumber : Subject + " " + CourseNumber;
+				string UpdatingCourseID = courseID.ToString();
+				if (IsCommonCourse)
+				{
+					int pos = UpdatingCourseID.IndexOf(' ');
+					StringBuilder s = new StringBuilder(UpdatingCourseID);
+					s[pos] = '&';
+					UpdatingCourseID = s.ToString();
+				}
+
+
 				CourseFootnote itemToUpdate = null;
 				var HPFootnotes = "";
 				using (ClassScheduleDb db = new ClassScheduleDb())
