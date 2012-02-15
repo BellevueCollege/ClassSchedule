@@ -34,7 +34,8 @@ $(function () {
         $(this).parents('#searchfield-wrap').removeClass('focus');
     });
 
-
+    /*set min-height for #content based on sidebar  */
+    $('.sidebar #content').css({ 'height': (($("#sidebar").height())) + 'px' });
 });
 
 function dropdown_show(){ $(this).addClass('hover'); }
