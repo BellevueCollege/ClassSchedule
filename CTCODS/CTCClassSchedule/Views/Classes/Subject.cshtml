@@ -8,6 +8,7 @@
 <div id="scheduleMain">
     @Html.Partial("quarterNavigation")
     <div id="container" class="sidebar">
+        <p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>
         <div id="sidebar">
             @Html.Partial("basicFacetedSearch")
         </div> <!-- #sidebar -->
@@ -25,7 +26,7 @@
 
 				if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle)) {
 
-                    <p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>
+
                     <h1 id="pageTitle">@ViewBag.ProgramTitle</h1>
                 }
                 if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))

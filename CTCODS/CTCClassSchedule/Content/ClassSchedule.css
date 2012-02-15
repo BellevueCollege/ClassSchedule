@@ -1,6 +1,6 @@
 body
 {
-	background-color: #fff;
+	background: #fff url("images/classes-bg.png");
     font-size: 13px;
     line-height: 21px;
     color: #222;
@@ -9,6 +9,7 @@ body
 h1 {
     font-size: 27px;
     line-height: 28px;
+    color: #864407
 }
 
 h2{
@@ -37,8 +38,7 @@ abbr:hover {
 
 #bodyWrapper
 {
-	font-family: Helvetica, Arial,  Sans-Serif;
-	background-color: #fff;
+	font-family: Helvetica, Arial, Sans-Serif;
 	margin-right: auto;
 	margin-left: auto;
 	width: 960px;
@@ -221,8 +221,8 @@ textarea
 #availability-facet label  { color: #003d79;}
 #times { margin-bottom: 14px}
 #days { margin-bottom: 21px;}
-
-
+#numcredits-facet {margin-bottom: 21px;}
+#latestart-facet {margin-bottom: 21px;}
 /*END JU NEW definitions*/
 
 #titlebar {
@@ -262,11 +262,14 @@ textarea
 {
 	display: block;
 	border: 1px solid #999;
-    margin: 28px 0 35px;
+	border-right: none;
+    margin: 44px 0 35px;
 	font-size: 12px;
 	line-height: 21px;
     color: #333;
     clear: left;
+    background-color: White;
+    background-color: rgba(255,255,255,0.8);
 }
 .sidenav h2 {
     background-color: #999;
@@ -290,30 +293,44 @@ textarea
 #container
 {
     overflow: hidden;
-    padding-bottom: 35px;
-    padding-top: 35px;}
+    padding-bottom: 28px;
+    padding-top: 29px;}
 
 
 #container.nosidebar{}
 #container.sidebar{}
-#container.home{}
-#content { padding: 0 20px;}
+#content
+{
+    background-color: #fff;
+    padding: 14px 20px 21px;
+    border: 1px solid #999;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px; }
+
 #sidebar {}
 
 #container.sidebar #content {
     float: left;
-    width: 760px;
-		background-color: #fff;
+    width: 758px;
+
 }
 #pageTitle {}
 
 #sectionTitle
 {
-    margin-top: -21px;
+   position: absolute;
+    text-align: right;
+    width: 160px;
 }
 #sectionTitle a
 {
-    color: #999;
+    color: #864407;
+    display: block;
+    font-weight: bold;
+    padding-right: 10px;
+    text-decoration: none;
+    padding-top: 8px;
 }
 
 
@@ -516,7 +533,7 @@ li.subject { list-style-type: none;}
         float: left;
         padding-right: 9px;}
 #search-tip {
-    background: url("images/search-tip-arrow.png") no-repeat scroll left 7px White;
+    background: url("images/search-tip-arrow.png") no-repeat scroll left 7px transparent;
     color: #444444;
     display: block;
     font-size: 12px;
@@ -555,7 +572,7 @@ li.subject { list-style-type: none;}
 
 }
 #searchfield-wrap.focus {
-    background-color: White;
+    background: none White ;
     }
 #search-keyword {
 	height: 16px;
@@ -1043,7 +1060,10 @@ ul.section-details li.section-notes
 #pageWrapper {}
 /*  Front page css */
 
-.homepage #content {padding: 0;}
+.homepage #content
+{
+    padding: 0;
+    margin-top: 29px;}
 #home-main-content{
 	margin-top: 30px;
     overflow: hidden;
@@ -1052,7 +1072,7 @@ ul.section-details li.section-notes
 #browse-credit
 {
 	float: left;
-	width: 640px;
+	width: 638px;
 }
 #browse-credit h2 {
     margin: 0;

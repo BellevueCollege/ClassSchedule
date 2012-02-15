@@ -27,6 +27,14 @@ $(function () {
     });
     $(".nav-dropdown").prepend('<div class="downarrow"></div>');
 
+    /*search bar*/
+    $("#search-keyword").focus(function () {
+        $(this).parents('#searchfield-wrap').addClass('focus');
+    }).blur(function () {
+        $(this).parents('#searchfield-wrap').removeClass('focus');
+    });
+
+
 });
 
 function dropdown_show(){ $(this).addClass('hover'); }

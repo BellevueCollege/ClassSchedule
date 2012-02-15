@@ -99,7 +99,8 @@
 		Html.RenderPartial("quarterNavigation");
 	}
 	<div id="container" class="sidebar">
-		<div id="sidebar">
+		<p id="sectionTitle"><a href="@Url.Action("YearQuarter", "Classes")">@FriendlyYRQ</a></p>
+        <div id="sidebar">
 			@{
 				Html.RenderPartial("advancedFacetedSearch");
 				Html.RenderPartial("basicFacetedSearch");
@@ -121,7 +122,7 @@
 	 }
 	 else
 	 {
-                <p id="sectionTitle"><a href="@Url.Action("YearQuarter", "Classes")">@FriendlyYRQ Credit Classes</a></p>
+
                 <h1 id="pageTitle">
 					@ViewBag.ProgramTitle
 					<span class="subjectchooser">@Html.Partial("subjectNavigation")</span>

@@ -192,6 +192,7 @@
     <Content Include="Content\images\ajax-loader_big.gif" />
     <Content Include="Content\images\alert.gif" />
     <Content Include="Content\images\btn-feedback.png" />
+    <Content Include="Content\images\classes-bg.png" />
     <Content Include="Content\images\coin-slider\sc1.jpg" />
     <Content Include="Content\images\coin-slider\sc2.jpg" />
     <Content Include="Content\images\coin-slider\sc3.jpg" />
