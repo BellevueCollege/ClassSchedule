@@ -35,7 +35,7 @@ $(function () {
     });
 
     /*set min-height for #content based on sidebar  */
-    $('.sidebar #content').css({ 'height': (($("#sidebar").height())) + 'px' });
+    $('.sidebar #content').css({ 'min-height': (($("#sidebar").height())) + 'px' });
 });
 
 function dropdown_show(){ $(this).addClass('hover'); }
