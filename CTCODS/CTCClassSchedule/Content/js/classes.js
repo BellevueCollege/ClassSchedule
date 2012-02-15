@@ -12,9 +12,6 @@ $(function () {
     /*make classes tab selected*/
     $("#mainnav-classes a").addClass("selected");
 
-    /*hack, remove beta bar during early testing*/
-    $("#betaBar").hide();
-
     /*tooltip*/
     $('abbr').tooltipsy();
 

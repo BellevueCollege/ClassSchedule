@@ -22,13 +22,13 @@
 		 }
 		 else
 		 {
-				<p class="subjectdesc">@ViewBag.SubjectIntro</p>
 
 				if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle)) {
 
 
                     <h1 id="pageTitle">@ViewBag.ProgramTitle</h1>
                 }
+
                 if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
                 {
 		            <p id="programWebsite">
@@ -36,6 +36,10 @@
 		            </p>
                 }
 
+				if (!string.IsNullOrWhiteSpace(ViewBag.SubjectIntro))
+                 {
+                     <p class="subjectdesc">@ViewBag.SubjectIntro</p>
+                 }
 
 		    <div id="classInfoWrap">
 		    @foreach (var item in Model.OrderBy(c => c.Number))

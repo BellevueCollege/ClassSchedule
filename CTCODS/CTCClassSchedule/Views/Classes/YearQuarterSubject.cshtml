@@ -127,8 +127,6 @@
 					<span class="subjectchooser">@Html.Partial("subjectNavigation")</span>
 				</h1>
 
-        <p class="subjectdesc">@ViewBag.SubjectIntro</p>
-
 
 		 if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
 		 {
@@ -137,104 +135,110 @@
 				</p>
 		 }
 
-			if(Helpers.isAdmin(Context))  {
+         if (!string.IsNullOrWhiteSpace(ViewBag.SubjectIntro))
+         {
+             <p class="subjectdesc">@ViewBag.SubjectIntro</p>
+         }
+         if (Helpers.isAdmin(Context))
+         {
 
 				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
-			}
-			else if(Helpers.isEditor(Context)){
+         }
+         else if (Helpers.isEditor(Context))
+         {
 				<div class="message">@Context.User.Identity.Name! You have editor access to this section.</div>
-			}
+         }
 
-			using (_profiler.Step("Rendering Sections by Course (outer loop)"))
-			{
-				foreach (SectionWithSeats sec in orderedModel)
-				{
-					courseID = sec.CourseID;
-					sectionID = sec.ID.ToString();
-					credits = sec.Credits;
-					isVariableCredit = sec.IsVariableCredits;
+         using (_profiler.Step("Rendering Sections by Course (outer loop)"))
+         {
+             foreach (SectionWithSeats sec in orderedModel)
+             {
+                 courseID = sec.CourseID;
+                 sectionID = sec.ID.ToString();
+                 credits = sec.Credits;
+                 isVariableCredit = sec.IsVariableCredits;
 
-					if (!sec.IsLinked)
-					{
-						if (courseID != PreviousCourseID || (courseID == PreviousCourseID && credits != PreviousCredits) || (courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit))
-						{
-							if (PreviousCourseID != "")
-							{
+                 if (!sec.IsLinked)
+                 {
+                     if (courseID != PreviousCourseID || (courseID == PreviousCourseID && credits != PreviousCredits) || (courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit))
+                     {
+                         if (PreviousCourseID != "")
+                         {
 				@:</ul>
 					}
 
-							route["Subject"] = sec.CourseSubject.Trim();
-							route["ClassNum"] = sec.CourseNumber;
+                         route["Subject"] = sec.CourseSubject.Trim();
+                         route["ClassNum"] = sec.CourseNumber;
 
 				<text>
 				<div class="classinfo">
 
 				@if (Helpers.isAdmin(Context))
-		{
+    {
 					@Ajax.ActionLink("Edit",
-											"ClassEdit",
-											"Api",
-											new
-											{
-												CourseNumber = sec.CourseNumber.ToString(),
-												Subject = sec.CourseSubject.ToString(),
-												IsCommonCourse = sec.IsCommonCourse,
-											},
-											new AjaxOptions
-											{
-												UpdateTargetId = "edit-class",
-												HttpMethod = "GET",
-												InsertionMode = InsertionMode.Replace,
-												OnBegin = "$('#edit-class').dialog('open');",
-												OnComplete = "spinner.stop();",
-											},
-											new { @class = "edit_button" })
+                                            "ClassEdit",
+                                            "Api",
+                                            new
+                                            {
+                                                CourseNumber = sec.CourseNumber.ToString(),
+                                                Subject = sec.CourseSubject.ToString(),
+                                                IsCommonCourse = sec.IsCommonCourse,
+                                            },
+                                            new AjaxOptions
+                                            {
+                                                UpdateTargetId = "edit-class",
+                                                HttpMethod = "GET",
+                                                InsertionMode = InsertionMode.Replace,
+                                                OnBegin = "$('#edit-class').dialog('open');",
+                                                OnComplete = "spinner.stop();",
+                                            },
+                                            new { @class = "edit_button" })
 
-		}
+    }
 				<h2 class="classHeading">
 					<a href="@Url.Action("ClassDetails", "Classes", route)">
 						@Html.Raw(string.Format("{0}{1} {2} {3}", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle))
 					</a>
 
 				@{
-		IEnumerable<SectionWithSeats> linkedSections = orderedModel.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber);
-		bool hasLinked = linkedSections.Count() > 0;
+    IEnumerable<SectionWithSeats> linkedSections = orderedModel.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber);
+    bool hasLinked = linkedSections.Count() > 0;
 				}
 				@foreach (SectionWithSeats linkedSec in linkedSections)
-		{
+    {
 			<br/>
 			<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
 				@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
 			</a>
-		}
+    }
 		&#8226;
 			@if (isVariableCredit)
-	 {
+   {
 				    <span class="classCredits">
 					    V1-@Html.CreditsValue(sec.Credits)
 				        <abbr title=" variable credit(s) ">Cr.</abbr>
             </span>
-	 }
-	 else
-	 {
+   }
+   else
+   {
 				    <span class="classCredits">
 					    @Html.CreditsValue(sec.Credits)
 				        <abbr title=" credit(s) ">Cr.</abbr>
             </span>
-	 }
+   }
 				</h2>
 				<div class="CourseFootnotes">
 					@sec.CourseFootnotes
 					@if (sec.CourseFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
-		 {
+     {
 						<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">How to clear prerequisites?</a>
-		 }
+     }
 				</div>
 				<p class="classDetails">
 				@if (hasLinked)
-		{
+    {
 					@Html.ActionLink("View class details", "ClassDetails", "Classes", route, null)
-		}
+    }
 				</p>
 				<ul class='course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))'>
 
