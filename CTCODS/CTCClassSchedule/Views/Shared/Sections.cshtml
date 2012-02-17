@@ -127,32 +127,28 @@
 
 
 		</li>
-
-
-
-
-
-
 			<li class="section-notes"><span class="descriptor">Notes: </span>
 				<ul>
-					<li><span class="label">
-                        @{ Model.SectionFootnotes += AutomatedFootnotesConfig.getAutomatedFootnotesText(Model); }
-						@if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
+					<li>
+									@if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
 			            {
-				            if (string.IsNullOrWhiteSpace(_searchTerm))
+										string secFootnotes = string.Concat(AutomatedFootnotesConfig.getAutomatedFootnotesText(Model), " ", Model.SectionFootnotes);
+							<span class="label">
+				            @if (string.IsNullOrWhiteSpace(_searchTerm))
 				            {
-					            @Model.SectionFootnotes
+					            @secFootnotes
 				            }
 				            else
 				            {
-					            Html.FormatWithSearchTerm(_searchTerm, Model.SectionFootnotes);
+					            Html.FormatWithSearchTerm(_searchTerm, secFootnotes);
 				            }
-			            }
+							</span>
+									}
 			            else
 			            {
-				            Html.Raw("&nbsp;");
+				            <!-- no section footnotes found -->
 			            }
-					</span></li>
+					</li>
 
 				</ul>
 			</li>
