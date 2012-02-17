@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CTCClassSchedule")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Online class schedule dynamically generated from system data.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Bellevue College")]
 [assembly: AssemblyProduct("CTCClassSchedule")]
@@ -30,5 +30,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.0.2.2")]
-[assembly: AssemblyFileVersion("1.0.2.2")]
+[assembly: AssemblyVersion("1.0.3.0")]
+[assembly: AssemblyFileVersion("1.0.3.0")]
