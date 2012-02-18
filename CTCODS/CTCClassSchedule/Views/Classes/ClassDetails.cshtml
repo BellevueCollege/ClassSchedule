@@ -104,10 +104,15 @@
 		@{
 		SectionWithSeats firstSection = Model.Count() > 0 ? Model.First() : null;
 		string apiCourseFootnotes = string.Empty;
-		string courseFootnotes = firstSection != null ? firstSection.CourseFootnotes : string.Empty;
+
 		}
 		@if (firstSection != null)
 		{
+			string courseFootnotes = firstSection.CourseFootnotes ?? string.Empty;
+
+		@*	Disabled because the API is getting these footnotes from the Sections object (e.g. vw_Class)
+				Re-enable when the API has been updated to provide footnote data from vw_Course
+
 			foreach (string f in firstSection.Footnotes)
 			{
 				if (!string.IsNullOrWhiteSpace(f))
@@ -115,7 +120,7 @@
 					apiCourseFootnotes = string.Concat(apiCourseFootnotes, " ", f);
 				}
 			}
-
+		*@
 			    <div id="courseFootnotes">
 			@if (string.IsNullOrWhiteSpace(apiCourseFootnotes) && string.IsNullOrWhiteSpace(courseFootnotes))
 			{

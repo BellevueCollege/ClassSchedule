@@ -19,6 +19,14 @@
 			displaySeatsAvailable = false;
 		}
 	}
+	string apiSectionFootnotes = string.Empty;
+	foreach (string f in Model.Footnotes)
+	{
+		if (!string.IsNullOrWhiteSpace(f))
+		{
+			apiSectionFootnotes = string.Concat(apiSectionFootnotes, " ", f);
+		}
+	}
 	bool firstIteration = true;
 }
 
@@ -127,32 +135,46 @@
 
 
 		</li>
-			<li class="section-notes"><span class="descriptor">Notes: </span>
+		<li class="section-notes"><span class="descriptor">Notes: </span>
 				<ul>
 					<li>
-									@if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
-			            {
-										string secFootnotes = string.Concat(AutomatedFootnotesConfig.getAutomatedFootnotesText(Model), " ", Model.SectionFootnotes);
-							<span class="label">
-				            @if (string.IsNullOrWhiteSpace(_searchTerm))
-				            {
-					            @secFootnotes
-				            }
-				            else
-				            {
-					            Html.FormatWithSearchTerm(_searchTerm, secFootnotes);
-				            }
+			@if (string.IsNullOrWhiteSpace(Model.SectionFootnotes) && string.IsNullOrWhiteSpace(apiSectionFootnotes))
+			{
+						<!-- no section footnotes found -->
+			}
+			else
+			{
+						<span class="label">
+							@AutomatedFootnotesConfig.getAutomatedFootnotesText(Model)
+				@if (!string.IsNullOrWhiteSpace(apiSectionFootnotes))
+				{
+							<span id="odsSectionFootnotes">@apiSectionFootnotes</span>
+					if (apiSectionFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
+					{
+							<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">How to clear prerequisites?</a>
+					}
+				}
+
+				@if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
+				{
+				string secFootnotes = Model.SectionFootnotes;
+							<span id="cmsSectionFootnotes">
+					@if (string.IsNullOrWhiteSpace(_searchTerm))
+					{
+								@secFootnotes;
+					}
+					else
+					{
+								Html.FormatWithSearchTerm(_searchTerm, secFootnotes);
+					}
 							</span>
-									}
-			            else
-			            {
-				            <!-- no section footnotes found -->
-			            }
+				}
+						</span> @* span class="label" *@
+			}
 					</li>
 
 				</ul>
 			</li>
-
 	}
 	</ul>
 </li>
