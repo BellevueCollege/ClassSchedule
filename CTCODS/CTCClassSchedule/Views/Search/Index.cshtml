@@ -88,10 +88,16 @@
 
 		<p class="courseDescription">
 				@Html.Raw(sec.CourseDescriptions.Count() == 0 ? "" : Html.FormatWithSearchTerm(_searchTerm, sec.CourseDescriptions[0].Description).ToString())
+
 		</p>
 
 		<p class="courseFootnotes">
 				@Html.Raw(sec.CourseFootnotes == null ? "" : Html.FormatWithSearchTerm(_searchTerm, Encoder.HtmlEncode(sec.CourseFootnotes)).ToString())
+				@if (sec.CourseDescriptions[0].Description.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+									<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">How to clear prerequisites?</a>
+        }
+
 		</p>
 
 		<ul class='course-block @(courseBlockClass)'>
