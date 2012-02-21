@@ -71,9 +71,11 @@
 		<div style="float:right;">
 	@if(Context.User.Identity.IsAuthenticated) {
 			<text>[ Welcome <b>@Context.User.Identity.Name</b>! ] @(Helpers.isAdmin(Context) ? " - Admin" : "") @(!Helpers.isAdmin(Context) && Helpers.isEditor(Context) ? " - Editor" : "")</text>
-	}
-	else {
-			@:[ @Html.ActionLink("Log On", "Authenticate", "Classes") ]
+		<text>[ @Html.ActionLink("Logout", "Logout", "Classes")  ]</text>
+ }
+ else
+ {
+			@:[ @Html.ActionLink("Login", "Authenticate", "Classes") ]
 	}
 		</div>
 		<!-- ******************************************************************************************* -->

@@ -4,19 +4,26 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DotNetCasClient.Security;
+using System.Net;
+using System.IO;
+using System.Web.Security;
 
 namespace CTCClassSchedule.Controllers
 {
-/* This partial class exists to logically compartmentalize all methods of the
- * ClassesController which are related to editing data, and thus require
- * authentication.
- *
- * This file and the original ClassesController.cs are compiled into a single
- * ClassController object when the project is built.
- *
- *		- 1/11/2012, shawn.south@bellevuecollege.edu
- */
-    public partial class ClassesController : Controller
+	/* This partial class exists to logically compartmentalize all methods of the
+	 * ClassesController which are related to editing data, and thus require
+	 * authentication.
+	 *
+	 * This file and the original ClassesController.cs are compiled into a single
+	 * ClassController object when the project is built.
+	 *
+	 *		- 1/11/2012, shawn.south@bellevuecollege.edu
+	 *
+	 * Much of the code can be referenced here: https://wiki.jasig.org/pages/viewpage.action?pageId=32210981
+	 * -Nathan 2/21/2012
+	 *
+	 */
+	public partial class ClassesController : Controller
     {
 			/// <summary>
 			/// A stub method for forcing authentication
@@ -30,9 +37,17 @@ namespace CTCClassSchedule.Controllers
       [Authorize]
       public ActionResult Authenticate()
       {
-//				Response.Redirect("http://localhost:61074/", true);
-//				return Content("Success!");
         return RedirectToRoute("Default");
       }
+
+			public ActionResult Logout()
+			{
+				FormsAuthentication.SignOut();
+				return RedirectToRoute("Default");
+			}
+
+
+
+
     }
 }
