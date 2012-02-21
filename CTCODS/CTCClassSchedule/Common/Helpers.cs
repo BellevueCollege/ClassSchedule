@@ -200,15 +200,18 @@ namespace CTCClassSchedule.Common
 
 			if (!String.IsNullOrWhiteSpace(numcredits))
 			{
-				int credits;
-				try
+				if (numcredits != "Any")
 				{
-					credits = Convert.ToInt16(numcredits);
-					facets.Add(new CreditsFacet(credits));
-				}
-				catch
-				{
-					throw new System.FormatException("Number of credits was not a valid integer");
+					int credits;
+					try
+					{
+						credits = Convert.ToInt16(numcredits);
+						facets.Add(new CreditsFacet(credits));
+					}
+					catch
+					{
+						throw new System.FormatException("Number of credits was not a valid integer");
+					}
 				}
 
 			}
