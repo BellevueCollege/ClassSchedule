@@ -536,7 +536,7 @@ li.subject { list-style-type: none;}
 {
         font-weight: bold;
         float: left;
-        padding-right: 9px;}
+        width: 52px;}
 #search-tip {
     background: url("images/search-tip-arrow.png") no-repeat scroll left 7px transparent;
     color: #444444;
@@ -587,6 +587,7 @@ li.subject { list-style-type: none;}
     float: left;
     border: none;
 	background-color: transparent;
+	padding: 0;
 }
 
 #searchbutton-wrap
@@ -1080,7 +1081,7 @@ ul.section-details li.section-notes
 
 .homepage #content
 {
-    padding: 0;
+    padding: 0 0 21px;
     margin-top: 29px;}
 #home-main-content{
 	margin-top: 30px;
