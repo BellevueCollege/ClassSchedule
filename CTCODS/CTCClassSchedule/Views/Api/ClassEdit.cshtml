@@ -26,14 +26,15 @@
 
 
 
-
-				        <div class="editor-label">
-            @Html.LabelFor(model => Model.HPFootnote, "Default Notes:")
-        </div>
-        <div class="editor-field">
+				@if (@Model.HPFootnote != "")
+				{
+					<div class="editor-label">
+						@Html.LabelFor(model => Model.HPFootnote, "Default Notes:")
+					</div>
+					<div class="editor-field">
 						@Model.HPFootnote
-        </div>
-
+					</div>
+				}
 				<div class="editor-label">
             @Html.LabelFor(model => Model.Footnote, "Additional Notes:")
         </div>
