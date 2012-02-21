@@ -34,24 +34,30 @@
 							@Html.LabelFor(model => model.itemToUpdate.Title)
 					</div>
 					<div class="editor-field">
-							@Html.TextBoxFor(model => model.itemToUpdate.Title, new { @class = "SubjectTextfield" })
+							@Html.TextBoxFor(model => model.itemToUpdate.Title, new { @class = "SubjectTextfield", @maxlength = "50" })
 							@Html.ValidationMessageFor(model => model.itemToUpdate.Title)
 					</div>
 
 					 <div class="editor-label">
 					 @{
+						if (Model.MergedClasses != null)
+						{
 							if ((Model.MergedClasses.Count() > 0 && Model.itemToUpdate.Abbreviation != Model.itemToUpdate.URL) || Model.MergedClasses.Count() > 1)
 							{
 								@Html.LabelFor(model => model.itemToUpdate.URL, "Subjects merged with " + Model.itemToUpdate.URL);
 							}
-							else
-							{
-								@Html.LabelFor(model => model.MergeSubjectChoices, "Merge with another subject (choose abbr)");
-							}
+						}
+						else
+						{
+							@Html.LabelFor(model => model.MergeSubjectChoices, "Merge with another subject (choose abbr)");
+						}
+
 					}
 					</div>
 					<div class="editor-field">
 						@{
+							if (Model.MergedClasses != null)
+							{
 								if ((Model.MergedClasses.Count() > 0 && Model.itemToUpdate.Abbreviation != Model.itemToUpdate.URL) || Model.MergedClasses.Count() > 1)
 								{
 									//there are merged subjects. display ajax actionlinks
@@ -80,16 +86,20 @@
 
 									}
 								}
-								else
-								{
-									//there aren't any merged subjects. display a select list of subjects they can choose to merge with the current subject
-									//foreach (string subject in Model.MergeSubjectChoices) {
 
-									//}
+
+							}
+
+							else
+							{
+								//there aren't any merged subjects. display a select list of subjects they can choose to merge with the current subject
+								//foreach (string subject in Model.MergeSubjectChoices) {
+
+								//}
 
 								@Html.DropDownList("MergeWith", new SelectList(Model.MergeSubjectChoices))
 
-								}
+							}
 
 
 						}
@@ -119,7 +129,7 @@
 							@Html.LabelFor(model => model.itemToUpdate.AcademicProgram, "Academic Program (if different than subject)")
 					</div>
 					<div class="editor-field">
-							@Html.TextBoxFor(model => model.itemToUpdate.AcademicProgram, new { @class = "SubjectTextfield" })
+							@Html.TextBoxFor(model => model.itemToUpdate.AcademicProgram, new { @class = "SubjectTextfield", @maxlength = "50" })
 							@Html.ValidationMessageFor(model => model.itemToUpdate.AcademicProgram)
 					</div>
 
@@ -128,7 +138,7 @@
 							@Html.LabelFor(model => model.itemToUpdate.ProgramURL, "Academic Program Website")
 					</div>
 					<div class="editor-field">
-							@Html.TextBoxFor(model => model.itemToUpdate.ProgramURL, new { @class = "SubjectTextfield" })
+							@Html.TextBoxFor(model => model.itemToUpdate.ProgramURL, new { @class = "SubjectTextfield", @maxlength = "50" })
 							@Html.ValidationMessageFor(model => model.itemToUpdate.ProgramURL)
 					</div>
 
@@ -139,7 +149,7 @@
 							@Html.LabelFor(model => model.itemToUpdate.Division)
 					</div>
 					<div class="editor-field">
-							@Html.TextBoxFor(model => model.itemToUpdate.Division, new { @class = "SubjectTextfield" })
+							@Html.TextBoxFor(model => model.itemToUpdate.Division, new { @class = "SubjectTextfield", @maxlength = "50" })
 							@Html.ValidationMessageFor(model => model.itemToUpdate.Division)
 					</div>
 
@@ -147,7 +157,7 @@
 							@Html.LabelFor(model => model.itemToUpdate.DivisionURL)
 					</div>
 					<div class="editor-field">
-							@Html.TextBoxFor(model => model.itemToUpdate.DivisionURL, new { @class = "SubjectTextfield" })
+							@Html.TextBoxFor(model => model.itemToUpdate.DivisionURL, new { @class = "SubjectTextfield", @maxlength = "50" })
 							@Html.ValidationMessageFor(model => model.itemToUpdate.DivisionURL)
 					</div>
 
