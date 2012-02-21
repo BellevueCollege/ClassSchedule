@@ -365,8 +365,10 @@ namespace CTCClassSchedule.Controllers
 					{
 						string cidString = sections.First().CourseID;
 						ICourseID cid = CourseID.FromString(cidString);
-						IList<Course> foo = repository.GetCourses(cid);
-						courseInfo = foo.First();
+						IList<Course> coursesTemp = repository.GetCourses(cid);
+
+						// NOTE: The view handles situations where foo is null or empty
+						courseInfo = coursesTemp != null && coursesTemp.Count > 0 ? coursesTemp.First() : null;
 					}
 				}
 				else
