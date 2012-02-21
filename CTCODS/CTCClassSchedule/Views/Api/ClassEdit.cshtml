@@ -18,8 +18,9 @@
 @using (Html.BeginForm()) {
 		@Html.ValidationSummary(true)
 		<fieldset>
-				@Html.Hidden("CourseID", Model.CourseID)
+			<legend>@(Model.CourseID) - @(Model.CourseTitle) </legend>
 
+				@Html.Hidden("CourseID", Model.CourseID)
 				@Html.Hidden("referrer", Request.UrlReferrer.ToString())
 
 

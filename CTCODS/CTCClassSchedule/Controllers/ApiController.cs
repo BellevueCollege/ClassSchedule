@@ -219,9 +219,13 @@ namespace CTCClassSchedule.Controllers
 					UpdatingCourseID = s.ToString();
 				}
 
+				//generate the repository courseID
+				string repoCourseID = IsCommonCourse ? Subject + "& " + CourseNumber : Subject + " " + CourseNumber;
+
 
 				CourseFootnote itemToUpdate = null;
 				var HPFootnotes = "";
+				string courseTitle = "";
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					try
@@ -234,17 +238,19 @@ namespace CTCClassSchedule.Controllers
 
 					}
 
-					using (OdsRepository respository = new OdsRepository(HttpContext))
+					using (OdsRepository repository = new OdsRepository(HttpContext))
 					{
-						var QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+						var QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 						Course coursesEnum = new Course();
 						try
 						{
-							coursesEnum = respository.GetCourses().Single(s => s.CourseID == UpdatingCourseID);
+							//coursesEnum = repository.GetCourses().Single(s => s.CourseID == UpdatingCourseID);
+							coursesEnum = repository.GetCourses().Single(s => s.CourseID == repoCourseID);
 							foreach (CourseDescription footnote in coursesEnum.Descriptions)
 							{
 								HPFootnotes += footnote.Description + " ";
 							}
+							courseTitle = coursesEnum.Title;
 						}
 						catch
 						{
@@ -260,6 +266,8 @@ namespace CTCClassSchedule.Controllers
 					LocalClass.HPFootnote = HPFootnotes;
 					LocalClass.LastUpdated = itemToUpdate != null ? Convert.ToString(itemToUpdate.LastUpdated) : "";
 					LocalClass.LastUpdatedBy = itemToUpdate != null ? itemToUpdate.LastUpdatedBy : "";
+					LocalClass.CourseTitle = courseTitle;
+
 
 
 

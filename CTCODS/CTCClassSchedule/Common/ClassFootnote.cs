@@ -12,5 +12,6 @@ namespace CTCClassSchedule.Common
 		public string LastUpdatedBy { get; set; }
 		public string Footnote { get; set; }
 		public string HPFootnote { get; set; }
+		public string CourseTitle { get; set; }
 	}
 }
