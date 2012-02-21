@@ -134,7 +134,8 @@ namespace CTCClassSchedule.Controllers
 																 {
 																	 ParentObject = s,
 																	 SectionFootnotes = itemToUpdate != null ? itemToUpdate.Footnote ?? string.Empty : string.Empty,
-																	 LastUpdated = itemToUpdate != null ? itemToUpdate.LastUpdated.ToString() ?? string.Empty : string.Empty
+																	 LastUpdated = itemToUpdate != null ? itemToUpdate.LastUpdated.ToString() ?? string.Empty : string.Empty,
+																	 LastUpdatedBy = itemToUpdate != null ? itemToUpdate.LastUpdatedBy.ToString() ?? string.Empty : string.Empty
 																 }).ToList();
 
 						return PartialView(LocalSections);

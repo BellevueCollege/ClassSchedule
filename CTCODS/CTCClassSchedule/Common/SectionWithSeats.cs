@@ -6,6 +6,7 @@ namespace CTCClassSchedule
 	{
 		public int? SeatsAvailable { get; set; }
 		public string LastUpdated { get; set; }
+		public string LastUpdatedBy { get; set; }
 		public string CourseFootnotes { get; set; }
 		public string SectionFootnotes { get; set; }
 
