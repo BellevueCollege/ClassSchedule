@@ -68,7 +68,7 @@
 
 		<!-- PROTOTYPE: This block of code only exists to prove that authentication/authorization works. -->
 		<!-- ******************************************************************************************* -->
-		<div style="float:right;">
+		<div style="float:right; display:none;">
 	@if(Context.User.Identity.IsAuthenticated) {
 			<text>[ Welcome <b>@Context.User.Identity.Name</b>! ] @(Helpers.isAdmin(Context) ? " - Admin" : "") @(!Helpers.isAdmin(Context) && Helpers.isEditor(Context) ? " - Editor" : "")</text>
 		<text>[ @Html.ActionLink("Logout", "Logout", "Classes")  ]</text>
