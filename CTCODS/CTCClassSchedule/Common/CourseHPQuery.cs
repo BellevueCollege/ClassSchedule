@@ -28,28 +28,35 @@ namespace CTCClassSchedule
 			request.ContentLength = byteArray.Length;
 
 	string result;
-
-	using (Stream requestStream = request.GetRequestStream())
-	{
-		requestStream.Write(byteArray, 0, byteArray.Length);
-				requestStream.Close();	// do we need to close the stream before we can GetResponse()?
-
-		// Get the response.
-		using (WebResponse response = request.GetResponse())
-		{
-			// TODO: why are we writing out to the console here?
-			Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-
-					// TODO: verify response is not null
-			using (Stream responseStream = response.GetResponseStream())
+			try
 			{
-				using (StreamReader reader = new StreamReader(responseStream))
+				using (Stream requestStream = request.GetRequestStream())
 				{
-					result = reader.ReadToEnd();
+					requestStream.Write(byteArray, 0, byteArray.Length);
+					requestStream.Close();	// do we need to close the stream before we can GetResponse()?
+
+					// Get the response.
+					using (WebResponse response = request.GetResponse())
+					{
+						// TODO: why are we writing out to the console here?
+						Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+
+						// TODO: verify response is not null
+						using (Stream responseStream = response.GetResponseStream())
+						{
+							using (StreamReader reader = new StreamReader(responseStream))
+							{
+								result = reader.ReadToEnd();
+							}
+						}
+					}
 				}
 			}
-		}
-	}
+			catch
+			{
+				//if the service cannot be reached, return a -1 for seats available.
+				return -1;
+			}
 
 	//grab the start of the 'seats available' string
       int index = result.IndexOf("Seats Available: ");

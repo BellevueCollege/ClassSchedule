@@ -424,16 +424,25 @@ namespace CTCClassSchedule.Controllers
 
 			string classID = courseIdPlusYRQ.Substring(0, 4);
 			string yrq = courseIdPlusYRQ.Substring(4, 4);
-
+			int HPseats = 0;
 
 			CourseHPQuery query = new CourseHPQuery();
-			int HPseats = query.findOpenSeats(classID, yrq);
-
 			using (ClassScheduleDb db = new ClassScheduleDb())
 			{
-				var seatsAvailableLocal =	from s in db.SeatAvailabilities
-								where s.ClassID == courseIdPlusYRQ
-								select s;
+				try
+				{
+					HPseats = query.findOpenSeats(classID, yrq);
+				}
+				catch
+				{
+					//if the query fails somehow, set seats to -1 so the local class schedule database isn't updated
+					HPseats = -1;
+				}
+
+
+				var seatsAvailableLocal = from s in db.SeatAvailabilities
+																	where s.ClassID == courseIdPlusYRQ
+																	select s;
 				int rows = seatsAvailableLocal.Count();
 
 				if (rows == 0)
@@ -457,11 +466,17 @@ namespace CTCClassSchedule.Controllers
 
 				}
 
-				db.SaveChanges();
+				if (HPseats != -1)
+				{
+					//if the HP query didn't fail, save the changes. Otherwise, leave the SeatAvailability table alone.
+					//This way, the correct number of seats can be pulled by the app and displayed instead of updating the
+					//table with a 0 for seats available.
+					db.SaveChanges();
+				}
 
 				var seatsAvailable = from s in db.vw_SeatAvailability
-				                     where s.ClassID == courseIdPlusYRQ
-				                     select s;
+														where s.ClassID == courseIdPlusYRQ
+														select s;
 
 				foreach (var seat in seatsAvailable)
 				{
@@ -469,7 +484,6 @@ namespace CTCClassSchedule.Controllers
 					friendlyTime = seat.LastUpdated.GetValueOrDefault().ToString("h:mm tt").ToLower();
 				}
 			}
-
 
 			var jsonReturnValue = seats.ToString() + "|" + friendlyTime;
 			return Json(jsonReturnValue);
