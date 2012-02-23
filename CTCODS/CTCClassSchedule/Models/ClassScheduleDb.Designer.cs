@@ -1956,6 +1956,54 @@ namespace CTCClassSchedule.Models
         partial void OnIntroChanging(global::System.String value);
         partial void OnIntroChanged();
 
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CustomTitle
+        {
+            get
+            {
+                return _CustomTitle;
+            }
+            set
+            {
+                OnCustomTitleChanging(value);
+                ReportPropertyChanging("CustomTitle");
+                _CustomTitle = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CustomTitle");
+                OnCustomTitleChanged();
+            }
+        }
+        private global::System.String _CustomTitle;
+        partial void OnCustomTitleChanging(global::System.String value);
+        partial void OnCustomTitleChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CustomDescription
+        {
+            get
+            {
+                return _CustomDescription;
+            }
+            set
+            {
+                OnCustomDescriptionChanging(value);
+                ReportPropertyChanging("CustomDescription");
+                _CustomDescription = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CustomDescription");
+                OnCustomDescriptionChanged();
+            }
+        }
+        private global::System.String _CustomDescription;
+        partial void OnCustomDescriptionChanging(global::System.String value);
+        partial void OnCustomDescriptionChanged();
+
         #endregion
 
     }

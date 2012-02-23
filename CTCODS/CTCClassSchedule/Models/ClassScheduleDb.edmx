@@ -38,7 +38,9 @@
       [vw_ClassScheduleData].[Division] AS [Division],
       [vw_ClassScheduleData].[ContactName] AS [ContactName],
       [vw_ClassScheduleData].[ContactPhone] AS [ContactPhone],
-      [vw_ClassScheduleData].[Intro] AS [Intro]
+      [vw_ClassScheduleData].[Intro] AS [Intro],
+      [vw_ClassScheduleData].[CustomTitle] AS [CustomTitle],
+      [vw_ClassScheduleData].[CustomDescription] AS [CustomDescription]
       FROM [dbo].[vw_ClassScheduleData] AS [vw_ClassScheduleData]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vw_ClassSearch" EntityType="ClassSchedule.Models.Store.vw_ClassSearch" store:Type="Views" store:Schema="dbo" store:Name="vw_ClassSearch">
@@ -195,6 +197,8 @@
           <Property Name="ContactName" Type="varchar" MaxLength="255" />
           <Property Name="ContactPhone" Type="varchar" MaxLength="255" />
           <Property Name="Intro" Type="varchar(max)" />
+          <Property Name="CustomTitle" Type="varchar" MaxLength="100" />
+          <Property Name="CustomDescription" Type="varchar" MaxLength="500" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'ClassScheduleDev.dbo.vw_ClassSearch' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -319,6 +323,8 @@
           <Property Name="ContactName" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="ContactPhone" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="Intro" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Type="String" Name="CustomTitle" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustomDescription" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="vw_ClassSearch">
           <Key>
@@ -460,7 +466,9 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ClassScheduleModelsStoreContainer" CdmEntityContainer="ClassScheduleDb">
           <EntitySetMapping Name="vw_ClassScheduleData"><EntityTypeMapping TypeName="ClassSchedule.Models.vw_ClassScheduleData"><MappingFragment StoreEntitySet="vw_ClassScheduleData">
-            <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+            <ScalarProperty Name="CustomDescription" ColumnName="CustomDescription" />
+                <ScalarProperty Name="CustomTitle" ColumnName="CustomTitle" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
             <ScalarProperty Name="YearQuarterID" ColumnName="YearQuarterID" />
             <ScalarProperty Name="CourseID" ColumnName="CourseID" />
             <ScalarProperty Name="SeatsAvailable" ColumnName="SeatsAvailable" />

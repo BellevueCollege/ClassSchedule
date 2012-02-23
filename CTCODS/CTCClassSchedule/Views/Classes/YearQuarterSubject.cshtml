@@ -15,10 +15,12 @@
 
 	string courseID = string.Empty;
 	string sectionID = string.Empty;
+	string CourseTitle = string.Empty;
 	decimal credits = 0;
 	bool isVariableCredit = false;
 	string PreviousCourseID = courseID;
 	string PreviousSectionID = sectionID;
+	string PreviousCourseTitle = CourseTitle;
 	decimal PreviousCredits = credits;
 	bool PreviousIsVariableCredit = isVariableCredit;
 
@@ -165,7 +167,7 @@
 
                  if (!sec.IsLinked)
                  {
-                     if (courseID != PreviousCourseID || (courseID == PreviousCourseID && credits != PreviousCredits) || (courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit))
+                     if ((courseID != PreviousCourseID || sec.CourseTitle != PreviousCourseTitle) || (courseID == PreviousCourseID && credits != PreviousCredits) || (courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit))
                      {
                          if (PreviousCourseID != "")
                          {
@@ -240,10 +242,19 @@
      }
 				</div>
 				<p class="classDetails">
-				@if (hasLinked)
-    {
-					@Html.ActionLink("View class details", "ClassDetails", "Classes", route, null)
-    }
+					@if (sec.CustomTitle != null && sec.CustomTitle != string.Empty)
+					{
+						@sec.CustomDescription
+					}
+
+					@if (hasLinked)
+					{
+						@Html.ActionLink("View class details", "ClassDetails", "Classes", route, null)
+					}
+
+
+
+
 				</p>
 				<ul class='course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))'>
 
@@ -260,6 +271,7 @@
 					PreviousCredits = sec.Credits;
 					PreviousSectionID = sectionID;
 					PreviousCourseID = courseID;
+					PreviousCourseTitle = sec.CourseTitle;
 					PreviousIsVariableCredit = isVariableCredit;
 				}
 			}

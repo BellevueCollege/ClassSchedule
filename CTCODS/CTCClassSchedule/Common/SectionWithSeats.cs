@@ -11,6 +11,7 @@ namespace CTCClassSchedule
 		public string SectionFootnotes { get; set; }
 		public string CustomTitle { get; set; }
 		public string CustomDescription { get; set; }
+		public new string CourseTitle { get; set; }
 
 		/// <summary>
 		/// Provides a means to set protected values of the parent object.
