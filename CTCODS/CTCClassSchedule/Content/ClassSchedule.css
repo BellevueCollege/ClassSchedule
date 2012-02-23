@@ -1527,6 +1527,11 @@ a.edit_button
 	width: 380px;
 }
 
+#SectionEdit .SubjectTextfield
+{
+	width: 500px;
+}
+
 .merged-subject-link
 {
 	margin-right: 15px;

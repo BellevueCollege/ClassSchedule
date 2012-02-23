@@ -57,14 +57,25 @@
 
 		$("#edit-class").dialog({
 			autoOpen: false,
-			height: 375,
-			width: 560
+			height: 425,
+			width: 600
 		});
 
 
-				$("span.ui-icon-closethick").click(function () {
+		$("span.ui-icon-closethick").click(function () {
+			showThrobber();
 			window.location.href = $(location).attr('href');
 		});
+
+		function showThrobber() {
+			var pageHeight = $(document).height();
+			$('#overlay').css('height', pageHeight - 49 + 'px');
+			$('#overlay').css('margin-top', 49 + 'px');
+			$('#overlay').css('opacity', '0.5');
+			$('#overlay').css('display', 'inherit');
+			$('#lightbox').css('display', 'inherit');
+		}
+
 
 			@if (Helpers.isEditor(Context))
 			{
