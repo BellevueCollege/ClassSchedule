@@ -135,7 +135,9 @@ namespace CTCClassSchedule.Controllers
 																	 ParentObject = s,
 																	 SectionFootnotes = itemToUpdate != null ? itemToUpdate.Footnote ?? string.Empty : string.Empty,
 																	 LastUpdated = itemToUpdate != null ? itemToUpdate.LastUpdated.ToString() ?? string.Empty : string.Empty,
-																	 LastUpdatedBy = itemToUpdate != null ? itemToUpdate.LastUpdatedBy.ToString() ?? string.Empty : string.Empty
+																	 LastUpdatedBy = itemToUpdate != null ? itemToUpdate.LastUpdatedBy.ToString() ?? string.Empty : string.Empty,
+																	 CustomTitle = itemToUpdate != null ? itemToUpdate.CustomTitle ?? string.Empty : string.Empty,
+																	 CustomDescription = itemToUpdate != null ? itemToUpdate.CustomDescription ?? string.Empty : string.Empty
 																 }).ToList();
 
 						return PartialView(LocalSections);
@@ -164,6 +166,8 @@ namespace CTCClassSchedule.Controllers
 				string Username = HttpContext.User.Identity.Name;
 				string SectionFootnotes = collection["section.SectionFootnotes"];
 				string classID = ItemNumber + Yrq;
+				string customTitle = collection["section.CustomTitle"];
+				string customDescription = collection["section.CustomDescription"];
 
 
 				SectionFootnote itemToUpdate = new SectionFootnote();
@@ -186,6 +190,8 @@ namespace CTCClassSchedule.Controllers
 						itemToUpdate.Footnote = SectionFootnotes;
 						itemToUpdate.LastUpdated = DateTime.Now;
 						itemToUpdate.LastUpdatedBy = Username;
+						itemToUpdate.CustomTitle = customTitle;
+						itemToUpdate.CustomDescription = customDescription;
 
 						if (itemFound == false)
 						{

@@ -170,6 +170,8 @@
           <Property Name="Footnote" Type="varchar(max)" />
           <Property Name="LastUpdatedBy" Type="nchar" MaxLength="40" />
           <Property Name="LastUpdated" Type="datetime" />
+          <Property Name="CustomTitle" Type="varchar" MaxLength="100" />
+          <Property Name="CustomDescription" Type="varchar" MaxLength="500" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'ClassScheduleDev.dbo.vw_ClassScheduleData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -448,6 +450,8 @@
           <Property Type="String" Name="Footnote" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LastUpdatedBy" MaxLength="40" FixedLength="true" Unicode="true" />
           <Property Type="DateTime" Name="LastUpdated" />
+          <Property Type="String" Name="CustomTitle" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CustomDescription" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -592,6 +596,8 @@
           <EntitySetMapping Name="SectionFootnotes">
             <EntityTypeMapping TypeName="ClassSchedule.Models.SectionFootnote">
               <MappingFragment StoreEntitySet="SectionFootnote">
+                <ScalarProperty Name="CustomDescription" ColumnName="CustomDescription" />
+                <ScalarProperty Name="CustomTitle" ColumnName="CustomTitle" />
                 <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
                 <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
                 <ScalarProperty Name="Footnote" ColumnName="Footnote" />
