@@ -11,7 +11,28 @@
 		var url = $("input#itemToUpdate_Abbreviation").val();
 		var titleHTML = "Edit Subject Information - " + url;
 		$("span.ui-dialog-title").html(titleHTML);
+
+		$("#cancelEdit").click(function (e) {
+			e.preventDefault();
+			$(".ui-dialog").hide();
+			showThrobber();
+			window.location.href = $(location).attr('href');
+		});
+
+		function showThrobber() {
+			var pageHeight = $(document).height();
+			$('#overlay').css('height', pageHeight - 49 + 'px');
+			$('#overlay').css('margin-top', 49 + 'px');
+			$('#overlay').css('opacity', '0.5');
+			$('#overlay').css('display', 'inherit');
+			$('#lightbox').css('display', 'inherit');
+		}
+
+
 	});
+
+
+
 </script>
 
 
@@ -175,7 +196,7 @@
 
 			 <div class="bottom">
         <p>
-            <input type="submit" value="Save" /> <a href="@Request.UrlReferrer.ToString()" class="cancelEdit">Cancel</a>
+            <input type="submit" value="Save" /> <a href="@Request.UrlReferrer.ToString()" id="cancelEdit">Cancel</a>
         </p>
 				</div>
 

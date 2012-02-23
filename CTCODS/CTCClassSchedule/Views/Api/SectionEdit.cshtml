@@ -17,6 +17,7 @@
 
 		$("#cancelEdit").click(function (e) {
 			e.preventDefault();
+			$(".ui-dialog").hide();
 			showThrobber();
 			window.location.href = $(location).attr('href');
 		});

@@ -62,19 +62,13 @@
  /* make the cancel button close the window and reload the page */
 	$(document).ready(function () {
 
-
-
-		/*
-		$(".cancelEdit").click(function (e) {
-		e.preventDefault();
-		window.location.href = $(location).attr('href');
-		});
-		*/
-
 		$("span.ui-icon-closethick").click(function () {
 			showThrobber();
 			window.location.href = $(location).attr('href');
 		});
+
+
+
 
 		function showThrobber() {
 			var pageHeight = $(document).height();
