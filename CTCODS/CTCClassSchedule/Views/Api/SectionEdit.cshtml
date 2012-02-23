@@ -22,6 +22,15 @@
 			window.location.href = $(location).attr('href');
 		});
 
+		$(".ui-dialog").keydown(function (e) {
+			if (e.keyCode == 27) { // esc
+				$(".ui-dialog").hide();
+				showThrobber();
+				window.location.href = $(location).attr('href');
+			}
+		});
+
+
 		function showThrobber() {
 			var pageHeight = $(document).height();
 			$('#overlay').css('height', pageHeight - 49 + 'px');
