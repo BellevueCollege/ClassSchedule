@@ -146,7 +146,7 @@ namespace CTCClassSchedule.Controllers
 																CourseTitle = d.CustomTitle != null && d.CustomTitle != string.Empty ? d.CustomTitle : c.CourseTitle,
 																CustomTitle = d.CustomTitle != null ? d.CustomTitle : string.Empty,
 																CustomDescription = d.CustomDescription != null ? d.CustomDescription : string.Empty
-					                  }).ToList();
+														}).OrderBy(x => x.CourseNumber).ThenBy(x => x.CourseTitle).ToList();
 
 				}
 				itemCount = sectionsEnum.Count;
