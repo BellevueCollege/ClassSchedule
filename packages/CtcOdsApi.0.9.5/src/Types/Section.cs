@@ -170,6 +170,8 @@ namespace Ctc.Ods.Types
         public bool IsDifferentEndDate { get; protected internal set; }
 
 		#region Properties mapped to data columns
+
+		#region Internal values set only by the API
 		/// <summary>
 		///
 		/// </summary>
@@ -227,16 +229,24 @@ namespace Ctc.Ods.Types
 		{
 			set
 			{
-				if (!string.IsNullOrWhiteSpace(value))
+				if (!string.IsNullOrWhiteSpace(value) && value.StartsWith(_continuousEnrollmentFlag))
 				{
-					if (value.StartsWith(_continuousEnrollmentFlag))
-					{
-						IsContinuousEnrollment = true;
-					}
+					IsContinuousEnrollment = true;
 				}
 			}
 		}
 
+		/// <summary>
+		/// Data retrieval stub for <see cref="LastRegistrationDate"/>
+		/// </summary>
+		/// <seealso cref="LastRegistrationDate"/>
+		internal DateTime? _LastRegistrationDate
+		{
+			set
+			{
+				LastRegistrationDate = value.HasValue ? value.Value : DateTime.MinValue;
+			}
+		}
 		/// <summary>
 		///
 		/// </summary>
@@ -244,9 +254,9 @@ namespace Ctc.Ods.Types
 		{
 			set
 			{
-				if (value != null)
+				if (value.HasValue)
 				{
-					IsVariableCredits = (bool)value;
+					IsVariableCredits = value.Value;
 				}
 			}
 		}
@@ -258,31 +268,38 @@ namespace Ctc.Ods.Types
 		{
 			set
 			{
-				if (value != null)
+				if (value.HasValue)
 				{
-					IsLateStart = (bool)value;
+					IsLateStart = value.Value;
 				}
 			}
 		}
 
-        /// <summary>
-        ///
-        /// </summary>
-        internal bool? _DifferentEndDate
-        {
-            set
-            {
-                if (value != null)
-                {
-                    IsDifferentEndDate = (bool)value;
-                }
-            }
-        }
+		/// <summary>
+		///
+		/// </summary>
+		internal bool? _DifferentEndDate
+		{
+			set
+			{
+				if (value.HasValue)
+				{
+					IsDifferentEndDate = value.Value;
+				}
+			}
+		}
 
 		/// <summary>
 		///
 		/// </summary>
 		internal string _CourseTitle { private get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		internal IEnumerable<string> _CourseFootnotes { get; set; }
+
+		#endregion
 
 		/// <summary>
 		///
@@ -441,6 +458,41 @@ namespace Ctc.Ods.Types
 				// ReSharper restore PossibleNullReferenceException
 			}
 		}
+
+		/// <summary>
+		/// The latest date to register for the <see cref="Section"/>
+		/// </summary>
+		/// <remarks>
+		///		<note type="note">
+		///			<para>
+		///			Per SBCTC policy, this value defaults to the "the last instructional day of the course" (e.g. <see cref="EndDate"/>)
+		///			</para>
+		///			- <a href="http://www.sbctc.ctc.edu/general/policymanual/_a-policymanual-ch5Append.aspx">http://www.sbctc.ctc.edu/general/policymanual/_a-policymanual-ch5Append.aspx</a>
+		///		</note>
+		/// </remarks>
+		/// <seealso cref="IsContinuousEnrollment"/>
+		/// <seealso cref="StartDate"/>
+		/// <seealso cref="EndDate"/>
+		public DateTime LastRegistrationDate{get;set;}
+
+/* Commented out due to property name collision: Class Schedule's inherited class defines a .CourseFootnotes property.
+ *	2/23/2012, shawn.south@bellevuecollege.edu
+ *
+		/// <summary>
+		/// The <see cref="Course"/> footnotes associated with this <see cref="Section"/>
+		/// </summary>
+		public IList<string> CourseFootnotes
+		{
+			get
+			{
+				return _CourseFootnotes != null ? _CourseFootnotes.ToList() : new List<string>();
+			}
+			protected internal set
+			{
+				_CourseFootnotes = value;
+			}
+		}
+*/
 		#endregion
 
 		#region Equality methods
