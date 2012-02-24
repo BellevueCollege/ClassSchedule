@@ -580,6 +580,20 @@ namespace CTCClassSchedule.Common
 			return friendlyName;
 		}
 
+		public static string getAllRoles()
+		{
+			string AllRoles = "";
+			try
+			{
+				string Developer = ConfigurationManager.AppSettings["ApplicationDeveloper"];
+				string Admin = ConfigurationManager.AppSettings["ApplicationAdmin"];
+				string Editor = ConfigurationManager.AppSettings["ApplicationEditor"];
+				AllRoles = Developer + ", " + Admin + ", " + Editor;
+			}
+			catch { }
+			return AllRoles;
+		}
+
 		public static Dictionary<string, string> getDayDictionary(){
 			Dictionary<string, string> dict = new Dictionary<string, string>();
 
