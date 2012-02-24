@@ -41,7 +41,7 @@
                      <p class="subjectdesc">@ViewBag.SubjectIntro</p>
                  }
 
-		    <div id="classInfoWrap">
+		    <div id="classDescriptions">
 		    @foreach (var item in Model.OrderBy(c => c.Number))
       {
           string courseID = string.Format("{0}{1} {2}", item.Subject, item.IsCommonCourse ? "&" : string.Empty, item.Number);

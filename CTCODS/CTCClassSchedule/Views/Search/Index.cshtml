@@ -83,11 +83,8 @@
 				@Html.FormatWithSearchTerm(_searchTerm, "{0}{1} {2} {3} &#8226; {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits))
 			</a>
 		</h2>
-		<p class="classDetails">
-			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
-		</p>
 
-		<p class="courseDescription">
+		<p class="classDescription">
 		@if (sec.CustomTitle != null && sec.CustomTitle != string.Empty)
 		{
 			@Html.Raw(Html.FormatWithSearchTerm(_searchTerm, sec.CustomDescription).ToString())
@@ -99,7 +96,7 @@
 
 		</p>
 
-		<p class="courseFootnotes">
+		<p class="classNotes">
 				@Html.Raw(sec.CourseFootnotes == null ? "" : Html.FormatWithSearchTerm(_searchTerm, Encoder.HtmlEncode(sec.CourseFootnotes)).ToString())
 				@if (sec.CourseDescriptions.Count() > 0)
 		{
@@ -109,7 +106,9 @@
 			}
 		}
 		</p>
-
+		<p class="classDetails">
+			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
+		</p>
 		<ul class='course-block @(courseBlockClass)'>
 		</text>
 			 }
