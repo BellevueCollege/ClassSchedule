@@ -24,6 +24,11 @@ namespace CTCClassSchedule.Controllers
 {
 	public class ApiController : Controller
 	{
+
+		public const string Roles = "Developers, InApp-Classes-Admin, InApp-Classes-Schedule-Editor";
+
+
+
 		public ApiController()
 		{
 			ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -86,7 +91,7 @@ namespace CTCClassSchedule.Controllers
 
 
 		//Generation of the Section Edit dialog box
-		[Authorize(Roles = "Developers")]
+		[Authorize(Roles = Roles)]
 		public ActionResult SectionEdit(string itemNumber, string yrq, string subject, string classNum)
 		{
 			string classID = itemNumber + yrq;
@@ -154,7 +159,7 @@ namespace CTCClassSchedule.Controllers
 		// POST after submit is clicked
 
 		[HttpPost]
-		[Authorize(Roles = "Developers")]
+		[Authorize(Roles = Roles)]
 		public ActionResult SectionEdit(FormCollection collection)
 		{
 			string referrer = collection["referrer"];
@@ -209,7 +214,7 @@ namespace CTCClassSchedule.Controllers
 
 
 		//Generation of the Class Edit dialog box
-		[Authorize(Roles = "Developers")]  //TODO: Make this configurable
+		[Authorize(Roles = Roles)]  //TODO: Make this configurable
 		public ActionResult ClassEdit(string CourseNumber, string Subject, bool IsCommonCourse)
 		{
 
@@ -294,7 +299,7 @@ namespace CTCClassSchedule.Controllers
 		// POST after submit is clicked
 
 		[HttpPost]
-		[Authorize(Roles = "Developers")]  //TODO: Make this configurable
+		[Authorize(Roles = Roles)]  //TODO: Make this configurable
 		public ActionResult ClassEdit(FormCollection collection)
 		{
 			string referrer = collection["referrer"];
@@ -345,7 +350,7 @@ namespace CTCClassSchedule.Controllers
 
 
 		//Generation of the Program Edit dialog box
-		[Authorize(Roles = "Developers")]  //TODO: Make this configurable
+		[Authorize(Roles = Roles)]  //TODO: Make this configurable
 		public ActionResult ProgramEdit(string Abbreviation)
 		{
 
@@ -401,7 +406,7 @@ namespace CTCClassSchedule.Controllers
 		// POST after submit is clicked
 
 		[HttpPost]
-		[Authorize(Roles = "Developers")]  //TODO: Make this configurable
+		[Authorize(Roles = Roles)]  //TODO: Make this configurable
 		public ActionResult ProgramEdit(FormCollection collection)
 		{
 			string referrer = collection["referrer"];
