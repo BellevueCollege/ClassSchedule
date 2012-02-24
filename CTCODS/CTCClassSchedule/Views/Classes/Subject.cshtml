@@ -47,7 +47,7 @@
           string courseID = string.Format("{0}{1} {2}", item.Subject, item.IsCommonCourse ? "&" : string.Empty, item.Number);
 
 			    <div class="classInfo">
-                    <h2>
+                    <h2 class="classHeading">
 							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number })">
 
 							<span class="classNumber">
