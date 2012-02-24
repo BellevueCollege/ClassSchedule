@@ -190,7 +190,7 @@ namespace CTCClassSchedule.Controllers
 						itemToUpdate.Footnote = SectionFootnotes;
 						itemToUpdate.LastUpdated = DateTime.Now;
 						itemToUpdate.LastUpdatedBy = Username;
-						itemToUpdate.CustomTitle = customTitle;
+						itemToUpdate.CustomTitle = customTitle == string.Empty ? null : customTitle;
 						itemToUpdate.CustomDescription = customDescription;
 
 						if (itemFound == false)

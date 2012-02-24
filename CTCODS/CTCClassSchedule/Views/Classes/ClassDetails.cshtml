@@ -79,17 +79,23 @@
 
 
             <div id="class-details">
-                <div id="courseDescription">
-				    <h2>Description:</h2>
-                    <p>
-		@{
-		IList<CourseDescription> descriptions = course.Descriptions.ToList();
-		int descriptionsCount = descriptions.Count;
-		string firstDescription = descriptionsCount <= 0 || string.IsNullOrWhiteSpace(descriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : descriptions[0].Description;
-		}
+						@{
+							IList<CourseDescription> descriptions = course.Descriptions.ToList();
+							int descriptionsCount = descriptions.Count;
+						}
+						@if (descriptionsCount > 0 ){
+							if(!string.IsNullOrWhiteSpace(descriptions[0].Description)) {
+								<div id="courseDescription">
+									<h2>Description:</h2>
+									<p>
+										@{
+											string firstDescription = descriptionsCount <= 0 || string.IsNullOrWhiteSpace(descriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : descriptions[0].Description;
+										}
 										@firstDescription
-			        </p>
-                </div>
+									</p>
+								</div>
+							}
+						}
 
 					@if (descriptionsCount > 1)
 		 {

@@ -555,9 +555,9 @@ namespace CTCClassSchedule.Common
 						    LastUpdated = (d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString("h:mm tt").ToLower(),
 						    SectionFootnotes = d != null ? d.SectionFootnote ?? string.Empty : string.Empty,
 						    CourseFootnotes = d != null ? d.CourseFootnote ?? string.Empty : string.Empty,
-																			CourseTitle = d.CustomTitle != null  && d.CustomTitle != string.Empty ? d.CustomTitle : c.CourseTitle,
-																			CustomTitle = d.CustomTitle != null ? d.CustomTitle : string.Empty,
-																			CustomDescription = d.CustomDescription != null ? d.CustomDescription : string.Empty
+																			CourseTitle = d != null ? d.CustomTitle : c.CourseTitle,
+																			CustomTitle = d != null ? d.CustomTitle : string.Empty,
+																			CustomDescription = d != null ? d.CustomDescription : string.Empty
 																	}).OrderBy(x => x.CourseNumber).ThenBy(x => x.CourseTitle).ToList();
             }
 
