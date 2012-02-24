@@ -159,7 +159,7 @@
 							@Html.LabelFor(model => model.itemToUpdate.ProgramURL, "Academic Program Website")
 					</div>
 					<div class="editor-field">
-							@Html.TextBoxFor(model => model.itemToUpdate.ProgramURL, new { @class = "SubjectTextfield", @maxlength = "50" })
+							@Html.TextBoxFor(model => model.itemToUpdate.ProgramURL, new { @class = "SubjectTextfield", @maxlength = "255" })
 							@Html.ValidationMessageFor(model => model.itemToUpdate.ProgramURL)
 					</div>
 
