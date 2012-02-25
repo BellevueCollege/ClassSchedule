@@ -302,7 +302,6 @@ namespace CTCClassSchedule.Controllers
 				// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
 				IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
 				routeValues.Add("YearQuarterID", YearQuarter);
-				routeValues.Add("YRQ", YRQ);
 				ViewBag.RouteValues = routeValues;
 
 
