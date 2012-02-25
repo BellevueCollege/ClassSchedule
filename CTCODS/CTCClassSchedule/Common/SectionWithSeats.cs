@@ -16,6 +16,19 @@ namespace CTCClassSchedule
 		/// <summary>
 		/// Provides a means to set protected values of the parent object.
 		/// </summary>
+		/// <remarks>
+		/// <para>
+		///		The members of <see cref="Section"/> are read-only to external code, which is problematic
+		///		for LINQ queries that need to assign values. So this Property takes the parent <see cref="Section"/>
+		///		object and assigns these values because it <b><i>is</i></b> within scope of the parent
+		///		<see cref="Section"/>.
+		/// </para>
+		/// <note type="important">
+		///		Whenever a new property is added to the base <see cref="Section"/> class, an assignment
+		///		should be added within this property's setter.
+		/// </note>
+		/// </remarks>
+		/// <seealso cref="Section"/>
 		public Section ParentObject
 		{
 			set
@@ -39,10 +52,11 @@ namespace CTCClassSchedule
 				IsHybrid = value.IsHybrid;
 				IsLateStart = value.IsLateStart;
 				IsContinuousEnrollment = value.IsContinuousEnrollment;
+				LastRegistrationDate = value.LastRegistrationDate;
 				IsVariableCredits = IsVariableCredits;
 				IsTelecourse = value.IsTelecourse;
 				Footnotes = value.Footnotes;
-                IsDifferentEndDate = value.IsDifferentEndDate;
+        IsDifferentEndDate = value.IsDifferentEndDate;
 				IsLinked = value.IsLinked;
 				LinkedTo = value.LinkedTo;
 			}
