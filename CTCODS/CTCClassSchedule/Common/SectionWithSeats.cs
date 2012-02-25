@@ -53,7 +53,7 @@ namespace CTCClassSchedule
 				IsLateStart = value.IsLateStart;
 				IsContinuousEnrollment = value.IsContinuousEnrollment;
 				LastRegistrationDate = value.LastRegistrationDate;
-				IsVariableCredits = IsVariableCredits;
+				IsVariableCredits = value.IsVariableCredits;
 				IsTelecourse = value.IsTelecourse;
 				Footnotes = value.Footnotes;
         IsDifferentEndDate = value.IsDifferentEndDate;
