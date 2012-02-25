@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -28,7 +29,7 @@ namespace CTCClassSchedule.Controllers
 
 		//
 		// GET: /Search/
-		public ActionResult Index(string searchterm, string Subject, string currentQuarter, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, int p_offset = 0)
+		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
 			int itemCount = 0;
 
@@ -87,13 +88,9 @@ namespace CTCClassSchedule.Controllers
 
 				YearQuarter YRQ = string.IsNullOrWhiteSpace(quarter) ? repository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
 				ViewBag.YearQuarter = YRQ;
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
-				bool IsPreviousQuarter = false;
-
-				if (ViewBag.QuarterNavMenu[0].ToString() != YRQ.ToString())
-				{
-					IsPreviousQuarter = true;
-				}
+				IList<YearQuarter> menuQuarters = Helpers.getYearQuarterListForMenus(repository);
+				ViewBag.QuarterNavMenu = menuQuarters;
+				ViewBag.CurrentRegistrationQuarter = menuQuarters[0];
 
 				IList<Section> sections;
 				using (_profiler.Step("API::GetSections()"))
@@ -193,73 +190,6 @@ namespace CTCClassSchedule.Controllers
 				return View(model);
 			}
 		}
-
-		///// <summary>
-		/////
-		///// </summary>
-		///// <param name="courseIdPlusYRQ"></param>
-		///// <returns></returns>
-		//[HttpPost]
-		//public ActionResult getSeats(string courseIdPlusYRQ)
-		//{
-		//  int? seats = null;
-		//  string friendlyTime = "";
-
-		//  string classID = courseIdPlusYRQ.Substring(0, 4);
-		//  string yrq = courseIdPlusYRQ.Substring(4, 4);
-
-
-		//  CourseHPQuery query = new CourseHPQuery();
-		//  int HPseats = query.findOpenSeats(classID, yrq);
-
-		//  var seatsAvailableLocal = from s in _classScheduleDb.SeatAvailabilities
-		//                            where s.ClassID == courseIdPlusYRQ
-		//                            select s;
-		//  int rows = seatsAvailableLocal.Count();
-
-		//  if (rows == 0)
-		//  {
-		//    //insert the value
-		//    SeatAvailability newseat = new SeatAvailability();
-		//    newseat.ClassID = courseIdPlusYRQ;
-		//    newseat.SeatsAvailable = HPseats;
-		//    newseat.LastUpdated = DateTime.Now;
-
-		//    _classScheduleDb.SeatAvailabilities.AddObject(newseat);
-		//  }
-		//  else
-		//  {
-		//    //update the value
-		//    foreach (SeatAvailability seat in seatsAvailableLocal)
-		//    {
-		//      seat.SeatsAvailable = HPseats;
-		//      seat.LastUpdated = DateTime.Now;
-		//    }
-
-		//  }
-
-		//  _classScheduleDb.SaveChanges();
-
-		//  var seatsAvailable = from s in _classScheduleDb.vw_SeatAvailability
-		//                       where s.ClassID == courseIdPlusYRQ
-		//                       select s;
-
-		//  foreach (var seat in seatsAvailable)
-		//  {
-		//    seats = seat.SeatsAvailable;
-		//    friendlyTime = Helpers.getFriendlyTime(seat.LastUpdated.GetValueOrDefault());
-		//  }
-
-		//  if (friendlyTime.Equals("not yet"))
-		//  {
-		//    friendlyTime = "0 seconds ago";
-		//  }
-
-		//  var jsonReturnValue = seats.ToString() + "|" + friendlyTime;
-		//  return Json(jsonReturnValue);
-		//}
-
-
 
 		#region helper methods
 		/// <summary>

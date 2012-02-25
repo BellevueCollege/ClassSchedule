@@ -296,6 +296,7 @@ namespace CTCClassSchedule.Controllers
 				setViewBagVars(YearQuarter, avail, "", repository);
 				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
 				ViewBag.QuarterNavMenu = yrqRange;
+				ViewBag.CurrentRegistrationQuarter = yrqRange[0];
 				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 
 				// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.

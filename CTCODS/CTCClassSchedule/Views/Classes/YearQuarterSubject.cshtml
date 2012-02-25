@@ -275,7 +275,10 @@
 
 						if (PreviousSectionID != sectionID)
 						{
-							Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+							 // NOTE: We must pass the current ViewData object to RenderPartial here.
+							 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+							 ViewData["PreviousSectionID"] = PreviousSectionID;
+							 Html.RenderPartial("Sections", sec, ViewData);
 						}
 					}
 

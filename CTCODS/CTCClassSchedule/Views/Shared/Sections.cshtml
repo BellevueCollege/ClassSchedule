@@ -11,14 +11,10 @@
 	string PreviousSectionID = ViewData["PreviousSectionID"] as string;
 	string sectionID = Model.ID.ToString();
 	string _searchTerm = Request.QueryString["searchterm"];
-	bool? displaySeatsAvailable = true;
+
 	YearQuarter quarterViewing = ViewBag.YearQuarter;
-	if (Request.AppRelativeCurrentExecutionFilePath == "~/Search")
-	{
-		if (@Model.Yrq.ToString() != Request.QueryString["currentQuarter"]) {
-			displaySeatsAvailable = false;
-		}
-	}
+	YearQuarter currentQuarter = ViewBag.CurrentRegistrationQuarter;
+
 	string apiSectionFootnotes = string.Empty;
 	foreach (string f in Model.Footnotes)
 	{
@@ -92,7 +88,7 @@
 		</li>
 		@if (sectionID != PreviousSectionID)
 		{
-			if (Model.SeatsAvailable != int.MinValue && displaySeatsAvailable == true)
+			if (Model.Yrq.ID.CompareTo(currentQuarter.ID) >= 0 && Model.SeatsAvailable != int.MinValue)
       {
 				<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
 				Availability: </span>

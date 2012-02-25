@@ -10,6 +10,7 @@
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;
 
+	YearQuarter currentQuarter = ViewBag.CurrentRegistrationQuarter;
 	// NOTE: we should always have a YearQuarter (searching all quarters is not an option)
 	YearQuarter yrq = ViewBag.YearQuarter;
 
@@ -20,13 +21,18 @@
 
 	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
 	_routeValues["YearQuarterID"] = "All";
+	// Define a place to remember SectionIDs
+	if (!ViewData.Keys.Contains("PreviousSectionID"))
+	{
+		ViewData.Add("PreviousSectionID", string.Empty);
+	}
 
 	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;
 	string PreviousCourseTitle = string.Empty;
 	string courseBlockClass = "";
 
-	if (yrq.ToString() != Request.QueryString["currentQuarter"])
+	if (yrq.ID.CompareTo(currentQuarter.ID) < 0)
 	{
 		courseBlockClass = "course-block-past-quarter";
 	}
@@ -115,7 +121,10 @@
 
 			 if (sectionID != PreviousSectionID)
 			 {
-				 Html.RenderPartial("Sections", sec, new ViewDataDictionary { { "PreviousSectionID", PreviousSectionID } });
+				 // NOTE: We must pass the current ViewData object to RenderPartial here.
+				 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+				 ViewData["PreviousSectionID"] = PreviousSectionID;
+				 Html.RenderPartial("Sections", sec, ViewData);
 			 }
 
 			 PreviousSectionID = sectionID;
