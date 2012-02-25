@@ -10,19 +10,18 @@ $(function () {
     $("body").addClass("js");
 
     /*make classes tab selected*/
-    $("#mainnav-classes a").addClass("selected");
+    $("#mainnav-classes").find("a").addClass("selected");
 
     /*tooltip*/
     $('abbr').tooltipsy();
 
     /*drowdown menu*/
     $('#browse').hoverIntent({
-        interval: 150, // milliseconds delay before onMouseOver
+        interval: 50, // milliseconds delay before onMouseOver
         over: dropdown_show,
-        timeout: 500, // milliseconds delay before onMouseOut
+        timeout: 400, // milliseconds delay before onMouseOut
         out: dropdown_hide
-    });
-    $(".nav-dropdown").prepend('<div class="downarrow"></div>');
+    }).find(".nav-dropdown").prepend('<div class="downarrow"></div>');
 
     /*search bar*/
     $("#search-keyword").focus(function () {
@@ -32,7 +31,11 @@ $(function () {
     });
 
     /*set min-height for #content based on sidebar  */
-    $('.sidebar #content').css({ 'min-height': (($("#sidebar").height())) + 'px' });
+    $('#container.sidebar #content').css({ 'min-height': (($("#sidebar").height())) + 'px' });
+
+    /*set arrow on sectionTitle */
+    $("#sectionTitle").prepend('<div class="arrow"></div>');
+
 });
 
 function dropdown_show(){ $(this).addClass('hover'); }
