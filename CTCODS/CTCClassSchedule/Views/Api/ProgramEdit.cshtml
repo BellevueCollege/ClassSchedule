@@ -39,6 +39,7 @@
 
 @using (Html.BeginForm())
 {
+	bool displayDropdown = false;
     @Html.ValidationSummary(true)
     <fieldset id="ProgramEdit">
 
@@ -63,9 +64,25 @@
 					 @{
 						if (Model.MergedClasses != null)
 						{
+
 							if ((Model.MergedClasses.Count() > 0 && Model.itemToUpdate.Abbreviation != Model.itemToUpdate.URL) || Model.MergedClasses.Count() > 1)
 							{
 								@Html.LabelFor(model => model.itemToUpdate.URL, "Subjects merged with " + Model.itemToUpdate.URL);
+							}
+							else if (Model.MergedClasses.Count() == 1)
+							{
+								//if the class is merged to itself, that is fine, but display the dropdown so they can merge it to another class
+								string classes = "";
+								foreach(string singleClass in Model.MergedClasses){
+									classes += singleClass;
+								}
+
+								if (classes == Model.itemToUpdate.Abbreviation)
+								{
+									@Html.LabelFor(model => model.MergeSubjectChoices, "Merge with another subject (choose abbr)");
+									displayDropdown = true;
+								}
+
 							}
 						}
 						else
@@ -77,15 +94,15 @@
 					</div>
 					<div class="editor-field">
 						@{
-							if (Model.MergedClasses != null)
+						if (Model.MergedClasses != null)
+						{
+							if ((Model.MergedClasses.Count() > 0 && Model.itemToUpdate.Abbreviation != Model.itemToUpdate.URL) || Model.MergedClasses.Count() > 1)
 							{
-								if ((Model.MergedClasses.Count() > 0 && Model.itemToUpdate.Abbreviation != Model.itemToUpdate.URL) || Model.MergedClasses.Count() > 1)
+								//there are merged subjects. display ajax actionlinks
+								foreach (string url in Model.MergedClasses)
 								{
-									//there are merged subjects. display ajax actionlinks
-									foreach (string url in Model.MergedClasses)
+									if (url != Model.itemToUpdate.Abbreviation)
 									{
-										if (url != Model.itemToUpdate.Abbreviation)
-										{
 										@Ajax.ActionLink(url.Trim(),
 											"ProgramEdit",
 											"Api",
@@ -103,24 +120,22 @@
 											},
 											new { @class = "merged-subject-link" }
 										);
-										}
-
 									}
+
 								}
-
-
 							}
 
-							else
+							else if (displayDropdown == true)
 							{
-								//there aren't any merged subjects. display a select list of subjects they can choose to merge with the current subject
-								//foreach (string subject in Model.MergeSubjectChoices) {
-
-								//}
-
+								//the class is merged with itself. in the app this behavior means that it isn't merged to any class. just display the dropdown.
 								@Html.DropDownList("MergeWith", new SelectList(Model.MergeSubjectChoices))
-
 							}
+						}
+
+						else{
+							//there aren't any merged subjects. display a select list of subjects they can choose to merge with the current subject
+								@Html.DropDownList("MergeWith", new SelectList(Model.MergeSubjectChoices))
+						}
 
 
 						}
