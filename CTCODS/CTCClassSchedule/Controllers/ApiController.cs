@@ -257,9 +257,9 @@ namespace CTCClassSchedule.Controllers
 						{
 							//coursesEnum = repository.GetCourses().Single(s => s.CourseID == UpdatingCourseID);
 							coursesEnum = repository.GetCourses().Single(s => s.CourseID == repoCourseID);
-							foreach (CourseDescription footnote in coursesEnum.Descriptions)
+							foreach (string footnote in coursesEnum.Footnotes)
 							{
-								HPFootnotes += footnote.Description + " ";
+								HPFootnotes += footnote + " ";
 							}
 							courseTitle = coursesEnum.Title;
 						}
@@ -272,7 +272,7 @@ namespace CTCClassSchedule.Controllers
 					}
 
 					ClassFootnote LocalClass = new ClassFootnote();
-					LocalClass.CourseID = itemToUpdate != null ? itemToUpdate.CourseID : "";
+					LocalClass.CourseID = itemToUpdate != null ? itemToUpdate.CourseID : UpdatingCourseID;
 					LocalClass.Footnote = itemToUpdate != null ? itemToUpdate.Footnote : "";
 					LocalClass.HPFootnote = HPFootnotes;
 					LocalClass.LastUpdated = itemToUpdate != null ? Convert.ToString(itemToUpdate.LastUpdated) : "";

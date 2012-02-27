@@ -35,7 +35,8 @@
 	});
 </script>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
 		@Html.ValidationSummary(true)
 		<fieldset>
 			<legend>@(Model.CourseID) - @(Model.CourseTitle) </legend>
@@ -45,18 +46,17 @@
 
 
 
-
-				@if (@Model.HPFootnote != "")
-				{
 					<div class="editor-label">
 						@Html.LabelFor(model => Model.HPFootnote, "Default Notes:")
 					</div>
+				@if (@Model.HPFootnote != "")
+				{
 					<div class="editor-field">
 						@Model.HPFootnote
 					</div>
 				}
 				<div class="editor-label">
-            @Html.LabelFor(model => Model.Footnote, "Additional Notes:")
+            @Html.LabelFor(model => Model.Footnote, @Model.HPFootnote != "" ? "Additional Notes" : "Notes:")
         </div>
         <div class="editor-field">
             @Html.TextAreaFor(model => Model.Footnote, new { @class = "editClassFootnotes", @cols = 80, @rows = 5 })
@@ -64,7 +64,7 @@
         </div>
 
 				<div id="lastModifiedBy">
-				@if(Model.LastUpdated != null){
+				@if(Model.LastUpdated != ""){
 					<text>Last modified by </text>@Model.LastUpdatedBy<text> on </text>@Model.LastUpdated
 		}
 
