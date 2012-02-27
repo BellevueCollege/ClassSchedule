@@ -90,6 +90,11 @@
 							@Html.LabelFor(model => model.MergeSubjectChoices, "Merge with another subject (choose abbr)");
 						}
 
+						if (Model.MergedClasses.Count() == 0) {
+							@Html.LabelFor(model => model.MergeSubjectChoices, "Merge with another subject (choose abbr)");
+							displayDropdown = true;
+						}
+
 					}
 					</div>
 					<div class="editor-field">
@@ -132,7 +137,8 @@
 							}
 						}
 
-						else{
+						else
+						{
 							//there aren't any merged subjects. display a select list of subjects they can choose to merge with the current subject
 								@Html.DropDownList("MergeWith", new SelectList(Model.MergeSubjectChoices))
 						}
