@@ -206,8 +206,9 @@ else
 	 if (m.Title.ToUpper() == "ONLINE" && m.Selected && modalities.Where(o => o.Title.ToUpper() != "ONLINE" && o.Selected).Count() == 0) { showDaysAndTimes = false; }
 
 		<p class="label_checkbox_pair">
+		<span>
 			<input class="clear" type="checkbox" name="@m.ID" id="@m.ID" value="true" @if (m.Selected)
-                                                                             { <text>checked='checked'</text> } />
+                                                                             { <text>checked='checked'</text> } /></span>
 			<label for="@m.ID">@m.Title</label>
 		</p>
  }
