@@ -96,6 +96,7 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Mvc">
       <Private>True</Private>
     </Reference>
@@ -144,6 +145,7 @@
     <Compile Include="Common\AutomatedFootnotesConfig.cs" />
     <Compile Include="Common\AutomatedFootnotesSection.cs" />
     <Compile Include="Common\ClassFootnote.cs" />
+    <Compile Include="Common\CourseOutcomes.cs" />
     <Compile Include="Common\ProgramEditModel.cs" />
     <Compile Include="Common\Encryption64.cs" />
     <Compile Include="Common\HelperContainers.cs" />

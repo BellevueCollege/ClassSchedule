@@ -500,7 +500,32 @@ namespace CTCClassSchedule.Controllers
 		/// Gets the course outcome information by scraping the Bellevue College
 		/// course outcomes website
 		/// </summary>
+		///
 		private static dynamic getCourseOutcome(string Subject, string ClassNum)
+		{
+
+			string CourseOutcome = "";
+			try
+			{
+				Service1Client client = new Service1Client();
+
+				ICourseID courseID = CourseID.FromString(Subject, ClassNum);
+
+				CourseOutcome = client.GetCourseOutcome(courseID.ToString());
+			}
+			catch
+			{
+				CourseOutcome = "Cannot find course outcome for this course.";
+			}
+			return CourseOutcome;
+		}
+
+
+		/// <summary>
+		/// Gets the course outcome information by scraping the Bellevue College
+		/// course outcomes website
+		/// </summary>
+		private static dynamic getCourseOutcomeOld(string Subject, string ClassNum)
 		{
 			const string SETTING_KEY = "IncludeCourseOutcomes";
 			bool includeCourseOutcomes = false;
