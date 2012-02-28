@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!---->
 <NamedFilter version="1" type="SQLCompareFilter">
   <!--This filter can be loaded using the SQL Compare UI or used with a SQL Compare command line session using the /filter switch-->
@@ -111,8 +111,8 @@
         <Expression>TRUE</Expression>
       </Table>
       <User version="1">
-        <Include>False</Include>
-        <Expression>(@NAME LIKE 'CAMPUS\%')</Expression>
+        <Include>True</Include>
+        <Expression>TRUE</Expression>
       </User>
       <UserDefinedType version="1">
         <Include>True</Include>
