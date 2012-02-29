@@ -515,7 +515,8 @@ namespace CTCClassSchedule.Controllers
 			}
 			catch
 			{
-				CourseOutcome = "Cannot find course outcome for this course.";
+
+				CourseOutcome = "Cannot find course outcome for this course or cannot connect to the course outcomes webservice.";
 			}
 			return CourseOutcome;
 		}
