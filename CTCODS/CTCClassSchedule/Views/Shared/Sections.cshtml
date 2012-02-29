@@ -135,37 +135,41 @@
 				<ul>
 					<li>
 						<span class="label">
-							@AutomatedFootnotesConfig.getAutomatedFootnotesText(Model)
-			@if (string.IsNullOrWhiteSpace(Model.SectionFootnotes) && string.IsNullOrWhiteSpace(apiSectionFootnotes))
-			{
-						<!-- no section footnotes found -->
-			}
-			else
-			{
-				if (!string.IsNullOrWhiteSpace(apiSectionFootnotes))
-				{
-							<span id="odsSectionFootnotes">@apiSectionFootnotes</span>
-					if (apiSectionFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
-					{
-							<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">How to clear prerequisites?</a>
-					}
-				}
 
-				if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
-				{
-				string secFootnotes = Model.SectionFootnotes;
+                @if (!string.IsNullOrWhiteSpace(apiSectionFootnotes))
+                {
+							<span id="odsSectionFootnotes">@apiSectionFootnotes</span>
+                    if (apiSectionFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+							<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">How to clear prerequisites?</a>
+                    }
+                }
+                else
+                {
+                    <!-- no ODS section footnotes found -->
+                }
+
+                @AutomatedFootnotesConfig.getAutomatedFootnotesText(Model)
+
+                @if (!string.IsNullOrWhiteSpace(Model.SectionFootnotes))
+                {
+                    string secFootnotes = Model.SectionFootnotes;
 							<span id="cmsSectionFootnotes">
 					@if (string.IsNullOrWhiteSpace(_searchTerm))
-					{
-								@secFootnotes;
-					}
-					else
-					{
-								@Html.FormatWithSearchTerm(_searchTerm, secFootnotes);
-					}
+                     {
+						    @secFootnotes;
+                     }
+                     else
+                     {
+							@Html.FormatWithSearchTerm(_searchTerm, secFootnotes);
+                     }
 							</span>
-				}
-			}
+                }
+                else
+                {
+                    <!-- no CMS section footnotes found -->
+                }
+
 						</span> @* span class="label" *@
 					</li>
 
