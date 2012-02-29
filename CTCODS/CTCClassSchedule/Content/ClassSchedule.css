@@ -1060,7 +1060,7 @@ ul.section-details li.section-notes
 {
     padding: 0 20px;
 }
-.footnote-prereq  { color: #666}
+a.footnote-prereq  { color: #666}
 #courseDescription{}
 #courseDescriptionUpcoming{ color: #666}
 #courseDescriptionUpcoming h3 {
