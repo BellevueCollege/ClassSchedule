@@ -553,11 +553,11 @@ namespace CTCClassSchedule.Common
 						    ParentObject = c,
 						    SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// allows us to identify past quarters (with no availability info)
 						    LastUpdated = (d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString("h:mm tt").ToLower(),
-						    SectionFootnotes = d != null ? d.SectionFootnote ?? string.Empty : string.Empty,
-						    CourseFootnotes = d != null ? d.CourseFootnote ?? string.Empty : string.Empty,
-																			CourseTitle = d != null ? d.CustomTitle : c.CourseTitle,
-																			CustomTitle = d != null ? d.CustomTitle : string.Empty,
-																			CustomDescription = d != null ? d.CustomDescription : string.Empty
+																			SectionFootnotes = !string.IsNullOrWhiteSpace(d.SectionFootnote) ? d.SectionFootnote ?? string.Empty : string.Empty,
+																			CourseFootnotes = !string.IsNullOrWhiteSpace(d.CourseFootnote) ? d.CourseFootnote ?? string.Empty : string.Empty,
+																			CourseTitle = !string.IsNullOrWhiteSpace(d.CustomTitle) ? d.CustomTitle : c.CourseTitle,
+																			CustomTitle = !string.IsNullOrWhiteSpace(d.CustomTitle) ? d.CustomTitle : string.Empty,
+																			CustomDescription = !string.IsNullOrWhiteSpace(d.CustomDescription) ? d.CustomDescription : string.Empty
 																	}).OrderBy(x => x.CourseNumber).ThenBy(x => x.CourseTitle).ToList();
             }
 
