@@ -84,11 +84,11 @@
 				$('li.section-listing').hover(
 					function () {
 						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').show();
-						$(this).addClass('yellow-dashed');
+						$(this).addClass('section-listing-edit edit-hover');
 					},
 					function () {
 						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').hide();
-						$(this).removeClass('yellow-dashed');
+						$(this).removeClass('section-listing-edit edit-hover');
 				});
 				</text>
 			}
@@ -97,14 +97,14 @@
 			@if (Helpers.isAdmin(Context))
 			{
 				<text>
-				$('.classinfo').hover(
+				$('.classInfo').hover(
 					function () {
 						$(this).children('a.edit_button').show();
-						$(this).addClass('yellow-dashed');
+						$(this).addClass('edit-hover classInfo-edit');
 					},
 					function () {
 						$(this).children('a.edit_button').hide();
-						$(this).removeClass('yellow-dashed');
+						$(this).removeClass('edit-hover classInfo-edit');
 				});
 				</text>
 			}
@@ -189,7 +189,7 @@
                          route["ClassNum"] = sec.CourseNumber;
 
 				<text>
-				<div class="classinfo">
+				<div class="classInfo">
 
 				@if (Helpers.isAdmin(Context))
     {
@@ -229,22 +229,21 @@
 				@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
 			</a>
     }
-		&#8226;
+		 <span class="classCredits">&#8226;
 			@if (isVariableCredit)
    {
-				    <span class="classCredits">
-					    V1-@Html.CreditsValue(sec.Credits)
-				        <abbr title=" variable credit(s) ">Cr.</abbr>
-            </span>
+					    @:V1-@Html.CreditsValue(sec.Credits)
+				        <abbr title="variable credits">Cr.</abbr>
+
    }
    else
    {
-				    <span class="classCredits">
 					    @Html.CreditsValue(sec.Credits)
-				        <abbr title=" credit(s) ">Cr.</abbr>
-            </span>
+				        <abbr title="credit(s)">Cr.</abbr>
+
    }
-				</h2>
+			 </span>
+              </h2>
 				<p class="classNotes">
 					@sec.CourseFootnotes
 					@if (sec.CourseFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
@@ -252,24 +251,23 @@
 						<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">How to clear prerequisites?</a>
      }
 				</p>
-				<p class="classDetails">
+				<div class="classDetails">
 					@if (sec.CustomTitle != null && sec.CustomTitle != string.Empty)
 					{
 						@sec.CustomDescription
 					}
 
-					@if (hasLinked)
+					@if (!hasLinked)
 					{
 						@Html.ActionLink("View class details", "ClassDetails", "Classes", route, null)
 					}
 
 
-
-
-				</p>
+				</div> <!--classDetails -->
+                </div> <!-- classInfo-->
 				<ul class='course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))'>
 
-				</div>
+
 				</text>
 						}
 
