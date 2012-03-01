@@ -154,9 +154,13 @@
 		                 {
                             @ViewBag.AcademicProgram
                          }
-                         else
+                        else if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
                         {
                             @ViewBag.ProgramTitle
+                        }
+                        else
+                        {
+                            <text>Program</text>
                         }
                     website</a>
 				</p>
