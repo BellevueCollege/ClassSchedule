@@ -25,7 +25,7 @@ namespace CTCClassSchedule.Controllers
 	public class ApiController : Controller
 	{
 
-		public const string Roles = "Developers, InApp-Classes-Admin, InApp-Classes-Schedule-Editor";
+		public const string Roles = "InApp-Classes-Admin, Developers, InApp-Classes-Schedule-Editor";
 
 
 

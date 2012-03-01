@@ -78,7 +78,11 @@
       [vw_ProgramInformation].[Division] AS [Division],
       [vw_ProgramInformation].[ContactName] AS [ContactName],
       [vw_ProgramInformation].[ContactPhone] AS [ContactPhone],
-      [vw_ProgramInformation].[Intro] AS [Intro]
+      [vw_ProgramInformation].[Intro] AS [Intro],
+      [vw_ProgramInformation].[AcademicProgram] AS [AcademicProgram],
+      [vw_ProgramInformation].[DivisionURL] AS [DivisionURL],
+      [vw_ProgramInformation].[LastUpdated] AS [LastUpdated],
+      [vw_ProgramInformation].[LastUpdatedBy] AS [LastUpdatedBy]
       FROM [dbo].[vw_ProgramInformation] AS [vw_ProgramInformation]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vw_SeatAvailability" EntityType="ClassSchedule.Models.Store.vw_SeatAvailability" store:Type="Views" store:Schema="dbo" store:Name="vw_SeatAvailability">
@@ -249,6 +253,10 @@
           <Property Name="ContactName" Type="varchar" MaxLength="255" />
           <Property Name="ContactPhone" Type="varchar" MaxLength="255" />
           <Property Name="Intro" Type="varchar(max)" />
+          <Property Name="AcademicProgram" Type="varchar" MaxLength="50" />
+          <Property Name="DivisionURL" Type="varchar" MaxLength="255" />
+          <Property Name="LastUpdated" Type="datetime" />
+          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'ClassScheduleDev.dbo.vw_SeatAvailability' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -366,6 +374,10 @@
           <Property Name="ContactName" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="ContactPhone" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="Intro" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Type="String" Name="AcademicProgram" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DivisionURL" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LastUpdated" />
+          <Property Type="String" Name="LastUpdatedBy" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="vw_SeatAvailability">
           <Key>
@@ -506,7 +518,11 @@
             <ScalarProperty Name="CourseDescription2" ColumnName="CourseDescription2" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="vw_ProgramInformation"><EntityTypeMapping TypeName="ClassSchedule.Models.vw_ProgramInformation"><MappingFragment StoreEntitySet="vw_ProgramInformation">
-            <ScalarProperty Name="AbbreviationTrimmed" ColumnName="AbbreviationTrimmed" />
+            <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="DivisionURL" ColumnName="DivisionURL" />
+                <ScalarProperty Name="AcademicProgram" ColumnName="AcademicProgram" />
+                <ScalarProperty Name="AbbreviationTrimmed" ColumnName="AbbreviationTrimmed" />
             <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
             <ScalarProperty Name="URL" ColumnName="URL" />
             <ScalarProperty Name="ProgramURL" ColumnName="ProgramURL" />
@@ -633,7 +649,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="ClassScheduleDb">
+      <Diagram Name="ClassScheduleDb" ZoomLevel="78">
         <EntityTypeShape EntityType="ClassSchedule.Models.vw_ClassScheduleData" Width="1.5" PointX="0.5" PointY="0.5" Height="3.9033007812499996" IsExpanded="true" />
         <EntityTypeShape EntityType="ClassSchedule.Models.vw_ClassSearch" Width="1.5" PointX="2" PointY="0.5" Height="2.9417936197916665" IsExpanded="true" />
         <EntityTypeShape EntityType="ClassSchedule.Models.vw_CourseSearch" Width="1.5" PointX="3.625" PointY="0.5" Height="2.3648893229166665" IsExpanded="true" />

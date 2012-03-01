@@ -648,6 +648,7 @@ namespace CTCClassSchedule.Controllers
 				const string DEFAULT_TITLE = "";
 				const string DEFAULT_URL = "";
 				const string DEFAULT_INTRO = "";
+				const string DEFAULT_ACADEMICPROGRAM = "";
 				bool disposeDb = false;
 
 				if (db == null)
@@ -679,6 +680,7 @@ namespace CTCClassSchedule.Controllers
 
 						ViewBag.ProgramTitle = program.Title ?? DEFAULT_TITLE;
 						ViewBag.SubjectIntro = program.Intro ?? DEFAULT_INTRO;
+						ViewBag.AcademicProgram = program.AcademicProgram ?? DEFAULT_ACADEMICPROGRAM;
 
 						string url = program.ProgramURL ?? DEFAULT_URL;
 
