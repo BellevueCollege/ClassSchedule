@@ -149,9 +149,18 @@
 		 if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
 		 {
 				<p id="programWebsite">
-					<a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a>
+					<a href="@ViewBag.ProgramUrl" class="programWebsite">
+                        @if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
+		                 {
+                            @ViewBag.AcademicProgram
+                         }
+                         else
+                        {
+                            @ViewBag.ProgramTitle
+                        }
+                    website</a>
 				</p>
-		 }
+         }
 
          if (!string.IsNullOrWhiteSpace(ViewBag.SubjectIntro))
          {
@@ -253,14 +262,14 @@
 				</p>
 				<div class="classDetails">
 					@if (sec.CustomTitle != null && sec.CustomTitle != string.Empty)
-					{
+     {
 						@sec.CustomDescription
-					}
+     }
 
 					@if (!hasLinked)
-					{
+     {
 						@Html.ActionLink("View class details", "ClassDetails", "Classes", route, null)
-					}
+     }
 
 
 				</div> <!--classDetails -->
