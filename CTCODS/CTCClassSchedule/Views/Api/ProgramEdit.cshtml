@@ -46,7 +46,7 @@
 
         @Html.HiddenFor(model => model.itemToUpdate.Abbreviation)
 				@Html.HiddenFor(model => model.itemToUpdate.URL)
-				@Html.Hidden("referrer", Request.UrlReferrer.ToString())
+				@Html.Hidden("referrer", (Request != null && Request.UrlReferrer != null) ? Request.UrlReferrer.ToString() : string.Empty)
 
 
 				<div class="left">
