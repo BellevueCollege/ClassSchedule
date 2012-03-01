@@ -7,6 +7,7 @@ using DotNetCasClient.Security;
 using System.Net;
 using System.IO;
 using System.Web.Security;
+using DotNetCasClient;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -42,7 +43,8 @@ namespace CTCClassSchedule.Controllers
 
 			public ActionResult Logout()
 			{
-				FormsAuthentication.SignOut();
+				//FormsAuthentication.SignOut();
+				CasAuthentication.SingleSignOut();
 				return RedirectToRoute("Default");
 			}
 
