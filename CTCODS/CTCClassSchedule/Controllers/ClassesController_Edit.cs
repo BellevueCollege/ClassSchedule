@@ -43,13 +43,16 @@ namespace CTCClassSchedule.Controllers
 
 			public ActionResult Logout()
 			{
-				//FormsAuthentication.SignOut();
-				CasAuthentication.SingleSignOut();
+				if (!string.IsNullOrWhiteSpace(CasAuthentication.CasServerUrlPrefix))
+				{
+					CasAuthentication.SingleSignOut();
+				}
+				else
+				{
+					FormsAuthentication.SignOut();
+				}
+
 				return RedirectToRoute("Default");
 			}
-
-
-
-
     }
 }
