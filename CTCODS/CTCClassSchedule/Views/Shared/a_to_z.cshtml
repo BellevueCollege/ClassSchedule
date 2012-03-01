@@ -5,7 +5,10 @@
 	string Action = ViewContext.RouteData.Values["Action"].ToString();
 }
 <p id="a_to_z">
-@Html.ActionLink("View All", Action, new RouteValueDictionary(routeParms))
+@if(Model.Count() > 0)
+{
+	@Html.ActionLink("View All", Action, new RouteValueDictionary(routeParms))
+}
 @foreach (char lttr in Model)
 {
 	if (routeParms.Keys.Contains("letter")) {
