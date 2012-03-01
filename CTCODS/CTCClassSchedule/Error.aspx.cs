@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace CTCClassSchedule
 {
@@ -6,14 +7,24 @@ namespace CTCClassSchedule
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			if (Application["LastError"] != null)
+			Exception exception = Application["LastError"] as Exception;
+			bool recognized = false;
+			string stackTrace;
+
+			if (exception != null)
 			{
-				ErrorMessage.Text = (Application["LastError"] as Exception).ToString();
+				// Specific error messages checked for and enabled here
+				Message_ValidationError.Visible = recognized = (exception is HttpRequestValidationException);
+
+				stackTrace = exception.ToString();
 			}
 			else
 			{
-				ErrorMessage.Text = "An error occurred, but no error information was found!";
+				stackTrace = "An error occurred, but no error information was found!";
 			}
+
+			Message_UnknownError.Visible = !recognized;
+			StackTrace.Text = stackTrace;
 		}
 	}
 }

@@ -9,7 +9,16 @@
 <body>
     <form id="form1" runat="server">
     <div>
-    <p><asp:Literal ID="ErrorMessage" runat="server"></asp:Literal></p>
+		<%-- For additional error messages, create a new invisible Panel and activate it in the code behind --%>
+		<asp:Panel ID="Message_ValidationError" runat="server" Visible="false">
+			<h3>Invalid characters were detected. Please do not include HTML and/or other scripting when entering data.</h3>
+		</asp:Panel>
+		<asp:Panel ID="Message_UnknownError" runat="server" Visible="false">
+			<h3>An unexpected error occurred.</h3>
+		</asp:Panel>
+<!--
+<asp:Literal ID="StackTrace" runat="server"></asp:Literal>
+-->
     </div>
     </form>
 </body>
