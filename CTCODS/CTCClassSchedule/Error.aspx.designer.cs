@@ -31,6 +31,15 @@ namespace CTCClassSchedule {
         protected global::System.Web.UI.WebControls.Panel Message_ValidationError;
 
         /// <summary>
+        /// Message_DatabaseError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Message_DatabaseError;
+
+        /// <summary>
         /// Message_UnknownError control.
         /// </summary>
         /// <remarks>
