@@ -14,8 +14,10 @@ CREATE TABLE [dbo].[ProgramInformation]
 [LastUpdatedBy] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-ALTER TABLE [dbo].[ProgramInformation] ADD CONSTRAINT [PK_Sheet1$] PRIMARY KEY CLUSTERED  ([Abbreviation]) ON [PRIMARY]
-GO
+GRANT SELECT ON  [dbo].[ProgramInformation] TO [WebApplicationUser]
 GRANT INSERT ON  [dbo].[ProgramInformation] TO [WebApplicationUser]
 GRANT UPDATE ON  [dbo].[ProgramInformation] TO [WebApplicationUser]
+GO
+
+ALTER TABLE [dbo].[ProgramInformation] ADD CONSTRAINT [PK_Sheet1$] PRIMARY KEY CLUSTERED  ([Abbreviation]) ON [PRIMARY]
 GO
