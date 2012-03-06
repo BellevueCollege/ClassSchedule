@@ -241,7 +241,8 @@ namespace CTCClassSchedule.Controllers
 						IEnumerable<ScheduleCoursePrefix> coursesEnum;
 						coursesEnum = from c in coursesLocalEnum
 						              where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
-						              select c;
+													group c by c.Subject into d
+						              select d.FirstOrDefault();
 
 						coursesEnum = coursesEnum.Distinct();
 
@@ -252,8 +253,11 @@ namespace CTCClassSchedule.Controllers
 					else
 					{
 						ViewBag.ItemCount = coursesLocalEnum.Count();
+						var coursesEnum = from c in coursesLocalEnum
+													group c by c.Subject into d
+													select d.FirstOrDefault();
 
-						return View(coursesLocalEnum);
+						return View(coursesEnum);
 					}
 				}
 			}

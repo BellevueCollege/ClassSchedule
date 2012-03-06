@@ -12,6 +12,7 @@ using System;
 using Ctc.Web.Security;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Diagnostics;
 
 
 
@@ -130,9 +131,9 @@ namespace CTCClassSchedule.Controllers
 						{
 							itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
 						}
-						catch
+						catch(InvalidOperationException e)
 						{
-
+							Trace.Write(e);
 						}
 						var LocalSections = (from s in sectionsEnum
 																 select new SectionWithSeats
@@ -187,8 +188,9 @@ namespace CTCClassSchedule.Controllers
 							itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
 							itemFound = true;
 						}
-						catch
+						catch(InvalidOperationException e)
 						{
+							Trace.Write(e);
 						}
 
 						itemToUpdate.ClassID = classID;
@@ -222,17 +224,13 @@ namespace CTCClassSchedule.Controllers
 			{
 				ICourseID courseID = CourseID.FromString(Subject, CourseNumber);
 				string UpdatingCourseID = courseID.ToString();
+				string subject = courseID.Subject;
+
 				if (IsCommonCourse)
 				{
-					int pos = UpdatingCourseID.IndexOf(' ');
-					StringBuilder s = new StringBuilder(UpdatingCourseID);
-					s[pos] = '&';
-					UpdatingCourseID = s.ToString();
+
+					subject = subject + "&";
 				}
-
-				//generate the repository courseID
-				string repoCourseID = IsCommonCourse ? Subject + "& " + CourseNumber : Subject + " " + CourseNumber;
-
 
 				CourseFootnote itemToUpdate = null;
 				var HPFootnotes = "";
@@ -241,31 +239,36 @@ namespace CTCClassSchedule.Controllers
 				{
 					try
 					{
-						itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID == UpdatingCourseID);
-						//var footnotesHP  = db.
-					}
-					catch
-					{
+						itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID.Substring(0, 5).Trim().ToUpper() == subject.ToUpper() &&
+																										 s.CourseID.EndsWith(courseID.Number)
+							);
 
+					}
+					catch(InvalidOperationException e)
+					{
+						Trace.Write(e);
 					}
 
 					using (OdsRepository repository = new OdsRepository(HttpContext))
 					{
 						var QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
-						Course coursesEnum = new Course();
+						//Course coursesEnum = new Course();
 						try
 						{
-							//coursesEnum = repository.GetCourses().Single(s => s.CourseID == UpdatingCourseID);
-							coursesEnum = repository.GetCourses().Single(s => s.CourseID == repoCourseID);
-							foreach (string footnote in coursesEnum.Footnotes)
-							{
-								HPFootnotes += footnote + " ";
-							}
-							courseTitle = coursesEnum.Title;
-						}
-						catch
-						{
+							var coursesEnum = repository.GetCourses(courseID);//.Single(s => s.IsCommonCourse);
 
+							foreach (Course course in coursesEnum)
+							{
+								foreach (string footnote in course.Footnotes)
+								{
+									HPFootnotes += footnote + " ";
+								}
+								courseTitle = course.Title;
+							}
+						}
+						catch(InvalidOperationException e)
+						{
+							Trace.Write(e);
 						}
 
 
@@ -289,6 +292,7 @@ namespace CTCClassSchedule.Controllers
 
 			return PartialView();
 		}
+
 
 
 
@@ -325,8 +329,9 @@ namespace CTCClassSchedule.Controllers
 
 							itemFound = true;
 						}
-						catch
+						catch(InvalidOperationException e)
 						{
+							Trace.Write(e);
 						}
 
 						itemToUpdate.CourseID = CourseID;
@@ -385,9 +390,9 @@ namespace CTCClassSchedule.Controllers
 
 						return PartialView(model);
 					}
-					catch
+					catch(InvalidOperationException e)
 					{
-
+						Trace.Write(e);
 					}
 
 
@@ -440,8 +445,9 @@ namespace CTCClassSchedule.Controllers
 
 							itemFound = true;
 						}
-						catch
+						catch(InvalidOperationException e)
 						{
+							Trace.Write(e);
 						}
 
 						itemToUpdate.LastUpdated = DateTime.Now;

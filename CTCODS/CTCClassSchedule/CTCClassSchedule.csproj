@@ -357,6 +357,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ClassScheduleDb.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\subjectList.cshtml" />
     <Content Include="Views\Api\SectionEdit.cshtml" />
