@@ -669,7 +669,7 @@ namespace CTCClassSchedule.Controllers
 					else
 					{
 						specificProgramInfo = from s in db.vw_ProgramInformation
-						                      where s.URL == Subject
+						                      where s.Abbreviation == Subject
 						                      select s;
 
 					}
