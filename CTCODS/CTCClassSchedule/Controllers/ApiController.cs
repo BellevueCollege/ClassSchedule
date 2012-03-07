@@ -239,8 +239,8 @@ namespace CTCClassSchedule.Controllers
 				{
 					try
 					{
-						itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID.Substring(0, 5).Trim().ToUpper() == subject.ToUpper() &&
-																										 s.CourseID.EndsWith(courseID.Number)
+						itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID.Trim().Substring(0, 5).ToUpper() == subject.Trim().ToUpper() &&
+																										 s.CourseID.Trim().EndsWith(courseID.Number)
 							);
 
 					}
