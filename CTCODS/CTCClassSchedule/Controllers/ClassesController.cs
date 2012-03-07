@@ -222,6 +222,7 @@ namespace CTCClassSchedule.Controllers
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					IList<vw_ProgramInformation> progInfo = (from s in db.vw_ProgramInformation
+																									 where s.Abbreviation == s.URL
 					                                         select s).ToList();
 
 					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
@@ -240,9 +241,8 @@ namespace CTCClassSchedule.Controllers
 					{
 						IEnumerable<ScheduleCoursePrefix> coursesEnum;
 						coursesEnum = from c in coursesLocalEnum
-						              where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
-													group c by c.Subject into d
-						              select d.FirstOrDefault();
+													where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
+													select c;
 
 						coursesEnum = coursesEnum.Distinct();
 
@@ -253,11 +253,7 @@ namespace CTCClassSchedule.Controllers
 					else
 					{
 						ViewBag.ItemCount = coursesLocalEnum.Count();
-						var coursesEnum = from c in coursesLocalEnum
-													group c by c.Subject into d
-													select d.FirstOrDefault();
-
-						return View(coursesEnum);
+						return View(coursesLocalEnum);
 					}
 				}
 			}
