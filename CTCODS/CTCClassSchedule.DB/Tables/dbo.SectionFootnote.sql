@@ -2,7 +2,7 @@ CREATE TABLE [dbo].[SectionFootnote]
 (
 [ClassID] [char] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Footnote] [varchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[LastUpdatedBy] [nchar] (40) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[LastUpdatedBy] [nchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [LastUpdated] [datetime] NULL,
 [CustomTitle] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [CustomDescription] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL

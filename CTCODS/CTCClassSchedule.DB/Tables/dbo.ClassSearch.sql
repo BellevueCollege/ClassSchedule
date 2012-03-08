@@ -2,9 +2,9 @@ CREATE TABLE [dbo].[ClassSearch]
 (
 [ClassID] [char] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SearchGroup1] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SearchGroup2] [varchar] (4065) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SearchGroup3] [varchar] (265) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SearchGroup4] [varchar] (4411) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[SearchGroup2] [varchar] (4089) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SearchGroup3] [varchar] (289) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SearchGroup4] [varchar] (4435) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 ) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[ClassSearch] ADD CONSTRAINT [PK_ClassSearch] PRIMARY KEY CLUSTERED  ([ClassID]) ON [PRIMARY]

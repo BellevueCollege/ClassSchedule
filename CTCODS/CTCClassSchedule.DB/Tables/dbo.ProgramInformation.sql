@@ -8,7 +8,7 @@ CREATE TABLE [dbo].[ProgramInformation]
 [ContactName] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ContactPhone] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Intro] [varchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[AcademicProgram] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[AcademicProgram] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [DivisionURL] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [LastUpdated] [datetime] NULL,
 [LastUpdatedBy] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
