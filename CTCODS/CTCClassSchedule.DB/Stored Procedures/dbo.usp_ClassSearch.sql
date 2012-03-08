@@ -1,3 +1,4 @@
+
 SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
@@ -80,7 +81,7 @@ ORDER BY KEY_TBL.RANK DESC;
 
 
 
-insert SearchLog
+insert SearchLog (SearchString,Group1Results,Group2Results,Group3Results)
 select
 @SearchString as SearchString
 ,(select COUNT(*) from #Results where SearchGroup=1) as Group1Results
@@ -100,5 +101,6 @@ from #Results r
 drop table #Results
 
 GO
+
 GRANT EXECUTE ON  [dbo].[usp_ClassSearch] TO [WebApplicationUser]
 GO
