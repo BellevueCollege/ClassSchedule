@@ -284,7 +284,7 @@
     <Content Include="globals\btheme_v0.1\img\twitter.png" />
     <Content Include="globals\btheme_v0.1\img\youtube.png" />
     <Content Include="globals\btheme_v0.1\js\searchbox.js" />
-    <Content Include="license.CtcOdsApi.txt" />
+    <None Include="license.CtcOdsApi.txt" />
     <Content Include="Scripts\CtcClassSchedule.js" />
     <Content Include="Scripts\jquery.ui.timepicker.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
