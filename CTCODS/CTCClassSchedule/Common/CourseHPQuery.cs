@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using Encoder = Microsoft.Security.Application.Encoder;
 
 namespace CTCClassSchedule
@@ -10,7 +12,7 @@ namespace CTCClassSchedule
 	public class CourseHPQuery
 	{
 		//code to grab the open seats and return as string
-    public int findOpenSeats (string itemNumber, string YRQ)
+    public int FindOpenSeats (string itemNumber, string YRQ)
     {
 			//much of this is from: http://msdn.microsoft.com/en-us/library/debx8sh9.aspx
 
@@ -22,7 +24,7 @@ namespace CTCClassSchedule
 			request.Method = "POST";
 			request.ContentType = "application/x-www-form-urlencoded";
 
-			string postData = getPostData(itemNumber, YRQ);
+			string postData = GetPostData(itemNumber, YRQ);
       byte[] byteArray = Encoding.UTF8.GetBytes(postData);
 
 			request.ContentLength = byteArray.Length;
@@ -38,19 +40,53 @@ namespace CTCClassSchedule
 					// Get the response.
 					using (WebResponse response = request.GetResponse())
 					{
-						// TODO: why are we writing out to the console here?
-						Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-
-						// TODO: verify response is not null
-						using (Stream responseStream = response.GetResponseStream())
+						if (response != null)
 						{
-							using (StreamReader reader = new StreamReader(responseStream))
+							string status = ((HttpWebResponse)response).StatusDescription;
+
+							if (status == "OK")	// HTTP 200
 							{
-								result = reader.ReadToEnd();
+								using (Stream responseStream = response.GetResponseStream())
+								{
+									if (responseStream != null)
+									{
+										using (StreamReader reader = new StreamReader(responseStream))
+										{
+											result = reader.ReadToEnd();
+										}
+
+										// Detect "server busy"
+										if (Regex.IsMatch(result, "503 Service Unavailable", RegexOptions.IgnoreCase))
+										{
+											Trace.WriteLine(string.Format("Call to '{0}' returned '{1}'", request.RequestUri, "503 Service Unavailable"));
+											return -1;
+										}
+
+										//grab the start of the 'seats available' string
+										int index = result.IndexOf("Seats Available: ");
+
+										//if 'seats available' was found
+										if (index > -1)
+										{
+											string seatsAvailable = result.Substring(index + 17, 3);
+											int seats = Convert.ToInt16(seatsAvailable);
+
+											return seats;
+										}
+
+										//if there are no seats available, return 0
+										return 0;
+									}
+								}
+							}
+							else
+							{
+								Trace.WriteLine(string.Format("Call to '{0}' returned '{1}'", request.RequestUri, ((HttpWebResponse)response).StatusCode));
 							}
 						}
 					}
 				}
+				return -1;
 			}
 			catch
 			{
@@ -58,24 +94,10 @@ namespace CTCClassSchedule
 				return -1;
 			}
 
-	//grab the start of the 'seats available' string
-      int index = result.IndexOf("Seats Available: ");
-
-      //if 'seats available' was found
-      if (index != -1)
-      {
-        string seatsAvailable = result.Substring(index + 17, 3);
-        int seats = Convert.ToInt16(seatsAvailable);
-
-        return seats;
-      }
-
-      //if there are no seats available, return 0
-      else
-					return 0;
     }
 
-    private static string getPostData(string itemNumber, string YRQ)
+		// TODO: Use API's YearQuarter methods for these calculations
+    private static string GetPostData(string itemNumber, string YRQ)
     {
       string postData = "";
       string sessionData = "";

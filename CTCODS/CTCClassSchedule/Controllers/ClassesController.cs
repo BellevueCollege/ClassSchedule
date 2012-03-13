@@ -412,80 +412,70 @@ namespace CTCClassSchedule.Controllers
 
 
 		/// <summary>
-		///
+		/// Retrieves and updates Seats Available data for the specified <see cref="Section"/>
 		/// </summary>
-		/// <param name="courseIdPlusYRQ"></param>
+		/// <param name="classID"></param>
 		/// <returns></returns>
 		[HttpPost]
-		public ActionResult getSeats(string courseIdPlusYRQ)
+		public ActionResult getSeats(string classID)
 		{
 			int? seats = null;
 			string friendlyTime = "";
 
-			string classID = courseIdPlusYRQ.Substring(0, 4);
-			string yrq = courseIdPlusYRQ.Substring(4, 4);
-			int HPseats = 0;
+			string itemNumber = classID.Substring(0, 4);
+			string yrq = classID.Substring(4, 4);
 
 			CourseHPQuery query = new CourseHPQuery();
+			int hpSeats = query.FindOpenSeats(itemNumber, yrq);
+
 			using (ClassScheduleDb db = new ClassScheduleDb())
 			{
-				try
+				//if the HP query didn't fail, save the changes. Otherwise, leave the SeatAvailability table alone.
+				//This way, the correct number of seats can be pulled by the app and displayed instead of updating the
+				//table with a 0 for seats available.
+				if (hpSeats >= 0)
 				{
-					HPseats = query.findOpenSeats(classID, yrq);
-				}
-				catch
-				{
-					//if the query fails somehow, set seats to -1 so the local class schedule database isn't updated
-					HPseats = -1;
-				}
+					IQueryable<SeatAvailability> seatsAvailableLocal = from s in db.SeatAvailabilities
+					                                                   where s.ClassID == classID
+					                                                   select s;
+					int rows = seatsAvailableLocal.Count();
 
-
-				var seatsAvailableLocal = from s in db.SeatAvailabilities
-																	where s.ClassID == courseIdPlusYRQ
-																	select s;
-				int rows = seatsAvailableLocal.Count();
-
-				if (rows == 0)
-				{
-					//insert the value
-					SeatAvailability newseat = new SeatAvailability();
-					newseat.ClassID = courseIdPlusYRQ;
-					newseat.SeatsAvailable = HPseats;
-					newseat.LastUpdated = DateTime.Now;
-
-					db.SeatAvailabilities.AddObject(newseat);
-				}
-				else
-				{
-					//update the value
-					foreach (SeatAvailability seat in seatsAvailableLocal)
+					if (rows > 0)
 					{
-						seat.SeatsAvailable = HPseats;
-						seat.LastUpdated = DateTime.Now;
+						// TODO: Should only be updating one record
+						//update the value
+						foreach (SeatAvailability seat in seatsAvailableLocal)
+						{
+							seat.SeatsAvailable = hpSeats;
+							seat.LastUpdated = DateTime.Now;
+						}
+					}
+					else
+					{
+						//insert the value
+						SeatAvailability newseat = new SeatAvailability();
+						newseat.ClassID = classID;
+						newseat.SeatsAvailable = hpSeats;
+						newseat.LastUpdated = DateTime.Now;
+
+						db.SeatAvailabilities.AddObject(newseat);
 					}
 
-				}
-
-				if (HPseats != -1)
-				{
-					//if the HP query didn't fail, save the changes. Otherwise, leave the SeatAvailability table alone.
-					//This way, the correct number of seats can be pulled by the app and displayed instead of updating the
-					//table with a 0 for seats available.
 					db.SaveChanges();
 				}
 
-				var seatsAvailable = from s in db.vw_SeatAvailability
-														where s.ClassID == courseIdPlusYRQ
-														select s;
+				// retrieve updated seats data
+				IQueryable<vw_SeatAvailability> seatsAvailable = from s in db.vw_SeatAvailability
+																												 where s.ClassID == classID
+																												 select s;
 
-				foreach (var seat in seatsAvailable)
-				{
-					seats = seat.SeatsAvailable;
-					friendlyTime = seat.LastUpdated.GetValueOrDefault().ToString("h:mm tt").ToLower();
-				}
+				vw_SeatAvailability newSeat = seatsAvailable.First();
+
+				seats = newSeat.SeatsAvailable;
+				friendlyTime = newSeat.LastUpdated.GetValueOrDefault().ToString("h:mm tt").ToLower();
 			}
 
-			var jsonReturnValue = seats.ToString() + "|" + friendlyTime;
+			string jsonReturnValue =  string.Format("{0}|{1}", seats, friendlyTime);
 			return Json(jsonReturnValue);
 		}
 

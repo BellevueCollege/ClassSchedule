@@ -94,7 +94,9 @@
 				Availability: </span>
 				@if (Model.SeatsAvailable <= 0 || Model.WaitlistCount > 0)
 				{
-					<strong class="seatsAvailable">class full, @Model.WaitlistCount on waitlist</strong>
+					<strong class="seatsAvailable">
+						class full@(Model.WaitlistCount > 0 ? string.Format(", {0} on waitlist", Model.WaitlistCount) : string.Empty)
+					</strong>
 					<span class="course-updated"></span>
 				}
 				else
