@@ -19,7 +19,6 @@ namespace CTCClassSchedule.Common
 	{
 		public static MvcHtmlString IncludePageURL(this HtmlHelper htmlHelper, string url)
 		{
-
 			return MvcHtmlString.Create(new WebClient().DownloadString(url));
 
 		}
@@ -30,10 +29,26 @@ namespace CTCClassSchedule.Common
 
 			if (Context.User.Identity.IsAuthenticated)
 			{
+				string appSetting = ConfigurationManager.AppSettings["ApplicationDeveloper"];
+				if (!string.IsNullOrWhiteSpace(appSetting))
+				{
+					string[] roles = appSetting.Split(',');
+					classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, roles) ? "role-developer" : "";
+				}
 
-				classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "Developers") ? "role-developer" : "";
-				classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "InApp-Classes-Schedule-Editor") ? " role-schedule-editors " : "";
-				classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, "InApp-Classes-Admin") ? " role-admin " : "";
+				appSetting = ConfigurationManager.AppSettings["ApplicationAdmin"];
+				if (!string.IsNullOrWhiteSpace(appSetting))
+				{
+					string[] roles = appSetting.Split(',');
+					classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, roles) ? " role-schedule-editors " : "";
+				}
+
+				appSetting = ConfigurationManager.AppSettings["ApplicationEditor"];
+				if (!string.IsNullOrWhiteSpace(appSetting))
+				{
+					string[] roles = appSetting.Split(',');
+					classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, roles) ? " role-admin " : "";
+				}
 			}
 			else
 			{
@@ -43,39 +58,42 @@ namespace CTCClassSchedule.Common
 			return classes;
 		}
 
-
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="Context"></param>
+		/// <returns></returns>
 		public static bool isAdmin(HttpContextBase Context)
 		{
 			bool isAdmin = false;
 			if (Context.User.Identity.IsAuthenticated)
 			{
-				isAdmin = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, ConfigurationManager.AppSettings["ApplicationDeveloper"]) ? true : false;
-				if (isAdmin == false)
+				string appSetting = ConfigurationManager.AppSettings["ApplicationAdmin"];
+				if (!string.IsNullOrWhiteSpace(appSetting))
 				{
-					isAdmin = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, ConfigurationManager.AppSettings["ApplicationAdmin"]) ? true : false;
+					string[] roles = appSetting.Split(',');
+					isAdmin = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, roles) ? true : false;
 				}
-
 			}
 			return isAdmin;
 		}
 
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="Context"></param>
+		/// <returns></returns>
 		public static bool isEditor(HttpContextBase Context)
 		{
 			bool isEditor = false;
 			if (Context.User.Identity.IsAuthenticated)
 			{
-
-				isEditor = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, ConfigurationManager.AppSettings["ApplicationDeveloper"]) ? true : false;
-				if (isEditor == false)
+				string appSetting = ConfigurationManager.AppSettings["ApplicationEditor"];
+				if (!string.IsNullOrWhiteSpace(appSetting))
 				{
-					isEditor = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, ConfigurationManager.AppSettings["ApplicationAdmin"]) ? true : false;
+					string[] roles = appSetting.Split(',');
+					isEditor = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, roles) ? true : false;
 				}
-				if (isEditor == false)
-				{
-					isEditor = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, ConfigurationManager.AppSettings["ApplicationEditor"]) ? true : false;
-				}
-
-
 			}
 			return isEditor;
 		}

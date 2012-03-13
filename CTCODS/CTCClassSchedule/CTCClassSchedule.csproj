@@ -142,6 +142,7 @@
   <ItemGroup>
     <Compile Include="Common\ActionOutputCacheAttribute.cs" />
     <Compile Include="Common\ActiveDirectoryRoleProvider.cs" />
+    <Compile Include="Common\AuthorizeFromConfigAttribute.cs" />
     <Compile Include="Common\AutomatedFootnotesConfig.cs" />
     <Compile Include="Common\AutomatedFootnotesSection.cs" />
     <Compile Include="Common\ClassFootnote.cs" />
@@ -358,7 +359,9 @@
       <LastGenOutput>ClassScheduleDb.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <None Include="ClassDiagram1.cd" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Views\Shared\subjectList.cshtml" />
     <Content Include="Views\Api\SectionEdit.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />

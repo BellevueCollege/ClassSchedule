@@ -7,29 +7,14 @@ using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
-using CTCClassSchedule.Properties;
 using System;
-using Ctc.Web.Security;
-using System.Text.RegularExpressions;
-using System.Text;
 using System.Diagnostics;
-
-
-
-
-
-
-
+using Ctc.Web.Security;
 
 namespace CTCClassSchedule.Controllers
 {
 	public class ApiController : Controller
 	{
-
-		public const string Roles = "InApp-Classes-Admin, Developers, InApp-Classes-Schedule-Editor";
-
-
-
 		public ApiController()
 		{
 			ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
@@ -92,7 +77,7 @@ namespace CTCClassSchedule.Controllers
 
 
 		//Generation of the Section Edit dialog box
-		[Authorize(Roles = Roles)]
+		[AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
 		public ActionResult SectionEdit(string itemNumber, string yrq, string subject, string classNum)
 		{
 			string classID = itemNumber + yrq;
@@ -160,7 +145,7 @@ namespace CTCClassSchedule.Controllers
 		// POST after submit is clicked
 
 		[HttpPost]
-		[Authorize(Roles = Roles)]
+		[AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
 		public ActionResult SectionEdit(FormCollection collection)
 		{
 			string referrer = collection["referrer"];
@@ -216,7 +201,7 @@ namespace CTCClassSchedule.Controllers
 
 
 		//Generation of the Class Edit dialog box
-		[Authorize(Roles = Roles)]  //TODO: Make this configurable
+		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
 		public ActionResult ClassEdit(string CourseNumber, string Subject, bool IsCommonCourse)
 		{
 
@@ -282,10 +267,6 @@ namespace CTCClassSchedule.Controllers
 					LocalClass.LastUpdatedBy = itemToUpdate != null ? itemToUpdate.LastUpdatedBy : "";
 					LocalClass.CourseTitle = courseTitle;
 
-
-
-
-
 					return PartialView(LocalClass);
 				}
 			}
@@ -293,17 +274,10 @@ namespace CTCClassSchedule.Controllers
 			return PartialView();
 		}
 
-
-
-
-
-
-
 		//
 		// POST after submit is clicked
-
 		[HttpPost]
-		[Authorize(Roles = Roles)]  //TODO: Make this configurable
+		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
 		public ActionResult ClassEdit(FormCollection collection)
 		{
 			string referrer = collection["referrer"];
@@ -313,9 +287,6 @@ namespace CTCClassSchedule.Controllers
 				string CourseID = collection["CourseID"];
 				string Username = HttpContext.User.Identity.Name;
 				string Footnote = collection["Footnote"];
-
-
-
 
 				CourseFootnote itemToUpdate = new CourseFootnote();
 				bool itemFound = false;
@@ -355,7 +326,7 @@ namespace CTCClassSchedule.Controllers
 
 
 		//Generation of the Program Edit dialog box
-		[Authorize(Roles = Roles)]  //TODO: Make this configurable
+		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
 		public ActionResult ProgramEdit(string Abbreviation)
 		{
 
@@ -394,24 +365,17 @@ namespace CTCClassSchedule.Controllers
 					{
 						Trace.Write(e);
 					}
-
-
 				}
 			}
 
 			return PartialView();
 		}
 
-
-
-
-
-
 		//
 		// POST after submit is clicked
 
 		[HttpPost]
-		[Authorize(Roles = Roles)]  //TODO: Make this configurable
+		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
 		public ActionResult ProgramEdit(FormCollection collection)
 		{
 			string referrer = collection["referrer"];
@@ -487,10 +451,5 @@ namespace CTCClassSchedule.Controllers
 
 			return Redirect(referrer);
 		}
-
-
-
-
-
 	}
 }
