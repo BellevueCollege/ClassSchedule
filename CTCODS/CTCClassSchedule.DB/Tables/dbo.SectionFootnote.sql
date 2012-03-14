@@ -8,10 +8,12 @@ CREATE TABLE [dbo].[SectionFootnote]
 [CustomDescription] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-ALTER TABLE [dbo].[SectionFootnote] ADD CONSTRAINT [PK_SectionFootnote] PRIMARY KEY CLUSTERED  ([ClassID]) ON [PRIMARY]
-GO
 GRANT SELECT ON  [dbo].[SectionFootnote] TO [ClassSchedule_WebUser]
 GRANT UPDATE ON  [dbo].[SectionFootnote] TO [ClassSchedule_WebUser]
+GRANT SELECT ON  [dbo].[SectionFootnote] TO [WebApplicationUser]
 GRANT INSERT ON  [dbo].[SectionFootnote] TO [WebApplicationUser]
 GRANT UPDATE ON  [dbo].[SectionFootnote] TO [WebApplicationUser]
+GO
+
+ALTER TABLE [dbo].[SectionFootnote] ADD CONSTRAINT [PK_SectionFootnote] PRIMARY KEY CLUSTERED  ([ClassID]) ON [PRIMARY]
 GO
