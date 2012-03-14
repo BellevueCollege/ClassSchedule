@@ -3,11 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Ctc.Ods;
@@ -65,7 +62,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				setViewBagVars("", "", letter, repository);
+				SetCommonViewBagVars("", "", letter, repository);
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 				IList<CoursePrefix> courses;
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
@@ -108,60 +105,84 @@ namespace CTCClassSchedule.Controllers
 		}
 
 		/// <summary>
-		/// GET: /Classes/All/{Subject}/
-		/// </summary>
 		///
-
+		/// </summary>
+		/// <param name="Subject"></param>
+		/// <param name="timestart"></param>
+		/// <param name="timeend"></param>
+		/// <param name="day_su"></param>
+		/// <param name="day_m"></param>
+		/// <param name="day_t"></param>
+		/// <param name="day_w"></param>
+		/// <param name="day_th"></param>
+		/// <param name="day_f"></param>
+		/// <param name="day_s"></param>
+		/// <param name="f_oncampus"></param>
+		/// <param name="f_online"></param>
+		/// <param name="f_hybrid"></param>
+		/// <param name="f_telecourse"></param>
+		/// <param name="avail"></param>
+		/// <param name="latestart"></param>
+		/// <param name="numcredits"></param>
+		/// <param name="format"></param>
+		/// <returns></returns>
 		[OutputCache(CacheProfile = "SubjectCacheTime")]
-		public ActionResult Subject(string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
+		public ActionResult Subject(string Subject, string timestart, string timeend,
+																string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s,
+																string f_oncampus, string f_online, string f_hybrid, string f_telecourse,
+																string avail, string latestart, string numcredits, string format)
 		{
-			ViewBag.Subject = Subject;
-			ViewBag.timestart = timestart;
-			ViewBag.timeend = timeend;
-			ViewBag.day_su = day_su;
-			ViewBag.day_m = day_m;
-			ViewBag.day_t = day_t;
-			ViewBag.day_w = day_w;
-			ViewBag.day_th = day_th;
-			ViewBag.day_f = day_f;
-			ViewBag.day_s = day_s;
-
-			IList<ModalityFacetInfo> modality = new List<ModalityFacetInfo>(4);
-			modality.Add(Helpers.getModalityInfo("f_oncampus", "On Campus", f_oncampus) );
-			modality.Add(Helpers.getModalityInfo("f_online", "Online", f_online));
-			modality.Add(Helpers.getModalityInfo("f_hybrid", "Hybrid", f_hybrid));
-			modality.Add(Helpers.getModalityInfo("f_telecourse", "Telecourse", f_telecourse));
-			ViewBag.Modality = modality;
-
-			ViewBag.avail = avail;
-
-			ViewBag.LinkParams = Helpers.getLinkParams(Request);
-
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
-			facets.Add(new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay));
-
-			setProgramInfo(Subject);
-
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				setViewBagVars("", avail, "", repository);
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
+				IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
+				facets.Add(new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay));
 
 				IEnumerable<Course> coursesEnum;
 				if (Subject != null)
 				{
-					coursesEnum = repository.GetCourses(getPrefix(Subject), facets).Distinct();
-					ViewBag.ItemCount = coursesEnum.Count();
-
-					return View(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number));
+					coursesEnum = repository.GetCourses(RealSubjectPrefixes(Subject), facets).Distinct();
 				}
 				else
 				{
 					coursesEnum = repository.GetCourses(facets).Distinct();
-					ViewBag.ItemCount = coursesEnum.Count();
-
-					return View(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number));
 				}
+
+				if (format == "json")
+				{
+					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+					return Json(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number), JsonRequestBehavior.AllowGet);
+				}
+
+				// Display the web page
+				ViewBag.Subject = Subject;
+				ViewBag.timestart = timestart;
+				ViewBag.timeend = timeend;
+				ViewBag.day_su = day_su;
+				ViewBag.day_m = day_m;
+				ViewBag.day_t = day_t;
+				ViewBag.day_w = day_w;
+				ViewBag.day_th = day_th;
+				ViewBag.day_f = day_f;
+				ViewBag.day_s = day_s;
+				ViewBag.avail = avail;
+
+				ViewBag.ItemCount = coursesEnum.Count();
+				ViewBag.LinkParams = Helpers.getLinkParams(Request);
+
+				SetProgramInfoVars(Subject);
+
+				IList<ModalityFacetInfo> modality = new List<ModalityFacetInfo>(4);
+				modality.Add(Helpers.getModalityInfo("f_oncampus", "On Campus", f_oncampus) );
+				modality.Add(Helpers.getModalityInfo("f_online", "Online", f_online));
+				modality.Add(Helpers.getModalityInfo("f_hybrid", "Hybrid", f_hybrid));
+				modality.Add(Helpers.getModalityInfo("f_telecourse", "Telecourse", f_telecourse));
+				ViewBag.Modality = modality;
+
+				SetCommonViewBagVars("", avail, "", repository);
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
+
+				return View(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number));
 			}
 		}
 
@@ -208,7 +229,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				setViewBagVars(YearQuarter, avail, letter, repository);
+				SetCommonViewBagVars(YearQuarter, avail, letter, repository);
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 
 				IList<CoursePrefix> courses;
@@ -293,7 +314,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				setViewBagVars(YearQuarter, avail, "", repository);
+				SetCommonViewBagVars(YearQuarter, avail, "", repository);
 				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
 				ViewBag.QuarterNavMenu = yrqRange;
 				ViewBag.CurrentRegistrationQuarter = yrqRange[0];
@@ -309,12 +330,12 @@ namespace CTCClassSchedule.Controllers
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
-					sections = repository.GetSections(getPrefix(Subject), YRQ, facets);
+					sections = repository.GetSections(RealSubjectPrefixes(Subject), YRQ, facets);
 				}
 
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					setProgramInfo(Subject, db);
+					SetProgramInfoVars(Subject, db);
 
 					IList<SectionWithSeats> sectionsEnum;
 					using (_profiler.Step("Getting app-specific Section records from DB"))
@@ -400,16 +421,12 @@ namespace CTCClassSchedule.Controllers
 					if (sectionsEnum != null && sectionsEnum.Count() > 0)
 					{
 						// Use the real abbreviation as the lookup since we're not longer doing the translation workaround at this level.
-						setProgramInfo(sectionsEnum.First().IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, db, true);
+						SetProgramInfoVars(sectionsEnum.First().IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, db, true);
 					}
 					return View(sectionsEnum);
 				}
 			}
 		}
-
-
-
-
 
 		/// <summary>
 		/// Retrieves and updates Seats Available data for the specified <see cref="Section"/>
@@ -493,7 +510,6 @@ namespace CTCClassSchedule.Controllers
 		///
 		private static dynamic getCourseOutcome(string Subject, string ClassNum)
 		{
-
 			string CourseOutcome = "";
 			try
 			{
@@ -505,118 +521,17 @@ namespace CTCClassSchedule.Controllers
 			}
 			catch
 			{
-
 				CourseOutcome = "Cannot find course outcome for this course or cannot connect to the course outcomes webservice.";
 			}
 			return CourseOutcome;
 		}
 
-
-		/// <summary>
-		/// Gets the course outcome information by scraping the Bellevue College
-		/// course outcomes website
-		/// </summary>
-		private static dynamic getCourseOutcomeOld(string Subject, string ClassNum)
-		{
-			const string SETTING_KEY = "IncludeCourseOutcomes";
-			bool includeCourseOutcomes = false;
-			string returnString = "";
-			string url = "";
-
-			if (ConfigurationManager.AppSettings.AllKeys.Contains(SETTING_KEY))
-			{
-				bool.TryParse(ConfigurationManager.AppSettings[SETTING_KEY], out includeCourseOutcomes);
-			}
-
-			if (includeCourseOutcomes)
-			{
-				if (Subject.Contains("&"))
-				{
-					url = "http://bellevuecollege.edu/courseoutcomes/?CourseID=" + Subject.Replace("&", "") + "^" + ClassNum;
-				}
-				else
-				{
-					url = "http://bellevuecollege.edu/courseoutcomes/?CourseID=" + Subject + "%20" + ClassNum;
-				}
-
-				StringBuilder sb = new StringBuilder();
-
-				byte[] buffer = new byte[8000];
-				HttpWebRequest request = (HttpWebRequest)
-				                         WebRequest.Create(url);
-
-				// execute the request
-				HttpWebResponse response = (HttpWebResponse)
-				                           request.GetResponse();
-
-				// we will read data via the response stream
-				Stream resStream = response.GetResponseStream();
-
-				string tempString = null;
-				int count = 0;
-
-				do
-				{
-					// fill the buffer with data
-					count = resStream.Read(buffer, 0, buffer.Length);
-
-					// make sure we read some data
-					if (count != 0)
-					{
-						// translate from bytes to ASCII text
-						tempString = Encoding.ASCII.GetString(buffer, 0, count);
-
-						// continue building the string
-						sb.Append(tempString);
-					}
-				}
-				while (count > 0); // any more data to read?
-
-
-				//do some error checking. If there is no outcome found, the following String will be returned that we have to clean up:
-				// Error: We didn't find any outcomes for this course.
-				if (sb.ToString().Contains("Error: We"))
-				{
-					returnString = "";
-				}
-				else
-				{
-					returnString = sb.ToString();
-					returnString = stripTitle(returnString);
-				}
-
-
-				// return course outcome page source
-				return returnString;
-			}
-
-			return string.Empty;
-		}
-
-		private static string stripTitle(string returnString)
-		{
-			string temp = returnString;
-			string search1 = "<title>";
-			string search2 = "</title>";
-			int location1 = returnString.IndexOf(search1);
-			int location2 = returnString.IndexOf(search2);
-
-			if (location1 > 0 && location2 > 0) {
-				int range = location2 - location1 + search2.Length;
-				temp = temp.Remove(location1, range);
-			}
-
-
-			return temp;
-		}
-
 		/// <summary>
 		/// Sets all of the common ViewBag variables
 		/// </summary>
-		private void setViewBagVars(string YearQuarter, string avail, string letter, OdsRepository repository)
+		private void SetCommonViewBagVars(string YearQuarter, string avail, string letter, OdsRepository repository)
 		{
 			ViewBag.ErrorMsg = "";
-			var debug = HttpContext.Request;
 			ViewBag.YearQuarter = string.IsNullOrWhiteSpace(YearQuarter) ? null : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 			ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
 
@@ -631,7 +546,7 @@ namespace CTCClassSchedule.Controllers
 		/// <param name="Subject"></param>
 		/// <param name="db"></param>
 		/// <param name="useRealAbbreviation"></param>
-		private void setProgramInfo(string Subject, ClassScheduleDb db = null, bool useRealAbbreviation = false)
+		private void SetProgramInfoVars(string Subject, ClassScheduleDb db = null, bool useRealAbbreviation = false)
 		{
 			using (_profiler.Step("Retrieving course program information"))
 			{
@@ -699,14 +614,18 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 
-
-
 		/// <summary>
-		///
+		/// Gets a list of course prefixes for the specified URL subject
 		/// </summary>
 		/// <param name="URLprefix"></param>
 		/// <returns></returns>
-		private List<string> getPrefix(string URLprefix)
+		/// <remarks>
+		/// The <i>Subject</i> portion of a route URL can reference more than one,
+		/// or a completely different, <see cref="CoursePrefix"/>. This method looks
+		/// up these mappings in the application database for the appropriate
+		/// list of actual prefix abbreviations.
+		/// </remarks>
+		private List<string> RealSubjectPrefixes(string URLprefix)
 		{
 			using (ClassScheduleDb db = new ClassScheduleDb())
 			{
