@@ -14,52 +14,34 @@
 //License and GNU General Public License along with this program.
 //If not, see <http://www.gnu.org/licenses/>.
 using System;
-using System.Collections.Generic;
 
 namespace Ctc.Ods.Types
 {
 	/// <summary>
+	/// Representa the unique ID for a <see cref="Course"/>
 	/// </summary>
-	public interface ICourse : IEquatable<ICourse>
+	/// <remarks>
+	/// This is a combination of the <see cref="Subject"/> and <see cref="Number"/>
+	/// </remarks>
+	public interface ICourseID : IEquatable<ICourseID>
 	{
-		/// <summary>
-		/// The unique ID for the course
-		/// </summary>
-		/// <remarks>
-		/// This is a combination of the <see cref="Subject"/> and <see cref="Number"/>
-		/// </remarks>
-		string CourseID { get;}
-
 		/// <summary>
 		/// Departmental prefix for the course (e.g. ART)
 		/// </summary>
 		/// <seealso cref="Number"/>
-		string Subject { get; }
+		/// <seealso cref="IsCommonCourse"/>
+		string Subject{get;set;}
 
 		/// <summary>
 		/// The (typically numeric) identifier for the course (e.g. 101)
 		/// </summary>
 		/// <seealso cref="Subject"/>
-		string Number { get; }
+		string Number{get;set;}
 
 		/// <summary>
-		/// Short title of the course (e.g. Beginning Art)
+		/// Indicates whether this CourseID represents a <a href="http://www.sbctc.ctc.edu/college/e_commoncoursenumbering.aspx">Common Course</a>
 		/// </summary>
-		string Title { get; }
-
-		/// <summary>
-		/// One or more long descriptions (defined by <see cref="ICourseDescription.YearQuarterBegin">begin date</see>) for the course
-		/// </summary>
-		IEnumerable<CourseDescription> Descriptions { get; }
-
-		/// <summary>
-		/// Number of credits earned upon completion of the course
-		/// </summary>
-		Decimal Credits { get; }
-
-		/// <summary>
-		/// Indicates whether this is a <a href="http://www.sbctc.ctc.edu/college/e_commoncoursenumbering.aspx">Common Course</a>
-		/// </summary>
-		bool IsCommonCourse { get; }
+		/// <seealso cref="Subject"/>
+		bool IsCommonCourse{get;set;}
 	}
 }

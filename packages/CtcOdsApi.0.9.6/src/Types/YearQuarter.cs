@@ -23,31 +23,33 @@ namespace Ctc.Ods.Types
 	/// <summary>
 	///
 	/// </summary>
-    [DataContract]
-    public class YearQuarter : IEquatable<YearQuarter>
+	[DataContract]
+	public class YearQuarter : IEquatable<YearQuarter>
 	{
+		private const int MAX_YEAR_ALLOWED = 2259;
+
 		#region Public members
 		/// <summary>
 		/// The 4-character code that represents this YearQuarterID
 		/// </summary>
-        [DataMember]
-        public string ID { get; internal set; }
+		[DataMember]
+		public string ID { get; internal set; }
 
 		/// <summary>
 		/// The user-friendly name for the quarter (e.g. "Fall 2010")
 		/// </summary>
-        [IgnoreDataMember]
-        public string FriendlyName
-        {
-            get
-            {
-                if (String.IsNullOrWhiteSpace(_friendlyName))
-                {
-                    _friendlyName = ToFriendlyName(ID);
-                }
-                return _friendlyName;
-            }
-        }
+		[IgnoreDataMember]
+		public string FriendlyName
+		{
+			get
+			{
+				if (String.IsNullOrWhiteSpace(_friendlyName))
+				{
+					_friendlyName = ToFriendlyName(ID);
+				}
+				return _friendlyName;
+			}
+		}
 
 		/// <summary>
 		///
@@ -159,17 +161,23 @@ namespace Ctc.Ods.Types
 
 			Regex quarterFormat = new Regex(@"^(FALL?|(SUM|SPR|WIN)\w{0,3})\s*\d{4}$");
 
-			if (! quarterFormat.IsMatch(quarter))
+			if (!quarterFormat.IsMatch(quarter))
 			{
 				throw new ArgumentOutOfRangeException("quarter", "Argument must be a valid quarter title in the form [season]<optional space>[4-digit year]");
 			}
 
-			char [] yrqId = new char[4];
+			// Should end with 4 digits, if passed previous check
+			if (int.Parse(quarter.Substring(quarter.Length - 4)) > MAX_YEAR_ALLOWED)
+			{
+				throw new ArgumentOutOfRangeException("quarter", string.Format("The specified year cannot be larger than '{0}'", MAX_YEAR_ALLOWED));
+			}
 
-			char [] year = quarter.Substring(quarter.Length - 4).ToCharArray();
+			char[] yrqId = new char[4];
+
+			char[] year = quarter.Substring(quarter.Length - 4).ToCharArray();
 			ushort yearDigit = ushort.Parse(year[3].ToString());
 			ushort decadeDigit = ushort.Parse(year[2].ToString());
-			ushort centuryDigit = ushort.Parse(year[0].ToString());
+			ushort century = ushort.Parse(string.Format("{0}{1}",year[0], year[1]));
 
 			switch (quarter.Substring(0, 3))
 			{
@@ -177,13 +185,13 @@ namespace Ctc.Ods.Types
 					yrqId[QUARTER] = '1';
 					yrqId[YEAR1] = year[3];
 					yrqId[YEAR2] = Utility.DigitToChar(Utility.CircularDigitSum(yearDigit, 1));
-					yrqId[YEAR_MOD] = GetYearMod(centuryDigit, decadeDigit);
+					yrqId[YEAR_MOD] = GetYearMod(century, decadeDigit);
 					break;
 				case "FAL":
 					yrqId[QUARTER] = '2';
 					yrqId[YEAR1] = year[3];
 					yrqId[YEAR2] = Utility.DigitToChar(Utility.CircularDigitSum(yearDigit, 1));
-					yrqId[YEAR_MOD] = GetYearMod(centuryDigit, decadeDigit);
+					yrqId[YEAR_MOD] = GetYearMod(century, decadeDigit);
 					break;
 				case "WIN":
 					yrqId[QUARTER] = '3';
@@ -191,11 +199,11 @@ namespace Ctc.Ods.Types
 					yrqId[YEAR2] = year[3];
 					if (decadeDigit == 0)
 					{
-						yrqId[YEAR_MOD] = GetYearMod((ushort)(centuryDigit - 1), Utility.CircularDigitSum(decadeDigit, -1));
+						yrqId[YEAR_MOD] = GetYearMod((ushort)(century - 1), Utility.CircularDigitSum(decadeDigit, -1));
 					}
 					else
 					{
-						yrqId[YEAR_MOD] = GetYearMod(centuryDigit, (ushort)(yearDigit == 0 ? decadeDigit - 1 : decadeDigit));
+						yrqId[YEAR_MOD] = GetYearMod(century, (ushort)(yearDigit == 0 ? decadeDigit - 1 : decadeDigit));
 					}
 					break;
 				case "SPR":
@@ -204,11 +212,11 @@ namespace Ctc.Ods.Types
 					yrqId[YEAR2] = year[3];
 					if (decadeDigit == 0)
 					{
-						yrqId[YEAR_MOD] = GetYearMod((ushort)(centuryDigit - 1), Utility.CircularDigitSum(decadeDigit, -1));
+						yrqId[YEAR_MOD] = GetYearMod((ushort)(century - 1), Utility.CircularDigitSum(decadeDigit, -1));
 					}
 					else
 					{
-						yrqId[YEAR_MOD] = GetYearMod(centuryDigit, (ushort)(yearDigit == 0 ? decadeDigit - 1 : decadeDigit));
+						yrqId[YEAR_MOD] = GetYearMod(century, (ushort)(yearDigit == 0 ? decadeDigit - 1 : decadeDigit));
 					}
 					break;
 			}
@@ -358,7 +366,7 @@ namespace Ctc.Ods.Types
 			if (modifer > '9')
 			{
 				// subtract an ASCII value get a valid year
-				longYear = String.Format("20{0}{1}", (modifer - 65) < 0 ? 0 : (modifer - 65), year);
+				longYear = String.Format("2{0:D2}{1}", (modifer - 65) < 0 ? 0 : (modifer - 65), year);
 			}
 			else
 			{
@@ -391,9 +399,12 @@ namespace Ctc.Ods.Types
 		{
 			int year2 = int.Parse(oldYrq[YEAR2].ToString()) + 1;
 
-			if (year2 == 1) { // starting a new decade
+			if (year2 == 1)
+			{ // starting a new decade
 				newYrq[YEAR_MOD] = Convert.ToChar(oldYrq[YEAR_MOD] + 1);	// Increments the ASCII value, which increments the letter
-			} else {
+			}
+			else
+			{
 				newYrq[YEAR_MOD] = oldYrq[YEAR_MOD];
 			}
 			newYrq[YEAR1] = oldYrq[YEAR2];	// shift the previous 2nd year to the new 1st year, and
@@ -401,15 +412,30 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// Calculates the century character in a YearQuarter <see cref="ID"/>
 		/// </summary>
 		/// <param name="century"></param>
 		/// <param name="decade"></param>
 		/// <returns></returns>
+		/// <remarks>
+		/// E.g. the 'A' in 'A894'
+		/// </remarks>
 		private static char GetYearMod(ushort century, ushort decade)
 		{
-			// 65 = 'A', 48 = '0'
-			return Convert.ToChar((century > 1 ? 65 : 48) + decade);
+			ushort modChar;
+
+			// The year 2000 started using letters for the YRQ ID
+			if (century > 19)
+			{
+				// 65 = 'A'
+				modChar = (ushort)(65 + ushort.Parse(string.Concat(century - 20, decade)));	// strip leading 2 and concatenate. e.g. 21 and 5 => 15
+			}
+			else
+			{
+				// 48 = '0'
+				modChar = (ushort)(48 + decade);
+			}
+			return Convert.ToChar(modChar);
 		}
 
 		#endregion

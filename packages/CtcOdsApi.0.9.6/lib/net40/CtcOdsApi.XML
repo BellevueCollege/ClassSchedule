@@ -283,6 +283,7 @@
             Departmental prefix for the course (e.g. ART)
             </summary>
             <seealso cref="P:Ctc.Ods.Types.ICourse.Number"/>
+            <seealso cref="P:Ctc.Ods.Types.ICourse.IsCommonCourse"/>
         </member>
         <member name="P:Ctc.Ods.Types.ICourse.Number">
             <summary>
@@ -309,6 +310,7 @@
             <summary>
             Indicates whether this is a <a href="http://www.sbctc.ctc.edu/college/e_commoncoursenumbering.aspx">Common Course</a>
             </summary>
+            <seealso cref="P:Ctc.Ods.Types.ICourse.Subject"/>
         </member>
         <member name="M:Ctc.Ods.Types.Course.Equals(Ctc.Ods.Types.Course)">
             <summary>
@@ -660,6 +662,15 @@
             <param name="facetOptions"></param>
             <returns></returns>
 		<exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Ctc.Ods.Data.OdsRepository.SectionCountForCourse(Ctc.Ods.Types.ICourseID,Ctc.Ods.Types.YearQuarter,System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
+            <summary>
+            Retrieves the number of <see cref="T:Ctc.Ods.Types.Section"/>s the specified <see cref="T:Ctc.Ods.Types.Course"/> in the given <see cref="T:Ctc.Ods.Types.YearQuarter"/>
+            </summary>
+            <param name="courseID"></param>
+            <param name="yrq"></param>
+            <param name="facets"></param>
+            <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.Dispose">
             <summary>
@@ -1220,18 +1231,30 @@
         </member>
         <member name="T:Ctc.Ods.Types.ICourseID">
             <summary>
-
+            Representa the unique ID for a <see cref="T:Ctc.Ods.Types.Course"/>
             </summary>
+            <remarks>
+            This is a combination of the <see cref="P:Ctc.Ods.Types.ICourseID.Subject"/> and <see cref="P:Ctc.Ods.Types.ICourseID.Number"/>
+            </remarks>
         </member>
         <member name="P:Ctc.Ods.Types.ICourseID.Subject">
             <summary>
-
+            Departmental prefix for the course (e.g. ART)
             </summary>
+            <seealso cref="P:Ctc.Ods.Types.ICourseID.Number"/>
+            <seealso cref="P:Ctc.Ods.Types.ICourseID.IsCommonCourse"/>
         </member>
         <member name="P:Ctc.Ods.Types.ICourseID.Number">
             <summary>
-
+            The (typically numeric) identifier for the course (e.g. 101)
             </summary>
+            <seealso cref="P:Ctc.Ods.Types.ICourseID.Subject"/>
+        </member>
+        <member name="P:Ctc.Ods.Types.ICourseID.IsCommonCourse">
+            <summary>
+            Indicates whether this CourseID represents a <a href="http://www.sbctc.ctc.edu/college/e_commoncoursenumbering.aspx">Common Course</a>
+            </summary>
+            <seealso cref="P:Ctc.Ods.Types.ICourseID.Subject"/>
         </member>
         <member name="T:Ctc.Ods.Extensions.QueryResultCacheExtension">
             <summary>
@@ -1434,11 +1457,14 @@
         </member>
         <member name="M:Ctc.Ods.Types.YearQuarter.GetYearMod(System.UInt16,System.UInt16)">
             <summary>
-
+            Calculates the century character in a YearQuarter <see cref="P:Ctc.Ods.Types.YearQuarter.ID"/>
             </summary>
             <param name="century"></param>
             <param name="decade"></param>
             <returns></returns>
+            <remarks>
+            E.g. the 'A' in 'A894'
+            </remarks>
         </member>
         <member name="P:Ctc.Ods.Types.YearQuarter.ID">
             <summary>
@@ -2269,6 +2295,12 @@
             This &gt;appSettings&lt; key is currently <i>CurrentDateOverride</i>
             </remarks>
         </member>
+        <member name="M:Ctc.Ods.Utility.GetApiSettings">
+            <summary>
+
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Ctc.Ods.Utility.GetHpTime(System.TimeSpan)">
             <summary>
             Creates a <see cref="T:System.DateTime"/> object which conforms to HP fields - which only contain meaningful time information.
@@ -2962,8 +2994,11 @@
         </member>
         <member name="T:Ctc.Ods.CourseID">
             <summary>
-
+            Representa the unique ID for a <see cref="T:Ctc.Ods.Types.Course"/>
             </summary>
+            <remarks>
+            This is a combination of the <see cref="P:Ctc.Ods.CourseID.Subject"/> and <see cref="P:Ctc.Ods.CourseID.Number"/>
+            </remarks>
         </member>
         <member name="M:Ctc.Ods.CourseID.#ctor(System.String,System.String)">
             <summary>
@@ -2989,10 +3024,10 @@
         </member>
         <member name="M:Ctc.Ods.CourseID.ToString">
             <summary>
-            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:Ctc.Ods.Types.ICourseID"/>.
             </summary>
             <returns>
-            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            A <see cref="T:System.String"/> that represents the current <see cref="T:Ctc.Ods.Types.ICourseID"/>.
             </returns>
             <filterpriority>2</filterpriority>
         </member>
@@ -3055,15 +3090,29 @@
             <param name="right"></param>
             <returns></returns>
         </member>
-        <member name="P:Ctc.Ods.CourseID.Subject">
+        <member name="P:Ctc.Ods.CourseID.CommonCourseChar">
             <summary>
 
             </summary>
         </member>
+        <member name="P:Ctc.Ods.CourseID.Subject">
+            <summary>
+            Departmental prefix for the course (e.g. ART)
+            </summary>
+            <seealso cref="P:Ctc.Ods.CourseID.Number"/>
+            <seealso cref="P:Ctc.Ods.CourseID.IsCommonCourse"/>
+        </member>
         <member name="P:Ctc.Ods.CourseID.Number">
             <summary>
-
+            The (typically numeric) identifier for the course (e.g. 101)
             </summary>
+            <seealso cref="P:Ctc.Ods.CourseID.Subject"/>
+        </member>
+        <member name="P:Ctc.Ods.CourseID.IsCommonCourse">
+            <summary>
+            Indicates whether this CourseID represents a <a href="http://www.sbctc.ctc.edu/college/e_commoncoursenumbering.aspx">Common Course</a>
+            </summary>
+            <seealso cref="P:Ctc.Ods.Types.ICourseID.Subject"/>
         </member>
         <member name="T:Ctc.Ods.Data.SectionEntity">
             <summary>

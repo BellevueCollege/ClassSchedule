@@ -601,7 +601,8 @@ namespace Ctc.Ods.Data
 		/// <returns></returns>
 		public IList<Section> GetSections(IList<ICourseID> courseIds, YearQuarter yrq = null, IList<ISectionFacet> facetOptions = null)
 		{
-			string[] ids = courseIds.Select(c => c.ToString()).ToArray();
+			// removing all whitespace
+			string[] ids = courseIds.Select(c => string.Concat(c.Subject, c.Number)).ToArray();
 
 			SectionFilters filters = new SectionFilters(this);
 
@@ -610,7 +611,9 @@ namespace Ctc.Ods.Data
 				string yrqId = yrq.ID;
 				filters.Add(s => s.YearQuarterID == yrqId);
 			}
-			filters.Add(s => ids.Contains(s.CourseID.Trim()));
+			// compare with whitespace removed
+			filters.Add(s => ids.Contains(string.Concat(s.CourseID.Substring(0, 5).Trim(), s.CourseID.Substring(5).Trim())));
+			// add remaining facets
 			filters.Add(facetOptions);
 
 			IQueryable<Section> sections = GetSections(filters);
@@ -815,6 +818,34 @@ namespace Ctc.Ods.Data
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Retrieves the number of <see cref="Section"/>s the specified <see cref="Course"/> in the given <see cref="YearQuarter"/>
+		/// </summary>
+		/// <param name="courseID"></param>
+		/// <param name="yrq"></param>
+		/// <param name="facets"></param>
+		/// <returns></returns>
+		public int SectionCountForCourse(ICourseID courseID, YearQuarter yrq, IList<ISectionFacet> facets = null)
+		{
+			SectionFilters filters = new SectionFilters(this);
+
+			string yrqID = yrq.ID;
+			filters.Add(s => s.YearQuarterID == yrqID);
+
+			if (facets != null)
+			{
+				filters.Add(facets);
+			}
+
+			string subject = courseID.IsCommonCourse ? string.Concat(courseID.Subject, Settings.RegexPatterns.CommonCourseChar) : courseID.Subject;
+
+			filters.Add(s => s.CourseID.Substring(0, 5).Trim().ToUpper() == subject.ToUpper() && s.CourseID.EndsWith(courseID.Number));
+
+			int sectionCount = _DbContext.Sections.CompoundWhere(filters.FilterArray).Count();
+
+			return sectionCount;
+		}
 
 		#region Implementation of Dispose
 		/// <summary>
