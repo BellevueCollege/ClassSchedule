@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Ctc.Ods.Types;
 
 namespace CTCClassSchedule
 {
@@ -26,7 +27,6 @@ namespace CTCClassSchedule
 			_footnoteInstances = GetFootnoteInstances(sec.FootnoteInstances);
 		}
 
-
 		/// <summary>
 		/// Returns a footnote message element based on the name.
 		/// </summary>
@@ -37,51 +37,91 @@ namespace CTCClassSchedule
 			return _footnoteInstances[footnoteName];
 		}
 
+    /// <summary>
+    /// Takes a SectionWithSeats and produces all automated messages that the section should display.
+    /// </summary>
+    /// <param name="section">The section to base the generated footnote messages on.</param>
+    /// <returns>A string of all automated footnote messages concatenated.</returns>
+    public static string getAutomatedFootnotesText(SectionWithSeats section)
+    {
+			string wSpace = section.Footnotes.Count() == 0 ? string.Empty : " ";
+			string footenoteText = buildFootnoteText(section.IsLateStart,
+																								section.IsDifferentEndDate,
+																								section.IsHybrid,
+																								section.IsContinuousEnrollment,
+																								section.StartDate.GetValueOrDefault(DateTime.Now),
+																								section.EndDate.GetValueOrDefault(DateTime.Now));
+			return wSpace + footenoteText;
+    }
+
 		/// <summary>
 		/// Takes a Section and produces all automated messages that the section should display.
 		/// </summary>
 		/// <param name="section">The section to base the generated footnote messages on.</param>
 		/// <returns>A string of all automated footnote messages concatenated.</returns>
-		public static string getAutomatedFootnotesText(SectionWithSeats section)
+		public static string getAutomatedFootnotesText(Section section)
+		{
+			string wSpace = section.Footnotes.Count() == 0 ? string.Empty : " ";
+			string footenoteText = buildFootnoteText(section.IsLateStart,
+																								section.IsDifferentEndDate,
+																								section.IsHybrid,
+																								section.IsContinuousEnrollment,
+																								section.StartDate.GetValueOrDefault(DateTime.Now),
+																								section.EndDate.GetValueOrDefault(DateTime.Now));
+			return wSpace + footenoteText;
+		}
+
+		/// <summary>
+		/// Gets automated footnotes based on boolean values passed to the method.
+		/// This is useful if you are handling either Section or SectionWithSeats objects.
+		/// </summary>
+		/// <param name="lateStartFlag">Is the course a late start course.</param>
+		/// <param name="differentEndDateFlag">Does the course have a different end date than normal.</param>
+		/// <param name="hybridFlag">Is this a hybrid course.</param>
+		/// <param name="continuousEnrollmentFlag">Is this course a continuous enrollment.</param>
+		/// <param name="startDate">The courses scheduled start date.</param>
+		/// <param name="endDate">The courses scheduled end date.</param>
+		/// <returns>All relevant automated footnotes in one concatenated string.</returns>
+		private static string buildFootnoteText(Boolean lateStartFlag, Boolean differentEndDateFlag, Boolean hybridFlag, Boolean continuousEnrollmentFlag, DateTime startDate, DateTime endDate)
 		{
 			string footnoteTextResult = string.Empty;
 			string dateParam = "{DATE}";
 			string dateText;
 			AutomatedFootnoteElement footnote;
-			string wSpace = section.Footnotes.Count() == 0 ? string.Empty : " ";
 
 			// If the section has a late start
-			if (section.IsLateStart)
+			if (lateStartFlag)
 			{
 				footnote = Footnotes("lateStart");
-				dateText = section.StartDate.GetValueOrDefault(DateTime.Now).ToString(footnote.StringFormat);
-				footnoteTextResult += wSpace + Footnotes("lateStart").Text.Replace(dateParam, dateText);
+				dateText = startDate.ToString(footnote.StringFormat);
+				footnoteTextResult += footnote.Text.Replace(dateParam, dateText) + " ";
 			}
 
 			// If the section has a different end date than usual
-			if (section.IsDifferentEndDate)
+			if (differentEndDateFlag)
 			{
-				footnote = Footnotes("lateStart");
-				dateText = section.EndDate.GetValueOrDefault(DateTime.Now).ToString(footnote.StringFormat);
-				footnoteTextResult += wSpace + Footnotes("endDate").Text.Replace(dateParam, dateText);
+				footnote = Footnotes("endDate");
+				dateText = endDate.ToString(footnote.StringFormat);
+				footnoteTextResult += footnote.Text.Replace(dateParam, dateText) + " ";
 			}
 
 			// If the section is a hybrid section
-			if (section.IsHybrid)
+			if (hybridFlag)
 			{
-				footnoteTextResult += wSpace + Footnotes("hybrid").Text;
+				footnoteTextResult += Footnotes("hybrid").Text;
 			}
 
 			// If the section is a continuous enrollment section
-			if (section.IsContinuousEnrollment)
+			if (continuousEnrollmentFlag)
 			{
 				footnote = Footnotes("continuousEnrollment");
-				dateText = section.LastRegistrationDate != DateTime.MinValue ? section.LastRegistrationDate.ToString(footnote.StringFormat) : "*UNK*";
-				footnoteTextResult += wSpace + Footnotes("continuousEnrollment").Text.Replace(dateParam, dateText);
+				dateText = endDate.ToString(footnote.StringFormat);
+				footnoteTextResult += footnote.Text.Replace(dateParam, dateText) + " ";
 			}
 
-			return footnoteTextResult;
+			return footnoteTextResult.Trim();
 		}
+
 
 		/// <summary>
 		/// Returns a dictionary of all elements within a given collection of footnote messages.
