@@ -34,16 +34,14 @@ namespace CTCClassSchedule
 			routes.MapRoute("ApiClassEdit", "Api/ClassEdit", new { controller = "Api", action = "ClassEdit" });
 			routes.MapRoute("ApiProgramEdit", "Api/ProgramEdit", new { controller = "Api", action = "ProgramEdit" });
 
+			// Couese data export for paper class schedule
+			routes.MapRoute("CoursesExport", "Export/{YearQuarterID}", new { controller = "Classes", action = "Export", YearQuarterID = UrlParameter.Optional });
+
 			// Authentication
 			routes.MapRoute("LogOn", "Authenticate", new { controller = "Classes", action = "Authenticate" });
 			routes.MapRoute("LogOut", "Logout", new { controller = "Classes", action = "Logout" });
 
-			// Couese data export
-			//	*** Temp route for testing purposes ***
-			routes.MapRoute("CoursesExport", "Export/{YearQuarterID}", new { controller = "Classes", action = "Export", YearQuarterID = UrlParameter.Optional });
-
-			// default application routes
-
+			// Default application routes
 			routes.MapRoute("getSeats", "getseats", new { controller = "Classes", action = "getSeats" });
 			routes.MapRoute("ClassDetails", "{YearQuarterID}/{Subject}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
 			routes.MapRoute("Subject", "All/{Subject}", new { controller = "Classes", action = "Subject" });
