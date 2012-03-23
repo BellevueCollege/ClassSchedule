@@ -38,6 +38,10 @@ namespace CTCClassSchedule
 			routes.MapRoute("LogOn", "Authenticate", new { controller = "Classes", action = "Authenticate" });
 			routes.MapRoute("LogOut", "Logout", new { controller = "Classes", action = "Logout" });
 
+			// Couese data export
+			//	*** Temp route for testing purposes ***
+			routes.MapRoute("CoursesExport", "Export/{YearQuarterID}", new { controller = "Classes", action = "Export", YearQuarterID = UrlParameter.Optional });
+
 			// default application routes
 
 			routes.MapRoute("getSeats", "getseats", new { controller = "Classes", action = "getSeats" });

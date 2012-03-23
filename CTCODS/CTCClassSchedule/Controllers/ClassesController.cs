@@ -16,6 +16,8 @@ using CTCClassSchedule.Models;
 using CTCClassSchedule.Properties;
 using MvcMiniProfiler;
 using System.Globalization;
+using System.Web;
+using System.Text;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -46,6 +48,88 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
 			}
 			return View();
+		}
+
+		/// <summary>
+		/// GET: /Classes/Export/{YearQuarterID}
+		/// </summary>
+		/// <returns>A Adobe InDesign formatted file with all Course data.</returns>
+		public void Export(String YearQuarterID)
+		{
+			// Use this to convert strings to byte arrays
+			System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+			StringBuilder fileText = new StringBuilder();
+
+			// Get a sorted collections of sections, collated by division
+			IList<vw_ProgramInformation> programs = new List<vw_ProgramInformation>();
+			IDictionary<vw_ProgramInformation, List<SectionWithSeats>> divisions = new Dictionary<vw_ProgramInformation, List<SectionWithSeats>>();
+			YearQuarter yrq;
+			using (OdsRepository _db = new OdsRepository())
+			{
+				if (String.IsNullOrEmpty(YearQuarterID))
+				{
+					yrq = _db.CurrentYearQuarter;
+				}
+				else
+				{
+					yrq = Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID);
+				}
+			}
+			divisions = getSectionsByDivision(yrq);
+
+			// Create file data
+			foreach (vw_ProgramInformation program in divisions.Keys)
+			{
+				fileText.AppendLine();
+				fileText.AppendLine(String.Concat("<CLS1>", program.Title));
+				if (!String.IsNullOrEmpty(program.Intro))
+				{
+					fileText.AppendLine(String.Concat("<CLSP>", program.Intro));
+				}
+
+				string line = string.Empty;
+				SectionWithSeats previousSection = new SectionWithSeats();
+				foreach (SectionWithSeats section in divisions[program])
+				{
+					// Build all section information such as title and footnotes
+					if (section.CourseNumber != previousSection.CourseNumber ||
+						  section.Credits != previousSection.Credits ||
+							section.CourseTitle != previousSection.CourseTitle)
+					{
+						buildSectionExportText(fileText, section);
+					}
+					previousSection = section;
+
+					// Compile list of all offered instances of the section
+					foreach (OfferedItem item in section.Offered.OrderBy(o => o.SequenceOrder))
+					{
+						buildOfferedItemsExportText(fileText, section, item);
+					}
+
+					// Section and course footnotes
+					line = String.Concat(section.CourseFootnotes, String.IsNullOrEmpty(section.CourseFootnotes.Trim()) ? string.Empty : " ", section.SectionFootnotes);
+					if (!String.IsNullOrEmpty(line.Trim()))
+					{
+						fileText.AppendLine(String.Concat("<CLSX>", line.Trim()));
+					}
+
+					line = AutomatedFootnotesConfig.getAutomatedFootnotesText(section);
+					if (!String.IsNullOrEmpty(line.Trim()))
+					{
+						fileText.AppendLine(String.Concat("<CLSY>", line.Trim()));
+					}
+				}
+			}
+
+			// Write the file as an HTTP response
+			string fileName = String.Concat("CourseData-", yrq.ID, "-", DateTime.Now.ToShortDateString(), ".txt");
+			fileText.Remove(0, 1); // Remove the first line break
+			byte[] fileData = encoding.GetBytes(fileText.ToString());
+			HttpResponseBase response = ControllerContext.HttpContext.Response;
+			string contentDisposition = String.Concat("attachment; filename=", fileName);
+			response.AddHeader("Content-Disposition", contentDisposition);
+			response.ContentType = "application/force-download";
+			response.BinaryWrite(fileData);
 		}
 
 
@@ -191,7 +275,6 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/
 		/// </summary>
-
 		[OutputCache(CacheProfile = "YearQuarterCacheTime")]
 		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter, string latestart, string numcredits)
 		{
@@ -286,7 +369,6 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
-
 		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")] // Caches for 30 minutes
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
 		{
@@ -500,14 +582,232 @@ namespace CTCClassSchedule.Controllers
 		#endregion
 
 
-
-
 		#region helper methods
+		/// <summary>
+		/// Takes a section and StringBuilder and appends the section title, and HP footnotes
+		/// in an Adobe InDesign format so that the data can be added to a file. The file is useful
+		/// when printing the paper version of the class schedule.
+		/// </summary>
+		/// <param name="text">The StringBuilder that the data should be added to.</param>
+		/// <param name="section">The SectionWithSeats object whose data should be recorded.</param>
+		private static void buildSectionExportText(StringBuilder text, SectionWithSeats section)
+		{
+			string creditsText;
+			string line;
+
+			creditsText = section.Credits.ToString();
+			if (section.Credits == Math.Floor(section.Credits)) { creditsText = creditsText.Remove(creditsText.IndexOf('.')); }
+			creditsText = String.Concat(section.IsVariableCredits ? "V 1-" : string.Empty, creditsText, " CR");
+
+			// Section title
+			text.AppendLine();
+			line = String.Concat("<CLS2>", section.CourseSubject, section.IsCommonCourse ? "&" : string.Empty, " ", section.CourseNumber, "\t", section.CourseTitle, " - ", creditsText);
+			text.AppendLine(line);
+
+
+			// Add HP footnotes
+			if (section.Footnotes.Count() > 0)
+			{
+				text.AppendLine(String.Concat("<CLS3>", string.Join(" ", section.Footnotes)));
+			}
+		}
+
+		/// <summary>
+		/// Takes section, offered item, and StringBuilder and appends data related to the offered item
+		/// in an Adobe InDesign format so that the data can be added to a file. The file is useful
+		/// when printing the paper version of the class schedule.
+		/// </summary>
+		/// <param name="text">The StringBuilder that the data should be added to.</param>
+		/// <param name="section">The SectionWithSeats object that the OfferedItem belongs to.</param>
+		/// <param name="item">The OfferedItem object whose data should be recorded.</param>
+		private static void buildOfferedItemsExportText(StringBuilder text, SectionWithSeats section, OfferedItem item)
+		{
+			// Configurables
+			string onlineDaysStr = "[online]";
+			string onlineRoomStr = "D110";
+			string distanceEdMinStr = "7000";
+			string distanceEdMaxStr = "ZZZZ";
+			string arrangedStr = "Arranged";
+			string instructorDefaultNameStr = "staff";
+			TimeSpan eveningCourse = new TimeSpan(17, 30, 0);
+
+			string daysStr;
+			string roomStr;
+			string line = string.Empty;
+			string tagStr = string.Empty;
+			string startTimeStr = string.Empty;
+			string endTimeStr = string.Empty;
+			string instructorName = string.Empty;
+			DateTime startTime;
+
+			// Build the line that describes the offered instance of the course
+			tagStr = "<CLS5>";
+			if (item.IsPrimary || !item.IsPrimary && !String.IsNullOrEmpty(item.InstructorName))
+			{
+				instructorName = getNameShortFormat(item.InstructorName) ?? instructorDefaultNameStr;
+			}
+			if (item.StartTime != null && item.EndTime != null) // Handle normal daily and evening courses
+			{
+				startTimeStr = item.StartTime.Value.ToString("h:mmt").ToLower();
+				endTimeStr = item.EndTime.Value.ToString("h:mmt").ToLower();
+				startTime = item.StartTime.Value;
+				if (new TimeSpan(startTime.Hour, startTime.Minute, startTime.Second) >= eveningCourse) { tagStr = "<CLS6>"; }
+
+				if (item.IsPrimary)
+				{
+					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", section.SectionCode, "\t", instructorName, "\t", item.Days, "\t", startTimeStr, "-", endTimeStr, "\t", item.Room);
+				}
+				else
+				{
+					line = String.Concat(tagStr, "\t\t\t", instructorName, "\t", item.Days, "\t", startTimeStr, "-", endTimeStr, "\t", item.Room);
+				}
+			}
+			else if (section.IsOnline) // Handle online courses
+			{
+				if (item.IsPrimary)
+				{
+					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", section.SectionCode, "\t", instructorName, "\t", onlineDaysStr, "\t", item.Room ?? onlineRoomStr);
+				}
+				else
+				{
+					line = String.Concat(tagStr, "\t\t\t", instructorName, "\t", onlineDaysStr, "\t", item.Room ?? onlineRoomStr);
+				}
+			}
+			else // Handle Distance Ed or arranged courses
+			{
+				daysStr = item.Days;
+				roomStr = String.Concat("\t", item.Room);
+				if (section.ID.ItemNumber.CompareTo(distanceEdMinStr) >= 0 && section.ID.ItemNumber.CompareTo(distanceEdMaxStr) <= 0)
+				{
+					tagStr = "<CLSD>";
+				}
+				else if (item.Days == arrangedStr)
+				{
+					tagStr = "<CLSA>";
+					daysStr = String.Concat("\t", arrangedStr.ToLower());
+					if (String.IsNullOrEmpty(item.Room))
+					{
+						roomStr = string.Empty;
+					}
+				}
+
+				if (item.IsPrimary)
+				{
+					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", section.SectionCode, "\t", instructorName, "\t", daysStr, roomStr);
+				}
+				else
+				{
+					line = String.Concat(tagStr, "\t\t\t", instructorName, "\t", daysStr, roomStr);
+				}
+			}
+
+			// Append the line to the file
+			text.AppendLine(line);
+		}
+
+		/// <summary>
+		/// Take a full name and converts it to a short format, with the last name and first initial of
+		/// the first name (e.g. ANDREW CRASWELL -> CRASWELL A).
+		/// </summary>
+		/// <param name="fullName">The full name to be converted.</param>
+		/// <returns>A string with the short name version of the full name.</returns>
+		private static string getNameShortFormat(string fullName)
+		{
+			string shortName = null;
+			if (!String.IsNullOrEmpty(fullName.Trim()))
+			{
+				int nameStartIndex = fullName.IndexOf(" ") + 1;
+				int nameEndIndex = fullName.Length - nameStartIndex;
+				shortName = String.Concat(fullName.Substring(nameStartIndex, nameEndIndex), " ", fullName.Substring(0, 1));
+			}
+
+			return shortName;
+		}
+
+		/// <summary>
+		/// Gets all the sections in a given quarter and sorts them into a dictionary by division.
+		/// </summary>
+		/// <param name="yrq">The quarter to fetch sections for.</param>
+		/// <returns>A dictionary where they key is the division, and the values are the corresponding lists of Sections.</returns>
+		private IDictionary<vw_ProgramInformation, List<SectionWithSeats>> getSectionsByDivision(YearQuarter yrq)
+		{
+			IList<Section> allSections;
+			IList<CoursePrefix> subjects = new List<CoursePrefix>();
+			IDictionary<vw_ProgramInformation, List<SectionWithSeats>> results = new Dictionary<vw_ProgramInformation, List<SectionWithSeats>>();
+			using (OdsRepository _db = new OdsRepository())
+			{
+				// Get subject and program information
+				subjects = _db.GetCourseSubjects(yrq).Distinct().ToList();
+
+				// Get all sections for the given quarter
+				allSections = _db.GetSections(yrq);
+			}
+
+			IList<vw_ProgramInformation> programs = new List<vw_ProgramInformation>();
+			IList<SectionWithSeats> allSectionsWithSeats;
+			using (ClassScheduleDb _csDb = new ClassScheduleDb())
+			{
+				// Get a sorted list of all programs
+				programs = _csDb.vw_ProgramInformation.OrderBy(p => p.URL).ToList();
+
+				// Convert all Sections to SectionsWithSeats so we get footnote data
+				allSectionsWithSeats = Helpers.getSectionsWithSeats(yrq.ID, allSections, _csDb);
+			}
+
+
+			// Get and sort all sections
+			IList<SectionWithSeats> tempSections;
+			vw_ProgramInformation currentProgram = new vw_ProgramInformation();
+			vw_ProgramInformation lastProgram = new vw_ProgramInformation();
+			string commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar;
+			foreach (vw_ProgramInformation program in programs)
+			{
+				if (lastProgram.URL != program.URL) // New division
+				{
+					// Sort the sections in the last division
+					if (results.ContainsKey(currentProgram))
+					{
+						if (results[currentProgram].Count > 0)
+						{
+							results[currentProgram] = results[currentProgram].OrderBy(s => s.CourseNumber)
+																															 .ThenByDescending(s => s.IsOnCampus)
+																															 .ThenByDescending(s => s.IsHybrid)
+																															 .ThenByDescending(s => s.IsOnline)
+																															 .ThenByDescending(s => s.IsTelecourse)
+																															 .ThenBy(s => s.SectionCode).ToList();
+						}
+						else
+						{
+							results.Remove(lastProgram);
+						}
+					}
+					lastProgram = program;
+
+					// Create a new division
+					if (subjects.Where(s => s.Subject == program.AbbreviationTrimmed).Count() > 0)
+					{
+						results.Add(program, new List<SectionWithSeats>());
+						currentProgram = program;
+					}
+					else // If the program has no sections this quarter
+					{
+						continue;
+					}
+				}
+
+				// Collate sections into the current division
+				bool isCommonCourse = program.Abbreviation.Contains(commonCourseChar);
+				tempSections = allSectionsWithSeats.Where(s => s.CourseSubject == program.AbbreviationTrimmed && s.IsCommonCourse == isCommonCourse).ToList();
+				results[currentProgram].AddRange(tempSections);
+			}
+
+			return results;
+		}
+
 		/// <summary>
 		/// Gets the course outcome information by scraping the Bellevue College
 		/// course outcomes website
 		/// </summary>
-		///
 		private static dynamic getCourseOutcome(string Subject, string ClassNum)
 		{
 			string CourseOutcome = "";
