@@ -4,88 +4,6 @@
         <name>CtcOdsApi</name>
     </assembly>
     <members>
-        <member name="T:Ctc.Ods.DaysFacet">
-            <summary>
-
-            </summary>
-        </member>
-        <member name="T:Ctc.Ods.ISectionFacet">
-            <summary>
-            Provides a common interface for defining live filters (e.g. <i>facets</i>)
-            </summary>
-        </member>
-        <member name="M:Ctc.Ods.ISectionFacet.GetFilter``1(System.Data.Entity.DbContext)">
-            <summary>
-            Provides the appropriate anonymous method for a LINQ .Where() call, depending on the option specified
-            </summary>
-            <param name="dbContext"></param>
-        </member>
-        <member name="M:Ctc.Ods.DaysFacet.#ctor(Ctc.Ods.DaysFacet.Options)">
-            <summary>
-
-            </summary>
-            <param name="option"></param>
-        </member>
-        <member name="M:Ctc.Ods.DaysFacet.GetFilter``1(System.Data.Entity.DbContext)">
-            <summary>
-            Provides the appropriate anonymous method for a LINQ .Where() call, depending on the option specified
-            </summary>
-            <note>This method assumes that the <b>Title</b> field in the database contains unique values AND the existence of certain values.</note>
-            <param name="dbContext"></param>
-            <exception cref="T:System.ArgumentNullException"><paramref name="dbContext"/> is null.</exception>
-            <exception cref="T:System.InvalidOperationException">A valid option value was not specified when the class was instantiated.</exception>
-        </member>
-        <member name="M:Ctc.Ods.DaysFacet.GetDaysTitle">
-            <summary>
-
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:Ctc.Ods.DaysFacet.Options">
-            <summary>
-            Options for which <see cref="T:Ctc.Ods.Types.Section"/>s to include
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.DaysFacet.Options.All">
-            <summary>
-            All days
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.DaysFacet.Options.Sunday">
-            <summary>
-            Sunday
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.DaysFacet.Options.Monday">
-            <summary>
-            Monday
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.DaysFacet.Options.Tuesday">
-            <summary>
-            Tuesday
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.DaysFacet.Options.Wednesday">
-            <summary>
-            Wednesday
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.DaysFacet.Options.Thursday">
-            <summary>
-            Thursday
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.DaysFacet.Options.Friday">
-            <summary>
-            Friday
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.DaysFacet.Options.Saturday">
-            <summary>
-            Saturday
-            </summary>
-        </member>
         <member name="T:Ctc.Ods.Data.CourseEntity">
             <summary>
             Internal entity object for use in database access
@@ -168,6 +86,48 @@
             The HP3000 allows two footnotes per Course.
             </remarks>
             <seealso cref="P:Ctc.Ods.Data.CourseEntity.FootnoteID1"/>
+        </member>
+        <member name="T:Ctc.Ods.RegistrationQuartersFacet">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Ctc.Ods.ISectionFacet">
+            <summary>
+            Provides a common interface for defining live filters (e.g. <i>facets</i>)
+            </summary>
+        </member>
+        <member name="T:Ctc.Ods.IDataFacet">
+            <summary>
+
+            </summary>
+        </member>
+        <member name="M:Ctc.Ods.ISectionFacet.GetFilter``1(System.Data.Entity.DbContext)">
+            <summary>
+            Provides the appropriate anonymous method for a LINQ .Where() call, depending on the option specified
+            </summary>
+            <param name="dbContext"></param>
+        </member>
+        <member name="M:Ctc.Ods.RegistrationQuartersFacet.#ctor">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Ctc.Ods.RegistrationQuartersFacet.#ctor(System.Int32)">
+            <summary>
+            </summary>
+            <param name="quarterCount"></param>
+            <exception cref="T:System.InvalidOperationException"><paramref name="quarterCount"/> cannot be zero (0).</exception>
+        </member>
+        <member name="M:Ctc.Ods.RegistrationQuartersFacet.GetFilter``1(System.Data.Entity.DbContext)">
+            <summary>
+            Provides the appropriate anonymous method for a LINQ .Where() call, depending on the option specified
+            </summary>
+            <param name="dbContext"></param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="dbContext"/>Is null, or is not a valid <see cref="T:Ctc.Ods.Data.OdsContext"/> object.</exception>
+        </member>
+        <member name="P:Ctc.Ods.RegistrationQuartersFacet.Settings">
+            <summary>
+
+            </summary>
         </member>
         <member name="T:Ctc.Ods.Customizations.PeninsulaCollegeCourseDescriptionStrategy">
             <summary>
@@ -261,6 +221,84 @@
             </returns>
             <exception cref="T:System.ArgumentNullException"><paramref name="yrq"/> is null.</exception>
         </member>
+        <member name="T:Ctc.Ods.AvailabilityFacet">
+            <summary>
+             Defines which <see cref="T:Ctc.Ods.Types.Section"/>s to include based on availability
+            </summary>
+             <remarks>
+             An "available" <see cref="T:Ctc.Ods.Types.Section"/> is currently defined as:
+             <list type="bullet">
+			<item>
+				<description>
+				<b>Normal Section:</b> <i>ClassCapacity</i> - <i>StudentsEnrolled</i>
+				</description>
+			</item>
+			<item>
+				<description>
+				<b>Clustered Section:</b> max(<i>ClusterCapacity</i>) - sum(<i>StudentsEnrolled</i>)
+				</description>
+			</item>
+			<item>
+				<description>
+				<b>And</b> Does not have a <see cref="P:Ctc.Ods.Data.OdsContext.WaitListCounts">Waitlist</see>
+				</description>
+			</item>
+             </list>
+
+             NOTE: If these rules do not match the logic needed by your school, create a custom "availability" <see cref="T:Ctc.Ods.ISectionFacet">Facet</see> to use instead.
+
+             </remarks>
+        </member>
+        <member name="M:Ctc.Ods.AvailabilityFacet.#ctor(Ctc.Ods.AvailabilityFacet.Options)">
+            <summary>
+             Creates a new Facet with the <see cref="T:Ctc.Ods.AvailabilityFacet.Options"/> specified
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="M:Ctc.Ods.AvailabilityFacet.GetFilter``1(System.Data.Entity.DbContext)">
+            <summary>
+            Gets filter to only include <see cref="T:Ctc.Ods.Types.Section"/>s which are "available"
+            </summary>
+            <param name="dbContext"></param>
+            <remarks>
+            An "available" <see cref="T:Ctc.Ods.Types.Section"/> is currently defined as:
+            <list type="bullet">
+		<item>
+			<description>
+			<b>Normal Section:</b> <i>ClassCapacity</i> - <i>StudentsEnrolled</i>
+			</description>
+		</item>
+		<item>
+			<description>
+			<b>Clustered Section:</b> max(<i>ClusterCapacity</i>) - sum(<i>StudentsEnrolled</i>)
+			</description>
+		</item>
+		<item>
+			<description>
+			<b>And</b> Does not have a <see cref="P:Ctc.Ods.Data.OdsContext.WaitListCounts">Waitlist</see>
+			</description>
+		</item>
+            </list>
+
+            NOTE: If these rules do not match the logic needed by your school, create a custom "availability" <see cref="T:Ctc.Ods.ISectionFacet">Facet</see> to use instead.
+
+            </remarks>
+            <exception cref="T:System.ArgumentNullException"><paramref name="dbContext"/>Is null, or is not a valid <see cref="T:Ctc.Ods.Data.OdsContext"/></exception>
+        </member>
+        <member name="T:Ctc.Ods.AvailabilityFacet.Options">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.AvailabilityFacet.Options.All">
+            <summary>
+             All Sections
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.AvailabilityFacet.Options.Open">
+            <summary>
+             Sections that have available seats
+            </summary>
+        </member>
         <member name="T:Ctc.Ods.Types.Course">
             <summary>
             Defines a college course offered to students
@@ -268,6 +306,11 @@
         </member>
         <member name="T:Ctc.Ods.Types.ICourse">
             <summary>
+            </summary>
+        </member>
+        <member name="T:Ctc.Ods.Types.IRichDataObject">
+            <summary>
+
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ICourse.CourseID">
@@ -672,6 +715,15 @@
             <param name="facets"></param>
             <returns></returns>
         </member>
+        <member name="M:Ctc.Ods.Data.OdsRepository.SectionCountForCourse(System.String,Ctc.Ods.Types.YearQuarter,System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
+            <summary>
+            Retrieves the number of <see cref="T:Ctc.Ods.Types.Section"/>s the specified <see cref="T:Ctc.Ods.Types.Course"/> subject in the given <see cref="T:Ctc.Ods.Types.YearQuarter"/>
+            </summary>
+            <param name="subject"></param>
+            <param name="yrq"></param>
+            <param name="facets"></param>
+            <returns></returns>
+        </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.Dispose">
             <summary>
 
@@ -761,6 +813,77 @@
 		</example>
             </remarks>
             <seealso cref="M:Ctc.Ods.LinqExtensions.CompoundWhere``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}}[])"/>
+        </member>
+        <member name="T:Ctc.Ods.DaysFacet">
+            <summary>
+
+            </summary>
+        </member>
+        <member name="M:Ctc.Ods.DaysFacet.#ctor(Ctc.Ods.DaysFacet.Options)">
+            <summary>
+
+            </summary>
+            <param name="option"></param>
+        </member>
+        <member name="M:Ctc.Ods.DaysFacet.GetFilter``1(System.Data.Entity.DbContext)">
+            <summary>
+            Provides the appropriate anonymous method for a LINQ .Where() call, depending on the option specified
+            </summary>
+            <note>This method assumes that the <b>Title</b> field in the database contains unique values AND the existence of certain values.</note>
+            <param name="dbContext"></param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="dbContext"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">A valid option value was not specified when the class was instantiated.</exception>
+        </member>
+        <member name="M:Ctc.Ods.DaysFacet.GetDaysTitle">
+            <summary>
+
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Ctc.Ods.DaysFacet.Options">
+            <summary>
+            Options for which <see cref="T:Ctc.Ods.Types.Section"/>s to include
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.DaysFacet.Options.All">
+            <summary>
+            All days
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.DaysFacet.Options.Sunday">
+            <summary>
+            Sunday
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.DaysFacet.Options.Monday">
+            <summary>
+            Monday
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.DaysFacet.Options.Tuesday">
+            <summary>
+            Tuesday
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.DaysFacet.Options.Wednesday">
+            <summary>
+            Wednesday
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.DaysFacet.Options.Thursday">
+            <summary>
+            Thursday
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.DaysFacet.Options.Friday">
+            <summary>
+            Friday
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.DaysFacet.Options.Saturday">
+            <summary>
+            Saturday
+            </summary>
         </member>
         <member name="T:Ctc.Ods.Types.CoursePrefix">
             <summary>
@@ -857,24 +980,6 @@
             </summary>
             <seealso cref="P:Ctc.Ods.Types.CoursePrefix.Subject"/>
         </member>
-        <member name="T:Ctc.Ods.TimeFacet">
-            <summary>
-            Defines a <see cref="T:Ctc.Ods.Types.Section"/> filter by start and end times
-            </summary>
-        </member>
-        <member name="M:Ctc.Ods.TimeFacet.#ctor(System.TimeSpan,System.TimeSpan)">
-            <summary>
-            Creates a new <see cref="T:Ctc.Ods.Types.Section"/> filter by specifying a start and end time range
-            </summary>
-            <param name="startTimeRange">Exclude <see cref="T:Ctc.Ods.Types.Section"/>s which start before this time of day.</param>
-            <param name="endTimeRange"></param>
-        </member>
-        <member name="M:Ctc.Ods.TimeFacet.GetFilter``1(System.Data.Entity.DbContext)">
-            <summary>
-            Filters the <see cref="T:Ctc.Ods.Data.SectionEntity"/> query to only include records between the specified start and end times
-            </summary>
-            <param name="dbContext"></param>
-        </member>
         <member name="T:Ctc.Ods.LinqExtensions">
             <summary>
             Extension methods for LINQ
@@ -964,84 +1069,6 @@
         <member name="P:Ctc.Ods.Data.EmployeeEntity.WorkEmail">
             <summary>
 
-            </summary>
-        </member>
-        <member name="T:Ctc.Ods.AvailabilityFacet">
-            <summary>
-             Defines which <see cref="T:Ctc.Ods.Types.Section"/>s to include based on availability
-            </summary>
-             <remarks>
-             An "available" <see cref="T:Ctc.Ods.Types.Section"/> is currently defined as:
-             <list type="bullet">
-			<item>
-				<description>
-				<b>Normal Section:</b> <i>ClassCapacity</i> - <i>StudentsEnrolled</i>
-				</description>
-			</item>
-			<item>
-				<description>
-				<b>Clustered Section:</b> max(<i>ClusterCapacity</i>) - sum(<i>StudentsEnrolled</i>)
-				</description>
-			</item>
-			<item>
-				<description>
-				<b>And</b> Does not have a <see cref="P:Ctc.Ods.Data.OdsContext.WaitListCounts">Waitlist</see>
-				</description>
-			</item>
-             </list>
-
-             NOTE: If these rules do not match the logic needed by your school, create a custom "availability" <see cref="T:Ctc.Ods.ISectionFacet">Facet</see> to use instead.
-
-             </remarks>
-        </member>
-        <member name="M:Ctc.Ods.AvailabilityFacet.#ctor(Ctc.Ods.AvailabilityFacet.Options)">
-            <summary>
-             Creates a new Facet with the <see cref="T:Ctc.Ods.AvailabilityFacet.Options"/> specified
-            </summary>
-            <param name="options"></param>
-        </member>
-        <member name="M:Ctc.Ods.AvailabilityFacet.GetFilter``1(System.Data.Entity.DbContext)">
-            <summary>
-            Gets filter to only include <see cref="T:Ctc.Ods.Types.Section"/>s which are "available"
-            </summary>
-            <param name="dbContext"></param>
-            <remarks>
-            An "available" <see cref="T:Ctc.Ods.Types.Section"/> is currently defined as:
-            <list type="bullet">
-		<item>
-			<description>
-			<b>Normal Section:</b> <i>ClassCapacity</i> - <i>StudentsEnrolled</i>
-			</description>
-		</item>
-		<item>
-			<description>
-			<b>Clustered Section:</b> max(<i>ClusterCapacity</i>) - sum(<i>StudentsEnrolled</i>)
-			</description>
-		</item>
-		<item>
-			<description>
-			<b>And</b> Does not have a <see cref="P:Ctc.Ods.Data.OdsContext.WaitListCounts">Waitlist</see>
-			</description>
-		</item>
-            </list>
-
-            NOTE: If these rules do not match the logic needed by your school, create a custom "availability" <see cref="T:Ctc.Ods.ISectionFacet">Facet</see> to use instead.
-
-            </remarks>
-            <exception cref="T:System.ArgumentNullException"><paramref name="dbContext"/>Is null, or is not a valid <see cref="T:Ctc.Ods.Data.OdsContext"/></exception>
-        </member>
-        <member name="T:Ctc.Ods.AvailabilityFacet.Options">
-            <summary>
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.AvailabilityFacet.Options.All">
-            <summary>
-             All Sections
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.AvailabilityFacet.Options.Open">
-            <summary>
-             Sections that have available seats
             </summary>
         </member>
         <member name="T:Ctc.Ods.Types.SectionID">
@@ -1229,6 +1256,14 @@
             </summary>
             <remarks>NOTE: This data is cached via <see cref="T:Ctc.Ods.Extensions.QueryResultCacheExtension"/></remarks>
         </member>
+        <member name="M:Ctc.Ods.YearQuarterFacet.GetFilter``1(System.Data.Entity.DbContext)">
+            <summary>
+            Provides the appropriate anonymous method for a LINQ .Where() call, depending on the option specified
+            </summary>
+            <param name="dbContext"></param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="dbContext"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">A valid option value was not specified when the class was instantiated.</exception>
+        </member>
         <member name="T:Ctc.Ods.Types.ICourseID">
             <summary>
             Representa the unique ID for a <see cref="T:Ctc.Ods.Types.Course"/>
@@ -1255,6 +1290,24 @@
             Indicates whether this CourseID represents a <a href="http://www.sbctc.ctc.edu/college/e_commoncoursenumbering.aspx">Common Course</a>
             </summary>
             <seealso cref="P:Ctc.Ods.Types.ICourseID.Subject"/>
+        </member>
+        <member name="T:Ctc.Ods.TimeFacet">
+            <summary>
+            Defines a <see cref="T:Ctc.Ods.Types.Section"/> filter by start and end times
+            </summary>
+        </member>
+        <member name="M:Ctc.Ods.TimeFacet.#ctor(System.TimeSpan,System.TimeSpan)">
+            <summary>
+            Creates a new <see cref="T:Ctc.Ods.Types.Section"/> filter by specifying a start and end time range
+            </summary>
+            <param name="startTimeRange">Exclude <see cref="T:Ctc.Ods.Types.Section"/>s which start before this time of day.</param>
+            <param name="endTimeRange"></param>
+        </member>
+        <member name="M:Ctc.Ods.TimeFacet.GetFilter``1(System.Data.Entity.DbContext)">
+            <summary>
+            Filters the <see cref="T:Ctc.Ods.Data.SectionEntity"/> query to only include records between the specified start and end times
+            </summary>
+            <param name="dbContext"></param>
         </member>
         <member name="T:Ctc.Ods.Extensions.QueryResultCacheExtension">
             <summary>
@@ -1385,10 +1438,17 @@
             Gets the user-friendly name for the quarter (e.g. "Fall 2010")
             </summary>
             <param name="yrq">A 4-character YRQ code.</param>
-            <returns></returns>
+            <returns>
+		A user-friendly string for the quarter in the form "Fall 2010". Can also return <see cref="F:Ctc.Ods.Types.YearQuarter.MIN_FRIENDLY_NAME"/>
+		or <see cref="F:Ctc.Ods.Types.YearQuarter.MAX_FRIENDLY_NAME"/>, if the value of <paramref name="yrq"/> represents either of the valid
+		limits.
+            </returns>
+            <seealso cref="P:Ctc.Ods.Config.ApiSettings.YearQuarter"/>
             <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="yrq"/> is not a 4-character value.</exception>
             <exception cref="T:System.InvalidCastException"><paramref name="yrq"/> is not a valid YearQuarterID.</exception>
             <exception cref="T:System.NullReferenceException"><paramref name="yrq"/> in <i>null</i>.</exception>
+            <remarks>
+            </remarks>
         </member>
         <member name="M:Ctc.Ods.Types.YearQuarter.Equals(Ctc.Ods.Types.YearQuarter)">
             <summary>
@@ -1569,7 +1629,7 @@
 
             </summary>
         </member>
-        <member name="P:Ctc.Ods.Types.ISection.IsLateStart">
+        <member name="P:Ctc.Ods.Types.ISection.IsDifferentStartDate">
             <summary>
 
             </summary>
@@ -1709,6 +1769,55 @@
             Represents the days of the week
             </summary>
         </member>
+        <member name="T:Ctc.Ods.Customizations.IOdsDataMapper`1">
+            <summary>
+
+            </summary>
+        </member>
+        <member name="M:Ctc.Ods.Customizations.IOdsDataMapper`1.GetData(System.Data.Entity.DbContext)">
+            <summary>
+
+            </summary>
+            <param name="db"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctc.Ods.Customizations.IOdsDataMapper`1.AddFacet(Ctc.Ods.IDataFacet)">
+            <summary>
+
+            </summary>
+            <param name="facet"></param>
+        </member>
+        <member name="T:Ctc.Ods.Customizations.DefaultSectionMapper">
+            <summary>
+
+            </summary>
+        </member>
+        <member name="M:Ctc.Ods.Customizations.DefaultSectionMapper.GetData(Ctc.Ods.Data.OdsContext)">
+            <summary>
+
+            </summary>
+            <param name="db"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctc.Ods.Customizations.DefaultSectionMapper.AddFacet(Ctc.Ods.ISectionFacet)">
+            <summary>
+
+            </summary>
+            <param name="facet"></param>
+        </member>
+        <member name="M:Ctc.Ods.Customizations.DefaultSectionMapper.GetData(System.Data.Entity.DbContext)">
+            <summary>
+
+            </summary>
+            <param name="db"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctc.Ods.Customizations.DefaultSectionMapper.AddFacet(Ctc.Ods.IDataFacet)">
+            <summary>
+
+            </summary>
+            <param name="facet"></param>
+        </member>
         <member name="T:Ctc.Ods.Types.OfferedItem">
             <summary>
             Defines when and where a <see cref="T:Ctc.Ods.Types.Section"/> is offered
@@ -1772,32 +1881,6 @@
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.OfferedItem.SequenceOrder">
-            <summary>
-
-            </summary>
-        </member>
-        <member name="T:Ctc.Ods.RegistrationQuartersFacet">
-            <summary>
-            </summary>
-        </member>
-        <member name="M:Ctc.Ods.RegistrationQuartersFacet.#ctor">
-            <summary>
-            </summary>
-        </member>
-        <member name="M:Ctc.Ods.RegistrationQuartersFacet.#ctor(System.Int32)">
-            <summary>
-            </summary>
-            <param name="quarterCount"></param>
-            <exception cref="T:System.InvalidOperationException"><paramref name="quarterCount"/> cannot be zero (0).</exception>
-        </member>
-        <member name="M:Ctc.Ods.RegistrationQuartersFacet.GetFilter``1(System.Data.Entity.DbContext)">
-            <summary>
-            Provides the appropriate anonymous method for a LINQ .Where() call, depending on the option specified
-            </summary>
-            <param name="dbContext"></param>
-            <exception cref="T:System.ArgumentNullException"><paramref name="dbContext"/>Is null, or is not a valid <see cref="T:Ctc.Ods.Data.OdsContext"/> object.</exception>
-        </member>
-        <member name="P:Ctc.Ods.RegistrationQuartersFacet.Settings">
             <summary>
 
             </summary>
@@ -2540,6 +2623,58 @@
             </remarks>
             <seealso cref="P:Ctc.Ods.Types.CourseDescription.YearQuarterBegin"/>
         </member>
+        <member name="T:Ctc.Ods.ModalityFacet">
+            <summary>
+
+            </summary>
+        </member>
+        <member name="M:Ctc.Ods.ModalityFacet.GetFilter``1(System.Data.Entity.DbContext)">
+            <summary>
+            Provides the appropriate anonymous method for a LINQ .Where() call, depending on the option specified
+            </summary>
+            <param name="dbContext"></param>
+            <remarks>
+            This property assumes the database field is 2 characters long.
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">A valid <see cref="T:Ctc.Ods.ModalityFacet.Options"/> value was not specified when the class was instantiated.</exception>
+            <seealso cref="T:Ctc.Ods.ModalityFacet.Options"/>
+        </member>
+        <member name="M:Ctc.Ods.ModalityFacet.#ctor(Ctc.Ods.ModalityFacet.Options)">
+            <summary>
+
+            </summary>
+            <param name="option"></param>
+        </member>
+        <member name="T:Ctc.Ods.ModalityFacet.Options">
+            <summary>
+            Options for which <see cref="T:Ctc.Ods.Types.Section"/>s to include
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.ModalityFacet.Options.All">
+            <summary>
+            Include all <see cref="T:Ctc.Ods.Types.Section"/>s
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.ModalityFacet.Options.Online">
+            <summary>
+            Include only online <see cref="T:Ctc.Ods.Types.Section"/>s
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.ModalityFacet.Options.Hybrid">
+            <summary>
+            Include only hybrid (both <see cref="F:Ctc.Ods.ModalityFacet.Options.Online"/> and <see cref="F:Ctc.Ods.ModalityFacet.Options.OnCampus"/>) <see cref="T:Ctc.Ods.Types.Section"/>s
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.ModalityFacet.Options.Telecourse">
+            <summary>
+            Include only telecom <see cref="T:Ctc.Ods.Types.Section"/>s
+            </summary>
+        </member>
+        <member name="F:Ctc.Ods.ModalityFacet.Options.OnCampus">
+            <summary>
+            Include only <see cref="T:Ctc.Ods.Types.Section"/>s that meet on campus (in a classroom)
+            </summary>
+        </member>
         <member name="T:Ctc.Ods.Types.Section">
             <summary>
             Defines an instance of a college class (i.e. <see cref="T:Ctc.Ods.Types.Course"/>)
@@ -2690,7 +2825,7 @@
 
             </summary>
         </member>
-        <member name="P:Ctc.Ods.Types.Section.IsLateStart">
+        <member name="P:Ctc.Ods.Types.Section.IsDifferentStartDate">
             <summary>
 
             </summary>
@@ -2754,21 +2889,6 @@
             Data retrieval stub for <see cref="P:Ctc.Ods.Types.Section.LastRegistrationDate"/>
             </summary>
             <seealso cref="P:Ctc.Ods.Types.Section.LastRegistrationDate"/>
-        </member>
-        <member name="P:Ctc.Ods.Types.Section._VariableCredits">
-            <summary>
-
-            </summary>
-        </member>
-        <member name="P:Ctc.Ods.Types.Section._LateStart">
-            <summary>
-
-            </summary>
-        </member>
-        <member name="P:Ctc.Ods.Types.Section._DifferentEndDate">
-            <summary>
-
-            </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section._CourseTitle">
             <summary>
@@ -2861,14 +2981,6 @@
             This method is invoked from the .NET configuration system when parsing the .config file.
             </remarks>
             <seealso cref="T:Ctc.Ods.Config.ApiSettings"/>
-        </member>
-        <member name="M:Ctc.Ods.YearQuarterFacet.GetFilter``1(System.Data.Entity.DbContext)">
-            <summary>
-            Provides the appropriate anonymous method for a LINQ .Where() call, depending on the option specified
-            </summary>
-            <param name="dbContext"></param>
-            <exception cref="T:System.ArgumentNullException"><paramref name="dbContext"/> is null.</exception>
-            <exception cref="T:System.InvalidOperationException">A valid option value was not specified when the class was instantiated.</exception>
         </member>
         <member name="T:Ctc.Ods.CommonExtensions">
             <summary>
@@ -3371,58 +3483,6 @@
             </list>
             </returns>
             <exception cref="T:System.NotImplementedException"/>
-        </member>
-        <member name="T:Ctc.Ods.ModalityFacet">
-            <summary>
-
-            </summary>
-        </member>
-        <member name="M:Ctc.Ods.ModalityFacet.GetFilter``1(System.Data.Entity.DbContext)">
-            <summary>
-            Provides the appropriate anonymous method for a LINQ .Where() call, depending on the option specified
-            </summary>
-            <param name="dbContext"></param>
-            <remarks>
-            This property assumes the database field is 2 characters long.
-            </remarks>
-            <exception cref="T:System.InvalidOperationException">A valid <see cref="T:Ctc.Ods.ModalityFacet.Options"/> value was not specified when the class was instantiated.</exception>
-            <seealso cref="T:Ctc.Ods.ModalityFacet.Options"/>
-        </member>
-        <member name="M:Ctc.Ods.ModalityFacet.#ctor(Ctc.Ods.ModalityFacet.Options)">
-            <summary>
-
-            </summary>
-            <param name="option"></param>
-        </member>
-        <member name="T:Ctc.Ods.ModalityFacet.Options">
-            <summary>
-            Options for which <see cref="T:Ctc.Ods.Types.Section"/>s to include
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.ModalityFacet.Options.All">
-            <summary>
-            Include all <see cref="T:Ctc.Ods.Types.Section"/>s
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.ModalityFacet.Options.Online">
-            <summary>
-            Include only online <see cref="T:Ctc.Ods.Types.Section"/>s
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.ModalityFacet.Options.Hybrid">
-            <summary>
-            Include only hybrid (both <see cref="F:Ctc.Ods.ModalityFacet.Options.Online"/> and <see cref="F:Ctc.Ods.ModalityFacet.Options.OnCampus"/>) <see cref="T:Ctc.Ods.Types.Section"/>s
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.ModalityFacet.Options.Telecourse">
-            <summary>
-            Include only telecom <see cref="T:Ctc.Ods.Types.Section"/>s
-            </summary>
-        </member>
-        <member name="F:Ctc.Ods.ModalityFacet.Options.OnCampus">
-            <summary>
-            Include only <see cref="T:Ctc.Ods.Types.Section"/>s that meet on campus (in a classroom)
-            </summary>
         </member>
         <member name="T:Ctc.Ods.Data.InstructionEntity">
             <summary>

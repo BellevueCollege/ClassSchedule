@@ -45,7 +45,7 @@ namespace CTCClassSchedule
     public static string getAutomatedFootnotesText(SectionWithSeats section)
     {
 			string wSpace = section.Footnotes.Count() == 0 ? string.Empty : " ";
-			string footenoteText = buildFootnoteText(section.IsLateStart,
+			string footenoteText = buildFootnoteText(section.IsDifferentStartDate,
 																								section.IsDifferentEndDate,
 																								section.IsHybrid,
 																								section.IsContinuousEnrollment,
@@ -62,7 +62,7 @@ namespace CTCClassSchedule
 		public static string getAutomatedFootnotesText(Section section)
 		{
 			string wSpace = section.Footnotes.Count() == 0 ? string.Empty : " ";
-			string footenoteText = buildFootnoteText(section.IsLateStart,
+			string footenoteText = buildFootnoteText(section.IsDifferentStartDate,
 																								section.IsDifferentEndDate,
 																								section.IsHybrid,
 																								section.IsContinuousEnrollment,
@@ -75,14 +75,14 @@ namespace CTCClassSchedule
 		/// Gets automated footnotes based on boolean values passed to the method.
 		/// This is useful if you are handling either Section or SectionWithSeats objects.
 		/// </summary>
-		/// <param name="lateStartFlag">Is the course a late start course.</param>
+		/// <param name="differentStartFlag">Is the course a late start course.</param>
 		/// <param name="differentEndDateFlag">Does the course have a different end date than normal.</param>
 		/// <param name="hybridFlag">Is this a hybrid course.</param>
 		/// <param name="continuousEnrollmentFlag">Is this course a continuous enrollment.</param>
 		/// <param name="startDate">The courses scheduled start date.</param>
 		/// <param name="endDate">The courses scheduled end date.</param>
 		/// <returns>All relevant automated footnotes in one concatenated string.</returns>
-		private static string buildFootnoteText(Boolean lateStartFlag, Boolean differentEndDateFlag, Boolean hybridFlag, Boolean continuousEnrollmentFlag, DateTime startDate, DateTime endDate)
+		private static string buildFootnoteText(Boolean differentStartFlag, Boolean differentEndDateFlag, Boolean hybridFlag, Boolean continuousEnrollmentFlag, DateTime startDate, DateTime endDate)
 		{
 			string footnoteTextResult = string.Empty;
 			string dateParam = "{DATE}";
@@ -90,9 +90,9 @@ namespace CTCClassSchedule
 			AutomatedFootnoteElement footnote;
 
 			// If the section has a late start
-			if (lateStartFlag)
+			if (differentStartFlag)
 			{
-				footnote = Footnotes("lateStart");
+				footnote = Footnotes("startDate");
 				dateText = startDate.ToString(footnote.StringFormat);
 				footnoteTextResult += footnote.Text.Replace(dateParam, dateText) + " ";
 			}

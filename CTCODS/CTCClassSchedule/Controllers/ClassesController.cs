@@ -211,6 +211,7 @@ namespace CTCClassSchedule.Controllers
 		/// <param name="numcredits"></param>
 		/// <param name="format"></param>
 		/// <returns></returns>
+		[HttpGet]
 		[OutputCache(CacheProfile = "SubjectCacheTime")]
 		public ActionResult Subject(string Subject, string timestart, string timeend,
 																string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s,

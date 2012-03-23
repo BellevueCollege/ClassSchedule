@@ -50,7 +50,7 @@ namespace CTCClassSchedule
 				IsOnline = value.IsOnline;
 				IsOnCampus = value.IsOnCampus;
 				IsHybrid = value.IsHybrid;
-				IsLateStart = value.IsLateStart;
+				IsDifferentStartDate = value.IsDifferentStartDate;
 				IsContinuousEnrollment = value.IsContinuousEnrollment;
 				LastRegistrationDate = value.LastRegistrationDate;
 				IsVariableCredits = value.IsVariableCredits;
