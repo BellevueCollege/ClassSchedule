@@ -53,17 +53,17 @@ namespace CTCClassSchedule.Controllers
 		/// <summary>
 		/// GET: /Classes/Export/{YearQuarterID}
 		/// </summary>
-		/// <returns>A Adobe InDesign formatted file with all Course data.</returns>
+		/// <returns>An Adobe InDesign formatted text file with all course data. File is
+		/// returned as an HTTP response.</returns>
 		public void Export(String YearQuarterID)
 		{
-			// Use this to convert strings to byte arrays
+			// Use this to convert strings to file byte arrays
 			System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
 			StringBuilder fileText = new StringBuilder();
 
-			// Get a sorted collections of sections, collated by division
-			IList<vw_ProgramInformation> programs = new List<vw_ProgramInformation>();
-			IDictionary<vw_ProgramInformation, List<SectionWithSeats>> divisions = new Dictionary<vw_ProgramInformation, List<SectionWithSeats>>();
+			// Determine whether to use a specific Year Quarter, or the current Year Quarter
 			YearQuarter yrq;
+			IList<vw_ProgramInformation> programs = new List<vw_ProgramInformation>();
 			using (OdsRepository _db = new OdsRepository())
 			{
 				if (String.IsNullOrEmpty(YearQuarterID))
@@ -75,9 +75,12 @@ namespace CTCClassSchedule.Controllers
 					yrq = Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID);
 				}
 			}
+
+			// Get a dictionary of sorted collections of sections, collated by division
+			IDictionary<vw_ProgramInformation, List<SectionWithSeats>> divisions = new Dictionary<vw_ProgramInformation, List<SectionWithSeats>>();
 			divisions = getSectionsByDivision(yrq);
 
-			// Create file data
+			// Create all file data
 			foreach (vw_ProgramInformation program in divisions.Keys)
 			{
 				fileText.AppendLine();
@@ -108,20 +111,19 @@ namespace CTCClassSchedule.Controllers
 
 					// Section and course footnotes
 					line = String.Concat(section.CourseFootnotes, String.IsNullOrEmpty(section.CourseFootnotes.Trim()) ? string.Empty : " ", section.SectionFootnotes);
-					if (!String.IsNullOrEmpty(line.Trim()))
+					if (!String.IsNullOrWhiteSpace(line))
 					{
 						fileText.AppendLine(String.Concat("<CLSX>", line.Trim()));
 					}
-
 					line = AutomatedFootnotesConfig.getAutomatedFootnotesText(section);
-					if (!String.IsNullOrEmpty(line.Trim()))
+					if (!String.IsNullOrWhiteSpace(line))
 					{
 						fileText.AppendLine(String.Concat("<CLSY>", line.Trim()));
 					}
 				}
 			}
 
-			// Write the file as an HTTP response
+			// Write the file data as an HTTP response
 			string fileName = String.Concat("CourseData-", yrq.ID, "-", DateTime.Now.ToShortDateString(), ".txt");
 			fileText.Remove(0, 1); // Remove the first line break
 			byte[] fileData = encoding.GetBytes(fileText.ToString());
@@ -131,7 +133,6 @@ namespace CTCClassSchedule.Controllers
 			response.ContentType = "application/force-download";
 			response.BinaryWrite(fileData);
 		}
-
 
 		/// <summary>
 		/// GET: /Classes/All
@@ -710,11 +711,11 @@ namespace CTCClassSchedule.Controllers
 		/// the first name (e.g. ANDREW CRASWELL -> CRASWELL A).
 		/// </summary>
 		/// <param name="fullName">The full name to be converted.</param>
-		/// <returns>A string with the short name version of the full name.</returns>
+		/// <returns>A string with the short name version of the full name. If fullName was blank or empty, a null is returned.</returns>
 		private static string getNameShortFormat(string fullName)
 		{
 			string shortName = null;
-			if (!String.IsNullOrEmpty(fullName.Trim()))
+			if (!String.IsNullOrEmpty(fullName))
 			{
 				int nameStartIndex = fullName.IndexOf(" ") + 1;
 				int nameEndIndex = fullName.Length - nameStartIndex;
