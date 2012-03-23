@@ -71,16 +71,18 @@
 							}
 							else if (Model.MergedClasses.Count() == 1)
 							{
-								//if the class is merged to itself, that is fine, but display the dropdown so they can merge it to another class
+
 								string classes = "";
 								foreach(string singleClass in Model.MergedClasses){
 									classes += singleClass;
 								}
 
+								//if the class is merged to itself, that is fine, but display the dropdown so they can merge it to another class
 								if (classes == Model.itemToUpdate.Abbreviation)
 								{
 									@Html.LabelFor(model => model.MergeSubjectChoices, "Merge with another subject (choose abbr)");
 									displayDropdown = true;
+
 								}
 
 							}
