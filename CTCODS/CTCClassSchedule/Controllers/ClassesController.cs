@@ -422,7 +422,7 @@ namespace CTCClassSchedule.Controllers
 					IList<SectionWithSeats> sectionsEnum;
 					using (_profiler.Step("Getting app-specific Section records from DB"))
 					{
-						sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections, db);
+						sectionsEnum = Helpers.getSectionsWithSeats(YRQ.ID, sections, db);
 					}
 
 					ViewBag.Modality = Helpers.ConstructModalityList(sectionsEnum, f_oncampus, f_online, f_hybrid, f_telecourse);
