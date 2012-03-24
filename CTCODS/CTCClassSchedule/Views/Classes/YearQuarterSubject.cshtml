@@ -27,7 +27,10 @@
 	string FriendlyYRQ = string.Empty;
 	string thisYrq = string.Empty;
 
-	IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenByDescending(s => s.IsVariableCredits).ThenBy(s => s.Credits).ToList();
+	// sort by the markers indicators where we need to being a new block (w/ course title, etc.)
+	IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenByDescending(s => s.IsVariableCredits).ThenBy(s => s.Credits).ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)).ToList();
+
+	// Get the navigation list and other quarter information
 	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
 	string currentYrq = yrqList[0].ID;
 
@@ -182,16 +185,31 @@
 
          using (_profiler.Step("Rendering Sections by Course (outer loop)"))
          {
-             foreach (SectionWithSeats sec in orderedModel)
+						IEnumerable<SectionWithSeats> linkedSections;
+						bool hasLinked;
+
+					 foreach (SectionWithSeats sec in orderedModel)
              {
-                 courseID = sec.CourseID;
+						 // ensure we don't have any bleed-over of data
+								linkedSections = null;
+								 hasLinked = false;
+
+							 courseID = sec.CourseID;
                  sectionID = sec.ID.ToString();
                  credits = sec.Credits;
                  isVariableCredit = sec.IsVariableCredits;
 
                  if (!sec.IsLinked)
                  {
-                     if ((courseID != PreviousCourseID || sec.CourseTitle != PreviousCourseTitle) || (courseID == PreviousCourseID && credits != PreviousCredits) || (courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit))
+									 linkedSections = orderedModel.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber);
+									 hasLinked = linkedSections.Count() > 0;
+
+									 bool newBlock = courseID != PreviousCourseID || sec.CourseTitle != PreviousCourseTitle ||
+																	(courseID == PreviousCourseID && credits != PreviousCredits) ||
+																	(courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit) ||
+																	(courseID == PreviousCourseID && credits == PreviousCredits && isVariableCredit == PreviousIsVariableCredit && hasLinked);
+
+                     if (newBlock)
                      {
                          if (PreviousCourseID != "")
                          {
@@ -230,18 +248,16 @@
 					<a href="@Url.Action("ClassDetails", "Classes", route)">
 						@Html.Raw(string.Format("{0}{1} {2} {3}", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle))
 					</a>
-
-				@{
-    IEnumerable<SectionWithSeats> linkedSections = orderedModel.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber);
-    bool hasLinked = linkedSections.Count() > 0;
-				}
-				@foreach (SectionWithSeats linkedSec in linkedSections)
-    {
+				@if (linkedSections != null)
+		{
+				foreach (SectionWithSeats linkedSec in linkedSections)
+				{
 			<br/>
 			<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
 				@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
 			</a>
-    }
+				}
+		}
 		 <span class="classCredits">&#8226;
 			@if (isVariableCredit)
    {
