@@ -70,13 +70,27 @@
 	</div>
 	 using (_profiler.Step("Rendering sections from search results"))
 	 {
-		 foreach (SectionWithSeats sec in Model.Section)
+			IEnumerable<SectionWithSeats> linkedSections;
+			bool hasLinked;
+
+		 foreach (SectionWithSeats sec in Model.Section.OrderBy(s => Model.Section.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)))
 		 {
+			// ensure we don't have any bleed-over of data
+			linkedSections = null;
+			hasLinked = false;
+
 			 string courseID = sec.CourseID;
 			 string sectionID = sec.ID.ToString();
+			 string courseTitle = sec.CourseTitle;
 
-			 if (PreviousCourseID != courseID || sec.CourseTitle != PreviousCourseTitle)
+			 if(!sec.IsLinked)
 			 {
+				linkedSections = Model.Section.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber);
+				hasLinked = linkedSections.Count() > 0;
+
+			 if (PreviousCourseID != courseID || courseTitle != PreviousCourseTitle || (courseID == PreviousCourseID && courseTitle == PreviousCourseTitle && hasLinked))
+			 {
+
 				 _routeValues["Subject"] = sec.CourseSubject;
 				 _routeValues["ClassNum"] = sec.CourseNumber;
 				 if (courseID != PreviousCourseID && PreviousCourseID != "")
@@ -86,8 +100,46 @@
 				<text>
 		<h2 class="classHeading">
 			<a href="@Url.Action("ClassDetails", "Classes", new RouteValueDictionary(_routeValues))">
-				@Html.FormatWithSearchTerm(_searchTerm, "{0}{1} {2} {3} &#8226; {4} Cr.", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, Html.CreditsValue(sec.Credits))
+				@Html.FormatWithSearchTerm(_searchTerm, "{0}{1} {2} {3}", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle)
 			</a>
+			<span class="classCredits">&#8226;
+			@if (sec.IsVariableCredits)
+		{
+							@:V1-@Html.CreditsValue(sec.Credits)
+								<abbr title="variable credits">Cr.</abbr>
+
+		}
+		else
+		{
+							@Html.CreditsValue(sec.Credits)
+								<abbr title="credit(s)">Cr.</abbr>
+
+		}
+				</span>
+				@if (linkedSections != null)
+		{
+				foreach (SectionWithSeats linkedSec in linkedSections)
+				{
+			<br/>
+			<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
+				@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
+			</a>
+			<span class="classCredits">&#8226;
+			@if (linkedSec.IsVariableCredits)
+		{
+							@:V1-@Html.CreditsValue(linkedSec.Credits)
+								<abbr title="variable credits">Cr.</abbr>
+
+		}
+		else
+		{
+							@Html.CreditsValue(linkedSec.Credits)
+								<abbr title="credit(s)">Cr.</abbr>
+
+		}
+				</span>
+				}
+		}
 		</h2>
 
 		<p class="classDescription">
@@ -126,6 +178,7 @@
 				 ViewData["PreviousSectionID"] = PreviousSectionID;
 				 Html.RenderPartial("Sections", sec, ViewData);
 			 }
+			 } @* end sec.IsLInked *@
 
 			 PreviousSectionID = sectionID;
 			 PreviousCourseID = courseID;
