@@ -149,7 +149,7 @@ namespace CTCClassSchedule.Controllers
 				itemCount = sectionsEnum.Count;
 				ViewBag.ItemCount = itemCount;
 
-				//DO A COUNT OF THE SECTION OBJECT HERE
+				//DO A COUNT OF THE SECTION OBJECT HERE		<- Why? 3/23/2012, shawn.south@bellevuecollege.edu
 				ViewBag.SubjectCount = 0;
 				string courseid = "";
 
@@ -172,18 +172,18 @@ namespace CTCClassSchedule.Controllers
 
 				using (_profiler.Step("Getting just records for page"))
 				{
-				  sectionsEnum = sectionsEnum.Skip(p_offset * 40).Take(40).ToList();
+					sectionsEnum = sectionsEnum.Skip(p_offset * 40).Take(40).ToList();
 				}
 
 				ViewBag.TotalPages = Math.Ceiling(itemCount / 40.0);
 
 				SearchResultsModel model = new SearchResultsModel
-				{
-				    Section = sectionsEnum,
-				    SearchResultNoSection = NoSectionSearchResults,
-						Subjects = allSubjects
+								{
+										Section = sectionsEnum,
+										SearchResultNoSection = NoSectionSearchResults,
+										Subjects = allSubjects
 
-				};
+								};
 
 				ViewBag.CurrentPage = p_offset + 1;
 
@@ -202,9 +202,9 @@ namespace CTCClassSchedule.Controllers
 		private IList<SearchResultNoSection> GetNoSectionSearchResults(ClassScheduleDb db, string searchterm, string quarter)
 		{
 			SqlParameter[] parms = {
-								new SqlParameter("SearchWord", searchterm),
-								new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
-															};
+							new SqlParameter("SearchWord", searchterm),
+							new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
+			                       };
 
 			using (_profiler.Step("Executing 'other classes' stored procedure"))
 			{
