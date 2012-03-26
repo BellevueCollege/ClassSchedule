@@ -42,10 +42,11 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "IndexCacheTime")] // Caches for 1 day
 		public ActionResult Index()
 		{
-			using (OdsRepository respository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				ViewBag.CurrentYearQuarter = respository.CurrentYearQuarter;
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(respository);
+				ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
+				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
+				ViewBag.RegistrationQuarters = Helpers.getFutureQuarters(repository);
 			}
 			return View();
 		}
@@ -110,7 +111,7 @@ namespace CTCClassSchedule.Controllers
 					}
 
 					// Section and course footnotes
-					line = String.Concat(section.CourseFootnotes, String.IsNullOrEmpty(section.CourseFootnotes.Trim()) ? string.Empty : " ", section.SectionFootnotes);
+					line = section.SectionFootnotes;
 					if (!String.IsNullOrWhiteSpace(line))
 					{
 						fileText.AppendLine(String.Concat("<CLSX>", line.Trim()));
@@ -607,11 +608,12 @@ namespace CTCClassSchedule.Controllers
 			text.AppendLine(line);
 
 
-			// Add HP footnotes
+			// Add Course and HP footnotes
 			if (section.Footnotes.Count() > 0)
 			{
-				text.AppendLine(String.Concat("<CLS3>", string.Join(" ", section.Footnotes)));
+				text.AppendLine(String.Concat("<CLS3>", section.CourseFootnotes, String.IsNullOrEmpty(section.CourseFootnotes) ? string.Empty : " ", string.Join(" ", section.Footnotes)));
 			}
+
 		}
 
 		/// <summary>

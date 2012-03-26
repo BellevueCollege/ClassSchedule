@@ -76,13 +76,13 @@ namespace CTCClassSchedule
 		/// This is useful if you are handling either Section or SectionWithSeats objects.
 		/// </summary>
 		/// <param name="differentStartFlag">Is the course a late start course.</param>
-		/// <param name="differentEndDateFlag">Does the course have a different end date than normal.</param>
+		/// <param name="differentEndFlag">Does the course have a different end date than normal.</param>
 		/// <param name="hybridFlag">Is this a hybrid course.</param>
 		/// <param name="continuousEnrollmentFlag">Is this course a continuous enrollment.</param>
 		/// <param name="startDate">The courses scheduled start date.</param>
 		/// <param name="endDate">The courses scheduled end date.</param>
 		/// <returns>All relevant automated footnotes in one concatenated string.</returns>
-		private static string buildFootnoteText(Boolean differentStartFlag, Boolean differentEndDateFlag, Boolean hybridFlag, Boolean continuousEnrollmentFlag, DateTime startDate, DateTime endDate)
+		private static string buildFootnoteText(Boolean differentStartFlag, Boolean differentEndFlag, Boolean hybridFlag, Boolean continuousEnrollmentFlag, DateTime startDate, DateTime endDate)
 		{
 			string footnoteTextResult = string.Empty;
 			string dateParam = "{DATE}";
@@ -98,7 +98,7 @@ namespace CTCClassSchedule
 			}
 
 			// If the section has a different end date than usual
-			if (differentEndDateFlag)
+			if (differentEndFlag)
 			{
 				footnote = Footnotes("endDate");
 				dateText = endDate.ToString(footnote.StringFormat);
