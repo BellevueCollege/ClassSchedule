@@ -617,7 +617,7 @@ li.subject { list-style-type: none;}
     float: left;
     border: none;
 	background-color: transparent;
-	padding: 0;
+	padding: 2px 0 0 0;
 }
 
 #searchbutton-wrap
