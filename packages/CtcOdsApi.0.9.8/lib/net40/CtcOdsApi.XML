@@ -540,6 +540,13 @@
             <seealso cref="P:Ctc.Ods.Data.OdsRepository.CurrentRegistrationQuarter"/>
             <seealso cref="P:Ctc.Ods.Config.ApiSettings.YearQuarter"/>
         </member>
+        <member name="M:Ctc.Ods.Data.OdsRepository.GetFutureQuarters(System.Int32)">
+            <summary>
+            Gets a list of future <see cref="T:Ctc.Ods.Types.YearQuarter"/>s, starting with the current registration quarter.
+            </summary>
+            <param name="count">Total number of <see cref="T:Ctc.Ods.Types.YearQuarter"/>s to return (including the current quarter).</param>
+            <returns>A list of <see cref="T:Ctc.Ods.Types.YearQuarter"/> objects, with the first being the current registration quarter.</returns>
+        </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetCourses(System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
             <summary>
             Retrieves all courses from the database
