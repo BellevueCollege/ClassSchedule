@@ -68,14 +68,8 @@
     <Reference Include="AntiXssLibrary">
       <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\AntiXssLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="CtcOdsApi">
-      <HintPath>..\..\packages\CtcOdsApi.0.9.8\lib\net40\CtcOdsApi.dll</HintPath>
-    </Reference>
     <Reference Include="DotNetCasClient">
       <HintPath>..\..\packages\DotNetCasClient.1.0.1\lib\DotNetCasClient.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>..\..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="HtmlSanitizationLibrary">
       <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
