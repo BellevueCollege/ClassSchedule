@@ -51,8 +51,10 @@
 
 	@if (itemCount == 0)
  {
-			<h1>No classes were found for &quot;@_searchTerm&quot;</h1>
-			<p><strong>TIP:</strong> Try searching for something else, or selecting fewer <span style="background-color:#999999;color:White; padding:2px;">Refine</span> criteria to the left.</p>
+			<h1 id="pageTitle">No classes were found for &quot;@_searchTerm&quot;</h1>
+			<div id="error-noclassesfound">
+            <p><strong>TIP:</strong> Try searching for something else, or selecting fewer <em>Refine</em> options to the left.</p>
+            </div>
  }
  else
  {
