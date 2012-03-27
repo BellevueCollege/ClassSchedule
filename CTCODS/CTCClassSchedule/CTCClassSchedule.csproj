@@ -65,13 +65,21 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AntiXssLibrary">
+    <Reference Include="AntiXssLibrary, Version=4.2.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\AntiXssLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="CtcOdsApi">
+      <HintPath>..\..\packages\CtcOdsApi.0.9.8\lib\net40\CtcOdsApi.dll</HintPath>
     </Reference>
     <Reference Include="DotNetCasClient">
       <HintPath>..\..\packages\DotNetCasClient.1.0.1\lib\DotNetCasClient.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlSanitizationLibrary">
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlSanitizationLibrary, Version=4.2.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -275,7 +283,6 @@
     <Content Include="globals\btheme_v0.1\img\twitter.png" />
     <Content Include="globals\btheme_v0.1\img\youtube.png" />
     <Content Include="globals\btheme_v0.1\js\searchbox.js" />
-    <Content Include="license.CtcOdsApi.txt" />
     <Content Include="Scripts\CtcClassSchedule.js" />
     <Content Include="Scripts\jquery.ui.timepicker.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
