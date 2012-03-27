@@ -722,5 +722,60 @@ namespace CTCClassSchedule.Common
 
 			return dict;
 		}
+
+		public static string BuildCourseID(string CourseNumber, string CourseSubject, bool IsCommonCourse)
+		{
+			char[] CourseID = new char[8];
+
+			//fill the char array with spaces
+			for (int i = 0; i < CourseID.Length; i++)
+			{
+				CourseID[i] = ' ';
+			}
+
+			//assign the subject to the first 2/3/4/5 char array slots
+			for (int i = 0; i < CourseSubject.Count(); i++)
+			{
+				CourseID[i] = CourseSubject[i];
+			}
+
+			//add in the ampersand if it's a common course
+			if (IsCommonCourse)
+			{
+				CourseID[CourseSubject.Length] = '&';
+			}
+
+			//if the coursenumber is 3 chars or longer, assign it to the last 3 slots in the return array
+			if (CourseNumber.Length >= 3)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					CourseID[i + 5] = CourseNumber[i];
+				}
+			}
+
+			//if the coursenumber is one of the exception 4 alphanumeric courseids, such as NURS 101X (2503B124),
+			//create a new 9 character return array, copy the 8 character array to it, and append the last character of
+			//the CourseNum to the last slot in the return array.
+			if (CourseNumber.Length > 3)
+			{
+				char[] TempCourseID = CourseID;
+				CourseID = new char[9];
+
+				for (int i = 0; i < TempCourseID.Count(); i++)
+				{
+					CourseID[i] = TempCourseID[i];
+				}
+
+				CourseID[8] = CourseNumber[CourseNumber.Length - 1];
+			}
+
+
+
+			return new string(CourseID);
+		}
+
+
+
 	}
 }

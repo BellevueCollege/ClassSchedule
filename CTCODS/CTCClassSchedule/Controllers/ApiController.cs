@@ -210,6 +210,7 @@ namespace CTCClassSchedule.Controllers
 				ICourseID courseID = CourseID.FromString(Subject, CourseNumber);
 				string UpdatingCourseID = courseID.ToString();
 				string subject = courseID.Subject;
+				string FullCourseID = Helpers.BuildCourseID(CourseNumber, Subject, IsCommonCourse);
 
 				if (IsCommonCourse)
 				{
@@ -224,9 +225,9 @@ namespace CTCClassSchedule.Controllers
 				{
 					try
 					{
-						itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID.Trim().Substring(0, 5).ToUpper() == subject.Trim().ToUpper() &&
-																										 s.CourseID.Trim().EndsWith(courseID.Number)
-							);
+						//itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID.Substring(0, 5).Trim().ToUpper() == subject.Trim().ToUpper() &&
+						//																				 s.CourseID.Trim().EndsWith(courseID.Number)
+						itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID.Trim().ToUpper() == FullCourseID.ToUpper());
 
 					}
 					catch(InvalidOperationException e)
@@ -260,7 +261,7 @@ namespace CTCClassSchedule.Controllers
 					}
 
 					ClassFootnote LocalClass = new ClassFootnote();
-					LocalClass.CourseID = itemToUpdate != null ? itemToUpdate.CourseID : UpdatingCourseID;
+					LocalClass.CourseID = itemToUpdate != null ? itemToUpdate.CourseID : FullCourseID;
 					LocalClass.Footnote = itemToUpdate != null ? itemToUpdate.Footnote : "";
 					LocalClass.HPFootnote = HPFootnotes;
 					LocalClass.LastUpdated = itemToUpdate != null ? Convert.ToString(itemToUpdate.LastUpdated) : "";
@@ -451,5 +452,9 @@ namespace CTCClassSchedule.Controllers
 
 			return Redirect(referrer);
 		}
+
+
+
+
 	}
 }
