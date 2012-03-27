@@ -142,7 +142,7 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "AllClassesCacheTime")] // Caches for 6 hours
 		public ActionResult AllClasses(string letter)
 		{
-			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? " (All)" : " (" + letter.ToUpper() + ")");
+			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? "All" : letter.ToUpper());
 
 			ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
@@ -281,7 +281,7 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "YearQuarterCacheTime")]
 		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter, string latestart, string numcredits)
 		{
-			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? " (All)" : " (" + letter.ToUpper() + ")");
+			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? "All" : letter.ToUpper());
 
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;

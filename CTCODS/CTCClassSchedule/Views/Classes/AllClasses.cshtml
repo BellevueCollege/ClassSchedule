@@ -15,12 +15,12 @@
 
         <div id="content">
 
-		@if (ViewBag.WhichClasses == " (All)")
+		@if (ViewBag.WhichClasses == "All")
 	{
 			<h1 id="pageTitle">All Credit Classes</h1>
 	}
 	else {
-		<h1 id="pageTitle">Credit Classes @ViewBag.WhichClasses</h1>
+		<h1 id="pageTitle">Credit Classes</h1>
 	}
 
 	 @Html.Partial("a_to_z", alphabet)
