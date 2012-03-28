@@ -58,6 +58,9 @@ namespace CTCClassSchedule.Controllers
 		/// returned as an HTTP response.</returns>
 		public void Export(String YearQuarterID)
 		{
+			// Configurables
+			int subjectSeparatoreLineBreaks = 4;
+
 			// Use this to convert strings to file byte arrays
 			System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
 			StringBuilder fileText = new StringBuilder();
@@ -84,8 +87,13 @@ namespace CTCClassSchedule.Controllers
 			// Create all file data
 			foreach (vw_ProgramInformation program in divisions.Keys)
 			{
-				fileText.AppendLine();
+				for (int i = 0; i < subjectSeparatoreLineBreaks; i++)
+				{
+					fileText.AppendLine();
+				}
+
 				fileText.AppendLine(String.Concat("<CLS1>", program.Title));
+				fileText.AppendLine(String.Concat("<CLS9>", program.Division));
 				if (!String.IsNullOrEmpty(program.Intro))
 				{
 					fileText.AppendLine(String.Concat("<CLSP>", program.Intro));
@@ -126,7 +134,7 @@ namespace CTCClassSchedule.Controllers
 
 			// Write the file data as an HTTP response
 			string fileName = String.Concat("CourseData-", yrq.ID, "-", DateTime.Now.ToShortDateString(), ".txt");
-			fileText.Remove(0, 1); // Remove the first line break
+			fileText.Remove(0, subjectSeparatoreLineBreaks * 2); // Remove the first set of line breaks
 			byte[] fileData = encoding.GetBytes(fileText.ToString());
 			HttpResponseBase response = ControllerContext.HttpContext.Response;
 			string contentDisposition = String.Concat("attachment; filename=", fileName);
@@ -604,7 +612,7 @@ namespace CTCClassSchedule.Controllers
 
 			// Section title
 			text.AppendLine();
-			line = String.Concat("<CLS2>", section.CourseSubject, section.IsCommonCourse ? "&" : string.Empty, " ", section.CourseNumber, "\t", section.CourseTitle, " - ", creditsText);
+			line = String.Concat("<CLS2>", section.CourseSubject, section.IsCommonCourse ? "&" : string.Empty, " ", section.CourseNumber, "\t", section.CourseTitle, " [-] ", creditsText);
 			text.AppendLine(line);
 
 
@@ -632,6 +640,7 @@ namespace CTCClassSchedule.Controllers
 			string distanceEdMinStr = "7000";
 			string distanceEdMaxStr = "ZZZZ";
 			string arrangedStr = "Arranged";
+			string hybridCodeStr = "[h]";
 			string instructorDefaultNameStr = "staff";
 			TimeSpan eveningCourse = new TimeSpan(17, 30, 0);
 
@@ -641,11 +650,13 @@ namespace CTCClassSchedule.Controllers
 			string tagStr = string.Empty;
 			string startTimeStr = string.Empty;
 			string endTimeStr = string.Empty;
+			string hybridStr = string.Empty;
 			string instructorName = string.Empty;
 			DateTime startTime;
 
 			// Build the line that describes the offered instance of the course
 			tagStr = "<CLS5>";
+			hybridStr = section.IsHybrid ? String.Concat(hybridCodeStr, "\t") : string.Empty;
 			if (item.IsPrimary || !item.IsPrimary && !String.IsNullOrEmpty(item.InstructorName))
 			{
 				instructorName = getNameShortFormat(item.InstructorName) ?? instructorDefaultNameStr;
@@ -659,7 +670,7 @@ namespace CTCClassSchedule.Controllers
 
 				if (item.IsPrimary)
 				{
-					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", section.SectionCode, "\t", instructorName, "\t", item.Days, "\t", startTimeStr, "-", endTimeStr, "\t", item.Room);
+					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", hybridStr, section.SectionCode, "\t", instructorName, "\t", item.Days, "\t", startTimeStr, "-", endTimeStr, "\t", item.Room);
 				}
 				else
 				{
@@ -670,7 +681,7 @@ namespace CTCClassSchedule.Controllers
 			{
 				if (item.IsPrimary)
 				{
-					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", section.SectionCode, "\t", instructorName, "\t", onlineDaysStr, "\t", item.Room ?? onlineRoomStr);
+					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", hybridStr, section.SectionCode, "\t", instructorName, "\t", onlineDaysStr, "\t", item.Room ?? onlineRoomStr);
 				}
 				else
 				{
@@ -697,7 +708,7 @@ namespace CTCClassSchedule.Controllers
 
 				if (item.IsPrimary)
 				{
-					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", section.SectionCode, "\t", instructorName, "\t", daysStr, roomStr);
+					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", hybridStr, section.SectionCode, "\t", instructorName, "\t", daysStr, roomStr);
 				}
 				else
 				{
