@@ -500,17 +500,7 @@ namespace CTCClassSchedule.Common
 		/// </summary>
 		static public IList<YearQuarter> getFutureQuarters(OdsRepository repository)
 		{
-			// 3/26/2012 NOTE: This is expect to halt builds until the latest version of the ODS API is pushed out.
-			// Until then the GetFutureQuarters(int) method will not exist.
-			IList<YearQuarter> futureQuarters;
-			try
-			{
-				futureQuarters = repository.GetFutureQuarters(3);
-			}
-			catch
-			{
-				futureQuarters = repository.GetRegistrationQuarters(3);
-			}
+			IList<YearQuarter> futureQuarters = repository.GetFutureQuarters(3);
 			return futureQuarters;
 		}
 
