@@ -50,7 +50,7 @@
 			</div>
 			<div id="printable-schedules"> <!-- Bellevue specific and/or optional -->
 				You can also <a href="http://bellevuecollege.edu/about/publications/schedule/">Download PDF versions of the credit class schedule</a>.
-				@if (/*Helpers.isAdmin(Context)*/ true || Helpers.isEditor(Context)) {
+				@if (Helpers.isAdmin(Context) || Helpers.isEditor(Context)) {
 					<br />@:Download course data for
 					bool isFirst = true;
 					foreach (YearQuarter yrq in ViewBag.RegistrationQuarters) {
