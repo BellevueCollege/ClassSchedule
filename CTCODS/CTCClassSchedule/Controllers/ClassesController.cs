@@ -656,7 +656,7 @@ namespace CTCClassSchedule.Controllers
 
 			// Build the line that describes the offered instance of the course
 			tagStr = "<CLS5>";
-			hybridStr = section.IsHybrid ? String.Concat(hybridCodeStr, "\t") : string.Empty;
+			hybridStr = section.IsHybrid ? String.Concat(hybridCodeStr, " ") : string.Empty;
 			if (item.IsPrimary || !item.IsPrimary && !String.IsNullOrEmpty(item.InstructorName))
 			{
 				instructorName = getNameShortFormat(item.InstructorName) ?? instructorDefaultNameStr;
@@ -816,7 +816,7 @@ namespace CTCClassSchedule.Controllers
 				results[currentProgram].AddRange(tempSections);
 			}
 
-			return results;
+			return results.OrderBy(p => p.Key.Division).ToDictionary(p => p.Key, p => p.Value);
 		}
 
 		/// <summary>
