@@ -70,46 +70,56 @@
 
 
         <div class="aside">
-				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
+				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
                 {
-				                    <div id="programWebsite">
-                                    <h2>Department</h2>
-					                    <a href="@ViewBag.ProgramUrl" class="programWebsite">
-                                            @if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
-                                            {
-                                                @ViewBag.AcademicProgram
-                                            }
-                                            else if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
-                                            {
-                                                @ViewBag.ProgramTitle
-                                            }
-                                            else
-                                            {
-                                                <text>Program</text>
-                                            }
-                                        website</a>
-				                    </div>
+				    <div class="generalInfo">
+                    <h2>Department</h2>
+					    @if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
+                        {
+                         <a href="@ViewBag.ProgramUrl">
+                            @if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
+                            {
+                                @ViewBag.AcademicProgram
+                            }
+                            else
+                            {
+                                @ViewBag.ProgramTitle
+                            }
+                         </a>
+                         }
+                         else {
+                            if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
+                            {
+                                @ViewBag.AcademicProgram
+                            }
+                            else
+                            {
+                                @ViewBag.ProgramTitle
+                            }
+                         }
+				    </div>
                 }
 
 						@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionTitle))
-            {
-							<div id="divisionWebsite">
+      {
+							<div class="generalInfo">
 								<h2>Division</h2>
 								@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionURL))
-								{
-									<a href="@ViewBag.DivisionURL" class="divisionWebsite">@ViewBag.DivisionTitle</a>
-								}
-								else {
+        {
+									<a href="@ViewBag.DivisionURL">@ViewBag.DivisionTitle</a>
+        }
+        else
+        {
 									@ViewBag.DivisionTitle
-								}
+        }
 							</div>
-						}
+      }
             </div><!-- aside -->
 
             <div id="class-details">
 						@{
-    IList<CourseDescription> descriptions = course.Descriptions.ToList();
-    int descriptionsCount = descriptions.Count;
+      IList<CourseDescription> descriptions = course.Descriptions.ToList();
+      int descriptionsCount = descriptions.Count;
 						}
 						@if (descriptionsCount > 0)
       {

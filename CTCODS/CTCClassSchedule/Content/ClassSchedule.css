@@ -385,9 +385,9 @@ li.subject { list-style-type: none;}
 }
 
 
-#programWebsite { padding-left: 20px; margin-top: 21px}
+.generalInfo { padding-left: 20px; margin-top: 21px}
 
-#programWebsite h2 {
+.generalInfo h2 {
     font-size: 13px; font-weight: bold;}
 
 #thanksMsg {
