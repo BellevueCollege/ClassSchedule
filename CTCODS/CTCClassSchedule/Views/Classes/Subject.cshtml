@@ -16,30 +16,45 @@
         <div id="content">
 	    @if (ViewBag.ItemCount == 0)
      {
-				string subject = ViewContext.RouteData.Values["Subject"].ToString();
+         string subject = ViewContext.RouteData.Values["Subject"].ToString();
 				<h1>No @subject classes were found</h1>
 				<p><strong>TIP:</strong> Try changing the <strong>Subject</strong> to the left.</p>
-		 }
-		 else
-		 {
+     }
+     else
+     {
 
-				if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle)) {
+         if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
+         {
 
 
                     <h1 id="pageTitle">@ViewBag.ProgramTitle</h1>
-                }
+         }
 
-                if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
-                {
-		            <p id="programWebsite">
-			            <a href="@ViewBag.ProgramUrl" class="programWebsite">Program Website</a>
-		            </p>
-                }
-
-				if (!string.IsNullOrWhiteSpace(ViewBag.SubjectIntro))
-                 {
+         if (!string.IsNullOrWhiteSpace(ViewBag.SubjectIntro))
+         {
                      <p class="subjectdesc">@ViewBag.SubjectIntro</p>
-                 }
+         }
+         if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
+         {
+		            <p id="programLink">
+					<strong>Need more info?</strong> <a href="@ViewBag.ProgramUrl" class="programWebsite">Visit the
+                        @if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
+                        {
+                            @ViewBag.AcademicProgram
+                        }
+                        else if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
+                        {
+                            @ViewBag.ProgramTitle
+                        }
+                        else
+                        {
+                            <text>Program</text>
+                        }
+                    website</a>
+				</p>
+         }
+
+
 
 		    <div id="classDescriptions">
 		    @foreach (var item in Model.OrderBy(c => c.Number))
@@ -96,7 +111,7 @@
 
       }
 	    </div> <!-- #classInfoWrap -->
-		 }
+     }
         </div> <!-- #content -->
 
 

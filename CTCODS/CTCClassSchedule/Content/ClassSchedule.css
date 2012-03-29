@@ -384,8 +384,9 @@ li.subject { list-style-type: none;}
     padding: 0 20px;
 }
 
+#programLink { padding-left: 20px; margin-top: 21px}
 
-.generalInfo { padding-left: 20px; margin-top: 21px}
+.generalInfo { padding-left: 20px;}
 
 .generalInfo h2 {
     font-size: 13px; font-weight: bold;}
