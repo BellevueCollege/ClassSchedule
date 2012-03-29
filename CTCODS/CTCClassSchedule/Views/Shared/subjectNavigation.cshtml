@@ -28,9 +28,6 @@
 					spinner.spin(document.getElementById('nav-choose-subjects'));
 				}
 			},
-			//			Cancel: function() {
-			//				$(this).dialog("close");
-			//			},
 		})
 	});
 </script>
@@ -62,10 +59,9 @@
 											 new AjaxOptions
 											 {
 												 UpdateTargetId = "nav-choose-subjects",
-												 HttpMethod = "GET",
+												 HttpMethod = "POST",
 												 InsertionMode = InsertionMode.Replace,
-												 OnBegin = "$('#nav-choose-subjects').dialog('open');",
-												 OnComplete = "spinner.stop();",
+												 OnBegin = "$('#nav-choose-subjects').dialog('open');"
 											 })
 
 <div id="nav-choose-subjects" title="Select new course subject"></div>

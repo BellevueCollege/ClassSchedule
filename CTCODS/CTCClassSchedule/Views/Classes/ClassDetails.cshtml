@@ -90,6 +90,20 @@
                                         website</a>
 				                    </div>
                 }
+
+						@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionTitle))
+            {
+							<div id="divisionWebsite">
+								<h2>Division</h2>
+								@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionURL))
+								{
+									<a href="@ViewBag.DivisionURL" class="divisionWebsite">@ViewBag.DivisionTitle</a>
+								}
+								else {
+									@ViewBag.DivisionTitle
+								}
+							</div>
+						}
             </div><!-- aside -->
 
             <div id="class-details">

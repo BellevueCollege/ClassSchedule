@@ -37,7 +37,7 @@ namespace CTCClassSchedule.Controllers
 		///			http://localhost/Api/Subjects?format=json
 		///		</example>
 		/// </remarks>
-		[HttpGet]
+		[HttpPost]
 		public ActionResult Subjects(string format, string YearQuarter)
 		{
 			using (OdsRepository db = new OdsRepository(HttpContext))

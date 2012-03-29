@@ -503,6 +503,8 @@ namespace CTCClassSchedule.Controllers
 					ViewBag.CourseOutcome = null;
 				}
 
+
+
 				IEnumerable<SectionWithSeats> sectionsEnum;
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
@@ -869,6 +871,28 @@ namespace CTCClassSchedule.Controllers
 				const string DEFAULT_URL = "";
 				const string DEFAULT_INTRO = "";
 				const string DEFAULT_ACADEMICPROGRAM = "";
+				const string DEFAULT_DIVISIONURL = "";
+				const string DEFAULT_DIVISIONTITLE = "";
+
+				/*
+				 *
+				 *
+				 * 				using (ClassScheduleDb db = new ClassScheduleDb()){
+					var DepartmentInfo = (from d in db.vw_ProgramInformation
+																where d.Abbreviation == Subject
+																select d).Take(1).ToList();
+
+
+					foreach (vw_ProgramInformation temp in DepartmentInfo)
+					{
+						string DivisionTitle
+							string DivisionUrl
+
+					}
+				}
+				 *
+				 *
+				 */
 				bool disposeDb = false;
 
 				if (db == null)
@@ -901,6 +925,10 @@ namespace CTCClassSchedule.Controllers
 						ViewBag.ProgramTitle = program.Title ?? DEFAULT_TITLE;
 						ViewBag.SubjectIntro = program.Intro ?? DEFAULT_INTRO;
 						ViewBag.AcademicProgram = program.AcademicProgram ?? DEFAULT_ACADEMICPROGRAM;
+						ViewBag.DivisionURL = program.DivisionURL ?? DEFAULT_DIVISIONURL;
+						ViewBag.DivisionTitle = program.Division ?? DEFAULT_DIVISIONTITLE;
+
+
 
 						string url = program.ProgramURL ?? DEFAULT_URL;
 
