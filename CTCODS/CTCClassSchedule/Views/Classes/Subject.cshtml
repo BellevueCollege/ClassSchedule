@@ -93,23 +93,33 @@
 				        @item.Descriptions.First().Description
 				        </p>
 
-        }
-        else
-        {
+								if (@item.Descriptions.Count() > 1)
+								{
+									<div id="courseDescriptionUpcoming">
+										<h3>New description starting @item.Descriptions.Skip(1).Take(1)</h3>
+										<p>
+											@item.Descriptions.Skip(1).Take(1)
+										</p>
+									</div>
+								}
+
+				}
+				else
+				{
 				        <p class="classDescription error">No class description found. Please report this via the feedback link at the top of this website</p>
-        }
+				}
 
                     <p class="classDetailsLink">
 				        @Html.ActionLink("View details for " + courseID,
-                                                                "ClassDetails",
-                                                                "Classes",
-                                                                new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number },
-                                                                null)
+																																"ClassDetails",
+																																"Classes",
+																																new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number },
+																																null)
 		            </p>
 
                 </div>
 
-      }
+			}
 	    </div> <!-- #classInfoWrap -->
      }
         </div> <!-- #content -->
