@@ -1,2 +1,9 @@
-﻿#sectionTitle { position: static
-}
+﻿/*We <3 IE7 */
+#site-navigation {z-index: 10}
+#sectionTitle { position: relative; margin-bottom: -29px;}
+.sidebar { z-index: 0}
+#browse a.home {height: 31px;}
+#search {height: 31px;}
+#searchfield-wrap {height: 20px;}
+#searchbutton-wrap  {height: 20px; line-height: 21px}
+#register a {height: 31px;}

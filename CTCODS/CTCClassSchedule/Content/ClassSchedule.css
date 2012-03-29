@@ -454,7 +454,7 @@ li.subject { list-style-type: none;}
 #browse{
 	display: inline;
 }
-#browse a.home {
+#browse a.home {  /*note IE7 hack*/
     float: left;
 	width: 160px;
 	min-height: 31px;
@@ -475,7 +475,7 @@ li.subject { list-style-type: none;}
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#004d9a', endColorstr='#003d79',GradientType=0 ); /* IE6-9 */
 
 }
-* html #browse a.home {height: 31px;} /*thanks IE6*/
+
 
 #browse a.home:hover, #browse a.home:focus { background-color: #003d79;}
 
@@ -541,7 +541,7 @@ li.subject { list-style-type: none;}
     margin-top: 10px
 }
 
-#search{
+#search{  /*note ie7 hack*/
 	float: left;
 	min-height: 31px;
 	padding: 0 0 0 17px;
@@ -559,7 +559,7 @@ li.subject { list-style-type: none;}
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#004d9a', endColorstr='#003d79',GradientType=0 ); /* IE6-9 */
 
 }
-* html #search {height: 31px;} /*thanks IE6*/
+
 
 #search-text
 {
@@ -588,7 +588,7 @@ li.subject { list-style-type: none;}
     width: 180px;
     float: left;
 }
-#searchfield-wrap
+#searchfield-wrap /*note IE7 hack*/
 {
     float: left;
     margin-top: 6px;
@@ -605,7 +605,7 @@ li.subject { list-style-type: none;}
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
 
 }
-* html #searchfield-wrap {height: 20px;} /*thanks IE6*/
+
 #searchfield-wrap.focus {
     background: none White ;
     }
@@ -619,7 +619,7 @@ li.subject { list-style-type: none;}
 	padding: 2px 0 0 0;
 }
 
-#searchbutton-wrap
+#searchbutton-wrap /*Note IE7 hack*/
 {
     float: left;
     min-height: 20px;
@@ -634,7 +634,7 @@ li.subject { list-style-type: none;}
     background: linear-gradient(top,  #f4f8e6 36%,#d6dbc3 65%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4f8e6', endColorstr='#d6dbc3',GradientType=0 ); /* IE6-9 */
     }
-* html #searchbutton-wrap  {height: 20px;} /*thanks IE6*/
+
 
 #searchfield-wrap.focus #searchbutton-wrap
 {
@@ -665,7 +665,7 @@ li.subject { list-style-type: none;}
 }
 
 
-#register a
+#register a /*note IE7 hack*/
 {
 	float: left;
     display: block;
@@ -687,7 +687,7 @@ li.subject { list-style-type: none;}
     background: linear-gradient(top,  #004d9a 0%,#003d79 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#004d9a', endColorstr='#003d79',GradientType=0 ); /* IE6-9 */
 }
-* html #register a {height: 31px;} /*thanks IE6*/
+
 
 #register a:hover, #register a:focus { background-color: #003d79;}
 
