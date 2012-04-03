@@ -1,0 +1,5 @@
+IF NOT EXISTS (SELECT * FROM master.dbo.syslogins WHERE loginname = N'CAMPUS\ELasater-N216D$')
+CREATE LOGIN [CAMPUS\ELasater-N216D$] FROM WINDOWS
+GO
+CREATE USER [campus\ELasater-N216D$] FOR LOGIN [CAMPUS\ELasater-N216D$]
+GO
