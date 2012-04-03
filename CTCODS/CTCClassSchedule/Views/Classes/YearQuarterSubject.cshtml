@@ -5,48 +5,46 @@
 @using Ctc.Ods.Types
 @model IList<CTCClassSchedule.SectionWithSeats>
 @{
-    MiniProfiler _profiler = MiniProfiler.Current;
+	MiniProfiler _profiler = MiniProfiler.Current;
 
-    IDictionary<string, object> _routeValues = ViewBag.RouteValues;
-    _routeValues["YearQuarterID"] = "All";
-    _routeValues["Subject"] = Model.Count > 0 ? Model.First().CourseSubject.Trim() : null;
-    RouteValueDictionary route = new RouteValueDictionary(_routeValues);
+	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
+	_routeValues["YearQuarterID"] = "All";
+	_routeValues["Subject"] = Model.Count > 0 ? Model.First().CourseSubject.Trim() : null;
+	RouteValueDictionary route = new RouteValueDictionary(_routeValues);
 
 
-    string courseID = string.Empty;
-    string sectionID = string.Empty;
-    string CourseTitle = string.Empty;
-    decimal credits = 0;
-    bool isVariableCredit = false;
-    string PreviousCourseID = courseID;
-    string PreviousSectionID = sectionID;
-    string PreviousCourseTitle = CourseTitle;
-    decimal PreviousCredits = credits;
-    bool PreviousIsVariableCredit = isVariableCredit;
+	string courseID = string.Empty;
+	string sectionID = string.Empty;
+	string CourseTitle = string.Empty;
+	decimal credits = 0;
+	bool isVariableCredit = false;
+	string PreviousCourseID = courseID;
+	string PreviousSectionID = sectionID;
+	string PreviousCourseTitle = CourseTitle;
+	decimal PreviousCredits = credits;
+	bool PreviousIsVariableCredit = isVariableCredit;
 
-    string FriendlyYRQ = string.Empty;
-    string thisYrq = string.Empty;
+	string FriendlyYRQ = string.Empty;
+	string thisYrq = string.Empty;
 
-    // sort by the markers indicators where we need to being a new block (w/ course title, etc.)
-    IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenByDescending(s => s.IsVariableCredits).ThenBy(s => s.Credits).ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)).ToList();
+	// sort by the markers indicators where we need to being a new block (w/ course title, etc.)
+	IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenByDescending(s => s.IsVariableCredits).ThenBy(s => s.Credits).ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)).ToList();
 
-    // Get the navigation list and other quarter information
-    IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
-    string currentYrq = yrqList[0].ID;
+	// Get the navigation list and other quarter information
+	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
+	string currentYrq = yrqList[0].ID;
 
-    if (ViewBag.YearQuarter != null)
-    {
-        YearQuarter yrq = ViewBag.YearQuarter;
-        thisYrq = yrq.ID;
-        FriendlyYRQ = yrq.FriendlyName;
-    }
+	if (ViewBag.YearQuarter != null)
+	{
+		YearQuarter yrq = ViewBag.YearQuarter;
+		thisYrq = yrq.ID;
+		FriendlyYRQ = yrq.FriendlyName;
+	}
 
-    ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Schedule at Bellevue College";
+	ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Schedule at Bellevue College";
 
 }
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
-
-
 <script type="text/javascript">
 
 	/* subject chooser pop-up dialog */
@@ -81,7 +79,7 @@
 
 
 			@if (Helpers.isEditor(Context))
-   {
+	 {
 
 				<text>
 				$('li.section-listing').hover(
@@ -94,11 +92,11 @@
 						$(this).removeClass('section-listing-edit edit-hover');
 				});
 				</text>
-   }
+	 }
 
 
 			@if (Helpers.isAdmin(Context))
-   {
+	 {
 				<text>
 				$('.classInfo').hover(
 					function () {
@@ -110,236 +108,234 @@
 						$(this).removeClass('edit-hover classInfo-edit');
 				});
 				</text>
-   }
+	 }
 
 	});
 </script>
-
 <div id="scheduleMain">
 	@{
-        Html.RenderPartial("quarterNavigation");
+		Html.RenderPartial("quarterNavigation");
 	}
 	<div id="container" class="sidebar">
-		<p id="sectionTitle"><a href="@Url.Action("YearQuarter", "Classes")">@FriendlyYRQ</a></p>
-        <div id="sidebar">
+		<p id="sectionTitle">
+			<a href="@Url.Action("YearQuarter", "Classes")">@FriendlyYRQ</a></p>
+		<div id="sidebar">
 			@{
-                Html.RenderPartial("advancedFacetedSearch");
+				Html.RenderPartial("advancedFacetedSearch");
 			}
 		</div>
 		<!-- #sidebar -->
 		<div id="content">
-
-
-
 			@if (Model.Count == 0)
-   {
-       string subject = ViewContext.RouteData.Values["Subject"].ToString();
-			<h1 id="pageTitle">No @subject classes were found</h1>
-			<div id="error-noclassesfound">
-				<strong>TIP:</strong>
-				@Html.Partial("subjectNavigation") or try selecting fewer <em>Refine</em> options to the left.
-			</div>
-   }
-   else
-   {
+	 {
+		 string subject = ViewContext.RouteData.Values["Subject"].ToString();
+				<h1 id="pageTitle">
+					No @subject classes were found</h1>
+				<div id="error-noclassesfound">
+					<strong>TIP:</strong>
+					@Html.Partial("subjectNavigation") or try selecting fewer <em>Refine</em> options
+					to the left.
+				</div>
+	 }
+	 else
+	 {
 
-                <h1 id="pageTitle">
+				<h1 id="pageTitle">
 					@ViewBag.ProgramTitle
 					<span class="subjectchooser">@Html.Partial("subjectNavigation")</span>
 				</h1>
 
 
 
-       if (!string.IsNullOrWhiteSpace(ViewBag.SubjectIntro))
-       {
-             <p class="subjectdesc">@ViewBag.SubjectIntro</p>
-       }
+		 if (!string.IsNullOrWhiteSpace(ViewBag.SubjectIntro))
+		 {
+				<p class="subjectdesc">@ViewBag.SubjectIntro</p>
+		 }
 
-       if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
-       {
+		 if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
+		 {
 				<p id="programLink">
 					<strong>Need more info?</strong> <a href="@ViewBag.ProgramUrl">Visit the
-                        @if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
-                        {
-                            @ViewBag.AcademicProgram
-                        }
-                        else if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
-                        {
-                            @ViewBag.ProgramTitle
-                        }
-                        else
-                        {
-                            <text>Program</text>
-                        }
-                    website</a>
+						@if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
+			{
+							@ViewBag.AcademicProgram
+			}
+			else if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
+			{
+							@ViewBag.ProgramTitle
+			}
+			else
+			{
+							<text>Program</text>
+			}
+						website</a>
 				</p>
-       }
+		 }
 
-       if (Helpers.isAdmin(Context))
-       {
+		 if (Helpers.isAdmin(Context))
+		 {
 
 				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
-       }
-       else if (Helpers.isEditor(Context))
-       {
+		 }
+		 else if (Helpers.isEditor(Context))
+		 {
 				<div class="message">@Context.User.Identity.Name! You have editor access to this section.</div>
-       }
+		 }
 
-       using (_profiler.Step("Rendering Sections by Course (outer loop)"))
-       {
-           IEnumerable<SectionWithSeats> linkedSections;
-           bool hasLinked;
+		 using (_profiler.Step("Rendering Sections by Course (outer loop)"))
+		 {
+			 IEnumerable<SectionWithSeats> linkedSections;
+			 bool hasLinked;
 
-           foreach (SectionWithSeats sec in orderedModel)
-           {
-               // ensure we don't have any bleed-over of data
-               linkedSections = null;
-               hasLinked = false;
+			 foreach (SectionWithSeats sec in orderedModel)
+			 {
+				 // ensure we don't have any bleed-over of data
+				 linkedSections = null;
+				 hasLinked = false;
 
-               courseID = sec.CourseID;
-               sectionID = sec.ID.ToString();
-               credits = sec.Credits;
-               isVariableCredit = sec.IsVariableCredits;
+				 courseID = sec.CourseID;
+				 sectionID = sec.ID.ToString();
+				 credits = sec.Credits;
+				 isVariableCredit = sec.IsVariableCredits;
 
-               if (!sec.IsLinked)
-               {
-                   linkedSections = orderedModel.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber);
-                   hasLinked = linkedSections.Count() > 0;
+				 if (!sec.IsLinked)
+				 {
+					 linkedSections = orderedModel.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber);
+					 hasLinked = linkedSections.Count() > 0;
 
-                   bool newBlock = courseID != PreviousCourseID || sec.CourseTitle != PreviousCourseTitle ||
-                                                  (courseID == PreviousCourseID && credits != PreviousCredits) ||
-                                                  (courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit) ||
-                                                  (courseID == PreviousCourseID && credits == PreviousCredits && isVariableCredit == PreviousIsVariableCredit && hasLinked);
+					 bool newBlock = courseID != PreviousCourseID || sec.CourseTitle != PreviousCourseTitle ||
+																					(courseID == PreviousCourseID && credits != PreviousCredits) ||
+																					(courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit) ||
+																					(courseID == PreviousCourseID && credits == PreviousCredits && isVariableCredit == PreviousIsVariableCredit && hasLinked);
 
-                   if (newBlock)
-                   {
-                       if (PreviousCourseID != "")
-                       {
+					 if (newBlock)
+					 {
+						 if (PreviousCourseID != "")
+						 {
 				@:</ul>
 					}
 
-                       route["Subject"] = sec.CourseSubject.Trim();
-                       route["ClassNum"] = sec.CourseNumber;
+						 route["Subject"] = sec.CourseSubject.Trim();
+						 route["ClassNum"] = sec.CourseNumber;
 
 				<text>
 				<div class="classInfo">
+					@if (Helpers.isAdmin(Context))
+		 {
+						@Ajax.ActionLink("Edit",
+																						"ClassEdit",
+																						"Api",
+																						new
+																						{
+																							CourseNumber = sec.CourseNumber.ToString(),
+																							Subject = sec.CourseSubject.ToString(),
+																							IsCommonCourse = sec.IsCommonCourse,
+																						},
+																						new AjaxOptions
+																						{
+																							UpdateTargetId = "edit-class",
+																							HttpMethod = "GET",
+																							InsertionMode = InsertionMode.Replace,
+																							OnBegin = "$('#edit-class').dialog('open');",
+																							OnComplete = "spinner.stop();",
+																						},
+																						new { @class = "edit_button" })
 
-				@if (Helpers.isAdmin(Context))
-    {
-					@Ajax.ActionLink("Edit",
-                                            "ClassEdit",
-                                            "Api",
-                                            new
-                                            {
-                                                CourseNumber = sec.CourseNumber.ToString(),
-                                                Subject = sec.CourseSubject.ToString(),
-                                                IsCommonCourse = sec.IsCommonCourse,
-                                            },
-                                            new AjaxOptions
-                                            {
-                                                UpdateTargetId = "edit-class",
-                                                HttpMethod = "GET",
-                                                InsertionMode = InsertionMode.Replace,
-                                                OnBegin = "$('#edit-class').dialog('open');",
-                                                OnComplete = "spinner.stop();",
-                                            },
-                                            new { @class = "edit_button" })
-
-    }
-				<h2 class="classHeading">
-					<a href="@Url.Action("ClassDetails", "Classes", route)">
-						@Html.Raw(string.Format("{0}{1} {2} {3}", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle))
-					</a>
-					 <span class="classCredits">&#8226;
-						@if (isVariableCredit)
-      {
-										@:V1-@Html.CreditsValue(sec.Credits)
+		 }
+					<h2 class="classHeading">
+						<a href="@Url.Action("ClassDetails", "Classes", route)">
+							@Html.Raw(string.Format("{0}{1} {2} {3}", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle))
+						</a><span class="classCredits">&#8226;
+							@if (isVariableCredit)
+			 {
+								@:V1-@Html.CreditsValue(sec.Credits)
 											<abbr title="variable credits">Cr.</abbr>
 
-      }
-      else
-      {
-										@Html.CreditsValue(sec.Credits)
-											<abbr title="credit(s)">Cr.</abbr>
+			 }
+			 else
+			 {
+								@Html.CreditsValue(sec.Credits)
+								<abbr title="credit(s)">
+									Cr.</abbr>
 
-      }
-						 </span>
-				@if (linkedSections != null)
-    {
-        foreach (SectionWithSeats linkedSec in linkedSections)
-        {
-			<br/>
-			<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
-				@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
-			</a>
-			 <span class="classCredits">&#8226;
-				@if (linkedSec.IsVariableCredits)
-    {
-								@:V1-@Html.CreditsValue(linkedSec.Credits)
+			 }
+						</span>
+						@if (linkedSections != null)
+			{
+				foreach (SectionWithSeats linkedSec in linkedSections)
+				{
+							<br />
+							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
+								@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
+							</a>
+							<span class="classCredits">&#8226;
+								@if (linkedSec.IsVariableCredits)
+				{
+									@:V1-@Html.CreditsValue(linkedSec.Credits)
 									<abbr title="variable credits">Cr.</abbr>
 
-    }
-    else
-    {
-								@Html.CreditsValue(linkedSec.Credits)
-									<abbr title="credit(s)">Cr.</abbr>
+				}
+				else
+				{
+									@Html.CreditsValue(linkedSec.Credits)
+									<abbr title="credit(s)">
+										Cr.</abbr>
 
-    }
-				 </span>
-        }
-    }
-              </h2>
-				<p class="classNotes">
-					@sec.CourseFootnotes
-					@if (sec.CourseFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
-     {
-						<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/entrycode/">How to clear prerequisites?</a>
-     }
-				</p>
-				<div class="classDetails">
-					@if (sec.CustomTitle != null && sec.CustomTitle != string.Empty)
-     {
-						@sec.CustomDescription
-     }
-
-					@if (!hasLinked)
-     {
-						@Html.ActionLink("View class details", "ClassDetails", "Classes", route, null)
-     }
-
-
-				</div> <!--classDetails -->
-                </div> <!-- classInfo-->
+				}
+							</span>
+				}
+			}
+					</h2>
+					<p class="classNotes">
+						@sec.CourseFootnotes
+						@if (sec.CourseFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
+			{
+							<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">
+								How to clear prerequisites?</a>
+			}
+					</p>
+					<div class="classDetails">
+						@if (sec.CustomTitle != null && sec.CustomTitle != string.Empty)
+			{
+							@sec.CustomDescription
+			}
+						@if (!hasLinked)
+			{
+							@Html.ActionLink("View class details", "ClassDetails", "Classes", route, null)
+			}
+					</div>
+					<!--classDetails -->
+				</div>
+				<!-- classInfo-->
 				<ul class='course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))'>
-
-
 				</text>
-                   }
+					 }
 
-                   if (PreviousSectionID != sectionID)
-                   {
-                       // NOTE: We must pass the current ViewData object to RenderPartial here.
-                       // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-                       ViewData["PreviousSectionID"] = PreviousSectionID;
-                       Html.RenderPartial("Sections", sec, ViewData);
-                   }
-               }  @* end sec.IsLInked *@
+					 if (PreviousSectionID != sectionID)
+					 {
+						 //bothSections includes a master and its subordinate linked section(s).
+						 List<SectionWithSeats> multipleSections = new List<SectionWithSeats>();
+						 multipleSections.Add(sec);
+						 foreach (SectionWithSeats linkedSec in linkedSections) {
+							 multipleSections.Add(linkedSec);
+						 }
 
-               PreviousCredits = sec.Credits;
-               PreviousSectionID = sectionID;
-               PreviousCourseID = courseID;
-               PreviousCourseTitle = sec.CourseTitle;
-               PreviousIsVariableCredit = isVariableCredit;
-           }
-       }
-   }
+						 // NOTE: We must pass the current ViewData object to RenderPartial here.
+						 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+						 ViewData["PreviousSectionID"] = PreviousSectionID;
+						 Html.RenderPartial("Sections", multipleSections, ViewData);
+					 }
+				 }  @* end sec.IsLInked *@
 
-
-
-
-	<div title="Edit Section" id="edit-section"></div>
-	<div title="Edit Class" id="edit-class"></div>
-
+				 PreviousCredits = sec.Credits;
+				 PreviousSectionID = sectionID;
+				 PreviousCourseID = courseID;
+				 PreviousCourseTitle = sec.CourseTitle;
+				 PreviousIsVariableCredit = isVariableCredit;
+			 }
+		 }
+	 }
+			<div title="Edit Section" id="edit-section"></div> <div title="Edit Class" id="edit-class"></div>
 		</div>
 		<!-- content -->
 	</div>

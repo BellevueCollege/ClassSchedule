@@ -177,10 +177,18 @@
 
 			 if (sectionID != PreviousSectionID)
 			 {
+				 //multipleSections includes a master and its subordinate linked section(s).
+				 List<SectionWithSeats> multipleSections = new List<SectionWithSeats>();
+				 multipleSections.Add(sec);
+				 foreach (SectionWithSeats linkedSec in linkedSections)
+				 {
+					 multipleSections.Add(linkedSec);
+				 }
+
 				 // NOTE: We must pass the current ViewData object to RenderPartial here.
 				 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
 				 ViewData["PreviousSectionID"] = PreviousSectionID;
-				 Html.RenderPartial("Sections", sec, ViewData);
+				 Html.RenderPartial("Sections", multipleSections, ViewData);
 			 }
 			 } @* end sec.IsLInked *@
 
