@@ -87,6 +87,16 @@
       }
 					</a>
                     </h2>
+
+			@if (string.Compare(item.YearQuarterBegin.ToString(), ViewBag.CurrentQuarter.ID.ToString()) == 1)
+			{
+				<div class="newClass">
+					New class effective starting @(ViewBag.CurrentQuarter.FriendlyName.ToString())
+				</div>
+
+			}
+
+
 				    @if (@item.Descriptions != null && @item.Descriptions.Count() > 0)
         {
 				        <p class="classDescription">

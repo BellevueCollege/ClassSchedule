@@ -210,6 +210,8 @@ textarea
 
 .classDescription{ padding: 0 20px;}
 
+.newClass{ padding: 0 20px; font-style: italic; color: #444;}
+
 .classDetailsLink {padding: 0 20px;}
 
 .classNumber a

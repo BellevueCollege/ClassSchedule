@@ -226,6 +226,12 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.ItemCount = coursesEnum.Count();
 				ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
+
+
+				IList<YearQuarter> currentQuarter = repository.GetRegistrationQuarters(1);
+
+				ViewBag.CurrentQuarter = currentQuarter[0];
+
 				SetProgramInfoVars(Subject);
 
 				SetCommonViewBagVars(repository, "", "", "");
