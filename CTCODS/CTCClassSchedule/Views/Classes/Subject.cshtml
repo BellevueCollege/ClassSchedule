@@ -106,9 +106,9 @@
 								if (@item.Descriptions.Count() > 1)
 								{
 									<div id="courseDescriptionUpcoming">
-										<h3>New description starting @item.Descriptions.Skip(1).Take(1)</h3>
+										<h3>New description starting @item.Descriptions.ElementAt(1).YearQuarterBegin.FriendlyName.ToString()</h3>
 										<p>
-											@item.Descriptions.Skip(1).Take(1))
+											@item.Descriptions.ElementAt(1).Description
 										</p>
 									</div>
 								}
