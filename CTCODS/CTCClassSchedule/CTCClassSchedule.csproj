@@ -69,10 +69,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\AntiXssLibrary.dll</HintPath>
     </Reference>
-      <Reference Include="CtcOdsApi, Version=0.9.9.0, Culture=neutral, processorArchitecture=MSIL">
-          <SpecificVersion>False</SpecificVersion>
-          <HintPath>..\..\packages\CtcOdsApi.0.9.9\lib\net40\CtcOdsApi.dll</HintPath>
-      </Reference>
+    <Reference Include="CtcOdsApi, Version=0.9.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\CtcOdsApi.0.9.12\lib\net40\CtcOdsApi.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetCasClient">
       <HintPath>..\..\packages\DotNetCasClient.1.0.1\lib\DotNetCasClient.dll</HintPath>
     </Reference>
@@ -287,6 +287,7 @@
     <Content Include="globals\btheme_v0.1\img\twitter.png" />
     <Content Include="globals\btheme_v0.1\img\youtube.png" />
     <Content Include="globals\btheme_v0.1\js\searchbox.js" />
+    <Content Include="license.CtcOdsApi.txt" />
     <Content Include="Scripts\CtcClassSchedule.js" />
     <Content Include="Scripts\jquery.ui.timepicker.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />

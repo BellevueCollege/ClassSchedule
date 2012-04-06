@@ -589,12 +589,12 @@
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetCourses(System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
             <summary>
-            Retrieves all courses from the database
+            Retrieves all <see cref="T:Ctc.Ods.Types.Course"/>s from the ODS
             </summary>
             <returns></returns>
             <remarks>
 		<example>
-			<code>
+			<code type="cs">
             using (OdsRepository repository = new OdsRepository())
             {
 		IEnumerable&lt;Course&gt; courses = repository.GetCourses();
@@ -605,6 +605,7 @@
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetCourses(System.String,System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
             <summary>
+             Retrieves the specified <see cref="T:Ctc.Ods.Types.Course"/>s from the ODS
             </summary>
             <param name="subject"></param>
             <param name="facetOptions"></param>
@@ -612,31 +613,33 @@
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetCourses(System.Collections.Generic.IList{System.String},System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
             <summary>
-
+            Retrieves the specified <see cref="T:Ctc.Ods.Types.Course"/>s from the ODS
             </summary>
             <param name="subjects"></param>
             <param name="facetOptions"></param>
             <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetCourses(Ctc.Ods.Types.ICourseID,System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
-             <summary>
-             Retrieves the specified course from the database
-             </summary>
-             <param name="courseId"></param>
+            <summary>
+            Retrieves the specified <see cref="T:Ctc.Ods.Types.Course"/>s from the ODS
+            </summary>
+            <param name="courseId"></param>
             <param name="facetOptions"></param>
-            <returns></returns>
-             <remarks>
-             NOTE: This may return more than one <see cref="T:Ctc.Ods.Types.Course"/> record.
-
-             <example>
-			<code>
-             using (OdsRepository repository = new OdsRepository())
+            <returns>
+		<note type="note">
+		This method may return more than one <see cref="T:Ctc.Ods.Types.Course"/> record.
+		</note>
+            </returns>
+            <remarks>
+		<example>
+			<code type="cs">
+		using (OdsRepository repository = new OdsRepository())
 		{
-			IEnumerable&lt;Course&gt; courses = repository.GetCourses(CourseID.FromString("art 101"));
-             }
+			IList&lt;Course&gt; courses = repository.GetCourses(CourseID.FromString("ART 101"));
+		}
 			</code>
-             </example>
-             </remarks>
+		</example>
+            </remarks>
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetCourseDescription(Ctc.Ods.Types.ICourseID,Ctc.Ods.Types.YearQuarter)">
             <summary>
@@ -648,8 +651,16 @@
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetAllCourses(Ctc.Ods.Types.YearQuarter,Ctc.Ods.Types.ICourseID,System.String[])">
             <summary>
-
+            Returns all <see cref="T:Ctc.Ods.Types.Course"/>s without <see cref="T:Ctc.Ods.Types.Section"/> filtering
             </summary>
+            <param name="yrq">Only retrieve <see cref="T:Ctc.Ods.Types.Course"/>s that are active for the specified <see cref="T:Ctc.Ods.Types.YearQuarter"/></param>
+            <param name="courseId">Only retrieve <see cref="T:Ctc.Ods.Types.Course"/>s for the specified <see cref="T:Ctc.Ods.Types.ICourseID"/></param>
+            <param name="subjects">Only retrieve <see cref="T:Ctc.Ods.Types.Course"/>s with the specified subject prefix(es).</param>
+            <remarks>
+		If any <see cref="!:GetCourses()"/> method was called without specifying any <see cref="T:Ctc.Ods.ISectionFacet"/>s, this method
+		will retrieve all current and future <see cref="T:Ctc.Ods.Types.Course"/>s after applying the remaining filter requests (e.g.
+		<paramref name="courseId"/>, <paramref name="subjects"/>, etc.)
+            </remarks>
             <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetSections(System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
@@ -2575,6 +2586,13 @@
             <param name="buffer"></param>
             <param name="token"></param>
             <param name="component"></param>
+        </member>
+        <member name="M:Ctc.Ods.Utility.TrimCommonCourseChar(System.String)">
+            <summary>
+            Removes the <see cref="!:ApiSettings.RegexPatterns.CommonCourseChar"/> from the end of a string.
+            </summary>
+            <param name="courseSubject"></param>
+            <returns>A new string with the trailing <see cref="!:ApiSettings.RegexPatterns.CommonCourseChar"/> removed.</returns>
         </member>
         <member name="P:Ctc.Ods.Utility.AssemblyName">
             <summary>
