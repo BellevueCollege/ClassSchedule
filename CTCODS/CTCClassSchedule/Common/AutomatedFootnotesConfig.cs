@@ -48,7 +48,6 @@ namespace CTCClassSchedule
 			string footenoteText = buildFootnoteText(section.IsDifferentStartDate,
 																								section.IsDifferentEndDate,
 																								section.IsHybrid,
-																								section.IsContinuousEnrollment,
 																								section.StartDate.GetValueOrDefault(DateTime.Now),
 																								section.EndDate.GetValueOrDefault(DateTime.Now));
 			return wSpace + footenoteText;
@@ -65,7 +64,6 @@ namespace CTCClassSchedule
 			string footenoteText = buildFootnoteText(section.IsDifferentStartDate,
 																								section.IsDifferentEndDate,
 																								section.IsHybrid,
-																								section.IsContinuousEnrollment,
 																								section.StartDate.GetValueOrDefault(DateTime.Now),
 																								section.EndDate.GetValueOrDefault(DateTime.Now));
 			return wSpace + footenoteText;
@@ -82,7 +80,7 @@ namespace CTCClassSchedule
 		/// <param name="startDate">The courses scheduled start date.</param>
 		/// <param name="endDate">The courses scheduled end date.</param>
 		/// <returns>All relevant automated footnotes in one concatenated string.</returns>
-		private static string buildFootnoteText(Boolean differentStartFlag, Boolean differentEndFlag, Boolean hybridFlag, Boolean continuousEnrollmentFlag, DateTime startDate, DateTime endDate)
+		private static string buildFootnoteText(Boolean differentStartFlag, Boolean differentEndFlag, Boolean hybridFlag, DateTime startDate, DateTime endDate)
 		{
 			string footnoteTextResult = string.Empty;
 			string dateParam = "{DATE}";
@@ -111,17 +109,8 @@ namespace CTCClassSchedule
 				footnoteTextResult += Footnotes("hybrid").Text;
 			}
 
-			// If the section is a continuous enrollment section
-			if (continuousEnrollmentFlag)
-			{
-				footnote = Footnotes("continuousEnrollment");
-				dateText = endDate.ToString(footnote.StringFormat);
-				footnoteTextResult += footnote.Text.Replace(dateParam, dateText) + " ";
-			}
-
 			return footnoteTextResult.Trim();
 		}
-
 
 		/// <summary>
 		/// Returns a dictionary of all elements within a given collection of footnote messages.
