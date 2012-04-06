@@ -1067,8 +1067,8 @@ ul.section-details li.section-notes
 }
 a.footnote-prereq  { color: #666}
 #courseDescription{}
-#courseDescriptionUpcoming{ color: #666}
-#courseDescriptionUpcoming h3 {
+#courseDescriptionUpcoming, #courseUpcoming{ color: #666}
+#courseDescriptionUpcoming h3, #courseUpcoming h3 {
     font-size: 13px;
     /*margin-top: 21px;*/
 }
