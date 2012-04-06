@@ -215,7 +215,7 @@
 				@:</ul>
 					}
 
-						 route["Subject"] = sec.CourseSubject.Trim();
+						 route["Subject"] = sec.IsCommonCourse == true ? sec.CourseSubject.Trim() + "&" : sec.CourseSubject.Trim();
 						 route["ClassNum"] = sec.CourseNumber;
 
 				<text>

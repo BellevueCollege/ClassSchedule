@@ -95,7 +95,7 @@
 			 if (PreviousCourseID != courseID || courseTitle != PreviousCourseTitle || (courseID == PreviousCourseID && courseTitle == PreviousCourseTitle && hasLinked))
 			 {
 
-				 _routeValues["Subject"] = sec.CourseSubject;
+				 _routeValues["Subject"] = sec.IsCommonCourse == true ? sec.CourseSubject.Trim() + "&" : sec.CourseSubject.Trim();
 				 _routeValues["ClassNum"] = sec.CourseNumber;
 				 if (courseID != PreviousCourseID && PreviousCourseID != "")
 				 {
