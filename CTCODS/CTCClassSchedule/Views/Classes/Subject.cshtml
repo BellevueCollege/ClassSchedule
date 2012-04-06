@@ -58,12 +58,15 @@
 
 		    <div id="classDescriptions">
 		    @foreach (var item in Model.OrderBy(c => c.Number))
-      {
-          string courseID = string.Format("{0}{1} {2}", item.Subject, item.IsCommonCourse ? "&" : string.Empty, item.Number);
+			{
+				string courseID = string.Format("{0}{1} {2}", item.Subject, item.IsCommonCourse ? "&" : string.Empty, item.Number);
 
 			    <div class="classInfo">
                     <h2 class="classHeading">
-							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number })">
+										@{
+											string subjectURL = item.IsCommonCourse == true ? item.Subject.Trim() + "&" : item.Subject.Trim();
+										}
+							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = subjectURL, ClassNum = item.Number })">
 
 							<span class="classNumber">
 								@Html.Raw(string.Format("{0} {1}", courseID, item.Title))
@@ -123,7 +126,7 @@
 				        @Html.ActionLink("View details for " + courseID,
 																																"ClassDetails",
 																																"Classes",
-																																new { YearQuarterID = "All", Subject = item.Subject, ClassNum = item.Number },
+																																 new { YearQuarterID = "All", Subject = subjectURL, ClassNum = item.Number },
 																																null)
 		            </p>
 
