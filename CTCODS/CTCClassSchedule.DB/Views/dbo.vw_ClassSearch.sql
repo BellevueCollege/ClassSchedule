@@ -1,7 +1,9 @@
+
 SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
 GO
+
 
 
 
@@ -29,6 +31,7 @@ c.ClassID
 END as InstructorName
 ,(select top 1 [Description] from ODS.dbo.vw_CourseDescription where CourseID=c.CourseID order by EffectiveYearQuarterBegin DESC) as CourseDescription
 ,(select top 1 [Description] from ODS.dbo.vw_CourseDescription2 where CourseID=c.CourseID order by EffectiveYearQuarterBegin DESC) as CourseDescription2
+,c.ItemYRQLink
 from ODS.dbo.vw_Class c
 left outer join ODS.dbo.vw_CoursePrefix p on c.Department = p.CoursePrefixID
 left outer join ODS.dbo.vw_Course c1 on c.CourseID=c1.CourseID and c1.EffectiveYearQuarterEnd='Z999'
@@ -41,6 +44,8 @@ where YearQuarterID>='B013'
 
 
 
+
 GO
+
 GRANT SELECT ON  [dbo].[vw_ClassSearch] TO [WebApplicationUser]
 GO

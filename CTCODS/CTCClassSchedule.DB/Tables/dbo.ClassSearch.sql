@@ -1,6 +1,7 @@
 CREATE TABLE [dbo].[ClassSearch]
 (
 [ClassID] [char] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ItemYrqLink] [char] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [SearchGroup1] [varchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [SearchGroup2] [varchar] (4089) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [SearchGroup3] [varchar] (289) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,

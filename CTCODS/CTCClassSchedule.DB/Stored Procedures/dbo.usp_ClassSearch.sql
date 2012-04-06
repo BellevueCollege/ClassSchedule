@@ -12,26 +12,28 @@ CREATE procedure [dbo].[usp_ClassSearch]
 )
 
 AS
-
+/*
+DECLARE @SearchWord nvarchar(100), @YearQuarterID char(4)
+SELECT @SearchWord = 'deved', @YearQuarterID = 'B124'
+--*/
 
 declare @SearchString nvarchar(100) --preserve original string typed in by the user
 set @SearchString = @SearchWord
 
---DECLARE @SearchWord nvarchar(100)
---set @SearchWord = 'art space sun boil'
 set @SearchWord = RTRIM(@SearchWord)
 SET @SearchWord = N'("' + REPLACE(@SearchWord, ' ', '*" AND "') + '*")'
---select @SearchWord
 
 
 /*
+select @SearchWord
+
 select
 *
 from
 ClassSearch
 where ClassID='0640B121'
 where CONTAINS((SearchGroup1, SearchGroup2, SearchGroup3), @SearchWord)
-*/
+--*/
 
 select
 ClassID
@@ -80,6 +82,14 @@ and FT_TBL.ClassID not in (select ClassID from #Results)
 ORDER BY KEY_TBL.RANK DESC;
 
 
+insert into #Results
+SELECT FT_TBL.ClassID, 0, 0
+FROM ClassSearch AS FT_TBL
+WHERE RIGHT(ClassID, 4) = @YearQuarterID
+AND ItemYrqLink IN (SELECT LEFT(ClassID, 4) FROM #Results)
+and FT_TBL.ClassID not in (select ClassID from #Results)
+
+
 
 insert SearchLog (SearchString,Group1Results,Group2Results,Group3Results)
 select
@@ -101,6 +111,7 @@ from #Results r
 drop table #Results
 
 GO
+
 
 GRANT EXECUTE ON  [dbo].[usp_ClassSearch] TO [WebApplicationUser]
 GO

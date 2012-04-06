@@ -1,3 +1,4 @@
+
 SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_NULLS ON
@@ -25,12 +26,14 @@ from vw_CourseSearch
 insert ClassSearch
 (
 ClassID
+,ItemYRQLink
 ,SearchGroup1
 ,SearchGroup2
 ,SearchGroup3
 )
 select
 ClassID
+,ItemYRQLink
 ,isNULL(RTrim(Left(CourseID, 5)), '') + ' ' + ISNULL(Replace(CourseID, Left(CourseID,5), ''), '') + ' ' +  -- Remove extra spaces from CourseID, i.e. convert "ART  101" to "ART 101"
 isNULL(RTrim(Left(CourseID, 5)), '') + ISNULL(Replace(CourseID, Left(CourseID,5), ''), '') + ' ' + --a version of CourseID without spaces
 isNULL(ItemNumber, '') + ' ' + isNULL(CourseTitle, '') + ' ' + isNULL(CourseSubject, '') as SearchGroup1
