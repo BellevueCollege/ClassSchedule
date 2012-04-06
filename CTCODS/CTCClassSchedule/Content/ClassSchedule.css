@@ -71,8 +71,10 @@ abbr:hover {
 #betaFeedback
 {
 	position: absolute;
-	width: 150px;
-	top: 5px;
+	right: 0;
+	top: 265px;
+	width: 25px;
+	height: 25px;
 }
 
 

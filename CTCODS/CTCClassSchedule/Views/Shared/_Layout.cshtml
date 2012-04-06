@@ -57,13 +57,6 @@
 
 
 <body class="@(Helpers.getBodyClasses(Context))">
-	<div id="betaBar">
-		<div id="betaBarWrapper">
-			<div id="betaInfo">You are using the <strong>class schedule</strong> BETA - <a href="http://bellevuecollege.edu/schedule/">Return to classic view</a></div>
-			<div id="betaFeedback"><a href="http://bellevuecollege.edu/classesfeedback/"><img alt="Give Feedback" title="Give Feedback" src="http://bellevuecollege.edu/classesbeta/Content/images/btn-feedback.png" /></a></div><div id="feedbackdialog" title="Feedback"></div>
-		</div>
-
-	</div>
 
 	@Html.Include(Server.MapPath("/globals/btheme_v0.1/asp/header_big.asp"))
 
@@ -93,7 +86,7 @@
 		@RenderBody()
 
 		@(Html.Partial("Footer"))
-
+        <div id="betaFeedback"><a href="http://bellevuecollege.edu/classesfeedback/"><img alt="Give Feedback" title="Give Feedback" src="@Url.Content("~/Content/images/feedbackbutton.png")"></a></div><div id="feedbackdialog" title="Feedback"></div>
 	</div>
 
 	@Html.Include(Server.MapPath("/globals/btheme_v0.1/asp/footer_big.asp"))
