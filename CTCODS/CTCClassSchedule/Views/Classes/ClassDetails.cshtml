@@ -2,21 +2,21 @@
 @using CTCClassSchedule.Common;
 @using MvcMiniProfiler;
 @using Ctc.Ods.Types;
-@model IEnumerable<CTCClassSchedule.SectionWithSeats>
+@model IEnumerable<Course>
 
 @{
 		MiniProfiler _profiler = MiniProfiler.Current;
+		IList<Course> _courses = Model != null ? Model.ToList() : new List<Course>();
+		Course course = _courses.Count > 0 ? _courses[0] : null;
 
-		ViewBag.PageTitle = ViewBag.Subject + " " + @ViewBag.ClassNum + " at Bellevue College";
+		ViewBag.PageTitle = course.Subject + " " + course.Number + " at Bellevue College";
 
-		Course course = (Course)ViewBag.CourseInfo;
 		IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
 		YearQuarter currentYrq = yrqList[0];
 		string currentYrqID = currentYrq.ID;
 		YearQuarter activeQuarter = ViewBag.CurrentYearQuarter;
 
-		string PreviousYrq = string.Empty;
-		string PreviousSectionID = string.Empty;
+		string _courseOutcomes = ViewBag.CourseOutcome;
 }
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
@@ -43,12 +43,8 @@
 				@if (course != null)
 		{
 						<h1 id="pageTitle">
-								<span class="courseID">@(string.Format("{0}{1} {2}", course.Subject, course.IsCommonCourse ? "&" : string.Empty, course.Number))</span>
-				<span>@course.Title</span>
-
-				@*
-				// TODO: Display any upcoming course title change, if detected
-				*@
+							<span class="courseID">@(string.Format("{0}{1} {2}", course.Subject, course.IsCommonCourse ? "&" : string.Empty, course.Number))</span>
+							<span>@course.Title</span>
 
 				&#8226;
 				@if (course.IsVariableCredits)
@@ -67,7 +63,37 @@
 		}
 						</h1>
 
+@* Display any upcoming course title change, if detected *@
 
+			if (_courses.Count > 1)
+		{
+			Course newCourse = _courses[1];
+			if (newCourse.IsVariableCredits != course.IsVariableCredits || newCourse.Credits != course.Credits || newCourse.Title.Trim() != course.Title.Trim())
+			{
+			 <div id="courseUpcoming">
+				<h3>Course change starting @newCourse.YearQuarterBegin.FriendlyName</h3>
+				<p>
+							<span>@newCourse.Title</span>
+
+				&#8226;
+				@if (newCourse.IsVariableCredits)
+		{
+							<span class="classCredits">
+								V1-@Html.CreditsValue(newCourse.Credits)
+									<abbr title=" variable credit(s) ">Cr.</abbr>
+							</span>
+		}
+		else
+		{
+							<span class="classCredits">
+								@Html.CreditsValue(newCourse.Credits)
+									<abbr title=" credit(s) ">Cr.</abbr>
+							</span>
+		}
+				</p>
+			 </div>
+			}
+		}
 
 				<div class="aside">
 				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
@@ -147,96 +173,67 @@
 			 </div>
 		 }
 
-		@{
-		 SectionWithSeats firstSection = Model.Count() > 0 ? Model.First() : null;
-		 string apiCourseFootnotes = string.Empty;
-
-		}
-		@if (firstSection != null)
+@* ***************************************************************************************************
+		Temporarily removed in order to meet initial public launch. We will want to re-enable this block
+		*AND* include both CMS footnotes and future footnote changes in a future release.
+			- 4/05/2012, shawn.south@bellevuecollege.edu
+	 ***************************************************************************************************
+		@if (course.Footnotes.Count > 0)
 	{
-			string courseFootnotes = firstSection.CourseFootnotes ?? string.Empty;
-
-		@*	Disabled because the API is getting these footnotes from the Sections object (e.g. vw_Class)
-				Re-enable when the API has been updated to provide footnote data from vw_Course
-
-			foreach (string f in firstSection.Footnotes)
-			{
-				if (!string.IsNullOrWhiteSpace(f))
-				{
-					apiCourseFootnotes = string.Concat(apiCourseFootnotes, " ", f);
-				}
-			}
-		*@
 					<div id="courseFootnotes">
-			@if (string.IsNullOrWhiteSpace(apiCourseFootnotes) && string.IsNullOrWhiteSpace(courseFootnotes))
-	 {
-				<!-- No footnotes found -->
-	 }
-	 else
-	 {
 						<h2>Details:</h2>
 							 <p>
-									<span id="odsCourseFootnotes">@apiCourseFootnotes</span>
-									@if (apiCourseFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
+									<span id="odsCourseFootnotes">
+			@foreach (string footnote in course.Footnotes)
+			{
+				if (!string.IsNullOrWhiteSpace(footnote))
+				{
+					@footnote;
+				}
+			}
+								</span>
+									@if (course.Footnotes.Any(f => f.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0))
          {
 										<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/entrycode/">How to clear prerequisites?</a>
          }
-				 {
-										<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">How to clear prerequisites?</a>
-				 }
-									<span id="cmsCourseFootnotes">@courseFootnotes</span>
 							</p>
-	 }
 					</div>
 	}
 
-				@if (!string.IsNullOrWhiteSpace(ViewBag.CourseOutcome))
+*@
+
+				@if (!string.IsNullOrWhiteSpace(_courseOutcomes) && !_courseOutcomes.StartsWith("Error:"))
 			{
 					<div id="courseOutcome">
 						<h2>Outcomes:</h2>
-										<!-- <p>After completing this course, students should be able to:</p>-->
-						@Html.Raw(ViewBag.CourseOutcome)
+						@Html.Raw(_courseOutcomes)
 					</div>
 			}
 
 						</div> <!-- class-details -->
+			if (ViewBag.QuartersOffered != null && ViewBag.QuartersOffered.Count > 0)
+	 {
 						<div id="allSectionsbyQuarter">
-
-				@using (_profiler.Step("Rendering sections by YRQ"))
+							<div class="offeredQuarters">
+								<h2>Offered:</h2>
+								<ul>
+				@foreach (YearQuarter q in ViewBag.QuartersOffered)
 		{
-				bool isPastQuarter = false;
-				var yrqs = (from s in Model
-										where s.Yrq.ID.CompareTo(currentYrqID) <= 0
-										orderby s.Yrq.ID descending
-										group s by s.Yrq.FriendlyName into g
-										select new
-										{
-												YRQ = g.Key
-												 ,
-												Sections = g.Count()
-										}).Take(4);
+			int relativeOffset = activeQuarter.FriendlyName.CompareTo(q.FriendlyName);
 
-			<div class="offeredQuarters">
-				<h2>Offered:</h2>
-				<ul>
-				@foreach (var y in yrqs)
-		{
-				if (y.Sections > 0)
-				{
-					<li class="@(isPastQuarter ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
-						@Html.ActionLink(y.YRQ, "YearQuarterSubject", new { YearQuarter = y.YRQ.Replace(" ", string.Empty), Subject = course.Subject })
-						@if (activeQuarter.FriendlyName.CompareTo(y.YRQ) == 0)
+					<li class="@(relativeOffset < 0 ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
+						@Html.ActionLink(q.FriendlyName, "YearQuarterSubject", new { YearQuarter = q.FriendlyName.Replace(" ", string.Empty), Subject = course.Subject })
+
+						@if (relativeOffset == 0)
 			{
 							<span>(current quarter)</span>
-					isPastQuarter = true; // for next iteration
 			}
 					</li>
-				}
 		}
 				</ul>
 			</div> <!-- offeredQuarters -->
-		}
 			</div> <!-- allSectionsbyQuarter -->
+	 }
 
 		}
 		else

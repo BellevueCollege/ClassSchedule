@@ -411,11 +411,6 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 			ICourseID courseID = CourseID.FromString(Subject, ClassNum);
-			ViewBag.Subject = Subject;
-			ViewBag.ClassNum = ClassNum;
-
-			//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
-			TempData["DayDictionary"] = Helpers.getDayDictionary();
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -423,63 +418,38 @@ namespace CTCClassSchedule.Controllers
 				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
 				ViewBag.QuarterNavMenu = yrqRange;
 
-				// TODO: move this declaration somewhere it can more easily be re-used
-				IList<ISectionFacet> facets = new List<ISectionFacet> {new RegistrationQuartersFacet(Settings.Default.QuartersToDisplay)};
-
-				IList<Section> sections;
+				IList<Course> courses;
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
-					sections = repository.GetSections(courseID, facetOptions: facets);
+					courses = repository.GetCourses(courseID);
 				}
 
-				ICourse courseInfo;
-				if (sections != null && sections.Count > 0)
+				ICourseID realCourseID = CourseID.FromString(courses.First().CourseID);
+				realCourseID.IsCommonCourse = courses.First().IsCommonCourse;
+
+				using (_profiler.Step("Getting Section counts (per YRQ)"))
 				{
-					using (_profiler.Step("ODSAPI::GetCourses() - course information"))
+					// Identify which, if any, of the current range of quarters has Sections for this Course
+					IList<YearQuarter> quartersOffered = new List<YearQuarter>(4);
+					foreach (YearQuarter quarter in yrqRange)
 					{
-						string cidString = sections.First().CourseID;
-						ICourseID cid = CourseID.FromString(cidString);
-						IList<Course> coursesTemp = repository.GetCourses(cid);
-
-						// NOTE: The view handles situations where foo is null or empty
-						courseInfo = coursesTemp != null && coursesTemp.Count > 0 ? coursesTemp.First() : null;
+						// TODO: for better performance, overload method to accept more than one YRQ
+						int sectionCount = repository.SectionCountForCourse(realCourseID, quarter);
+						if (sectionCount > 0)
+						{
+							quartersOffered.Add(quarter);
+						}
 					}
+					ViewBag.QuartersOffered = quartersOffered;
 				}
-				else
+
+				using (_profiler.Step("Retrieving course outcomes"))
 				{
-					courseInfo = null;
-				}
-				ViewBag.CourseInfo = courseInfo;
-
-				if (courseInfo != null)
-				{
-					using (_profiler.Step("Retrieving course outcomes"))
-					{
-						ViewBag.CourseOutcome = getCourseOutcome(courseInfo.IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, ClassNum);
-					}
-				}
-				else
-				{
-					ViewBag.CourseOutcome = null;
+					ViewBag.CourseOutcome = getCourseOutcome(realCourseID.IsCommonCourse ? string.Concat(realCourseID.Subject, _apiSettings.RegexPatterns.CommonCourseChar) : realCourseID.Subject, realCourseID.Number);
 				}
 
-
-
-				IEnumerable<SectionWithSeats> sectionsEnum;
-				using (ClassScheduleDb db = new ClassScheduleDb())
-				{
-					using (_profiler.Step("Getting app-specific Section records from the DB"))
-					{
-						sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections, db); //this isn't looking at the ProgramInformation table's URL values when getting classes, resulting in CJ showing up but CJ& not showing up
-					}
-
-					if (sectionsEnum != null && sectionsEnum.Count() > 0)
-					{
-						// Use the real abbreviation as the lookup since we're not longer doing the translation workaround at this level.
-						SetProgramInfoVars(sectionsEnum.First().IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, db, true);
-					}
-					return View(sectionsEnum);
-				}
+//				SetProgramInfoVars(sectionsEnum.First().IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, db, true);
+				return View(courses);
 			}
 		}
 
@@ -787,7 +757,7 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		private static dynamic getCourseOutcome(string Subject, string ClassNum)
 		{
-			string CourseOutcome = "";
+			string CourseOutcome = string.Empty;
 			try
 			{
 				Service1Client client = new Service1Client();
@@ -796,9 +766,9 @@ namespace CTCClassSchedule.Controllers
 
 				CourseOutcome = client.GetCourseOutcome(courseID.ToString());
 			}
-			catch
+			catch (Exception ex)
 			{
-				CourseOutcome = "Cannot find course outcome for this course or cannot connect to the course outcomes webservice.";
+				CourseOutcome = "Error: Cannot find course outcome for this course or cannot connect to the course outcomes webservice.";
 			}
 			return CourseOutcome;
 		}
