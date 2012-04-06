@@ -444,12 +444,15 @@ namespace CTCClassSchedule.Controllers
 						ViewBag.QuartersOffered = quartersOffered;
 					}
 
+					string realSubject = realCourseID.IsCommonCourse ? string.Concat(realCourseID.Subject, _apiSettings.RegexPatterns.CommonCourseChar) : realCourseID.Subject;
+
 					using (_profiler.Step("Retrieving course outcomes"))
 					{
-						ViewBag.CourseOutcome = getCourseOutcome(realCourseID.IsCommonCourse ? string.Concat(realCourseID.Subject, _apiSettings.RegexPatterns.CommonCourseChar) : realCourseID.Subject, realCourseID.Number);
+						ViewBag.CourseOutcome = getCourseOutcome(realSubject, realCourseID.Number);
 					}
+
+					SetProgramInfoVars(realSubject, null, true);
 				}
-//				SetProgramInfoVars(sectionsEnum.First().IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, db, true);
 				return View(courses);
 			}
 		}
