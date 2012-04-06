@@ -210,7 +210,7 @@ textarea
 
 .classDescription{ padding: 0 20px;}
 
-.newClass, #courseDescriptionUpcoming { padding: 0 20px; font-style: italic; color: #444;}
+.subject .upcomingChange { padding: 0 20px; font-style: italic; color: #444;}
 
 
 
@@ -1067,8 +1067,8 @@ ul.section-details li.section-notes
 }
 a.footnote-prereq  { color: #666}
 #courseDescription{}
-#courseDescriptionUpcoming, #courseUpcoming{ color: #666}
-#courseDescriptionUpcoming h3, #courseUpcoming h3 {
+.upcomingChange{ color: #666}
+.upcomingChange h3 {
     font-size: 13px;
     /*margin-top: 21px;*/
 }

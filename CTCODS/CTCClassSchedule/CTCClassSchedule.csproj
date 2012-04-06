@@ -69,9 +69,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AntiXSS.4.2.1\lib\net40\AntiXssLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="CtcOdsApi">
-      <HintPath>..\..\packages\CtcOdsApi.0.9.8\lib\net40\CtcOdsApi.dll</HintPath>
-    </Reference>
+      <Reference Include="CtcOdsApi, Version=0.9.9.0, Culture=neutral, processorArchitecture=MSIL">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>..\..\packages\CtcOdsApi.0.9.9\lib\net40\CtcOdsApi.dll</HintPath>
+      </Reference>
     <Reference Include="DotNetCasClient">
       <HintPath>..\..\packages\DotNetCasClient.1.0.1\lib\DotNetCasClient.dll</HintPath>
     </Reference>

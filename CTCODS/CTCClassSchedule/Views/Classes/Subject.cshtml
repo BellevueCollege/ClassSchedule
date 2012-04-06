@@ -7,7 +7,7 @@
 
 <div id="scheduleMain">
     @Html.Partial("quarterNavigation")
-    <div id="container" class="sidebar">
+    <div id="container" class="sidebar subject">
         <p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>
         <div id="sidebar">
             @Html.Partial("basicFacetedSearch")
@@ -90,7 +90,7 @@
 
 			@if (string.Compare(item.YearQuarterBegin.ToString(), ViewBag.CurrentQuarter.ID.ToString()) == 1)
 			{
-				<div class="newClass">
+				<div class="upcomingChange">
 					New class effective starting @(ViewBag.CurrentQuarter.FriendlyName.ToString())
 				</div>
 
@@ -105,7 +105,7 @@
 
 								if (@item.Descriptions.Count() > 1)
 								{
-									<div id="courseDescriptionUpcoming">
+									<div class="upcomingChange">
 										<h3>New description starting @item.Descriptions.ElementAt(1).YearQuarterBegin.FriendlyName.ToString()</h3>
 										<p>
 											@item.Descriptions.ElementAt(1).Description

@@ -63,37 +63,7 @@
 		}
 						</h1>
 
-@* Display any upcoming course title change, if detected *@
 
-			if (_courses.Count > 1)
-		{
-			Course newCourse = _courses[1];
-			if (newCourse.IsVariableCredits != course.IsVariableCredits || newCourse.Credits != course.Credits || newCourse.Title.Trim() != course.Title.Trim())
-			{
-			 <div id="courseUpcoming">
-				<h3>Class title change starting @newCourse.YearQuarterBegin.FriendlyName</h3>
-				<p>
-							<span>@newCourse.Title</span>
-
-				&#8226;
-				@if (newCourse.IsVariableCredits)
-		{
-							<span class="classCredits">
-								V1-@Html.CreditsValue(newCourse.Credits)
-									<abbr title=" variable credit(s) ">Cr.</abbr>
-							</span>
-		}
-		else
-		{
-							<span class="classCredits">
-								@Html.CreditsValue(newCourse.Credits)
-									<abbr title=" credit(s) ">Cr.</abbr>
-							</span>
-		}
-				</p>
-			 </div>
-			}
-		}
 
 				<div class="aside">
 				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
@@ -143,6 +113,40 @@
 						</div><!-- aside -->
 
 						<div id="class-details">
+
+                        @* Display any upcoming course title change, if detected *@
+
+			@if (_courses.Count > 1)
+		{
+			Course newCourse = _courses[1];
+			if (newCourse.IsVariableCredits != course.IsVariableCredits || newCourse.Credits != course.Credits || newCourse.Title.Trim() != course.Title.Trim())
+			{
+			 <div class="upcomingChange">
+				<h3>Class title change starting @newCourse.YearQuarterBegin.FriendlyName</h3>
+				<p>
+							<span>@newCourse.Title</span>
+
+				&#8226;
+				@if (newCourse.IsVariableCredits)
+		{
+							<span class="classCredits">
+								V1-@Html.CreditsValue(newCourse.Credits)
+									<abbr title=" variable credit(s) ">Cr.</abbr>
+							</span>
+		}
+		else
+		{
+							<span class="classCredits">
+								@Html.CreditsValue(newCourse.Credits)
+									<abbr title=" credit(s) ">Cr.</abbr>
+							</span>
+		}
+				</p>
+			 </div>
+			}
+		}
+
+
 						@{
 			IList<CourseDescription> descriptions = course.Descriptions.ToList();
 			int descriptionsCount = descriptions.Count;
@@ -165,7 +169,7 @@
 
 					@if (descriptionsCount > 1)
 		 {
-			 <div id="courseDescriptionUpcoming">
+			 <div class="upcomingChange">
 				<h3>New description starting @descriptions[1].YearQuarterBegin.FriendlyName</h3>
 				<p>
 					@(string.IsNullOrWhiteSpace(descriptions[1].Description) ? "* NO DESCRIPTION FOUND*" : descriptions[1].Description)
