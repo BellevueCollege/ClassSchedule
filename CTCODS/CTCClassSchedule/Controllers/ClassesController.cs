@@ -212,7 +212,6 @@ namespace CTCClassSchedule.Controllers
 			{
 				IEnumerable<Course> coursesEnum = (Subject != null ? repository.GetCourses(RealSubjectPrefixes(Subject)) : repository.GetCourses()).Distinct();
 
-
 				if (format == "json")
 				{
 					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
@@ -424,30 +423,32 @@ namespace CTCClassSchedule.Controllers
 					courses = repository.GetCourses(courseID);
 				}
 
-				ICourseID realCourseID = CourseID.FromString(courses.First().CourseID);
-				realCourseID.IsCommonCourse = courses.First().IsCommonCourse;
-
-				using (_profiler.Step("Getting Section counts (per YRQ)"))
+				if (courses.Count > 0)
 				{
-					// Identify which, if any, of the current range of quarters has Sections for this Course
-					IList<YearQuarter> quartersOffered = new List<YearQuarter>(4);
-					foreach (YearQuarter quarter in yrqRange)
+					ICourseID realCourseID = CourseID.FromString(courses.First().CourseID);
+					realCourseID.IsCommonCourse = courses.First().IsCommonCourse;
+
+					using (_profiler.Step("Getting Section counts (per YRQ)"))
 					{
-						// TODO: for better performance, overload method to accept more than one YRQ
-						int sectionCount = repository.SectionCountForCourse(realCourseID, quarter);
-						if (sectionCount > 0)
+						// Identify which, if any, of the current range of quarters has Sections for this Course
+						IList<YearQuarter> quartersOffered = new List<YearQuarter>(4);
+						foreach (YearQuarter quarter in yrqRange)
 						{
-							quartersOffered.Add(quarter);
+							// TODO: for better performance, overload method to accept more than one YRQ
+							int sectionCount = repository.SectionCountForCourse(realCourseID, quarter);
+							if (sectionCount > 0)
+							{
+								quartersOffered.Add(quarter);
+							}
 						}
+						ViewBag.QuartersOffered = quartersOffered;
 					}
-					ViewBag.QuartersOffered = quartersOffered;
-				}
 
-				using (_profiler.Step("Retrieving course outcomes"))
-				{
-					ViewBag.CourseOutcome = getCourseOutcome(realCourseID.IsCommonCourse ? string.Concat(realCourseID.Subject, _apiSettings.RegexPatterns.CommonCourseChar) : realCourseID.Subject, realCourseID.Number);
+					using (_profiler.Step("Retrieving course outcomes"))
+					{
+						ViewBag.CourseOutcome = getCourseOutcome(realCourseID.IsCommonCourse ? string.Concat(realCourseID.Subject, _apiSettings.RegexPatterns.CommonCourseChar) : realCourseID.Subject, realCourseID.Number);
+					}
 				}
-
 //				SetProgramInfoVars(sectionsEnum.First().IsCommonCourse ? string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar) : Subject, db, true);
 				return View(courses);
 			}
