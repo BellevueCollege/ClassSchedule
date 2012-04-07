@@ -145,7 +145,7 @@
 
                 @if (!string.IsNullOrWhiteSpace(apiSectionFootnotes))
                 {
-							<span id="odsSectionFootnotes">@apiSectionFootnotes</span>
+							<span id="odsSectionFootnotes">@Html.FormatWithSearchTerm(_searchTerm, apiSectionFootnotes)</span>
                     if (apiSectionFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
                     {
 							<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/entrycode/">How to clear prerequisites?</a>
@@ -156,7 +156,7 @@
                     <!-- no ODS section footnotes found -->
                 }
 
-                @AutomatedFootnotesConfig.getAutomatedFootnotesText(Model[0])
+								@AutomatedFootnotesConfig.getAutomatedFootnotesText(Model[0])
 
                 @if (!string.IsNullOrWhiteSpace(Model[0].SectionFootnotes))
                 {
