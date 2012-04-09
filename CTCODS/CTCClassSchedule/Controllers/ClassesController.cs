@@ -18,6 +18,7 @@ using MvcMiniProfiler;
 using System.Globalization;
 using System.Web;
 using System.Text;
+using Ctc.Web.Security;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -56,91 +57,96 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		/// <returns>An Adobe InDesign formatted text file with all course data. File is
 		/// returned as an HTTP response.</returns>
+		[AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
 		public void Export(String YearQuarterID)
 		{
-			// Configurables
-			int subjectSeparatoreLineBreaks = 4;
-
-			// Use this to convert strings to file byte arrays
-			System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-			StringBuilder fileText = new StringBuilder();
-
-			// Determine whether to use a specific Year Quarter, or the current Year Quarter
-			YearQuarter yrq;
-			IList<vw_ProgramInformation> programs = new List<vw_ProgramInformation>();
-			using (OdsRepository _db = new OdsRepository())
+			if (HttpContext.User.Identity.IsAuthenticated == true)
 			{
-				if (String.IsNullOrEmpty(YearQuarterID))
+
+				// Configurables
+				int subjectSeparatoredLineBreaks = 4;
+
+				// Use this to convert strings to file byte arrays
+				System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+				StringBuilder fileText = new StringBuilder();
+
+				// Determine whether to use a specific Year Quarter, or the current Year Quarter
+				YearQuarter yrq;
+				IList<vw_ProgramInformation> programs = new List<vw_ProgramInformation>();
+				using (OdsRepository _db = new OdsRepository())
 				{
-					yrq = _db.CurrentYearQuarter;
+					if (String.IsNullOrEmpty(YearQuarterID))
+					{
+						yrq = _db.CurrentYearQuarter;
+					}
+					else
+					{
+						yrq = Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID);
+					}
 				}
-				else
+
+				// Get a dictionary of sorted collections of sections, collated by division
+				IDictionary<vw_ProgramInformation, List<SectionWithSeats>> divisions = new Dictionary<vw_ProgramInformation, List<SectionWithSeats>>();
+				divisions = getSectionsByDivision(yrq);
+
+				// Create all file data
+				foreach (vw_ProgramInformation program in divisions.Keys)
 				{
-					yrq = Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID);
+					for (int i = 0; i < subjectSeparatoredLineBreaks; i++)
+					{
+						fileText.AppendLine();
+					}
+
+					fileText.AppendLine(String.Concat("<CLS1>", program.Title));
+					fileText.AppendLine(String.Concat("<CLS9>", program.Division));
+					if (!String.IsNullOrEmpty(program.Intro))
+					{
+						fileText.AppendLine(String.Concat("<CLSP>", program.Intro));
+					}
+
+					string line = string.Empty;
+					SectionWithSeats previousSection = new SectionWithSeats();
+					foreach (SectionWithSeats section in divisions[program])
+					{
+						// Build all section information such as title and footnotes
+						if (section.CourseNumber != previousSection.CourseNumber ||
+								section.Credits != previousSection.Credits ||
+								section.CourseTitle != previousSection.CourseTitle)
+						{
+							buildSectionExportText(fileText, section);
+						}
+						previousSection = section;
+
+						// Compile list of all offered instances of the section
+						foreach (OfferedItem item in section.Offered.OrderBy(o => o.SequenceOrder))
+						{
+							buildOfferedItemsExportText(fileText, section, item);
+						}
+
+						// Section and course footnotes
+						line = section.SectionFootnotes;
+						if (!String.IsNullOrWhiteSpace(line))
+						{
+							fileText.AppendLine(String.Concat("<CLSX>", line.Trim()));
+						}
+						line = AutomatedFootnotesConfig.getAutomatedFootnotesText(section);
+						if (!String.IsNullOrWhiteSpace(line))
+						{
+							fileText.AppendLine(String.Concat("<CLSY>", line.Trim()));
+						}
+					}
 				}
+
+				// Write the file data as an HTTP response
+				string fileName = String.Concat("CourseData-", yrq.ID, "-", DateTime.Now.ToShortDateString(), ".txt");
+				fileText.Remove(0, subjectSeparatoredLineBreaks * 2); // Remove the first set of line breaks
+				byte[] fileData = encoding.GetBytes(fileText.ToString());
+				HttpResponseBase response = ControllerContext.HttpContext.Response;
+				string contentDisposition = String.Concat("attachment; filename=", fileName);
+				response.AddHeader("Content-Disposition", contentDisposition);
+				response.ContentType = "application/force-download";
+				response.BinaryWrite(fileData);
 			}
-
-			// Get a dictionary of sorted collections of sections, collated by division
-			IDictionary<vw_ProgramInformation, List<SectionWithSeats>> divisions = new Dictionary<vw_ProgramInformation, List<SectionWithSeats>>();
-			divisions = getSectionsByDivision(yrq);
-
-			// Create all file data
-			foreach (vw_ProgramInformation program in divisions.Keys)
-			{
-				for (int i = 0; i < subjectSeparatoreLineBreaks; i++)
-				{
-					fileText.AppendLine();
-				}
-
-				fileText.AppendLine(String.Concat("<CLS1>", program.Title));
-				fileText.AppendLine(String.Concat("<CLS9>", program.Division));
-				if (!String.IsNullOrEmpty(program.Intro))
-				{
-					fileText.AppendLine(String.Concat("<CLSP>", program.Intro));
-				}
-
-				string line = string.Empty;
-				SectionWithSeats previousSection = new SectionWithSeats();
-				foreach (SectionWithSeats section in divisions[program])
-				{
-					// Build all section information such as title and footnotes
-					if (section.CourseNumber != previousSection.CourseNumber ||
-						  section.Credits != previousSection.Credits ||
-							section.CourseTitle != previousSection.CourseTitle)
-					{
-						buildSectionExportText(fileText, section);
-					}
-					previousSection = section;
-
-					// Compile list of all offered instances of the section
-					foreach (OfferedItem item in section.Offered.OrderBy(o => o.SequenceOrder))
-					{
-						buildOfferedItemsExportText(fileText, section, item);
-					}
-
-					// Section and course footnotes
-					line = section.SectionFootnotes;
-					if (!String.IsNullOrWhiteSpace(line))
-					{
-						fileText.AppendLine(String.Concat("<CLSX>", line.Trim()));
-					}
-					line = AutomatedFootnotesConfig.getAutomatedFootnotesText(section);
-					if (!String.IsNullOrWhiteSpace(line))
-					{
-						fileText.AppendLine(String.Concat("<CLSY>", line.Trim()));
-					}
-				}
-			}
-
-			// Write the file data as an HTTP response
-			string fileName = String.Concat("CourseData-", yrq.ID, "-", DateTime.Now.ToShortDateString(), ".txt");
-			fileText.Remove(0, subjectSeparatoreLineBreaks * 2); // Remove the first set of line breaks
-			byte[] fileData = encoding.GetBytes(fileText.ToString());
-			HttpResponseBase response = ControllerContext.HttpContext.Response;
-			string contentDisposition = String.Concat("attachment; filename=", fileName);
-			response.AddHeader("Content-Disposition", contentDisposition);
-			response.ContentType = "application/force-download";
-			response.BinaryWrite(fileData);
 		}
 
 		/// <summary>
