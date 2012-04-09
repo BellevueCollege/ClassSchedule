@@ -2,14 +2,6 @@
 
 <script type="text/javascript">
 	$(document).ready(function () {
-		function showThrobber() {
-			var pageHeight = $(document).height();
-			$('#overlay').css('height', pageHeight - 49 + 'px');
-			$('#overlay').css('margin-top', 49 + 'px');
-			$('#overlay').css('opacity', '0.5');
-			$('#overlay').css('display', 'inherit');
-			$('#lightbox').css('display', 'inherit');
-		}
 
 		//when user clicks refine, show throbber
 		$('.searchSubmit').click(function () {

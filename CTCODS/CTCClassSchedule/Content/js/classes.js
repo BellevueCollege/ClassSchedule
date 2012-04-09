@@ -57,10 +57,25 @@ $(function () {
     /*set arrow on sectionTitle */
     $("#sectionTitle").prepend('<div class="arrow"></div>');
 
+
+    //hide throbber on page load (fix for back button bug on throbber)
+    $(window).unload(function () {
+        $('#overlay').hide();
+    });
+
+
 });
 
 function dropdown_show(){ $(this).addClass('hover'); }
-function dropdown_hide(){ $(this).removeClass('hover'); }
+function dropdown_hide() { $(this).removeClass('hover'); }
+function showThrobber() {
+    var pageHeight = $(document).height();
+    $('#overlay').css('height', pageHeight - 49 + 'px');
+    $('#overlay').css('margin-top', 49 + 'px');
+    $('#overlay').css('opacity', '0.5');
+    $('#overlay').css('display', 'inherit');
+    $('#lightbox').css('display', 'inherit');
+}
 
 /**
 * hoverIntent r6 // 2011.02.26 // jQuery 1.5.1+
