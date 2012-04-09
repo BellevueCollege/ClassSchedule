@@ -35,8 +35,10 @@
 			@if (ViewBag.ItemCount == 0)
 	 {
 		 string letter = Request.QueryString["letter"];
-				<h2>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h2>
+				<div id="error-noclassesfound">
+                <h2>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h2>
 				<p><em>TIP:</em> Information for @yrq.FriendlyName may not be available yet.</p>
+                </div>
 	 }
 	 else
 	 {
