@@ -287,6 +287,10 @@
     <Content Include="globals\btheme_v0.1\img\twitter.png" />
     <Content Include="globals\btheme_v0.1\img\youtube.png" />
     <Content Include="globals\btheme_v0.1\js\searchbox.js" />
+    <Content Include="globals\dropdown_about.asp" />
+    <Content Include="globals\dropdown_enrollment.asp" />
+    <Content Include="globals\dropdown_programs.asp" />
+    <Content Include="globals\dropdown_resources.asp" />
     <Content Include="license.CtcOdsApi.txt" />
     <Content Include="Scripts\CtcClassSchedule.js" />
     <Content Include="Scripts\jquery.ui.timepicker.js" />

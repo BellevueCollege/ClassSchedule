@@ -12,6 +12,27 @@ $(function () {
     /*make classes tab selected*/
     $("#mainnav-classes").find("a").addClass("selected");
 
+    $("#mainnav-list").find(".mainnav-item").hoverIntent({
+        interval: 50, // milliseconds delay before onMouseOver
+        over: dropdown_show,
+        timeout: 100, // milliseconds delay before onMouseOut
+        out: dropdown_hide
+    })
+
+    //Generate dropdown menus
+    $("#mainnav-about").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load("/globals/dropdown_about.asp");
+    $("#mainnav-programs").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load("/globals/dropdown_programs.asp");
+    $("#mainnav-enrollment").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load("/globals/dropdown_enrollment.asp");
+    $("#mainnav-resources").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load("/globals/dropdown_resources.asp");
+
+
+    $('#mainnav-list .dropdown').focusin(function () {
+        $(this).parent(".mainnav-item").addClass('hover');
+    });
+    $('#mainnav-list .dropdown').focusout(function () {
+        $(this).parent(".mainnav-item").removeClass('hover');
+    });
+
     /*tooltip*/
     $('abbr').tooltipsy();
 
