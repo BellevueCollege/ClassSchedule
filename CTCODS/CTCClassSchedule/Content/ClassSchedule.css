@@ -548,6 +548,7 @@ li.subject { list-style-type: none;}
     padding: 0 20px 0 18px;
     margin-top: 10px
 }
+#nav-other-options li {padding-bottom: 7px}
 
 #search{  /*note ie7 hack*/
 	float: left;
