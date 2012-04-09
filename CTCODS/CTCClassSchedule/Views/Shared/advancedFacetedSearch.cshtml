@@ -15,12 +15,8 @@
 		$('#submit').html('');
 
 
-
-
-
-
 		//when user clicks refine, show throbber
-		$('#submit_days_times').click(function () {
+        $('#submit_days_times').click(function () {
 			showThrobber();
 			$('#daystimesform').submit();
 		});
@@ -148,14 +144,14 @@
 
 @if (ViewContext.RouteData.Values["Controller"].Equals("Classes"))
 {
-	<div>
-		<form id="daystimesform" action="@Url.Content("~/")@(yrq != null ? yrq.FriendlyName.Replace(" ","") : "All")/@subject" method="get">
 
-		@if (routeParms.ContainsKey("letter"))
+		@:<form id="daystimesform" action="@Url.Content("~/")@(yrq != null ? yrq.FriendlyName.Replace(" ","") : "All")/@subject" method="get">
+
+		if (routeParms.ContainsKey("letter"))
   {
 			<input type="hidden" name="letter" value="@routeParms["letter"]" />
 		}
-	</div>
+
 }
 else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
 {

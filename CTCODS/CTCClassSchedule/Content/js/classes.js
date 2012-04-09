@@ -70,8 +70,7 @@ function dropdown_show(){ $(this).addClass('hover'); }
 function dropdown_hide() { $(this).removeClass('hover'); }
 function showThrobber() {
     var pageHeight = $(document).height();
-    $('#overlay').css('height', pageHeight - 49 + 'px');
-    $('#overlay').css('margin-top', 49 + 'px');
+    $('#overlay').css('height', pageHeight);
     $('#overlay').css('opacity', '0.5');
     $('#overlay').css('display', 'inherit');
     $('#lightbox').css('display', 'inherit');
