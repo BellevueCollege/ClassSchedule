@@ -1,4 +1,21 @@
-﻿@model System.Web.Mvc.HandleErrorInfo
+﻿@using System.Diagnostics;
+@model System.Web.Mvc.HandleErrorInfo
+
+@{
+	// TODO: implement actual logging
+
+	Exception _ex = null;
+	if (Model != null && Model.Exception != null)
+	{
+		_ex = Model.Exception;
+		Trace.WriteLine(Model.Exception.ToString());
+	}
+	else
+	{
+		Trace.WriteLine("MVC Error page was invoked, but no Exception was passed.");
+	}
+}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,16 +24,11 @@
 <body>
     <h2>Oops, an error has occurred</h2>
 		<div>
-        @if (Model != null)
+        @if (_ex != null)
 				{
 					<p><strong>Controller:</strong> @Model.ControllerName</p>
 					<p><strong>Action:</strong> @Model.ActionName</p>
-					<p>@Model.Exception.Message</p>
-<!-- Exception stack trace ******************************************************************************************
-
-@Model.Exception.ToString()
-
-****************************************************************************************************************** -->
+					<p>@_ex.Message</p>
 				}
 				else
 				{

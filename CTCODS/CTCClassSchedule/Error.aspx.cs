@@ -34,7 +34,7 @@ namespace CTCClassSchedule
 			Message_UnknownError.Visible = Controls.OfType<Panel>().Where(p => p.ID.StartsWith("Message_") && p.Visible).Count() <= 0;
 
 			// Display the detailed Exception dump
-			StackTrace.Text = stackTrace;
+//			StackTrace.Text = stackTrace;
 		}
 	}
 }
