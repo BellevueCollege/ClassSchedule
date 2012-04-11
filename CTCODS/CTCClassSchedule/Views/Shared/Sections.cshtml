@@ -13,7 +13,7 @@
 	string _searchTerm = Request.QueryString["searchterm"];
 
 	YearQuarter quarterViewing = ViewBag.YearQuarter;
-	YearQuarter currentQuarter = ViewBag.CurrentRegistrationQuarter;
+	YearQuarter currentQuarter = ViewBag.CurrentYearQuarter;
 
 	string apiSectionFootnotes = string.Empty;
 	foreach (string f in Model[0].Footnotes)
