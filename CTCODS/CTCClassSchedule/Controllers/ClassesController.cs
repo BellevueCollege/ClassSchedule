@@ -771,10 +771,9 @@ namespace CTCClassSchedule.Controllers
 			try
 			{
 				Service1Client client = new Service1Client();
-
 				ICourseID courseID = CourseID.FromString(Subject, ClassNum);
-
-				CourseOutcome = client.GetCourseOutcome(courseID.ToString());
+				string realCourseID = Helpers.BuildCourseID(ClassNum, Subject, courseID.IsCommonCourse);
+				CourseOutcome = client.GetCourseOutcome(realCourseID);
 			}
 			catch (Exception ex)
 			{
