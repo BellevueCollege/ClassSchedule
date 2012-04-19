@@ -32,6 +32,7 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
 			int itemCount = 0;
+			searchterm = searchterm.Replace("\"", string.Empty);	// We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
 
 			if (quarter == "CE")
 			{
@@ -68,7 +69,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s,
-																											f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
+			                                                f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
 			// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
 			IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
@@ -127,23 +128,23 @@ namespace CTCClassSchedule.Controllers
 				using (_profiler.Step("Joining SectionWithSeats (in memory)"))
 				{
 					sectionsEnum = (from c in sections
-													join d in classScheduleData on c.ID.ToString() equals d.ClassID into cd
-													from d in cd.DefaultIfEmpty()
-													join e in SearchResults on c.ID.ToString() equals e.ClassID into ce
-													from e in ce
-													where e.ClassID == c.ID.ToString()
-													orderby c.Yrq.ID descending
-													select new SectionWithSeats
-					                  {
-					                      ParentObject = c,
-					                      SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// MinValue allows us to identify past quarters (with no availability info)
-					                      LastUpdated = Helpers.getFriendlyTime(d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue),
-					                      SectionFootnotes = d != null ? d.SectionFootnote : string.Empty,
-					                      CourseFootnotes = d != null ? d.CourseFootnote : string.Empty,
-																CourseTitle = d.CustomTitle != null && d.CustomTitle != string.Empty ? d.CustomTitle : c.CourseTitle,
-																CustomTitle = d.CustomTitle != null ? d.CustomTitle : string.Empty,
-																CustomDescription = d.CustomDescription != null ? d.CustomDescription : string.Empty
-														}).OrderBy(x => x.CourseNumber).ThenBy(x => x.CourseTitle).ToList();
+					                join d in classScheduleData on c.ID.ToString() equals d.ClassID into cd
+					                from d in cd.DefaultIfEmpty()
+					                join e in SearchResults on c.ID.ToString() equals e.ClassID into ce
+					                from e in ce
+					                where e.ClassID == c.ID.ToString()
+					                orderby c.Yrq.ID descending
+					                select new SectionWithSeats
+								{
+										ParentObject = c,
+										SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// MinValue allows us to identify past quarters (with no availability info)
+										LastUpdated = Helpers.getFriendlyTime(d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue),
+										SectionFootnotes = d != null ? d.SectionFootnote : string.Empty,
+										CourseFootnotes = d != null ? d.CourseFootnote : string.Empty,
+										CourseTitle = d.CustomTitle != null && d.CustomTitle != string.Empty ? d.CustomTitle : c.CourseTitle,
+										CustomTitle = d.CustomTitle != null ? d.CustomTitle : string.Empty,
+										CustomDescription = d.CustomDescription != null ? d.CustomDescription : string.Empty
+								}).OrderBy(x => x.CourseNumber).ThenBy(x => x.CourseTitle).ToList();
 
 				}
 				itemCount = sectionsEnum.Count;
