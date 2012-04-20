@@ -31,8 +31,8 @@ namespace CTCClassSchedule.Controllers
 		// GET: /Search/
 		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
-			int itemCount = 0;
-			searchterm = searchterm.Replace("\"", string.Empty);	// We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
+			// We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
+			searchterm = searchterm.Replace("\"", string.Empty);
 
 			if (quarter == "CE")
 			{
@@ -77,11 +77,6 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.RouteValues = routeValues;
 
 			ViewBag.LinkParams = Helpers.getLinkParams(Request);
-
-			if (searchterm == null)
-			{
-				return View();
-			}
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -147,23 +142,18 @@ namespace CTCClassSchedule.Controllers
 								}).OrderBy(x => x.CourseNumber).ThenBy(x => x.CourseTitle).ToList();
 
 				}
-				itemCount = sectionsEnum.Count;
+
+				// do not count Linked sections (since we don't display them)
+				IEnumerable<SectionWithSeats> countedSections = sectionsEnum.Where(s => !s.IsLinked);
+				int itemCount = countedSections.Count();
 				ViewBag.ItemCount = itemCount;
 
-				//DO A COUNT OF THE SECTION OBJECT HERE		<- Why? 3/23/2012, shawn.south@bellevuecollege.edu
-				ViewBag.SubjectCount = 0;
-				string courseid = "";
-
-				using (_profiler.Step("Counting subjects (courseIDs)"))
+				int courseCount;
+				using (_profiler.Step("Getting count of courses"))
 				{
-					foreach (SectionWithSeats temp in sectionsEnum)
-					{
-						if(temp.CourseID != courseid) {
-							ViewBag.SubjectCount++;
-						}
-						courseid = temp.CourseID;
-					}
+					courseCount = countedSections.Select(s => s.CourseID).Distinct().Count();
 				}
+				ViewBag.CourseCount = courseCount;
 
 				IEnumerable<string> allSubjects;
 				using (_profiler.Step("Getting distinct list of subjects"))

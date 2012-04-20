@@ -15,8 +15,8 @@
 	YearQuarter yrq = ViewBag.YearQuarter;
 
 	int itemCount = ViewBag.ItemCount ?? 0;
-	int subjectCount = ViewBag.SubjectCount ?? 0;
-	String classDesc = subjectCount == 1 ? "class" : "classes";
+	int _courseCount = ViewBag.CourseCount ?? 0;
+	String classDesc = _courseCount == 1 ? "class" : "classes";
 	String sectionDesc = itemCount == 1 ? "section" : "sections";
 
 	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
@@ -60,7 +60,7 @@
  {
 	<div id="searchHeaderInfo">
 		<h1 id="searchResultsMsg">
-			<strong>&quot;@_searchTerm&quot;</strong> found @itemCount @sectionDesc in @subjectCount @classDesc for @(yrq != null ? yrq.FriendlyName : "ERROR: Unknown quarter")
+			<strong>&quot;@_searchTerm&quot;</strong> found @itemCount @sectionDesc in @_courseCount @classDesc for @(yrq != null ? yrq.FriendlyName : "ERROR: Unknown quarter")
 		</h1>
 		<div id="searchPageNum">
 
