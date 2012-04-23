@@ -498,7 +498,7 @@ li.subject { list-style-type: none;}
     z-index: 20;
     border: 2px solid #003d79;
     background-color: rgb(239,243,252);
-    background-color: rgba(239,243,252,0.94);
+    background-color: rgba(239,243,252,0.96);
     overflow: hidden;
     padding: 0 0 20px 0;
 }
@@ -519,7 +519,7 @@ li.subject { list-style-type: none;}
     margin-left: 60px;}
 
 #browse .nav-dropdown a { color: #003d79; text-decoration: none;}
-.nav-dropdown a em { text-decoration: underline;}
+.nav-dropdown a em { text-decoration: underline; font-style: normal;}
 
 .nav-dropdown a .clarify
 {
@@ -551,7 +551,7 @@ li.subject { list-style-type: none;}
     padding: 0 20px 0 18px;
     margin-top: 10px
 }
-#nav-other-options li {padding-bottom: 7px}
+#nav-other-options li {padding-bottom: 15px}
 
 #search{  /*note ie7 hack*/
 	float: left;
@@ -1202,23 +1202,13 @@ a.footnote-prereq  { color: #666}
 
 #browse-all-classes{
 	float: left;
-	width: 300px;
-    padding-left: 70px;
+    padding-left: 40px;
 }
 #browse-all-classes a {
-    background: none repeat scroll 0 0 #FBFBFB;
-    border: 1px solid #CCCCCC;
     display: block;
-    padding: 13px 17px 15px;
-    width: 9Em;
+    padding: 21px 0 0 0;
     font-size: 15px;
-    text-decoration: none;
-    color: #333;
-}
-#browse-all-classes a:hover, #browse-all-classes a:focus {
-    color: white;
-    border-color: #003d79;
-    background-color: #003d79;
+    font-weight: bold;
 }
 
 

@@ -21,7 +21,7 @@
 	<div id="browse"><a href="@Url.Content("~/")" class="home roundcorners">Browse Classes</a>
 
         <div class="nav-dropdown roundcorners">
-            <div id="nav-credit-options"><p>Credit Classes</p>
+            <div id="nav-credit-options"><p><strong>Credit Classes</strong></p>
                 <ul>
 
                 @foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
@@ -45,10 +45,10 @@
 										</a>
 									</li>
                 }
-									<li class="browse-all-classes"><a href="@Url.Action("AllClasses", "Classes")"><em>Browse all classes</em> <span class="clarify">(with Descriptions)</span></a></li>
+									<li class="browse-all-classes"><a href="@Url.Action("AllClasses", "Classes")"><em><strong>All class descriptions</strong></em></a></li>
                 </ul>
             </div>
-            <div id="nav-other-options"><p>Other classes and workshops</p>
+            <div id="nav-other-options"><p><strong>Other classes and workshops</strong></p>
                 <ul>
                     <li><a href="http://www.campusce.net/BC/Search/Search.aspx"><em>Continuing Education</em> <span class="clarify">(non-credit)</span></a></li>
                     <li><a href="http://bellevuecollege.edu/careers/sac_classes.html"><em>Center for Career Connections classes &amp; workshops</em></a></li>

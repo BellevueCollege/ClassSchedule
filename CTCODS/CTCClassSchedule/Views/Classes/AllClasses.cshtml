@@ -2,7 +2,7 @@
 @model IEnumerable<Ctc.Ods.Types.ICoursePrefix>
 
 @{
-    ViewBag.PageTitle = "All Classes at Bellevue College";
+    ViewBag.PageTitle = "All Class Descriptions at Bellevue College";
 		// TODO: provide a default alphabet if the ViewBag is empty
 		IEnumerable<char> alphabet = ViewBag.Alphabet;
 }
@@ -15,13 +15,7 @@
 
         <div id="content">
 
-		@if (ViewBag.WhichClasses == "All")
-	{
-			<h1 id="pageTitle">All Credit Classes</h1>
-	}
-	else {
-		<h1 id="pageTitle">Credit Classes</h1>
-	}
+		<h1 id="pageTitle">All Credit Classes &amp Descriptions</h1>
 
 	 @Html.Partial("a_to_z", alphabet)
 	 @Html.Partial("subjectList", Model)
