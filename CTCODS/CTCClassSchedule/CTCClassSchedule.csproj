@@ -291,7 +291,7 @@
     <Content Include="globals\dropdown_enrollment.asp" />
     <Content Include="globals\dropdown_programs.asp" />
     <Content Include="globals\dropdown_resources.asp" />
-    <Content Include="license.CtcOdsApi.txt" />
+    <None Include="license.CtcOdsApi.txt" />
     <Content Include="Scripts\CtcClassSchedule.js" />
     <Content Include="Scripts\jquery.ui.timepicker.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
