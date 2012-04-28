@@ -547,7 +547,7 @@ namespace CTCClassSchedule.Common
 		/// <param name="sections"></param>
 		/// <param name="db"></param>
 		/// <returns></returns>
-		public static IList<SectionWithSeats> getSectionsWithSeats(string currentYrq, IList<Section> sections, ClassScheduleDb db)
+		public static IList<SectionWithSeats> GetSectionsWithSeats(string currentYrq, IList<Section> sections, ClassScheduleDb db)
 		{
 			MiniProfiler profiler = MiniProfiler.Current;
             IList<SectionWithSeats> sectionsEnum;

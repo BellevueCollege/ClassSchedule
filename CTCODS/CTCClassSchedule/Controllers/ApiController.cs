@@ -110,7 +110,7 @@ namespace CTCClassSchedule.Controllers
 					SectionFootnote itemToUpdate = null;
 					using (ClassScheduleDb db = new ClassScheduleDb())
 					{
-						sectionsEnum = Helpers.getSectionsWithSeats(yrqRange[0].ID, sections, db);
+						sectionsEnum = Helpers.GetSectionsWithSeats(yrqRange[0].ID, sections, db);
 
 						try
 						{
