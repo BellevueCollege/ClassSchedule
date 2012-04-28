@@ -153,53 +153,65 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/All
 		/// </summary>
 		///
+		[HttpGet]
 		[OutputCache(CacheProfile = "AllClassesCacheTime")] // Caches for 6 hours
-		public ActionResult AllClasses(string letter)
+		public ActionResult AllClasses(string letter, string format)
 		{
-			ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? "All" : letter.ToUpper());
-
-			ViewBag.LinkParams = Helpers.getLinkParams(Request);
-
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				SetCommonViewBagVars(repository, "", "", letter);
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 				IList<CoursePrefix> courses;
 				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
 				{
 					courses = repository.GetCourseSubjects();
 				}
 
+				// TODO: Refactor the following code into its own method
+				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					IList<vw_ProgramInformation> progInfo = (from s in db.vw_ProgramInformation
 					                                         select s).ToList();
 
-					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
-					                                                where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
-					                                                orderby p.Title
-					                                                select new ScheduleCoursePrefix
+					IList<ScheduleCoursePrefix> coursesJoin = (from p in progInfo
+					                                           // TODO: Can we use the AbbreviationTrimmed field here instead of calling TrimEnd()?
+					                                           // see YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
+					                                           where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
+					                                           orderby p.Title
+					                                           select new ScheduleCoursePrefix
 												{
 														Subject = p.URL,
 														Title = p.Title
 												}).Distinct().ToList();
 
-					IList<char> alphabet = coursesLocalEnum.Select(c => c.Title.First()).Distinct().ToList();
+					IList<char> alphabet = coursesJoin.Select(c => c.Title.First()).Distinct().ToList();
 					ViewBag.Alphabet = alphabet;
 
+					IEnumerable<ScheduleCoursePrefix> coursesEnum;
 					if (letter != null)
 					{
-						IEnumerable<ScheduleCoursePrefix> coursesEnum;
-						coursesEnum = from c in coursesLocalEnum
+						coursesEnum = from c in coursesJoin
 						              where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
 						              select c;
-
-						return View(coursesEnum);
 					}
 					else
 					{
-						return View(coursesLocalEnum);
+						coursesEnum = coursesJoin;
 					}
+
+					if (format == "json")
+					{
+						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+						return Json(coursesEnum, JsonRequestBehavior.AllowGet);
+					}
+
+					// set up all the ancillary data we'll need to display the View
+					SetCommonViewBagVars(repository, "", "", letter);
+					ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
+					ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? "All" : letter.ToUpper());
+					ViewBag.LinkParams = Helpers.getLinkParams(Request);
+
+					return View(coursesEnum);
 				}
 			}
 		}
@@ -299,10 +311,14 @@ namespace CTCClassSchedule.Controllers
 
 				}
 
+				// TODO: Refactor the following code into its own method
+				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
+					// BUG: Should this query filter where Abbreviation == URL?
+					// We're not doing this in AllClasses() - 4/27/2012, shawn.south@bellevuecollege.edu
 					IList<vw_ProgramInformation> progInfo = (from s in db.vw_ProgramInformation
-																									 where s.Abbreviation == s.URL
+					                                         where s.Abbreviation == s.URL
 					                                         select s).ToList();
 
 					IList<ScheduleCoursePrefix> coursesLocalEnum = (from p in progInfo
@@ -321,8 +337,8 @@ namespace CTCClassSchedule.Controllers
 					{
 						IEnumerable<ScheduleCoursePrefix> coursesEnum;
 						coursesEnum = from c in coursesLocalEnum
-													where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
-													select c;
+						              where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
+						              select c;
 
 						coursesEnum = coursesEnum.Distinct();
 
@@ -398,7 +414,7 @@ namespace CTCClassSchedule.Controllers
 					IList<SectionWithSeats> sectionsEnum;
 					using (_profiler.Step("Getting app-specific Section records from DB"))
 					{
-						sectionsEnum = Helpers.getSectionsWithSeats(YRQ.ID, sections, db);
+						sectionsEnum = Helpers.GetSectionsWithSeats(YRQ.ID, sections, db);
 					}
 
 					ViewBag.Modality = Helpers.ConstructModalityList(sectionsEnum, f_oncampus, f_online, f_hybrid, f_telecourse);
@@ -518,8 +534,8 @@ namespace CTCClassSchedule.Controllers
 
 				// retrieve updated seats data
 				IQueryable<vw_SeatAvailability> seatsAvailable = from s in db.vw_SeatAvailability
-																												 where s.ClassID == classID
-																												 select s;
+				                                                 where s.ClassID == classID
+				                                                 select s;
 
 				vw_SeatAvailability newSeat = seatsAvailable.First();
 
@@ -708,7 +724,7 @@ namespace CTCClassSchedule.Controllers
 				programs = _csDb.vw_ProgramInformation.OrderBy(p => p.URL).ToList();
 
 				// Convert all Sections to SectionsWithSeats so we get footnote data
-				allSectionsWithSeats = Helpers.getSectionsWithSeats(yrq.ID, allSections, _csDb);
+				allSectionsWithSeats = Helpers.GetSectionsWithSeats(yrq.ID, allSections, _csDb);
 			}
 
 
@@ -727,11 +743,11 @@ namespace CTCClassSchedule.Controllers
 						if (results[currentProgram].Count > 0)
 						{
 							results[currentProgram] = results[currentProgram].OrderBy(s => s.CourseNumber)
-																															 .ThenByDescending(s => s.IsOnCampus)
-																															 .ThenByDescending(s => s.IsHybrid)
-																															 .ThenByDescending(s => s.IsOnline)
-																															 .ThenByDescending(s => s.IsTelecourse)
-																															 .ThenBy(s => s.SectionCode).ToList();
+									.ThenByDescending(s => s.IsOnCampus)
+									.ThenByDescending(s => s.IsHybrid)
+									.ThenByDescending(s => s.IsOnline)
+									.ThenByDescending(s => s.IsTelecourse)
+									.ThenBy(s => s.SectionCode).ToList();
 						}
 						else
 						{
