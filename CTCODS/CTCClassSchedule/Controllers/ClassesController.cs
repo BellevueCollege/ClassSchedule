@@ -362,67 +362,69 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
 		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")] // Caches for 30 minutes
-		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
+		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, string format)
 		{
-			ViewBag.timestart = timestart;
-			ViewBag.timeend = timeend;
-			ViewBag.day_su = day_su;
-			ViewBag.day_m = day_m;
-			ViewBag.day_t = day_t;
-			ViewBag.day_w = day_w;
-			ViewBag.day_th = day_th;
-			ViewBag.day_f = day_f;
-			ViewBag.day_s = day_s;
-
-			ViewBag.avail = avail;
-			ViewBag.numcredits = numcredits;
-			ViewBag.latestart = latestart;
-
-			ViewBag.LinkParams = Helpers.getLinkParams(Request);
-			ViewBag.Subject = Subject;
-
-			//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
-			TempData["DayDictionary"] = Helpers.getDayDictionary();
-
+			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				SetCommonViewBagVars(repository, avail, "");
-				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
-				ViewBag.QuarterNavMenu = yrqRange;
-				ViewBag.CurrentRegistrationQuarter = yrqRange[0];
-				YearQuarter YRQ = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
-
-
-				ViewBag.YearQuarter = string.IsNullOrWhiteSpace(YearQuarter) ? null : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
-
-
-
-				// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
-				IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
-				routeValues.Add("YearQuarterID", YearQuarter);
-				ViewBag.RouteValues = routeValues;
-
-
-
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
-					sections = repository.GetSections(RealSubjectPrefixes(Subject), YRQ, facets);
+					sections = repository.GetSections(RealSubjectPrefixes(Subject), yrq, facets);
 				}
 
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					SetProgramInfoVars(Subject, db);
-
 					IList<SectionWithSeats> sectionsEnum;
 					using (_profiler.Step("Getting app-specific Section records from DB"))
 					{
-						sectionsEnum = Helpers.GetSectionsWithSeats(YRQ.ID, sections, db);
+						sectionsEnum = Helpers.GetSectionsWithSeats(yrq.ID, sections, db);
 					}
 
+					if (format == "json")
+					{
+						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+						return Json(sectionsEnum, JsonRequestBehavior.AllowGet);
+					}
+
+					// set up all the ancillary data we'll need to display the View
+					ViewBag.timestart = timestart;
+					ViewBag.timeend = timeend;
+					ViewBag.day_su = day_su;
+					ViewBag.day_m = day_m;
+					ViewBag.day_t = day_t;
+					ViewBag.day_w = day_w;
+					ViewBag.day_th = day_th;
+					ViewBag.day_f = day_f;
+					ViewBag.day_s = day_s;
+
+					ViewBag.avail = avail;
+					ViewBag.numcredits = numcredits;
+					ViewBag.latestart = latestart;
+
+					ViewBag.LinkParams = Helpers.getLinkParams(Request);
+					ViewBag.Subject = Subject;
+
+					//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
+					TempData["DayDictionary"] = Helpers.getDayDictionary();
+
+					SetCommonViewBagVars(repository, avail, "");
+					SetProgramInfoVars(Subject, db);
+
+					ViewBag.YearQuarter = yrq;
+					IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
+					ViewBag.QuarterNavMenu = yrqRange;
+					ViewBag.CurrentRegistrationQuarter = yrqRange[0];
+
 					ViewBag.Modality = Helpers.ConstructModalityList(sectionsEnum, f_oncampus, f_online, f_hybrid, f_telecourse);
+
+					// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
+					IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
+					routeValues.Add("YearQuarterID", YearQuarter);
+					ViewBag.RouteValues = routeValues;
 
 					return View(sectionsEnum);
 				}
