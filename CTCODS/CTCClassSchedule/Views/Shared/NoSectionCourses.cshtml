@@ -3,15 +3,13 @@
 @using Microsoft.Security.Application
 @model IEnumerable<CTCClassSchedule.Common.SearchResultNoSection>
 @{
-	string quarter = Request.QueryString["quarter"];
-	string qtr = quarter.Substring(0, quarter.Length - 4);
-	string year = quarter.Substring(quarter.Length - 4);
+	YearQuarter searchYrq = ViewBag.YearQuarter;
 
 	// at the moment, this view is only used in search results. 11/15/2011, shawn.south@bellevuecollege.edu
 	string _searchTerm = ViewBag.searchterm;
 }
 <div id="NotOfferedThisQuarter">
-<h2>Classes not offered @qtr @year, but match your search:</h2>
+<h2>Classes not offered @searchYrq.FriendlyName, but match your search:</h2>
 
 <ul>
 @foreach (var item in Model) {
