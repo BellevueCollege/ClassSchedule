@@ -10,9 +10,9 @@
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;
 
-	YearQuarter currentQuarter = ViewBag.CurrentRegistrationQuarter;
+	YearQuarter currentQuarter = ViewBag.CurrentYearQuarter;
 	// NOTE: we should always have a YearQuarter (searching all quarters is not an option)
-	YearQuarter yrq = ViewBag.YearQuarter;
+	YearQuarter yrq = ViewBag.YearQuarter;	// this is the YRQ being searched
 
 	int itemCount = ViewBag.ItemCount ?? 0;
 	int _courseCount = ViewBag.CourseCount ?? 0;
@@ -30,12 +30,6 @@
 	string PreviousCourseID = string.Empty;
 	string PreviousSectionID = string.Empty;
 	string PreviousCourseTitle = string.Empty;
-	string courseBlockClass = "";
-
-	if (yrq.ID.CompareTo(currentQuarter.ID) < 0)
-	{
-		courseBlockClass = "course-block-past-quarter";
-	}
 
 	string _searchTerm = ViewBag.searchterm;
 }
@@ -169,7 +163,7 @@
 		<p class="classDetails">
 			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
 		</p>
-		<ul class='course-block @(courseBlockClass)'>
+		<ul class='course-block @(yrq.ID.CompareTo(currentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
 		</text>
 			 }
 

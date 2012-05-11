@@ -31,8 +31,7 @@
 	IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenByDescending(s => s.IsVariableCredits).ThenBy(s => s.Credits).ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)).ToList();
 
 	// Get the navigation list and other quarter information
-	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
-	string currentYrq = yrqList[0].ID;
+	string currentYrq = ViewBag.CurrentYearQuarter.ID;
 
 	if (ViewBag.YearQuarter != null)
 	{
@@ -299,7 +298,7 @@
 					<!--classDetails -->
 				</div>
 				<!-- classInfo-->
-				<ul class='course-block@(currentYrq != thisYrq ? Html.Raw(" course-block-past-quarter") : Html.Raw(string.Empty))'>
+				<ul class='course-block @(thisYrq.CompareTo(currentYrq) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
 				</text>
 					 }
 
