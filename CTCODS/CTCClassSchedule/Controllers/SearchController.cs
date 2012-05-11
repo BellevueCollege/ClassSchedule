@@ -75,8 +75,9 @@ namespace CTCClassSchedule.Controllers
 			IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
 			routeValues.Add("YearQuarterID", quarter);
 			ViewBag.RouteValues = routeValues;
-
-			ViewBag.LinkParams = Helpers.getLinkParams(Request);
+			// TODO: Aren't link parameters part of the route values? Let's merge these two somehow.
+			// (Is RouteValues even being used?)
+			ViewBag.LinkParams = Helpers.getLinkParams(Request, "submit");
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{

@@ -509,12 +509,13 @@ namespace CTCClassSchedule.Common
 		/// This is mainly used to set a Viewbag variable so these can be passed into action links in the views.
 		/// </summary>
 		/// <param name="httpRequest"></param>
-		static public IDictionary<string, object> getLinkParams(HttpRequestBase httpRequest)
+		/// <param name="ignoreKeys">List of key values to ignore.</param>
+		static public IDictionary<string, object> getLinkParams(HttpRequestBase httpRequest, params string[] ignoreKeys)
 		{
 			IDictionary<string, object> linkParams = new Dictionary<string, object>(httpRequest.QueryString.Count);
 			foreach (string key in httpRequest.QueryString.AllKeys)
 			{
-				if (key != "X-Requested-With")
+				if (key != "X-Requested-With" && !ignoreKeys.Contains(key, StringComparer.OrdinalIgnoreCase))
 				{
 					if (linkParams.ContainsKey(key))
 					{
@@ -528,13 +529,16 @@ namespace CTCClassSchedule.Common
 			}
 			foreach (string key in httpRequest.Form.AllKeys)
 			{
-				if (linkParams.ContainsKey(key))
+				if (!ignoreKeys.Contains(key, StringComparer.OrdinalIgnoreCase))
 				{
-					linkParams[key] = httpRequest.Form[key];
-				}
-				else
-				{
-					linkParams.Add(key, httpRequest.Form[key]);
+					if (linkParams.ContainsKey(key))
+					{
+						linkParams[key] = httpRequest.Form[key];
+					}
+					else
+					{
+						linkParams.Add(key, httpRequest.Form[key]);
+					}
 				}
 			}
 			return linkParams;
