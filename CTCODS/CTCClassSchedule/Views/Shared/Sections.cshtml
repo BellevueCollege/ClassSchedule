@@ -164,7 +164,7 @@
 							<span id="cmsSectionFootnotes">
 					@if (string.IsNullOrWhiteSpace(_searchTerm))
                      {
-						    @secFootnotes;
+						    @Html.Raw(secFootnotes);
                      }
                      else
                      {

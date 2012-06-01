@@ -278,7 +278,7 @@
 			}
 					</h2>
 					<p class="classNotes">
-						@sec.CourseFootnotes
+						@Html.Raw(sec.CourseFootnotes)
 						@if (sec.CourseFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
 			{
 							<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">
@@ -288,7 +288,7 @@
 					<div class="classDetails">
 						@if (sec.CustomTitle != null && sec.CustomTitle != string.Empty)
 			{
-							@sec.CustomDescription
+							@Html.Raw(sec.CustomDescription)
 			}
 						@if (!hasLinked)
 			{

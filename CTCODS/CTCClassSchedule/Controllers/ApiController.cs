@@ -10,6 +10,8 @@ using CTCClassSchedule.Models;
 using System;
 using System.Diagnostics;
 using Ctc.Web.Security;
+using System.Text.RegularExpressions;
+using System.Configuration;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -145,6 +147,7 @@ namespace CTCClassSchedule.Controllers
 		// POST after submit is clicked
 
 		[HttpPost]
+		[ValidateInput(false)]
 		[AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
 		public ActionResult SectionEdit(FormCollection collection)
 		{
@@ -160,6 +163,9 @@ namespace CTCClassSchedule.Controllers
 				string customTitle = collection["section.CustomTitle"];
 				string customDescription = collection["section.CustomDescription"];
 
+
+				customDescription = StripHTML(customDescription);
+				SectionFootnotes = StripHTML(SectionFootnotes);
 
 				SectionFootnote itemToUpdate = new SectionFootnote();
 
@@ -278,6 +284,7 @@ namespace CTCClassSchedule.Controllers
 		//
 		// POST after submit is clicked
 		[HttpPost]
+		[ValidateInput(false)]
 		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
 		public ActionResult ClassEdit(FormCollection collection)
 		{
@@ -288,6 +295,8 @@ namespace CTCClassSchedule.Controllers
 				string CourseID = collection["CourseID"];
 				string Username = HttpContext.User.Identity.Name;
 				string Footnote = collection["Footnote"];
+
+				Footnote = StripHTML(Footnote);
 
 				CourseFootnote itemToUpdate = new CourseFootnote();
 				bool itemFound = false;
@@ -322,6 +331,25 @@ namespace CTCClassSchedule.Controllers
 			}
 
 			return Redirect(referrer);
+		}
+
+		private string StripHTML(string WithHTML)
+		{
+			string Stripped;
+			string whitelist = ConfigurationManager.AppSettings["CMSHtmlParsingAllowedElements"];
+
+			try
+			{
+				string Pattern = @"</?(?(?=" + whitelist + @")notag|[a-zA-Z0-9]+)(?:\s[a-zA-Z0-9\-]+=?(?:(["",']?).*?\1?)?)*\s*/?>";
+				Stripped = Regex.Replace(WithHTML, Pattern, string.Empty);
+
+			}
+			catch
+			{
+				Stripped = string.Empty;
+			}
+			return Stripped;
+
 		}
 
 
@@ -376,6 +404,7 @@ namespace CTCClassSchedule.Controllers
 		// POST after submit is clicked
 
 		[HttpPost]
+		[ValidateInput(false)]
 		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
 		public ActionResult ProgramEdit(FormCollection collection)
 		{
@@ -396,6 +425,9 @@ namespace CTCClassSchedule.Controllers
 				string Abbreviation = collection["itemToUpdate.Abbreviation"];
 				string URL = collection["itemToUpdate.URL"];
 				string MergeWith = collection["MergeWith"] == "" ? null : collection["MergeWith"];
+
+				Intro = StripHTML(Intro);
+
 
 
 				ProgramInformation itemToUpdate = new ProgramInformation();
