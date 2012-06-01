@@ -70,7 +70,7 @@
 								@Html.LabelFor(model => section.SectionFootnotes, "Additional Notes:")
 						</div>
 						<div class="editor-field">
-								@Html.TextAreaFor(model => section.SectionFootnotes, new { @class = "editSectionFootnotes", @cols = 80, @rows = 5 })
+								@Html.TextAreaFor(model => section.SectionFootnotes, new { @class = "editSectionFootnotes", @cols = 80, @rows = 14 })
 								@Html.ValidationMessageFor(model => section.SectionFootnotes)
 						</div>
 					</div>
@@ -90,7 +90,7 @@
 								@Html.LabelFor(model => section.CustomDescription, "Custom Description (only visibile when there is a custom title)")
 						</div>
 						<div class="editor-field">
-								@Html.TextAreaFor(model => section.CustomDescription, new { @class = "editSectionFootnotes", @cols = 80, @rows = 5 })
+								@Html.TextAreaFor(model => section.CustomDescription, new { @class = "editSectionFootnotes", @cols = 80, @rows = 14 })
 								@Html.ValidationMessageFor(model => section.CustomDescription)
 						</div>
 
