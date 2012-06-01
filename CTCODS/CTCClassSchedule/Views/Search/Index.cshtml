@@ -194,7 +194,7 @@
 
 
 
-    @if (ViewBag.TotalPages == 1 && Model.SearchResultNoSection.Count() > 0)
+    @if (ViewBag.TotalPages <= 1 && Model.SearchResultNoSection.Count() > 0)
 		{
 			Html.RenderPartial("NoSectionCourses", Model.SearchResultNoSection);
 		}
