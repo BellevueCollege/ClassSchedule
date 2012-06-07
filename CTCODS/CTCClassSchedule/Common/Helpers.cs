@@ -115,7 +115,7 @@ namespace CTCClassSchedule.Common
 		/// passed into the app by the user clicking on the faceted search left pane
 		/// facets accepted: flex, time, days, availability
 		/// </summary>
-		static public IList<ISectionFacet> addFacets(string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
+		static public IList<ISectionFacet> addFacets(string timestart, string timeend, string[] allDays, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
 		{
 			IList<ISectionFacet> facets = new List<ISectionFacet>();
 
@@ -163,36 +163,41 @@ namespace CTCClassSchedule.Common
 			//day of the week facets
 			DaysFacet.Options days = DaysFacet.Options.All;	// default
 
-			if (!String.IsNullOrWhiteSpace(day_su))
+			if (allDays != null)
 			{
-				days = (days | DaysFacet.Options.Sunday);
+				foreach (string day in allDays)
+				{
+					if (day == "Su")
+					{
+						days = (days | DaysFacet.Options.Sunday);
+					}
+					if (day == "M")
+					{
+						days = (days | DaysFacet.Options.Monday);
+					}
+					if (day == "T")
+					{
+						days = (days | DaysFacet.Options.Tuesday);
+					}
+					if (day == "W")
+					{
+						days = (days | DaysFacet.Options.Wednesday);
+					}
+					if (day == "Th")
+					{
+						days = (days | DaysFacet.Options.Thursday);
+					}
+					if (day == "F")
+					{
+						days = (days | DaysFacet.Options.Friday);
+					}
+					if (day == "Sa")
+					{
+						days = (days | DaysFacet.Options.Saturday);
+					}
+				}
+				facets.Add(new DaysFacet(days));
 			}
-			if (!String.IsNullOrWhiteSpace(day_m))
-			{
-				days = (days | DaysFacet.Options.Monday);
-			}
-			if (!String.IsNullOrWhiteSpace(day_t))
-			{
-				days = (days | DaysFacet.Options.Tuesday);
-			}
-			if (!String.IsNullOrWhiteSpace(day_w))
-			{
-				days = (days | DaysFacet.Options.Wednesday);
-			}
-			if (!String.IsNullOrWhiteSpace(day_th))
-			{
-				days = (days | DaysFacet.Options.Thursday);
-			}
-			if (!String.IsNullOrWhiteSpace(day_f))
-			{
-				days = (days | DaysFacet.Options.Friday);
-			}
-			if (!String.IsNullOrWhiteSpace(day_s))
-			{
-				days = (days | DaysFacet.Options.Saturday);
-			}
-			facets.Add(new DaysFacet(days));
-
 
 			if (!String.IsNullOrWhiteSpace(avail))
 			{
@@ -717,6 +722,8 @@ namespace CTCClassSchedule.Common
 			return dict;
 		}
 
+
+
 		public static string BuildCourseID(string CourseNumber, string CourseSubject, bool IsCommonCourse)
 		{
 			char[] CourseID = new char[8];
@@ -772,4 +779,7 @@ namespace CTCClassSchedule.Common
 
 
 	}
+
+
+
 }

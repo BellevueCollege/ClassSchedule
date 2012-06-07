@@ -264,10 +264,11 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/{FriendlyYRQ}/
 		/// </summary>
 		[OutputCache(CacheProfile = "YearQuarterCacheTime")]
-		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter, string latestart, string numcredits, string format)
+		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string[] days, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter, string latestart, string numcredits, string format)
 		{
 			YearQuarter yrq	= string.IsNullOrWhiteSpace(YearQuarter) ? null : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
+			string[] chosenDays = setDayFacetViewbags(days);
+			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, chosenDays, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -327,13 +328,9 @@ namespace CTCClassSchedule.Controllers
 
 					ViewBag.timestart = timestart;
 					ViewBag.timeend = timeend;
-					ViewBag.day_su = day_su;
-					ViewBag.day_m = day_m;
-					ViewBag.day_t = day_t;
-					ViewBag.day_w = day_w;
-					ViewBag.day_th = day_th;
-					ViewBag.day_f = day_f;
-					ViewBag.day_s = day_s;
+
+
+
 					ViewBag.latestart = latestart;
 					ViewBag.numcredits = numcredits;
 					ViewBag.avail = avail;
@@ -362,10 +359,11 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
 		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")] // Caches for 30 minutes
-		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, string format)
+		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string[] days, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, string format)
 		{
 			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
+			string[] chosenDays = setDayFacetViewbags(days);
+			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, chosenDays, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -393,14 +391,6 @@ namespace CTCClassSchedule.Controllers
 					// set up all the ancillary data we'll need to display the View
 					ViewBag.timestart = timestart;
 					ViewBag.timeend = timeend;
-					ViewBag.day_su = day_su;
-					ViewBag.day_m = day_m;
-					ViewBag.day_t = day_t;
-					ViewBag.day_w = day_w;
-					ViewBag.day_th = day_th;
-					ViewBag.day_f = day_f;
-					ViewBag.day_s = day_s;
-
 					ViewBag.avail = avail;
 					ViewBag.numcredits = numcredits;
 					ViewBag.latestart = latestart;
@@ -429,6 +419,39 @@ namespace CTCClassSchedule.Controllers
 					return View(sectionsEnum);
 				}
 			}
+		}
+
+		private string[] setDayFacetViewbags(string[] days)
+		{
+			if (days != null)
+			{
+				string[] chosenDays = days;
+				foreach (string day in chosenDays)
+				{
+					if (day == "Su")
+						ViewBag.day_su = true;
+					else if (day == "M")
+						ViewBag.day_m = true;
+					else if (day == "T")
+						ViewBag.day_t = true;
+					else if (day == "W")
+						ViewBag.day_w = true;
+					else if (day == "Th")
+						ViewBag.day_th = true;
+					else if (day == "F")
+						ViewBag.day_f = true;
+					else if (day == "Sa")
+						ViewBag.day_s = true;
+				}
+				return chosenDays;
+			}
+
+			else
+			{
+				string[] chosenDays = new string[0];
+				return chosenDays;
+			}
+
 		}
 
 		/// <summary>

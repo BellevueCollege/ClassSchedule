@@ -29,7 +29,7 @@ namespace CTCClassSchedule.Controllers
 
 		//
 		// GET: /Search/
-		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, int p_offset = 0)
+		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string[] days, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
 			// We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
 			searchterm = searchterm.Replace("\"", string.Empty);
@@ -42,13 +42,7 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
-			ViewBag.day_su = day_su;
-			ViewBag.day_m = day_m;
-			ViewBag.day_t = day_t;
-			ViewBag.day_w = day_w;
-			ViewBag.day_th = day_th;
-			ViewBag.day_f = day_f;
-			ViewBag.day_s = day_s;
+			string[] chosenDays = setDayFacetViewbags(days);
 			ViewBag.latestart = latestart;
 			ViewBag.numcredits = numcredits;
 
@@ -68,8 +62,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.Subject = Subject;
 			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
 
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s,
-			                                                f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
+			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, chosenDays, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
 			// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
 			IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
@@ -240,6 +233,33 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.activeClass = " class=active";
 		}
+
+		private string[] setDayFacetViewbags(string[] days)
+		{
+			if (days != null)
+			{
+				foreach (string day in days)
+				{
+					if (day == "Su")
+						ViewBag.day_su = true;
+					else if (day == "M")
+						ViewBag.day_m = true;
+					else if (day == "T")
+						ViewBag.day_t = true;
+					else if (day == "W")
+						ViewBag.day_w = true;
+					else if (day == "Th")
+						ViewBag.day_th = true;
+					else if (day == "F")
+						ViewBag.day_f = true;
+					else if (day == "Sa")
+						ViewBag.day_s = true;
+				}
+			}
+
+			return days;
+		}
+
 		#endregion
 	}
 }

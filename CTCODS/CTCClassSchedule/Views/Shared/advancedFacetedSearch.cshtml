@@ -210,38 +210,38 @@ else
 		</div>
 		<div id="days">
 			<div class="day">
-				<label class="daylabel weekend" for="day_su"><abbr title="Sunday ">S</abbr></label>
-					<input type="checkbox" name="day_su" id="day_su"  value="true" @if (@ViewBag.day_su == "true")
+				<label class="daylabel weekend" for="days"><abbr title="Sunday ">S</abbr></label>
+					<input type="checkbox" name="days" id="day_su"  value="Su" @if (@ViewBag.day_su == true)
 																											 {  <text>checked="checked"</text> } />
 			</div>
 			<div class="day">
-				<label class="daylabel" for="day_m"><abbr title="Monday ">M</abbr></label>
-				<input type="checkbox" name="day_m" id="day_m" value="true"  @if (@ViewBag.day_m == "true")
+				<label class="daylabel" for="days"><abbr title="Monday ">M</abbr></label>
+				<input type="checkbox" name="days" id="day_m" value="M"  @if (@ViewBag.day_m == true)
 																											{  <text>checked="checked"</text> }/>
 			</div>
 			<div class="day">
-				<label class="daylabel" for="day_t"><abbr title="Tuesday ">T</abbr></label>
-				<input type="checkbox" name="day_t" id="day_t" value="true"  @if (@ViewBag.day_t == "true")
+				<label class="daylabel" for="days"><abbr title="Tuesday ">T</abbr></label>
+				<input type="checkbox" name="days" id="day_t" value="T"  @if (@ViewBag.day_t == true)
 																											{  <text>checked="checked"</text> }/>
 			</div>
 			<div class="day">
-				<label class="daylabel" for="day_w"><abbr title="Wednesday ">W</abbr></label>
-				<input type="checkbox" name="day_w"  id="day_w" value="true" @if (@ViewBag.day_w == "true")
+				<label class="daylabel" for="days"><abbr title="Wednesday ">W</abbr></label>
+				<input type="checkbox" name="days"  id="day_w" value="W" @if (@ViewBag.day_w == true)
 																											{  <text>checked="checked"</text> } />
 			</div>
 			<div class="day">
-				<label class="daylabel" for="day_th"><abbr title="Thursday ">T</abbr></label>
-				<input type="checkbox" name="day_th" id="day_th" value="true" @if (@ViewBag.day_th == "true")
+				<label class="daylabel" for="days"><abbr title="Thursday ">T</abbr></label>
+				<input type="checkbox" name="days" id="day_th" value="Th" @if (@ViewBag.day_th == true)
 																											{  <text>checked="checked"</text> } />
 			</div>
 			<div class="day">
-				<label class="daylabel" for="day_f"><abbr title="Friday ">F</abbr></label>
-				<input type="checkbox" name="day_f" id="day_f" value="true"  @if (@ViewBag.day_f == "true")
+				<label class="daylabel" for="days"><abbr title="Friday ">F</abbr></label>
+				<input type="checkbox" name="days" id="day_f" value="F"  @if (@ViewBag.day_f == true)
 																											{  <text>checked="checked"</text> }/>
 			</div>
 			<div class="day">
-				<label class="daylabel weekend" for="day_s"><abbr title="Saturday ">S</abbr></label>
-				<input type="checkbox" name="day_s" id="day_s" value="true"  @if (@ViewBag.day_s == "true")
+				<label class="daylabel weekend" for="days"><abbr title="Saturday ">S</abbr></label>
+				<input type="checkbox" name="days" id="day_s" value="Sa"  @if (@ViewBag.day_s == true)
 																											{  <text>checked="checked"</text> }/>
 			</div>
 			<div id="submitjquery">
