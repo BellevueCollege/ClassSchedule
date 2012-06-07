@@ -12,7 +12,6 @@ using CTCClassSchedule.Models;
 using MvcMiniProfiler;
 using Ctc.Web.Security;
 using System.Configuration;
-using System.Collections;
 
 namespace CTCClassSchedule.Common
 {
@@ -116,37 +115,29 @@ namespace CTCClassSchedule.Common
 		/// passed into the app by the user clicking on the faceted search left pane
 		/// facets accepted: flex, time, days, availability
 		/// </summary>
-		static public IList<ISectionFacet> addFacets(string timestart, string timeend, string[] allDays, string[] formats, string avail, string latestart, string numcredits)
+		static public IList<ISectionFacet> addFacets(string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
 		{
 			IList<ISectionFacet> facets = new List<ISectionFacet>();
 
 			//add the class format facet options (online, hybrid, telecourse, on campus)
 			ModalityFacet.Options modality = ModalityFacet.Options.All;	// default
 
-
-			if (formats != null)
+			if (!String.IsNullOrWhiteSpace(f_online))
 			{
-				foreach (string format in formats)
-				{
-					if (format == "oncampus")
-					{
-						modality = (modality | ModalityFacet.Options.OnCampus);
-					}
-					if (format == "online")
-					{
-						modality = (modality | ModalityFacet.Options.Online);
-					}
-					if (format == "hybrid")
-					{
-						modality = (modality | ModalityFacet.Options.Hybrid);
-					}
-					if (format == "telecourse")
-					{
-						modality = (modality | ModalityFacet.Options.Telecourse);
-					}
-				}
+				modality = (modality | ModalityFacet.Options.Online);
 			}
-
+			if (!String.IsNullOrWhiteSpace(f_hybrid))
+			{
+				modality = (modality | ModalityFacet.Options.Hybrid);
+			}
+			if (!String.IsNullOrWhiteSpace(f_telecourse))
+			{
+				modality = (modality | ModalityFacet.Options.Telecourse);
+			}
+			if (!String.IsNullOrWhiteSpace(f_oncampus))
+			{
+				modality = (modality | ModalityFacet.Options.OnCampus);
+			}
 			facets.Add(new ModalityFacet(modality));
 
 			int startHour = 0;
@@ -172,41 +163,36 @@ namespace CTCClassSchedule.Common
 			//day of the week facets
 			DaysFacet.Options days = DaysFacet.Options.All;	// default
 
-			if (allDays != null)
+			if (!String.IsNullOrWhiteSpace(day_su))
 			{
-				foreach (string day in allDays)
-				{
-					if (day == "Su")
-					{
-						days = (days | DaysFacet.Options.Sunday);
-					}
-					if (day == "M")
-					{
-						days = (days | DaysFacet.Options.Monday);
-					}
-					if (day == "T")
-					{
-						days = (days | DaysFacet.Options.Tuesday);
-					}
-					if (day == "W")
-					{
-						days = (days | DaysFacet.Options.Wednesday);
-					}
-					if (day == "Th")
-					{
-						days = (days | DaysFacet.Options.Thursday);
-					}
-					if (day == "F")
-					{
-						days = (days | DaysFacet.Options.Friday);
-					}
-					if (day == "Sa")
-					{
-						days = (days | DaysFacet.Options.Saturday);
-					}
-				}
-				facets.Add(new DaysFacet(days));
+				days = (days | DaysFacet.Options.Sunday);
 			}
+			if (!String.IsNullOrWhiteSpace(day_m))
+			{
+				days = (days | DaysFacet.Options.Monday);
+			}
+			if (!String.IsNullOrWhiteSpace(day_t))
+			{
+				days = (days | DaysFacet.Options.Tuesday);
+			}
+			if (!String.IsNullOrWhiteSpace(day_w))
+			{
+				days = (days | DaysFacet.Options.Wednesday);
+			}
+			if (!String.IsNullOrWhiteSpace(day_th))
+			{
+				days = (days | DaysFacet.Options.Thursday);
+			}
+			if (!String.IsNullOrWhiteSpace(day_f))
+			{
+				days = (days | DaysFacet.Options.Friday);
+			}
+			if (!String.IsNullOrWhiteSpace(day_s))
+			{
+				days = (days | DaysFacet.Options.Saturday);
+			}
+			facets.Add(new DaysFacet(days));
+
 
 			if (!String.IsNullOrWhiteSpace(avail))
 			{
@@ -454,91 +440,45 @@ namespace CTCClassSchedule.Common
 		/// <param name="fieldTitle"></param>
 		/// <param name="fieldValue"></param>
 		/// <returns></returns>
-		static public GeneralFacetInfo getFacetInfo(string fieldID, string fieldTitle, string fieldValue, bool selected)
+		static public GeneralFacetInfo getFacetInfo(string fieldID, string fieldTitle, string fieldValue)
 		{
 			return new GeneralFacetInfo
 				{
 						ID = fieldID,
 						Title = fieldTitle,
 									Value = fieldValue,
-						Selected = selected
+						Selected = Utility.SafeConvertToBool(fieldValue)
 				};
 		}
 
-		static public IList<GeneralFacetInfo> ConstructModalityList(string[] classformat)
+
+
+		static public IList<GeneralFacetInfo> ConstructModalityList(string f_oncampus, string f_online, string f_hybrid, string f_telecourse)
 		{
 			IList<GeneralFacetInfo> modality = new List<GeneralFacetInfo>(4);
 
-			GeneralFacetInfo oncampus = getFacetInfo("f_oncampus", "On Campus", "oncampus", false);
-			GeneralFacetInfo online = getFacetInfo("f_online", "Online", "online", false);
-			GeneralFacetInfo hybrid = getFacetInfo("f_hybrid", "Hybrid", "hybrid", false);
-			GeneralFacetInfo telecourse = getFacetInfo("f_telecourse", "Telecourse", "telecourse", false);
-
-			if (classformat != null)
-			{
-				foreach (string type in classformat)
-				{
-					if (type == "oncampus")
-						oncampus.Selected = true;
-					if (type == "online")
-						online.Selected = true;
-					if (type == "hybrid")
-						hybrid.Selected = true;
-					if (type == "telecourse")
-						telecourse.Selected = true;
-				}
-			}
-
-			modality.Add(oncampus);
-			modality.Add(online);
-			modality.Add(hybrid);
-			modality.Add(telecourse);
+			modality.Add(getFacetInfo("f_oncampus", "On Campus", f_oncampus));
+			modality.Add(getFacetInfo("f_online", "Online", f_online));
+			modality.Add(getFacetInfo("f_hybrid", "Hybrid", f_hybrid));
+			modality.Add(getFacetInfo("f_telecourse", "Telecourse", f_telecourse));
 
 			return modality;
 		}
 
-		static public IList<GeneralFacetInfo> ConstructDaysList(string[] chosendays)
+
+		static public IList<GeneralFacetInfo> ConstructDaysList(string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s)
 		{
-			IList<GeneralFacetInfo> allDays = new List<GeneralFacetInfo>(7);
+			IList<GeneralFacetInfo> modality = new List<GeneralFacetInfo>(7);
 
-			GeneralFacetInfo sunday = getFacetInfo("day_su", "Sunday", "Su", false);
-			GeneralFacetInfo monday = getFacetInfo("day_m", "Monday", "M", false);
-			GeneralFacetInfo tuesday = getFacetInfo("day_t", "Tuesday", "T", false);
-			GeneralFacetInfo wednesday = getFacetInfo("day_w", "Wednesday", "W", false);
-			GeneralFacetInfo thursday = getFacetInfo("day_th", "Thursday", "Th", false);
-			GeneralFacetInfo friday = getFacetInfo("day_f", "Friday", "F", false);
-			GeneralFacetInfo saturday = getFacetInfo("day_sa", "Saturday", "Sa", false);
+			modality.Add(getFacetInfo("day_su", "S", day_su));
+			modality.Add(getFacetInfo("day_m", "M", day_m));
+			modality.Add(getFacetInfo("day_t", "T", day_t));
+			modality.Add(getFacetInfo("day_w", "W", day_w));
+			modality.Add(getFacetInfo("day_th", "T", day_th));
+			modality.Add(getFacetInfo("day_f", "F", day_f));
+			modality.Add(getFacetInfo("day_s", "S", day_s));
 
-			if (chosendays != null)
-			{
-				foreach (string day in chosendays)
-				{
-					if (day == "Su")
-						sunday.Selected = true;
-					if (day == "M")
-						monday.Selected = true;
-					if (day == "T")
-						tuesday.Selected = true;
-					if (day == "W")
-						wednesday.Selected = true;
-					if (day == "Th")
-						thursday.Selected = true;
-					if (day == "F")
-						friday.Selected = true;
-					if (day == "Sa")
-						saturday.Selected = true;
-				}
-			}
-
-			allDays.Add(sunday);
-			allDays.Add(monday);
-			allDays.Add(tuesday);
-			allDays.Add(wednesday);
-			allDays.Add(thursday);
-			allDays.Add(friday);
-			allDays.Add(saturday);
-
-			return allDays;
+			return modality;
 		}
 
 		/// <summary>
@@ -597,11 +537,6 @@ namespace CTCClassSchedule.Common
 					}
 				}
 			}
-
-
-
-
-
 			return linkParams;
 		}
 
@@ -778,8 +713,6 @@ namespace CTCClassSchedule.Common
 			return dict;
 		}
 
-
-
 		public static string BuildCourseID(string CourseNumber, string CourseSubject, bool IsCommonCourse)
 		{
 			char[] CourseID = new char[8];
@@ -834,31 +767,5 @@ namespace CTCClassSchedule.Common
 
 
 
-
-		internal static dynamic cleanLinkParams(IDictionary<string, object> linkParams)
-		{
-			if (linkParams.ContainsKey("days"))
-			{
-				foreach (var param in linkParams)
-				{
-					if (param.Key == "days")
-					{
-						string value = Convert.ToString(param.Value);
-						if (value.Contains(","))
-						{
-
-						}
-					}
-				}
-			}
-
-			return linkParams;
-
-		}
-
-
 	}
-
-
-
 }

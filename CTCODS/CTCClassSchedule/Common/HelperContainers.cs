@@ -7,7 +7,7 @@ namespace CTCClassSchedule.Common
 	public class GeneralFacetInfo
 	{
 		public string ID{get;set;}
-		public string Title { get; set; }
+		public string Title{get;set;}
 		public string Value { get; set; }
 		public bool Selected{get;set;}
 	}
