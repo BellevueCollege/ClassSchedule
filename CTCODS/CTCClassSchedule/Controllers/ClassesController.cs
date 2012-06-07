@@ -19,6 +19,7 @@ using System.Globalization;
 using System.Web;
 using System.Text;
 using Ctc.Web.Security;
+using System.Web.Routing;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -264,11 +265,11 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/{FriendlyYRQ}/
 		/// </summary>
 		[OutputCache(CacheProfile = "YearQuarterCacheTime")]
-		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string[] days, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter, string latestart, string numcredits, string format)
+		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string[] days, string[] classformat, string avail, string letter, string latestart, string numcredits, string format)
 		{
 			YearQuarter yrq	= string.IsNullOrWhiteSpace(YearQuarter) ? null : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
-			string[] chosenDays = setDayFacetViewbags(days);
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, chosenDays, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
+
+			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, days, classformat, avail, latestart, numcredits);
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -337,12 +338,8 @@ namespace CTCClassSchedule.Controllers
 					ViewBag.Subject = "All";
 					ViewBag.YearQuarter = yrq;
 
-					IList<ModalityFacetInfo> modality = new List<ModalityFacetInfo>(4);
-					modality.Add(Helpers.getModalityInfo("f_oncampus", "On Campus", f_oncampus) );
-					modality.Add(Helpers.getModalityInfo("f_online", "Online", f_online));
-					modality.Add(Helpers.getModalityInfo("f_hybrid", "Hybrid", f_hybrid));
-					modality.Add(Helpers.getModalityInfo("f_telecourse", "Telecourse", f_telecourse));
-					ViewBag.Modality = modality;
+					ViewBag.Modality = Helpers.ConstructModalityList(classformat);
+					ViewBag.Days = Helpers.ConstructDaysList(days);
 
 					ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
@@ -359,11 +356,11 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
 		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")] // Caches for 30 minutes
-		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string[] days, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, string format)
+		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string[] days, string[] classformat, string avail, string latestart, string numcredits, string format)
 		{
 			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
-			string[] chosenDays = setDayFacetViewbags(days);
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, chosenDays, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
+
+			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, days, classformat, avail, latestart, numcredits);
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -395,7 +392,11 @@ namespace CTCClassSchedule.Controllers
 					ViewBag.numcredits = numcredits;
 					ViewBag.latestart = latestart;
 
-					ViewBag.LinkParams = Helpers.getLinkParams(Request);
+					IDictionary<string,object> linkParams = Helpers.getLinkParams(Request);
+					linkParams.Add(days);
+
+					ViewBag.LinkParams = Helpers.cleanLinkParams(linkParams);
+
 					ViewBag.Subject = Subject;
 
 					//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
@@ -409,7 +410,8 @@ namespace CTCClassSchedule.Controllers
 					ViewBag.QuarterNavMenu = yrqRange;
 					ViewBag.CurrentRegistrationQuarter = yrqRange[0];
 
-					ViewBag.Modality = Helpers.ConstructModalityList(sectionsEnum, f_oncampus, f_online, f_hybrid, f_telecourse);
+					ViewBag.Modality = Helpers.ConstructModalityList(classformat);
+					ViewBag.Days = Helpers.ConstructDaysList(days);
 
 					// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
 					IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
@@ -421,38 +423,6 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 
-		private string[] setDayFacetViewbags(string[] days)
-		{
-			if (days != null)
-			{
-				string[] chosenDays = days;
-				foreach (string day in chosenDays)
-				{
-					if (day == "Su")
-						ViewBag.day_su = true;
-					else if (day == "M")
-						ViewBag.day_m = true;
-					else if (day == "T")
-						ViewBag.day_t = true;
-					else if (day == "W")
-						ViewBag.day_w = true;
-					else if (day == "Th")
-						ViewBag.day_th = true;
-					else if (day == "F")
-						ViewBag.day_f = true;
-					else if (day == "Sa")
-						ViewBag.day_s = true;
-				}
-				return chosenDays;
-			}
-
-			else
-			{
-				string[] chosenDays = new string[0];
-				return chosenDays;
-			}
-
-		}
 
 		/// <summary>
 		/// GET: /Classes/All/{Subject}/{ClassNum}

@@ -97,7 +97,8 @@
 		YearQuarter yrq = ViewBag.YearQuarter;
 		string subject = (ViewBag.Subject ?? string.Empty);
 
-		if (subject.ToUpper() == "ALL") {
+		if (subject.ToUpper() == "ALL")
+		{
 			subject = string.Empty;
 		}
 		string lastSubject = "";
@@ -117,40 +118,40 @@
     <h3>Subject</h3>
 	<ul class="subject">
    @if (!string.IsNullOrWhiteSpace(subject))
-		{
-			routeParms.Remove("Subject");
+	 {
+		 routeParms.Remove("Subject");
 			<li>
 				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">All</a>
 			</li>
-		 }
+	 }
 	@foreach (string sub in Model)
-	{
-			if (sub.ToUpper() == (subject ?? string.Empty).ToUpper())
-			{
+ {
+	 if (sub.ToUpper() == (subject ?? string.Empty).ToUpper())
+	 {
 			<li class="active">
 						<span class="notlink">@sub</span>
 			</li>
-			}
-			else
-			{
-				routeParms["Subject"] = sub;
+	 }
+	 else
+	 {
+		 routeParms["Subject"] = sub;
 				<li>
 				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@sub</a>
 				</li>
-			}
-		}
+	 }
+ }
 	</ul>
-	}
+}
 
 @if (ViewContext.RouteData.Values["Controller"].Equals("Classes"))
 {
 
-		@:<form id="daystimesform" action="@Url.Content("~/")@(yrq != null ? yrq.FriendlyName.Replace(" ","") : "All")/@subject" method="get">
+		@:<form id="daystimesform" action="@Url.Content("~/")@(yrq != null ? yrq.FriendlyName.Replace(" ", "") : "All")/@subject" method="get">
 
-		if (routeParms.ContainsKey("letter"))
-  {
+	if (routeParms.ContainsKey("letter"))
+	{
 			<input type="hidden" name="letter" value="@routeParms["letter"]" />
-		}
+	}
 
 }
 else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
@@ -159,14 +160,14 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
 		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])" method="get">
 		<!-- hidden fields to include in form -->
 		@if (!string.IsNullOrWhiteSpace(QuarterParam))
-		{
+	{
 			<input type="hidden" name="quarter" value="@QuarterParam"/>
-		}
+	}
 
 		@if (!string.IsNullOrWhiteSpace(subject))
-		{
+	{
 			<input type="hidden" name="Subject" value="@subject"/>
-		}
+	}
 		<input type="hidden" name="searchterm" value="@ViewBag.searchterm"/>
 	</div>
 }
@@ -178,7 +179,9 @@ else
 	<h3>Class Format</h3>
 	<div id="classformat">
 	@{
-		IList<ModalityFacetInfo> modalities = (IList<ModalityFacetInfo>)ViewBag.Modality;
+		IList<GeneralFacetInfo> modalities = (IList<GeneralFacetInfo>)ViewBag.Modality;
+		IList<GeneralFacetInfo> days = (IList<GeneralFacetInfo>)ViewBag.Days;
+
 		bool showDaysAndTimes = true;
 	}
 	@if (modalities.Where(m => m.Selected == true).Count() > 0)
@@ -187,15 +190,15 @@ else
 			<a href="#" id="uncheckFormat">Uncheck all</a>
 		</p>
  }
- @foreach (ModalityFacetInfo m in modalities)
+ @foreach (GeneralFacetInfo m in modalities)
  {
 	 @* Determine whether or not we should display Days & Times options *@
 	 if (m.Title.ToUpper() == "ONLINE" && m.Selected && modalities.Where(o => o.Title.ToUpper() != "ONLINE" && o.Selected).Count() == 0) { showDaysAndTimes = false; }
 
 		<p class="label_checkbox_pair">
 		<span>
-			<input class="clear" type="checkbox" name="@m.ID" id="@m.ID" value="true" @if (m.Selected)
-                                                                             { <text>checked='checked'</text> } /></span>
+			<input class="clear" type="checkbox" name="classformat" id="@m.ID" value="@m.Value" @if (m.Selected)
+																																											 { <text>checked='checked'</text> } /></span>
 			<label for="@m.ID">@m.Title</label>
 		</p>
  }
@@ -208,47 +211,30 @@ else
 		<div id="times">
 		    <label><span title="Start Time" class="time-text">START</span><input id="timestart"  name="timestart" type="text" value="@ViewBag.timestart" /></label><span class="time-separator">-</span><label><span title="End Time" class="time-text">END</span><input id="timeend" name="timeend" type="text" value="@ViewBag.timeend" /></label>
 		</div>
+
+
+
+
+
+
+
+
+
 		<div id="days">
-			<div class="day">
-				<label class="daylabel weekend" for="days"><abbr title="Sunday ">S</abbr></label>
-					<input type="checkbox" name="days" id="day_su"  value="Su" @if (@ViewBag.day_su == true)
-																											 {  <text>checked="checked"</text> } />
-			</div>
-			<div class="day">
-				<label class="daylabel" for="days"><abbr title="Monday ">M</abbr></label>
-				<input type="checkbox" name="days" id="day_m" value="M"  @if (@ViewBag.day_m == true)
-																											{  <text>checked="checked"</text> }/>
-			</div>
-			<div class="day">
-				<label class="daylabel" for="days"><abbr title="Tuesday ">T</abbr></label>
-				<input type="checkbox" name="days" id="day_t" value="T"  @if (@ViewBag.day_t == true)
-																											{  <text>checked="checked"</text> }/>
-			</div>
-			<div class="day">
-				<label class="daylabel" for="days"><abbr title="Wednesday ">W</abbr></label>
-				<input type="checkbox" name="days"  id="day_w" value="W" @if (@ViewBag.day_w == true)
-																											{  <text>checked="checked"</text> } />
-			</div>
-			<div class="day">
-				<label class="daylabel" for="days"><abbr title="Thursday ">T</abbr></label>
-				<input type="checkbox" name="days" id="day_th" value="Th" @if (@ViewBag.day_th == true)
-																											{  <text>checked="checked"</text> } />
-			</div>
-			<div class="day">
-				<label class="daylabel" for="days"><abbr title="Friday ">F</abbr></label>
-				<input type="checkbox" name="days" id="day_f" value="F"  @if (@ViewBag.day_f == true)
-																											{  <text>checked="checked"</text> }/>
-			</div>
-			<div class="day">
-				<label class="daylabel weekend" for="days"><abbr title="Saturday ">S</abbr></label>
-				<input type="checkbox" name="days" id="day_s" value="Sa"  @if (@ViewBag.day_s == true)
-																											{  <text>checked="checked"</text> }/>
-			</div>
+
+			@foreach (GeneralFacetInfo d in days)
+			{
+				<div class="day">
+					<label class="daylabel @if(d.Value == "Su" || d.Value == "Sa"){  <text>weekend</text> }" for="days"><abbr title="@d.Title ">@d.Value</abbr></label>
+					<input type="checkbox" name="days" id="@d.ID"  value="@d.Value" @if(d.Selected)
+																																					{  <text>checked="checked"</text> } />
+				</div>
+			}
 			<div id="submitjquery">
 
 			</div>
 		</div>
-}
+ }
 
 		<h3>Credits</h3>
 	<div id="numcredits-facet">
@@ -256,10 +242,11 @@ else
 			<select class="clear"name="numcredits" id="numcredits" value="true">
 				<option @if (@ViewBag.numcredits == "Any")
 						{ <text>selected='selected'</text> }>Any</option>
-				@for (int i = 1; i <= 15; i++){
+				@for (int i = 1; i <= 15; i++)
+		{
 					<option @if (ViewBag.numcredits != "Any" && @Convert.ToInt16(ViewBag.numcredits) == i)
-						{ <text>selected='selected'</text> }>@i</option>
-				}
+						 { <text>selected='selected'</text> }>@i</option>
+		}
 			</select>
 
 		</p>
@@ -269,7 +256,7 @@ else
 	<div id="latestart-facet">
 		<p class="label_checkbox_pair">
 			<input class="clear" type="checkbox" name="latestart" id="latestart" value="true" @if (@ViewBag.latestart == "true")
-                                                                             { <text>checked='checked'</text> } />
+																																										 { <text>checked='checked'</text> } />
 			<label for="latestart">Late Start</label>
 		</p>
 	</div>
@@ -280,9 +267,9 @@ else
 
 
 		<li><label><input id="radio_all" type="radio" name="avail" value="All" @if (@ViewBag.avail == "All" || @ViewBag.avail == null)
-																																	{  <text> checked="checked"</text> } /> All</label></li>
+																																				 {  <text> checked="checked"</text> } /> All</label></li>
 		<li><label><input id="radio_open" type="radio" name="avail" value="Open"	@if (@ViewBag.avail == "Open")
-																																		{  <text> checked="checked"</text> } /> Open</label></li>
+																																					 {  <text> checked="checked"</text> } /> Open</label></li>
 	</ul>
 
 

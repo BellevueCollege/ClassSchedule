@@ -29,7 +29,7 @@ namespace CTCClassSchedule.Controllers
 
 		//
 		// GET: /Search/
-		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string[] days, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, int p_offset = 0)
+		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string[] days, string[] classformat, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
 			// We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
 			searchterm = searchterm.Replace("\"", string.Empty);
@@ -42,16 +42,12 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
-			string[] chosenDays = setDayFacetViewbags(days);
+
 			ViewBag.latestart = latestart;
 			ViewBag.numcredits = numcredits;
 
-			IList<ModalityFacetInfo> modality = new List<ModalityFacetInfo>(4);
-			modality.Add(Helpers.getModalityInfo("f_oncampus", "On Campus", f_oncampus));
-			modality.Add(Helpers.getModalityInfo("f_online", "Online", f_online));
-			modality.Add(Helpers.getModalityInfo("f_hybrid", "Hybrid", f_hybrid));
-			modality.Add(Helpers.getModalityInfo("f_telecourse", "Telecourse", f_telecourse));
-			ViewBag.Modality = modality;
+			ViewBag.Modality = Helpers.ConstructModalityList(classformat);
+			ViewBag.Days = Helpers.ConstructDaysList(days);
 
 			ViewBag.avail = avail;
 			ViewBag.p_offset = p_offset;
@@ -62,7 +58,7 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.Subject = Subject;
 			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
 
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, chosenDays, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
+			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, days, classformat, avail, latestart, numcredits);
 
 			// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
 			IDictionary<string, object> routeValues = new Dictionary<string, object>(3);

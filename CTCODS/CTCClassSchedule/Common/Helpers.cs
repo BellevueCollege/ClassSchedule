@@ -12,6 +12,7 @@ using CTCClassSchedule.Models;
 using MvcMiniProfiler;
 using Ctc.Web.Security;
 using System.Configuration;
+using System.Collections;
 
 namespace CTCClassSchedule.Common
 {
@@ -115,29 +116,37 @@ namespace CTCClassSchedule.Common
 		/// passed into the app by the user clicking on the faceted search left pane
 		/// facets accepted: flex, time, days, availability
 		/// </summary>
-		static public IList<ISectionFacet> addFacets(string timestart, string timeend, string[] allDays, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
+		static public IList<ISectionFacet> addFacets(string timestart, string timeend, string[] allDays, string[] formats, string avail, string latestart, string numcredits)
 		{
 			IList<ISectionFacet> facets = new List<ISectionFacet>();
 
 			//add the class format facet options (online, hybrid, telecourse, on campus)
 			ModalityFacet.Options modality = ModalityFacet.Options.All;	// default
 
-			if (!String.IsNullOrWhiteSpace(f_online))
+
+			if (formats != null)
 			{
-				modality = (modality | ModalityFacet.Options.Online);
+				foreach (string format in formats)
+				{
+					if (format == "oncampus")
+					{
+						modality = (modality | ModalityFacet.Options.OnCampus);
+					}
+					if (format == "online")
+					{
+						modality = (modality | ModalityFacet.Options.Online);
+					}
+					if (format == "hybrid")
+					{
+						modality = (modality | ModalityFacet.Options.Hybrid);
+					}
+					if (format == "telecourse")
+					{
+						modality = (modality | ModalityFacet.Options.Telecourse);
+					}
+				}
 			}
-			if (!String.IsNullOrWhiteSpace(f_hybrid))
-			{
-				modality = (modality | ModalityFacet.Options.Hybrid);
-			}
-			if (!String.IsNullOrWhiteSpace(f_telecourse))
-			{
-				modality = (modality | ModalityFacet.Options.Telecourse);
-			}
-			if (!String.IsNullOrWhiteSpace(f_oncampus))
-			{
-				modality = (modality | ModalityFacet.Options.OnCampus);
-			}
+
 			facets.Add(new ModalityFacet(modality));
 
 			int startHour = 0;
@@ -445,49 +454,91 @@ namespace CTCClassSchedule.Common
 		/// <param name="fieldTitle"></param>
 		/// <param name="fieldValue"></param>
 		/// <returns></returns>
-		static public ModalityFacetInfo getModalityInfo(string fieldID, string fieldTitle, string fieldValue)
+		static public GeneralFacetInfo getFacetInfo(string fieldID, string fieldTitle, string fieldValue, bool selected)
 		{
-			return new ModalityFacetInfo
+			return new GeneralFacetInfo
 				{
 						ID = fieldID,
 						Title = fieldTitle,
-						Selected = Utility.SafeConvertToBool(fieldValue)
+									Value = fieldValue,
+						Selected = selected
 				};
 		}
 
-		static public IList<ModalityFacetInfo> ConstructModalityList(IEnumerable<SectionWithSeats> sections, string f_oncampus, string f_online, string f_hybrid, string f_telecourse)
+		static public IList<GeneralFacetInfo> ConstructModalityList(string[] classformat)
 		{
-			IList<ModalityFacetInfo> modality = new List<ModalityFacetInfo>(4);
+			IList<GeneralFacetInfo> modality = new List<GeneralFacetInfo>(4);
 
-/*
- * Disabled contextual showing/hiding of facets because this functionality needs much more
- * discussion, planning and design. - 9/21/2011, shawn.south@bellevuecollege.edu
- *
- * See also: Bug 154
- *
-			if (sections.Where(s => s.IsOnCampus).Count() > 0)
+			GeneralFacetInfo oncampus = getFacetInfo("f_oncampus", "On Campus", "oncampus", false);
+			GeneralFacetInfo online = getFacetInfo("f_online", "Online", "online", false);
+			GeneralFacetInfo hybrid = getFacetInfo("f_hybrid", "Hybrid", "hybrid", false);
+			GeneralFacetInfo telecourse = getFacetInfo("f_telecourse", "Telecourse", "telecourse", false);
+
+			if (classformat != null)
 			{
-				modality.Add(getModalityInfo("f_oncampus", "On Campus", f_oncampus) );
+				foreach (string type in classformat)
+				{
+					if (type == "oncampus")
+						oncampus.Selected = true;
+					if (type == "online")
+						online.Selected = true;
+					if (type == "hybrid")
+						hybrid.Selected = true;
+					if (type == "telecourse")
+						telecourse.Selected = true;
+				}
 			}
-			if (sections.Where(s => s.IsOnline).Count() > 0)
-			{
-				modality.Add(getModalityInfo("f_online", "Online", f_online));
-			}
-			if (sections.Where(s => s.IsHybrid).Count() > 0)
-			{
-				modality.Add(getModalityInfo("f_hybrid", "Hybrid", f_hybrid));
-			}
-			if (sections.Where(s => s.IsTelecourse).Count() > 0)
-			{
-				modality.Add(getModalityInfo("f_telecourse", "Telecourse", f_telecourse));
-			}
-*/
-			modality.Add(getModalityInfo("f_oncampus", "On Campus", f_oncampus) );
-			modality.Add(getModalityInfo("f_online", "Online", f_online));
-			modality.Add(getModalityInfo("f_hybrid", "Hybrid", f_hybrid));
-			modality.Add(getModalityInfo("f_telecourse", "Telecourse", f_telecourse));
+
+			modality.Add(oncampus);
+			modality.Add(online);
+			modality.Add(hybrid);
+			modality.Add(telecourse);
 
 			return modality;
+		}
+
+		static public IList<GeneralFacetInfo> ConstructDaysList(string[] chosendays)
+		{
+			IList<GeneralFacetInfo> allDays = new List<GeneralFacetInfo>(7);
+
+			GeneralFacetInfo sunday = getFacetInfo("day_su", "Sunday", "Su", false);
+			GeneralFacetInfo monday = getFacetInfo("day_m", "Monday", "M", false);
+			GeneralFacetInfo tuesday = getFacetInfo("day_t", "Tuesday", "T", false);
+			GeneralFacetInfo wednesday = getFacetInfo("day_w", "Wednesday", "W", false);
+			GeneralFacetInfo thursday = getFacetInfo("day_th", "Thursday", "Th", false);
+			GeneralFacetInfo friday = getFacetInfo("day_f", "Friday", "F", false);
+			GeneralFacetInfo saturday = getFacetInfo("day_sa", "Saturday", "Sa", false);
+
+			if (chosendays != null)
+			{
+				foreach (string day in chosendays)
+				{
+					if (day == "Su")
+						sunday.Selected = true;
+					if (day == "M")
+						monday.Selected = true;
+					if (day == "T")
+						tuesday.Selected = true;
+					if (day == "W")
+						wednesday.Selected = true;
+					if (day == "Th")
+						thursday.Selected = true;
+					if (day == "F")
+						friday.Selected = true;
+					if (day == "Sa")
+						saturday.Selected = true;
+				}
+			}
+
+			allDays.Add(sunday);
+			allDays.Add(monday);
+			allDays.Add(tuesday);
+			allDays.Add(wednesday);
+			allDays.Add(thursday);
+			allDays.Add(friday);
+			allDays.Add(saturday);
+
+			return allDays;
 		}
 
 		/// <summary>
@@ -546,6 +597,11 @@ namespace CTCClassSchedule.Common
 					}
 				}
 			}
+
+
+
+
+
 			return linkParams;
 		}
 
@@ -776,6 +832,29 @@ namespace CTCClassSchedule.Common
 			return new string(CourseID);
 		}
 
+
+
+
+		internal static dynamic cleanLinkParams(IDictionary<string, object> linkParams)
+		{
+			if (linkParams.ContainsKey("days"))
+			{
+				foreach (var param in linkParams)
+				{
+					if (param.Key == "days")
+					{
+						string value = Convert.ToString(param.Value);
+						if (value.Contains(","))
+						{
+
+						}
+					}
+				}
+			}
+
+			return linkParams;
+
+		}
 
 
 	}
