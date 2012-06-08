@@ -28,7 +28,7 @@ namespace CTCClassSchedule
 			//normal ASP.NET processing of these requests will occur.
 			routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
-			// API calls the application exposes
+			// API calls the application exposesl
 			routes.MapRoute("ApiSubjects", "Api/Subjects", new { controller = "Api", action = "Subjects" });
 			routes.MapRoute("ApiSectionEdit", "Api/SectionEdit", new { controller = "Api", action = "SectionEdit" });
 			routes.MapRoute("ApiClassEdit", "Api/ClassEdit", new { controller = "Api", action = "ClassEdit" });

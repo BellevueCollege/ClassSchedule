@@ -146,6 +146,7 @@
     <Compile Include="Common\AutomatedFootnotesSection.cs" />
     <Compile Include="Common\ClassFootnote.cs" />
     <Compile Include="Common\CourseOutcomes.cs" />
+    <Compile Include="Common\CASAuthorizeAttribute.cs" />
     <Compile Include="Common\ProgramEditModel.cs" />
     <Compile Include="Common\Encryption64.cs" />
     <Compile Include="Common\HelperContainers.cs" />

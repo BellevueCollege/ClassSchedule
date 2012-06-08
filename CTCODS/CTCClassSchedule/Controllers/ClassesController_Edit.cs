@@ -8,6 +8,7 @@ using System.Net;
 using System.IO;
 using System.Web.Security;
 using DotNetCasClient;
+using CTCClassSchedule.Common;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -35,14 +36,18 @@ namespace CTCClassSchedule.Controllers
 			/// accessing protected data/functionality. For example; in response to the user clicking a "Log in"
 			/// button.
 			/// </remarks>
-      [Authorize]
+			///
+
+			[CASAuthorize]
       public ActionResult Authenticate()
       {
-        return RedirectToRoute("Default");
+				string url = HttpContext.Session["ReferralUrlForCas"].ToString();
+				return Redirect(url);
       }
 
 			public ActionResult Logout()
 			{
+				string url = Request.UrlReferrer.ToString();
 				if (!string.IsNullOrWhiteSpace(CasAuthentication.CasServerUrlPrefix))
 				{
 					CasAuthentication.SingleSignOut();
@@ -52,7 +57,7 @@ namespace CTCClassSchedule.Controllers
 					FormsAuthentication.SignOut();
 				}
 
-				return RedirectToRoute("Default");
+				return Redirect(url);
 			}
     }
 }
