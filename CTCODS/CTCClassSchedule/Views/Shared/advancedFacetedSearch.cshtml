@@ -5,10 +5,12 @@
 <script type="text/javascript">
 	$(document).ready(function () {
 		$('#timestart').timepicker({
-			numberOfMonths: 0
+			numberOfMonths: 0,
+			ampm: true
 		});
 		$('#timeend').timepicker({
-			numberOfMonths: 0
+			numberOfMonths: 0,
+			ampm: true
 		});
 
 		$('#submitjquery').html('<input type="submit" id="submit_days_times" name="submitbtn" value="Refine >" />');

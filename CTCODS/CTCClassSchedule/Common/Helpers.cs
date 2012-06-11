@@ -148,13 +148,49 @@ namespace CTCClassSchedule.Common
 			//determine integer values for start/end time hours and minutes
 			if (!String.IsNullOrWhiteSpace(timestart))
 			{
-				startHour = Convert.ToInt16(timestart.Substring(0, 2));
-				startMinute = Convert.ToInt16(timestart.Substring(3, 2));
+				//adjust the conversion to integers if the user leaves off a leading 0
+				//(possible by using tab instead of mouseoff on the time selector)
+				if (timestart.IndexOf(':') == 2)
+				{
+					startHour = Convert.ToInt16(timestart.Substring(0, 2));
+					if (timestart.IndexOf(':') != -1)
+					{
+						startMinute = Convert.ToInt16(timestart.Substring(3, 2));
+					}
+				}
+				else
+				{
+					startHour = Convert.ToInt16(timestart.Substring(0, 1));
+					if (timestart.IndexOf(':') != -1)
+					{
+						startMinute = Convert.ToInt16(timestart.Substring(2, 2));
+					}
+				}
 			}
+
+			//adjust the conversion to integers if the user leaves off a leading 0
+			//(possible by using tab instead of mouseoff on the time selector)
 			if (!String.IsNullOrWhiteSpace(timeend))
 			{
-				endHour = Convert.ToInt16(timeend.Substring(0, 2));
-				endMinute = Convert.ToInt16(timeend.Substring(3, 2));
+				if (timeend.IndexOf(':') == 2)
+				{
+					endHour = Convert.ToInt16(timeend.Substring(0, 2));
+					if (timeend.IndexOf(':') != -1)
+					{
+						endMinute = Convert.ToInt16(timeend.Substring(3, 2));
+					}
+				}
+				else
+				{
+					endHour = Convert.ToInt16(timeend.Substring(0, 1));
+					if (timeend.IndexOf(':') != -1)
+					{
+						endMinute = Convert.ToInt16(timeend.Substring(2, 2));
+					}
+				}
+
+
+
 			}
 
 			//add the time facet
