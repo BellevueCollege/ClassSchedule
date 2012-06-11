@@ -178,8 +178,8 @@
 		 }
 
 @* ***************************************************************************************************
-		Temporarily removed in order to meet initial public launch. We will want to re-enable this block
-		*AND* include both CMS footnotes and future footnote changes in a future release.
+		Temporarily removed in order to meet initial public launch. We may want to re-enable this block
+
 			- 4/05/2012, shawn.south@bellevuecollege.edu
 	 ***************************************************************************************************
 		@if (course.Footnotes.Count > 0)
@@ -205,6 +205,18 @@
 	}
 
 *@
+
+				@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote))
+				{
+					<div id="courseFootnotes">
+						<h2>Details:</h2>
+							 <p>
+									<span id="CMSCourseFootnotes">
+										@Html.Raw(ViewBag.CMSFootnote)
+								</span>
+							</p>
+					</div>
+				}
 
 				@if (!string.IsNullOrWhiteSpace(_courseOutcomes) && !_courseOutcomes.StartsWith("Error:"))
 			{

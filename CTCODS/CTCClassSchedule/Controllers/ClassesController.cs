@@ -421,6 +421,8 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 			ICourseID courseID = CourseID.FromString(Subject, ClassNum);
+				// YearQuarter.FromString(YearQuarterID);
+
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -463,10 +465,15 @@ namespace CTCClassSchedule.Controllers
 					}
 
 					SetProgramInfoVars(realSubject, null, true);
+
+					ViewBag.CMSFootnote = getCMSFootnote(Subject, ClassNum, courseID);
+
 				}
 				return View(courses);
 			}
 		}
+
+
 
 		/// <summary>
 		/// Retrieves and updates Seats Available data for the specified <see cref="Section"/>
@@ -569,6 +576,46 @@ namespace CTCClassSchedule.Controllers
 				text.AppendLine(String.Concat("<CLS3>", section.CourseFootnotes, String.IsNullOrEmpty(section.CourseFootnotes) ? string.Empty : " ", string.Join(" ", section.Footnotes)));
 			}
 
+		}
+
+		/// <summary>
+		/// Takes a Subject, ClassNum and CourseID and finds the CMS Footnote for the course.
+		/// </summary>
+		/// <param name="Subject">The course Subject</param>
+		/// <param name="ClassNum">The CourseNumber</param>
+		/// /// <param name="courseID">The courseID for the course.</param>
+		private string getCMSFootnote(string Subject, string CourseNum, ICourseID courseID)
+		{
+			using (ClassScheduleDb db = new ClassScheduleDb())
+			{
+				using (_profiler.Step("Getting app-specific Section records from DB"))
+				{
+					CourseFootnote item = null;
+					char[] trimChar = { '&' };
+
+					string FullCourseID = Helpers.BuildCourseID(CourseNum, Subject.TrimEnd(trimChar), courseID.IsCommonCourse);
+					try
+					{
+						item = db.CourseFootnotes.Single(s => s.CourseID.Trim().ToUpper() == FullCourseID);
+
+						if (item != null)
+						{
+							return item.Footnote;
+						}
+
+
+					}
+					catch (InvalidOperationException e)
+					{
+						Trace.Write("Course has no CMS footnote: " + e);
+					}
+
+
+
+
+				}
+			}
+			return null;
 		}
 
 		/// <summary>
