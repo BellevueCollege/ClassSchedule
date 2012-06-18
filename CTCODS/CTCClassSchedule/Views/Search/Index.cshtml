@@ -95,23 +95,21 @@
 			 }
 				<text>
 		<h2 class="classHeading">
-			<a href="@Url.Action("ClassDetails", "Classes", new RouteValueDictionary(_routeValues))">
-				@Html.FormatWithSearchTerm(_searchTerm, "{0}{1} {2} {3}", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle)
-			</a>
-			<span class="classCredits">&#8226;
-			@if (sec.IsVariableCredits)
+
+		@if (sec.IsVariableCredits)
 		{
-							@:V1-@Html.CreditsValue(sec.Credits)
-								<abbr title="variable credits">Cr.</abbr>
+			ViewBag.dynamicCredits = "<span class='classInfo'><span class='classCredits'>V1-" + Html.CreditsValue(sec.Credits) + "<abbr title='variable credits'> Cr.</abbr></span></span>";
 
 		}
 		else
 		{
-							@Html.CreditsValue(sec.Credits)
-								<abbr title="credit(s)">Cr.</abbr>
+				ViewBag.dynamicCredits =  "<span class='classInfo'><span class='classCredits'>" + Html.CreditsValue(sec.Credits) + "<abbr title='credit(s)'> Cr.</abbr></span></span>";
 
 		}
-				</span>
+
+			<a href="@Url.Action("ClassDetails", "Classes", new RouteValueDictionary(_routeValues))">
+				@Html.FormatWithSearchTerm(_searchTerm, "{0}{1} {2} {3} &#8226; ", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle) @Html.Raw(ViewBag.dynamicCredits)
+			</a>
 				@if (linkedSections != null)
 		{
 				foreach (SectionWithSeats linkedSec in linkedSections)
@@ -120,7 +118,7 @@
 			<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
 				@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
 			</a>
-			<span class="classCredits">&#8226;
+			<span class="classInfo"><span class="classCredits">&#8226;
 			@if (linkedSec.IsVariableCredits)
 		{
 							@:V1-@Html.CreditsValue(linkedSec.Credits)
@@ -133,7 +131,7 @@
 								<abbr title="credit(s)">Cr.</abbr>
 
 		}
-				</span>
+				</span>	</span>
 				}
 		}
 		</h2>

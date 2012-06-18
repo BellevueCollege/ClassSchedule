@@ -235,22 +235,18 @@
 		 }
 					<h2 class="classHeading">
 						<a href="@Url.Action("ClassDetails", "Classes", route)">
-							@Html.Raw(string.Format("{0}{1} {2} {3}", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle))
-						</a><span class="classCredits">&#8226;
-							@if (isVariableCredit)
-			 {
-								@:V1-@Html.CreditsValue(sec.Credits)
-											<abbr title="variable credits">Cr.</abbr>
 
-			 }
-			 else
-			 {
-								@Html.CreditsValue(sec.Credits)
-								<abbr title="credit(s)">
-									Cr.</abbr>
+						@if (isVariableCredit)
+						{
+								ViewBag.dynamicCredits = "<span class='classCredits'>V1-" + Html.CreditsValue(sec.Credits) + "<abbr title='variable credits'> Cr.</abbr></span>";
+						 }
+						 else
+						 {
+								ViewBag.dynamicCredits = "<span class='classCredits'>" + Html.CreditsValue(sec.Credits) + "<abbr title='credit(s)'> Cr.</abbr></span>";
+						}
 
-			 }
-						</span>
+							@Html.Raw(string.Format("{0}{1} {2} {3} &#8226; {4}", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, ViewBag.dynamicCredits))
+						</a>
 						@if (linkedSections != null)
 			{
 				foreach (SectionWithSeats linkedSec in linkedSections)
@@ -259,7 +255,7 @@
 							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
 								@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
 							</a>
-							<span class="classCredits">&#8226;
+							<span class="classInfo"><span class="classCredits">&#8226;
 								@if (linkedSec.IsVariableCredits)
 				{
 									@:V1-@Html.CreditsValue(linkedSec.Credits)
@@ -273,7 +269,7 @@
 										Cr.</abbr>
 
 				}
-							</span>
+							</span>	</span>
 				}
 			}
 					</h2>
