@@ -37,21 +37,21 @@ namespace CTCClassSchedule
 			return _footnoteInstances[footnoteName];
 		}
 
-    /// <summary>
-    /// Takes a SectionWithSeats and produces all automated messages that the section should display.
-    /// </summary>
-    /// <param name="section">The section to base the generated footnote messages on.</param>
-    /// <returns>A string of all automated footnote messages concatenated.</returns>
-    public static string getAutomatedFootnotesText(SectionWithSeats section)
-    {
-			string wSpace = section.Footnotes.Count() == 0 ? string.Empty : " ";
-			string footenoteText = buildFootnoteText(section.IsDifferentStartDate,
-																								section.IsDifferentEndDate,
-																								section.IsHybrid,
-																								section.StartDate.GetValueOrDefault(DateTime.Now),
-																								section.EndDate.GetValueOrDefault(DateTime.Now));
-			return wSpace + footenoteText;
-    }
+		/// <summary>
+		/// Takes a SectionWithSeats and produces all automated messages that the section should display.
+		/// </summary>
+		/// <param name="section">The section to base the generated footnote messages on.</param>
+		/// <returns>A string of all automated footnote messages concatenated.</returns>
+		public static string getAutomatedFootnotesText(SectionWithSeats section)
+		{
+				string wSpace = section.Footnotes.Count() == 0 ? string.Empty : " ";
+				string footenoteText = buildFootnoteText(section.IsDifferentStartDate,
+																								 section.IsDifferentEndDate,
+																								 section.IsHybrid,
+																								 section.StartDate.GetValueOrDefault(DateTime.Now),
+																								 section.EndDate.GetValueOrDefault(DateTime.Now));
+				return wSpace + footenoteText;
+		}
 
 		/// <summary>
 		/// Takes a Section and produces all automated messages that the section should display.
@@ -62,10 +62,10 @@ namespace CTCClassSchedule
 		{
 			string wSpace = section.Footnotes.Count() == 0 ? string.Empty : " ";
 			string footenoteText = buildFootnoteText(section.IsDifferentStartDate,
-																								section.IsDifferentEndDate,
-																								section.IsHybrid,
-																								section.StartDate.GetValueOrDefault(DateTime.Now),
-																								section.EndDate.GetValueOrDefault(DateTime.Now));
+																							 section.IsDifferentEndDate,
+																							 section.IsHybrid,
+																							 section.StartDate.GetValueOrDefault(DateTime.Now),
+																							 section.EndDate.GetValueOrDefault(DateTime.Now));
 			return wSpace + footenoteText;
 		}
 
@@ -76,31 +76,24 @@ namespace CTCClassSchedule
 		/// <param name="differentStartFlag">Is the course a late start course.</param>
 		/// <param name="differentEndFlag">Does the course have a different end date than normal.</param>
 		/// <param name="hybridFlag">Is this a hybrid course.</param>
-		/// <param name="continuousEnrollmentFlag">Is this course a continuous enrollment.</param>
-		/// <param name="startDate">The courses scheduled start date.</param>
+		/// <param name="startDate">The course's scheduled start date.</param>
 		/// <param name="endDate">The courses scheduled end date.</param>
 		/// <returns>All relevant automated footnotes in one concatenated string.</returns>
 		private static string buildFootnoteText(Boolean differentStartFlag, Boolean differentEndFlag, Boolean hybridFlag, DateTime startDate, DateTime endDate)
 		{
+			string startDateParam = "{STARTDATE}";
+			string endDateParam = "{ENDDATE}";
 			string footnoteTextResult = string.Empty;
-			string dateParam = "{DATE}";
-			string dateText;
-			AutomatedFootnoteElement footnote;
 
-			// If the section has a late start
-			if (differentStartFlag)
+			// Build the footnotes applicable to the start/end date
+			AutomatedFootnoteElement footnote = getApplicableDateFootnote(differentStartFlag, differentEndFlag, startDate, endDate);
+			if (footnote != null)
 			{
-				footnote = Footnotes("startDate");
-				dateText = startDate.ToString(footnote.StringFormat);
-				footnoteTextResult += footnote.Text.Replace(dateParam, dateText) + " ";
-			}
+				string startDateText = startDate.ToString(footnote.StringFormat);
+				string endDateText = endDate.ToString(footnote.StringFormat);
 
-			// If the section has a different end date than usual
-			if (differentEndFlag)
-			{
-				footnote = Footnotes("endDate");
-				dateText = endDate.ToString(footnote.StringFormat);
-				footnoteTextResult += footnote.Text.Replace(dateParam, dateText) + " ";
+				footnoteTextResult = footnote.Text.Replace(startDateParam, startDateText);
+				footnoteTextResult = footnoteTextResult.Replace(endDateParam, endDateText) + " ";
 			}
 
 			// If the section is a hybrid section
@@ -110,6 +103,46 @@ namespace CTCClassSchedule
 			}
 
 			return footnoteTextResult.Trim();
+		}
+
+		/// <summary>
+		/// Uses a section's start/end date to determine an applicable date footnote.
+		/// By design, at most one date related footnote will be relevant to any
+		/// given section. This method determines and returns the applicable footnote,
+		/// should one exist.
+		/// </summary>
+		/// <param name="differentStartFlag">Is the course a late start course?</param>
+		/// <param name="differentEndFlag">Does the course have a different end date than normal?</param>
+		/// <param name="startDate">The course's scheduled start date.</param>
+		/// <param name="endDate">The courses scheduled end date.</param>
+		/// <returns>A AutomatedFootnoteElement object, or null if no applicable footnote exists.</returns>
+		private static AutomatedFootnoteElement getApplicableDateFootnote(Boolean differentStartFlag, Boolean differentEndFlag, DateTime startDate, DateTime endDate)
+		{
+			AutomatedFootnoteElement footnote = null;
+
+			// If the section start and end date are identical
+			if (startDate.Date.Equals(endDate.Date))
+			{
+				footnote = Footnotes("identicalStartAndEndDates");
+			}
+			else
+			{
+				// If the section has both a different start and end date than the default
+				if (differentStartFlag && differentEndFlag)
+				{
+					footnote = Footnotes("differentStartAndEndDates");
+				}
+				else if (differentStartFlag) // If the section only has a different start date
+				{
+					footnote = Footnotes("startDate");
+				}
+				else if (differentEndFlag) // If the section has a different end date
+				{
+					footnote = Footnotes("endDate");
+				}
+			}
+
+			return footnote;
 		}
 
 		/// <summary>
