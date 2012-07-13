@@ -328,7 +328,6 @@ namespace CTCClassSchedule.Controllers
 					ViewBag.timestart = timestart;
 					ViewBag.timeend = timeend;
 					ViewBag.latestart = latestart;
-					ViewBag.numcredits = numcredits;
 					ViewBag.avail = avail;
 					ViewBag.Subject = "All";
 					ViewBag.YearQuarter = yrq;
@@ -383,7 +382,6 @@ namespace CTCClassSchedule.Controllers
 					ViewBag.timestart = timestart;
 					ViewBag.timeend = timeend;
 					ViewBag.avail = avail;
-					ViewBag.numcredits = numcredits;
 					ViewBag.latestart = latestart;
 
 					ViewBag.LinkParams = Helpers.getLinkParams(Request);

@@ -364,6 +364,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ClassScheduleDb.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="App_Code\ViewHelpers.cshtml" />
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
     <None Include="packages.config">

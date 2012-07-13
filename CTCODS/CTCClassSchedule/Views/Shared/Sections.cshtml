@@ -8,21 +8,14 @@
 	MiniProfiler _profiler = MiniProfiler.Current;
 	Dictionary<string, string> dict = TempData["DayDictionary"] as Dictionary<string, string>;
 
-	string PreviousSectionID = ViewData["PreviousSectionID"] as string;
 	string sectionID = Model[0].ID.ToString();
 	string _searchTerm = Request.QueryString["searchterm"];
 
 	YearQuarter quarterViewing = ViewBag.YearQuarter;
 	YearQuarter currentQuarter = ViewBag.CurrentYearQuarter;
 
-	string apiSectionFootnotes = string.Empty;
-	foreach (string f in Model[0].Footnotes)
-	{
-		if (!string.IsNullOrWhiteSpace(f))
-		{
-			apiSectionFootnotes = string.Concat(apiSectionFootnotes, " ", f);
-		}
-	}
+	IEnumerable<string> _courseFootnotes = ViewData["CourseFootnotes"] as List<string> ?? new List<string>();
+
 	bool firstIteration = true;
 }
 
@@ -91,9 +84,8 @@
 
 			</ul>
 		</li>
-		@if (sectionID != PreviousSectionID)
-		{
-			if (Model[0].Yrq.ID.CompareTo(currentQuarter.ID) >= 0 && Model[0].SeatsAvailable != int.MinValue)
+
+			@if (Model[0].Yrq.ID.CompareTo(currentQuarter.ID) >= 0 && Model[0].SeatsAvailable != int.MinValue)
       {
 				<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
 				Availability: </span>
@@ -111,8 +103,7 @@
 				}
 				</li>
       }
-			 <li class="editing">
-
+			<li class="editing">
 				@if (Context.User.Identity.Name.Length > 0 && Helpers.isEditor(Context))
 				{
 					@Ajax.ActionLink("Edit",
@@ -135,53 +126,16 @@
 														},
 														new { @class = "edit_button" })
 				}
-
-
 		</li>
 		<li class="section-notes"><span class="descriptor">Notes: </span>
 				<ul>
 					<li>
 						<span class="label">
-
-                @if (!string.IsNullOrWhiteSpace(apiSectionFootnotes))
-                {
-							<span id="odsSectionFootnotes">@Html.FormatWithSearchTerm(_searchTerm, apiSectionFootnotes)</span>
-                    if (apiSectionFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
-                    {
-							<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/entrycode/">How to clear prerequisites?</a>
-                    }
-                }
-                else
-                {
-                    <!-- no ODS section footnotes found -->
-                }
-
-								@AutomatedFootnotesConfig.getAutomatedFootnotesText(Model[0])
-
-                @if (!string.IsNullOrWhiteSpace(Model[0].SectionFootnotes))
-                {
-									string secFootnotes = Model[0].SectionFootnotes;
-							<span id="cmsSectionFootnotes">
-					@if (string.IsNullOrWhiteSpace(_searchTerm))
-                     {
-						    @Html.Raw(secFootnotes);
-                     }
-                     else
-                     {
-							@Html.FormatWithSearchTerm(_searchTerm, secFootnotes);
-                     }
-							</span>
-                }
-                else
-                {
-                    <!-- no CMS section footnotes found -->
-                }
-
-						</span> @* span class="label" *@
+								@ViewHelpers.DisplayFootnotes(Model[0].Footnotes, Model[0].SectionFootnotes, _courseFootnotes, Model[0])
+						</span>
 					</li>
 
 				</ul>
 			</li>
-	}
 	</ul>
 </li>

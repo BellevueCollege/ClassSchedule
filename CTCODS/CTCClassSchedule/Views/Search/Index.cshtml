@@ -21,19 +21,11 @@
 
 	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
 	_routeValues["YearQuarterID"] = "All";
-	// Define a place to remember SectionIDs
-	if (!ViewData.Keys.Contains("PreviousSectionID"))
-	{
-		ViewData.Add("PreviousSectionID", string.Empty);
-	}
-
-	string PreviousCourseID = string.Empty;
-	string PreviousSectionID = string.Empty;
-	string PreviousCourseTitle = string.Empty;
 
 	string _searchTerm = ViewBag.searchterm;
+	ViewBag.PageTitle = yrq.FriendlyName + " class search results for \"" + _searchTerm + "\" at Bellevue College";
+
 }
-<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
 <div id="scheduleMain" class="page-search">
     @Html.Partial("quarterNavigation")
     <div id="container" class="sidebar">
@@ -68,125 +60,116 @@
 	 {
 			IEnumerable<SectionWithSeats> linkedSections;
 			bool hasLinked;
+			int processedCount = 0;
 
-		 foreach (SectionWithSeats sec in Model.Section.OrderBy(s => Model.Section.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)))
-		 {
-			// ensure we don't have any bleed-over of data
-			linkedSections = null;
-			hasLinked = false;
+		 IList<SectionWithSeats> orderedSections = Model.Section.OrderBy(s => Model.Section.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)).ToList();
 
-			 string courseID = sec.CourseID;
-			 string sectionID = sec.ID.ToString();
-			 string courseTitle = sec.CourseTitle;
-
-			 if(!sec.IsLinked)
-			 {
-				linkedSections = Model.Section.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber);
-				hasLinked = linkedSections.Count() > 0;
-
-			 if (PreviousCourseID != courseID || courseTitle != PreviousCourseTitle || (courseID == PreviousCourseID && courseTitle == PreviousCourseTitle && hasLinked))
-			 {
-
-				 _routeValues["Subject"] = sec.IsCommonCourse == true ? sec.CourseSubject.Trim() + "&" : sec.CourseSubject.Trim();
-				 _routeValues["ClassNum"] = sec.CourseNumber;
-				 if (courseID != PreviousCourseID && PreviousCourseID != "")
-				 {
-				@:</ul>
-			 }
-				<text>
-		<h2 class="classHeading">
-
-		@if (sec.IsVariableCredits)
-		{
-			ViewBag.dynamicCredits = "<span class='classInfo'><span class='classCredits'>V1-" + Html.CreditsValue(sec.Credits) + "<abbr title='variable credits'> Cr.</abbr></span></span>";
-
-		}
-		else
-		{
-				ViewBag.dynamicCredits =  "<span class='classInfo'><span class='classCredits'>" + Html.CreditsValue(sec.Credits) + "<abbr title='credit(s)'> Cr.</abbr></span></span>";
-
-		}
-
-			<a href="@Url.Action("ClassDetails", "Classes", new RouteValueDictionary(_routeValues))">
-				@Html.FormatWithSearchTerm(_searchTerm, "{0}{1} {2} {3} &#8226; ", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle) @Html.Raw(ViewBag.dynamicCredits)
-			</a>
-				@if (linkedSections != null)
-		{
-				foreach (SectionWithSeats linkedSec in linkedSections)
-				{
-			<br/>
-			<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
-				@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
-			</a>
-			<span class="classInfo"><span class="classCredits">&#8226;
-			@if (linkedSec.IsVariableCredits)
-		{
-							@:V1-@Html.CreditsValue(linkedSec.Credits)
-								<abbr title="variable credits">Cr.</abbr>
-
-		}
-		else
-		{
-							@Html.CreditsValue(linkedSec.Credits)
-								<abbr title="credit(s)">Cr.</abbr>
-
-		}
-				</span>	</span>
-				}
-		}
-		</h2>
-
-		<p class="classDescription">
-		@if (sec.CustomTitle != null && sec.CustomTitle != string.Empty)
-		{
-			@Html.Raw(Html.FormatWithSearchTerm(_searchTerm, sec.CustomDescription).ToString())
-		}
-		else {
-			@Html.Raw(sec.CourseDescriptions.Count() == 0 ? "" : Html.FormatWithSearchTerm(_searchTerm, sec.CourseDescriptions[0].Description).ToString())
-		}
-
-
-		</p>
-
-		<p class="classNotes">
-				@Html.Raw(sec.CourseFootnotes == null ? "" : Html.FormatWithSearchTerm(_searchTerm, Encoder.HtmlEncode(sec.CourseFootnotes)).ToString())
-				@if (sec.CourseDescriptions.Count() > 0)
-		{
-			if (sec.CourseDescriptions[0].Description.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
+			while (processedCount < orderedSections.Count)
 			{
-										<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/entrycode/">How to clear prerequisites?</a>
-			}
-		}
-		</p>
-		<p class="classDetails">
-			@Html.ActionLink("View Class Details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
-		</p>
-		<ul class='course-block @(yrq.ID.CompareTo(currentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
-		</text>
-			 }
+				IEnumerable<SectionWithSeats> remainingSections = orderedSections.Skip(processedCount);
 
-			 if (sectionID != PreviousSectionID)
-			 {
-				 //multipleSections includes a master and its subordinate linked section(s).
-				 List<SectionWithSeats> multipleSections = new List<SectionWithSeats>();
-				 multipleSections.Add(sec);
-				 foreach (SectionWithSeats linkedSec in linkedSections)
+				@*
+				 TODO: do we have to worry about the first section being IsLinked?
+				*@
+				 SectionWithSeats firstSection = remainingSections.First();
+
+			 IEnumerable<SectionWithSeats> sectionBlock = remainingSections.TakeWhile(s =>
+															 s.CourseID == firstSection.CourseID &&
+															 s.CourseTitle == firstSection.CourseTitle &&
+															 s.Credits == firstSection.Credits &&
+															 s.IsVariableCredits == firstSection.IsVariableCredits);
+			 processedCount += sectionBlock.Count();
+
+				if (firstSection != null)
 				 {
-					 multipleSections.Add(linkedSec);
-				 }
+					 if (!firstSection.IsLinked)
+					 {
+							@*
+							TODO: *******************************************************************************
+							Is this valid? Can we assume only the first Section's ItemNumber will give us all the linkages?
+							*************************************************************************************
+							*@
+						 linkedSections = orderedSections.Where(s => s.IsLinked && s.Yrq.ID == firstSection.Yrq.ID && s.LinkedTo.Trim() == firstSection.ID.ItemNumber);
+						 hasLinked = linkedSections.Count() > 0;
 
-				 // NOTE: We must pass the current ViewData object to RenderPartial here.
-				 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-				 ViewData["PreviousSectionID"] = PreviousSectionID;
-				 Html.RenderPartial("Sections", multipleSections, ViewData);
+						 _routeValues["Subject"] = Helpers.SubjectWithCommonCourseFlag(firstSection);
+						 _routeValues["ClassNum"] = firstSection.CourseNumber;
+
+				<h2 class="classHeading">
+					<a href="@Url.Action("ClassDetails", "Classes", _routeValues)">
+						@Html.SectionCourseHeading(firstSection, searchTerm: _searchTerm)
+						@ViewHelpers.DisplayCredits(firstSection)
+					</a>
+					@if (linkedSections != null && hasLinked)
+		 {
+			 foreach (SectionWithSeats linkedSec in linkedSections)
+			 {
+						<br />
+						<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
+							@Html.SectionCourseHeading(linkedSec, _searchTerm)
+						</a>
+						<span class="classInfo">
+							@ViewHelpers.DisplayCredits(linkedSec)
+						</span>
 			 }
-			 } @* end sec.IsLInked *@
+		 }
+				</h2> @* classHeading *@
 
-			 PreviousSectionID = sectionID;
-			 PreviousCourseID = courseID;
-			 PreviousCourseTitle = sec.CourseTitle;
+				<div class="classInfo">
+					<div class="classDetails">
+					@*
+					*************************************************************************************
+					TODO: Is this a bug? Should it be checking .CustomDescription?
+					*************************************************************************************
+					*@
+					@if (!string.IsNullOrWhiteSpace(firstSection.CustomTitle))
+					{
+						@Html.Raw(Html.FormatWithSearchTerm(_searchTerm, firstSection.CustomDescription).ToString())
+					}
+					else {
+						@Html.Raw(firstSection.CourseDescriptions.Count() == 0 ? "" : Html.FormatWithSearchTerm(_searchTerm, firstSection.CourseDescriptions[0].Description).ToString())
+					}
 
-		 } @* end foreach(sec) *@
+					@if (!hasLinked)
+					{
+						@Html.ActionLink("View class details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
+					}
+					</div>
+					<p class="classNotes">
+						@{
+						 IList<string> commonFootnotes = Helpers.ExtractCommonFootnotes(sectionBlock).ToList();
+						 // save footnotes to pass to sub-view
+						 ViewData["CourseFootnotes"] = commonFootnotes;
+						}
+						@ViewHelpers.DisplayFootnotes(commonFootnotes, firstSection.CourseFootnotes)
+					</p>
+				</div> <!-- classInfo -->
+
+						foreach (SectionWithSeats sec in sectionBlock)
+						{
+							<ul class='course-block @(yrq.ID.CompareTo(currentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
+								@{
+							//bothSections includes a master and its subordinate linked section(s).
+							IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
+
+							if (linkedSections != null && hasLinked)
+							{
+								multipleSections = multipleSections.Union(linkedSections);
+							}
+
+							// NOTE: We must pass the current ViewData object to RenderPartial here.
+							// If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+							Html.RenderPartial("Sections", multipleSections, ViewData);
+
+								}
+							</ul>
+						}
+
+					 } @* if (!firstSection.IsLinked) *@
+
+				} @* if (firstSection != null) *@
+
+			} @* while (processedCount < orderedSections.Count) *@
 	 }
  }
 
@@ -202,3 +185,10 @@
     </div> <!-- #content -->
     </div> <!-- #container -->
 </div>
+
+
+
+@section PageScripts
+{
+<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
+}

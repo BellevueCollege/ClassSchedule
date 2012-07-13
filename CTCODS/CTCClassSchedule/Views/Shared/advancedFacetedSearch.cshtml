@@ -2,6 +2,23 @@
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Models
 @using CTCClassSchedule
+@{
+	const int ANY = -1;
+	int _numCredits = Request.QueryString.SafeNameValueToInt32("numcredits", ANY);
+
+	YearQuarter yrq = ViewBag.YearQuarter;
+	string subject = (ViewBag.Subject ?? string.Empty);
+
+	if (subject.ToUpper() == "ALL") {
+		subject = string.Empty;
+	}
+	string lastSubject = "";
+	// construct the route values we'll pass to the ActionLink helper
+	IDictionary<string, object> routeParms = ViewBag.LinkParams;
+
+	string QuarterParam = Request.QueryString["quarter"];
+}
+
 <script type="text/javascript">
 	$(document).ready(function () {
 		$('#timestart').timepicker({
@@ -94,24 +111,8 @@
  <img src="@Url.Content("~/Content/")images/ajax-loader_big.gif" />
 </div>
 
-
-	@{
-		YearQuarter yrq = ViewBag.YearQuarter;
-		string subject = (ViewBag.Subject ?? string.Empty);
-
-		if (subject.ToUpper() == "ALL") {
-			subject = string.Empty;
-		}
-		string lastSubject = "";
-		// construct the route values we'll pass to the ActionLink helper
-		IDictionary<string, object> routeParms = ViewBag.LinkParams;
-
-		string QuarterParam = Request.QueryString["quarter"];
-	}
-
 <div id="advancedFacetedSearch" class="sidenav">
         <h2>Refine</h2>
-
 
 @* if the user has browsed vs. searched for a term, display a different subject chooser UI  *@
 @if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
@@ -230,10 +231,10 @@ else
 	<div id="numcredits-facet">
 		<p class="label_checkbox_pair">
 			<select class="clear"name="numcredits" id="numcredits" value="true">
-				<option @if (@ViewBag.numcredits == "Any")
+				<option @if (_numCredits == ANY)
 						{ <text>selected='selected'</text> }>Any</option>
 				@for (int i = 1; i <= 15; i++){
-					<option @if (ViewBag.numcredits != "Any" && @Convert.ToInt16(ViewBag.numcredits) == i)
+					<option @if (_numCredits == i)
 						{ <text>selected='selected'</text> }>@i</option>
 				}
 			</select>

@@ -1,0 +1,112 @@
+﻿@using System.Web.WebPages.Html;
+@using CTCClassSchedule;
+@using CTCClassSchedule.Common;
+@*
+The methods declared in this file can be called from within any View
+in the project, and will render the output specified.
+
+WARNING:	There is a known issue with using global @helper methods in the App_Code
+					folder - due to scope restraints, it is not posslbe to reference Html.
+					methods from this file. A fix is expected in some future version of MVC.
+*@
+
+@* ====================================================================================================== *@
+
+@helper DisplayCredits(SectionWithSeats sec)
+{
+	string credits = sec.Credits.ToString().TrimEnd('0').TrimEnd('.');
+
+	<span class="classCredits">&#8226;
+				@if (sec.IsVariableCredits)
+				{
+					@:V1-@credits
+					<abbr title="variable credits">Cr.</abbr>
+				}
+				else
+				{
+					@credits
+					<abbr title="credit(s)">
+					Cr.</abbr>
+				}
+	</span>
+}
+
+@* ====================================================================================================== *@
+
+@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, IEnumerable<string> cmsFootnotes, IEnumerable<string> toIgnore, SectionWithSeats sectionForAutomatedFootnotes = null, string searchTerm = null)
+{
+	bool showPreRequisite = false;
+
+	foreach (string footnote in hpFootnotes.Distinct())
+	{
+		if (!string.IsNullOrWhiteSpace(footnote))
+		{
+			// skip any footnotes in the supplied ignore list (used to avoid duplicates)
+			if (toIgnore == null || toIgnore.Count() <= 0 || !toIgnore.Contains(footnote))
+			{
+				if (footnote.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0) {
+					showPreRequisite = true;
+				}
+
+				<span class="hpfootnote">@(string.IsNullOrWhiteSpace(searchTerm) ? footnote : Helpers.FormatWithSearchTerm(searchTerm, footnote))</span>
+			}
+		}
+	}
+
+	if (sectionForAutomatedFootnotes != null)
+	{
+		<span class="autofootnote">@AutomatedFootnotesConfig.getAutomatedFootnotesText(sectionForAutomatedFootnotes)</span>
+	}
+
+	foreach (string footnote in cmsFootnotes)
+	{
+		// ensure we don't have duplicates
+		if (!string.IsNullOrWhiteSpace(footnote) && !hpFootnotes.Contains(footnote))
+		{
+			if (footnote.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0) {
+				showPreRequisite = true;
+			}
+
+			<span class="cmsfootnote">@(string.IsNullOrWhiteSpace(searchTerm) ? footnote : Helpers.FormatWithSearchTerm(searchTerm, footnote))</span>
+		}
+	}
+
+	if (showPreRequisite)
+	{
+		<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">
+			How to clear prerequisites?
+		</a>
+	}
+}
+
+@* Helper method overrides *@
+
+@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, string cmsFootnote, string searchTerm = null)
+{
+	IList<string> cmsFootnotes = new List<string> { cmsFootnote };
+	@DisplayFootnotes(hpFootnotes, cmsFootnotes, null, searchTerm: searchTerm);
+}
+
+@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, string cmsFootnote, IEnumerable<string> toIgnore, string searchTerm = null)
+{
+	IList<string> cmsFootnotes = new List<string> { cmsFootnote };
+	@DisplayFootnotes(hpFootnotes, cmsFootnotes, toIgnore, searchTerm: searchTerm);
+}
+
+@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, string cmsFootnote, IEnumerable<string> toIgnore, SectionWithSeats includedAutomatedFootnotes, string searchTerm = null)
+{
+	IList<string> cmsFootnotes = new List<string> { cmsFootnote };
+	@DisplayFootnotes(hpFootnotes, cmsFootnotes, toIgnore, includedAutomatedFootnotes, searchTerm: searchTerm);
+}
+
+@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, IEnumerable<string> cmsFootnotes, string searchTerm = null)
+{
+	@DisplayFootnotes(hpFootnotes, cmsFootnotes, null, searchTerm: searchTerm);
+}
+
+@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, IEnumerable<string> cmsFootnotes, SectionWithSeats includeAutomatedFootnotes, string searchTerm = null)
+{
+	@DisplayFootnotes(hpFootnotes, cmsFootnotes, null, includeAutomatedFootnotes, searchTerm: searchTerm);
+}
+
+@* ====================================================================================================== *@

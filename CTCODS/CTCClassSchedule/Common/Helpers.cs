@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Objects;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using Ctc.Ods;
@@ -801,7 +802,59 @@ namespace CTCClassSchedule.Common
 			return new string(CourseID);
 		}
 
+		public static string SubjectWithCommonCourseFlag(SectionWithSeats sec)
+		{
+			return sec.IsCommonCourse ? sec.CourseSubject.Trim() + "&" : sec.CourseSubject.Trim();
+		}
 
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="sectionBlock"></param>
+		/// <returns></returns>
+		public static IList<string> ExtractCommonFootnotes(IList<SectionWithSeats> sectionBlock)
+		{
+			IEnumerable<string> rollupFootnotes = new string[]{};
 
+			for (int i = 0; i < sectionBlock.Count; i++)
+			{
+				IEnumerable<string> f = i > 0 ? rollupFootnotes.ToArray() : sectionBlock[0].Footnotes;
+
+				rollupFootnotes = f.Intersect(sectionBlock[i].Footnotes);
+			}
+
+			return rollupFootnotes.ToList();
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="sectionBlock"></param>
+		/// <returns></returns>
+		public static IList<string> ExtractCommonFootnotes(IEnumerable<SectionWithSeats> sectionBlock)
+		{
+			return ExtractCommonFootnotes(sectionBlock.ToList());
+		}
+
+		/// <summary>
+		/// Applies keyword markup to all instances of the <paramref name="searchTerm"/> found in the provided <paramref name="text"/>
+		/// </summary>
+		/// <param name="searchTerm"></param>
+		/// <param name="text"></param>
+		/// <param name="args"></param>
+		/// <returns></returns>
+		static public string FormatWithSearchTerm(string searchTerm, string text, params object[] args)
+		{
+			if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(searchTerm))
+			{
+				return text;
+			}
+
+			if (args != null && args.Length > 0)
+			{
+				text = string.Format(text, args);
+			}
+			return Regex.Replace(text, searchTerm, @"<em class='keyword'>$&</em>", RegexOptions.IgnoreCase);
+		}
 	}
 }

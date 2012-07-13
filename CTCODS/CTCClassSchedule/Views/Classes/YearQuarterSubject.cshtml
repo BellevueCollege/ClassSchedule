@@ -43,66 +43,6 @@
 	ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Schedule at Bellevue College";
 
 }
-<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
-<script type="text/javascript">
-
-	/* subject chooser pop-up dialog */
-	$(document).ready(function () {
-
-		$("#edit-section").dialog({
-			autoOpen: false,
-			height: 575,
-			width: 650
-		});
-
-		$("#edit-class").dialog({
-			autoOpen: false,
-			height: 425,
-			width: 600
-		});
-
-
-		$("span.ui-icon-closethick").click(function () {
-			showThrobber();
-			window.location.href = $(location).attr('href');
-		});
-
-
-
-			@if (Helpers.isEditor(Context))
-	 {
-
-				<text>
-				$('li.section-listing').hover(
-					function () {
-						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').show();
-						$(this).addClass('section-listing-edit edit-hover');
-					},
-					function () {
-						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').hide();
-						$(this).removeClass('section-listing-edit edit-hover');
-				});
-				</text>
-	 }
-
-
-			@if (Helpers.isAdmin(Context))
-	 {
-				<text>
-				$('.classInfo').hover(
-					function () {
-						$(this).children('a.edit_button').show();
-						$(this).addClass('edit-hover classInfo-edit');
-					},
-					function () {
-						$(this).children('a.edit_button').hide();
-						$(this).removeClass('edit-hover classInfo-edit');
-				});
-				</text>
-	 }
-
-	});
-</script>
 <div id="scheduleMain">
 	@{
 		Html.RenderPartial("quarterNavigation");
@@ -177,155 +117,201 @@
 		 {
 			 IEnumerable<SectionWithSeats> linkedSections;
 			 bool hasLinked;
+			 int processedCount = 0;
 
-			 foreach (SectionWithSeats sec in orderedModel)
+			 while (processedCount < orderedModel.Count)
 			 {
-				 // ensure we don't have any bleed-over of data
-				 linkedSections = null;
-				 hasLinked = false;
+				 IEnumerable<SectionWithSeats> remainingSections = orderedModel.Skip(processedCount);
 
-				 courseID = sec.CourseID;
-				 sectionID = sec.ID.ToString();
-				 credits = sec.Credits;
-				 isVariableCredit = sec.IsVariableCredits;
+@*
+				 TODO: do we have to worry about the first section being IsLinked?
+				 *@
+				 SectionWithSeats firstSection = remainingSections.First();
 
-				 if (!sec.IsLinked)
+				 IEnumerable<SectionWithSeats> sectionBlock = remainingSections.TakeWhile(s =>
+																 s.CourseID == firstSection.CourseID &&
+																 s.CourseTitle == firstSection.CourseTitle &&
+																 s.Credits == firstSection.Credits &&
+																 s.IsVariableCredits == firstSection.IsVariableCredits);
+				 processedCount += sectionBlock.Count();
+
+				if (firstSection != null)
 				 {
-					 linkedSections = orderedModel.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber);
-					 hasLinked = linkedSections.Count() > 0;
-
-					 bool newBlock = courseID != PreviousCourseID || sec.CourseTitle != PreviousCourseTitle ||
-																					(courseID == PreviousCourseID && credits != PreviousCredits) ||
-																					(courseID == PreviousCourseID && isVariableCredit != PreviousIsVariableCredit) ||
-																					(courseID == PreviousCourseID && credits == PreviousCredits && isVariableCredit == PreviousIsVariableCredit && hasLinked);
-
-					 if (newBlock)
+					 if (!firstSection.IsLinked)
 					 {
-						 if (PreviousCourseID != "")
-						 {
-				@:</ul>
-					}
+@*
+							TODO: *******************************************************************************
+							Is this valid? Can we assume only the first Section's ItemNumber will give us all the linkages?
+							*************************************************************************************
+							*@
+						 linkedSections = orderedModel.Where(s => s.IsLinked && s.Yrq.ID == firstSection.Yrq.ID && s.LinkedTo.Trim() == firstSection.ID.ItemNumber);
+						 hasLinked = linkedSections.Count() > 0;
 
-						 route["Subject"] = sec.IsCommonCourse == true ? sec.CourseSubject.Trim() + "&" : sec.CourseSubject.Trim();
-						 route["ClassNum"] = sec.CourseNumber;
+						 route["Subject"] = Helpers.SubjectWithCommonCourseFlag(firstSection);
+						 route["ClassNum"] = firstSection.CourseNumber;
 
-				<text>
 				<div class="classInfo">
-					@if (Helpers.isAdmin(Context))
+						@if (Helpers.isAdmin(Context))
+							{
+										@Ajax.ActionLink("Edit",
+																		"ClassEdit",
+																		"Api",
+																		new
+																		{
+																			CourseNumber = firstSection.CourseNumber,
+																			Subject = firstSection.CourseSubject,
+																			IsCommonCourse = firstSection.IsCommonCourse,
+																		},
+																		new AjaxOptions
+																		{
+																			UpdateTargetId = "edit-class",
+																			HttpMethod = "GET",
+																			InsertionMode = InsertionMode.Replace,
+																			OnBegin = "$('#edit-class').dialog('open');",
+																			OnComplete = "spinner.stop();",
+																		},
+																		new { @class = "edit_button" })
+
+							}
+				</div>
+
+				<h2 class="classHeading">
+					<a href="@Url.Action("ClassDetails", "Classes", route)">
+						@Html.SectionCourseHeading(firstSection)
+						@ViewHelpers.DisplayCredits(firstSection)
+					</a>
+					@if (linkedSections != null && hasLinked)
 		 {
-						@Ajax.ActionLink("Edit",
-																						"ClassEdit",
-																						"Api",
-																						new
-																						{
-																							CourseNumber = sec.CourseNumber.ToString(),
-																							Subject = sec.CourseSubject.ToString(),
-																							IsCommonCourse = sec.IsCommonCourse,
-																						},
-																						new AjaxOptions
-																						{
-																							UpdateTargetId = "edit-class",
-																							HttpMethod = "GET",
-																							InsertionMode = InsertionMode.Replace,
-																							OnBegin = "$('#edit-class').dialog('open');",
-																							OnComplete = "spinner.stop();",
-																						},
-																						new { @class = "edit_button" })
-
-		 }
-					<h2 class="classHeading">
-						<a href="@Url.Action("ClassDetails", "Classes", route)">
-
-						@if (isVariableCredit)
-						{
-								ViewBag.dynamicCredits = "<span class='classCredits'>V1-" + Html.CreditsValue(sec.Credits) + "<abbr title='variable credits'> Cr.</abbr></span>";
-						 }
-						 else
-						 {
-								ViewBag.dynamicCredits = "<span class='classCredits'>" + Html.CreditsValue(sec.Credits) + "<abbr title='credit(s)'> Cr.</abbr></span>";
-						}
-
-							@Html.Raw(string.Format("{0}{1} {2} {3} &#8226; {4}", sec.CourseSubject, sec.IsCommonCourse ? "&" : string.Empty, sec.CourseNumber, sec.CourseTitle, ViewBag.dynamicCredits))
+			 foreach (SectionWithSeats linkedSec in linkedSections)
+			 {
+						<br />
+						<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
+							@Html.SectionCourseHeading(linkedSec)
 						</a>
-						@if (linkedSections != null)
-			{
-				foreach (SectionWithSeats linkedSec in linkedSections)
-				{
-							<br />
-							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
-								@Html.Raw(string.Format("{0}{1} {2} {3}", linkedSec.CourseSubject, linkedSec.IsCommonCourse ? "&" : string.Empty, linkedSec.CourseNumber, linkedSec.CourseTitle))
-							</a>
-							<span class="classInfo"><span class="classCredits">&#8226;
-								@if (linkedSec.IsVariableCredits)
-				{
-									@:V1-@Html.CreditsValue(linkedSec.Credits)
-									<abbr title="variable credits">Cr.</abbr>
-
-				}
-				else
-				{
-									@Html.CreditsValue(linkedSec.Credits)
-									<abbr title="credit(s)">
-										Cr.</abbr>
-
-				}
-							</span>	</span>
-				}
-			}
-					</h2>
-					<p class="classNotes">
-						@Html.Raw(sec.CourseFootnotes)
-						@if (sec.CourseFootnotes.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0)
-			{
-							<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/">
-								How to clear prerequisites?</a>
-			}
-					</p>
+						<span class="classInfo">
+							@ViewHelpers.DisplayCredits(linkedSec)
+						</span>
+			 }
+		 }
+				</h2> @* classHeading *@
+				<div class="classInfo">
 					<div class="classDetails">
-						@if (sec.CustomTitle != null && sec.CustomTitle != string.Empty)
+						@if (!string.IsNullOrWhiteSpace(firstSection.CustomTitle))
 			{
-							@Html.Raw(sec.CustomDescription)
+				// NOTE: do not display HP description from this page
+							@Html.Raw(firstSection.CustomDescription)
 			}
 						@if (!hasLinked)
 			{
 							@Html.ActionLink("View class details", "ClassDetails", "Classes", route, null)
 			}
 					</div>
-					<!--classDetails -->
-				</div>
-				<!-- classInfo-->
+					<p class="classNotes">
+		@{
+		 IList<string> commonFootnotes = Helpers.ExtractCommonFootnotes(sectionBlock).ToList();
+		 // save footnotes to pass to sub-view
+		 ViewData["CourseFootnotes"] = commonFootnotes;
+		}
+						@ViewHelpers.DisplayFootnotes(commonFootnotes, firstSection.CourseFootnotes)
+					</p>
+				</div> <!--classInfo -->
+
+			foreach (SectionWithSeats sec in sectionBlock)
+			{
 				<ul class='course-block @(thisYrq.CompareTo(currentYrq) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
-				</text>
-					 }
+					@{
+				//bothSections includes a master and its subordinate linked section(s).
+				IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
 
-					 if (PreviousSectionID != sectionID)
-					 {
-						 //bothSections includes a master and its subordinate linked section(s).
-						 List<SectionWithSeats> multipleSections = new List<SectionWithSeats>();
-						 multipleSections.Add(sec);
-						 foreach (SectionWithSeats linkedSec in linkedSections) {
-							 multipleSections.Add(linkedSec);
-						 }
+				if (linkedSections != null && hasLinked)
+				{
+					multipleSections = multipleSections.Union(linkedSections);
+				}
 
-						 // NOTE: We must pass the current ViewData object to RenderPartial here.
-						 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-						 ViewData["PreviousSectionID"] = PreviousSectionID;
-						 Html.RenderPartial("Sections", multipleSections, ViewData);
-					 }
-				 }  @* end sec.IsLInked *@
+				// NOTE: We must pass the current ViewData object to RenderPartial here.
+				// If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+				Html.RenderPartial("Sections", multipleSections, ViewData);
 
-				 PreviousCredits = sec.Credits;
-				 PreviousSectionID = sectionID;
-				 PreviousCourseID = courseID;
-				 PreviousCourseTitle = sec.CourseTitle;
-				 PreviousIsVariableCredit = isVariableCredit;
+					}
+				</ul>
+			}
+					 } @* !sec.IsLinked *@
+				 }
 			 }
 		 }
 	 }
-			<div title="Edit Section" id="edit-section"></div> <div title="Edit Class" id="edit-class"></div>
+			<div title="Edit Section" id="edit-section">
+			</div>
+			<div title="Edit Class" id="edit-class">
+			</div>
 		</div>
 		<!-- content -->
 	</div>
 	<!-- container -->
 </div>
 <!-- #scheduleMain -->
+
+
+@section PageScripts
+{
+	<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
+	<script type="text/javascript">
+
+	/* subject chooser pop-up dialog */
+	$(document).ready(function () {
+
+		$("#edit-section").dialog({
+			autoOpen: false,
+			height: 575,
+			width: 650
+		});
+
+		$("#edit-class").dialog({
+			autoOpen: false,
+			height: 425,
+			width: 600
+		});
+
+
+		$("span.ui-icon-closethick").click(function () {
+			showThrobber();
+			window.location.href = $(location).attr('href');
+		});
+
+
+
+			@if (Helpers.isEditor(Context))
+	 {
+
+				<text>
+				$('li.section-listing').hover(
+					function () {
+						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').show();
+						$(this).addClass('section-listing-edit edit-hover');
+					},
+					function () {
+						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').hide();
+						$(this).removeClass('section-listing-edit edit-hover');
+				});
+				</text>
+	 }
+
+
+			@if (Helpers.isAdmin(Context))
+	 {
+				<text>
+				$('.classInfo').hover(
+					function () {
+						$(this).children('a.edit_button').show();
+						$(this).addClass('edit-hover classInfo-edit');
+					},
+					function () {
+						$(this).children('a.edit_button').hide();
+						$(this).removeClass('edit-hover classInfo-edit');
+				});
+				</text>
+	 }
+
+	});
+	</script>
+}
