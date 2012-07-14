@@ -38,22 +38,6 @@ namespace CTCClassSchedule
 		}
 
 		/// <summary>
-		/// Takes a SectionWithSeats and produces all automated messages that the section should display.
-		/// </summary>
-		/// <param name="section">The section to base the generated footnote messages on.</param>
-		/// <returns>A string of all automated footnote messages concatenated.</returns>
-		public static string getAutomatedFootnotesText(SectionWithSeats section)
-		{
-				string wSpace = section.Footnotes.Count() == 0 ? string.Empty : " ";
-				string footenoteText = buildFootnoteText(section.IsDifferentStartDate,
-																								 section.IsDifferentEndDate,
-																								 section.IsHybrid,
-																								 section.StartDate.GetValueOrDefault(DateTime.Now),
-																								 section.EndDate.GetValueOrDefault(DateTime.Now));
-				return wSpace + footenoteText;
-		}
-
-		/// <summary>
 		/// Takes a Section and produces all automated messages that the section should display.
 		/// </summary>
 		/// <param name="section">The section to base the generated footnote messages on.</param>
@@ -64,22 +48,23 @@ namespace CTCClassSchedule
 			string footenoteText = buildFootnoteText(section.IsDifferentStartDate,
 																							 section.IsDifferentEndDate,
 																							 section.IsHybrid,
+																							 section.IsTelecourse,
 																							 section.StartDate.GetValueOrDefault(DateTime.Now),
 																							 section.EndDate.GetValueOrDefault(DateTime.Now));
 			return wSpace + footenoteText;
 		}
 
-		/// <summary>
 		/// Gets automated footnotes based on boolean values passed to the method.
 		/// This is useful if you are handling either Section or SectionWithSeats objects.
 		/// </summary>
 		/// <param name="differentStartFlag">Is the course a late start course.</param>
 		/// <param name="differentEndFlag">Does the course have a different end date than normal.</param>
-		/// <param name="hybridFlag">Is this a hybrid course.</param>
+		/// <param name="hybridFlag">Is this a hybrid course?</param>
+		/// /// <param name="telecourseFlag">Is this a telecourse?</param>
 		/// <param name="startDate">The course's scheduled start date.</param>
 		/// <param name="endDate">The courses scheduled end date.</param>
 		/// <returns>All relevant automated footnotes in one concatenated string.</returns>
-		private static string buildFootnoteText(Boolean differentStartFlag, Boolean differentEndFlag, Boolean hybridFlag, DateTime startDate, DateTime endDate)
+		private static string buildFootnoteText(Boolean differentStartFlag, Boolean differentEndFlag, Boolean hybridFlag, Boolean telecourseFlag, DateTime startDate, DateTime endDate)
 		{
 			string startDateParam = "{STARTDATE}";
 			string endDateParam = "{ENDDATE}";
@@ -99,7 +84,13 @@ namespace CTCClassSchedule
 			// If the section is a hybrid section
 			if (hybridFlag)
 			{
-				footnoteTextResult += Footnotes("hybrid").Text;
+				footnoteTextResult += Footnotes("hybrid").Text + " ";
+			}
+
+			// If the section is a telecourse
+			if (telecourseFlag)
+			{
+				footnoteTextResult += Footnotes("telecourse").Text;
 			}
 
 			return footnoteTextResult.Trim();
