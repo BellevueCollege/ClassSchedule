@@ -64,7 +64,7 @@ namespace CTCClassSchedule.Controllers
 			{
 
 				// Configurables
-				int subjectSeparatoredLineBreaks = 4;
+				int subjectSeparatedLineBreaks = 4;
 
 				// Use this to convert strings to file byte arrays
 				System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
@@ -92,7 +92,7 @@ namespace CTCClassSchedule.Controllers
 				// Create all file data
 				foreach (vw_ProgramInformation program in divisions.Keys)
 				{
-					for (int i = 0; i < subjectSeparatoredLineBreaks; i++)
+					for (int i = 0; i < subjectSeparatedLineBreaks; i++)
 					{
 						fileText.AppendLine();
 					}
@@ -139,7 +139,7 @@ namespace CTCClassSchedule.Controllers
 
 				// Write the file data as an HTTP response
 				string fileName = String.Concat("CourseData-", yrq.ID, "-", DateTime.Now.ToShortDateString(), ".txt");
-				fileText.Remove(0, subjectSeparatoredLineBreaks * 2); // Remove the first set of line breaks
+				fileText.Remove(0, subjectSeparatedLineBreaks * 2); // Remove the first set of line breaks
 				byte[] fileData = encoding.GetBytes(fileText.ToString());
 				HttpResponseBase response = ControllerContext.HttpContext.Response;
 				string contentDisposition = String.Concat("attachment; filename=", fileName);
