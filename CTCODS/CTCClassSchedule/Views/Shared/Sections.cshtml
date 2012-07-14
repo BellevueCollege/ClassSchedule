@@ -3,6 +3,7 @@
 @using CTCClassSchedule.Common
 @using Microsoft.Security.Application
 @using MvcMiniProfiler;
+<!-- Would this perform better as an IEnumerable, rather than converting to List when passing the model from YearQuarterSubject? -->
 @model List<SectionWithSeats>
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;

@@ -230,7 +230,7 @@
 
 				// NOTE: We must pass the current ViewData object to RenderPartial here.
 				// If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-				Html.RenderPartial("Sections", multipleSections, ViewData);
+				Html.RenderPartial("Sections", multipleSections.ToList(), ViewData);
 
 					}
 				</ul>
