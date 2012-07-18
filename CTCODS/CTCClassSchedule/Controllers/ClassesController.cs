@@ -57,7 +57,7 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		/// <returns>An Adobe InDesign formatted text file with all course data. File is
 		/// returned as an HTTP response.</returns>
-		[AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
+
 		public void Export(String YearQuarterID)
 		{
 			if (HttpContext.User.Identity.IsAuthenticated == true)
@@ -67,29 +67,31 @@ namespace CTCClassSchedule.Controllers
 				int subjectSeparatedLineBreaks = 4;
 
 				// Use this to convert strings to file byte arrays
-				System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+				ASCIIEncoding encoding = new ASCIIEncoding();
 				StringBuilder fileText = new StringBuilder();
 
 				// Determine whether to use a specific Year Quarter, or the current Year Quarter
 				YearQuarter yrq;
 				IList<vw_ProgramInformation> programs = new List<vw_ProgramInformation>();
-				using (OdsRepository _db = new OdsRepository())
+				if (String.IsNullOrEmpty(YearQuarterID))
 				{
-					if (String.IsNullOrEmpty(YearQuarterID))
+					using (OdsRepository _db = new OdsRepository())
 					{
-						yrq = _db.CurrentYearQuarter;
-					}
-					else
-					{
-						yrq = Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID);
+							yrq = _db.CurrentYearQuarter;
 					}
 				}
+				else
+				{
+					yrq = Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID);
+				}
+
 
 				// Get a dictionary of sorted collections of sections, collated by division
 				IDictionary<vw_ProgramInformation, List<SectionWithSeats>> divisions = new Dictionary<vw_ProgramInformation, List<SectionWithSeats>>();
 				divisions = getSectionsByDivision(yrq);
 
 				// Create all file data
+				string hyrbidFootnote = AutomatedFootnotesConfig.Footnotes("hybrid").Text;
 				foreach (vw_ProgramInformation program in divisions.Keys)
 				{
 					for (int i = 0; i < subjectSeparatedLineBreaks; i++)
@@ -127,9 +129,16 @@ namespace CTCClassSchedule.Controllers
 						line = section.SectionFootnotes;
 						if (!String.IsNullOrWhiteSpace(line))
 						{
-							fileText.AppendLine(String.Concat("<CLSX>", line.Trim()));
+							fileText.AppendLine(String.Concat("<CLSN>", line.Trim()));
 						}
 						line = AutomatedFootnotesConfig.getAutomatedFootnotesText(section);
+
+						// Only display the last hyrbid footnote in a grouping of hybrid courses
+						if (line.Contains(hyrbidFootnote) && section != divisions[program].Where(s => s.IsHybrid && section.CourseNumber == s.CourseNumber && section.Credits == s.Credits && section.CourseTitle == s.CourseTitle).LastOrDefault())
+						{
+							line = line.Replace(hyrbidFootnote, string.Empty);
+						}
+
 						if (!String.IsNullOrWhiteSpace(line))
 						{
 							fileText.AppendLine(String.Concat("<CLSY>", line.Trim()));
@@ -138,7 +147,7 @@ namespace CTCClassSchedule.Controllers
 				}
 
 				// Write the file data as an HTTP response
-				string fileName = String.Concat("CourseData-", yrq.ID, "-", DateTime.Now.ToShortDateString(), ".txt");
+				string fileName = String.Concat("CourseData-", yrq.ID, "-", DateTime.Now.ToShortDateString(), ".rtf");
 				fileText.Remove(0, subjectSeparatedLineBreaks * 2); // Remove the first set of line breaks
 				byte[] fileData = encoding.GetBytes(fileText.ToString());
 				HttpResponseBase response = ControllerContext.HttpContext.Response;
@@ -629,83 +638,52 @@ namespace CTCClassSchedule.Controllers
 			// Configurables
 			string onlineDaysStr = "[online]";
 			string onlineRoomStr = "D110";
-			string distanceEdMinStr = "7000";
-			string distanceEdMaxStr = "ZZZZ";
 			string arrangedStr = "Arranged";
 			string hybridCodeStr = "[h]";
 			string instructorDefaultNameStr = "staff";
-			TimeSpan eveningCourse = new TimeSpan(17, 30, 0);
 
-			string daysStr;
-			string roomStr;
-			string line = string.Empty;
-			string tagStr = string.Empty;
-			string startTimeStr = string.Empty;
-			string endTimeStr = string.Empty;
-			string hybridStr = string.Empty;
-			string instructorName = string.Empty;
-			DateTime startTime;
-
-			// Build the line that describes the offered instance of the course
-			tagStr = "<CLS5>";
-			hybridStr = section.IsHybrid ? String.Concat(hybridCodeStr, " ") : string.Empty;
-			if (item.IsPrimary || !item.IsPrimary && !String.IsNullOrEmpty(item.InstructorName))
+			// Build a string that represents the DAY and TIME of the course
+			string dayTimeStr = String.Concat("\t", arrangedStr.ToLower()); // Default if no date or time is available is "arranged"
+			if (item.StartTime != null && item.EndTime != null) // If there is a time available
 			{
-				instructorName = getNameShortFormat(item.InstructorName) ?? instructorDefaultNameStr;
+				string startTimeStr = item.StartTime.Value.ToString("h:mmt").ToLower();
+				string endTimeStr = item.EndTime.Value.ToString("h:mmt").ToLower();
+				dayTimeStr = String.Concat(item.Days.Equals(arrangedStr) ? arrangedStr.ToLower() : item.Days, "\t", startTimeStr, "-", endTimeStr);
 			}
-			if (item.StartTime != null && item.EndTime != null) // Handle normal daily and evening courses
+			else if (section.IsOnline) // Online class
 			{
-				startTimeStr = item.StartTime.Value.ToString("h:mmt").ToLower();
-				endTimeStr = item.EndTime.Value.ToString("h:mmt").ToLower();
-				startTime = item.StartTime.Value;
-				if (new TimeSpan(startTime.Hour, startTime.Minute, startTime.Second) >= eveningCourse) { tagStr = "<CLS6>"; }
-
-				if (item.IsPrimary)
-				{
-					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", hybridStr, section.SectionCode, "\t", instructorName, "\t", item.Days, "\t", startTimeStr, "-", endTimeStr, "\t", item.Room);
-				}
-				else
-				{
-					line = String.Concat(tagStr, "\t\t\t", instructorName, "\t", item.Days, "\t", startTimeStr, "-", endTimeStr, "\t", item.Room);
-				}
+				dayTimeStr = String.Concat("\t", onlineDaysStr);
 			}
-			else if (section.IsOnline) // Handle online courses
-			{
-				if (item.IsPrimary)
-				{
-					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", hybridStr, section.SectionCode, "\t", instructorName, "\t", onlineDaysStr, "\t", item.Room ?? onlineRoomStr);
-				}
-				else
-				{
-					line = String.Concat(tagStr, "\t\t\t", instructorName, "\t", onlineDaysStr, "\t", item.Room ?? onlineRoomStr);
-				}
-			}
-			else // Handle Distance Ed or arranged courses
-			{
-				daysStr = item.Days;
-				roomStr = String.Concat("\t", item.Room);
-				if (section.ID.ItemNumber.CompareTo(distanceEdMinStr) >= 0 && section.ID.ItemNumber.CompareTo(distanceEdMaxStr) <= 0)
-				{
-					tagStr = "<CLSD>";
-				}
-				else if (item.Days == arrangedStr)
-				{
-					tagStr = "<CLSA>";
-					daysStr = String.Concat("\t", arrangedStr.ToLower());
-					if (String.IsNullOrEmpty(item.Room))
-					{
-						roomStr = string.Empty;
-					}
-				}
 
-				if (item.IsPrimary)
-				{
-					line = String.Concat(tagStr, section.ID.ItemNumber, "\t", hybridStr, section.SectionCode, "\t", instructorName, "\t", daysStr, roomStr);
-				}
-				else
-				{
-					line = String.Concat(tagStr, "\t\t\t", instructorName, "\t", daysStr, roomStr);
-				}
+			// Get the tag code that describes the offered item. The tag is determined by the primary offered item
+			string tagStr = getSectionExportTag(section, item);
+
+
+			// Set or override variable values for tags that have special conditions
+			string roomStr = String.Concat("\t", item.Room ?? onlineRoomStr);
+			switch (tagStr)
+			{
+				case "<CLSA>":
+					roomStr = String.IsNullOrEmpty(item.Room) ? string.Empty : String.Concat("\t", item.Room);
+					break;
+				case "<CLSD>":
+					roomStr = String.Concat("\t", item.Room);
+					break;
+			}
+
+
+			// Construct the finalized tag itself, based on whether or not the current item is the primary
+			string line;
+			if (item.IsPrimary)
+			{
+				string instructorName = getNameShortFormat(item.InstructorName) ?? instructorDefaultNameStr;
+				string sectionCodeStr = String.Concat((section.IsHybrid ? String.Concat(hybridCodeStr, " ") : string.Empty), section.SectionCode);
+
+				line = String.Concat(tagStr, section.ID.ItemNumber, "\t", sectionCodeStr, "\t", instructorName, "\t", dayTimeStr, roomStr);
+			}
+			else // Not primary
+			{
+				line = String.Concat(tagStr, "\t\talso meets\t", dayTimeStr, roomStr);
 			}
 
 			// Append the line to the file
@@ -729,6 +707,62 @@ namespace CTCClassSchedule.Controllers
 			}
 
 			return shortName;
+		}
+
+		/// <summary>
+		/// Takes an offered item and determines whether the course qualifies as an evening course.
+		/// </summary>
+		/// <param name="course">The OfferedItem to evaluate.</param>
+		/// <returns>True if evening course, otherwise false.</returns>
+		private static bool isEveneingCourse(OfferedItem course)
+		{
+			bool isEvening = false;
+
+			TimeSpan eveningCourse = new TimeSpan(17, 30, 0); // Hard coded evening course definition; TODO: Move to app settings
+			if (course.StartTime.HasValue && course.EndTime.HasValue)
+			{
+				if (new TimeSpan(course.StartTime.Value.Hour, course.StartTime.Value.Minute, course.StartTime.Value.Second) >= eveningCourse)
+				{
+					isEvening = false;
+				}
+			}
+
+			return isEvening;
+		}
+
+		/// <summary>
+		/// Takes a section and returns the coded tag. This method is only used during a Class Schedule export.
+		/// </summary>
+		/// <param name="section">The Section being evaluated.</param>
+		/// <param name="item">The particular OfferedItem within the given Section being evaluated.</param>
+		/// <returns>A string containing the tag code that represents the given Section.</returns>
+		private static string getSectionExportTag(Section section, OfferedItem item)
+		{
+			string tag = "<CLS5>";
+			string distanceEdMinStr = "7000";
+			string distanceEdMaxStr = "ZZZZ";
+			string arrangedStr = "Arranged";
+
+			OfferedItem primary = section.Offered.Where(o => o.IsPrimary).FirstOrDefault();
+			if ((primary.Days.Contains("Sa") || primary.Days.Contains("Su")) &&
+				 !(primary.Days.Contains("M") || primary.Days.Contains("T") || primary.Days.Contains("W") || primary.Days.Contains("Th"))) // Weekend course
+			{
+				tag = "<CLS7>";
+			}
+			else if (isEveneingCourse(primary)) // Evening course
+			{
+				tag = "<CLS6>";
+			}
+			else if (section.ID.ItemNumber.CompareTo(distanceEdMinStr) >= 0 && section.ID.ItemNumber.CompareTo(distanceEdMaxStr) <= 0) // Distance Ed
+			{
+				tag = "<CLSD>";
+			}
+			else if (item.Days == arrangedStr && !section.IsOnline) // Arranged course
+			{
+				tag = "<CLSA>";
+			}
+
+			return tag;
 		}
 
 		/// <summary>
