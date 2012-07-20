@@ -1,6 +1,7 @@
 ﻿@using System.Web.WebPages.Html;
 @using CTCClassSchedule;
 @using CTCClassSchedule.Common;
+@using Ctc.Ods.Types;
 @*
 The methods declared in this file can be called from within any View
 in the project, and will render the output specified.
@@ -12,24 +13,24 @@ WARNING:	There is a known issue with using global @helper methods in the App_Cod
 
 @* ====================================================================================================== *@
 
-@helper DisplayCredits(SectionWithSeats sec)
+@helper DisplayCredits(decimal credits, bool isVariableCredits)
 {
-	string credits = sec.Credits.ToString().TrimEnd('0').TrimEnd('.');
+	string creditsStr = credits.ToString().TrimEnd('0').TrimEnd('.');
 
-	<span class="classCredits">&#8226;
-				@if (sec.IsVariableCredits)
+	<span class="courseCredits">&#8226;
+				@if (isVariableCredits)
 				{
-					@:V1-@credits
+					@:V1-@creditsStr
 					<abbr title="variable credits">Cr.</abbr>
 				}
 				else
 				{
-					@credits
-					<abbr title="credit(s)">
-					Cr.</abbr>
+					@creditsStr
+					<abbr title="credit(s)">Cr.</abbr>
 				}
 	</span>
 }
+
 
 @* ====================================================================================================== *@
 
@@ -80,6 +81,16 @@ WARNING:	There is a known issue with using global @helper methods in the App_Cod
 }
 
 @* Helper method overrides *@
+
+@helper DisplayCredits(SectionWithSeats sec)
+{
+	@DisplayCredits(sec.Credits, sec.IsVariableCredits);
+}
+
+@helper DisplayCredits(Course course)
+{
+	@DisplayCredits(course.Credits, course.IsVariableCredits);
+}
 
 @helper DisplayFootnotes(IEnumerable<string> hpFootnotes, string cmsFootnote, string searchTerm = null)
 {
