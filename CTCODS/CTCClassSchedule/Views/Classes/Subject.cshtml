@@ -59,35 +59,18 @@
 		    <div id="classDescriptions">
 		    @foreach (var item in Model.OrderBy(c => c.Number))
 			{
-				string courseID = string.Format("{0}{1} {2}", item.Subject, item.IsCommonCourse ? "&" : string.Empty, item.Number);
+				string subjectURL = Helpers.SubjectWithCommonCourseFlag(item);
+				string courseID = string.Format("{0} {1}", subjectURL, item.Number);
 
 			    <div class="classInfo">
                     <h2 class="classHeading">
-										@{
-											string subjectURL = item.IsCommonCourse == true ? item.Subject.Trim() + "&" : item.Subject.Trim();
-										}
+
 							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = subjectURL, ClassNum = item.Number })">
 
-							<span class="classNumber">
-								@Html.Raw(string.Format("{0} {1}", courseID, item.Title))
-							</span>
+							<span class="courseID">@item.CourseID</span>
+							<span class="courseTitle">@item.Title</span>
 
-							&#8226;
-
-						@if (item.IsVariableCredits)
-      {
-				    <span class="classCredits">
-					    V1-@Html.CreditsValue(item.Credits)
-				        <abbr title=" variable credit(s) ">Cr.</abbr>
-            </span>
-      }
-      else
-      {
-				    <span class="classCredits">
-					    @Html.CreditsValue(item.Credits)
-				        <abbr title=" credit(s) ">Cr.</abbr>
-            </span>
-      }
+							@ViewHelpers.DisplayCredits(item)
 					</a>
                     </h2>
 

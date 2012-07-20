@@ -107,10 +107,8 @@
 						<br />
 						<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
 							@Html.SectionCourseHeading(linkedSec, _searchTerm)
-						</a>
-						<span class="classInfo">
 							@ViewHelpers.DisplayCredits(linkedSec)
-						</span>
+						</a>
 			 }
 		 }
 				</h2> @* classHeading *@

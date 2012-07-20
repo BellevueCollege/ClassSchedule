@@ -43,24 +43,10 @@
 				@if (course != null)
 		{
 						<h1 id="pageTitle">
-							<span class="courseID">@(string.Format("{0}{1} {2}", course.Subject, course.IsCommonCourse ? "&" : string.Empty, course.Number))</span>
-							<span>@course.Title</span>
+							<span class="courseID">@(string.Format("{0} {1}", Helpers.SubjectWithCommonCourseFlag(course), course.Number))</span>
+							<span class="courseTitle">@course.Title</span>
 
-				&#8226;
-				@if (course.IsVariableCredits)
-		{
-							<span class="classCredits">
-								V1-@Html.CreditsValue(course.Credits)
-									<abbr title=" variable credit(s) ">Cr.</abbr>
-							</span>
-		}
-		else
-		{
-							<span class="classCredits">
-								@Html.CreditsValue(course.Credits)
-									<abbr title=" credit(s) ">Cr.</abbr>
-							</span>
-		}
+							@ViewHelpers.DisplayCredits(course)
 						</h1>
 
 
