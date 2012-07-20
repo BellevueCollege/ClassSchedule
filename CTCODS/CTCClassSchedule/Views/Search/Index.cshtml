@@ -152,7 +152,7 @@
 
 							if (linkedSections != null && hasLinked)
 							{
-								multipleSections = multipleSections.Union(linkedSections);
+								multipleSections = multipleSections.Union(linkedSections).ToList();
 							}
 
 							// NOTE: We must pass the current ViewData object to RenderPartial here.
