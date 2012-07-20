@@ -804,7 +804,17 @@ namespace CTCClassSchedule.Common
 
 		public static string SubjectWithCommonCourseFlag(SectionWithSeats sec)
 		{
-			return sec.IsCommonCourse ? sec.CourseSubject.Trim() + "&" : sec.CourseSubject.Trim();
+			return SubjectWithCommonCourseFlag(sec.CourseSubject, sec.IsCommonCourse);
+		}
+
+		public static string SubjectWithCommonCourseFlag(Course course)
+		{
+			return SubjectWithCommonCourseFlag(course.Subject, course.IsCommonCourse);
+		}
+
+		private static string SubjectWithCommonCourseFlag(string subject, bool isCommonCourse)
+		{
+			return isCommonCourse ? subject.Trim() + "&" : subject.Trim();
 		}
 
 		/// <summary>
