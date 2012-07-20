@@ -154,11 +154,11 @@ namespace CTCClassSchedule.Common
 		/// <returns></returns>
 		public static IHtmlString SectionCourseHeading(this HtmlHelper html, SectionWithSeats sec, string credits = null, string searchTerm = null)
 		{
-			string output = string.Format("{0} {1} {2}", Helpers.SubjectWithCommonCourseFlag(sec), sec.CourseNumber, sec.CourseTitle);
+			string output = string.Format("<span class=\"courseID\">{0} {1}</span> <span class=\"courseTitle\">{2}</span> ", Helpers.SubjectWithCommonCourseFlag(sec), sec.CourseNumber, sec.CourseTitle);
 
 			if (!string.IsNullOrWhiteSpace(credits))
 			{
-				output = string.Concat(output, " &#8226; ", credits);
+				output = string.Concat(output, "<span class=\"courseCredits\">&#8226; ", credits, "</span>");
 			}
 
 			if (string.IsNullOrWhiteSpace(searchTerm))
