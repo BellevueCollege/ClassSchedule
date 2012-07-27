@@ -80,33 +80,40 @@
 					}
 					</li>
 				}
-			} //end of iterate section list
-    }
+
+			} // end of iterate section list
+		}
 
 			</ul>
 		</li>
 
 			@if (Model[0].Yrq.ID.CompareTo(currentQuarter.ID) >= 0 && Model[0].SeatsAvailable != int.MinValue)
-      {
+	 {
+				// course books link
+				<li class="bookstoreinfo">
+					<a href='@String.Concat("http://bcc.collegestoreonline.com/ePOS?form=schedule.html&term=", Model[0].Yrq.FriendlyName, "&department.0=", Model[0].CourseSubject, "&course.0=", Model[0].CourseNumber, "&section.0=", Model[0].ID.ItemNumber)' target="_blank">
+						<img src="@Url.Content("~/Content/images/books.gif")" alt="Required books/supplies" />
+					</a>
+				</li>
 				<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
 				Availability: </span>
 				@if (Model[0].SeatsAvailable <= 0 || Model[0].WaitlistCount > 0)
-				{
+		{
 					<strong class="seatsAvailable">
 						class full@(Model[0].WaitlistCount > 0 ? string.Format(", {0} on waitlist", Model[0].WaitlistCount) : string.Empty)
 					</strong>
 					<span class="course-updated"></span>
-				}
-				else
-				{
+		}
+		else
+		{
 					<strong class="seatsAvailable">@Model[0].SeatsAvailable</strong>
 					<span class="course-updated"><a id="@sectionID"><span class="ui-icon ui-icon-arrowrefresh-1-e"></span>updated <span class="update-time">@Model[0].LastUpdated</span></a></span>
-				}
+		}
 				</li>
-      }
+	 }
 			<li class="editing">
 				@if (Context.User.Identity.Name.Length > 0 && Helpers.isEditor(Context))
-				{
+		{
 					@Ajax.ActionLink("Edit",
 														"SectionEdit",
 														"Api",
@@ -126,7 +133,7 @@
 															OnComplete = "spinner.stop();",
 														},
 														new { @class = "edit_button" })
-				}
+		}
 		</li>
 		<li class="section-notes"><span class="descriptor">Notes: </span>
 				<ul>
