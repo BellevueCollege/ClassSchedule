@@ -40,7 +40,14 @@
 	@foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
  {
 		<li @if (quarterViewing != null && quarterViewing == yrq) { <text> class="active" </text> }>
+	@if (String.IsNullOrEmpty(subject))
+	{
 			<a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">@yrq.FriendlyName</a>
+	}
+	else
+	{
+			<a href="@Url.Action("YearQuarterSubject", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", ""), Subject = subject})">@yrq.FriendlyName</a>
+	}
 		</li>
  }
 	</ul>
