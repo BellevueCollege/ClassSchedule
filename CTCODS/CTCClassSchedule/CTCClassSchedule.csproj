@@ -195,12 +195,13 @@
     <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\ajax-loader_big.gif" />
     <Content Include="Content\images\alert.gif" />
+    <Content Include="Content\images\books.gif" />
     <Content Include="Content\images\classes-bg.png" />
     <Content Include="Content\images\coin-slider\sc1.jpg" />
     <Content Include="Content\images\coin-slider\sc2.jpg" />
     <Content Include="Content\images\coin-slider\sc3.jpg" />
-    <Content Include="Content\images\course-block-header-noseats.png" />
-    <Content Include="Content\images\course-block-header.png" />
+    <Content Include="Content\images\course-block-header-past.gif" />
+    <Content Include="Content\images\course-block-header.gif" />
     <Content Include="Content\images\edit_button.png" />
     <Content Include="Content\images\feedbackbutton.png" />
     <Content Include="Content\images\online.gif" />
