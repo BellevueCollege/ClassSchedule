@@ -9,7 +9,8 @@
 	YearQuarter yrq = ViewBag.YearQuarter;
 	string subject = (ViewBag.Subject ?? string.Empty);
 
-	if (subject.ToUpper() == "ALL") {
+	if (subject.ToUpper() == "ALL")
+	{
 		subject = string.Empty;
 	}
 	string lastSubject = "";
@@ -115,45 +116,57 @@
         <h2>Refine</h2>
 
 @* if the user has browsed vs. searched for a term, display a different subject chooser UI  *@
-@if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
-{
     <h3>Subject</h3>
 	<ul class="subject">
-   @if (!string.IsNullOrWhiteSpace(subject))
-		{
-			routeParms.Remove("Subject");
+@if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
+{
+   if (!string.IsNullOrWhiteSpace(subject))
+	 {
+		 routeParms.Remove("Subject");
 			<li>
 				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">All</a>
 			</li>
-		 }
-	@foreach (string sub in Model)
-	{
-			if (sub.ToUpper() == (subject ?? string.Empty).ToUpper())
-			{
+	 }
+ foreach (string sub in Model)
+ {
+	 if (sub.ToUpper() == (subject ?? string.Empty).ToUpper())
+	 {
 			<li class="active">
 						<span class="notlink">@sub</span>
 			</li>
-			}
-			else
-			{
-				routeParms["Subject"] = sub;
+	 }
+	 else
+	 {
+		 routeParms["Subject"] = sub;
 				<li>
 				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@sub</a>
 				</li>
-			}
-		}
-	</ul>
-	}
+	 }
+ }
+}
+else
+{
+	if (!string.IsNullOrWhiteSpace(subject))
+ {
+			<li @(ViewBag.activeClass)>
+				<span class="notlink">@subject</span>
+			</li>
+ }
+				<li>
+				@Html.Partial("subjectNavigation")
+				</li>
+}
+</ul>
 
 @if (ViewContext.RouteData.Values["Controller"].Equals("Classes"))
 {
 
-		@:<form id="daystimesform" action="@Url.Content("~/")@(yrq != null ? yrq.FriendlyName.Replace(" ","") : "All")/@subject" method="get">
+		@:<form id="daystimesform" action="@Url.Content("~/")@(yrq != null ? yrq.FriendlyName.Replace(" ", "") : "All")/@subject" method="get">
 
-		if (routeParms.ContainsKey("letter"))
-  {
+	if (routeParms.ContainsKey("letter"))
+	{
 			<input type="hidden" name="letter" value="@routeParms["letter"]" />
-		}
+	}
 
 }
 else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
@@ -162,14 +175,14 @@ else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
 		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])" method="get">
 		<!-- hidden fields to include in form -->
 		@if (!string.IsNullOrWhiteSpace(QuarterParam))
-		{
+	{
 			<input type="hidden" name="quarter" value="@QuarterParam"/>
-		}
+	}
 
 		@if (!string.IsNullOrWhiteSpace(subject))
-		{
+	{
 			<input type="hidden" name="Subject" value="@subject"/>
-		}
+	}
 		<input type="hidden" name="searchterm" value="@ViewBag.searchterm"/>
 	</div>
 }
@@ -199,15 +212,15 @@ else
 		<p class="label_checkbox_pair">
 		<span>
 			<input class="clear" type="checkbox" name="@m.ID" id="@m.ID" value="true" @if (m.Selected)
-                                                                             { <text>checked='checked'</text> } /></span>
+																																						 { <text>checked='checked'</text> } /></span>
 			<label for="@m.ID">@m.Title</label>
 		</p>
  }
 	</div>
 
 
-	@if(showDaysAndTimes)
-	{
+	@if (showDaysAndTimes)
+ {
 		<h3>Days & Times</h3>
 		<div id="times">
 		    <label><span title="Start Time" class="time-text">START</span><input id="timestart"  name="timestart" type="text" value="@ViewBag.timestart" /></label><span class="time-separator">-</span><label><span title="End Time" class="time-text">END</span><input id="timeend" name="timeend" type="text" value="@ViewBag.timeend" /></label>
@@ -215,28 +228,31 @@ else
 
 		<div id="days">
 			@foreach (GeneralFacetInfo d in days)
-			{
+	 {
 				<div class="day">
-					<label class="daylabel @if(d.ID == "day_su" || d.ID == "day_s"){  <text>weekend</text> }" for="days"><abbr title="@d.Title ">@d.Title</abbr></label>
-					<input type="checkbox" name="@d.ID" id="@d.ID"  value="true" @if(d.Selected){  <text>checked="checked"</text> } />
+					<label class="daylabel @if (d.ID == "day_su" || d.ID == "day_s")
+														{  <text>weekend</text> }" for="days"><abbr title="@d.Title ">@d.Title</abbr></label>
+					<input type="checkbox" name="@d.ID" id="@d.ID"  value="true" @if (d.Selected)
+																																	{  <text>checked="checked"</text> } />
 				</div>
-			}
+	 }
 			<div id="submitjquery">
 
 			</div>
 		</div>
 
-	}
+ }
 		<h3>Credits</h3>
 	<div id="numcredits-facet">
 		<p class="label_checkbox_pair">
 			<select class="clear"name="numcredits" id="numcredits" value="true">
 				<option @if (_numCredits == ANY)
 						{ <text>selected='selected'</text> }>Any</option>
-				@for (int i = 1; i <= 15; i++){
+				@for (int i = 1; i <= 15; i++)
+		{
 					<option @if (_numCredits == i)
-						{ <text>selected='selected'</text> }>@i</option>
-				}
+						 { <text>selected='selected'</text> }>@i</option>
+		}
 			</select>
 
 		</p>
@@ -246,7 +262,7 @@ else
 	<div id="latestart-facet">
 		<p class="label_checkbox_pair">
 			<input class="clear" type="checkbox" name="latestart" id="latestart" value="true" @if (@ViewBag.latestart == "true")
-                                                                             { <text>checked='checked'</text> } />
+																																										 { <text>checked='checked'</text> } />
 			<label for="latestart">Late Start</label>
 		</p>
 	</div>
@@ -257,9 +273,9 @@ else
 
 
 		<li><label><input id="radio_all" type="radio" name="avail" value="All" @if (@ViewBag.avail == "All" || @ViewBag.avail == null)
-																																	{  <text> checked="checked"</text> } /> All</label></li>
+																																				 {  <text> checked="checked"</text> } /> All</label></li>
 		<li><label><input id="radio_open" type="radio" name="avail" value="Open"	@if (@ViewBag.avail == "Open")
-																																		{  <text> checked="checked"</text> } /> Open</label></li>
+																																					 {  <text> checked="checked"</text> } /> Open</label></li>
 	</ul>
 
 
