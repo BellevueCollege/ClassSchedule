@@ -851,7 +851,7 @@ p.course-details-link
 	list-style: none;
 	margin: 0;
 	padding-top: 21px;  /*ju */
-	background:  url(images/course-block-header.png) 20px 9px no-repeat;  /*new*/
+	background:  url(images/course-block-header.gif) 20px 9px no-repeat;  /*new*/
 	margin-bottom: 8px;
 
 
@@ -859,7 +859,7 @@ p.course-details-link
 
 .course-block-past-quarter
 {
-	background:  url(images/course-block-header-noseats.png) 20px 9px no-repeat;
+	background:  url(images/course-block-header-past.gif) 20px 9px no-repeat;
 }
 
 .course-block-no-section
