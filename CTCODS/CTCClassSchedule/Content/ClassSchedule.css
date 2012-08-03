@@ -939,12 +939,12 @@ ul.class-description
 
 .section
 {
-	width: 50px; /*ju*/
+	width: 60px; /*ju*/
 	clear: left;
 }
 .instructor
 {
-	width: 140px;
+	width: 146px;
 }
 .meets
 {
@@ -955,27 +955,27 @@ ul.class-description
 }
 .days
 {
-	width: 76px;
+	width: 78px;
 }
 .times{
-	width: 120px;
+	width: 108px;
   text-transform: lowercase;
 }
 
 .room
 {
-	width: 80px;
+	width: 60px;
 }
 .online
 {
-    width: 61px;
+    width: 63px;
     padding-left: 15px;
     background: transparent url("images/online.gif") no-repeat left 48%
 }
 
 .bookstoreinfo
 {
-	width: 40px;
+	width: 70px;
 }
 
 .seatsAvailable {}
