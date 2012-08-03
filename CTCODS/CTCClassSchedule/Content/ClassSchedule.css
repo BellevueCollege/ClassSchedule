@@ -222,6 +222,11 @@ textarea
 
 
 .classDetailsLink {padding: 0 20px;}
+li.classDetailsLink
+{
+	padding: 0 20px 0 0;
+	display: inline;
+}
 
 .classNumber a
 {
@@ -909,6 +914,8 @@ p.course-details-link
 
 }
 
+
+
 ul.class-description
 {
 	height: 70px;
@@ -924,13 +931,11 @@ ul.class-description
 	overflow: hidden;
 }
 
-.section, .instructor, .meets, .days, .times, .room, .availability, .online, .tv
+.section, .instructor, .meets, .days, .times, .room, .availability, .online, .tv, .bookstoreinfo
 {
 	display: block;
 	float: left;
 }
-
-
 
 .section
 {
@@ -954,7 +959,8 @@ ul.class-description
 }
 .times{
 	width: 120px;
-    text-transform: lowercase;}
+  text-transform: lowercase;
+}
 
 .room
 {
@@ -966,6 +972,12 @@ ul.class-description
     padding-left: 15px;
     background: transparent url("images/online.gif") no-repeat left 48%
 }
+
+.bookstoreinfo
+{
+	width: 40px;
+}
+
 .seatsAvailable {}
 .seatsFull {}
 
@@ -1051,12 +1063,20 @@ ul.section-details li.section-notes
 
 /*END COURSE DESCRIPTION BLOCK CODE*/
 
+.combinationClass
+{
+	font-size: 12px;
+	font-weight: bold;
+	color: #794800;
+}
+
 .classDetails
 {
     padding: 0 20px;
 }
 
-.classHeading {
+.classHeading
+{
 	font-size: 17px;
 	padding: 0 20px;
 }

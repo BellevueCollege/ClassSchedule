@@ -170,6 +170,10 @@
 				</div>
 
 				<h2 class="classHeading">
+			 @if (hasLinked)
+			 {
+				  <span class="combinationClass">Combination class:</span><br />
+			 }
 					<a href="@Url.Action("ClassDetails", "Classes", route)">
 						@Html.SectionCourseHeading(firstSection)
 						@ViewHelpers.DisplayCredits(firstSection)
@@ -191,42 +195,49 @@
 						@if (!string.IsNullOrWhiteSpace(firstSection.CustomTitle))
 			{
 				// NOTE: do not display HP description from this page
-							@Html.Raw(firstSection.CustomDescription)
+						@Html.Raw(firstSection.CustomDescription)
 			}
-						@if (!hasLinked)
+						<ul>
+							<li class="classDetailsLink">
+								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", route, null)
+							</li>
+			@foreach (SectionWithSeats linkedSec in linkedSections)
 			{
-							@Html.ActionLink("View class details", "ClassDetails", "Classes", route, null)
+							<li class="classDetailsLink">
+								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber }, null)
+							</li>
 			}
+						</ul>
 					</div>
 					<p class="classNotes">
 		@{
-		 IList<string> commonFootnotes = Helpers.ExtractCommonFootnotes(sectionBlock).ToList();
-		 // save footnotes to pass to sub-view
-		 ViewData["CourseFootnotes"] = commonFootnotes;
+	 IList<string> commonFootnotes = Helpers.ExtractCommonFootnotes(sectionBlock).ToList();
+	 // save footnotes to pass to sub-view
+	 ViewData["CourseFootnotes"] = commonFootnotes;
 		}
 						@ViewHelpers.DisplayFootnotes(commonFootnotes, firstSection.CourseFootnotes)
 					</p>
 				</div> <!--classInfo -->
 
-			foreach (SectionWithSeats sec in sectionBlock)
-			{
+	 foreach (SectionWithSeats sec in sectionBlock)
+	 {
 				<ul class='course-block @(thisYrq.CompareTo(currentYrq) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
 					@{
-				//bothSections includes a master and its subordinate linked section(s).
-				IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
+		 //bothSections includes a master and its subordinate linked section(s).
+		 IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
 
-				if (linkedSections != null && hasLinked)
-				{
-					multipleSections = multipleSections.Union(linkedSections).ToList();
-				}
+		 if (linkedSections != null && hasLinked)
+		 {
+			 multipleSections = multipleSections.Union(linkedSections).ToList();
+		 }
 
-				// NOTE: We must pass the current ViewData object to RenderPartial here.
-				// If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-				Html.RenderPartial("Sections", multipleSections, ViewData);
+		 // NOTE: We must pass the current ViewData object to RenderPartial here.
+		 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+		 Html.RenderPartial("Sections", multipleSections, ViewData);
 
 					}
 				</ul>
-			}
+	 }
 					 } @* !sec.IsLinked *@
 				 }
 			 }

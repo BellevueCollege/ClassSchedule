@@ -96,6 +96,10 @@
 						 _routeValues["ClassNum"] = firstSection.CourseNumber;
 
 				<h2 class="classHeading">
+			 @if (hasLinked)
+			 {
+				  <span class="combinationClass">Combination class:</span><br />
+			 }
 					<a href="@Url.Action("ClassDetails", "Classes", _routeValues)">
 						@Html.SectionCourseHeading(firstSection, searchTerm: _searchTerm)
 						@ViewHelpers.DisplayCredits(firstSection)
@@ -127,11 +131,17 @@
 					else {
 						@Html.Raw(firstSection.CourseDescriptions.Count() == 0 ? "" : Html.FormatWithSearchTerm(_searchTerm, firstSection.CourseDescriptions[0].Description).ToString())
 					}
-
-					@if (!hasLinked)
-					{
-						@Html.ActionLink("View class details", "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
-					}
+						<ul>
+							<li class="classDetailsLink">
+								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
+							</li>
+			@foreach (SectionWithSeats linkedSec in linkedSections)
+			{
+							<li class="classDetailsLink">
+								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber }, null)
+							</li>
+			}
+						</ul>
 					</div>
 					<p class="classNotes">
 						@{
