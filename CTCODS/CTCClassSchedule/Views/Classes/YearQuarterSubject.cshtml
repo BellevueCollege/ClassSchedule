@@ -23,7 +23,14 @@
 	string thisYrq = string.Empty;
 
 	// sort by the markers indicators where we need to being a new block (w/ course title, etc.)
-	IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenByDescending(s => s.IsVariableCredits).ThenBy(s => s.Credits).ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)).ToList();
+	/* TODO: Implement a more configurable sort method.
+	 * OLD SORT CODE: IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenByDescending(s => s.IsVariableCredits).ThenBy(s => s.Credits).ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)).ToList();
+	 */
+	IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber)
+																							.ThenByDescending(s => s.IsVariableCredits)
+																							.ThenBy(s => s.Credits)
+																							.ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber))
+																							.ThenBy(s => s.SectionCode).ToList();
 
 	// Get the navigation list and other quarter information
 	string currentYrq = ViewBag.CurrentYearQuarter.ID;
