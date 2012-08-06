@@ -34,7 +34,7 @@ WARNING:	There is a known issue with using global @helper methods in the App_Cod
 
 @* ====================================================================================================== *@
 
-@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, IEnumerable<string> cmsFootnotes, IEnumerable<string> toIgnore, SectionWithSeats sectionForAutomatedFootnotes = null, string searchTerm = null)
+@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, IEnumerable<string> cmsFootnotes, IEnumerable<string> toIgnore, Section sectionForAutomatedFootnotes = null, string searchTerm = null)
 {
 	bool showPreRequisite = false;
 
@@ -104,7 +104,7 @@ WARNING:	There is a known issue with using global @helper methods in the App_Cod
 	@DisplayFootnotes(hpFootnotes, cmsFootnotes, toIgnore, searchTerm: searchTerm);
 }
 
-@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, string cmsFootnote, IEnumerable<string> toIgnore, SectionWithSeats includedAutomatedFootnotes, string searchTerm = null)
+@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, string cmsFootnote, IEnumerable<string> toIgnore, Section includedAutomatedFootnotes, string searchTerm = null)
 {
 	IList<string> cmsFootnotes = new List<string> { cmsFootnote };
 	@DisplayFootnotes(hpFootnotes, cmsFootnotes, toIgnore, includedAutomatedFootnotes, searchTerm: searchTerm);
@@ -115,7 +115,7 @@ WARNING:	There is a known issue with using global @helper methods in the App_Cod
 	@DisplayFootnotes(hpFootnotes, cmsFootnotes, null, searchTerm: searchTerm);
 }
 
-@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, IEnumerable<string> cmsFootnotes, SectionWithSeats includeAutomatedFootnotes, string searchTerm = null)
+@helper DisplayFootnotes(IEnumerable<string> hpFootnotes, IEnumerable<string> cmsFootnotes, Section includeAutomatedFootnotes, string searchTerm = null)
 {
 	@DisplayFootnotes(hpFootnotes, cmsFootnotes, null, includeAutomatedFootnotes, searchTerm: searchTerm);
 }
