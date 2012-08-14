@@ -16,8 +16,6 @@
 	string courseID = string.Empty;
 	string sectionID = string.Empty;
 	string CourseTitle = string.Empty;
-	decimal credits = 0;
-	bool isVariableCredit = false;
 
 	string FriendlyYRQ = string.Empty;
 	string thisYrq = string.Empty;
@@ -30,6 +28,10 @@
 																							.ThenByDescending(s => s.IsVariableCredits)
 																							.ThenBy(s => s.Credits)
 																							.ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber))
+																							.ThenBy(s => s.IsTelecourse)
+																							.ThenBy(s => s.IsOnline)
+																							.ThenBy(s => s.IsHybrid)
+																							.ThenBy(s => s.IsOnCampus)
 																							.ThenBy(s => s.SectionCode).ToList();
 
 	// Get the navigation list and other quarter information
