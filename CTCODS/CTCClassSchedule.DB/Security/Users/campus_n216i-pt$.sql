@@ -1,5 +1,0 @@
-IF NOT EXISTS (SELECT * FROM master.dbo.syslogins WHERE loginname = N'CAMPUS\n216i-pt$')
-CREATE LOGIN [CAMPUS\n216i-pt$] FROM WINDOWS
-GO
-CREATE USER [campus\n216i-pt$] FOR LOGIN [CAMPUS\n216i-pt$]
-GO
