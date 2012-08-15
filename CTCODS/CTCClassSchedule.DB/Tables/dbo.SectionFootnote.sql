@@ -5,7 +5,7 @@ CREATE TABLE [dbo].[SectionFootnote]
 [LastUpdatedBy] [nchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [LastUpdated] [datetime] NULL,
 [CustomTitle] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[CustomDescription] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[CustomDescription] [varchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 GRANT SELECT ON  [dbo].[SectionFootnote] TO [ClassSchedule_WebUser]
