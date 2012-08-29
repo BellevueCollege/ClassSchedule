@@ -291,10 +291,11 @@ namespace CTCClassSchedule.Controllers
 				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					// BUG: Should this query filter where Abbreviation == URL?
-					// We're not doing this in AllClasses() - 4/27/2012, shawn.south@bellevuecollege.edu
 					IList<vw_ProgramInformation> progInfo = (from s in db.vw_ProgramInformation
-					                                         where s.Abbreviation == s.URL
+// The following line was causing problems at Penninsula College. Since I already felt this
+// line was suspect, I've gone ahead and commented it out. (Note that we're not doing this
+// filter in AllClasses(). - 8/29/2012, shawn.south@bellevuecollege.edu
+//					                                         where s.Abbreviation == s.URL
 					                                         select s).ToList();
 
 					IList<ScheduleCoursePrefix> coursesJoin = (from p in progInfo
@@ -313,8 +314,8 @@ namespace CTCClassSchedule.Controllers
 					if (letter != null)
 					{
 						coursesEnum = (from c in coursesJoin
-						              where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
-						              select c).Distinct();
+						               where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
+						               select c).Distinct();
 					}
 					else
 					{
@@ -428,7 +429,7 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
 		{
 			ICourseID courseID = CourseID.FromString(Subject, ClassNum);
-				// YearQuarter.FromString(YearQuarterID);
+			// YearQuarter.FromString(YearQuarterID);
 
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
@@ -745,7 +746,7 @@ namespace CTCClassSchedule.Controllers
 
 			OfferedItem primary = section.Offered.Where(o => o.IsPrimary).FirstOrDefault();
 			if ((primary.Days.Contains("Sa") || primary.Days.Contains("Su")) &&
-				 !(primary.Days.Contains("M") || primary.Days.Contains("T") || primary.Days.Contains("W") || primary.Days.Contains("Th"))) // Weekend course
+			    !(primary.Days.Contains("M") || primary.Days.Contains("T") || primary.Days.Contains("W") || primary.Days.Contains("Th"))) // Weekend course
 			{
 				tag = "<CLS7>";
 			}
