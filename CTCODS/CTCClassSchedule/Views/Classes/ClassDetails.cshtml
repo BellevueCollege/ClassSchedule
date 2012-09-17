@@ -41,7 +41,7 @@
 	<div id="container" class="nosidebar">
 				<div id="content">
 				@if (course != null)
-		{
+	{
 						<h1 id="pageTitle">
 							<span class="courseID">@(string.Format("{0} {1}", Helpers.SubjectWithCommonCourseFlag(course), course.Number))</span>
 							<span class="courseTitle">@course.Title</span>
@@ -53,49 +53,50 @@
 
 				<div class="aside">
 				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
-								{
+	{
 						<div class="generalInfo">
 										<h2>Department</h2>
 							@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
-												{
+	   {
 												 <a href="@ViewBag.ProgramUrl">
 														@if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
-														{
+			  {
 																@ViewBag.AcademicProgram
-														}
-														else
-														{
+			  }
+			  else
+			  {
 																@ViewBag.ProgramTitle
-														}
+			  }
 												 </a>
-												 }
-												 else {
-														if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
-														{
+	   }
+	   else
+	   {
+		   if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
+		   {
 																@ViewBag.AcademicProgram
-														}
-														else
-														{
+		   }
+		   else
+		   {
 																@ViewBag.ProgramTitle
-														}
-												 }
+		   }
+	   }
 						</div>
-								}
+	}
 
 						@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionTitle))
-			{
+	  {
 							<div class="generalInfo">
 								<h2>Division</h2>
 								@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionURL))
-				{
+		{
 									<a href="@ViewBag.DivisionURL">@ViewBag.DivisionTitle</a>
-				}
-				else
-				{
+		}
+		else
+		{
 									@ViewBag.DivisionTitle
-				}
+		}
 							</div>
-			}
+	  }
 						</div><!-- aside -->
 
 						<div id="class-details">
@@ -103,10 +104,10 @@
                         @* Display any upcoming course title change, if detected *@
 
 			@if (_courses.Count > 1)
-		{
-			Course newCourse = _courses[1];
-			if (newCourse.IsVariableCredits != course.IsVariableCredits || newCourse.Credits != course.Credits || newCourse.Title.Trim() != course.Title.Trim())
-			{
+   {
+	   Course newCourse = _courses[1];
+	   if (newCourse.IsVariableCredits != course.IsVariableCredits || newCourse.Credits != course.Credits || newCourse.Title.Trim() != course.Title.Trim())
+	   {
 			 <div class="upcomingChange">
 				<h3>Class title change starting @newCourse.YearQuarterBegin.FriendlyName</h3>
 				<p>
@@ -114,54 +115,54 @@
 
 				&#8226;
 				@if (newCourse.IsVariableCredits)
-		{
+	{
 							<span class="classCredits">
 								V1-@Html.CreditsValue(newCourse.Credits)
 									<abbr title=" variable credit(s) ">Cr.</abbr>
 							</span>
-		}
-		else
-		{
+	}
+	else
+	{
 							<span class="classCredits">
 								@Html.CreditsValue(newCourse.Credits)
 									<abbr title=" credit(s) ">Cr.</abbr>
 							</span>
-		}
+	}
 				</p>
 			 </div>
-			}
-		}
+	   }
+   }
 
 
 						@{
-			IList<CourseDescription> descriptions = course.Descriptions.ToList();
-			int descriptionsCount = descriptions.Count;
+   IList<CourseDescription> descriptions = course.Descriptions.ToList();
+   int descriptionsCount = descriptions.Count;
 						}
 						@if (descriptionsCount > 0)
-			{
-					if (!string.IsNullOrWhiteSpace(descriptions[0].Description))
-					{
+	  {
+		  if (!string.IsNullOrWhiteSpace(descriptions[0].Description))
+		  {
 								<div id="courseDescription">
 									<h2>Description:</h2>
 									<p>
 										@{
-							string firstDescription = descriptionsCount <= 0 || string.IsNullOrWhiteSpace(descriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : descriptions[0].Description;
+			  string firstDescription = descriptionsCount <= 0 || string.IsNullOrWhiteSpace(descriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : descriptions[0].Description;
 										}
 										@firstDescription
 									</p>
 								</div>
-					}
-			}
+		  }
+	  }
 
 					@if (descriptionsCount > 1)
-		 {
+	 {
 			 <div class="upcomingChange">
 				<h3>New description starting @descriptions[1].YearQuarterBegin.FriendlyName</h3>
 				<p>
 					@(string.IsNullOrWhiteSpace(descriptions[1].Description) ? "* NO DESCRIPTION FOUND*" : descriptions[1].Description)
 				</p>
 			 </div>
-		 }
+	 }
 
 @* ***************************************************************************************************
 		Temporarily removed in order to meet initial public launch. We may want to re-enable this block
@@ -192,17 +193,30 @@
 
 *@
 
-				@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote))
-				{
+				@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote) || _courses[0].Footnotes.Count > 0)
+	{
 					<div id="courseFootnotes">
 						<h2>Details:</h2>
-							 <p>
-									<span id="CMSCourseFootnotes">
-										@Html.Raw(ViewBag.CMSFootnote)
-								</span>
-							</p>
+						<p>
+							@ViewHelpers.DisplayFootnotes(course.Footnotes, ViewBag.CMSFootnote)
+						</p>
 					</div>
+	}
+
+				@* Display upcoming course footnote changes, if detected *@
+				@if (_courses.Count > 1)
+				{
+					if (_courses[1].Footnotes.Count > 0 && !_courses[0].Footnotes.SequenceEqual(_courses[1].Footnotes))
+					{
+						<div class="upcomingChange">
+							<h3>New details starting @_courses[1].YearQuarterBegin.FriendlyName</h3>
+							<p>
+								@ViewHelpers.DisplayFootnotes(_courses[1].Footnotes, ViewBag.CMSFootnote)
+							</p>
+						</div>
+					}
 				}
+
 
 				@if (!string.IsNullOrWhiteSpace(_courseOutcomes) && !_courseOutcomes.StartsWith("Error:"))
 			{
