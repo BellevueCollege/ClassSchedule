@@ -18,6 +18,16 @@ namespace CTCClassSchedule.Common
 {
 	public static class Helpers
 	{
+		/// <summary>
+		/// Useful if a helper method works with a timespan and should default to
+		/// either 12:00am or 23:59pm (start time/end time).
+		/// </summary>
+		private enum DefaultTimeResult
+		{
+			StartTime,
+			EndTime
+		};
+
 		public static MvcHtmlString IncludePageURL(this HtmlHelper htmlHelper, string url)
 		{
 			return MvcHtmlString.Create(new WebClient().DownloadString(url));
@@ -141,58 +151,12 @@ namespace CTCClassSchedule.Common
 			}
 			facets.Add(new ModalityFacet(modality));
 
-			int startHour = 0;
-			int startMinute = 0;
-			int endHour = 23;
-			int endMinute = 59;
 
 			//determine integer values for start/end time hours and minutes
-			if (!String.IsNullOrWhiteSpace(timestart))
-			{
-				//adjust the conversion to integers if the user leaves off a leading 0
-				//(possible by using tab instead of mouseoff on the time selector)
-				if (timestart.IndexOf(':') == 2)
-				{
-					startHour = Convert.ToInt16(timestart.Substring(0, 2));
-					if (timestart.IndexOf(':') != -1)
-					{
-						startMinute = Convert.ToInt16(timestart.Substring(3, 2));
-					}
-				}
-				else
-				{
-					startHour = Convert.ToInt16(timestart.Substring(0, 1));
-					if (timestart.IndexOf(':') != -1)
-					{
-						startMinute = Convert.ToInt16(timestart.Substring(2, 2));
-					}
-				}
-			}
-
-			//adjust the conversion to integers if the user leaves off a leading 0
-			//(possible by using tab instead of mouseoff on the time selector)
-			if (!String.IsNullOrWhiteSpace(timeend))
-			{
-				if (timeend.IndexOf(':') == 2)
-				{
-					endHour = Convert.ToInt16(timeend.Substring(0, 2));
-					if (timeend.IndexOf(':') != -1)
-					{
-						endMinute = Convert.ToInt16(timeend.Substring(3, 2));
-					}
-				}
-				else
-				{
-					endHour = Convert.ToInt16(timeend.Substring(0, 1));
-					if (timeend.IndexOf(':') != -1)
-					{
-						endMinute = Convert.ToInt16(timeend.Substring(2, 2));
-					}
-				}
-
-
-
-			}
+			int startHour, startMinute;
+			int endHour, endMinute;
+			getHourAndMinuteFromString(timestart, out startHour, out startMinute);
+			getHourAndMinuteFromString(timeend, out endHour, out endMinute, DefaultTimeResult.EndTime);
 
 			//add the time facet
 			facets.Add(new TimeFacet(new TimeSpan(startHour, startMinute, 0), new TimeSpan(endHour, endMinute, 0)));
@@ -865,6 +829,57 @@ namespace CTCClassSchedule.Common
 				text = string.Format(text, args);
 			}
 			return Regex.Replace(text, searchTerm, @"<em class='keyword'>$&</em>", RegexOptions.IgnoreCase);
+		}
+
+		/// <summary>
+		/// Takes a string that represents a time (ie "6:45pm") and outputs the parsed hour and minute integers
+		/// based on a 24 hour clock. If a time cannot be parsed, the output defaults to either 12am or 11:59pm
+		/// depending on the time default parameter passed
+		/// </summary>
+		/// <param name="time">String representing a time value</param>
+		/// <param name="hour">Reference to an integer storage for the parsed hour value</param>
+		/// <param name="minute">Reference to an integer storage for the parsed minute value</param>
+		/// <param name="defaultResultMode">Flag which determines the default result values if a time values were unable to be parsed</param>
+		static private void getHourAndMinuteFromString(string time, out int hour, out int minute, DefaultTimeResult defaultResultMode = DefaultTimeResult.StartTime)
+		{
+			// In case the method is unable to convert a time, default to either a start/end time
+			switch (defaultResultMode)
+			{
+				case DefaultTimeResult.EndTime:
+					hour = 23;
+					minute = 59;
+					break;
+				default:
+					hour = 0;
+					minute = 0;
+					break;
+			}
+
+			// Determine integer values for time hours and minutes
+			if (!String.IsNullOrWhiteSpace(time))
+			{
+				string timeTrimmed = time.Trim();
+				bool period = (timeTrimmed.Length > 2 ? timeTrimmed.Substring(timeTrimmed.Length - 2) : timeTrimmed).Equals("PM", StringComparison.OrdinalIgnoreCase);
+
+				// Adjust the conversion to integers if the user leaves off a leading 0
+				// (possible by using tab instead of mouseoff on the time selector)
+				if (time.IndexOf(':') == 2)
+				{
+					hour = Convert.ToInt16(time.Substring(0, 2)) + (period ? 12 : 0);
+					if (time.IndexOf(':') != -1)
+					{
+						minute = Convert.ToInt16(time.Substring(3, 2));
+					}
+				}
+				else
+				{
+					hour = Convert.ToInt16(time.Substring(0, 1)) + (period ? 12 : 0);
+					if (time.IndexOf(':') != -1)
+					{
+						minute = Convert.ToInt16(time.Substring(2, 2));
+					}
+				}
+			}
 		}
 	}
 }
