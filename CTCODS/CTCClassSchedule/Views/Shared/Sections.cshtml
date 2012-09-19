@@ -91,7 +91,7 @@
 	 {
 				// course books link
 				<li class="bookstoreinfo">
-					<a href='@String.Concat("http://bcc.collegestoreonline.com/ePOS?form=schedule.html&term=", Model[0].Yrq.FriendlyName, "&department.0=", Model[0].CourseSubject, "&course.0=", Model[0].CourseNumber, "&section.0=", Model[0].ID.ItemNumber)' target="_blank">
+					<a href='@Helpers.getBookstoreBooksLink(Model)'>
 						<img src="@Url.Content("~/Content/images/books.gif")" alt="Required books/supplies" />
 					</a>
 				</li>

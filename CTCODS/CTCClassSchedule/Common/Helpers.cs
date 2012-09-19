@@ -13,6 +13,7 @@ using CTCClassSchedule.Models;
 using MvcMiniProfiler;
 using Ctc.Web.Security;
 using System.Configuration;
+using System.Text;
 
 namespace CTCClassSchedule.Common
 {
@@ -119,6 +120,24 @@ namespace CTCClassSchedule.Common
 			returnString = "http://bellevuecollege.edu/directory/PersonDetails.aspx?PersonID=" + en.Encrypt(SID,"!#$a54?5");
 			return returnString;
 
+		}
+
+		// TODO: Jeremy, another optional/BCC specific way of getting data - find another way?
+		public static string getBookstoreBooksLink(List<SectionWithSeats> linkedSections)
+		{
+			StringBuilder resultURL = new StringBuilder("http://bellevue.verbacompare.com/comparison?id=");
+			for (int i = 0; i < linkedSections.Count; i++)
+			{
+				SectionWithSeats sec = linkedSections[i];
+				resultURL.AppendFormat("{0}{1}__{2}__{3}{4}__{5}", (i > 0? "%2C" : string.Empty),
+																	getYRQValueForBookstoreURL(sec.Yrq),
+																	sec.CourseSubject,
+																	sec.CourseNumber,
+																	(sec.IsCommonCourse ? "%26" : string.Empty),
+																	sec.ID.ItemNumber);
+			}
+
+			return resultURL.ToString();
 		}
 
 		/// <summary>
@@ -880,6 +899,36 @@ namespace CTCClassSchedule.Common
 					}
 				}
 			}
+		}
+
+		static private string getYRQValueForBookstoreURL(YearQuarter yrq)
+		{
+			string quarter = string.Empty;
+			string year = string.Empty;
+
+			if (yrq != null)
+			{
+				quarter = yrq.FriendlyName.ToUpper();
+				year = quarter.Substring(quarter.Length - 2);
+				if (quarter.Contains("FALL"))
+				{
+					quarter = "F";
+				}
+				else if (quarter.Contains("WINTER"))
+				{
+					quarter = "W";
+				}
+				else if (quarter.Contains("SPRING"))
+				{
+					quarter = "S";
+				}
+				else // Summer
+				{
+					quarter = "X";
+				}
+			}
+
+			return String.Concat(quarter, year);
 		}
 	}
 }
