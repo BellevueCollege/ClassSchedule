@@ -153,10 +153,11 @@
 					</p>
 				</div> <!-- classInfo -->
 
+				<ul class='course-block @(yrq.ID.CompareTo(currentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
+					@{
 						foreach (SectionWithSeats sec in sectionBlock)
 						{
-							<ul class='course-block @(yrq.ID.CompareTo(currentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
-								@{
+
 							//bothSections includes a master and its subordinate linked section(s).
 							IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
 
@@ -168,11 +169,9 @@
 							// NOTE: We must pass the current ViewData object to RenderPartial here.
 							// If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
 							Html.RenderPartial("Sections", multipleSections, ViewData);
-
-								}
-							</ul>
 						}
-
+					}
+				 </ul>
 					 } @* if (!firstSection.IsLinked) *@
 
 				} @* if (firstSection != null) *@

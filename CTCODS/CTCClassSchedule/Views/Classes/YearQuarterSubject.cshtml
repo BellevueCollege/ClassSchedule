@@ -227,26 +227,27 @@
 						@ViewHelpers.DisplayFootnotes(commonFootnotes, firstSection.CourseFootnotes)
 					</p>
 				</div> <!--classInfo -->
+	<ul class='course-block @(thisYrq.CompareTo(currentYrq) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
+		@{
+			 foreach (SectionWithSeats sec in sectionBlock)
+			 {
 
-	 foreach (SectionWithSeats sec in sectionBlock)
-	 {
-				<ul class='course-block @(thisYrq.CompareTo(currentYrq) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
-					@{
-		 //bothSections includes a master and its subordinate linked section(s).
-		 IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
+				 //bothSections includes a master and its subordinate linked section(s).
+				 IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
 
-		 if (linkedSections != null && hasLinked)
-		 {
-			 multipleSections = multipleSections.Union(linkedSections).ToList();
+				 if (linkedSections != null && hasLinked)
+				 {
+					 multipleSections = multipleSections.Union(linkedSections).ToList();
+				 }
+
+				 // NOTE: We must pass the current ViewData object to RenderPartial here.
+				 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+				 Html.RenderPartial("Sections", multipleSections, ViewData);
+
+			 }
+
 		 }
-
-		 // NOTE: We must pass the current ViewData object to RenderPartial here.
-		 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-		 Html.RenderPartial("Sections", multipleSections, ViewData);
-
-					}
-				</ul>
-	 }
+	 </ul>
 					 } @* !sec.IsLinked *@
 				 }
 			 }
