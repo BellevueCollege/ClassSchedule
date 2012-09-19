@@ -57,7 +57,6 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		/// <returns>An Adobe InDesign formatted text file with all course data. File is
 		/// returned as an HTTP response.</returns>
-
 		public void Export(String YearQuarterID)
 		{
 			if (HttpContext.User.Identity.IsAuthenticated == true)
