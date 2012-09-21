@@ -193,6 +193,7 @@
 
 *@
 
+				@* Show footnotes, and upcoming changes to footnotes. Save this for a future release
 				@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote) || _courses[0].Footnotes.Count > 0)
 	{
 					<div id="courseFootnotes">
@@ -203,7 +204,6 @@
 					</div>
 	}
 
-				@* Display upcoming course footnote changes, if detected *@
 				@if (_courses.Count > 1)
 				{
 					if (_courses[1].Footnotes.Count > 0 && !_courses[0].Footnotes.SequenceEqual(_courses[1].Footnotes))
@@ -216,7 +216,19 @@
 						</div>
 					}
 				}
+				*@
 
+				@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote))
+				{
+					<div id="courseFootnotes">
+						<h2>Details:</h2>
+							 <p>
+									<span id="CMSCourseFootnotes">
+										@Html.Raw(ViewBag.CMSFootnote)
+								</span>
+							</p>
+					</div>
+				}
 
 				@if (!string.IsNullOrWhiteSpace(_courseOutcomes) && !_courseOutcomes.StartsWith("Error:"))
 			{
