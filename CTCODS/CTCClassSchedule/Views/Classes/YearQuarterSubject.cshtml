@@ -22,8 +22,10 @@
 
 	// sort by the markers indicators where we need to being a new block (w/ course title, etc.)
 	/* TODO: Implement a more configurable sort method.
-	 * OLD SORT CODE: IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenByDescending(s => s.IsVariableCredits).ThenBy(s => s.Credits).ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)).ToList();
+	 * OLD SORT CODE:
+	 * IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenByDescending(s => s.IsVariableCredits).ThenBy(s => s.Credits).ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)).ToList();
 	 */
+
 	IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber)
 																							.ThenByDescending(s => s.IsVariableCredits)
 																							.ThenBy(s => s.Credits)
@@ -135,7 +137,8 @@
 																 s.CourseID == firstSection.CourseID &&
 																 s.CourseTitle == firstSection.CourseTitle &&
 																 s.Credits == firstSection.Credits &&
-																 s.IsVariableCredits == firstSection.IsVariableCredits);
+																 s.IsVariableCredits == firstSection.IsVariableCredits &&
+																 s.LinkedTo == firstSection.LinkedTo);
 				 processedCount += sectionBlock.Count();
 
 				if (firstSection != null)
