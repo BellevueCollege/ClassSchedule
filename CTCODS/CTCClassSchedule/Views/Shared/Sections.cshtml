@@ -3,6 +3,7 @@
 @using CTCClassSchedule.Common
 @using Microsoft.Security.Application
 @using MvcMiniProfiler;
+@using System.Text.RegularExpressions;
 <!-- Would this perform better as an IEnumerable, rather than converting to List when passing the model from YearQuarterSubject or Search/Index? -->
 @model List<SectionWithSeats>
 @{
@@ -135,15 +136,24 @@
 														new { @class = "edit_button" })
 		}
 		</li>
-		<li class="section-notes"><span class="descriptor">Notes: </span>
+		@* Don't add a footnote DIV if there are no footnotes
+			 Code based on: http://stackoverflow.com/questions/785715/how-can-i-strip-html-tags-from-a-string-in-asp-net
+		*@
+		@{
+			HelperResult footnotes = ViewHelpers.DisplayFootnotes(Model[0].Footnotes, Model[0].SectionFootnotes, _courseFootnotes, Model[0]);
+			if (!String.IsNullOrWhiteSpace(Regex.Replace(Regex.Replace(footnotes.ToString(), "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", String.Empty)))
+			{
+			<li class="section-notes"><span class="descriptor">Notes: </span>
 				<ul>
 					<li>
 						<span class="label">
-								@ViewHelpers.DisplayFootnotes(Model[0].Footnotes, Model[0].SectionFootnotes, _courseFootnotes, Model[0])
+							@footnotes
 						</span>
 					</li>
 
 				</ul>
 			</li>
+			}
+		}
 	</ul>
 </li>
