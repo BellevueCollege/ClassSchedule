@@ -127,25 +127,31 @@
 			 {
 				 IEnumerable<SectionWithSeats> remainingSections = orderedModel.Skip(processedCount);
 
-@*
+				 @*
 				 TODO: do we have to worry about the first section being IsLinked?
 				 *@
 				 SectionWithSeats firstSection = remainingSections.First();
+				 var linkedToFirstSec = orderedModel.Where(s => s.IsLinked && s.LinkedTo == firstSection.ID.ItemNumber).Select(s => new { s.CourseID, s.CourseTitle, s.Credits, s.IsVariableCredits });
 
 				 IEnumerable<SectionWithSeats> sectionBlock = remainingSections.TakeWhile(s =>
 																 s.CourseID == firstSection.CourseID &&
 																 s.CourseTitle == firstSection.CourseTitle &&
 																 s.Credits == firstSection.Credits &&
 																 s.IsVariableCredits == firstSection.IsVariableCredits &&
-																 s.LinkedTo == firstSection.LinkedTo);
+																 (s.LinkedTo == firstSection.LinkedTo ||
+																	 (s.IsLinked == false &&
+																		orderedModel.Where(l => l.IsLinked && l.LinkedTo == s.ID.ItemNumber)
+																								.Select(l => new { l.CourseID, l.CourseTitle, l.Credits, l.IsVariableCredits })
+																								.SequenceEqual(linkedToFirstSec))
+																 ));
 
-				 processedCount += sectionBlock.Count();
+				processedCount += sectionBlock.Count();
 
 				if (firstSection != null)
 				 {
 					 if (!firstSection.IsLinked)
 					 {
-@*
+							@*
 							TODO: *******************************************************************************
 							Is this valid? Can we assume only the first Section's ItemNumber will give us all the linkages?
 							*************************************************************************************
