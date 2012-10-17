@@ -162,31 +162,6 @@
 						 route["Subject"] = Helpers.SubjectWithCommonCourseFlag(firstSection);
 						 route["ClassNum"] = firstSection.CourseNumber;
 
-				<div class="classInfo">
-						@if (Helpers.isAdmin(Context))
-							{
-										@Ajax.ActionLink("Edit",
-																		"ClassEdit",
-																		"Api",
-																		new
-																		{
-																			CourseNumber = firstSection.CourseNumber,
-																			Subject = firstSection.CourseSubject,
-																			IsCommonCourse = firstSection.IsCommonCourse,
-																		},
-																		new AjaxOptions
-																		{
-																			UpdateTargetId = "edit-class",
-																			HttpMethod = "GET",
-																			InsertionMode = InsertionMode.Replace,
-																			OnBegin = "$('#edit-class').dialog('open');",
-																			OnComplete = "spinner.stop();",
-																		},
-																		new { @class = "edit_button" })
-
-							}
-				</div>
-
 				<h2 class="classHeading">
 			 @if (hasLinked)
 			 {
@@ -209,6 +184,28 @@
 		 }
 				</h2> @* classHeading *@
 				<div class="classInfo">
+					@if (Helpers.isAdmin(Context))
+								{
+											@Ajax.ActionLink("Edit",
+																			"ClassEdit",
+																			"Api",
+																			new
+																			{
+																				CourseNumber = firstSection.CourseNumber,
+																				Subject = firstSection.CourseSubject,
+																				IsCommonCourse = firstSection.IsCommonCourse,
+																			},
+																			new AjaxOptions
+																			{
+																				UpdateTargetId = "edit-class",
+																				HttpMethod = "GET",
+																				InsertionMode = InsertionMode.Replace,
+																				OnBegin = "$('#edit-class').dialog('open');",
+																				OnComplete = "spinner.stop();",
+																			},
+																			new { @class = "edit_button" })
+
+								}
 					<div class="classDetails">
 						@if (!string.IsNullOrWhiteSpace(firstSection.CustomTitle))
 			{
