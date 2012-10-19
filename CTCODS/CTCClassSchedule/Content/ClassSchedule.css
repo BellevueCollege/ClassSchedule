@@ -1525,15 +1525,16 @@ div.subjects-letter h2
 }
 
 
-.edit_button
-{
-	float: right;
-	width: 53px;
-	height: 20px;
-	margin: 0px 5px;
-	padding-left: 20px;
-	background: transparent url(images/edit_button.png) top left no-repeat;
+.edit_button {
+    background: url("images/edit_button.png") no-repeat scroll left top transparent;
+    float: right;
+    height: 20px;
+    margin: 0;
+    margin: 0 0 0 5px;
+    padding-left: 20px;
+    width: 53px;
 }
+
 
 a.edit_button
 {
