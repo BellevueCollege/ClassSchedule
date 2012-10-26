@@ -3,13 +3,13 @@
 @using CTCClassSchedule.Controllers
 @using MvcMiniProfiler;
 @using Ctc.Ods.Types
-@model IList<CTCClassSchedule.SectionWithSeats>
+@model IList<CTCClassSchedule.SectionsBlock>
 @{
 	MiniProfiler _profiler = MiniProfiler.Current;
 
 	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
 	_routeValues["YearQuarterID"] = "All";
-	_routeValues["Subject"] = Model.Count > 0 ? Model.First().CourseSubject.Trim() : null;
+	_routeValues["Subject"] = Model.Count() > 0 ? Model.First().Sections.First().CourseSubject.Trim() : null;
 	RouteValueDictionary route = new RouteValueDictionary(_routeValues);
 
 
@@ -19,21 +19,6 @@
 
 	string FriendlyYRQ = string.Empty;
 	string thisYrq = string.Empty;
-
-	// sort by the markers indicators where we need to being a new block (w/ course title, etc.)
-	/* TODO: Implement a more configurable sort method.
-	 * OLD SORT CODE:
-	 * IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber).ThenByDescending(s => s.IsVariableCredits).ThenBy(s => s.Credits).ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)).ToList();
-	 */
-	IList<SectionWithSeats> orderedModel = Model.OrderBy(s => s.CourseNumber)
-																							.ThenByDescending(s => s.IsVariableCredits)
-																							.ThenBy(s => s.Credits)
-																							.ThenBy(s => Model.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber))
-																							.ThenBy(s => s.IsTelecourse)
-																							.ThenBy(s => s.IsOnline)
-																							.ThenBy(s => s.IsHybrid)
-																							.ThenBy(s => s.IsOnCampus)
-																							.ThenBy(s => s.SectionCode).ToList();
 
 	// Get the navigation list and other quarter information
 	string currentYrq = ViewBag.CurrentYearQuarter.ID;
@@ -92,17 +77,17 @@
 				<p id="programLink">
 					<strong>Need more info?</strong> <a href="@ViewBag.ProgramUrl">Visit the
 						@if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
-			{
+						{
 							@ViewBag.AcademicProgram
-			}
-			else if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
-			{
+						}
+						else if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
+						{
 							@ViewBag.ProgramTitle
-			}
-			else
-			{
+						}
+						else
+						{
 							<text>Program</text>
-			}
+						}
 						website</a>
 				</p>
 		 }
@@ -119,141 +104,108 @@
 
 		 using (_profiler.Step("Rendering Sections by Course (outer loop)"))
 		 {
-			 IEnumerable<SectionWithSeats> linkedSections;
-			 bool hasLinked;
-			 int processedCount = 0;
-
-			 while (processedCount < orderedModel.Count)
+			 foreach (SectionsBlock block in Model)
 			 {
-				 IEnumerable<SectionWithSeats> remainingSections = orderedModel.Skip(processedCount);
+				 SectionWithSeats firstSection = block.Sections.First();
 
-				 @*
-				 TODO: do we have to worry about the first section being IsLinked?
-				 *@
-				 SectionWithSeats firstSection = remainingSections.First();
-				 var linkedToFirstSec = orderedModel.Where(s => s.IsLinked && s.LinkedTo == firstSection.ID.ItemNumber).Select(s => new { s.CourseID, s.CourseTitle, s.Credits, s.IsVariableCredits });
-
-				 IEnumerable<SectionWithSeats> sectionBlock = remainingSections.TakeWhile(s =>
-																 s.CourseID == firstSection.CourseID &&
-																 s.CourseTitle == firstSection.CourseTitle &&
-																 s.Credits == firstSection.Credits &&
-																 s.IsVariableCredits == firstSection.IsVariableCredits &&
-																 (s.LinkedTo == firstSection.LinkedTo ||
-																	 (s.IsLinked == false &&
-																		orderedModel.Where(l => l.IsLinked && l.LinkedTo == s.ID.ItemNumber)
-																								.Select(l => new { l.CourseID, l.CourseTitle, l.Credits, l.IsVariableCredits })
-																								.SequenceEqual(linkedToFirstSec))
-																 ));
-
-				processedCount += sectionBlock.Count();
-
-				if (firstSection != null)
+				 if (firstSection != null)
 				 {
 					 if (!firstSection.IsLinked)
 					 {
-							@*
-							TODO: *******************************************************************************
-							Is this valid? Can we assume only the first Section's ItemNumber will give us all the linkages?
-							*************************************************************************************
-							*@
-						 linkedSections = orderedModel.Where(s => s.IsLinked && s.Yrq.ID == firstSection.Yrq.ID && s.LinkedTo.Trim() == firstSection.ID.ItemNumber);
-						 hasLinked = linkedSections.Count() > 0;
+						 bool hasLinked = block.LinkedSections.Count() > 0;
 
 						 route["Subject"] = Helpers.SubjectWithCommonCourseFlag(firstSection);
 						 route["ClassNum"] = firstSection.CourseNumber;
 
 				<h2 class="classHeading">
-			 @if (hasLinked)
-			 {
-				  <span class="combinationClass">Combination class:</span><br />
-			 }
+					@if (hasLinked)
+					{
+						<span class="combinationClass">Combination class:</span><br />
+					}
 					<a href="@Url.Action("ClassDetails", "Classes", route)">
 						@Html.SectionCourseHeading(firstSection)
 						@ViewHelpers.DisplayCredits(firstSection)
 					</a>
-					@if (linkedSections != null && hasLinked)
-		 {
-			 foreach (SectionWithSeats linkedSec in linkedSections)
-			 {
+					@if (block.LinkedSections != null && hasLinked)
+					{
+						 foreach (SectionWithSeats linkedSec in block.LinkedSections)
+						 {
 						<br />
 						<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
 							@Html.SectionCourseHeading(linkedSec)
 							@ViewHelpers.DisplayCredits(linkedSec)
 						</a>
-			 }
-		 }
+							}
+					}
 				</h2> @* classHeading *@
 				<div class="classInfo">
 					@if (Helpers.isAdmin(Context))
-								{
-											@Ajax.ActionLink("Edit",
-																			"ClassEdit",
-																			"Api",
-																			new
-																			{
-																				CourseNumber = firstSection.CourseNumber,
-																				Subject = firstSection.CourseSubject,
-																				IsCommonCourse = firstSection.IsCommonCourse,
-																			},
-																			new AjaxOptions
-																			{
-																				UpdateTargetId = "edit-class",
-																				HttpMethod = "GET",
-																				InsertionMode = InsertionMode.Replace,
-																				OnBegin = "$('#edit-class').dialog('open');",
-																				OnComplete = "spinner.stop();",
-																			},
-																			new { @class = "edit_button" })
+					{
+							 @Ajax.ActionLink("Edit",
+																"ClassEdit",
+																"Api",
+																new
+																{
+																	CourseNumber = firstSection.CourseNumber,
+																	Subject = firstSection.CourseSubject,
+																	IsCommonCourse = firstSection.IsCommonCourse,
+																},
+																new AjaxOptions
+																{
+																	UpdateTargetId = "edit-class",
+																	HttpMethod = "GET",
+																	InsertionMode = InsertionMode.Replace,
+																	OnBegin = "$('#edit-class').dialog('open');",
+																	OnComplete = "spinner.stop();",
+																},
+																new { @class = "edit_button" })
 
-								}
+					}
 					<div class="classDetails">
 						@if (!string.IsNullOrWhiteSpace(firstSection.CustomTitle))
-			{
-				// NOTE: do not display HP description from this page
-						@Html.Raw(firstSection.CustomDescription)
-			}
+						{
+							// NOTE: do not display HP description from this page
+							@Html.Raw(firstSection.CustomDescription)
+						}
 						<ul>
 							<li class="classDetailsLink">
 								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", route, null)
 							</li>
-			@foreach (SectionWithSeats linkedSec in linkedSections)
-			{
-							<li class="classDetailsLink">
-								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber }, null)
-							</li>
-			}
+						@foreach (SectionWithSeats linkedSec in block.LinkedSections)
+						{
+								<li class="classDetailsLink">
+									@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber }, null)
+								</li>
+						}
 						</ul>
 					</div>
 					<p class="classNotes">
-		@{
-	 IList<string> commonFootnotes = Helpers.ExtractCommonFootnotes(sectionBlock).ToList();
-	 // save footnotes to pass to sub-view
-	 ViewData["CourseFootnotes"] = commonFootnotes;
-		}
-						@ViewHelpers.DisplayFootnotes(commonFootnotes, firstSection.CourseFootnotes)
+						@{
+								// save footnotes to pass to sub-view
+								ViewData["CourseFootnotes"] = block.CommonFootnotes;
+						}
+						@ViewHelpers.DisplayFootnotes(block.CommonFootnotes, firstSection.CourseFootnotes)
 					</p>
 				</div> <!--classInfo -->
-	<ul class='course-block @(thisYrq.CompareTo(currentYrq) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
-		@{
-			 foreach (SectionWithSeats sec in sectionBlock)
-			 {
+				<ul class='course-block @(thisYrq.CompareTo(currentYrq) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
+					@{
+						 foreach (SectionWithSeats sec in block.Sections)
+						 {
 
-				 //bothSections includes a master and its subordinate linked section(s).
-				 IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
+							 //bothSections includes a master and its subordinate linked section(s).
+							 IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
 
-				 if (linkedSections != null && hasLinked)
-				 {
-					 multipleSections = multipleSections.Union(linkedSections).ToList();
-				 }
+							 if (block.LinkedSections != null && hasLinked)
+							 {
+								 multipleSections = multipleSections.Union(block.LinkedSections).ToList();
+							 }
 
-				 // NOTE: We must pass the current ViewData object to RenderPartial here.
-				 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-				 Html.RenderPartial("Sections", multipleSections, ViewData);
-
-			 }
-
-		 }
-	 </ul>
+							 // NOTE: We must pass the current ViewData object to RenderPartial here.
+							 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+							 Html.RenderPartial("Sections", multipleSections, ViewData);
+						 }
+					}
+				</ul>
 					 } @* !sec.IsLinked *@
 				 }
 			 }
@@ -269,8 +221,6 @@
 	<!-- container -->
 </div>
 <!-- #scheduleMain -->
-
-
 @section PageScripts
 {
 	<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
@@ -291,16 +241,13 @@
 			width: 600
 		});
 
-
 		$("span.ui-icon-closethick").click(function () {
 			showThrobber();
 			window.location.href = $(location).attr('href');
 		});
 
-
-
 			@if (Helpers.isEditor(Context))
-	 {
+			{
 
 				<text>
 				$('li.section-listing').hover(
@@ -313,11 +260,11 @@
 						$(this).removeClass('section-listing-edit edit-hover');
 				});
 				</text>
-	 }
+			}
 
 
 			@if (Helpers.isAdmin(Context))
-	 {
+			{
 				<text>
 				$('.classInfo').hover(
 					function () {
@@ -329,7 +276,7 @@
 						$(this).removeClass('edit-hover classInfo-edit');
 				});
 				</text>
-	 }
+			}
 
 	});
 	</script>

@@ -57,6 +57,7 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		/// <returns>An Adobe InDesign formatted text file with all course data. File is
 		/// returned as an HTTP response.</returns>
+		[OutputCache(CacheProfile = "AllClassesCacheTime")] // Caches for 6 hours
 		public void Export(String YearQuarterID)
 		{
 			if (HttpContext.User.Identity.IsAuthenticated == true)
@@ -267,7 +268,6 @@ namespace CTCClassSchedule.Controllers
 		}
 
 
-
 		/// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/
 		/// </summary>
@@ -380,11 +380,12 @@ namespace CTCClassSchedule.Controllers
 						sectionsEnum = Helpers.GetSectionsWithSeats(yrq.ID, sections, db);
 					}
 
+					IList<SectionsBlock> courseBlocks = groupSectionsIntoBlocks(sectionsEnum);
 					if (format == "json")
 					{
 						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-						return Json(sectionsEnum, JsonRequestBehavior.AllowGet);
+						return Json(courseBlocks, JsonRequestBehavior.AllowGet);
 					}
 
 					// set up all the ancillary data we'll need to display the View
@@ -415,7 +416,7 @@ namespace CTCClassSchedule.Controllers
 					routeValues.Add("YearQuarterID", YearQuarter);
 					ViewBag.RouteValues = routeValues;
 
-					return View(sectionsEnum);
+					return View(courseBlocks);
 				}
 			}
 		}
@@ -438,7 +439,7 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.QuarterNavMenu = yrqRange;
 
 				IList<Course> courses;
-				using (_profiler.Step("ODSAPI::GetSections()"))
+				using (_profiler.Step("ODSAPI::GetCourses()"))
 				{
 					courses = repository.GetCourses(courseID);
 				}
@@ -448,7 +449,7 @@ namespace CTCClassSchedule.Controllers
 					ICourseID realCourseID = CourseID.FromString(courses.First().CourseID);
 					realCourseID.IsCommonCourse = courses.First().IsCommonCourse;
 
-					using (_profiler.Step("Getting Section counts (per YRQ)"))
+					using (_profiler.Step("Getting Course counts (per YRQ)"))
 					{
 						// Identify which, if any, of the current range of quarters has Sections for this Course
 						IList<YearQuarter> quartersOffered = new List<YearQuarter>(4);
@@ -556,33 +557,73 @@ namespace CTCClassSchedule.Controllers
 
 		#region helper methods
 		/// <summary>
-		/// Takes a section and StringBuilder and appends the section title, and HP footnotes
-		/// in an Adobe InDesign format so that the data can be added to a file. The file is useful
-		/// when printing the paper version of the class schedule.
+		/// Groups a list of Sections by course, into descriptive SectionBlocks
 		/// </summary>
-		/// <param name="text">The StringBuilder that the data should be added to.</param>
-		/// <param name="section">The SectionWithSeats object whose data should be recorded.</param>
-		private static void buildSectionExportText(StringBuilder text, SectionWithSeats section)
+		/// <param name="sections">List of sections to group</param>
+		/// <returns>LIst of SectionBlock objects which describe the block of sections</returns>
+		private IList<SectionsBlock> groupSectionsIntoBlocks(IList<SectionWithSeats> sections)
 		{
-			string creditsText;
-			string line;
+			IList<SectionsBlock> results = new List<SectionsBlock>();
 
-			creditsText = section.Credits.ToString();
-			if (section.Credits == Math.Floor(section.Credits)) { creditsText = creditsText.Remove(creditsText.IndexOf('.')); }
-			creditsText = String.Concat(section.IsVariableCredits ? "V 1-" : string.Empty, creditsText, " CR");
-
-			// Section title
-			text.AppendLine();
-			line = String.Concat("<CLS2>", section.CourseSubject, section.IsCommonCourse ? "&" : string.Empty, " ", section.CourseNumber, "\t", section.CourseTitle, " [-] ", creditsText);
-			text.AppendLine(line);
-
-
-			// Add Course and HP footnotes
-			if (section.Footnotes.Count() > 0)
+			// sort by the markers indicators where we need to being a new block (w/ course title, etc.)
+			/* TODO: Implement a more configurable sort method. */
+			using (_profiler.Step("Sorting sections in preparation for grouping and linking"))
 			{
-				text.AppendLine(String.Concat("<CLS3>", section.CourseFootnotes, String.IsNullOrEmpty(section.CourseFootnotes) ? string.Empty : " ", string.Join(" ", section.Footnotes)));
+				sections = sections.OrderBy(s => s.CourseNumber)
+													.ThenByDescending(s => s.IsVariableCredits)
+													.ThenBy(s => s.Credits)
+													.ThenBy(s => sections.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber))
+													.ThenBy(s => s.IsTelecourse)
+													.ThenBy(s => s.IsOnline)
+													.ThenBy(s => s.IsHybrid)
+													.ThenBy(s => s.IsOnCampus)
+													.ThenBy(s => s.SectionCode).ToList();
 			}
 
+			// Group all the sections into course blocks and determine which sections linked
+			using (_profiler.Step("Grouping/linking by course"))
+			{
+				int processedCount = 0;
+				while (processedCount < sections.Count)
+				{
+					SectionsBlock courseBlock = new SectionsBlock();
+					courseBlock.LinkedSections = new List<SectionWithSeats>();
+
+					// TODO: do we have to worry about the first section being IsLinked?
+					IEnumerable<SectionWithSeats> remainingSections = sections.Skip(processedCount);
+					SectionWithSeats firstSection = remainingSections.First();
+
+					var linkedToFirstSec = sections.Where(s => s.IsLinked && s.LinkedTo == firstSection.ID.ItemNumber).Select(s => new { s.CourseID, s.CourseTitle, s.Credits, s.IsVariableCredits });
+					courseBlock.Sections = remainingSections.TakeWhile(s =>
+																										s.CourseID == firstSection.CourseID &&
+																										s.CourseTitle == firstSection.CourseTitle &&
+																										s.Credits == firstSection.Credits &&
+																										s.IsVariableCredits == firstSection.IsVariableCredits &&
+																										(s.LinkedTo == firstSection.LinkedTo ||
+																											(s.IsLinked == false &&
+																											sections.Where(l => l.IsLinked && l.LinkedTo == s.ID.ItemNumber)
+																															.Select(l => new { l.CourseID, l.CourseTitle, l.Credits, l.IsVariableCredits })
+																															.SequenceEqual(linkedToFirstSec))
+																										));
+
+
+					/*TODO: *******************************************************************************
+					Is this valid? Can we assume only the first Section's ItemNumber will give us all the linkages?
+					**************************************************************************************/
+					if (!firstSection.IsLinked)
+					{
+						courseBlock.LinkedSections = sections.Where(s => s.IsLinked && s.Yrq.ID == firstSection.Yrq.ID && s.LinkedTo.Trim() == firstSection.ID.ItemNumber);
+					}
+
+					// Get a list of common footnotes shared with every section in the block
+					courseBlock.CommonFootnotes = Helpers.ExtractCommonFootnotes(courseBlock.Sections);
+
+					processedCount += courseBlock.Sections.Count();
+					results.Add(courseBlock);
+				}
+			}
+
+			return results;
 		}
 
 		/// <summary>
@@ -623,6 +664,36 @@ namespace CTCClassSchedule.Controllers
 				}
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// Takes a section and StringBuilder and appends the section title, and HP footnotes
+		/// in an Adobe InDesign format so that the data can be added to a file. The file is useful
+		/// when printing the paper version of the class schedule.
+		/// </summary>
+		/// <param name="text">The StringBuilder that the data should be added to.</param>
+		/// <param name="section">The SectionWithSeats object whose data should be recorded.</param>
+		private static void buildSectionExportText(StringBuilder text, SectionWithSeats section)
+		{
+			string creditsText;
+			string line;
+
+			creditsText = section.Credits.ToString();
+			if (section.Credits == Math.Floor(section.Credits)) { creditsText = creditsText.Remove(creditsText.IndexOf('.')); }
+			creditsText = String.Concat(section.IsVariableCredits ? "V 1-" : string.Empty, creditsText, " CR");
+
+			// Section title
+			text.AppendLine();
+			line = String.Concat("<CLS2>", section.CourseSubject, section.IsCommonCourse ? "&" : string.Empty, " ", section.CourseNumber, "\t", section.CourseTitle, " [-] ", creditsText);
+			text.AppendLine(line);
+
+
+			// Add Course and HP footnotes
+			if (section.Footnotes.Count() > 0)
+			{
+				text.AppendLine(String.Concat("<CLS3>", section.CourseFootnotes, String.IsNullOrEmpty(section.CourseFootnotes) ? string.Empty : " ", string.Join(" ", section.Footnotes)));
+			}
+
 		}
 
 		/// <summary>
