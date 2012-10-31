@@ -112,7 +112,7 @@
 				 {
 					 if (!firstSection.IsLinked)
 					 {
-						 bool hasLinked = block.LinkedSections.Count() > 0;
+						 bool hasLinked = block.LinkedSections.ContainsKey(firstSection.ID.ItemNumber);
 
 						 route["Subject"] = Helpers.SubjectWithCommonCourseFlag(firstSection);
 						 route["ClassNum"] = firstSection.CourseNumber;
@@ -126,9 +126,9 @@
 						@Html.SectionCourseHeading(firstSection)
 						@ViewHelpers.DisplayCredits(firstSection)
 					</a>
-					@if (block.LinkedSections != null && hasLinked)
+					@if (hasLinked)
 					{
-						 foreach (SectionWithSeats linkedSec in block.LinkedSections)
+						 foreach (SectionWithSeats linkedSec in block.LinkedSections[firstSection.ID.ItemNumber])
 						 {
 						<br />
 						<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
@@ -171,11 +171,14 @@
 							<li class="classDetailsLink">
 								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", route, null)
 							</li>
-						@foreach (SectionWithSeats linkedSec in block.LinkedSections)
+						@if (hasLinked)
 						{
+							foreach (SectionWithSeats linkedSec in block.LinkedSections[firstSection.ID.ItemNumber])
+							{
 								<li class="classDetailsLink">
 									@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber }, null)
 								</li>
+							}
 						}
 						</ul>
 					</div>
@@ -192,12 +195,12 @@
 						 foreach (SectionWithSeats sec in block.Sections)
 						 {
 
-							 //bothSections includes a master and its subordinate linked section(s).
+							 //bothSections includes a master and its subordinate linked section(s)
 							 IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
 
-							 if (block.LinkedSections != null && hasLinked)
+							 if (hasLinked)
 							 {
-								 multipleSections = multipleSections.Union(block.LinkedSections).ToList();
+								 multipleSections = multipleSections.Union(block.LinkedSections[sec.ID.ItemNumber]).ToList();
 							 }
 
 							 // NOTE: We must pass the current ViewData object to RenderPartial here.

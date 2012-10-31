@@ -379,7 +379,7 @@ namespace CTCClassSchedule.Controllers
 					{
 						sectionsEnum = Helpers.GetSectionsWithSeats(yrq.ID, sections, db);
 					}
-
+					IList<Section> bugs = sections.Where(s => s.ID.ItemNumber == "4642" || s.ID.ItemNumber == "4643").ToList();
 					IList<SectionsBlock> courseBlocks = groupSectionsIntoBlocks(sectionsEnum);
 					if (format == "json")
 					{
@@ -587,7 +587,7 @@ namespace CTCClassSchedule.Controllers
 				while (processedCount < sections.Count)
 				{
 					SectionsBlock courseBlock = new SectionsBlock();
-					courseBlock.LinkedSections = new List<SectionWithSeats>();
+					courseBlock.LinkedSections = new Dictionary<string, List<SectionWithSeats>>();
 
 					// TODO: do we have to worry about the first section being IsLinked?
 					IEnumerable<SectionWithSeats> remainingSections = sections.Skip(processedCount);
@@ -607,12 +607,14 @@ namespace CTCClassSchedule.Controllers
 																										));
 
 
-					/*TODO: *******************************************************************************
-					Is this valid? Can we assume only the first Section's ItemNumber will give us all the linkages?
-					**************************************************************************************/
-					if (!firstSection.IsLinked)
+					// Find all links associated to each of the grouped sections
+					foreach (Section sec in courseBlock.Sections.Where(s => !s.IsLinked && s.LinkedTo == s.ID.ItemNumber))
 					{
-						courseBlock.LinkedSections = sections.Where(s => s.IsLinked && s.Yrq.ID == firstSection.Yrq.ID && s.LinkedTo.Trim() == firstSection.ID.ItemNumber);
+						List<SectionWithSeats> linkedSections = sections.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber).ToList();
+						if (linkedSections.Count > 0)
+						{
+							courseBlock.LinkedSections.Add(sec.ID.ItemNumber, linkedSections);
+						}
 					}
 
 					// Get a list of common footnotes shared with every section in the block
