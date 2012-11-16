@@ -57,7 +57,7 @@
 
 
 		    <div id="classDescriptions">
-		    @foreach (var item in Model.OrderBy(c => c.Number))
+		    @foreach (var item in Model)
 			{
 				string subjectURL = Helpers.SubjectWithCommonCourseFlag(item);
 				string courseID = string.Format("{0} {1}", subjectURL, item.Number);

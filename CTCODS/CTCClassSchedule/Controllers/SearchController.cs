@@ -153,7 +153,7 @@ namespace CTCClassSchedule.Controllers
 				IEnumerable<string> allSubjects;
 				using (_profiler.Step("Getting distinct list of subjects"))
 				{
-					allSubjects = sectionsEnum.Select(c => c.CourseSubject).Distinct();
+					allSubjects = sectionsEnum.Select(c => c.CourseSubject).Distinct().OrderBy(c => c);
 				}
 
 				using (_profiler.Step("Getting just records for page"))
