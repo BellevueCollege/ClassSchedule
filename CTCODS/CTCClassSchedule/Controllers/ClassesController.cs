@@ -564,15 +564,21 @@ namespace CTCClassSchedule.Controllers
 		private IList<SectionsBlock> groupSectionsIntoBlocks(IList<SectionWithSeats> sections)
 		{
 			IList<SectionsBlock> results = new List<SectionsBlock>();
+			IList<SectionWithSeats> allLinkedSections = sections.Where(s => s.IsLinked).ToList();
+			IList<SectionWithSeats> nonLinkedSections;
 
 			// sort by the markers indicators where we need to being a new block (w/ course title, etc.)
 			/* TODO: Implement a more configurable sort method. */
 			using (_profiler.Step("Sorting sections in preparation for grouping and linking"))
 			{
-				sections = sections.OrderBy(s => s.CourseNumber)
+				/* COMMENT THIS LINE TO DEBUG
+				IEnumerable<SectionWithSeats> d1 = sections.Where(s => s.ID.ItemNumber.StartsWith("410"));
+				// END DEBUGGING */
+				nonLinkedSections = sections.Where(s => !s.IsLinked)
+													.OrderBy(s => s.CourseNumber)
+													.ThenBy(s => allLinkedSections.Where(l => l.LinkedTo == s.ID.ItemNumber).Count())
 													.ThenByDescending(s => s.IsVariableCredits)
 													.ThenBy(s => s.Credits)
-													.ThenBy(s => sections.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber))
 													.ThenBy(s => s.IsTelecourse)
 													.ThenBy(s => s.IsOnline)
 													.ThenBy(s => s.IsHybrid)
@@ -584,36 +590,29 @@ namespace CTCClassSchedule.Controllers
 			using (_profiler.Step("Grouping/linking by course"))
 			{
 				int processedCount = 0;
-				while (processedCount < sections.Count)
+				while (processedCount < nonLinkedSections.Count)
 				{
 					SectionsBlock courseBlock = new SectionsBlock();
-					courseBlock.LinkedSections = new Dictionary<string, List<SectionWithSeats>>();
+					courseBlock.LinkedSections = new List<SectionWithSeats>();
 
-					// TODO: do we have to worry about the first section being IsLinked?
-					IEnumerable<SectionWithSeats> remainingSections = sections.Skip(processedCount);
+					IEnumerable<SectionWithSeats> remainingSections = nonLinkedSections.Skip(processedCount);
 					SectionWithSeats firstSection = remainingSections.First();
 
-					var linkedToFirstSec = sections.Where(s => s.IsLinked && s.LinkedTo == firstSection.ID.ItemNumber).Select(s => new { s.CourseID, s.CourseTitle, s.Credits, s.IsVariableCredits });
 					courseBlock.Sections = remainingSections.TakeWhile(s =>
 																										s.CourseID == firstSection.CourseID &&
 																										s.CourseTitle == firstSection.CourseTitle &&
 																										s.Credits == firstSection.Credits &&
 																										s.IsVariableCredits == firstSection.IsVariableCredits &&
-																										(s.LinkedTo == firstSection.LinkedTo ||
-																											(s.IsLinked == false &&
-																											sections.Where(l => l.IsLinked && l.LinkedTo == s.ID.ItemNumber)
-																															.Select(l => new { l.CourseID, l.CourseTitle, l.Credits, l.IsVariableCredits })
-																															.SequenceEqual(linkedToFirstSec))
-																										));
+																										allLinkedSections.Where(l => l.LinkedTo == s.ID.ItemNumber).Count() == allLinkedSections.Where(l => l.LinkedTo == firstSection.ID.ItemNumber).Count());
 
 
 					// Find all links associated to each of the grouped sections
-					foreach (Section sec in courseBlock.Sections.Where(s => !s.IsLinked && s.LinkedTo == s.ID.ItemNumber))
+					foreach (SectionWithSeats sec in courseBlock.Sections)
 					{
-						List<SectionWithSeats> linkedSections = sections.Where(s => s.IsLinked && s.Yrq.ID == sec.Yrq.ID && s.LinkedTo.Trim() == sec.ID.ItemNumber).ToList();
+						List<SectionWithSeats> linkedSections = allLinkedSections.Where(s => s.LinkedTo == sec.ID.ItemNumber).ToList();
 						if (linkedSections.Count > 0)
 						{
-							courseBlock.LinkedSections.Add(sec.ID.ItemNumber, linkedSections);
+							courseBlock.LinkedSections.AddRange(linkedSections);
 						}
 					}
 
@@ -1075,5 +1074,30 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 		#endregion
+
+		public static IList<SectionWithSeats> ParseCommonHeadingLinkedSections(List<SectionWithSeats> linkedSections)
+		{
+			string prevCourseID = string.Empty;
+			string prevTitle = string.Empty;
+			decimal prevCredits = 0;
+			bool prevIsVariableCredits = false;
+
+			IList<SectionWithSeats> common = new List<SectionWithSeats>(linkedSections.Count);
+
+			foreach (SectionWithSeats section in linkedSections)
+			{
+				if (!(section.CourseID == prevCourseID && section.CourseTitle == prevTitle && section.Credits == prevCredits && section.IsVariableCredits == prevIsVariableCredits))
+				{
+					common.Add(section);
+				}
+
+				prevCourseID = section.CourseID;
+				prevTitle = section.CourseTitle;
+				prevCredits = section.Credits;
+				prevIsVariableCredits = section.IsVariableCredits;
+			}
+
+			return common;
+		}
 	}
 }

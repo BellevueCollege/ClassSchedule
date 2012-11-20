@@ -17,7 +17,7 @@ namespace CTCClassSchedule
 		/// Collection of all linked sections, where the key is the item number and the value
 		/// is is an array of linked sections.
 		/// </summary>
-		public IDictionary<string, List<SectionWithSeats>> LinkedSections { get; set; }
+		public List<SectionWithSeats> LinkedSections { get; set; }
 
 		/// <summary>
 		/// Collection of footnotes shared by all sections of the block
