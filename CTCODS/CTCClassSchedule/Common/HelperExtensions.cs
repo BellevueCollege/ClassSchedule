@@ -154,7 +154,19 @@ namespace CTCClassSchedule.Common
 		/// <returns></returns>
 		public static IHtmlString SectionCourseHeading(this HtmlHelper html, SectionWithSeats sec, string credits = null, string searchTerm = null)
 		{
-			string output = string.Format("<span class=\"courseID\">{0} {1}</span> <span class=\"courseTitle\">{2}</span> ", Helpers.SubjectWithCommonCourseFlag(sec), sec.CourseNumber, sec.CourseTitle);
+			string subject = Helpers.SubjectWithCommonCourseFlag(sec);
+			return SectionCourseHeading(html, subject, sec.CourseNumber, sec.CourseTitle, credits, searchTerm);
+		}
+
+		public static IHtmlString SectionCourseHeading(this HtmlHelper html, Course course, string credits = null, string searchTerm = null)
+		{
+			string subject = Helpers.SubjectWithCommonCourseFlag(course);
+			return SectionCourseHeading(html, subject, course.Number, course.Title, credits, searchTerm);
+		}
+
+		public static IHtmlString SectionCourseHeading(this HtmlHelper html, string subject, string courseNumber, string courseTitle, string credits = null, string searchTerm = null)
+		{
+			string output = string.Format("<span class=\"courseID\">{0} {1}</span> <span class=\"courseTitle\">{2}</span> ", subject, courseNumber, courseTitle);
 
 			if (!string.IsNullOrWhiteSpace(credits))
 			{

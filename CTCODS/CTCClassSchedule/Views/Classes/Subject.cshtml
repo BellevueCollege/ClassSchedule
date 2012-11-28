@@ -2,8 +2,8 @@
 @model IEnumerable<Ctc.Ods.Types.Course>
 @{
     ViewBag.PageTitle = ViewBag.Subject + "-" + @ViewBag.ProgramTitle + " Classes at Bellevue College";
+		string subjectURL = "";
 }
-
 
 <div id="scheduleMain">
     @Html.Partial("quarterNavigation")
@@ -59,20 +59,13 @@
 		    <div id="classDescriptions">
 		    @foreach (var item in Model)
 			{
-				string subjectURL = Helpers.SubjectWithCommonCourseFlag(item);
-				string courseID = string.Format("{0} {1}", subjectURL, item.Number);
-
 			    <div class="classInfo">
-                    <h2 class="classHeading">
-
+            <h2 class="classHeading">
 							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = subjectURL, ClassNum = item.Number })">
-
-							<span class="courseID">@item.CourseID</span>
-							<span class="courseTitle">@item.Title</span>
-
-							@ViewHelpers.DisplayCredits(item)
-					</a>
-                    </h2>
+								@Html.SectionCourseHeading(item)
+								@ViewHelpers.DisplayCredits(item)
+							</a>
+            </h2>
 
 			@if (string.Compare(item.YearQuarterBegin.ToString(), ViewBag.CurrentQuarter.ID.ToString()) == 1)
 			{
@@ -106,7 +99,7 @@
 				}
 
                     <p class="classDetailsLink">
-				        @Html.ActionLink("View details for " + courseID,
+				        @Html.ActionLink("View details for " + item.CourseID,
 																																"ClassDetails",
 																																"Classes",
 																																 new { YearQuarterID = "All", Subject = subjectURL, ClassNum = item.Number },
