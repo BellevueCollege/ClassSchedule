@@ -560,7 +560,7 @@ namespace CTCClassSchedule.Controllers
 		/// Groups a list of Sections by course, into descriptive SectionBlocks
 		/// </summary>
 		/// <param name="sections">List of sections to group</param>
-		/// <returns>LIst of SectionBlock objects which describe the block of sections</returns>
+		/// <returns>List of SectionBlock objects which describe the block of sections</returns>
 		private IList<SectionsBlock> groupSectionsIntoBlocks(IList<SectionWithSeats> sections)
 		{
 			IList<SectionsBlock> results = new List<SectionsBlock>();

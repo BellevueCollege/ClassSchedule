@@ -82,7 +82,7 @@
 				        @item.Descriptions.First().Description
 				        </p>
 
-								if (@item.Descriptions.Count() > 1)
+					if (item.Descriptions.Count() > 1 && String.Compare(item.Descriptions.First().YearQuarterBegin.ID, ViewBag.CurrentQuarter.ID) > 0)
 								{
 									<div class="upcomingChange">
 										<h3>New description starting @item.Descriptions.ElementAt(1).YearQuarterBegin.FriendlyName.ToString()</h3>
