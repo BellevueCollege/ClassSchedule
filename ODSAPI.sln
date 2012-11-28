@@ -4,15 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTCClassSchedule", "CTCODS\CTCClassSchedule\CTCClassSchedule.csproj", "{D0DFD430-8A10-440D-A564-4E113D57A079}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{305B62EE-42FA-4AB2-861C-63F72E5AAEDC}"
-	ProjectSection(SolutionItems) = preProject
-		ODSAPI.testsettings = ODSAPI.testsettings
-		ODSAPI.vsmdi = ODSAPI.vsmdi
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Research", "Research", "{73BECA23-C79E-4BB1-B9C9-F73DC2A5F3E1}"
-	ProjectSection(SolutionItems) = preProject
-		Research\Bellevue-SectionInstructorTimeAndLocation.sql = Research\Bellevue-SectionInstructorTimeAndLocation.sql
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
