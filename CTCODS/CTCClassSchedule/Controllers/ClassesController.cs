@@ -58,7 +58,7 @@ namespace CTCClassSchedule.Controllers
 		/// <returns>An Adobe InDesign formatted text file with all course data. File is
 		/// returned as an HTTP response.</returns>
 		[OutputCache(CacheProfile = "AllClassesCacheTime")] // Caches for 6 hours
-		public void Export(String YearQuarterID)
+		public ActionResult Export(String YearQuarterID)
 		{
 			if (HttpContext.User.Identity.IsAuthenticated == true)
 			{
@@ -77,7 +77,7 @@ namespace CTCClassSchedule.Controllers
 				{
 					using (OdsRepository _db = new OdsRepository())
 					{
-							yrq = _db.CurrentYearQuarter;
+						yrq = _db.CurrentYearQuarter;
 					}
 				}
 				else
@@ -147,14 +147,13 @@ namespace CTCClassSchedule.Controllers
 				}
 
 				// Write the file data as an HTTP response
-				string fileName = String.Concat("CourseData-", yrq.ID, "-", DateTime.Now.ToShortDateString(), ".rtf");
-				fileText.Remove(0, subjectSeparatedLineBreaks * 2); // Remove the first set of line breaks
 				byte[] fileData = encoding.GetBytes(fileText.ToString());
-				HttpResponseBase response = ControllerContext.HttpContext.Response;
-				string contentDisposition = String.Concat("attachment; filename=", fileName);
-				response.AddHeader("Content-Disposition", contentDisposition);
-				response.ContentType = "application/force-download";
-				response.BinaryWrite(fileData);
+				string fileName = String.Concat("CourseData-", yrq.ID, "-", DateTime.Now.ToShortDateString(), ".rtf");
+				return File(fileData, "application/force-download", fileName);
+			}
+			else
+			{
+				throw new UnauthorizedAccessException("You do not have sufficient privileges to export course data.");
 			}
 		}
 
