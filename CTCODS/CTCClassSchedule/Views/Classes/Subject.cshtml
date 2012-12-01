@@ -2,7 +2,6 @@
 @model IEnumerable<Ctc.Ods.Types.Course>
 @{
     ViewBag.PageTitle = ViewBag.Subject + "-" + @ViewBag.ProgramTitle + " Classes at Bellevue College";
-		string subjectURL = "";
 }
 
 <div id="scheduleMain">
@@ -61,7 +60,7 @@
 			{
 			    <div class="classInfo">
             <h2 class="classHeading">
-							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = subjectURL, ClassNum = item.Number })">
+							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number })">
 								@Html.SectionCourseHeading(item)
 								@ViewHelpers.DisplayCredits(item)
 							</a>
@@ -99,10 +98,11 @@
 				}
 
                     <p class="classDetailsLink">
-				        @Html.ActionLink("View details for " + item.CourseID,
+
+				        @Html.ActionLink(String.Concat("View details for ", Helpers.SubjectWithCommonCourseFlag(item), " ", item.Number),
 																																"ClassDetails",
 																																"Classes",
-																																 new { YearQuarterID = "All", Subject = subjectURL, ClassNum = item.Number },
+																																	new { YearQuarterID = "All", Subject = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number },
 																																null)
 		            </p>
 
