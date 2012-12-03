@@ -82,6 +82,7 @@
 
 				if (firstSection != null)
 				 {
+
 					 if (!firstSection.IsLinked)
 					 {
 							@*
@@ -100,7 +101,7 @@
 			 {
 				  <span class="combinationClass">Combination class:</span><br />
 			 }
-					<a href="@Url.Action("ClassDetails", "Classes", _routeValues)">
+					<a href="@Url.Action("ClassDetails", "Classes", new RouteValueDictionary(_routeValues))">
 						@Html.SectionCourseHeading(firstSection, searchTerm: _searchTerm)
 						@ViewHelpers.DisplayCredits(firstSection)
 					</a>
@@ -108,8 +109,9 @@
 		 {
 			 foreach (SectionWithSeats linkedSec in linkedSections)
 			 {
+				 _routeValues["ClassNum"] = linkedSec.CourseNumber;
 						<br />
-						<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
+						<a href="@Url.Action("ClassDetails", "Classes", new RouteValueDictionary(_routeValues))">
 							@Html.SectionCourseHeading(linkedSec, _searchTerm)
 							@ViewHelpers.DisplayCredits(linkedSec)
 						</a>
