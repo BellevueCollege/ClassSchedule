@@ -62,7 +62,7 @@
 			bool hasLinked;
 			int processedCount = 0;
 
-		 IList<SectionWithSeats> orderedSections = Model.Section.OrderBy(s => Model.Section.Any(l => l.IsLinked && l.Yrq.ID == s.Yrq.ID && l.LinkedTo.Trim() == s.ID.ItemNumber)).ToList();
+		 IList<SectionWithSeats> orderedSections = Model.Section.ToList();
 
 			while (processedCount < orderedSections.Count)
 			{
