@@ -40,6 +40,11 @@ namespace CTCClassSchedule.Controllers
 				return null;
 			}
 
+			if (String.IsNullOrEmpty(searchterm.Trim()))
+			{
+				return RedirectToAction("AllClasses", "Classes", new { YearQuarterID = quarter });
+			}
+
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
 
