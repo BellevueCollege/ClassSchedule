@@ -338,8 +338,8 @@ li.classDetailsLink
 
 
 #container.sidebar #content {
-    float: left;
-    width: 798px;
+    overflow: hidden;
+    width: auto;
 
 }
 #pageTitle
@@ -638,9 +638,9 @@ li.subject { list-style-type: none;}
 
 #searchbutton-wrap /*Note IE7 hack*/
 {
-    float: left;
+    overflow: hidden;
     min-height: 20px;
-    width: 70px;
+    width: auto;
     border-left: 1px solid #173817;
     background: #f4f8e6; /* Old browsers */
     background: -moz-linear-gradient(top,  #f4f8e6 36%, #d6dbc3 65%); /* FF3.6+ */
