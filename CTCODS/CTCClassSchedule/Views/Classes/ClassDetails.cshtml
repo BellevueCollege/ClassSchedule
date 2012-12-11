@@ -134,35 +134,31 @@
    }
 
 
-						@{
-   IList<CourseDescription> descriptions = course.Descriptions.ToList();
-   int descriptionsCount = descriptions.Count;
-						}
-						@if (descriptionsCount > 0)
-	  {
-		  if (!string.IsNullOrWhiteSpace(descriptions[0].Description))
-		  {
-								<div id="courseDescription">
-									<h2>Description:</h2>
-									<p>
-										@{
-			  string firstDescription = descriptionsCount <= 0 || string.IsNullOrWhiteSpace(descriptions[0].Description) ? "* NO DESCRIPTION FOUND *" : descriptions[0].Description;
-										}
-										@firstDescription
-									</p>
-								</div>
-		  }
-	  }
-
-					@if (descriptionsCount > 1)
-	 {
-			 <div class="upcomingChange">
-				<h3>New description starting @descriptions[1].YearQuarterBegin.FriendlyName</h3>
+	@{
+		IList<CourseDescription> activeDescriptions = Helpers.getActiveCourseDescriptions(course, currentYrq);
+		string currentDescription = "* NO DESCRIPTION FOUND *"; // default if no description found
+	}
+	@if (activeDescriptions.Count > 0)
+  {
+	  currentDescription = string.IsNullOrWhiteSpace(activeDescriptions[0].Description) ? currentDescription : activeDescriptions[0].Description;
+  }
+			<div id="courseDescription">
+				<h2>Description:</h2>
 				<p>
-					@(string.IsNullOrWhiteSpace(descriptions[1].Description) ? "* NO DESCRIPTION FOUND*" : descriptions[1].Description)
+					@currentDescription
+				</p>
+			</div>
+
+	@if (activeDescriptions.Count > 1)
+  {
+			 <div class="upcomingChange">
+				<h3>New description starting @activeDescriptions[1].YearQuarterBegin.FriendlyName</h3>
+				<p>
+					@(string.IsNullOrWhiteSpace(activeDescriptions[1].Description) ? "* NO DESCRIPTION FOUND*" : activeDescriptions[1].Description)
 				</p>
 			 </div>
-	 }
+  }
+
 
 @* ***************************************************************************************************
 		Temporarily removed in order to meet initial public launch. We may want to re-enable this block
