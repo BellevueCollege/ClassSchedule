@@ -627,6 +627,25 @@ namespace CTCClassSchedule.Common
 			return friendlyName;
 		}
 
+		/// <summary>
+		/// Retrieves all active and future course descriptions from a <see cref="Course"/>
+		/// </summary>
+		/// <param name="course">The course to process</param>
+		/// <param name="currentYrq">The current YRQ</param>
+		/// <returns>An ordered list of CourseDescriptions sorted current first</returns>
+		public static IList<CourseDescription> getActiveCourseDescriptions(Course course, YearQuarter currentYrq)
+		{
+			IList<CourseDescription> results = new List<CourseDescription>();
+			if (course.Descriptions != null)
+			{
+				IList<CourseDescription> descriptions = course.Descriptions.Reverse().ToList();
+				results = descriptions.Where(q => String.Compare(q.YearQuarterBegin.ID, currentYrq.ID) > 0).ToList();
+				if (results.Count == 0) { results.Add(descriptions.First()); }
+			}
+
+			return results;
+		}
+
 		public static Dictionary<string, string> getDayDictionary(){
 			Dictionary<string, string> dict = new Dictionary<string, string>();
 
