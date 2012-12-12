@@ -636,7 +636,7 @@ namespace CTCClassSchedule.Common
 		public static IList<CourseDescription> getActiveCourseDescriptions(Course course, YearQuarter currentYrq)
 		{
 			IList<CourseDescription> results = new List<CourseDescription>();
-			if (course.Descriptions != null)
+			if (course.Descriptions != null && course.Descriptions.Count() > 0)
 			{
 				IList<CourseDescription> descriptions = course.Descriptions.Reverse().ToList();
 				results = descriptions.Where(q => String.Compare(q.YearQuarterBegin.ID, currentYrq.ID) > 0).ToList();
