@@ -30,10 +30,10 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Development|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Production|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
@@ -352,10 +352,10 @@
     <Content Include="web.Test.config">
       <DependentUpon>web.config</DependentUpon>
     </Content>
-    <Content Include="web.Development.config">
+    <Content Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </Content>
-    <Content Include="web.Production.config">
+    <Content Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </Content>
   </ItemGroup>

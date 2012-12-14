@@ -26,10 +26,10 @@ Global
 		Test|Any CPU = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D0DFD430-8A10-440D-A564-4E113D57A079}.Development|Any CPU.ActiveCfg = Development|Any CPU
-		{D0DFD430-8A10-440D-A564-4E113D57A079}.Development|Any CPU.Build.0 = Development|Any CPU
-		{D0DFD430-8A10-440D-A564-4E113D57A079}.Production|Any CPU.ActiveCfg = Production|Any CPU
-		{D0DFD430-8A10-440D-A564-4E113D57A079}.Production|Any CPU.Build.0 = Production|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Production|Any CPU.ActiveCfg = Release|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Production|Any CPU.Build.0 = Release|Any CPU
 		{D0DFD430-8A10-440D-A564-4E113D57A079}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{D0DFD430-8A10-440D-A564-4E113D57A079}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
