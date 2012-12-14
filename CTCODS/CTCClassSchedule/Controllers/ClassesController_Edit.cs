@@ -47,7 +47,9 @@ namespace CTCClassSchedule.Controllers
 
 			public ActionResult Logout()
 			{
-				string url = Request.UrlReferrer.ToString();
+
+				string url = Request.UrlReferrer == null ? CasAuthentication.ServerName : Request.UrlReferrer.ToString();
+
 				if (!string.IsNullOrWhiteSpace(CasAuthentication.CasServerUrlPrefix))
 				{
 					CasAuthentication.SingleSignOut();
