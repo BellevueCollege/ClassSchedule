@@ -1,7 +1,7 @@
 @using CTCClassSchedule.Common;
 @using Ctc.Web.Security;
 @using CTCClassSchedule.Common;
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 	<!-- VERSION: @Html.Raw(ViewBag.Version) -->
@@ -29,6 +29,7 @@
 		// global values used by multiple client scripts
 		var g_ajaxLoaderImgPath = "@Url.Content("~/Content/images/ajax-loader.gif")";
 		var g_getSeatsUrl = "@Url.Action("getSeats", "Classes")";
+		var g_updateCMSFootnoteUrl = "@Url.Action("UpdateSectionFootnote", "Api")";
 
 
         //feedbackform

@@ -59,17 +59,24 @@ WARNING:	There is a known issue with using global @helper methods in the App_Cod
 		<span class="autofootnote">@AutomatedFootnotesConfig.getAutomatedFootnotesText(sectionForAutomatedFootnotes)</span>
 	}
 
-	foreach (string footnote in cmsFootnotes)
+	if (cmsFootnotes.Count(f => f.Trim().Length > 0) > 0)
 	{
-		// ensure we don't have duplicates
-		if (!string.IsNullOrWhiteSpace(footnote) && !hpFootnotes.Contains(footnote))
+		foreach (string footnote in cmsFootnotes)
 		{
-			if (footnote.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0) {
-				showPreRequisite = true;
-			}
+			// ensure we don't have duplicates
+			if (!string.IsNullOrWhiteSpace(footnote) && !hpFootnotes.Contains(footnote))
+			{
+				if (footnote.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0) {
+					showPreRequisite = true;
+				}
 
-			<span class="cmsfootnote">@(string.IsNullOrWhiteSpace(searchTerm) ? footnote : Helpers.FormatWithSearchTerm(searchTerm, footnote))</span>
+				<span class="cmsfootnote">@(string.IsNullOrWhiteSpace(searchTerm) ? footnote : Helpers.FormatWithSearchTerm(searchTerm, footnote))</span>
+			}
 		}
+	}
+	else
+	{
+		<span class="cmsfootnote hidden"></span>
 	}
 
 	if (showPreRequisite)
@@ -83,40 +90,40 @@ WARNING:	There is a known issue with using global @helper methods in the App_Cod
 @* Helper method overrides *@
 
 @helper DisplayCredits(SectionWithSeats sec)
-{
+	{
 	@DisplayCredits(sec.Credits, sec.IsVariableCredits);
 }
 
 @helper DisplayCredits(Course course)
-{
+	{
 	@DisplayCredits(course.Credits, course.IsVariableCredits);
 }
 
 @helper DisplayFootnotes(IEnumerable<string> hpFootnotes, string cmsFootnote, string searchTerm = null)
-{
+	{
 	IList<string> cmsFootnotes = new List<string> { cmsFootnote };
 	@DisplayFootnotes(hpFootnotes, cmsFootnotes, null, searchTerm: searchTerm);
 }
 
 @helper DisplayFootnotes(IEnumerable<string> hpFootnotes, string cmsFootnote, IEnumerable<string> toIgnore, string searchTerm = null)
-{
+	{
 	IList<string> cmsFootnotes = new List<string> { cmsFootnote };
 	@DisplayFootnotes(hpFootnotes, cmsFootnotes, toIgnore, searchTerm: searchTerm);
 }
 
 @helper DisplayFootnotes(IEnumerable<string> hpFootnotes, string cmsFootnote, IEnumerable<string> toIgnore, Section includedAutomatedFootnotes, string searchTerm = null)
-{
+	{
 	IList<string> cmsFootnotes = new List<string> { cmsFootnote };
 	@DisplayFootnotes(hpFootnotes, cmsFootnotes, toIgnore, includedAutomatedFootnotes, searchTerm: searchTerm);
 }
 
 @helper DisplayFootnotes(IEnumerable<string> hpFootnotes, IEnumerable<string> cmsFootnotes, string searchTerm = null)
-{
+	{
 	@DisplayFootnotes(hpFootnotes, cmsFootnotes, null, searchTerm: searchTerm);
 }
 
 @helper DisplayFootnotes(IEnumerable<string> hpFootnotes, IEnumerable<string> cmsFootnotes, Section includeAutomatedFootnotes, string searchTerm = null)
-{
+	{
 	@DisplayFootnotes(hpFootnotes, cmsFootnotes, null, includeAutomatedFootnotes, searchTerm: searchTerm);
 }
 

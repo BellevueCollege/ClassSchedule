@@ -529,7 +529,7 @@ namespace CTCClassSchedule.Controllers
 						newseat.SeatsAvailable = hpSeats;
 						newseat.LastUpdated = DateTime.Now;
 
-						db.SeatAvailabilities.AddObject(newseat);
+						//db.SeatAvailabilities.AddObject(newseat);
 					}
 
 					db.SaveChanges();

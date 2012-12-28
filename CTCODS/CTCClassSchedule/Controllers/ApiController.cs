@@ -140,8 +140,57 @@ namespace CTCClassSchedule.Controllers
 			return PartialView();
 		}
 
+		/// <summary>
+		/// Attempts to update a given sections footnote. If no footnote exists for the section, one is added.
+		/// If the new footnote text is identical to the original, no changes are made.
+		/// </summary>
+		/// <param name="classId">The class ID of to modify (also section ID)</param>
+		/// <param name="newFootnoteText">The text which will become the new footnote</param>
+		/// <returns>Returns a JSON boolean true value if the footnote was modified</returns>
+		[HttpPost]
+		[AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
+		public ActionResult UpdateSectionFootnote(string classId, string newFootnoteText)
+		{
+			JsonResult result = Json(false);
+			if (HttpContext.User.Identity.IsAuthenticated == true)
+			{
+				using (ClassScheduleDb db = new ClassScheduleDb())
+				{
+					IQueryable<SectionFootnote> footnotes = db.SectionFootnotes.Where(s => s.ClassID == classId);
+
+					if (footnotes.Count() > 0)
+					{
+						// Should only update one section
+						foreach (SectionFootnote footnote in footnotes)
+						{
+							if (!String.Equals(footnote.Footnote, newFootnoteText))
+							{
+								footnote.Footnote = newFootnoteText;
+								footnote.LastUpdated = DateTime.Now;
+								//footnote.LastUpdatedBy
+								result = Json(true);
+							}
+						}
+					}
+					else if (classId != null)
+					{
+						// Insert footnote
+						SectionFootnote newFootnote = new SectionFootnote();
+						newFootnote.ClassID = classId;
+						newFootnote.Footnote = newFootnoteText;
+						newFootnote.LastUpdated = DateTime.Now;
+
+						db.SectionFootnotes.AddObject(newFootnote);
+						result = Json(true);
+					}
+
+					db.SaveChanges();
+				}
+			}
 
 
+			return result;
+		}
 
 		//
 		// POST after submit is clicked

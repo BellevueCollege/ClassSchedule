@@ -22,7 +22,7 @@
 }
 
 <!-- SEARCHTERM: @_searchTerm -->
-<li class="section-listing"><span class="item-number"><span class="descriptor">Item
+<li class="section-listing" data-sectionid="@sectionID"><span class="item-number"><span class="descriptor">Item
 	number: </span>@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? Model[0].ID.ItemNumber : Html.FormatWithSearchTerm(_searchTerm, Model[0].ID.ItemNumber).ToString())</span>
 	<ul class="section-details">
 		<li class="section"><span class="descriptor">Section: </span>@Model[0].SectionCode</li>
@@ -141,7 +141,7 @@
 		*@
 		@{
 			HelperResult footnotes = ViewHelpers.DisplayFootnotes(Model[0].Footnotes, Model[0].SectionFootnotes, _courseFootnotes, Model[0]);
-			if (!String.IsNullOrWhiteSpace(Regex.Replace(Regex.Replace(footnotes.ToString(), "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", String.Empty)))
+			if (!String.IsNullOrWhiteSpace(Regex.Replace(Regex.Replace(footnotes.ToString(), "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", String.Empty)) || Helpers.isEditor(Context))
 			{
 			<li class="section-notes"><span class="descriptor">Notes: </span>
 				<ul>

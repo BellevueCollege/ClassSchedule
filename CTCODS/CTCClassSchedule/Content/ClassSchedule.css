@@ -1653,4 +1653,42 @@ a.edit_button
     border-width:  9px 10px 0px 10px;
     height: 0px;
     width: 0px;
-    }
+}
+
+.hidden
+{
+	display: none;
+}
+
+.text-editable
+{
+	display: inline-block;
+	min-width: 125px;
+	min-height: 15px;
+}
+
+.text-error
+{
+  color: #b94a48;
+}
+.text-success
+{
+  color: #468847;
+}
+
+.text-highlight
+{
+	background-color: #ffa;
+}
+
+#textSuccessIcon
+{
+	display: inline-block;
+	height: 15px;
+}
+
+.toggleEditingMode
+{
+	text-decoration: underline;
+	cursor: pointer;
+}
