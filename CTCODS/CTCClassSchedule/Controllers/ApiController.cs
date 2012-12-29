@@ -172,7 +172,7 @@ namespace CTCClassSchedule.Controllers
 							}
 						}
 					}
-					else if (classId != null)
+					else if (classId != null && !String.IsNullOrEmpty(newFootnoteText))
 					{
 						// Insert footnote
 						SectionFootnote newFootnote = new SectionFootnote();
