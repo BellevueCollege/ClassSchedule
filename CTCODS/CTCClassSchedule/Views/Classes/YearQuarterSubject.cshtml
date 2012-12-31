@@ -301,9 +301,11 @@
 								type: 'POST',
 								data: { classId: classId, newFootnoteText: footnote },
 								timeout: 4000,
-								success: function (result) {
-									if (result === true) // Only if the footnote was modified
-									{
+								success: function (response) {
+									if ($(footnoteRef).html() != cmsFootnotePlaceholder) {
+										$(footnoteRef).html(response.footnote);
+									}
+									if (response.result === true)	{
 										$(footnoteRef).append("<span id='textSuccessIcon' class='ui-icon ui-icon-check'></span>");
 									}
 								},

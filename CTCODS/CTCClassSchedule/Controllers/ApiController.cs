@@ -140,6 +140,7 @@ namespace CTCClassSchedule.Controllers
 			return PartialView();
 		}
 
+		// TODO: If save successful, return new (possibly trimmed) footnote text
 		/// <summary>
 		/// Attempts to update a given sections footnote. If no footnote exists for the section, one is added.
 		/// If the new footnote text is identical to the original, no changes are made.
@@ -151,7 +152,15 @@ namespace CTCClassSchedule.Controllers
 		[AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
 		public ActionResult UpdateSectionFootnote(string classId, string newFootnoteText)
 		{
-			JsonResult result = Json(false);
+			bool result = false;
+
+			// Trim any whitespace
+			if (!String.IsNullOrEmpty(newFootnoteText))
+			{
+				newFootnoteText = newFootnoteText.Trim();
+			}
+
+
 			if (HttpContext.User.Identity.IsAuthenticated == true)
 			{
 				using (ClassScheduleDb db = new ClassScheduleDb())
@@ -168,11 +177,12 @@ namespace CTCClassSchedule.Controllers
 								footnote.Footnote = newFootnoteText;
 								footnote.LastUpdated = DateTime.Now;
 								//footnote.LastUpdatedBy
-								result = Json(true);
+
+								result = true;
 							}
 						}
 					}
-					else if (classId != null && !String.IsNullOrEmpty(newFootnoteText))
+					else if (classId != null && !String.IsNullOrWhiteSpace(newFootnoteText))
 					{
 						// Insert footnote
 						SectionFootnote newFootnote = new SectionFootnote();
@@ -181,15 +191,14 @@ namespace CTCClassSchedule.Controllers
 						newFootnote.LastUpdated = DateTime.Now;
 
 						db.SectionFootnotes.AddObject(newFootnote);
-						result = Json(true);
+						result = true;
 					}
 
 					db.SaveChanges();
 				}
 			}
 
-
-			return result;
+			return Json(new { result = result, footnote = newFootnoteText });
 		}
 
 		//
