@@ -80,6 +80,7 @@ namespace CTCClassSchedule.Controllers
 
 		//Generation of the Section Edit dialog box
 		[AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
+		[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
 		public ActionResult SectionEdit(string itemNumber, string yrq, string subject, string classNum)
 		{
 			string classID = itemNumber + yrq;
@@ -102,6 +103,7 @@ namespace CTCClassSchedule.Controllers
 						if (section.ID.ToString() == classID)
 						{
 							editSection = section;
+							break;
 						}
 					}
 
@@ -266,6 +268,7 @@ namespace CTCClassSchedule.Controllers
 
 		//Generation of the Class Edit dialog box
 		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
+		[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
 		public ActionResult ClassEdit(string CourseNumber, string Subject, bool IsCommonCourse)
 		{
 
@@ -414,6 +417,7 @@ namespace CTCClassSchedule.Controllers
 
 		//Generation of the Program Edit dialog box
 		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
+		[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
 		public ActionResult ProgramEdit(string Abbreviation)
 		{
 
