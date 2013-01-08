@@ -1,5 +1,9 @@
 CREATE ROLE [WebApplicationUser]
 AUTHORIZATION [dbo]
+EXEC sp_addrolemember N'WebApplicationUser', N'CAMPUS\maricel.medina'
+
+EXEC sp_addrolemember N'WebApplicationUser', N'CAMPUS\N216J-E027168$'
+
 EXEC sp_addrolemember N'WebApplicationUser', N'CAMPUS\elasater'
 
 EXEC sp_addrolemember N'WebApplicationUser', N'campus\ELasater-N216D$'
