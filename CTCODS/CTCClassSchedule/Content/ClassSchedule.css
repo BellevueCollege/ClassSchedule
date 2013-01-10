@@ -1663,8 +1663,10 @@ a.edit_button
 .text-editable
 {
 	display: inline-block;
-	min-width: 125px;
+	min-width: 200px;
 	min-height: 15px;
+	background-color: #f1f1f1;
+	padding: 0 5px;
 }
 
 .text-error
