@@ -306,7 +306,7 @@
 										$(footnoteRef).html(response.footnote);
 									}
 									if (response.result === true)	{
-										$(footnoteRef).append("<span id='textSuccessIcon' class='ui-icon ui-icon-check'></span>");
+										$(footnoteRef).append("<span id='textSuccessIcon' class='ui-icon ui-icon-check'></span>").parent().addClass('ui-state-highlight');
 									}
 								},
 								error: function (x, t, m) {
