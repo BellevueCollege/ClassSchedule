@@ -135,7 +135,7 @@
 
 
 	@{
-		IList<CourseDescription> activeDescriptions = Helpers.getActiveCourseDescriptions(course, currentYrq);
+		IList<CourseDescription> activeDescriptions = Helpers.getActiveCourseDescriptions(course, activeQuarter);
 		string currentDescription = "* NO DESCRIPTION FOUND *"; // default if no description found
 	}
 	@if (activeDescriptions.Count > 0)
