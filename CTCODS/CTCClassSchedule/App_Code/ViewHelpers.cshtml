@@ -59,7 +59,7 @@ WARNING:	There is a known issue with using global @helper methods in the App_Cod
 		<span class="autofootnote">@AutomatedFootnotesConfig.getAutomatedFootnotesText(sectionForAutomatedFootnotes)</span>
 	}
 
-	if (cmsFootnotes.Count(f => f.Trim().Length > 0) > 0)
+	if (cmsFootnotes != null && cmsFootnotes.Count(f => !string.IsNullOrWhiteSpace(f) && f.Trim().Length > 0) > 0)
 	{
 		foreach (string footnote in cmsFootnotes)
 		{
