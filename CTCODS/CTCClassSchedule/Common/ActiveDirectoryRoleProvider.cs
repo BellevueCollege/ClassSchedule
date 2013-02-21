@@ -248,7 +248,8 @@ namespace Ctc.Web.Security
 					if ( _isAdditiveGroupMode )
 						groupList = groupList.Join( _groupsToUse, r => r, g => g, ( r, g ) => r ).ToList();
 
-					if ( HttpContext.Current != null )
+          // If we can, save the list, so we don't need to go to Active Directory again
+					if ( HttpContext.Current != null && HttpContext.Current.Session != null )
 						HttpContext.Current.Session[ sessionKey ] = groupList;
 
 					return groupList.ToArray();
