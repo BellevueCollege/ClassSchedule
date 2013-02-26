@@ -18,6 +18,7 @@
           </EntitySet>
           <EntitySet Name="Divisions" EntityType="ClassSchedule.Models.Store.Divisions" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SectionCourseCrosslistings" EntityType="ClassSchedule.Models.Store.SectionCourseCrosslistings" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SectionSeats" EntityType="ClassSchedule.Models.Store.SectionSeats" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SectionsMeta" EntityType="ClassSchedule.Models.Store.SectionsMeta" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Subjects" EntityType="ClassSchedule.Models.Store.Subjects" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SubjectsCoursePrefixes" EntityType="ClassSchedule.Models.Store.SubjectsCoursePrefixes" store:Type="Tables" Schema="dbo" />
@@ -129,6 +130,14 @@
           <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="CourseID" Type="varchar" Nullable="false" MaxLength="10" />
         </EntityType>
+        <EntityType Name="SectionSeats">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Name="ClassID" Type="char" Nullable="false" MaxLength="8" />
+          <Property Name="SeatsAvailable" Type="int" />
+          <Property Name="LastUpdated" Type="datetime" />
+        </EntityType>
         <EntityType Name="SectionsMeta">
           <Key>
             <PropertyRef Name="ClassID" />
@@ -147,7 +156,7 @@
           <Property Name="SubjectID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="varchar" MaxLength="255" />
           <Property Name="Intro" Type="varchar(max)" />
-          <Property Name="Slug" Type="varchar" MaxLength="63" />
+          <Property Name="Slug" Type="varchar" Nullable="false" MaxLength="63" />
           <Property Name="LastUpdatedBy" Type="varchar" MaxLength="9" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
@@ -265,13 +274,13 @@
           </AssociationSet>
           <EntitySet Name="CourseMetas" EntityType="ClassSchedule.Models.CourseMeta" />
           <EntitySet Name="SectionCourseCrosslistings" EntityType="ClassSchedule.Models.SectionCourseCrosslisting" />
-          <EntitySet Name="SectionSeatAvailabilities" EntityType="ClassSchedule.Models.SectionSeatAvailability" />
           <EntitySet Name="SectionsMetas" EntityType="ClassSchedule.Models.SectionsMeta" />
           <EntitySet Name="SubjectsCoursePrefixes" EntityType="ClassSchedule.Models.SubjectsCoursePrefix" />
           <AssociationSet Name="FK_SubjectsCoursePrefixes_Subjects" Association="ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects">
             <End Role="Subject" EntitySet="Subjects" />
             <End Role="SubjectsCoursePrefix" EntitySet="SubjectsCoursePrefixes" />
           </AssociationSet>
+          <EntitySet Name="SectionSeats" EntityType="ClassSchedule.Models.SectionSeat" />
           </EntityContainer>
         <EntityType Name="vw_ClassScheduleData">
           <Key>
@@ -386,14 +395,6 @@
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CourseID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="SectionSeatAvailability">
-          <Key>
-            <PropertyRef Name="ClassID" />
-          </Key>
-          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
-          <Property Type="Int32" Name="SeatsAvailable" />
-          <Property Type="DateTime" Name="LastUpdated" />
-        </EntityType>
         <EntityType Name="SectionsMeta">
           <Key>
             <PropertyRef Name="ClassID" />
@@ -426,6 +427,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="SectionSeat">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Type="Int32" Name="SeatsAvailable" />
+          <Property Type="DateTime" Name="LastUpdated" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -555,6 +564,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SectionSeats">
+            <EntityTypeMapping TypeName="ClassSchedule.Models.SectionSeat">
+              <MappingFragment StoreEntitySet="SectionSeats">
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="SeatsAvailable" ColumnName="SeatsAvailable" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -592,7 +610,6 @@
         </AssociationConnector>
         <EntityTypeShape EntityType="ClassSchedule.Models.CourseMeta" Width="1.5" PointX="12.375" PointY="1.125" Height="1.7879850260416674" />
         <EntityTypeShape EntityType="ClassSchedule.Models.SectionCourseCrosslisting" Width="1.5" PointX="2.875" PointY="1.125" Height="1.4033821614583388" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.SectionSeatAvailability" Width="1.5" PointX="6.375" PointY="1.125" Height="1.5956835937500031" />
         <EntityTypeShape EntityType="ClassSchedule.Models.SectionsMeta" Width="1.5" PointX="4.625" PointY="1.125" Height="2.1725878906250031" />
         <EntityTypeShape EntityType="ClassSchedule.Models.SubjectsCoursePrefix" Width="1.5" PointX="3.75" PointY="4.25" Height="1.5956835937500031" />
         <AssociationConnector Association="ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects" >
@@ -600,6 +617,7 @@
           <ConnectorPoint PointX="5.9375005000000005" PointY="5.0478417968750016" />
           <ConnectorPoint PointX="5.25" PointY="5.0478417968750016" />
         </AssociationConnector>
+        <EntityTypeShape EntityType="ClassSchedule.Models.SectionSeat" Width="1.5" PointX="6.375" PointY="1.125" Height="1.5956835937500031" />
         </Diagram>
     </Diagrams>
   </Designer>

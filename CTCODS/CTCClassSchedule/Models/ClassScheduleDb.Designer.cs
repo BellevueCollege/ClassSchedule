@@ -203,22 +203,6 @@ namespace CTCClassSchedule.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<SectionSeatAvailability> SectionSeatAvailabilities
-        {
-            get
-            {
-                if ((_SectionSeatAvailabilities == null))
-                {
-                    _SectionSeatAvailabilities = base.CreateObjectSet<SectionSeatAvailability>("SectionSeatAvailabilities");
-                }
-                return _SectionSeatAvailabilities;
-            }
-        }
-        private ObjectSet<SectionSeatAvailability> _SectionSeatAvailabilities;
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<SectionsMeta> SectionsMetas
         {
             get
@@ -247,6 +231,22 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<SubjectsCoursePrefix> _SubjectsCoursePrefixes;
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SectionSeat> SectionSeats
+        {
+            get
+            {
+                if ((_SectionSeats == null))
+                {
+                    _SectionSeats = base.CreateObjectSet<SectionSeat>("SectionSeats");
+                }
+                return _SectionSeats;
+            }
+        }
+        private ObjectSet<SectionSeat> _SectionSeats;
 
         #endregion
         #region AddTo Methods
@@ -316,14 +316,6 @@ namespace CTCClassSchedule.Models
         }
 
         /// <summary>
-        /// Deprecated Method for adding a new object to the SectionSeatAvailabilities EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSectionSeatAvailabilities(SectionSeatAvailability sectionSeatAvailability)
-        {
-            base.AddObject("SectionSeatAvailabilities", sectionSeatAvailability);
-        }
-
-        /// <summary>
         /// Deprecated Method for adding a new object to the SectionsMetas EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToSectionsMetas(SectionsMeta sectionsMeta)
@@ -337,6 +329,14 @@ namespace CTCClassSchedule.Models
         public void AddToSubjectsCoursePrefixes(SubjectsCoursePrefix subjectsCoursePrefix)
         {
             base.AddObject("SubjectsCoursePrefixes", subjectsCoursePrefix);
+        }
+
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SectionSeats EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSectionSeats(SectionSeat sectionSeat)
+        {
+            base.AddObject("SectionSeats", sectionSeat);
         }
 
         #endregion
@@ -1305,22 +1305,22 @@ namespace CTCClassSchedule.Models
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="ClassSchedule.Models", Name="SectionSeatAvailability")]
+    [EdmEntityTypeAttribute(NamespaceName="ClassSchedule.Models", Name="SectionSeat")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class SectionSeatAvailability : EntityObject
+    public partial class SectionSeat : EntityObject
     {
         #region Factory Method
 
         /// <summary>
-        /// Create a new SectionSeatAvailability object.
+        /// Create a new SectionSeat object.
         /// </summary>
         /// <param name="classID">Initial value of the ClassID property.</param>
-        public static SectionSeatAvailability CreateSectionSeatAvailability(global::System.String classID)
+        public static SectionSeat CreateSectionSeat(global::System.String classID)
         {
-            SectionSeatAvailability sectionSeatAvailability = new SectionSeatAvailability();
-            sectionSeatAvailability.ClassID = classID;
-            return sectionSeatAvailability;
+            SectionSeat sectionSeat = new SectionSeat();
+            sectionSeat.ClassID = classID;
+            return sectionSeat;
         }
 
         #endregion
