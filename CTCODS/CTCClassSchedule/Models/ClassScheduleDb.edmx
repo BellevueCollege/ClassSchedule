@@ -18,7 +18,6 @@
           </EntitySet>
           <EntitySet Name="Divisions" EntityType="ClassSchedule.Models.Store.Divisions" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SectionCourseCrosslistings" EntityType="ClassSchedule.Models.Store.SectionCourseCrosslistings" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="SectionSeatAvailabilities" EntityType="ClassSchedule.Models.Store.SectionSeatAvailabilities" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SectionsMeta" EntityType="ClassSchedule.Models.Store.SectionsMeta" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Subjects" EntityType="ClassSchedule.Models.Store.Subjects" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SubjectsCoursePrefixes" EntityType="ClassSchedule.Models.Store.SubjectsCoursePrefixes" store:Type="Tables" Schema="dbo" />
@@ -130,14 +129,6 @@
           <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="CourseID" Type="varchar" Nullable="false" MaxLength="10" />
         </EntityType>
-        <EntityType Name="SectionSeatAvailabilities">
-          <Key>
-            <PropertyRef Name="ClassID" />
-          </Key>
-          <Property Name="ClassID" Type="char" Nullable="false" MaxLength="8" />
-          <Property Name="SeatsAvailable" Type="int" />
-          <Property Name="LastUpdated" Type="datetime" />
-        </EntityType>
         <EntityType Name="SectionsMeta">
           <Key>
             <PropertyRef Name="ClassID" />
@@ -153,9 +144,10 @@
           <Key>
             <PropertyRef Name="SubjectID" />
           </Key>
-          <Property Name="SubjectID" Type="int" Nullable="false" />
+          <Property Name="SubjectID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="varchar" MaxLength="255" />
-          <Property Name="Intro" Type="varchar" MaxLength="255" />
+          <Property Name="Intro" Type="varchar(max)" />
+          <Property Name="Slug" Type="varchar" MaxLength="63" />
           <Property Name="LastUpdatedBy" Type="varchar" MaxLength="9" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
@@ -371,6 +363,7 @@
           <Property Type="DateTime" Name="LastUpdated" />
           <NavigationProperty Name="Departments" Relationship="ClassSchedule.Models.DepartmentsSubjects" FromRole="Subject" ToRole="Department" />
           <NavigationProperty Name="SubjectsCoursePrefixes" Relationship="ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects" FromRole="Subject" ToRole="SubjectsCoursePrefix" />
+          <Property Type="String" Name="Slug" MaxLength="63" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="DepartmentsSubjects">
           <End Type="ClassSchedule.Models.Department" Role="Department" Multiplicity="*" />
@@ -507,6 +500,7 @@
           <EntitySetMapping Name="Subjects">
             <EntityTypeMapping TypeName="ClassSchedule.Models.Subject">
               <MappingFragment StoreEntitySet="Subjects">
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
                 <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
                 <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
                 <ScalarProperty Name="Intro" ColumnName="Intro" />
@@ -537,15 +531,6 @@
             <EntityTypeMapping TypeName="ClassSchedule.Models.SectionCourseCrosslisting">
               <MappingFragment StoreEntitySet="SectionCourseCrosslistings">
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SectionSeatAvailabilities">
-            <EntityTypeMapping TypeName="ClassSchedule.Models.SectionSeatAvailability">
-              <MappingFragment StoreEntitySet="SectionSeatAvailabilities">
-                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
-                <ScalarProperty Name="SeatsAvailable" ColumnName="SeatsAvailable" />
                 <ScalarProperty Name="ClassID" ColumnName="ClassID" />
               </MappingFragment>
             </EntityTypeMapping>

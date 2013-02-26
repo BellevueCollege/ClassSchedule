@@ -1727,6 +1727,30 @@ namespace CTCClassSchedule.Models
         partial void OnLastUpdatedChanging(Nullable<global::System.DateTime> value);
         partial void OnLastUpdatedChanged();
 
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Slug
+        {
+            get
+            {
+                return _Slug;
+            }
+            set
+            {
+                OnSlugChanging(value);
+                ReportPropertyChanging("Slug");
+                _Slug = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Slug");
+                OnSlugChanged();
+            }
+        }
+        private global::System.String _Slug;
+        partial void OnSlugChanging(global::System.String value);
+        partial void OnSlugChanged();
+
         #endregion
 
         #region Navigation Properties
