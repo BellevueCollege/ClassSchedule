@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -13,12 +12,8 @@ using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
-using CTCClassSchedule.Properties;
 using MvcMiniProfiler;
-using System.Globalization;
-using System.Web;
 using System.Text;
-using Ctc.Web.Security;
 
 namespace CTCClassSchedule.Controllers
 {

@@ -11,6 +11,8 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Security;
+using Common.Logging;
+
 /**********************************************************************************************
  * This class was adapted from a code example found at:
  * http://stackoverflow.com/questions/726837/user-group-and-role-management-in-net-with-active-directory
@@ -18,7 +20,7 @@ using System.Web.Security;
  * TODO: This provider still needs a lot of work/customizing.
  * I've tweaked it enough to get it working so far. - 1/04/2012, shawn.south@bellevuecollege.edu
  * ********************************************************************************************/
-namespace Ctc.Web.Security
+namespace CtcApi.Web.Security
 {
 	public sealed class ActiveDirectoryRoleProvider : RoleProvider
 	{
@@ -66,6 +68,20 @@ namespace Ctc.Web.Security
 										"MTS Impersonators", "Everyone", "LOCAL", "Authenticated Users"
 								};
 		#endregion
+
+		private ILog _log;
+
+		/// <summary>
+		/// Provides class-level access to the current logger
+		/// </summary>
+		private ILog log
+		{
+			get
+			{
+				_log = _log ?? LogManager.GetCurrentClassLogger();
+				return _log;
+			}
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the ADRoleProvider class.
@@ -232,33 +248,41 @@ namespace Ctc.Web.Security
 				try
 				{
 					// add the users groups to the result
-					var groupList = UserPrincipal
-							.FindByIdentity( context, IdentityType.SamAccountName, username )
-							.GetGroups()
-							.Select( group => group.Name )
-							.ToList();
+					UserPrincipal identity = UserPrincipal.FindByIdentity( context, IdentityType.SamAccountName, username );
 
-					// NOTE: Because groupList will be modified during recursion, we need a copy that won't change
-					IList<string> groupListCopy = new List<string>(groupList);
-					foreach ( var group in groupListCopy )
-						RecurseGroup( context, group, groupList );
+					if (identity != null)
+					{
+						var groupList = identity
+								.GetGroups()
+								.Select( group => group.Name )
+								.ToList();
 
-					groupList = groupList.Except( _groupsToIgnore ).ToList();
+						// NOTE: Because groupList will be modified during recursion, we need a copy that won't change
+						IList<string> groupListCopy = new List<string>(groupList);
+						foreach ( var group in groupListCopy )
+							RecurseGroup( context, group, groupList );
 
-					if ( _isAdditiveGroupMode )
-						groupList = groupList.Join( _groupsToUse, r => r, g => g, ( r, g ) => r ).ToList();
+						groupList = groupList.Except( _groupsToIgnore ).ToList();
 
-          // If we can, save the list, so we don't need to go to Active Directory again
-					if ( HttpContext.Current != null && HttpContext.Current.Session != null )
-						HttpContext.Current.Session[ sessionKey ] = groupList;
+						if ( _isAdditiveGroupMode )
+							groupList = groupList.Join( _groupsToUse, r => r, g => g, ( r, g ) => r ).ToList();
 
-					return groupList.ToArray();
+						if ( HttpContext.Current != null && HttpContext.Current.Session != null )
+							HttpContext.Current.Session[ sessionKey ] = groupList;
+
+						return groupList.ToArray();
+					}
+					else
+					{
+						log.Warn(m => m("Username '{0}' not found in Domain '{0}'", username, _domain));
+					}
 				}
 				catch ( Exception ex )
 				{
-					// TODO: LogError( "Unable to query Active Directory.", ex );
-					throw;
+					log.Error(m => m("Unable to query Active Directory for user '{0}': {1}", username, ex));
 				}
+
+				return new string[] {};
 			}
 		}
 
@@ -288,10 +312,11 @@ namespace Ctc.Web.Security
 				}
 				catch ( Exception ex )
 				{
-					// TODO: LogError( "Unable to query Active Directory.", ex );
-					throw;
+					log.Error(m => m("Unable to query Active Directory for role '{0}': {1}", rolename, ex));
 				}
 			}
+
+			return new string[] {};
 		}
 
 		/// <summary>

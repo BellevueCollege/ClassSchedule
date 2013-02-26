@@ -9,7 +9,8 @@ using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
 using System;
 using System.Diagnostics;
-using Ctc.Web.Security;
+using CtcApi.Web.Mvc;
+using CtcApi.Web.Security;
 using System.Text.RegularExpressions;
 using System.Configuration;
 

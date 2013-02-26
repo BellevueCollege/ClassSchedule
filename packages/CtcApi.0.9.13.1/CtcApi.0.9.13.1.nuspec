@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>CtcApi</id>
+    <version>0.9.13.1</version>
+    <title>CTC API (core)</title>
+    <authors>Shawn South</authors>
+    <owners>Shawn South</owners>
+    <licenseUrl>http://www.opensource.org/licenses/lgpl-3.0.html</licenseUrl>
+    <projectUrl>http://codemastershawn.com/kb/index.php/CTC_API</projectUrl>
+    <iconUrl>https://sn2files.storage.live.com/y1piGsEP4o3zW3cU_o_64eFwkJ_J6uz6nB9qhLWGV6OM3DlpklUS72qdQc0uTUF9R_41yRLu2xwcDM/ctcodsapi-logo.jpg</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Common API for use by Washington State community and technical colleges. For more info, visit http://codemastershawn.com/kb/index.php/CTC_API</description>
+    <releaseNotes />
+    <tags>CTC ODS API HP HP3000 SBCTC college Washington State</tags>
+    <dependencies>
+      <dependency id="Common.Logging" version="2.1.2" />
+    </dependencies>
+    <references>
+      <reference file="CtcApi.dll" />
+    </references>
+  </metadata>
+</package>

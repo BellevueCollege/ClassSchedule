@@ -1,16 +1,16 @@
 ﻿using System.Configuration;
 using System.Web;
 using System.Web.Mvc;
-using Ctc.Web.Security;
+using CtcApi.Web.Security;
 
-namespace Ctc.Web.Security
+namespace CtcApi.Web.Mvc
 {
 	/// <summary>
 	///
 	/// </summary>
 	public class AuthorizeFromConfigAttribute : AuthorizeAttribute
 	{
-		private string[] _roles = new string[] {};
+		private string[] _roles = new string[] { };
 
 		/// <summary>
 		///
@@ -31,7 +31,7 @@ namespace Ctc.Web.Security
 		/// </summary>
 		public string RoleKey
 		{
-			get {return string.Join(",", _roles);}
+			get { return string.Join(",", _roles); }
 			set
 			{
 				string roles = ConfigurationManager.AppSettings[value];

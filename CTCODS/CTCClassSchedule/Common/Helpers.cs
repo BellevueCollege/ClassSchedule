@@ -10,8 +10,8 @@ using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Models;
+using CtcApi.Web.Security;
 using MvcMiniProfiler;
-using Ctc.Web.Security;
 using System.Configuration;
 using System.Text;
 

@@ -47,6 +47,9 @@
     <Reference Include="Common.Logging.Elmah">
       <HintPath>..\..\packages\Common.Logging.Elmah.1.2.1\lib\net40\Common.Logging.Elmah.dll</HintPath>
     </Reference>
+    <Reference Include="CtcApi">
+      <HintPath>..\..\packages\CtcApi.0.9.13.1\lib\net40\CtcApi.dll</HintPath>
+    </Reference>
     <Reference Include="CtcOdsApi, Version=0.9.13.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\CtcOdsApi.0.9.13.1\lib\net40\CtcOdsApi.dll</HintPath>
@@ -131,8 +134,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\ActionOutputCacheAttribute.cs" />
-    <Compile Include="Common\ActiveDirectoryRoleProvider.cs" />
-    <Compile Include="Common\AuthorizeFromConfigAttribute.cs" />
     <Compile Include="Common\AutomatedFootnotesConfig.cs" />
     <Compile Include="Common\AutomatedFootnotesSection.cs" />
     <Compile Include="Common\ClassFootnote.cs" />
