@@ -57,7 +57,8 @@ namespace CTCClassSchedule.Controllers
 		{
 			if (HttpContext.User.Identity.IsAuthenticated == true)
 			{
-
+				throw new UnauthorizedAccessException("Class Schedule Exports are currently disabled pending updates.");
+				/*
 				// Configurables
 				int subjectSeparatedLineBreaks = 4;
 
@@ -145,6 +146,7 @@ namespace CTCClassSchedule.Controllers
 				byte[] fileData = encoding.GetBytes(fileText.ToString());
 				string fileName = String.Concat("CourseData-", yrq.ID, "-", DateTime.Now.ToShortDateString(), ".rtf");
 				return File(fileData, "application/force-download", fileName);
+				*/
 			}
 			else
 			{
@@ -162,50 +164,29 @@ namespace CTCClassSchedule.Controllers
 		{
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				IList<CoursePrefix> courses;
-				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
-				{
-					courses = repository.GetCourseSubjects();
-				}
-
 				// TODO: Refactor the following code into its own method
 				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					IList<vw_ProgramInformation> progInfo = (from s in db.vw_ProgramInformation
-					                                         select s).ToList();
+					IList<Subject> subjects = db.Subjects.ToList();
 
-					IList<ScheduleCoursePrefix> coursesJoin = (from p in progInfo
-					                                           // TODO: Can we use the AbbreviationTrimmed field here instead of calling TrimEnd()?
-					                                           // see YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
-					                                           where courses.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
-					                                           orderby p.Title
-					                                           select new ScheduleCoursePrefix
-												{
-														Subject = p.URL,
-														Title = p.Title
-												}).Distinct().ToList();
-
-					IList<char> alphabet = coursesJoin.Select(c => c.Title.First()).Distinct().ToList();
-					ViewBag.Alphabet = alphabet;
-
-					IEnumerable<ScheduleCoursePrefix> coursesEnum;
+					IEnumerable<Subject> subjectsEnum;
 					if (letter != null)
 					{
-						coursesEnum = from c in coursesJoin
-						              where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
-						              select c;
+						subjectsEnum = from s in subjects
+						              where s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
+						              select s;
 					}
 					else
 					{
-						coursesEnum = coursesJoin;
+						subjectsEnum = subjects;
 					}
 
 					if (format == "json")
 					{
 						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-						return Json(coursesEnum, JsonRequestBehavior.AllowGet);
+						return Json(subjectsEnum, JsonRequestBehavior.AllowGet);
 					}
 
 					// set up all the ancillary data we'll need to display the View
@@ -214,7 +195,7 @@ namespace CTCClassSchedule.Controllers
 					ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? "All" : letter.ToUpper());
 					ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
-					return View(coursesEnum);
+					return View(subjectsEnum);
 				}
 			}
 		}
@@ -231,7 +212,8 @@ namespace CTCClassSchedule.Controllers
 		{
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				IEnumerable<Course> coursesEnum = (Subject != null ? repository.GetCourses(RealSubjectPrefixes(Subject)) : repository.GetCourses()).Distinct();
+
+				IEnumerable<Course> coursesEnum = (Subject != null ? repository.GetCourses(SubjectPrefixes(Subject)) : repository.GetCourses()).Distinct();
 
 				if (format == "json")
 				{
@@ -273,56 +255,38 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				IList<CoursePrefix> courses;
 
-				using (_profiler.Step("ODSAPI::GetCourseSubjects()"))
-				{
-					courses = repository.GetCourseSubjects(yrq, facets);
-				}
 
 				// TODO: Refactor the following code into its own method
 				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					IList<vw_ProgramInformation> progInfo = (from s in db.vw_ProgramInformation
-// The following line was causing problems at Penninsula College. Since I already felt this
-// line was suspect, I've gone ahead and commented it out. (Note that we're not doing this
-// filter in AllClasses(). - 8/29/2012, shawn.south@bellevuecollege.edu
-//					                                         where s.Abbreviation == s.URL
-					                                         select s).ToList();
+					IList<Subject> subjects = db.Subjects.ToList();
 
-					IList<ScheduleCoursePrefix> coursesJoin = (from p in progInfo
-					                                           where courses.Select(c => c.Subject).Contains(p.AbbreviationTrimmed)
-					                                           orderby p.Title
-					                                           select new ScheduleCoursePrefix
-												{
-														Subject = p.URL,
-														Title = p.Title,
-												}).Distinct().ToList();
-
-					IList<char> alphabet = coursesJoin.Select(c => c.Title.First()).Distinct().ToList();
+					IList<char> alphabet = subjects.Select(c => c.Title.First()).Distinct().ToList();
 					ViewBag.Alphabet = alphabet;
 
-					IEnumerable<ScheduleCoursePrefix> coursesEnum;
+					IEnumerable<Subject> subjectsEnum;
 					if (letter != null)
 					{
-						coursesEnum = (from c in coursesJoin
-						               where c.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
-						               select c).Distinct();
+						subjectsEnum = (from s in subjects
+														where s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
+														select s).Distinct();
 					}
 					else
 					{
-						coursesEnum = coursesJoin;
+						subjectsEnum = subjects;
 					}
 
 					if (format == "json")
 					{
 						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-						return Json(coursesEnum, JsonRequestBehavior.AllowGet);
+						return Json(subjectsEnum, JsonRequestBehavior.AllowGet);
 					}
 
 					// set up all the ancillary data we'll need to display the View
+
 					SetCommonViewBagVars(repository, avail, letter);
 					ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 
@@ -340,8 +304,8 @@ namespace CTCClassSchedule.Controllers
 
 					ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
-					ViewBag.ItemCount = coursesEnum.Count();
-					return View(coursesEnum);
+					ViewBag.ItemCount = subjectsEnum.Count();
+					return View(subjectsEnum);
 				}
 			}
 		}
@@ -363,7 +327,7 @@ namespace CTCClassSchedule.Controllers
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
-					sections = repository.GetSections(RealSubjectPrefixes(Subject), yrq, facets);
+					sections = repository.GetSections(SubjectPrefixes(Subject), yrq, facets);
 				}
 
 				using (ClassScheduleDb db = new ClassScheduleDb())
@@ -394,7 +358,7 @@ namespace CTCClassSchedule.Controllers
 					//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
 					TempData["DayDictionary"] = Helpers.getDayDictionary();
 
-					SetCommonViewBagVars(repository, avail, "");
+					SetCommonViewBagVars(repository, avail, string.Empty);
 					SetProgramInfoVars(Subject, db);
 
 					ViewBag.YearQuarter = yrq;
@@ -501,7 +465,7 @@ namespace CTCClassSchedule.Controllers
 				//table with a 0 for seats available.
 				if (hpSeats >= 0)
 				{
-					IQueryable<SeatAvailability> seatsAvailableLocal = from s in db.SeatAvailabilities
+					IQueryable<SectionSeatAvailability> seatsAvailableLocal = from s in db.SectionSeatAvailabilities
 					                                                   where s.ClassID == classID
 					                                                   select s;
 					int rows = seatsAvailableLocal.Count();
@@ -510,7 +474,7 @@ namespace CTCClassSchedule.Controllers
 					{
 						// TODO: Should only be updating one record
 						//update the value
-						foreach (SeatAvailability seat in seatsAvailableLocal)
+						foreach (SectionSeatAvailability seat in seatsAvailableLocal)
 						{
 							seat.SeatsAvailable = hpSeats;
 							seat.LastUpdated = DateTime.Now;
@@ -519,7 +483,7 @@ namespace CTCClassSchedule.Controllers
 					else
 					{
 						//insert the value
-						SeatAvailability newseat = new SeatAvailability();
+						SectionSeatAvailability newseat = new SectionSeatAvailability();
 						newseat.ClassID = classID;
 						newseat.SeatsAvailable = hpSeats;
 						newseat.LastUpdated = DateTime.Now;
@@ -531,11 +495,11 @@ namespace CTCClassSchedule.Controllers
 				}
 
 				// retrieve updated seats data
-				IQueryable<vw_SeatAvailability> seatsAvailable = from s in db.vw_SeatAvailability
-				                                                 where s.ClassID == classID
-				                                                 select s;
+				IQueryable<SectionSeatAvailability> seatsAvailable = from s in db.SectionSeatAvailabilities
+																														 where s.ClassID == classID
+																														 select s;
 
-				vw_SeatAvailability newSeat = seatsAvailable.First();
+				SectionSeatAvailability newSeat = seatsAvailable.First();
 
 				seats = newSeat.SeatsAvailable;
 				friendlyTime = newSeat.LastUpdated.GetValueOrDefault().ToString("h:mm tt").ToLower();
@@ -633,13 +597,13 @@ namespace CTCClassSchedule.Controllers
 			{
 				using (_profiler.Step("Getting app-specific Section records from DB"))
 				{
-					CourseFootnote item = null;
+					CourseMeta item = null;
 					char[] trimChar = { '&' };
 
 					string FullCourseID = Helpers.BuildCourseID(CourseNum, Subject.TrimEnd(trimChar), courseID.IsCommonCourse);
 					try
 					{
-						item = db.CourseFootnotes.Single(s => s.CourseID.Trim().ToUpper() == FullCourseID);
+						item = db.CourseMetas.Single(s => s.CourseID.Trim().ToUpper() == FullCourseID);
 
 						if (item != null)
 						{
@@ -836,6 +800,7 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		/// <param name="yrq">The quarter to fetch sections for.</param>
 		/// <returns>A dictionary where they key is the division, and the values are the corresponding lists of Sections.</returns>
+		/*
 		private IDictionary<vw_ProgramInformation, List<SectionWithSeats>> getSectionsByDivision(YearQuarter yrq)
 		{
 			IList<Section> allSections;
@@ -910,7 +875,7 @@ namespace CTCClassSchedule.Controllers
 
 			return results.OrderBy(p => p.Key.Division).ToDictionary(p => p.Key, p => p.Value);
 		}
-
+		*/
 		/// <summary>
 		/// Gets the course outcome information by scraping the Bellevue College
 		/// course outcomes website
@@ -951,6 +916,13 @@ namespace CTCClassSchedule.Controllers
 		/// <param name="Subject"></param>
 		/// <param name="db"></param>
 		/// <param name="useRealAbbreviation"></param>
+		private void SetProgramInfoVars(string Subject, bool useRealAbbreviation = false)
+		{
+			using (ClassScheduleDb db = new ClassScheduleDb())
+			{
+				SetProgramInfoVars(Subject, db, useRealAbbreviation);
+			}
+		}
 		private void SetProgramInfoVars(string Subject, ClassScheduleDb db = null, bool useRealAbbreviation = false)
 		{
 			using (_profiler.Step("Retrieving course program information"))
@@ -962,85 +934,47 @@ namespace CTCClassSchedule.Controllers
 				const string DEFAULT_DIVISIONURL = "";
 				const string DEFAULT_DIVISIONTITLE = "";
 
-				/*
-				 *
-				 *
-				 * 				using (ClassScheduleDb db = new ClassScheduleDb()){
-					var DepartmentInfo = (from d in db.vw_ProgramInformation
-																where d.Abbreviation == Subject
-																select d).Take(1).ToList();
-
-
-					foreach (vw_ProgramInformation temp in DepartmentInfo)
-					{
-						string DivisionTitle
-							string DivisionUrl
-
-					}
-				}
-				 *
-				 *
-				 */
-				bool disposeDb = false;
-
-				if (db == null)
+				IQueryable<vw_ProgramInformation> specificProgramInfo;
+				if (useRealAbbreviation)
 				{
-					db = new ClassScheduleDb();
-					disposeDb = true;
+					specificProgramInfo = from s in db.vw_ProgramInformation
+						                    where s.Abbreviation == Subject
+						                    select s;
+				}
+				else
+				{
+					specificProgramInfo = from s in db.vw_ProgramInformation
+						                    where s.Abbreviation == Subject
+						                    select s;
+
 				}
 
-				try
+				if (specificProgramInfo.Count() > 0)
 				{
-					IQueryable<vw_ProgramInformation> specificProgramInfo;
-					if (useRealAbbreviation)
+					vw_ProgramInformation program = specificProgramInfo.Take(1).Single();
+
+					ViewBag.ProgramTitle = program.Title ?? DEFAULT_TITLE;
+					ViewBag.SubjectIntro = program.Intro ?? DEFAULT_INTRO;
+					ViewBag.AcademicProgram = program.AcademicProgram ?? DEFAULT_ACADEMICPROGRAM;
+					ViewBag.DivisionURL = program.DivisionURL ?? DEFAULT_DIVISIONURL;
+					ViewBag.DivisionTitle = program.Division ?? DEFAULT_DIVISIONTITLE;
+
+
+
+					string url = program.ProgramURL ?? DEFAULT_URL;
+
+					//if the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
+					//or empty just return it, otherwise prepend iwth the current school url.
+					if (!string.IsNullOrWhiteSpace(url) && !Regex.IsMatch(url, @"^https?://"))
 					{
-						specificProgramInfo = from s in db.vw_ProgramInformation
-						                      where s.Abbreviation == Subject
-						                      select s;
+						url =  ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(url);
 					}
-					else
-					{
-						specificProgramInfo = from s in db.vw_ProgramInformation
-						                      where s.Abbreviation == Subject
-						                      select s;
-
-					}
-
-					if (specificProgramInfo.Count() > 0)
-					{
-						vw_ProgramInformation program = specificProgramInfo.Take(1).Single();
-
-						ViewBag.ProgramTitle = program.Title ?? DEFAULT_TITLE;
-						ViewBag.SubjectIntro = program.Intro ?? DEFAULT_INTRO;
-						ViewBag.AcademicProgram = program.AcademicProgram ?? DEFAULT_ACADEMICPROGRAM;
-						ViewBag.DivisionURL = program.DivisionURL ?? DEFAULT_DIVISIONURL;
-						ViewBag.DivisionTitle = program.Division ?? DEFAULT_DIVISIONTITLE;
-
-
-
-						string url = program.ProgramURL ?? DEFAULT_URL;
-
-						//if the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
-						//or empty just return it, otherwise prepend iwth the current school url.
-						if (!string.IsNullOrWhiteSpace(url) && !Regex.IsMatch(url, @"^https?://"))
-						{
-							url =  ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(url);
-						}
-						ViewBag.ProgramUrl = url;
-					}
-					else
-					{
-						ViewBag.ProgramTitle = DEFAULT_TITLE;
-						ViewBag.ProgramUrl = DEFAULT_URL;
-					}
+					ViewBag.ProgramUrl = url;
 				}
-				finally
+				else
 				{
-					// clean up the database connection if we had to create one
-					if (disposeDb && db != null)
-					{
-						db.Dispose();
-					}
+					ViewBag.ProgramTitle = DEFAULT_TITLE;
+					ViewBag.ProgramUrl = DEFAULT_URL;
 				}
 			}
 		}
@@ -1056,13 +990,22 @@ namespace CTCClassSchedule.Controllers
 		/// up these mappings in the application database for the appropriate
 		/// list of actual prefix abbreviations.
 		/// </remarks>
-		private List<string> RealSubjectPrefixes(string URLprefix)
+		private List<string> SubjectPrefixes(string subjectId)
+		{
+			int id;
+			List<string> prefixes = new List<string>();
+			if (Int32.TryParse(subjectId, out id))
+			{
+				prefixes = SubjectPrefixes(id);
+			}
+
+			return prefixes;
+		}
+		private List<string> SubjectPrefixes(int subjectId)
 		{
 			using (ClassScheduleDb db = new ClassScheduleDb())
 			{
-				List<string> prefixList = (from s in db.vw_ProgramInformation
-				                           where s.URL == URLprefix
-				                           select s.Abbreviation).ToList();
+				List<string> prefixList = db.SubjectsCoursePrefixes.Where(s => s.SubjectID == subjectId).Select(s => s.CoursePrefixID).ToList();
 
 				return prefixList;
 			}

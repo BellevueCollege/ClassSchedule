@@ -7,11 +7,11 @@ namespace CTCClassSchedule
 {
 	public class ProgramEditModel
 	{
-		public ProgramInformation itemToUpdate { get; set; }
+		public ProgramInformation ItemToUpdate { get; set; }
 
-		public IEnumerable<string> MergeSubjectChoices { get; set; }
+		public IEnumerable<string> Subjects { get; set; }
 
-		public IEnumerable<string> MergedClasses{ get; set; }
+		public IEnumerable<string> MergedSubjects{ get; set; }
 
 	}
 }

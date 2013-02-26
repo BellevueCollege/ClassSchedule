@@ -430,25 +430,17 @@ namespace CTCClassSchedule.Controllers
 					try
 					{
 						var itemToUpdate = db.ProgramInformations.First(s => s.Abbreviation == Abbreviation);
+						IList<string> mergedSubjects = db.ProgramInformations.Where(c => c.URL == Abbreviation && c.Abbreviation != Abbreviation).Select(c => c.Abbreviation).ToList();
+						IList<string> subjectChoices = db.ProgramInformations.Where(c => c.Abbreviation != Abbreviation && !mergedSubjects.Contains(c.Abbreviation))
+																																 .Select(c => c.Abbreviation).OrderBy(c => c).ToList();
 
-						var subjectChoices = (	from c in db.ProgramInformations
-																		orderby c.Abbreviation ascending
-																		select c.Abbreviation
-																		).ToList();
-						subjectChoices.Insert(0, "");
-
-						var mergedClasses = (from c in db.ProgramInformations
-																	where c.URL == Abbreviation
-																	select c.Abbreviation
-																		).ToList();
-
+						subjectChoices.Insert(0, string.Empty);
 
 						ProgramEditModel model = new ProgramEditModel
 						{
-							itemToUpdate = itemToUpdate,
-							MergeSubjectChoices = subjectChoices,
-							MergedClasses = mergedClasses
-
+							ItemToUpdate = itemToUpdate,
+							Subjects = subjectChoices,
+							MergedSubjects = mergedSubjects
 						};
 
 						return PartialView(model);
@@ -469,7 +461,7 @@ namespace CTCClassSchedule.Controllers
 		[HttpPost]
 		[ValidateInput(false)]
 		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
-		public ActionResult ProgramEdit(FormCollection collection)
+		public ActionResult ProgramEdit(FormCollection collection, ICollection<string> MergeSubjects)
 		{
 			string referrer = collection["referrer"];
 
@@ -487,27 +479,19 @@ namespace CTCClassSchedule.Controllers
 				string Title = collection["itemToUpdate.Title"];
 				string Abbreviation = collection["itemToUpdate.Abbreviation"];
 				string URL = collection["itemToUpdate.URL"];
-				string MergeWith = collection["MergeWith"] == "" ? null : collection["MergeWith"];
 
 				Intro = StripHTML(Intro);
 
-
-
-				ProgramInformation itemToUpdate = new ProgramInformation();
-				bool itemFound = false;
 				if (ModelState.IsValid)
 				{
+					bool itemFound = false;
 					using (ClassScheduleDb db = new ClassScheduleDb())
 					{
-						try
+						ProgramInformation itemToUpdate = new ProgramInformation();
+						if (db.ProgramInformations.Any(s => s.Abbreviation == Abbreviation))
 						{
 							itemToUpdate = db.ProgramInformations.First(s => s.Abbreviation == Abbreviation);
-
 							itemFound = true;
-						}
-						catch(InvalidOperationException e)
-						{
-							Trace.Write(e);
 						}
 
 						itemToUpdate.LastUpdated = DateTime.Now;
@@ -519,16 +503,6 @@ namespace CTCClassSchedule.Controllers
 						itemToUpdate.Intro = Intro;
 						itemToUpdate.Title = Title;
 
-
-						if (MergeWith != null)
-						{
-							itemToUpdate.URL = MergeWith;
-						}
-						else
-						{
-							itemToUpdate.URL = Abbreviation;
-						}
-
 						//add the item to the database if it doesn't exist.
 						if (itemFound == false)
 						{
@@ -539,6 +513,32 @@ namespace CTCClassSchedule.Controllers
 							db.AddToProgramInformations(itemToUpdate);
 						}
 
+
+
+						// Perform subject merging/unmerging
+						if (MergeSubjects == null) { MergeSubjects = new List<string>(); }
+						IList<ProgramInformation> mergedSubjects = db.ProgramInformations.Where(c => c.URL == Abbreviation).ToList();
+
+						 // Merge subjects
+						foreach (string abbr in MergeSubjects)
+						{
+							if (db.ProgramInformations.Any(s => s.Abbreviation == abbr))
+							{
+								db.ProgramInformations.First(s => s.Abbreviation == abbr).URL = Abbreviation;
+							}
+						}
+
+						// Unmerge subjects
+						foreach (string abbr in mergedSubjects.Select(s => s.Abbreviation))
+						{
+							if (!MergeSubjects.Contains(abbr) && abbr != Abbreviation)
+							{
+								ProgramInformation program = db.ProgramInformations.First(s => s.Abbreviation == abbr);
+								program.URL = program.Abbreviation;
+							}
+						}
+
+
 						//save to the db (whether item existed or not)
 						db.SaveChanges();
 					}
@@ -547,9 +547,6 @@ namespace CTCClassSchedule.Controllers
 
 			return Redirect(referrer);
 		}
-
-
-
 
 	}
 }
