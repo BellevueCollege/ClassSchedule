@@ -1,23 +1,24 @@
 /*
 INSERT INTO dbo.Subjects
-        ( Title ,
-          Intro ,
-          LastUpdatedBy ,
+        ( Title,
+          Intro,
+          Slug,
+          LastUpdatedBy,
           LastUpdated
         )
 --*/
 
---delete from dbo.Subjects
+-- delete from dbo.Subjects
 
 SELECT
-		--d.[Abbreviation]
-  --    ,d.[URL]
+	 --d.[Abbreviation]
       d.[Title]
       --,d.[ProgramURL]
       --,d.[Division]
       --,d.[ContactName]
       --,d.[ContactPhone]
       ,ISNULL(d.[Intro], '')
+	    ,d.[URL]
       --,d.[AcademicProgram]
       --,d.[DivisionURL]
       ,(
@@ -31,8 +32,9 @@ SELECT
 		) AS LastUpdatedBy
       ,MAX(d.[LastUpdated]) AS LastUpdated
   FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].[ProgramInformation] d
-  GROUP BY d.Title, ISNULL(d.Intro, '')
+  GROUP BY d.Title, ISNULL(d.Intro, ''), d.URL
   ORDER BY d.Title
 GO
 
---SELECT * FROM dbo.Subjects
+SELECT * FROM dbo.Subjects
+
