@@ -8,7 +8,7 @@ namespace CTCClassSchedule.Common
 {
 	// TODO:
 	// (1) Add GetSubjectsFromPrefix methods accepting either a CoursePrefix, SubjectCoursePrefix, ScheduleCoursePrefix, or String?
-	//		 Returns list of Subjects mkaing use of the specified Prefix
+	//		 Should return a list of Subjects which are using specified Prefix
 	// (2) Add summary documentation to class and members
 	// (3) Include error handling if the subject is not found
 	public static class SubjectInfo
