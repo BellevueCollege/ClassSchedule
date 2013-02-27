@@ -19,8 +19,8 @@ using System.Runtime.Serialization;
 #region EDM Relationship Metadata
 
 [assembly: EdmRelationshipAttribute("ClassSchedule.Models", "FK_Departments_Division", "Division", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(CTCClassSchedule.Models.Division), "Department", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CTCClassSchedule.Models.Department), true)]
-[assembly: EdmRelationshipAttribute("ClassSchedule.Models", "DepartmentsSubjects", "Department", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CTCClassSchedule.Models.Department), "Subject", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CTCClassSchedule.Models.Subject))]
 [assembly: EdmRelationshipAttribute("ClassSchedule.Models", "FK_SubjectsCoursePrefixes_Subjects", "Subject", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CTCClassSchedule.Models.Subject), "SubjectsCoursePrefix", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CTCClassSchedule.Models.SubjectsCoursePrefix), true)]
+[assembly: EdmRelationshipAttribute("ClassSchedule.Models", "DepartmentsSubjects", "Department", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CTCClassSchedule.Models.Department), "Subject", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CTCClassSchedule.Models.Subject))]
 
 #endregion
 
@@ -155,22 +155,6 @@ namespace CTCClassSchedule.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Subject> Subjects
-        {
-            get
-            {
-                if ((_Subjects == null))
-                {
-                    _Subjects = base.CreateObjectSet<Subject>("Subjects");
-                }
-                return _Subjects;
-            }
-        }
-        private ObjectSet<Subject> _Subjects;
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<CourseMeta> CourseMetas
         {
             get
@@ -248,6 +232,22 @@ namespace CTCClassSchedule.Models
         }
         private ObjectSet<SectionSeat> _SectionSeats;
 
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Subject> Subjects
+        {
+            get
+            {
+                if ((_Subjects == null))
+                {
+                    _Subjects = base.CreateObjectSet<Subject>("Subjects");
+                }
+                return _Subjects;
+            }
+        }
+        private ObjectSet<Subject> _Subjects;
+
         #endregion
         #region AddTo Methods
 
@@ -292,14 +292,6 @@ namespace CTCClassSchedule.Models
         }
 
         /// <summary>
-        /// Deprecated Method for adding a new object to the Subjects EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSubjects(Subject subject)
-        {
-            base.AddObject("Subjects", subject);
-        }
-
-        /// <summary>
         /// Deprecated Method for adding a new object to the CourseMetas EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToCourseMetas(CourseMeta courseMeta)
@@ -337,6 +329,14 @@ namespace CTCClassSchedule.Models
         public void AddToSectionSeats(SectionSeat sectionSeat)
         {
             base.AddObject("SectionSeats", sectionSeat);
+        }
+
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Subjects EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSubjects(Subject subject)
+        {
+            base.AddObject("Subjects", subject);
         }
 
         #endregion
@@ -1594,10 +1594,12 @@ namespace CTCClassSchedule.Models
         /// Create a new Subject object.
         /// </summary>
         /// <param name="subjectID">Initial value of the SubjectID property.</param>
-        public static Subject CreateSubject(global::System.Int32 subjectID)
+        /// <param name="slug">Initial value of the Slug property.</param>
+        public static Subject CreateSubject(global::System.Int32 subjectID, global::System.String slug)
         {
             Subject subject = new Subject();
             subject.SubjectID = subjectID;
+            subject.Slug = slug;
             return subject;
         }
 
@@ -1682,6 +1684,30 @@ namespace CTCClassSchedule.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Slug
+        {
+            get
+            {
+                return _Slug;
+            }
+            set
+            {
+                OnSlugChanging(value);
+                ReportPropertyChanging("Slug");
+                _Slug = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Slug");
+                OnSlugChanged();
+            }
+        }
+        private global::System.String _Slug;
+        partial void OnSlugChanging(global::System.String value);
+        partial void OnSlugChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String LastUpdatedBy
@@ -1727,55 +1753,9 @@ namespace CTCClassSchedule.Models
         partial void OnLastUpdatedChanging(Nullable<global::System.DateTime> value);
         partial void OnLastUpdatedChanged();
 
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Slug
-        {
-            get
-            {
-                return _Slug;
-            }
-            set
-            {
-                OnSlugChanging(value);
-                ReportPropertyChanging("Slug");
-                _Slug = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Slug");
-                OnSlugChanged();
-            }
-        }
-        private global::System.String _Slug;
-        partial void OnSlugChanging(global::System.String value);
-        partial void OnSlugChanged();
-
         #endregion
 
         #region Navigation Properties
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("ClassSchedule.Models", "DepartmentsSubjects", "Department")]
-        public EntityCollection<Department> Departments
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Department>("ClassSchedule.Models.DepartmentsSubjects", "Department");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Department>("ClassSchedule.Models.DepartmentsSubjects", "Department", value);
-                }
-            }
-        }
 
         /// <summary>
         /// No Metadata Documentation available.
@@ -1795,6 +1775,28 @@ namespace CTCClassSchedule.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<SubjectsCoursePrefix>("ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects", "SubjectsCoursePrefix", value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("ClassSchedule.Models", "DepartmentsSubjects", "Department")]
+        public EntityCollection<Department> Departments
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Department>("ClassSchedule.Models.DepartmentsSubjects", "Department");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Department>("ClassSchedule.Models.DepartmentsSubjects", "Department", value);
                 }
             }
         }
