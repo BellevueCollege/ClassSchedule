@@ -430,7 +430,7 @@ namespace CTCClassSchedule.Controllers
 						ViewBag.CourseOutcome = getCourseOutcome(realSubject, realCourseID.Number);
 					}
 
-					SetProgramInfoVars(realSubject, null, true);
+					SetProgramInfoVars(realSubject);
 
 					ViewBag.CMSFootnote = getCMSFootnote(Subject, ClassNum, courseID);
 
@@ -465,7 +465,7 @@ namespace CTCClassSchedule.Controllers
 				//table with a 0 for seats available.
 				if (hpSeats >= 0)
 				{
-					IQueryable<SectionSeatAvailability> seatsAvailableLocal = from s in db.SectionSeatAvailabilities
+					IQueryable<SectionSeat> seatsAvailableLocal = from s in db.SectionSeats
 					                                                   where s.ClassID == classID
 					                                                   select s;
 					int rows = seatsAvailableLocal.Count();
@@ -474,7 +474,7 @@ namespace CTCClassSchedule.Controllers
 					{
 						// TODO: Should only be updating one record
 						//update the value
-						foreach (SectionSeatAvailability seat in seatsAvailableLocal)
+						foreach (SectionSeat seat in seatsAvailableLocal)
 						{
 							seat.SeatsAvailable = hpSeats;
 							seat.LastUpdated = DateTime.Now;
@@ -483,7 +483,7 @@ namespace CTCClassSchedule.Controllers
 					else
 					{
 						//insert the value
-						SectionSeatAvailability newseat = new SectionSeatAvailability();
+						SectionSeat newseat = new SectionSeat();
 						newseat.ClassID = classID;
 						newseat.SeatsAvailable = hpSeats;
 						newseat.LastUpdated = DateTime.Now;
@@ -495,11 +495,11 @@ namespace CTCClassSchedule.Controllers
 				}
 
 				// retrieve updated seats data
-				IQueryable<SectionSeatAvailability> seatsAvailable = from s in db.SectionSeatAvailabilities
+				IQueryable<SectionSeat> seatsAvailable = from s in db.SectionSeats
 																														 where s.ClassID == classID
 																														 select s;
 
-				SectionSeatAvailability newSeat = seatsAvailable.First();
+				SectionSeat newSeat = seatsAvailable.First();
 
 				seats = newSeat.SeatsAvailable;
 				friendlyTime = newSeat.LastUpdated.GetValueOrDefault().ToString("h:mm tt").ToLower();
@@ -916,65 +916,31 @@ namespace CTCClassSchedule.Controllers
 		/// <param name="Subject"></param>
 		/// <param name="db"></param>
 		/// <param name="useRealAbbreviation"></param>
-		private void SetProgramInfoVars(string Subject, bool useRealAbbreviation = false)
-		{
-			using (ClassScheduleDb db = new ClassScheduleDb())
-			{
-				SetProgramInfoVars(Subject, db, useRealAbbreviation);
-			}
-		}
-		private void SetProgramInfoVars(string Subject, ClassScheduleDb db = null, bool useRealAbbreviation = false)
+		// TODO: Refactor this code to return SubjectInfo. Instead of using ViewBag we should return the data to each View as the Model
+		private void SetProgramInfoVars(string slug, ClassScheduleDb context = null)
 		{
 			using (_profiler.Step("Retrieving course program information"))
 			{
-				const string DEFAULT_TITLE = "";
-				const string DEFAULT_URL = "";
-				const string DEFAULT_INTRO = "";
-				const string DEFAULT_ACADEMICPROGRAM = "";
-				const string DEFAULT_DIVISIONURL = "";
-				const string DEFAULT_DIVISIONTITLE = "";
-
-				IQueryable<vw_ProgramInformation> specificProgramInfo;
-				if (useRealAbbreviation)
+				using (context = context ?? new ClassScheduleDb())
 				{
-					specificProgramInfo = from s in db.vw_ProgramInformation
-						                    where s.Abbreviation == Subject
-						                    select s;
-				}
-				else
-				{
-					specificProgramInfo = from s in db.vw_ProgramInformation
-						                    where s.Abbreviation == Subject
-						                    select s;
-
-				}
-
-				if (specificProgramInfo.Count() > 0)
-				{
-					vw_ProgramInformation program = specificProgramInfo.Take(1).Single();
-
-					ViewBag.ProgramTitle = program.Title ?? DEFAULT_TITLE;
-					ViewBag.SubjectIntro = program.Intro ?? DEFAULT_INTRO;
-					ViewBag.AcademicProgram = program.AcademicProgram ?? DEFAULT_ACADEMICPROGRAM;
-					ViewBag.DivisionURL = program.DivisionURL ?? DEFAULT_DIVISIONURL;
-					ViewBag.DivisionTitle = program.Division ?? DEFAULT_DIVISIONTITLE;
-
-
-
-					string url = program.ProgramURL ?? DEFAULT_URL;
-
-					//if the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
-					//or empty just return it, otherwise prepend iwth the current school url.
-					if (!string.IsNullOrWhiteSpace(url) && !Regex.IsMatch(url, @"^https?://"))
+					SubjectInfoResult subjectInfo = SubjectInfo.GetSubjectInfo(slug);
+					if (subjectInfo != null)
 					{
-						url =  ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(url);
+						ViewBag.ProgramTitle = subjectInfo.Subject.Title;
+						ViewBag.SubjectIntro = subjectInfo.Subject.Intro;
+						ViewBag.AcademicProgram = subjectInfo.Department.Title;
+						ViewBag.DivisionURL = subjectInfo.Division.URL;
+						ViewBag.DivisionTitle = subjectInfo.Division.Title;
+
+						// If the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
+						// or empty just return it, otherwise prepend iwth the current school url.
+						string deptUrl = subjectInfo.Department.URL;
+						if (!string.IsNullOrWhiteSpace(deptUrl) && !Regex.IsMatch(deptUrl, @"^https?://"))
+						{
+							deptUrl = ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(deptUrl);
+						}
+						ViewBag.ProgramUrl = deptUrl;
 					}
-					ViewBag.ProgramUrl = url;
-				}
-				else
-				{
-					ViewBag.ProgramTitle = DEFAULT_TITLE;
-					ViewBag.ProgramUrl = DEFAULT_URL;
 				}
 			}
 		}
