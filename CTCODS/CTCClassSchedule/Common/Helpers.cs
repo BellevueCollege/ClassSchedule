@@ -29,12 +29,6 @@ namespace CTCClassSchedule.Common
 			EndTime
 		};
 
-		public static MvcHtmlString IncludePageURL(this HtmlHelper htmlHelper, string url)
-		{
-			return MvcHtmlString.Create(new WebClient().DownloadString(url));
-
-		}
-
 		public static string getBodyClasses(HttpContextBase Context)
 		{
 			string classes = "";
@@ -322,136 +316,6 @@ namespace CTCClassSchedule.Common
 			}
 		}
 
-		/// <summary>
-		/// Returns true/false if the value passed does not meet valid year requirements
-		/// </summary>
-		public static bool IsBadlyFormedYear(string year)
-		{
-			short yearNumber;
-
-			if (Int16.TryParse(year, out yearNumber))
-			{
-				return (yearNumber < 1975 || yearNumber > 2030);
-			}
-
-			return true;
-		}
-
-		/// <summary>
-		/// Gets the current year given some input params. Helper method for getFriendlyDateFromYRQ
-		/// </summary>
-		public static string getYearHelper(string quarter, string year1, string year2, string decade, bool isLastTwoQuarters)
-		{
-			string first2OfYear = "";
-			string last2OfYear = "";
-			string ThirdOfYear = "";
-
-			int intYear1 = Convert.ToInt16(year1);
-			int intYear2 = Convert.ToInt16(year2);
-
-			switch (decade)
-			{
-				case "7":
-					first2OfYear = "19";
-					break;
-				case "8":
-					first2OfYear = "19";
-					break;
-				case "9":
-					first2OfYear = isLastTwoQuarters == true ? "20" : "19";
-					break;
-				case "A":
-					first2OfYear = "20";
-					break;
-				case "B":
-					first2OfYear = "20";
-					break;
-				case "C":
-					first2OfYear = "20";
-					break;
-				case "D":
-					first2OfYear = "20";
-					break;
-				default:
-					break;
-			}
-
-			switch (quarter)
-			{
-				case "1":
-					last2OfYear = getDecadeIntegerFromString(decade) + intYear1.ToString();
-					break;
-				case "2":
-					last2OfYear = getDecadeIntegerFromString(decade) + intYear1.ToString();
-					break;
-				case "3":
-					ThirdOfYear = isLastTwoQuarters == true ? getDecadeIntegerFromString(getNextDecade(decade)) : getDecadeIntegerFromString(decade);
-					last2OfYear = ThirdOfYear + intYear2.ToString();
-					break;
-				case "4":
-					ThirdOfYear = isLastTwoQuarters == true ? getDecadeIntegerFromString(getNextDecade(decade)) : getDecadeIntegerFromString(decade);
-					last2OfYear = ThirdOfYear + intYear2.ToString();
-					break;
-				default:
-
-					break;
-
-			}
-
-			return first2OfYear + last2OfYear;
-
-		}
-
-		/// <summary>
-		/// Gets the friendly decade value from the HP decade (A = 2000's, B = 2010's). Helper method for getYearHelper
-		/// </summary>
-		static public string getDecadeIntegerFromString(string decade)
-		{
-			switch (decade)
-			{
-				case "7":
-					return "7";
-				case "8":
-					return "8";
-				case "9":
-					return "9";
-				case "A":
-					return "0";
-				case "B":
-					return "1";
-				case "C":
-					return "2";
-				case "D":
-					return "3";
-			}
-			return "";
-		}
-
-		/// <summary>
-		/// Gets the next decade in HP format (8, 9, A, B)
-		/// </summary>
-		static public string getNextDecade(string decade)
-		{
-			switch (decade)
-			{
-				case "7":
-					return "8";
-				case "8":
-					return "9";
-				case "9":
-					return "A";
-				case "A":
-					return "B";
-				case "B":
-					return "C";
-				case "C":
-					return "D";
-				case "D":
-					return "E";
-			}
-			return "";
-
-		}
 
 		/// <summary>
 		///
@@ -462,13 +326,12 @@ namespace CTCClassSchedule.Common
 		/// <returns></returns>
 		static public GeneralFacetInfo getFacetInfo(string fieldID, string fieldTitle, string fieldValue)
 		{
-			return new GeneralFacetInfo
-				{
-						ID = fieldID,
-						Title = fieldTitle,
-									Value = fieldValue,
-						Selected = Utility.SafeConvertToBool(fieldValue)
-				};
+			return new GeneralFacetInfo {
+			  ID = fieldID,
+			  Title = fieldTitle,
+				Value = fieldValue,
+			  Selected = Utility.SafeConvertToBool(fieldValue)
+			};
 		}
 
 
