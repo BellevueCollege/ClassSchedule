@@ -1,7 +1,7 @@
 ﻿@using CTCClassSchedule.Common
 @model IEnumerable<CTCClassSchedule.Models.Subject>
 
-	@{
+@{
 	// construct the route values we'll pass to the ActionLink helper
 	IDictionary<string, object> routeParms = ViewBag.LinkParams;
 	// make sure the Subject parameter exists, so we can assign to it later
@@ -10,63 +10,69 @@
 	}
 
 
-
 	char PreviousLetter = '\0';
-
 	int count = 0;
 	string FriendlyYrq = ViewContext.RouteData.Values.Keys.Contains("YearQuarter") ? ViewContext.RouteData.Values["YearQuarter"].ToString() : "ALL";
-	}
-	@foreach (var item in Model)
- {
-	char letter = item.Title.First();
+}
 
-	 if (letter != PreviousLetter) {
-		 if (count++ > 0)
-		 {
-			 @:</ul>
-		 }
+
+@foreach (var item in Model)
+{
+	char letter = item.Title.First();
+	if (letter != PreviousLetter)
+	{
+		if (count++ > 0)
+		{
+			@:</ul>
+		}
 		<h2 class="subject-letter">@letter</h2>
 		@:<ul class="subject-list">
-	 }
+	}
 
-				routeParms["Subject"] = item.Slug.Trim();
-						<li class="subject-name">
-				@if (FriendlyYrq != "ALL")
+	routeParms["Subject"] = item.Slug.Trim();
+	<li class="subject-name">
+	@if (FriendlyYrq != "ALL")
+	{
+		if (routeParms.Keys.Contains("YearQuarter"))
 		{
-				if (routeParms.Keys.Contains("YearQuarter")) {
-					routeParms["YearQuarter"] = FriendlyYrq;
-				} else {
-					routeParms.Add("YearQuarter", FriendlyYrq);
-				}
-					Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null));
-				}
+			routeParms["YearQuarter"] = FriendlyYrq;
+		}
 		else
 		{
-					Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
-				}
-
-				@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
-				{
-                   @* TODO: ProgramEdit functionality needs to be completely rewritten *@
-				  @Ajax.ActionLink("Edit",
-				                   "ProgramEdit",
-				                   "Api",
-				                   new
-				                     {
-				                       Abbreviation = item.Slug @* <-- Slug is placeholder to get code to compile. *@
-				                     },
-				                   new AjaxOptions
-				                     {
-				                       UpdateTargetId = "edit-program",
-				                       HttpMethod = "GET",
-				                       InsertionMode = InsertionMode.Replace,
-				                       OnBegin = "$('#edit-program').dialog('open');",
-				                     },
-				                   new { @class = "edit_button" })
-				}
-
-
-				</li>
-		PreviousLetter = letter;
+			routeParms.Add("YearQuarter", FriendlyYrq);
+		}
+		Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null));
 	}
-	</ul>
+	else
+	{
+		Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
+	}
+
+
+	@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
+	{
+    @* TODO: ProgramEdit functionality needs to be completely rewritten *@
+		@Ajax.ActionLink("Edit",
+				              "ProgramEdit",
+				              "Api",
+				              new
+				                {
+				                  Abbreviation = item.Slug @* <-- Slug is placeholder to get code to compile. *@
+				                },
+				              new AjaxOptions
+				                {
+				                  UpdateTargetId = "edit-program",
+				                  HttpMethod = "GET",
+				                  InsertionMode = InsertionMode.Replace,
+				                  OnBegin = "$('#edit-program').dialog('open');",
+				                },
+				              new { @class = "edit_button" })
+	}
+
+
+	</li>
+	PreviousLetter = letter;
+}
+</ul>
+
+
