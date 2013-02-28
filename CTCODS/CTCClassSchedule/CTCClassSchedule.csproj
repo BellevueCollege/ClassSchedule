@@ -160,7 +160,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ClassScheduleDb.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\SubjectViewModel.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

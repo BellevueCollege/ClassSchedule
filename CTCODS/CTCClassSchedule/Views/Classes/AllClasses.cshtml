@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CTCClassSchedule.Models.SubjectViewModel>
+﻿@model IEnumerable<CTCClassSchedule.Models.Subject>
 
 @{
     ViewBag.PageTitle = "All Class Descriptions at Bellevue College";
@@ -14,7 +14,7 @@
 
         <div id="content">
 
-		<h1 id="pageTitle">All Credit Classes &amp Descriptions</h1>
+		<h1 id="pageTitle">All Credit Classes &amp; Descriptions</h1>
 
 	 @Html.Partial("a_to_z", alphabet)
 	 @Html.Partial("subjectList", Model)
