@@ -1,24 +1,30 @@
 ﻿using System.Collections.Generic;
+using System.Data.Objects;
+using System.Data.Objects.DataClasses;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Web.Mvc;
+using Common.Logging;
 using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
 using System;
-using System.Diagnostics;
+using CtcApi.Extensions;
 using CtcApi.Web.Mvc;
-using CtcApi.Web.Security;
 using System.Text.RegularExpressions;
 using System.Configuration;
+using Microsoft.Security.Application;
 
 namespace CTCClassSchedule.Controllers
 {
 	public class ApiController : Controller
 	{
-		public ApiController()
+	  private ILog _log = LogManager.GetCurrentClassLogger();
+
+	  public ApiController()
 		{
 			ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		}
@@ -48,23 +54,24 @@ namespace CTCClassSchedule.Controllers
 				IList<CoursePrefix> data;
 				data = string.IsNullOrWhiteSpace(YearQuarter) || YearQuarter.ToUpper() == "ALL" ? db.GetCourseSubjects() : db.GetCourseSubjects(Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter));
 
-				IList<vw_ProgramInformation> progInfo;
-				using (ClassScheduleDb classScheduleDb = new ClassScheduleDb())
-				{
-					progInfo = (from s in classScheduleDb.vw_ProgramInformation select s).ToList();
-				}
-				IList<ScheduleCoursePrefix> subjectList = (from p in progInfo
-																									where data.Select(c => c.Subject).Contains(p.Abbreviation.TrimEnd('&'))
-																									select new ScheduleCoursePrefix
-																														{
-																															Subject = p.URL,
-																															Title = p.Title
-																														})
-																									.OrderBy(s => s.Title)
-																									.Distinct()
-																									.ToList();
+			  IList<ScheduleCoursePrefix> subjectList;
+        using (ClassScheduleDb classScheduleDb = new ClassScheduleDb())
+        {
+          subjectList = (from s in classScheduleDb.Subjects
+				                 join p in classScheduleDb.SubjectsCoursePrefixes on s.SubjectID equals p.SubjectID
+				                 where data.Select(c => c.Subject).Contains(p.CoursePrefixID.TrimEnd('&'))
+				                 select new ScheduleCoursePrefix
+				                          {
+                                    Slug = s.Slug,
+				                            Subject = p.CoursePrefixID,
+				                            Title = s.Title
+				                          })
+				                .OrderBy(s => s.Title)
+				                .Distinct()
+				                .ToList();
+        }
 
-				if (format == "json")
+			  if (format == "json")
 				{
 					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
@@ -78,15 +85,23 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 
-
+    // TODO: Move to Edit methods to ClassesController_Edit.cs
 		//Generation of the Section Edit dialog box
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="itemNumber"></param>
+    /// <param name="yrq"></param>
+    /// <param name="subject"></param>
+    /// <param name="classNum"></param>
+    /// <returns></returns>
 		[AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
 		[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
 		public ActionResult SectionEdit(string itemNumber, string yrq, string subject, string classNum)
 		{
 			string classID = itemNumber + yrq;
 
-			if (HttpContext.User.Identity.IsAuthenticated == true)
+			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 
 				using (OdsRepository respository = new OdsRepository(HttpContext))
@@ -112,38 +127,35 @@ namespace CTCClassSchedule.Controllers
 					sections.Add(editSection);
 
 					IEnumerable<SectionWithSeats> sectionsEnum;
-					SectionFootnote itemToUpdate = null;
+					SectionsMeta itemToUpdate = null;
 					using (ClassScheduleDb db = new ClassScheduleDb())
 					{
 						sectionsEnum = Helpers.GetSectionsWithSeats(yrqRange[0].ID, sections, db);
 
-						try
+					  if(db.SectionsMetas.Any(s => s.ClassID == classID))
 						{
-							itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
+							itemToUpdate = db.SectionsMetas.Single(s => s.ClassID == classID);
 						}
-						catch(InvalidOperationException e)
-						{
-							Trace.Write(e);
-						}
-						var LocalSections = (from s in sectionsEnum
-																 select new SectionWithSeats
-																 {
-																	 ParentObject = s,
-																	 SectionFootnotes = itemToUpdate != null ? itemToUpdate.Footnote ?? string.Empty : string.Empty,
-																	 LastUpdated = itemToUpdate != null ? itemToUpdate.LastUpdated.ToString() ?? string.Empty : string.Empty,
-																	 LastUpdatedBy = itemToUpdate != null ? itemToUpdate.LastUpdatedBy ?? string.Empty : string.Empty,
-																	 CustomTitle = itemToUpdate != null ? itemToUpdate.CustomTitle ?? string.Empty : string.Empty,
-																	 CustomDescription = itemToUpdate != null ? itemToUpdate.CustomDescription ?? string.Empty : string.Empty
-																 }).ToList();
 
-						return PartialView(LocalSections);
+            List<SectionWithSeats> localSections = (from s in sectionsEnum
+					                                          select new SectionWithSeats
+					                                                   {
+					                                                     ParentObject = s,
+					                                                     SectionFootnotes = MvcApplication.SafePropertyToString(itemToUpdate, "Footnote", string.Empty),
+					                                                     LastUpdated = MvcApplication.SafePropertyToString(itemToUpdate, "LastUpdated", string.Empty),
+                                                               LastUpdatedBy = MvcApplication.SafePropertyToString(itemToUpdate, "LastUpdatedBy", string.Empty),
+                                                               CustomTitle = MvcApplication.SafePropertyToString(itemToUpdate, "Title", string.Empty),
+                                                               CustomDescription = MvcApplication.SafePropertyToString(itemToUpdate, "Description", string.Empty),
+					                                                   }).ToList();
+
+						return PartialView(localSections);
 					}
 				}
 			}
 			return PartialView();
 		}
 
-		// TODO: If save successful, return new (possibly trimmed) footnote text
+	  // TODO: If save successful, return new (possibly trimmed) footnote text
 		/// <summary>
 		/// Attempts to update a given sections footnote. If no footnote exists for the section, one is added.
 		/// If the new footnote text is identical to the original, no changes are made.
@@ -168,12 +180,12 @@ namespace CTCClassSchedule.Controllers
 			{
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					IQueryable<SectionFootnote> footnotes = db.SectionFootnotes.Where(s => s.ClassID == classId);
+					IQueryable<SectionsMeta> footnotes = db.SectionsMetas.Where(s => s.ClassID == classId);
 
 					if (footnotes.Count() > 0)
 					{
 						// Should only update one section
-						foreach (SectionFootnote footnote in footnotes)
+						foreach (SectionsMeta footnote in footnotes)
 						{
 							if (!String.Equals(footnote.Footnote, newFootnoteText))
 							{
@@ -188,12 +200,12 @@ namespace CTCClassSchedule.Controllers
 					else if (classId != null && !String.IsNullOrWhiteSpace(newFootnoteText))
 					{
 						// Insert footnote
-						SectionFootnote newFootnote = new SectionFootnote();
+						SectionsMeta newFootnote = new SectionsMeta();
 						newFootnote.ClassID = classId;
 						newFootnote.Footnote = newFootnoteText;
 						newFootnote.LastUpdated = DateTime.Now;
 
-						db.SectionFootnotes.AddObject(newFootnote);
+						db.SectionsMetas.AddObject(newFootnote);
 						result = true;
 					}
 
@@ -204,10 +216,12 @@ namespace CTCClassSchedule.Controllers
 			return Json(new { result = result, footnote = newFootnoteText });
 		}
 
-		//
-		// POST after submit is clicked
-
-		[HttpPost]
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="collection"></param>
+    /// <returns></returns>
+    [HttpPost]
 		[ValidateInput(false)]
 		[AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
 		public ActionResult SectionEdit(FormCollection collection)
@@ -216,135 +230,111 @@ namespace CTCClassSchedule.Controllers
 
 			if (HttpContext.User.Identity.IsAuthenticated == true)
 			{
-				string ItemNumber = collection["ItemNumber"];
-				string Yrq = collection["Yrq"];
-				string Username = HttpContext.User.Identity.Name;
-				string SectionFootnotes = collection["section.SectionFootnotes"];
-				string classID = ItemNumber + Yrq;
+				string itemNumber = collection["ItemNumber"];
+				string yrq = collection["Yrq"];
+				string username = HttpContext.User.Identity.Name;
+				string sectionFootnotes = collection["section.SectionFootnotes"];
+				string classID = itemNumber + yrq;
 				string customTitle = collection["section.CustomTitle"];
 				string customDescription = collection["section.CustomDescription"];
 
 
-				customDescription = StripHTML(customDescription);
-				SectionFootnotes = StripHTML(SectionFootnotes);
+				customDescription = StripHtml(customDescription);
+				sectionFootnotes = StripHtml(sectionFootnotes);
 
-				SectionFootnote itemToUpdate = new SectionFootnote();
+				SectionsMeta itemToUpdate;
 
-				bool itemFound = false;
 				if (ModelState.IsValid)
 				{
 					using (ClassScheduleDb db = new ClassScheduleDb())
 					{
-						try
-						{
-							itemToUpdate = db.SectionFootnotes.Single(s => s.ClassID == classID);
-							itemFound = true;
-						}
-						catch(InvalidOperationException e)
-						{
-							Trace.Write(e);
-						}
+					  itemToUpdate = GetItemToUpdate(db.SectionsMetas, s => s.ClassID == classID);
 
-						itemToUpdate.ClassID = classID;
-						itemToUpdate.Footnote = SectionFootnotes;
-						itemToUpdate.LastUpdated = DateTime.Now;
-						itemToUpdate.LastUpdatedBy = Username;
-						itemToUpdate.CustomTitle = customTitle == string.Empty ? null : customTitle;
-						itemToUpdate.CustomDescription = customDescription;
-
-						if (itemFound == false)
-						{
-							db.AddToSectionFootnotes(itemToUpdate);
-						}
+            itemToUpdate.ClassID = classID;
+            itemToUpdate.Footnote = sectionFootnotes;
+            itemToUpdate.LastUpdated = DateTime.Now;
+            itemToUpdate.LastUpdatedBy = username;
+            itemToUpdate.Title = customTitle == string.Empty ? null : customTitle;
+            itemToUpdate.Description = customDescription;
 
 						db.SaveChanges();
 					}
 				}
-
-
 			}
 			return Redirect(referrer);
 		}
 
-
-		//Generation of the Class Edit dialog box
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="CourseNumber"></param>
+    /// <param name="Subject"></param>
+    /// <param name="IsCommonCourse"></param>
+    /// <returns></returns>
 		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
 		[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
 		public ActionResult ClassEdit(string CourseNumber, string Subject, bool IsCommonCourse)
 		{
 
-			if (HttpContext.User.Identity.IsAuthenticated == true)
+			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				ICourseID courseID = CourseID.FromString(Subject, CourseNumber);
-				string UpdatingCourseID = courseID.ToString();
-				string subject = courseID.Subject;
-				string FullCourseID = Helpers.BuildCourseID(CourseNumber, Subject, IsCommonCourse);
+        // TODO: Do we need the following line because CourseID.FromString() is not returning the correct ICourseID?
+				string fullCourseId = Helpers.BuildCourseID(CourseNumber, Subject, IsCommonCourse);
 
-				if (IsCommonCourse)
-				{
+				CourseMeta itemToUpdate = null;
+				var hpFootnotes = string.Empty;
+				string courseTitle = string.Empty;
 
-					subject = subject + "&";
-				}
-
-				CourseFootnote itemToUpdate = null;
-				var HPFootnotes = "";
-				string courseTitle = "";
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					try
+					if(db.CourseMetas.Any(s => s.CourseID.Trim().ToUpper() == fullCourseId.ToUpper()))
 					{
 						//itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID.Substring(0, 5).Trim().ToUpper() == subject.Trim().ToUpper() &&
 						//																				 s.CourseID.Trim().EndsWith(courseID.Number)
-						itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID.Trim().ToUpper() == FullCourseID.ToUpper());
-
-					}
-					catch(InvalidOperationException e)
-					{
-						Trace.Write(e);
+						itemToUpdate = db.CourseMetas.Single(s => s.CourseID.Trim().ToUpper() == fullCourseId.ToUpper());
 					}
 
-					using (OdsRepository repository = new OdsRepository(HttpContext))
+					using (OdsRepository repository = new OdsRepository())
 					{
-						var QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
-						//Course coursesEnum = new Course();
-						try
+					  try
 						{
-							var coursesEnum = repository.GetCourses(courseID);//.Single(s => s.IsCommonCourse);
+							IList<Course> coursesEnum = repository.GetCourses(courseID);
 
 							foreach (Course course in coursesEnum)
 							{
-								foreach (string footnote in course.Footnotes)
-								{
-									HPFootnotes += footnote + " ";
-								}
+							  hpFootnotes = course.Footnotes.ToArray().Mash(" ");
+
+                // BUG: If more than one course is returned from the API, this will ignore all Titles except for the last one
 								courseTitle = course.Title;
 							}
 						}
-						catch(InvalidOperationException e)
+						catch(InvalidOperationException ex)
 						{
-							Trace.Write(e);
+							_log.Warn(m => m("Ignoring Exception while attempting to retrieve footnote and title data for CourseID '{0}'\n{1}", courseID, ex));
 						}
-
-
 					}
 
-					ClassFootnote LocalClass = new ClassFootnote();
-					LocalClass.CourseID = itemToUpdate != null ? itemToUpdate.CourseID : FullCourseID;
-					LocalClass.Footnote = itemToUpdate != null ? itemToUpdate.Footnote : "";
-					LocalClass.HPFootnote = HPFootnotes;
-					LocalClass.LastUpdated = itemToUpdate != null ? Convert.ToString(itemToUpdate.LastUpdated) : "";
-					LocalClass.LastUpdatedBy = itemToUpdate != null ? itemToUpdate.LastUpdatedBy : "";
-					LocalClass.CourseTitle = courseTitle;
+				  ClassFootnote localClass = new ClassFootnote();
+					localClass.CourseID = MvcApplication.SafePropertyToString(itemToUpdate, "CourseID", fullCourseId);
+					localClass.Footnote = MvcApplication.SafePropertyToString(itemToUpdate, "Footnote", string.Empty);
+					localClass.HPFootnote = hpFootnotes;
+					localClass.LastUpdated = MvcApplication.SafePropertyToString(itemToUpdate, "LastUpdated", string.Empty);
+					localClass.LastUpdatedBy = MvcApplication.SafePropertyToString(itemToUpdate, "LastUpdatedBy", string.Empty);
+					localClass.CourseTitle = courseTitle;
 
-					return PartialView(LocalClass);
+					return PartialView(localClass);
 				}
 			}
 
 			return PartialView();
 		}
 
-		//
-		// POST after submit is clicked
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="collection"></param>
+		/// <returns></returns>
 		[HttpPost]
 		[ValidateInput(false)]
 		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
@@ -352,40 +342,26 @@ namespace CTCClassSchedule.Controllers
 		{
 			string referrer = collection["referrer"];
 
-			if (HttpContext.User.Identity.IsAuthenticated == true)
+			if (HttpContext.User.Identity.IsAuthenticated)
 			{
-				string CourseID = collection["CourseID"];
-				string Username = HttpContext.User.Identity.Name;
-				string Footnote = collection["Footnote"];
+				string courseId = collection["CourseID"];
+				string username = HttpContext.User.Identity.Name;
+				string footnote = collection["Footnote"];
 
-				Footnote = StripHTML(Footnote);
+				footnote = StripHtml(footnote);
 
-				CourseFootnote itemToUpdate = new CourseFootnote();
-				bool itemFound = false;
 				if (ModelState.IsValid)
 				{
-					using (ClassScheduleDb db = new ClassScheduleDb())
+          CourseMeta itemToUpdate;
+
+          using (ClassScheduleDb db = new ClassScheduleDb())
 					{
-						try
-						{
-							itemToUpdate = db.CourseFootnotes.Single(s => s.CourseID == CourseID);
+						itemToUpdate = GetItemToUpdate(db.CourseMetas, s => s.CourseID == courseId);
 
-							itemFound = true;
-						}
-						catch(InvalidOperationException e)
-						{
-							Trace.Write(e);
-						}
-
-						itemToUpdate.CourseID = CourseID;
-						itemToUpdate.Footnote = Footnote;
+						itemToUpdate.CourseID = courseId;
+						itemToUpdate.Footnote = footnote;
 						itemToUpdate.LastUpdated = DateTime.Now;
-						itemToUpdate.LastUpdatedBy = Username;
-
-						if (itemFound == false)
-						{
-							db.AddToCourseFootnotes(itemToUpdate);
-						}
+						itemToUpdate.LastUpdatedBy = username;
 
 						db.SaveChanges();
 					}
@@ -395,158 +371,193 @@ namespace CTCClassSchedule.Controllers
 			return Redirect(referrer);
 		}
 
-		private string StripHTML(string WithHTML)
-		{
-			string Stripped;
-			string whitelist = ConfigurationManager.AppSettings["CMSHtmlParsingAllowedElements"];
+    //Generation of the Program Edit dialog box
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="Abbreviation"></param>
+    /// <returns></returns>
+    [AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
+    [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+    public ActionResult ProgramEdit(string Abbreviation)
+    {
+      ////*******************************************************************************************************************************************
+      //// TODO: Do we need the ProgramEdit method any more? Or should we split its functionality into new methods that handle those specific areas?
+      ////*******************************************************************************************************************************************
 
-			try
-			{
-				string Pattern = @"</?(?(?=" + whitelist + @")notag|[a-zA-Z0-9]+)(?:\s[a-zA-Z0-9\-]+=?(?:(["",']?).*?\1?)?)*\s*/?>";
-				Stripped = Regex.Replace(WithHTML, Pattern, string.Empty);
+      //if (HttpContext.User.Identity.IsAuthenticated)
+      //{
+      //  //ProgramInformation itemToUpdate = new ProgramInformation();
+      //  using (ClassScheduleDb db = new ClassScheduleDb())
+      //  {
+      //    try
+      //    {
+      //      var itemToUpdate = db.ProgramInformations.First(s => s.Abbreviation == Abbreviation);
+      //      IList<string> mergedSubjects = db.ProgramInformations.Where(c => c.URL == Abbreviation && c.Abbreviation != Abbreviation).Select(c => c.Abbreviation).ToList();
+      //      IList<string> subjectChoices = db.ProgramInformations.Where(c => c.Abbreviation != Abbreviation && !mergedSubjects.Contains(c.Abbreviation))
+      //                                                           .Select(c => c.Abbreviation).OrderBy(c => c).ToList();
 
-			}
-			catch
-			{
-				Stripped = string.Empty;
-			}
-			return Stripped;
+      //      subjectChoices.Insert(0, string.Empty);
 
-		}
+      //      ProgramEditModel model = new ProgramEditModel
+      //      {
+      //        ItemToUpdate = itemToUpdate,
+      //        Subjects = subjectChoices,
+      //        MergedSubjects = mergedSubjects
+      //      };
 
+      //      return PartialView(model);
+      //    }
+      //    catch (InvalidOperationException e)
+      //    {
+      //      Trace.Write(e);
+      //    }
+      //  }
+      //}
 
+      return PartialView();
+    }
 
-		//Generation of the Program Edit dialog box
-		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
-		[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-		public ActionResult ProgramEdit(string Abbreviation)
-		{
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="collection"></param>
+    /// <param name="MergeSubjects"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ValidateInput(false)]
+    [AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
+    public ActionResult ProgramEdit(FormCollection collection, ICollection<string> MergeSubjects)
+    {
+      //*******************************************************************************************************************************************
+      // TODO: Do we need the ProgramEdit method any more? Or should we split its functionality into new methods that handle those specific areas?
+      //*******************************************************************************************************************************************
+      string referrer = collection["referrer"];
 
-			if (HttpContext.User.Identity.IsAuthenticated == true)
-			{
-				//ProgramInformation itemToUpdate = new ProgramInformation();
-				using (ClassScheduleDb db = new ClassScheduleDb())
-				{
-					try
-					{
-						var itemToUpdate = db.ProgramInformations.First(s => s.Abbreviation == Abbreviation);
-						IList<string> mergedSubjects = db.ProgramInformations.Where(c => c.URL == Abbreviation && c.Abbreviation != Abbreviation).Select(c => c.Abbreviation).ToList();
-						IList<string> subjectChoices = db.ProgramInformations.Where(c => c.Abbreviation != Abbreviation && !mergedSubjects.Contains(c.Abbreviation))
-																																 .Select(c => c.Abbreviation).OrderBy(c => c).ToList();
+      //if (HttpContext.User.Identity.IsAuthenticated == true)
+      //{
 
-						subjectChoices.Insert(0, string.Empty);
-
-						ProgramEditModel model = new ProgramEditModel
-						{
-							ItemToUpdate = itemToUpdate,
-							Subjects = subjectChoices,
-							MergedSubjects = mergedSubjects
-						};
-
-						return PartialView(model);
-					}
-					catch(InvalidOperationException e)
-					{
-						Trace.Write(e);
-					}
-				}
-			}
-
-			return PartialView();
-		}
-
-		//
-		// POST after submit is clicked
-
-		[HttpPost]
-		[ValidateInput(false)]
-		[AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
-		public ActionResult ProgramEdit(FormCollection collection, ICollection<string> MergeSubjects)
-		{
-			string referrer = collection["referrer"];
-
-			if (HttpContext.User.Identity.IsAuthenticated == true)
-			{
-
-				string Username = HttpContext.User.Identity.Name;
+      //  string Username = HttpContext.User.Identity.Name;
 
 
-				string DivisionURL = collection["itemToUpdate.DivisionURL"];
-				string Division = collection["itemToUpdate.Division"];
-				string ProgramURL = collection["itemToUpdate.ProgramURL"];
-				string AcademicProgram = collection["itemToUpdate.AcademicProgram"];
-				string Intro = collection["itemToUpdate.Intro"];
-				string Title = collection["itemToUpdate.Title"];
-				string Abbreviation = collection["itemToUpdate.Abbreviation"];
-				string URL = collection["itemToUpdate.URL"];
+      //  string DivisionURL = collection["itemToUpdate.DivisionURL"];
+      //  string Division = collection["itemToUpdate.Division"];
+      //  string ProgramURL = collection["itemToUpdate.ProgramURL"];
+      //  string AcademicProgram = collection["itemToUpdate.AcademicProgram"];
+      //  string Intro = collection["itemToUpdate.Intro"];
+      //  string Title = collection["itemToUpdate.Title"];
+      //  string Abbreviation = collection["itemToUpdate.Abbreviation"];
+      //  string URL = collection["itemToUpdate.URL"];
 
-				Intro = StripHTML(Intro);
+      //  Intro = StripHtml(Intro);
 
-				if (ModelState.IsValid)
-				{
-					bool itemFound = false;
-					using (ClassScheduleDb db = new ClassScheduleDb())
-					{
-						ProgramInformation itemToUpdate = new ProgramInformation();
-						if (db.ProgramInformations.Any(s => s.Abbreviation == Abbreviation))
-						{
-							itemToUpdate = db.ProgramInformations.First(s => s.Abbreviation == Abbreviation);
-							itemFound = true;
-						}
+      //  if (ModelState.IsValid)
+      //  {
+      //    bool itemFound = false;
+      //    using (ClassScheduleDb db = new ClassScheduleDb())
+      //    {
+      //      ProgramInformation itemToUpdate = new ProgramInformation();
+      //      if (db.ProgramInformations.Any(s => s.Abbreviation == Abbreviation))
+      //      {
+      //        itemToUpdate = db.ProgramInformations.First(s => s.Abbreviation == Abbreviation);
+      //        itemFound = true;
+      //      }
 
-						itemToUpdate.LastUpdated = DateTime.Now;
-						itemToUpdate.LastUpdatedBy = Username;
-						itemToUpdate.DivisionURL = DivisionURL;
-						itemToUpdate.Division = Division;
-						itemToUpdate.ProgramURL = ProgramURL;
-						itemToUpdate.AcademicProgram = AcademicProgram;
-						itemToUpdate.Intro = Intro;
-						itemToUpdate.Title = Title;
+      //      itemToUpdate.LastUpdated = DateTime.Now;
+      //      itemToUpdate.LastUpdatedBy = Username;
+      //      itemToUpdate.DivisionURL = DivisionURL;
+      //      itemToUpdate.Division = Division;
+      //      itemToUpdate.ProgramURL = ProgramURL;
+      //      itemToUpdate.AcademicProgram = AcademicProgram;
+      //      itemToUpdate.Intro = Intro;
+      //      itemToUpdate.Title = Title;
 
-						//add the item to the database if it doesn't exist.
-						if (itemFound == false)
-						{
-							//add the primary key only to inserts
-							itemToUpdate.Abbreviation = Abbreviation;
+      //      //add the item to the database if it doesn't exist.
+      //      if (itemFound == false)
+      //      {
+      //        //add the primary key only to inserts
+      //        itemToUpdate.Abbreviation = Abbreviation;
 
-							//add the newly created item to the entity update queue
-							db.AddToProgramInformations(itemToUpdate);
-						}
+      //        //add the newly created item to the entity update queue
+      //        db.AddToProgramInformations(itemToUpdate);
+      //      }
 
 
 
-						// Perform subject merging/unmerging
-						if (MergeSubjects == null) { MergeSubjects = new List<string>(); }
-						IList<ProgramInformation> mergedSubjects = db.ProgramInformations.Where(c => c.URL == Abbreviation).ToList();
+      //      // Perform subject merging/unmerging
+      //      if (MergeSubjects == null) { MergeSubjects = new List<string>(); }
+      //      IList<ProgramInformation> mergedSubjects = db.ProgramInformations.Where(c => c.URL == Abbreviation).ToList();
 
-						 // Merge subjects
-						foreach (string abbr in MergeSubjects)
-						{
-							if (db.ProgramInformations.Any(s => s.Abbreviation == abbr))
-							{
-								db.ProgramInformations.First(s => s.Abbreviation == abbr).URL = Abbreviation;
-							}
-						}
+      //      // Merge subjects
+      //      foreach (string abbr in MergeSubjects)
+      //      {
+      //        if (db.ProgramInformations.Any(s => s.Abbreviation == abbr))
+      //        {
+      //          db.ProgramInformations.First(s => s.Abbreviation == abbr).URL = Abbreviation;
+      //        }
+      //      }
 
-						// Unmerge subjects
-						foreach (string abbr in mergedSubjects.Select(s => s.Abbreviation))
-						{
-							if (!MergeSubjects.Contains(abbr) && abbr != Abbreviation)
-							{
-								ProgramInformation program = db.ProgramInformations.First(s => s.Abbreviation == abbr);
-								program.URL = program.Abbreviation;
-							}
-						}
+      //      // Unmerge subjects
+      //      foreach (string abbr in mergedSubjects.Select(s => s.Abbreviation))
+      //      {
+      //        if (!MergeSubjects.Contains(abbr) && abbr != Abbreviation)
+      //        {
+      //          ProgramInformation program = db.ProgramInformations.First(s => s.Abbreviation == abbr);
+      //          program.URL = program.Abbreviation;
+      //        }
+      //      }
 
 
-						//save to the db (whether item existed or not)
-						db.SaveChanges();
-					}
-				}
-			}
+      //      //save to the db (whether item existed or not)
+      //      db.SaveChanges();
+      //    }
+      //  }
+      //}
 
-			return Redirect(referrer);
-		}
+      return Redirect(referrer);
+    }
 
-	}
+	  #region Private methods
+	  /// <summary>
+	  ///
+	  /// </summary>
+	  /// <typeparam name="T"></typeparam>
+	  /// <param name="entities"></param>
+	  /// <param name="expression"></param>
+	  /// <returns>Either a <typeparamref name="T"/> object that meets the specified <paramref name="expression"/>, or a new instance.</returns>
+	  private static T GetItemToUpdate<T>(ObjectSet<T> entities, Expression<Func<T, bool>> expression)
+	    where T : EntityObject, new()
+	  {
+	    return entities.Any(expression) ? entities.Single(expression) : new T();
+	  }
+
+	  /// <summary>
+	  ///
+	  /// </summary>
+	  /// <param name="withHtml"></param>
+	  /// <returns></returns>
+	  private string StripHtml(string withHtml)
+	  {
+	    string stripped;
+	    // BUG: The appSetting value "CMSHtmlParsingAllowedElements" is not present
+	    string whitelist = ConfigurationManager.AppSettings["CMSHtmlParsingAllowedElements"];
+
+	    try
+	    {
+	      string pattern = @"</?(?(?=" + whitelist +
+	                       @")notag|[a-zA-Z0-9]+)(?:\s[a-zA-Z0-9\-]+=?(?:(["",']?).*?\1?)?)*\s*/?>";
+	      stripped = Regex.Replace(withHtml, pattern, string.Empty);
+	    }
+	    catch (Exception ex)
+	    {
+	      stripped = Encoder.HtmlEncode(withHtml);
+	      _log.Warn(
+	        m => m("Unable to remove HTML from string '{0}'\nReturning HTML-encoded string instead.\n{1}", withHtml, ex));
+	    }
+	    return stripped;
+	  }
+
+	  #endregion
+
+  }
 }

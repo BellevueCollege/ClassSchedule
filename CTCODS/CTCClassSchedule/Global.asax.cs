@@ -125,5 +125,32 @@ namespace CTCClassSchedule
 				Application["LastError"] = ex;
 			}
 		}
-	}
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="sec"></param>
+    /// <param name="property"></param>
+    /// <param name="defaultValue"></param>
+    /// <returns></returns>
+    public static string SafePropertyToString<T>(T sec, string property, string defaultValue) where T : class
+    {
+      if (sec != null)
+      {
+        object val = typeof(T).GetProperty(property).GetValue(sec, null);
+
+        if (val != null)
+        {
+          string sValue = val.ToString();
+          if (!string.IsNullOrWhiteSpace(sValue))
+          {
+            return sValue;
+          }
+        }
+      }
+      return defaultValue;
+    }
+
+  }
 }

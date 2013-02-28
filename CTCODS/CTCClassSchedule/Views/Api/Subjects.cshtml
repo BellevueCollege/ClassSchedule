@@ -69,7 +69,7 @@
 				}
 
 				// construct the appropriate link, maintaining any query string paramters
-				routeParms["Subject"] = item.Subject.Trim();
+				routeParms["Subject"] = item.Slug.Trim();
 
 					<div class="subject">
 				@if (routeParms.Keys.Contains("YearQuarter") && routeParms["YearQuarter"] != null && !routeParms["YearQuarter"].ToString().IsEmpty() && routeParms["YearQuarter"].ToString().ToUpper() != "ALL")

@@ -29,7 +29,7 @@
 		@:<ul class="subject-list">
 	 }
 
-				routeParms["Subject"] = item.Subject.Trim();
+				routeParms["Subject"] = item.Slug.Trim();
 						<li class="subject-name">
 				@if (FriendlyYrq != "ALL")
 		{
@@ -47,25 +47,21 @@
 
 				@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
 				{
-
-
-
-					@Ajax.ActionLink("Edit",
-											"ProgramEdit",
-											"Api",
-											new
-											{
-												Abbreviation = item.Subject.ToString() //this Subject is actually the Abbreviation.
-											},
-											new AjaxOptions
-											{
-												UpdateTargetId = "edit-program",
-												HttpMethod = "GET",
-												InsertionMode = InsertionMode.Replace,
-												OnBegin = "$('#edit-program').dialog('open');",
-											},
-											new { @class = "edit_button" })
-
+				  @Ajax.ActionLink("Edit",
+				                   "ProgramEdit",
+				                   "Api",
+				                   new
+				                     {
+				                       Abbreviation = item.Subject //this Subject is actually the Abbreviation.
+				                     },
+				                   new AjaxOptions
+				                     {
+				                       UpdateTargetId = "edit-program",
+				                       HttpMethod = "GET",
+				                       InsertionMode = InsertionMode.Replace,
+				                       OnBegin = "$('#edit-program').dialog('open');",
+				                     },
+				                   new { @class = "edit_button" })
 				}
 
 

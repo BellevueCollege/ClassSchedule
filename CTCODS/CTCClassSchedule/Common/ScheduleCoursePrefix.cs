@@ -9,15 +9,31 @@ namespace CTCClassSchedule.Common
 		/// The five-character abbreviation which identifies a course of study (e.g. ENGL)
 		/// </summary>
 		/// <seealso cref="ICoursePrefix.Title"/>
-		public int Subject { get; set; }
+		public int SubjectID { get; set; }
 
-		/// <summary>
+    /// <summary>
+    /// The five-character abbreviation which identifies a course of study (e.g. ENGL)
+    /// </summary>
+    /// <seealso cref="ICoursePrefix.Title"/>
+    public string Subject { get; set; }
+
+    /// <summary>
 		/// The full name of a course of study (e.g. English)
 		/// </summary>
-		/// <seealso cref="ICoursePrefix.Subject"/>
+    /// <seealso cref="ICoursePrefix.Subject"/>
 		public string Title { get;set;}
 
-		/// <summary>
+    /// <summary>
+    /// Portion of the URL that represents the <see cref="Subject"/>(s) to or being displayed
+    /// </summary>
+    /// <remarks>
+    ///   The URL which contains this value may represent more than one <see cref="Subject"/>. The relationship
+    ///   between <see cref="Slug"/> and <see cref="Subject"/>s can be modified through the CMS functionality
+    ///   of the Class Schedule.
+    /// </remarks>
+	  public string Slug {get;set;}
+
+	  /// <summary>
 		/// Indicates whether the current object is equal to another object of the same type.
 		/// </summary>
 		/// <returns>
@@ -34,7 +50,7 @@ namespace CTCClassSchedule.Common
 			{
 				return true;
 			}
-			return Equals(other.Subject, Subject) && Equals(other.Title, Title);
+			return Equals(other.SubjectID, SubjectID) && Equals(other.Title, Title);
 		}
 
 		/// <summary>
@@ -84,7 +100,7 @@ namespace CTCClassSchedule.Common
 		{
 			unchecked
 			{
-				return ((Subject != null ? Subject.GetHashCode() : 0) * 397) ^ (Title != null ? Title.GetHashCode() : 0);
+				return ((SubjectID != null ? SubjectID.GetHashCode() : 0) * 397) ^ (Title != null ? Title.GetHashCode() : 0);
 			}
 		}
 
