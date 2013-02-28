@@ -170,16 +170,31 @@ namespace CTCClassSchedule.Controllers
 				{
 					IList<Subject> subjects = db.Subjects.ToList();
 
-					IEnumerable<Subject> subjectsEnum;
+                    IEnumerable<SubjectViewModel> subjectsEnum;
 					if (letter != null)
 					{
-						subjectsEnum = from s in subjects
-						              where s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
-						              select s;
+					    subjectsEnum = from s in subjects
+					                   join p in db.SubjectsCoursePrefixes on s.SubjectID equals p.SubjectID
+					                   where s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
+					                   select new SubjectViewModel
+					                       {
+					                           Title = s.Title,
+					                           Intro = s.Intro,
+					                           CoursePrefixID = p.CoursePrefixID
+					                       };
 					}
 					else
 					{
-						subjectsEnum = subjects;
+					    subjectsEnum = from s in subjects
+					                   join prefix in db.SubjectsCoursePrefixes on s.SubjectID equals prefix.SubjectID
+					                   select new SubjectViewModel
+					                       {
+					                           Title = s.Title,
+					                           Intro = s.Intro,
+					                           CoursePrefixID = prefix.CoursePrefixID,
+                                               Slug = s.Slug
+					                       };
+					    ;
 					}
 
 					if (format == "json")
@@ -266,16 +281,32 @@ namespace CTCClassSchedule.Controllers
 					IList<char> alphabet = subjects.Select(c => c.Title.First()).Distinct().ToList();
 					ViewBag.Alphabet = alphabet;
 
-					IEnumerable<Subject> subjectsEnum;
+					IEnumerable<SubjectViewModel> subjectsEnum;
 					if (letter != null)
 					{
-						subjectsEnum = (from s in subjects
-														where s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
-														select s).Distinct();
+					    subjectsEnum = (from s in subjects
+					                    join p in db.SubjectsCoursePrefixes on s.SubjectID equals p.SubjectID
+					                    where s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
+					                    select new SubjectViewModel()
+					                        {
+					                            CoursePrefixID = p.CoursePrefixID,
+					                            Intro = s.Intro,
+					                            Slug = s.Slug,
+					                            Title = s.Title
+					                        }
+					                   ).Distinct();
 					}
 					else
 					{
-						subjectsEnum = subjects;
+					    subjectsEnum = from s in subjects
+					                   join p in db.SubjectsCoursePrefixes on s.SubjectID equals p.SubjectID
+					                   select new SubjectViewModel()
+					                       {
+					                           CoursePrefixID = p.CoursePrefixID,
+					                           Intro = s.Intro,
+					                           Slug = s.Slug,
+					                           Title = s.Title
+					                       };
 					}
 
 					if (format == "json")
