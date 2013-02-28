@@ -3,11 +3,7 @@
 @model IEnumerable<CTCClassSchedule.Models.Subject>
 @{
 	YearQuarter yrq = ViewBag.YearQuarter;
-
-	// TODO: provide a default alphabet if the ViewBag is empty
-	IEnumerable<char> alphabet = ViewBag.Alphabet;
-
-	ViewBag.PageTitle = yrq.FriendlyName + " Credit Class Schedule at Bellevue College";
+	IEnumerable<char> alphabet = Model.Select(c => c.Title.First()).Distinct().ToList();
 }
 <div id="scheduleMain">
     @Html.Partial("quarterNavigation")
@@ -28,43 +24,48 @@
 
 
 		@if (Helpers.isAdmin(Context))
-	{
-				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
+		{
+			<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
 		}
 
-			@if (ViewBag.ItemCount == 0)
-	 {
-		 string letter = Request.QueryString["letter"];
-				<div id="error-noclassesfound">
-                <h2>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h2>
+		@if (Model.Count() == 0)
+		{
+			string letter = Request.QueryString["letter"];
+			<div id="error-noclassesfound">
+				<h2>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h2>
 				<p><em>TIP:</em> Information for @yrq.FriendlyName may not be available yet.</p>
-                </div>
-	 }
-	 else
-	 {
-		 Html.RenderPartial("subjectList", Model);
-	 }
+			</div>
+		}
+		else
+		{
+			Html.RenderPartial("subjectList", Model);
+		}
 
-	 <script type="text/javascript">
+
+	<div title="Edit Subject Information" id="edit-program"></div>
+
+
+
+
+        </div> <!-- #content -->
+    </div> <!-- #container -->
+</div>
+
+
+
+<script type="text/javascript">
 	/* program editor pop-up dialog */
-	$(document).ready(function () {
+	$(function () {
 
 		$("#edit-program").dialog({
 			closeOnEscape: false,
 			autoOpen: false,
 			height: 455,
 			width: 950
-
 		});
 
 
-	});
-</script>
-
-<script type="text/javascript">
- /* make the cancel button close the window and reload the page */
-	$(document).ready(function () {
-
+		/* make the cancel button close the window and reload the page */
 		$("span.ui-icon-closethick").click(function () {
 			showThrobber();
 			window.location.href = $(location).attr('href');
@@ -77,11 +78,6 @@
 				window.location.href = $(location).attr('href');
 			}
 		});
-
-
-
-
-
 
 		@if(Helpers.isAdmin(Context))  {
 
@@ -98,12 +94,3 @@
 
 	});
 </script>
-
-	<div title="Edit Subject Information" id="edit-program"></div>
-
-
-
-
-        </div> <!-- #content -->
-    </div> <!-- #container -->
-</div>
