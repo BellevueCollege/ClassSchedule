@@ -145,7 +145,6 @@
     <Compile Include="Common\HelperExtensions.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Common\SectionsBlock.cs" />
-    <Compile Include="Common\SubjectInfo.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
