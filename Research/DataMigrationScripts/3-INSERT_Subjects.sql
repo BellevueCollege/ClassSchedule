@@ -1,6 +1,7 @@
 /*
 INSERT INTO dbo.Subjects
-        ( Title,
+        ( DepartmentID
+					Title,
           Intro,
           Slug,
           LastUpdatedBy,
@@ -11,6 +12,7 @@ INSERT INTO dbo.Subjects
 -- delete from dbo.Subjects
 
 SELECT
+			(SELECT DepartmentID FROM Departments WHERE Title = MIN(d.AcademicProgram) AND URL = MIN(d.ProgramURL)) AS DepartmentID
 	 --d.[Abbreviation]
       d.[Title]
       --,d.[ProgramURL]
