@@ -1,4 +1,5 @@
-﻿using Ctc.Ods.Types;
+﻿using CTCClassSchedule.Models;
+using Ctc.Ods.Types;
 
 namespace CTCClassSchedule
 {
@@ -12,6 +13,16 @@ namespace CTCClassSchedule
 		public string CustomTitle { get; set; }
 		public string CustomDescription { get; set; }
 		public new string CourseTitle { get; set; }
+
+    /// <summary>
+    /// Identifies whether or not a cross-listing relationship exists in <see cref="ClassScheduleDb.SectionCourseCrosslistings"/>
+    /// </summary>
+    /// <remarks>
+    /// This property exists in this model so that we don't have to make additional database calls
+    /// to determine IF a relationship exists - once we know that one does, then we can query
+    /// the database to find out what they are.
+    /// </remarks>
+    public bool IsCrossListed { get; set; }
 
 		/// <summary>
 		/// Provides a means to set protected values of the parent object.

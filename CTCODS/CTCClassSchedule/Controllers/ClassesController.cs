@@ -333,7 +333,7 @@ namespace CTCClassSchedule.Controllers
 						sectionsEnum = Helpers.GetSectionsWithSeats(yrq.ID, sections, db);
 					}
 
-					IList<SectionsBlock> courseBlocks = groupSectionsIntoBlocks(sectionsEnum);
+					IList<SectionsBlock> courseBlocks = groupSectionsIntoBlocks(sectionsEnum, db);
 					if (format == "json")
 					{
 						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
@@ -514,7 +514,7 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		/// <param name="sections">List of sections to group</param>
 		/// <returns>List of SectionBlock objects which describe the block of sections</returns>
-		private IList<SectionsBlock> groupSectionsIntoBlocks(IList<SectionWithSeats> sections)
+		private IList<SectionsBlock> groupSectionsIntoBlocks(IList<SectionWithSeats> sections, ClassScheduleDb db)
 		{
 			IList<SectionsBlock> results = new List<SectionsBlock>();
 			IList<SectionWithSeats> allLinkedSections = sections.Where(s => s.IsLinked).ToList();
@@ -548,21 +548,32 @@ namespace CTCClassSchedule.Controllers
 					SectionsBlock courseBlock = new SectionsBlock();
 					courseBlock.LinkedSections = new List<SectionWithSeats>();
 
-					IEnumerable<SectionWithSeats> remainingSections = nonLinkedSections.Skip(processedCount);
+					IList<SectionWithSeats> remainingSections = nonLinkedSections.Skip(processedCount).ToList();
 					SectionWithSeats firstSection = remainingSections.First();
 
-					courseBlock.Sections = remainingSections.TakeWhile(s =>
-																										s.CourseID == firstSection.CourseID &&
-																										s.CourseTitle == firstSection.CourseTitle &&
-																										s.Credits == firstSection.Credits &&
-																										s.IsVariableCredits == firstSection.IsVariableCredits &&
-																										allLinkedSections.Where(l => l.LinkedTo == s.ID.ItemNumber).Count() == allLinkedSections.Where(l => l.LinkedTo == firstSection.ID.ItemNumber).Count());
+				  courseBlock.Sections = remainingSections.TakeWhile(s =>
+				                                                     s.CourseID == firstSection.CourseID &&
+				                                                     s.CourseTitle == firstSection.CourseTitle &&
+				                                                     s.Credits == firstSection.Credits &&
+				                                                     s.IsVariableCredits == firstSection.IsVariableCredits &&
+				                                                     allLinkedSections.Count(l => l.LinkedTo == s.ID.ItemNumber) == allLinkedSections.Count(l => l.LinkedTo == firstSection.ID.ItemNumber))
+				                                          .ToList();
 
+/* IMPLEMENT IN FUTURE RELEASE
+          // Get list of Section/Course cross-listings, if any
+				  if (courseBlock.Sections.Any(s => s.IsCrossListed))
+				  {
+            // NOTE:  This logic assumes that data will only be saved in ClassScheduleDb after having come through
+            //        the filter of the CtcApi - which normalizes spacing of the ClassID/SectionID field data.
+            courseBlock.CrossListings = db.SectionCourseCrosslistings.Where(x => courseBlock.Sections.Select(s => s.ID.ToString()).Contains(x.ClassID)).ToList();
+				  }
+*/
 
 					// Find all links associated to each of the grouped sections
 					foreach (SectionWithSeats sec in courseBlock.Sections)
 					{
-						List<SectionWithSeats> linkedSections = allLinkedSections.Where(s => s.LinkedTo == sec.ID.ItemNumber).ToList();
+					  SectionWithSeats sect = sec;  // Use copy of object to ensure cross-compiler compatibility
+					  List<SectionWithSeats> linkedSections = allLinkedSections.Where(s => sect != null && s.LinkedTo == sect.ID.ItemNumber).ToList();
 						if (linkedSections.Count > 0)
 						{
 							courseBlock.LinkedSections.AddRange(linkedSections);
@@ -905,13 +916,12 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.activeClass = " class=active";
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="Subject"></param>
-		/// <param name="db"></param>
-		/// <param name="useRealAbbreviation"></param>
-		// TODO: Refactor this code to return SubjectInfo. Instead of using ViewBag we should return the data to each View as the Model
+	  /// <summary>
+	  ///
+	  /// </summary>
+	  /// <param name="slug"></param>
+	  /// <param name="context"></param>
+	  // TODO: Refactor this code to return SubjectInfo. Instead of using ViewBag we should return the data to each View as the Model
 		private void SetProgramInfoVars(string slug, ClassScheduleDb context = null)
 		{
 			using (_profiler.Step("Retrieving course program information"))
@@ -919,24 +929,36 @@ namespace CTCClassSchedule.Controllers
 				using (context = context ?? new ClassScheduleDb())
 				{
 
-					var subject = context.Subjects.Where(s => s.Slug.Equals(slug, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-					var department = subject.Department;
-					var division = department != null ? department.Division : null;
+					Subject subject = context.Subjects.Where(s => s.Slug.Equals(slug, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+				  if (subject != null)
+				  {
+				    Department department = subject.Department;
+				    Division division = department != null ? department.Division : null;
 
-					ViewBag.ProgramTitle = subject.Title ?? string.Empty;
-					ViewBag.SubjectIntro = subject.Intro ?? string.Empty;
-					ViewBag.AcademicProgram = department.Title ?? string.Empty;
-					ViewBag.DivisionURL = division.URL ?? string.Empty;
-					ViewBag.DivisionTitle = division.Title ?? string.Empty;
+				    ViewBag.ProgramTitle = subject.Title ?? string.Empty;
+				    ViewBag.SubjectIntro = subject.Intro ?? string.Empty;
+				    if (department != null)
+				    {
+				      ViewBag.AcademicProgram = department.Title ?? string.Empty;
+				    }
+				    if (division != null)
+				    {
+				      ViewBag.DivisionURL = division.URL ?? string.Empty;
+				      ViewBag.DivisionTitle = division.Title ?? string.Empty;
+				    }
 
-					// If the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
-					// or empty just return it, otherwise prepend iwth the current school url.
-					string deptUrl = department.URL ?? string.Empty;
-					if (!string.IsNullOrWhiteSpace(deptUrl) && !Regex.IsMatch(deptUrl, @"^https?://"))
-					{
-						deptUrl = ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(deptUrl);
-					}
-					ViewBag.ProgramUrl = deptUrl;
+				    // If the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
+				    // or empty just return it, otherwise prepend iwth the current school url.
+				    if (department != null)
+				    {
+				      string deptUrl = department.URL ?? string.Empty;
+				      if (!string.IsNullOrWhiteSpace(deptUrl) && !Regex.IsMatch(deptUrl, @"^https?://"))
+				      {
+				        deptUrl = ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(deptUrl);
+				      }
+				      ViewBag.ProgramUrl = deptUrl;
+				    }
+				  }
 				}
 			}
 		}

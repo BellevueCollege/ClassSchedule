@@ -434,7 +434,7 @@ namespace CTCClassSchedule.Common
 		{
 			MiniProfiler profiler = MiniProfiler.Current;
 
-			// ensure we're ALWAYS getting the latest data from the database
+			// ensure we're ALWAYS getting the latest data from the database (i.e. ignore any cached data)
 			// Reference: http://forums.asp.net/post/2848021.aspx
 			db.vw_Class.MergeOption = MergeOption.OverwriteChanges;
 
@@ -451,7 +451,9 @@ namespace CTCClassSchedule.Common
       {
           sectionsEnum = (
 			      from c in sections
-											join d in classes on c.ID.ToString() equals d.ClassID into t1
+                      // NOTE:  This logic assumes that data will only be saved in ClassScheduleDb after having come through
+                      //        the filter of the CtcApi - which normalizes spacing of the ClassID/SectionID field data.
+                      join d in classes on c.ID.ToString() equals d.ClassID into t1
 			      from d in t1.DefaultIfEmpty()
 											join ss in db.SectionSeats on d.ClassID equals ss.ClassID into t2
 											from ss in t2.DefaultIfEmpty()
@@ -467,7 +469,10 @@ namespace CTCClassSchedule.Common
 													SectionFootnotes = sm != null && !string.IsNullOrWhiteSpace(sm.Footnote) ? sm.Footnote : string.Empty,
 													CourseFootnotes = cm != null && !string.IsNullOrWhiteSpace(cm.Footnote) ? cm.Footnote : string.Empty,
 													CourseTitle = sm != null && !string.IsNullOrWhiteSpace(sm.Title) ? sm.Title : c.CourseTitle,
-													CustomDescription = sm != null && !string.IsNullOrWhiteSpace(sm.Description) ? sm.Description : string.Empty
+													CustomDescription = sm != null && !string.IsNullOrWhiteSpace(sm.Description) ? sm.Description : string.Empty,
+/* IMPLEMENT IN FUTURE RELEASE
+                          IsCrossListed = db.SectionCourseCrosslistings.Any(x => c.ID.ToString() == x.ClassID)
+ */
 											}).OrderBy(x => x.CourseNumber).ThenBy(x => x.CourseTitle).ToList();
       }
 

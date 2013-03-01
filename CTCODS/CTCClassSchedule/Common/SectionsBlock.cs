@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using CTCClassSchedule.Models;
 using Ctc.Ods.Types;
 
 namespace CTCClassSchedule
@@ -23,5 +24,10 @@ namespace CTCClassSchedule
 		/// Collection of footnotes shared by all sections of the block
 		/// </summary>
 		public IEnumerable<string> CommonFootnotes { get; set; }
+
+    /// <summary>
+    /// Collection of cross-listed <see cref="Section"/>/<see cref="Course"/> relationships
+    /// </summary>
+	  public IEnumerable<SectionCourseCrosslisting> CrossListings {get;set;}
 	}
 }
