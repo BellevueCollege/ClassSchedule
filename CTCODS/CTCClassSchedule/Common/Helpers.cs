@@ -433,44 +433,43 @@ namespace CTCClassSchedule.Common
 		public static IList<SectionWithSeats> GetSectionsWithSeats(string currentYrq, IList<Section> sections, ClassScheduleDb db)
 		{
 			MiniProfiler profiler = MiniProfiler.Current;
-            IList<SectionWithSeats> sectionsEnum;
 
 			// ensure we're ALWAYS getting the latest data from the database
 			// Reference: http://forums.asp.net/post/2848021.aspx
-			db.vw_ClassScheduleData.MergeOption = MergeOption.OverwriteChanges;
+			db.vw_Class.MergeOption = MergeOption.OverwriteChanges;
 
-            string yrqID = YearQuarter.FromString(currentYrq).ID;
+      string yrqID = YearQuarter.FromString(currentYrq).ID;
+			IList<vw_Class> classes;
+      using (profiler.Step("API::Get Class Schedule Specific Data()"))
+      {
+				classes = db.vw_Class.Where(c => c.YearQuarterID == yrqID).ToList();
+      }
 
-			IList<vw_ClassScheduleData> classScheduleData;
-            using (profiler.Step("API::Get Class Schedule Specific Data()"))
-            {
-            classScheduleData = (from c in db.vw_ClassScheduleData
 
-			                    where c.YearQuarterID == yrqID // && c.ClassID == "0917B123"
-			                    select c
-			                ).ToList();
-            }
-
-            using (profiler.Step("Joining all data"))
-            {
-                sectionsEnum = (
-			            from c in sections
-			            join d in classScheduleData on c.ID.ToString() equals d.ClassID into cd
-			            from d in cd.DefaultIfEmpty()
-			            orderby c.Yrq.ID descending
-			            select new SectionWithSeats
-						{
-						    ParentObject = c,
-						    SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// allows us to identify past quarters (with no availability info)
-						    LastUpdated = (d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString("h:mm tt").ToLower(),
-																			SectionFootnotes = d != null && !string.IsNullOrWhiteSpace(d.SectionFootnote) ? d.SectionFootnote ?? string.Empty : string.Empty,
-																			CourseFootnotes = d != null && !string.IsNullOrWhiteSpace(d.CourseFootnote) ? d.CourseFootnote ?? string.Empty : string.Empty,
-																			CourseTitle = d != null && !string.IsNullOrWhiteSpace(d.CustomTitle) ? d.CustomTitle : c.CourseTitle,
-																			CustomTitle = d != null && !string.IsNullOrWhiteSpace(d.CustomTitle) ? d.CustomTitle : string.Empty,
-																			CustomDescription = d != null && !string.IsNullOrWhiteSpace(d.CustomDescription) ? d.CustomDescription : string.Empty
-																	}).OrderBy(x => x.CourseNumber).ThenBy(x => x.CourseTitle).ToList();
-            }
-
+			IList<SectionWithSeats> sectionsEnum;
+      using (profiler.Step("Joining all data"))
+      {
+          sectionsEnum = (
+			      from c in sections
+											join d in classes on c.ID.ToString() equals d.ClassID into t1
+			      from d in t1.DefaultIfEmpty()
+											join ss in db.SectionSeats on d.ClassID equals ss.ClassID into t2
+											from ss in t2.DefaultIfEmpty()
+											join sm in db.SectionsMetas on d.ClassID equals sm.ClassID into t3
+											from sm in t3.DefaultIfEmpty()
+											join cm in db.CourseMetas on d.CourseID equals cm.CourseID into t4
+											from cm in t4.DefaultIfEmpty()
+			      orderby c.Yrq.ID descending
+			      select new SectionWithSeats {
+								ParentObject = c,
+								SeatsAvailable = ss != null ? ss.SeatsAvailable : int.MinValue,	// allows us to identify past quarters (with no availability info)
+								LastUpdated = (d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString("h:mm tt").ToLower(),
+													SectionFootnotes = sm != null && !string.IsNullOrWhiteSpace(sm.Footnote) ? sm.Footnote : string.Empty,
+													CourseFootnotes = cm != null && !string.IsNullOrWhiteSpace(cm.Footnote) ? cm.Footnote : string.Empty,
+													CourseTitle = sm != null && !string.IsNullOrWhiteSpace(sm.Title) ? sm.Title : c.CourseTitle,
+													CustomDescription = sm != null && !string.IsNullOrWhiteSpace(sm.Description) ? sm.Description : string.Empty
+											}).OrderBy(x => x.CourseNumber).ThenBy(x => x.CourseTitle).ToList();
+      }
 
 
 			return sectionsEnum;
