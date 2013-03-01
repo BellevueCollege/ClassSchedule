@@ -19,8 +19,8 @@ using System.Runtime.Serialization;
 #region EDM Relationship Metadata
 
 [assembly: EdmRelationshipAttribute("ClassSchedule.Models", "FK_Departments_Division", "Division", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(CTCClassSchedule.Models.Division), "Department", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CTCClassSchedule.Models.Department), true)]
+[assembly: EdmRelationshipAttribute("ClassSchedule.Models", "FK_Subjects_Departments", "Department", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(CTCClassSchedule.Models.Department), "Subject", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CTCClassSchedule.Models.Subject), true)]
 [assembly: EdmRelationshipAttribute("ClassSchedule.Models", "FK_SubjectsCoursePrefixes_Subjects", "Subject", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(CTCClassSchedule.Models.Subject), "SubjectsCoursePrefix", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CTCClassSchedule.Models.SubjectsCoursePrefix), true)]
-[assembly: EdmRelationshipAttribute("ClassSchedule.Models", "DepartmentsSubjects", "Department", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CTCClassSchedule.Models.Department), "Subject", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(CTCClassSchedule.Models.Subject))]
 
 #endregion
 
@@ -75,22 +75,6 @@ namespace CTCClassSchedule.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<vw_ClassScheduleData> vw_ClassScheduleData
-        {
-            get
-            {
-                if ((_vw_ClassScheduleData == null))
-                {
-                    _vw_ClassScheduleData = base.CreateObjectSet<vw_ClassScheduleData>("vw_ClassScheduleData");
-                }
-                return _vw_ClassScheduleData;
-            }
-        }
-        private ObjectSet<vw_ClassScheduleData> _vw_ClassScheduleData;
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<ClassSearch> ClassSearches
         {
             get
@@ -119,22 +103,6 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<CourseSearch> _CourseSearches;
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<Department> Departments
-        {
-            get
-            {
-                if ((_Departments == null))
-                {
-                    _Departments = base.CreateObjectSet<Department>("Departments");
-                }
-                return _Departments;
-            }
-        }
-        private ObjectSet<Department> _Departments;
 
         /// <summary>
         /// No Metadata Documentation available.
@@ -235,6 +203,38 @@ namespace CTCClassSchedule.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<vw_Class> vw_Class
+        {
+            get
+            {
+                if ((_vw_Class == null))
+                {
+                    _vw_Class = base.CreateObjectSet<vw_Class>("vw_Class");
+                }
+                return _vw_Class;
+            }
+        }
+        private ObjectSet<vw_Class> _vw_Class;
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Department> Departments
+        {
+            get
+            {
+                if ((_Departments == null))
+                {
+                    _Departments = base.CreateObjectSet<Department>("Departments");
+                }
+                return _Departments;
+            }
+        }
+        private ObjectSet<Department> _Departments;
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<Subject> Subjects
         {
             get
@@ -252,14 +252,6 @@ namespace CTCClassSchedule.Models
         #region AddTo Methods
 
         /// <summary>
-        /// Deprecated Method for adding a new object to the vw_ClassScheduleData EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddTovw_ClassScheduleData(vw_ClassScheduleData vw_ClassScheduleData)
-        {
-            base.AddObject("vw_ClassScheduleData", vw_ClassScheduleData);
-        }
-
-        /// <summary>
         /// Deprecated Method for adding a new object to the ClassSearches EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToClassSearches(ClassSearch classSearch)
@@ -273,14 +265,6 @@ namespace CTCClassSchedule.Models
         public void AddToCourseSearches(CourseSearch courseSearch)
         {
             base.AddObject("CourseSearches", courseSearch);
-        }
-
-        /// <summary>
-        /// Deprecated Method for adding a new object to the Departments EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToDepartments(Department department)
-        {
-            base.AddObject("Departments", department);
         }
 
         /// <summary>
@@ -329,6 +313,22 @@ namespace CTCClassSchedule.Models
         public void AddToSectionSeats(SectionSeat sectionSeat)
         {
             base.AddObject("SectionSeats", sectionSeat);
+        }
+
+        /// <summary>
+        /// Deprecated Method for adding a new object to the vw_Class EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTovw_Class(vw_Class vw_Class)
+        {
+            base.AddObject("vw_Class", vw_Class);
+        }
+
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Departments EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToDepartments(Department department)
+        {
+            base.AddObject("Departments", department);
         }
 
         /// <summary>
@@ -1023,18 +1023,18 @@ namespace CTCClassSchedule.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("ClassSchedule.Models", "DepartmentsSubjects", "Subject")]
+        [EdmRelationshipNavigationPropertyAttribute("ClassSchedule.Models", "FK_Subjects_Departments", "Subject")]
         public EntityCollection<Subject> Subjects
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Subject>("ClassSchedule.Models.DepartmentsSubjects", "Subject");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Subject>("ClassSchedule.Models.FK_Subjects_Departments", "Subject");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Subject>("ClassSchedule.Models.DepartmentsSubjects", "Subject", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Subject>("ClassSchedule.Models.FK_Subjects_Departments", "Subject", value);
                 }
             }
         }
@@ -1638,6 +1638,30 @@ namespace CTCClassSchedule.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public Nullable<global::System.Int32> DepartmentID
+        {
+            get
+            {
+                return _DepartmentID;
+            }
+            set
+            {
+                OnDepartmentIDChanging(value);
+                ReportPropertyChanging("DepartmentID");
+                _DepartmentID = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DepartmentID");
+                OnDepartmentIDChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _DepartmentID;
+        partial void OnDepartmentIDChanging(Nullable<global::System.Int32> value);
+        partial void OnDepartmentIDChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public global::System.String Title
         {
             get
@@ -1763,6 +1787,44 @@ namespace CTCClassSchedule.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("ClassSchedule.Models", "FK_Subjects_Departments", "Department")]
+        public Department Department
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Department>("ClassSchedule.Models.FK_Subjects_Departments", "Department").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Department>("ClassSchedule.Models.FK_Subjects_Departments", "Department").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Department> DepartmentReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Department>("ClassSchedule.Models.FK_Subjects_Departments", "Department");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Department>("ClassSchedule.Models.FK_Subjects_Departments", "Department", value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("ClassSchedule.Models", "FK_SubjectsCoursePrefixes_Subjects", "SubjectsCoursePrefix")]
         public EntityCollection<SubjectsCoursePrefix> SubjectsCoursePrefixes
         {
@@ -1775,28 +1837,6 @@ namespace CTCClassSchedule.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<SubjectsCoursePrefix>("ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects", "SubjectsCoursePrefix", value);
-                }
-            }
-        }
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("ClassSchedule.Models", "DepartmentsSubjects", "Department")]
-        public EntityCollection<Department> Departments
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Department>("ClassSchedule.Models.DepartmentsSubjects", "Department");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Department>("ClassSchedule.Models.DepartmentsSubjects", "Department", value);
                 }
             }
         }
@@ -1932,22 +1972,22 @@ namespace CTCClassSchedule.Models
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="ClassSchedule.Models", Name="vw_ClassScheduleData")]
+    [EdmEntityTypeAttribute(NamespaceName="ClassSchedule.Models", Name="vw_Class")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class vw_ClassScheduleData : EntityObject
+    public partial class vw_Class : EntityObject
     {
         #region Factory Method
 
         /// <summary>
-        /// Create a new vw_ClassScheduleData object.
+        /// Create a new vw_Class object.
         /// </summary>
         /// <param name="classID">Initial value of the ClassID property.</param>
-        public static vw_ClassScheduleData Createvw_ClassScheduleData(global::System.String classID)
+        public static vw_Class Createvw_Class(global::System.String classID)
         {
-            vw_ClassScheduleData vw_ClassScheduleData = new vw_ClassScheduleData();
-            vw_ClassScheduleData.ClassID = classID;
-            return vw_ClassScheduleData;
+            vw_Class vw_Class = new vw_Class();
+            vw_Class.ClassID = classID;
+            return vw_Class;
         }
 
         #endregion
@@ -2009,6 +2049,30 @@ namespace CTCClassSchedule.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public global::System.String ItemNumber
+        {
+            get
+            {
+                return _ItemNumber;
+            }
+            set
+            {
+                OnItemNumberChanging(value);
+                ReportPropertyChanging("ItemNumber");
+                _ItemNumber = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ItemNumber");
+                OnItemNumberChanged();
+            }
+        }
+        private global::System.String _ItemNumber;
+        partial void OnItemNumberChanging(global::System.String value);
+        partial void OnItemNumberChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public global::System.String CourseID
         {
             get
@@ -2033,24 +2097,96 @@ namespace CTCClassSchedule.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> SeatsAvailable
+        public global::System.String Department
         {
             get
             {
-                return _SeatsAvailable;
+                return _Department;
             }
             set
             {
-                OnSeatsAvailableChanging(value);
-                ReportPropertyChanging("SeatsAvailable");
-                _SeatsAvailable = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("SeatsAvailable");
-                OnSeatsAvailableChanged();
+                OnDepartmentChanging(value);
+                ReportPropertyChanging("Department");
+                _Department = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Department");
+                OnDepartmentChanged();
             }
         }
-        private Nullable<global::System.Int32> _SeatsAvailable;
-        partial void OnSeatsAvailableChanging(Nullable<global::System.Int32> value);
-        partial void OnSeatsAvailableChanged();
+        private global::System.String _Department;
+        partial void OnDepartmentChanging(global::System.String value);
+        partial void OnDepartmentChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CourseNumber
+        {
+            get
+            {
+                return _CourseNumber;
+            }
+            set
+            {
+                OnCourseNumberChanging(value);
+                ReportPropertyChanging("CourseNumber");
+                _CourseNumber = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CourseNumber");
+                OnCourseNumberChanged();
+            }
+        }
+        private global::System.String _CourseNumber;
+        partial void OnCourseNumberChanging(global::System.String value);
+        partial void OnCourseNumberChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> ClassCapacity
+        {
+            get
+            {
+                return _ClassCapacity;
+            }
+            set
+            {
+                OnClassCapacityChanging(value);
+                ReportPropertyChanging("ClassCapacity");
+                _ClassCapacity = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ClassCapacity");
+                OnClassCapacityChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _ClassCapacity;
+        partial void OnClassCapacityChanging(Nullable<global::System.Int32> value);
+        partial void OnClassCapacityChanged();
+
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> StudentsEnrolled
+        {
+            get
+            {
+                return _StudentsEnrolled;
+            }
+            set
+            {
+                OnStudentsEnrolledChanging(value);
+                ReportPropertyChanging("StudentsEnrolled");
+                _StudentsEnrolled = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StudentsEnrolled");
+                OnStudentsEnrolledChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _StudentsEnrolled;
+        partial void OnStudentsEnrolledChanging(Nullable<global::System.Int32> value);
+        partial void OnStudentsEnrolledChanged();
 
         /// <summary>
         /// No Metadata Documentation available.
@@ -2075,294 +2211,6 @@ namespace CTCClassSchedule.Models
         private Nullable<global::System.DateTime> _LastUpdated;
         partial void OnLastUpdatedChanging(Nullable<global::System.DateTime> value);
         partial void OnLastUpdatedChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CourseFootnote
-        {
-            get
-            {
-                return _CourseFootnote;
-            }
-            set
-            {
-                OnCourseFootnoteChanging(value);
-                ReportPropertyChanging("CourseFootnote");
-                _CourseFootnote = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CourseFootnote");
-                OnCourseFootnoteChanged();
-            }
-        }
-        private global::System.String _CourseFootnote;
-        partial void OnCourseFootnoteChanging(global::System.String value);
-        partial void OnCourseFootnoteChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String SectionFootnote
-        {
-            get
-            {
-                return _SectionFootnote;
-            }
-            set
-            {
-                OnSectionFootnoteChanging(value);
-                ReportPropertyChanging("SectionFootnote");
-                _SectionFootnote = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("SectionFootnote");
-                OnSectionFootnoteChanged();
-            }
-        }
-        private global::System.String _SectionFootnote;
-        partial void OnSectionFootnoteChanging(global::System.String value);
-        partial void OnSectionFootnoteChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Abbreviation
-        {
-            get
-            {
-                return _Abbreviation;
-            }
-            set
-            {
-                OnAbbreviationChanging(value);
-                ReportPropertyChanging("Abbreviation");
-                _Abbreviation = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Abbreviation");
-                OnAbbreviationChanged();
-            }
-        }
-        private global::System.String _Abbreviation;
-        partial void OnAbbreviationChanging(global::System.String value);
-        partial void OnAbbreviationChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String ProgramURL
-        {
-            get
-            {
-                return _ProgramURL;
-            }
-            set
-            {
-                OnProgramURLChanging(value);
-                ReportPropertyChanging("ProgramURL");
-                _ProgramURL = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("ProgramURL");
-                OnProgramURLChanged();
-            }
-        }
-        private global::System.String _ProgramURL;
-        partial void OnProgramURLChanging(global::System.String value);
-        partial void OnProgramURLChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Title
-        {
-            get
-            {
-                return _Title;
-            }
-            set
-            {
-                OnTitleChanging(value);
-                ReportPropertyChanging("Title");
-                _Title = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Title");
-                OnTitleChanged();
-            }
-        }
-        private global::System.String _Title;
-        partial void OnTitleChanging(global::System.String value);
-        partial void OnTitleChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String URL
-        {
-            get
-            {
-                return _URL;
-            }
-            set
-            {
-                OnURLChanging(value);
-                ReportPropertyChanging("URL");
-                _URL = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("URL");
-                OnURLChanged();
-            }
-        }
-        private global::System.String _URL;
-        partial void OnURLChanging(global::System.String value);
-        partial void OnURLChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Division
-        {
-            get
-            {
-                return _Division;
-            }
-            set
-            {
-                OnDivisionChanging(value);
-                ReportPropertyChanging("Division");
-                _Division = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Division");
-                OnDivisionChanged();
-            }
-        }
-        private global::System.String _Division;
-        partial void OnDivisionChanging(global::System.String value);
-        partial void OnDivisionChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String ContactName
-        {
-            get
-            {
-                return _ContactName;
-            }
-            set
-            {
-                OnContactNameChanging(value);
-                ReportPropertyChanging("ContactName");
-                _ContactName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("ContactName");
-                OnContactNameChanged();
-            }
-        }
-        private global::System.String _ContactName;
-        partial void OnContactNameChanging(global::System.String value);
-        partial void OnContactNameChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String ContactPhone
-        {
-            get
-            {
-                return _ContactPhone;
-            }
-            set
-            {
-                OnContactPhoneChanging(value);
-                ReportPropertyChanging("ContactPhone");
-                _ContactPhone = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("ContactPhone");
-                OnContactPhoneChanged();
-            }
-        }
-        private global::System.String _ContactPhone;
-        partial void OnContactPhoneChanging(global::System.String value);
-        partial void OnContactPhoneChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Intro
-        {
-            get
-            {
-                return _Intro;
-            }
-            set
-            {
-                OnIntroChanging(value);
-                ReportPropertyChanging("Intro");
-                _Intro = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Intro");
-                OnIntroChanged();
-            }
-        }
-        private global::System.String _Intro;
-        partial void OnIntroChanging(global::System.String value);
-        partial void OnIntroChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CustomTitle
-        {
-            get
-            {
-                return _CustomTitle;
-            }
-            set
-            {
-                OnCustomTitleChanging(value);
-                ReportPropertyChanging("CustomTitle");
-                _CustomTitle = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CustomTitle");
-                OnCustomTitleChanged();
-            }
-        }
-        private global::System.String _CustomTitle;
-        partial void OnCustomTitleChanging(global::System.String value);
-        partial void OnCustomTitleChanged();
-
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String CustomDescription
-        {
-            get
-            {
-                return _CustomDescription;
-            }
-            set
-            {
-                OnCustomDescriptionChanging(value);
-                ReportPropertyChanging("CustomDescription");
-                _CustomDescription = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CustomDescription");
-                OnCustomDescriptionChanged();
-            }
-        }
-        private global::System.String _CustomDescription;
-        partial void OnCustomDescriptionChanging(global::System.String value);
-        partial void OnCustomDescriptionChanged();
 
         #endregion
 

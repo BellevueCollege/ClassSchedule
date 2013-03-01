@@ -10,50 +10,32 @@
           <EntitySet Name="CourseMeta" EntityType="ClassSchedule.Models.Store.CourseMeta" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="CourseSearch" EntityType="ClassSchedule.Models.Store.CourseSearch" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Departments" EntityType="ClassSchedule.Models.Store.Departments" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="DepartmentsSubjects" EntityType="ClassSchedule.Models.Store.DepartmentsSubjects" store:Type="Tables" store:Schema="dbo" store:Name="DepartmentsSubjects">
-            <DefiningQuery>SELECT
-      [DepartmentsSubjects].[DepartmentID] AS [DepartmentID],
-      [DepartmentsSubjects].[SubjectID] AS [SubjectID]
-      FROM [dbo].[DepartmentsSubjects] AS [DepartmentsSubjects]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="Divisions" EntityType="ClassSchedule.Models.Store.Divisions" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SectionCourseCrosslistings" EntityType="ClassSchedule.Models.Store.SectionCourseCrosslistings" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SectionSeats" EntityType="ClassSchedule.Models.Store.SectionSeats" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SectionsMeta" EntityType="ClassSchedule.Models.Store.SectionsMeta" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Subjects" EntityType="ClassSchedule.Models.Store.Subjects" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SubjectsCoursePrefixes" EntityType="ClassSchedule.Models.Store.SubjectsCoursePrefixes" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="vw_ClassScheduleData" EntityType="ClassSchedule.Models.Store.vw_ClassScheduleData" store:Type="Views" store:Schema="dbo" store:Name="vw_ClassScheduleData">
+          <EntitySet Name="vw_Class" EntityType="ClassSchedule.Models.Store.vw_Class" store:Type="Views" store:Schema="dbo" store:Name="vw_Class">
             <DefiningQuery>SELECT
-      [vw_ClassScheduleData].[ClassID] AS [ClassID],
-      [vw_ClassScheduleData].[YearQuarterID] AS [YearQuarterID],
-      [vw_ClassScheduleData].[CourseID] AS [CourseID],
-      [vw_ClassScheduleData].[SeatsAvailable] AS [SeatsAvailable],
-      [vw_ClassScheduleData].[LastUpdated] AS [LastUpdated],
-      [vw_ClassScheduleData].[CourseFootnote] AS [CourseFootnote],
-      [vw_ClassScheduleData].[SectionFootnote] AS [SectionFootnote],
-      [vw_ClassScheduleData].[Abbreviation] AS [Abbreviation],
-      [vw_ClassScheduleData].[ProgramURL] AS [ProgramURL],
-      [vw_ClassScheduleData].[Title] AS [Title],
-      [vw_ClassScheduleData].[URL] AS [URL],
-      [vw_ClassScheduleData].[Division] AS [Division],
-      [vw_ClassScheduleData].[ContactName] AS [ContactName],
-      [vw_ClassScheduleData].[ContactPhone] AS [ContactPhone],
-      [vw_ClassScheduleData].[Intro] AS [Intro],
-      [vw_ClassScheduleData].[CustomTitle] AS [CustomTitle],
-      [vw_ClassScheduleData].[CustomDescription] AS [CustomDescription]
-      FROM [dbo].[vw_ClassScheduleData] AS [vw_ClassScheduleData]</DefiningQuery>
+      [vw_Class].[ClassID] AS [ClassID],
+      [vw_Class].[YearQuarterID] AS [YearQuarterID],
+      [vw_Class].[ItemNumber] AS [ItemNumber],
+      [vw_Class].[CourseID] AS [CourseID],
+      [vw_Class].[Department] AS [Department],
+      [vw_Class].[CourseNumber] AS [CourseNumber],
+      [vw_Class].[ClassCapacity] AS [ClassCapacity],
+      [vw_Class].[StudentsEnrolled] AS [StudentsEnrolled],
+      [vw_Class].[LastUpdated] AS [LastUpdated]
+      FROM [dbo].[vw_Class] AS [vw_Class]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_Departments_Division" Association="ClassSchedule.Models.Store.FK_Departments_Division">
             <End Role="Divisions" EntitySet="Divisions" />
             <End Role="Departments" EntitySet="Departments" />
           </AssociationSet>
-          <AssociationSet Name="FK_DepartmentsSubjects_Departments" Association="ClassSchedule.Models.Store.FK_DepartmentsSubjects_Departments">
+          <AssociationSet Name="FK_Subjects_Departments" Association="ClassSchedule.Models.Store.FK_Subjects_Departments">
             <End Role="Departments" EntitySet="Departments" />
-            <End Role="DepartmentsSubjects" EntitySet="DepartmentsSubjects" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DepartmentsSubjects_Subjects" Association="ClassSchedule.Models.Store.FK_DepartmentsSubjects_Subjects">
             <End Role="Subjects" EntitySet="Subjects" />
-            <End Role="DepartmentsSubjects" EntitySet="DepartmentsSubjects" />
           </AssociationSet>
           <AssociationSet Name="FK_SubjectsCoursePrefixes_Subjects" Association="ClassSchedule.Models.Store.FK_SubjectsCoursePrefixes_Subjects">
             <End Role="Subjects" EntitySet="Subjects" />
@@ -101,17 +83,6 @@
           <Property Name="LastUpdatedBy" Type="varchar" MaxLength="9" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'ClassSchedule.dbo.DepartmentsSubjects' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
-        <EntityType Name="DepartmentsSubjects">
-          <Key>
-            <PropertyRef Name="DepartmentID" />
-            <PropertyRef Name="SubjectID" />
-          </Key>
-          <Property Name="DepartmentID" Type="int" Nullable="false" />
-          <Property Name="SubjectID" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="Divisions">
           <Key>
             <PropertyRef Name="DivisionID" />
@@ -154,6 +125,7 @@
             <PropertyRef Name="SubjectID" />
           </Key>
           <Property Name="SubjectID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentID" Type="int" />
           <Property Name="Title" Type="varchar" MaxLength="255" />
           <Property Name="Intro" Type="varchar(max)" />
           <Property Name="Slug" Type="varchar" Nullable="false" MaxLength="63" />
@@ -169,30 +141,25 @@
           <Property Name="CoursePrefixID" Type="varchar" Nullable="false" MaxLength="5" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'ClassSchedule.dbo.vw_ClassScheduleData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      warning 6002: The table/view 'ClassSchedule.dbo.vw_Class' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
-        <EntityType Name="vw_ClassScheduleData">
+        <EntityType Name="vw_Class">
           <Key>
             <PropertyRef Name="ClassID" />
           </Key>
           <Property Name="ClassID" Type="char" Nullable="false" MaxLength="8" />
           <Property Name="YearQuarterID" Type="char" MaxLength="4" />
+          <Property Name="ItemNumber" Type="varchar" MaxLength="4" />
           <Property Name="CourseID" Type="varchar" MaxLength="10" />
-          <Property Name="SeatsAvailable" Type="int" />
+          <Property Name="Department" Type="char" MaxLength="5" />
+          <Property Name="CourseNumber" Type="char" MaxLength="5" />
+          <Property Name="ClassCapacity" Type="int" />
+          <Property Name="StudentsEnrolled" Type="int" />
           <Property Name="LastUpdated" Type="datetime" />
-          <Property Name="CourseFootnote" Type="varchar(max)" />
-          <Property Name="SectionFootnote" Type="varchar(max)" />
-          <Property Name="Abbreviation" Type="varchar" MaxLength="5" />
-          <Property Name="ProgramURL" Type="varchar" MaxLength="255" />
-          <Property Name="Title" Type="varchar" MaxLength="255" />
-          <Property Name="URL" Type="varchar" MaxLength="50" />
-          <Property Name="Division" Type="varchar" MaxLength="255" />
-          <Property Name="ContactName" Type="varchar" MaxLength="255" />
-          <Property Name="ContactPhone" Type="varchar" MaxLength="255" />
-          <Property Name="Intro" Type="varchar(max)" />
-          <Property Name="CustomTitle" Type="varchar" MaxLength="100" />
-          <Property Name="CustomDescription" Type="varchar(max)" />
         </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'ClassSchedule.dbo.vw_ClassScheduleData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <Association Name="FK_Departments_Division">
           <End Role="Divisions" Type="ClassSchedule.Models.Store.Divisions" Multiplicity="0..1" />
           <End Role="Departments" Type="ClassSchedule.Models.Store.Departments" Multiplicity="*" />
@@ -205,27 +172,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DepartmentsSubjects_Departments">
-          <End Role="Departments" Type="ClassSchedule.Models.Store.Departments" Multiplicity="1" />
-          <End Role="DepartmentsSubjects" Type="ClassSchedule.Models.Store.DepartmentsSubjects" Multiplicity="*" />
+        <Association Name="FK_Subjects_Departments">
+          <End Role="Departments" Type="ClassSchedule.Models.Store.Departments" Multiplicity="0..1" />
+          <End Role="Subjects" Type="ClassSchedule.Models.Store.Subjects" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Departments">
               <PropertyRef Name="DepartmentID" />
             </Principal>
-            <Dependent Role="DepartmentsSubjects">
+            <Dependent Role="Subjects">
               <PropertyRef Name="DepartmentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DepartmentsSubjects_Subjects">
-          <End Role="Subjects" Type="ClassSchedule.Models.Store.Subjects" Multiplicity="1" />
-          <End Role="DepartmentsSubjects" Type="ClassSchedule.Models.Store.DepartmentsSubjects" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subjects">
-              <PropertyRef Name="SubjectID" />
-            </Principal>
-            <Dependent Role="DepartmentsSubjects">
-              <PropertyRef Name="SubjectID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -258,52 +213,30 @@
     <edmx:ConceptualModels>
       <Schema Namespace="ClassSchedule.Models" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="ClassScheduleDb" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="vw_ClassScheduleData" EntityType="ClassSchedule.Models.vw_ClassScheduleData" />
           <EntitySet Name="ClassSearches" EntityType="ClassSchedule.Models.ClassSearch" />
           <EntitySet Name="CourseSearches" EntityType="ClassSchedule.Models.CourseSearch" />
-          <EntitySet Name="Departments" EntityType="ClassSchedule.Models.Department" />
           <EntitySet Name="Divisions" EntityType="ClassSchedule.Models.Division" />
-          <AssociationSet Name="FK_Departments_Division" Association="ClassSchedule.Models.FK_Departments_Division">
-            <End Role="Division" EntitySet="Divisions" />
-            <End Role="Department" EntitySet="Departments" />
-          </AssociationSet>
           <EntitySet Name="CourseMetas" EntityType="ClassSchedule.Models.CourseMeta" />
           <EntitySet Name="SectionCourseCrosslistings" EntityType="ClassSchedule.Models.SectionCourseCrosslisting" />
           <EntitySet Name="SectionsMetas" EntityType="ClassSchedule.Models.SectionsMeta" />
           <EntitySet Name="SubjectsCoursePrefixes" EntityType="ClassSchedule.Models.SubjectsCoursePrefix" />
           <EntitySet Name="SectionSeats" EntityType="ClassSchedule.Models.SectionSeat" />
+          <EntitySet Name="vw_Class" EntityType="ClassSchedule.Models.vw_Class" />
+          <EntitySet Name="Departments" EntityType="ClassSchedule.Models.Department" />
           <EntitySet Name="Subjects" EntityType="ClassSchedule.Models.Subject" />
+          <AssociationSet Name="FK_Departments_Division" Association="ClassSchedule.Models.FK_Departments_Division">
+            <End Role="Division" EntitySet="Divisions" />
+            <End Role="Department" EntitySet="Departments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subjects_Departments" Association="ClassSchedule.Models.FK_Subjects_Departments">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Subject" EntitySet="Subjects" />
+          </AssociationSet>
           <AssociationSet Name="FK_SubjectsCoursePrefixes_Subjects" Association="ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects">
             <End Role="Subject" EntitySet="Subjects" />
             <End Role="SubjectsCoursePrefix" EntitySet="SubjectsCoursePrefixes" />
           </AssociationSet>
-          <AssociationSet Name="DepartmentsSubjects" Association="ClassSchedule.Models.DepartmentsSubjects">
-            <End Role="Department" EntitySet="Departments" />
-            <End Role="Subject" EntitySet="Subjects" />
-          </AssociationSet>
           </EntityContainer>
-        <EntityType Name="vw_ClassScheduleData">
-          <Key>
-            <PropertyRef Name="ClassID" />
-          </Key>
-          <Property Name="ClassID" Type="String" Nullable="false" MaxLength="8" Unicode="false" FixedLength="true" />
-          <Property Name="YearQuarterID" Type="String" MaxLength="4" Unicode="false" FixedLength="true" />
-          <Property Name="CourseID" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
-          <Property Name="SeatsAvailable" Type="Int32" />
-          <Property Name="LastUpdated" Type="DateTime" />
-          <Property Name="CourseFootnote" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
-          <Property Name="SectionFootnote" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
-          <Property Name="Abbreviation" Type="String" MaxLength="5" Unicode="false" FixedLength="false" />
-          <Property Name="ProgramURL" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="Title" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="URL" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="Division" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="ContactName" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="ContactPhone" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="Intro" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
-          <Property Type="String" Name="CustomTitle" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="CustomDescription" MaxLength="500" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="ClassSearch">
           <Key>
             <PropertyRef Name="ClassID" />
@@ -324,20 +257,6 @@
           <Property Type="String" Name="CourseID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CourseInfo" MaxLength="4065" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="Department">
-          <Key>
-            <PropertyRef Name="DepartmentID" />
-          </Key>
-          <Property Type="Int32" Name="DepartmentID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="DivisionID" />
-          <Property Type="String" Name="Title" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="URL" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="ProgramChairSID" MaxLength="9" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastUpdatedBy" MaxLength="9" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="LastUpdated" />
-          <NavigationProperty Name="Division" Relationship="ClassSchedule.Models.FK_Departments_Division" FromRole="Department" ToRole="Division" />
-          <NavigationProperty Name="Subjects" Relationship="ClassSchedule.Models.DepartmentsSubjects" FromRole="Department" ToRole="Subject" />
-        </EntityType>
         <EntityType Name="Division">
           <Key>
             <PropertyRef Name="DivisionID" />
@@ -349,18 +268,6 @@
           <Property Type="DateTime" Name="LastUpdated" />
           <NavigationProperty Name="Departments" Relationship="ClassSchedule.Models.FK_Departments_Division" FromRole="Division" ToRole="Department" />
         </EntityType>
-        <Association Name="FK_Departments_Division">
-          <End Type="ClassSchedule.Models.Division" Role="Division" Multiplicity="0..1" />
-          <End Type="ClassSchedule.Models.Department" Role="Department" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Division">
-              <PropertyRef Name="DivisionID" />
-            </Principal>
-            <Dependent Role="Department">
-              <PropertyRef Name="DivisionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="CourseMeta">
           <Key>
             <PropertyRef Name="CourseID" />
@@ -406,19 +313,72 @@
           <Property Type="Int32" Name="SeatsAvailable" />
           <Property Type="DateTime" Name="LastUpdated" />
         </EntityType>
+        <EntityType Name="vw_Class">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Type="String" Name="ClassID" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="YearQuarterID" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="ItemNumber" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CourseID" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Department" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="CourseNumber" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Type="Int32" Name="ClassCapacity" />
+          <Property Type="Int32" Name="StudentsEnrolled" />
+          <Property Type="DateTime" Name="LastUpdated" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentID" />
+          </Key>
+          <Property Type="Int32" Name="DepartmentID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="DivisionID" />
+          <Property Type="String" Name="Title" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="URL" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ProgramChairSID" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastUpdatedBy" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LastUpdated" />
+          <NavigationProperty Name="Division" Relationship="ClassSchedule.Models.FK_Departments_Division" FromRole="Department" ToRole="Division" />
+          <NavigationProperty Name="Subjects" Relationship="ClassSchedule.Models.FK_Subjects_Departments" FromRole="Department" ToRole="Subject" />
+        </EntityType>
         <EntityType Name="Subject">
           <Key>
             <PropertyRef Name="SubjectID" />
           </Key>
           <Property Type="Int32" Name="SubjectID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="DepartmentID" />
           <Property Type="String" Name="Title" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Intro" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Slug" Nullable="false" MaxLength="63" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LastUpdatedBy" MaxLength="9" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastUpdated" />
+          <NavigationProperty Name="Department" Relationship="ClassSchedule.Models.FK_Subjects_Departments" FromRole="Subject" ToRole="Department" />
           <NavigationProperty Name="SubjectsCoursePrefixes" Relationship="ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects" FromRole="Subject" ToRole="SubjectsCoursePrefix" />
-          <NavigationProperty Name="Departments" Relationship="ClassSchedule.Models.DepartmentsSubjects" FromRole="Subject" ToRole="Department" />
         </EntityType>
+        <Association Name="FK_Departments_Division">
+          <End Type="ClassSchedule.Models.Division" Role="Division" Multiplicity="0..1" />
+          <End Type="ClassSchedule.Models.Department" Role="Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Division">
+              <PropertyRef Name="DivisionID" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="DivisionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subjects_Departments">
+          <End Type="ClassSchedule.Models.Department" Role="Department" Multiplicity="0..1" />
+          <End Type="ClassSchedule.Models.Subject" Role="Subject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="Subject">
+              <PropertyRef Name="DepartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SubjectsCoursePrefixes_Subjects">
           <End Type="ClassSchedule.Models.Subject" Role="Subject" Multiplicity="1" />
           <End Type="ClassSchedule.Models.SubjectsCoursePrefix" Role="SubjectsCoursePrefix" Multiplicity="*" />
@@ -431,35 +391,12 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="DepartmentsSubjects">
-          <End Type="ClassSchedule.Models.Department" Role="Department" Multiplicity="*" />
-          <End Type="ClassSchedule.Models.Subject" Role="Subject" Multiplicity="*" />
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ClassScheduleModelsStoreContainer" CdmEntityContainer="ClassScheduleDb">
-          <EntitySetMapping Name="vw_ClassScheduleData"><EntityTypeMapping TypeName="ClassSchedule.Models.vw_ClassScheduleData"><MappingFragment StoreEntitySet="vw_ClassScheduleData">
-            <ScalarProperty Name="CustomDescription" ColumnName="CustomDescription" />
-                <ScalarProperty Name="CustomTitle" ColumnName="CustomTitle" />
-                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
-            <ScalarProperty Name="YearQuarterID" ColumnName="YearQuarterID" />
-            <ScalarProperty Name="CourseID" ColumnName="CourseID" />
-            <ScalarProperty Name="SeatsAvailable" ColumnName="SeatsAvailable" />
-            <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
-            <ScalarProperty Name="CourseFootnote" ColumnName="CourseFootnote" />
-            <ScalarProperty Name="SectionFootnote" ColumnName="SectionFootnote" />
-            <ScalarProperty Name="Abbreviation" ColumnName="Abbreviation" />
-            <ScalarProperty Name="ProgramURL" ColumnName="ProgramURL" />
-            <ScalarProperty Name="Title" ColumnName="Title" />
-            <ScalarProperty Name="URL" ColumnName="URL" />
-            <ScalarProperty Name="Division" ColumnName="Division" />
-            <ScalarProperty Name="ContactName" ColumnName="ContactName" />
-            <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
-            <ScalarProperty Name="Intro" ColumnName="Intro" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="ClassSearches">
             <EntityTypeMapping TypeName="ClassSchedule.Models.ClassSearch">
               <MappingFragment StoreEntitySet="ClassSearch">
@@ -479,19 +416,6 @@
                 <ScalarProperty Name="CourseID" ColumnName="CourseID" />
                 <ScalarProperty Name="YearQuarterID" ColumnName="YearQuarterID" />
                 <ScalarProperty Name="CourseKey" ColumnName="CourseKey" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Departments">
-            <EntityTypeMapping TypeName="ClassSchedule.Models.Department">
-              <MappingFragment StoreEntitySet="Departments">
-                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
-                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
-                <ScalarProperty Name="ProgramChairSID" ColumnName="ProgramChairSID" />
-                <ScalarProperty Name="URL" ColumnName="URL" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="DivisionID" ColumnName="DivisionID" />
-                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -553,6 +477,34 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="vw_Class">
+            <EntityTypeMapping TypeName="ClassSchedule.Models.vw_Class">
+              <MappingFragment StoreEntitySet="vw_Class">
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="StudentsEnrolled" ColumnName="StudentsEnrolled" />
+                <ScalarProperty Name="ClassCapacity" ColumnName="ClassCapacity" />
+                <ScalarProperty Name="CourseNumber" ColumnName="CourseNumber" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="CourseID" ColumnName="CourseID" />
+                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
+                <ScalarProperty Name="YearQuarterID" ColumnName="YearQuarterID" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="ClassSchedule.Models.Department">
+              <MappingFragment StoreEntitySet="Departments">
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="LastUpdatedBy" ColumnName="LastUpdatedBy" />
+                <ScalarProperty Name="ProgramChairSID" ColumnName="ProgramChairSID" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="DivisionID" ColumnName="DivisionID" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Subjects">
             <EntityTypeMapping TypeName="ClassSchedule.Models.Subject">
               <MappingFragment StoreEntitySet="Subjects">
@@ -561,18 +513,11 @@
                 <ScalarProperty Name="Slug" ColumnName="Slug" />
                 <ScalarProperty Name="Intro" ColumnName="Intro" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
                 <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="DepartmentsSubjects" TypeName="ClassSchedule.Models.DepartmentsSubjects" StoreEntitySet="DepartmentsSubjects">
-            <EndProperty Name="Subject">
-              <ScalarProperty Name="SubjectID" ColumnName="SubjectID" />
-            </EndProperty>
-            <EndProperty Name="Department">
-              <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
-            </EndProperty>
-          </AssociationSetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -594,28 +539,28 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="ClassScheduleDb" ZoomLevel="89">
-        <EntityTypeShape EntityType="ClassSchedule.Models.vw_ClassScheduleData" Width="1.5" PointX="0.5" PointY="0.5" Height="3.9033007812499996" IsExpanded="true" />
         <EntityTypeShape EntityType="ClassSchedule.Models.ClassSearch" Width="1.5" PointX="10.75" PointY="1.125" Height="2.1725878906249996" />
         <EntityTypeShape EntityType="ClassSchedule.Models.CourseSearch" Width="1.5" PointX="9" PointY="1.125" Height="1.7879850260416674" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.Department" Width="1.5" PointX="7" PointY="5.625" Height="2.7494921874999996" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.Division" Width="1.5" PointX="9" PointY="4.75" Height="2.1725878906249996" />
-        <AssociationConnector Association="ClassSchedule.Models.FK_Departments_Division" >
-          <ConnectorPoint PointX="9" PointY="6.2737939453125" />
-          <ConnectorPoint PointX="8.5" PointY="6.2737939453125" />
-        </AssociationConnector>
+        <EntityTypeShape EntityType="ClassSchedule.Models.Division" Width="1.5" PointX="10.625" PointY="4.25" Height="2.1725878906249996" />
         <EntityTypeShape EntityType="ClassSchedule.Models.CourseMeta" Width="1.5" PointX="12.375" PointY="1.125" Height="1.7879850260416674" />
         <EntityTypeShape EntityType="ClassSchedule.Models.SectionCourseCrosslisting" Width="1.5" PointX="2.875" PointY="1.125" Height="1.4033821614583388" />
         <EntityTypeShape EntityType="ClassSchedule.Models.SectionsMeta" Width="1.5" PointX="4.625" PointY="1.125" Height="2.1725878906250031" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.SubjectsCoursePrefix" Width="1.5" PointX="3.75" PointY="4.25" Height="1.5956835937500031" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.SubjectsCoursePrefix" Width="1.5" PointX="3.25" PointY="4" Height="1.5956835937500031" />
         <EntityTypeShape EntityType="ClassSchedule.Models.SectionSeat" Width="1.5" PointX="6.375" PointY="1.125" Height="1.5956835937500031" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.Subject" Width="1.5" PointX="4.875" PointY="6.625" Height="2.5571907552083317" />
-        <AssociationConnector Association="ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects" >
-          <ConnectorPoint PointX="5.0625" PointY="6.625" />
-          <ConnectorPoint PointX="5.0625" PointY="5.84568359375" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.vw_Class" Width="1.5" PointX="0.5" PointY="0.625" Height="2.7494921875000031" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.Department" Width="1.5" PointX="8.25" PointY="4.25" Height="2.749492187499996" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.Subject" Width="1.5" PointX="5.875" PointY="4.25" Height="2.749492187499996" />
+        <AssociationConnector Association="ClassSchedule.Models.FK_Departments_Division" >
+          <ConnectorPoint PointX="10.625" PointY="5.3362939453125" />
+          <ConnectorPoint PointX="9.75" PointY="5.3362939453125" />
         </AssociationConnector>
-        <AssociationConnector Association="ClassSchedule.Models.DepartmentsSubjects" >
-          <ConnectorPoint PointX="7" PointY="7.49974609375" />
-          <ConnectorPoint PointX="6.375" PointY="7.49974609375" />
+        <AssociationConnector Association="ClassSchedule.Models.FK_Subjects_Departments" >
+          <ConnectorPoint PointX="8.25" PointY="5.624746093749998" />
+          <ConnectorPoint PointX="7.375" PointY="5.624746093749998" />
+        </AssociationConnector>
+        <AssociationConnector Association="ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects" >
+          <ConnectorPoint PointX="5.875" PointY="4.9228417968750016" />
+          <ConnectorPoint PointX="4.75" PointY="4.9228417968750016" />
         </AssociationConnector>
         </Diagram>
     </Diagrams>
