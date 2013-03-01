@@ -34,6 +34,7 @@ namespace CTCClassSchedule.Controllers
 			// We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
 			searchterm = searchterm.Replace("\"", string.Empty);
 
+			// TODO: This needs to be configurable
 			if (quarter == "CE")
 			{
 				Response.Redirect("http://www.campusce.net/BC/Search/Search.aspx?q=" + searchterm, true);
@@ -47,19 +48,15 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
-
-
 			ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid, f_telecourse);
 			ViewBag.Days = Helpers.ConstructDaysList(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
-
 			ViewBag.avail = avail;
 			ViewBag.p_offset = p_offset;
+			ViewBag.Subject = Subject;
+			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
 
 			//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
 			TempData["DayDictionary"] = Helpers.getDayDictionary();
-
-			ViewBag.Subject = Subject;
-			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s,
 			                                                f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
@@ -74,7 +71,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				setViewBagVars("", "", "", avail, "", repository);
+				setViewBagVars(string.Empty, string.Empty, string.Empty, avail, string.Empty, repository);
 
 				YearQuarter YRQ = string.IsNullOrWhiteSpace(quarter) ? repository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
 				ViewBag.YearQuarter = YRQ;
@@ -96,52 +93,28 @@ namespace CTCClassSchedule.Controllers
 					}
 				}
 
-				IList<vw_ClassScheduleData> classScheduleData;
+				IList<SectionWithSeats> sectionsEnum;
 				IList<SearchResult> SearchResults;
 				IList<SearchResultNoSection> NoSectionSearchResults;
-
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					SearchResults = GetSearchResults(db, searchterm, quarter);
 					NoSectionSearchResults = GetNoSectionSearchResults(db, searchterm, quarter);
 
-					using (_profiler.Step("API::Get Class Schedule Specific Data()"))
-					{
-						classScheduleData = (from c in db.vw_ClassScheduleData
-						                     where c.YearQuarterID == YRQ.ID
-						                     select c
-						                    ).ToList();
-					}
-				}
-				IList<SectionWithSeats> sectionsEnum;
-				using (_profiler.Step("Joining SectionWithSeats (in memory)"))
-				{
-					sectionsEnum = (from c in sections
-					                join d in classScheduleData on c.ID.ToString() equals d.ClassID into cd
-					                from d in cd.DefaultIfEmpty()
-					                join e in SearchResults on c.ID.ToString() equals e.ClassID into ce
-					                from e in ce
-					                where e.ClassID == c.ID.ToString()
-					                orderby c.Yrq.ID descending
-					                select new SectionWithSeats
-								{
-										ParentObject = c,
-										SeatsAvailable = d != null ? d.SeatsAvailable : int.MinValue,	// MinValue allows us to identify past quarters (with no availability info)
-										LastUpdated = Helpers.getFriendlyTime(d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue),
-										SectionFootnotes = d != null ? d.SectionFootnote : string.Empty,
-										CourseFootnotes = d != null ? d.CourseFootnote : string.Empty,
-										CourseTitle = d.CustomTitle != null && d.CustomTitle != string.Empty ? d.CustomTitle : c.CourseTitle,
-										CustomTitle = d.CustomTitle != null ? d.CustomTitle : string.Empty,
-										CustomDescription = d.CustomDescription != null ? d.CustomDescription : string.Empty
-																	}).OrderBy(x => x.CourseNumber)
+					sections = (from s in sections
+											join r in SearchResults on s.ID.ToString() equals r.ClassID
+											select s).ToList();
+
+					sectionsEnum = Helpers.GetSectionsWithSeats(YRQ.ID, sections, db)
+																		.OrderBy(x => x.CourseNumber)
 																		.ThenBy(x => x.CourseTitle)
 																		.ThenBy(s => s.IsTelecourse)
 																		.ThenBy(s => s.IsOnline)
 																		.ThenBy(s => s.IsHybrid)
 																		.ThenBy(s => s.IsOnCampus)
-																		.ThenBy(s => s.SectionCode).ToList();
-
+																		.ThenBy(s => s.SectionCode).ToList();;
 				}
+
 
 				// do not count Linked sections (since we don't display them)
 				IEnumerable<SectionWithSeats> countedSections = sectionsEnum.Where(s => !s.IsLinked);
@@ -173,7 +146,6 @@ namespace CTCClassSchedule.Controllers
 										Section = sectionsEnum,
 										SearchResultNoSection = NoSectionSearchResults,
 										Subjects = allSubjects
-
 								};
 
 				ViewBag.CurrentPage = p_offset + 1;
