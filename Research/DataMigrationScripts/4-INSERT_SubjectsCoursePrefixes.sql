@@ -12,3 +12,5 @@ SELECT DISTINCT
 FROM dbo.Subjects s
 JOIN [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].[ProgramInformation] p
 	ON p.URL = s.Slug
+
+--SELECT * FROM SubjectsCoursePrefixes
