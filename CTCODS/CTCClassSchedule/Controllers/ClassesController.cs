@@ -257,16 +257,11 @@ namespace CTCClassSchedule.Controllers
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
 
-
 				// TODO: Refactor the following code into its own method
 				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					IList<Subject> subjects = db.Subjects.ToList();
-
-					IList<char> alphabet = subjects.Select(c => c.Title.First()).Distinct().ToList();
-					ViewBag.Alphabet = alphabet;
-
 					IEnumerable<Subject> subjectsEnum;
 					if (letter != null)
 					{
@@ -305,7 +300,6 @@ namespace CTCClassSchedule.Controllers
 
 					ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
-					ViewBag.ItemCount = subjectsEnum.Count();
 					return View(subjectsEnum);
 				}
 			}
@@ -338,7 +332,7 @@ namespace CTCClassSchedule.Controllers
 					{
 						sectionsEnum = Helpers.GetSectionsWithSeats(yrq.ID, sections, db);
 					}
-					IList<Section> bugs = sections.Where(s => s.ID.ItemNumber == "4642" || s.ID.ItemNumber == "4643").ToList();
+
 					IList<SectionsBlock> courseBlocks = groupSectionsIntoBlocks(sectionsEnum);
 					if (format == "json")
 					{
@@ -891,7 +885,7 @@ namespace CTCClassSchedule.Controllers
 				string realCourseID = Helpers.BuildCourseID(ClassNum, Subject, courseID.IsCommonCourse);
 				CourseOutcome = client.GetCourseOutcome(realCourseID);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				CourseOutcome = "Error: Cannot find course outcome for this course or cannot connect to the course outcomes webservice.";
 			}
@@ -924,49 +918,48 @@ namespace CTCClassSchedule.Controllers
 			{
 				using (context = context ?? new ClassScheduleDb())
 				{
-					SubjectInfoResult subjectInfo = SubjectInfo.GetSubjectInfo(slug);
-					if (subjectInfo != null)
-					{
-						ViewBag.ProgramTitle = subjectInfo.Subject.Title;
-						ViewBag.SubjectIntro = subjectInfo.Subject.Intro;
-						ViewBag.AcademicProgram = subjectInfo.Department.Title;
-						ViewBag.DivisionURL = subjectInfo.Division.URL;
-						ViewBag.DivisionTitle = subjectInfo.Division.Title;
 
-						// If the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
-						// or empty just return it, otherwise prepend iwth the current school url.
-						string deptUrl = subjectInfo.Department.URL;
-						if (!string.IsNullOrWhiteSpace(deptUrl) && !Regex.IsMatch(deptUrl, @"^https?://"))
-						{
-							deptUrl = ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(deptUrl);
-						}
-						ViewBag.ProgramUrl = deptUrl;
+					var subject = context.Subjects.Where(s => s.Slug.Equals(slug, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+					var department = subject.Department;
+					var division = department != null ? department.Division : null;
+
+					ViewBag.ProgramTitle = subject.Title ?? string.Empty;
+					ViewBag.SubjectIntro = subject.Intro ?? string.Empty;
+					ViewBag.AcademicProgram = department.Title ?? string.Empty;
+					ViewBag.DivisionURL = division.URL ?? string.Empty;
+					ViewBag.DivisionTitle = division.Title ?? string.Empty;
+
+					// If the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
+					// or empty just return it, otherwise prepend iwth the current school url.
+					string deptUrl = department.URL ?? string.Empty;
+					if (!string.IsNullOrWhiteSpace(deptUrl) && !Regex.IsMatch(deptUrl, @"^https?://"))
+					{
+						deptUrl = ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(deptUrl);
 					}
+					ViewBag.ProgramUrl = deptUrl;
 				}
 			}
 		}
 
 		/// <summary>
-		/// Gets a list of course prefixes for the specified URL subject
+		/// Gets a list of course prefixes for the specified subject
 		/// </summary>
-		/// <param name="URLprefix"></param>
+		/// <param name="slug"></param>
 		/// <returns></returns>
 		/// <remarks>
-		/// The <i>Subject</i> portion of a route URL can reference more than one,
-		/// or a completely different, <see cref="CoursePrefix"/>. This method looks
+		/// This method looks
 		/// up these mappings in the application database for the appropriate
 		/// list of actual prefix abbreviations.
 		/// </remarks>
-		private List<string> SubjectPrefixes(string subjectId)
+		private List<string> SubjectPrefixes(string slug)
 		{
-			int id;
-			List<string> prefixes = new List<string>();
-			if (Int32.TryParse(subjectId, out id))
+			using (ClassScheduleDb db = new ClassScheduleDb())
 			{
-				prefixes = SubjectPrefixes(id);
-			}
+				List<int> subjectIds = db.Subjects.Where(s => s.Slug.Equals(slug, StringComparison.OrdinalIgnoreCase)).Select(s => s.SubjectID).ToList();
+				List<string> prefixList = db.SubjectsCoursePrefixes.Where(s => subjectIds.Contains(s.SubjectID)).Select(s => s.CoursePrefixID).ToList();
 
-			return prefixes;
+				return prefixList;
+			}
 		}
 		private List<string> SubjectPrefixes(int subjectId)
 		{
