@@ -6,26 +6,205 @@
 @model IEnumerable<Course>
 
 @{
-		MiniProfiler _profiler = MiniProfiler.Current;
-		IList<Course> _courses = Model != null ? Model.ToList() : new List<Course>();
-		Course course = _courses.Count > 0 ? _courses[0] : null;
+	MiniProfiler _profiler = MiniProfiler.Current;
+	IList<Course> _courses = Model != null ? Model.ToList() : new List<Course>();
+	Course course = _courses.Count > 0 ? _courses[0] : null;
 
-		ViewBag.PageTitle = course.Subject + " " + course.Number + " at Bellevue College";
+	ViewBag.PageTitle = course.Subject + " " + course.Number + " at Bellevue College";
 
-		IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
-		YearQuarter currentYrq = yrqList[0];
-		string currentYrqID = currentYrq.ID;
-		YearQuarter activeQuarter = ViewBag.CurrentYearQuarter;
+	IList<YearQuarter> yrqList = (ViewBag.QuarterNavMenu as IList<YearQuarter>);
+	YearQuarter currentYrq = yrqList[0];
+	string currentYrqID = currentYrq.ID;
+	YearQuarter activeQuarter = ViewBag.CurrentYearQuarter;
 
-		string _courseOutcomes = ViewBag.CourseOutcome;
+	string _courseOutcomes = ViewBag.CourseOutcome;
 }
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
 
+<div title="Edit Section" id="edit-section"></div>
+
+<div id="scheduleMain">
+	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu })
+	<div id="container" class="nosidebar">
+		<div id="content">
+			@if (course != null)
+			{
+				<h1 id="pageTitle">
+					<span class="courseID">@(string.Format("{0} {1}", Helpers.SubjectWithCommonCourseFlag(course), course.Number))</span>
+					<span class="courseTitle">@course.Title</span>
+
+					@ViewHelpers.DisplayCredits(course)
+				</h1>
+
+				<div class="aside">
+					@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
+					{
+						<div class="generalInfo">
+							<h2>Department</h2>
+							@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
+							{
+								<a href="@ViewBag.ProgramUrl">
+									@if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
+									{
+										@ViewBag.AcademicProgram
+									}
+									else
+									{
+										@ViewBag.ProgramTitle
+									}
+								</a>
+							}
+							else
+							{
+								if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
+								{
+									@ViewBag.AcademicProgram
+								}
+								else
+								{
+									@ViewBag.ProgramTitle
+								}
+							}
+						</div>
+					}
+
+					@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionTitle))
+					{
+						<div class="generalInfo">
+							<h2>Division</h2>
+							@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionURL))
+							{
+								<a href="@ViewBag.DivisionURL">@ViewBag.DivisionTitle</a>
+							}
+							else
+							{
+								@ViewBag.DivisionTitle
+							}
+						</div>
+					}
+				</div><!-- aside -->
+
+				<div id="class-details">
+					@* Display any upcoming course title change, if detected *@
+
+					@if (_courses.Count > 1)
+					{
+						Course newCourse = _courses[1];
+						if (newCourse.IsVariableCredits != course.IsVariableCredits || newCourse.Credits != course.Credits || newCourse.Title.Trim() != course.Title.Trim())
+						{
+							<div class="upcomingChange">
+								<h3>Class title change starting @newCourse.YearQuarterBegin.FriendlyName</h3>
+								<p>
+									<span>@newCourse.Title</span>
+									&#8226;
+									@if (newCourse.IsVariableCredits)
+									{
+										<span class="classCredits">
+											V1-@Html.CreditsValue(newCourse.Credits)
+											<abbr title=" variable credit(s) ">Cr.</abbr>
+										</span>
+									}
+									else
+									{
+										<span class="classCredits">
+											@Html.CreditsValue(newCourse.Credits)
+											<abbr title=" credit(s) ">Cr.</abbr>
+										</span>
+									}
+								</p>
+							</div>
+						}
+					}
+
+					@{
+						IList<CourseDescription> activeDescriptions = Helpers.getActiveCourseDescriptions(course, activeQuarter);
+						string currentDescription = "* NO DESCRIPTION FOUND *"; // default if no description found
+					}
+					@if (activeDescriptions.Count > 0)
+					{
+						currentDescription = string.IsNullOrWhiteSpace(activeDescriptions[0].Description) ? currentDescription : activeDescriptions[0].Description;
+					}
+
+					<div id="courseDescription">
+						<h2>Description:</h2>
+						<p>
+							@currentDescription
+						</p>
+					</div>
+
+					@if (activeDescriptions.Count > 1)
+					{
+						<div class="upcomingChange">
+							<h3>New description starting @activeDescriptions[1].YearQuarterBegin.FriendlyName</h3>
+							<p>
+								@(string.IsNullOrWhiteSpace(activeDescriptions[1].Description) ? "* NO DESCRIPTION FOUND*" : activeDescriptions[1].Description)
+							</p>
+						</div>
+					}
+
+					@* COMMENTS HERE *@
+
+					@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote))
+					{
+						<div id="courseFootnotes">
+							<h2>Details:</h2>
+							<p>
+								<span id="CMSCourseFootnotes">
+									@Html.Raw(ViewBag.CMSFootnote)
+								</span>
+							</p>
+						</div>
+					}
+
+					@if (!string.IsNullOrWhiteSpace(_courseOutcomes) && !_courseOutcomes.StartsWith("Error:"))
+					{
+						<div id="courseOutcome">
+							<h2>Outcomes:</h2>
+							<p>After completing this class, students should be able to:</p>
+							@Html.Raw(_courseOutcomes)
+						</div>
+					}
+				</div> <!-- class-details -->
+
+				if (ViewBag.QuartersOffered != null && ViewBag.QuartersOffered.Count > 0)
+				{
+					<div id="allSectionsbyQuarter">
+						<div class="offeredQuarters">
+							<h2>Offered:</h2>
+							<ul>
+								@foreach (YearQuarter q in ViewBag.QuartersOffered)
+								{
+									int relativeOffset = activeQuarter.FriendlyName.CompareTo(q.FriendlyName);
+									<li class="@(relativeOffset < 0 ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
+										@Html.ActionLink(q.FriendlyName, "YearQuarterSubject", new { YearQuarter = q.FriendlyName.Replace(" ", string.Empty), Subject = course.Subject })
+
+										@if (relativeOffset == 0)
+										{
+											<span>(current quarter)</span>
+										}
+									</li>
+								}
+							</ul>
+						</div> <!-- offeredQuarters -->
+					</div> <!-- allSectionsbyQuarter -->
+				}
+			}
+			else
+			{
+				string subject = ViewContext.RouteData.Values["Subject"].ToString();
+				string number = ViewContext.RouteData.Values["ClassNum"].ToString();
+				<h1>Sorry, we don't appear to have any courses with the ID &quot;@string.Format("{0} {1}", subject, number)&quot;</h1>
+			}
+		</div> <!-- content -->
+	</div> <!-- container -->
+</div>
+
+
 
 <script type="text/javascript">
 	/* subject chooser pop-up dialog */
-	$(document).ready(function () {
+	$(function () {
 
 		$("#edit-section").dialog({
 			autoOpen: false,
@@ -34,241 +213,3 @@
 		});
 	});
 </script>
-
-	<div title="Edit Section" id="edit-section"></div>
-
-<div id="scheduleMain">
-	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu })
-	<div id="container" class="nosidebar">
-				<div id="content">
-				@if (course != null)
-	{
-						<h1 id="pageTitle">
-							<span class="courseID">@(string.Format("{0} {1}", Helpers.SubjectWithCommonCourseFlag(course), course.Number))</span>
-							<span class="courseTitle">@course.Title</span>
-
-							@ViewHelpers.DisplayCredits(course)
-						</h1>
-
-
-
-				<div class="aside">
-				@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
-	{
-						<div class="generalInfo">
-										<h2>Department</h2>
-							@if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
-	   {
-												 <a href="@ViewBag.ProgramUrl">
-														@if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
-			  {
-																@ViewBag.AcademicProgram
-			  }
-			  else
-			  {
-																@ViewBag.ProgramTitle
-			  }
-												 </a>
-	   }
-	   else
-	   {
-		   if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
-		   {
-																@ViewBag.AcademicProgram
-		   }
-		   else
-		   {
-																@ViewBag.ProgramTitle
-		   }
-	   }
-						</div>
-	}
-
-						@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionTitle))
-	  {
-							<div class="generalInfo">
-								<h2>Division</h2>
-								@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionURL))
-		{
-									<a href="@ViewBag.DivisionURL">@ViewBag.DivisionTitle</a>
-		}
-		else
-		{
-									@ViewBag.DivisionTitle
-		}
-							</div>
-	  }
-						</div><!-- aside -->
-
-						<div id="class-details">
-
-                        @* Display any upcoming course title change, if detected *@
-
-			@if (_courses.Count > 1)
-   {
-	   Course newCourse = _courses[1];
-	   if (newCourse.IsVariableCredits != course.IsVariableCredits || newCourse.Credits != course.Credits || newCourse.Title.Trim() != course.Title.Trim())
-	   {
-			 <div class="upcomingChange">
-				<h3>Class title change starting @newCourse.YearQuarterBegin.FriendlyName</h3>
-				<p>
-							<span>@newCourse.Title</span>
-
-				&#8226;
-				@if (newCourse.IsVariableCredits)
-	{
-							<span class="classCredits">
-								V1-@Html.CreditsValue(newCourse.Credits)
-									<abbr title=" variable credit(s) ">Cr.</abbr>
-							</span>
-	}
-	else
-	{
-							<span class="classCredits">
-								@Html.CreditsValue(newCourse.Credits)
-									<abbr title=" credit(s) ">Cr.</abbr>
-							</span>
-	}
-				</p>
-			 </div>
-	   }
-   }
-
-
-	@{
-		IList<CourseDescription> activeDescriptions = Helpers.getActiveCourseDescriptions(course, activeQuarter);
-		string currentDescription = "* NO DESCRIPTION FOUND *"; // default if no description found
-	}
-	@if (activeDescriptions.Count > 0)
-  {
-	  currentDescription = string.IsNullOrWhiteSpace(activeDescriptions[0].Description) ? currentDescription : activeDescriptions[0].Description;
-  }
-			<div id="courseDescription">
-				<h2>Description:</h2>
-				<p>
-					@currentDescription
-				</p>
-			</div>
-
-	@if (activeDescriptions.Count > 1)
-  {
-			 <div class="upcomingChange">
-				<h3>New description starting @activeDescriptions[1].YearQuarterBegin.FriendlyName</h3>
-				<p>
-					@(string.IsNullOrWhiteSpace(activeDescriptions[1].Description) ? "* NO DESCRIPTION FOUND*" : activeDescriptions[1].Description)
-				</p>
-			 </div>
-  }
-
-
-@* ***************************************************************************************************
-		Temporarily removed in order to meet initial public launch. We may want to re-enable this block
-
-			- 4/05/2012, shawn.south@bellevuecollege.edu
-	 ***************************************************************************************************
-		@if (course.Footnotes.Count > 0)
-	{
-					<div id="courseFootnotes">
-						<h2>Details:</h2>
-							 <p>
-									<span id="odsCourseFootnotes">
-			@foreach (string footnote in course.Footnotes)
-			{
-				if (!string.IsNullOrWhiteSpace(footnote))
-				{
-					@footnote;
-				}
-			}
-								</span>
-									@if (course.Footnotes.Any(f => f.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0))
-         {
-										<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/entrycode/">How to clear prerequisites?</a>
-         }
-							</p>
-					</div>
-	}
-
-*@
-
-				@* Show footnotes, and upcoming changes to footnotes. Save this for a future release
-				@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote) || _courses[0].Footnotes.Count > 0)
-	{
-					<div id="courseFootnotes">
-						<h2>Details:</h2>
-						<p>
-							@ViewHelpers.DisplayFootnotes(course.Footnotes, ViewBag.CMSFootnote)
-						</p>
-					</div>
-	}
-
-				@if (_courses.Count > 1)
-				{
-					if (_courses[1].Footnotes.Count > 0 && !_courses[0].Footnotes.SequenceEqual(_courses[1].Footnotes))
-					{
-						<div class="upcomingChange">
-							<h3>New details starting @_courses[1].YearQuarterBegin.FriendlyName</h3>
-							<p>
-								@ViewHelpers.DisplayFootnotes(_courses[1].Footnotes, ViewBag.CMSFootnote)
-							</p>
-						</div>
-					}
-				}
-				*@
-
-				@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote))
-				{
-					<div id="courseFootnotes">
-						<h2>Details:</h2>
-							 <p>
-									<span id="CMSCourseFootnotes">
-										@Html.Raw(ViewBag.CMSFootnote)
-								</span>
-							</p>
-					</div>
-				}
-
-				@if (!string.IsNullOrWhiteSpace(_courseOutcomes) && !_courseOutcomes.StartsWith("Error:"))
-			{
-					<div id="courseOutcome">
-						<h2>Outcomes:</h2>
-                        <p>After completing this class, students should be able to:</p>
-						@Html.Raw(_courseOutcomes)
-					</div>
-			}
-
-						</div> <!-- class-details -->
-			if (ViewBag.QuartersOffered != null && ViewBag.QuartersOffered.Count > 0)
-	 {
-						<div id="allSectionsbyQuarter">
-							<div class="offeredQuarters">
-								<h2>Offered:</h2>
-								<ul>
-				@foreach (YearQuarter q in ViewBag.QuartersOffered)
-		{
-			int relativeOffset = activeQuarter.FriendlyName.CompareTo(q.FriendlyName);
-
-					<li class="@(relativeOffset < 0 ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
-						@Html.ActionLink(q.FriendlyName, "YearQuarterSubject", new { YearQuarter = q.FriendlyName.Replace(" ", string.Empty), Subject = course.Subject })
-
-						@if (relativeOffset == 0)
-			{
-							<span>(current quarter)</span>
-			}
-					</li>
-		}
-				</ul>
-			</div> <!-- offeredQuarters -->
-			</div> <!-- allSectionsbyQuarter -->
-	 }
-
-		}
-		else
-		{
-				string subject = ViewContext.RouteData.Values["Subject"].ToString();
-				string number = ViewContext.RouteData.Values["ClassNum"].ToString();
-				<h1>Sorry, we don't appear to have any courses with the ID &quot;@string.Format("{0} {1}", subject, number)&quot;</h1>
-		}
-		</div> <!-- content -->
-
-		</div> <!-- container -->
-</div>
