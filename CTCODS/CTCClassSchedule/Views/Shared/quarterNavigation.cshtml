@@ -1,9 +1,94 @@
 ﻿@using Ctc.Ods.Types
+@model CTCClassSchedule.Models.QuarterNavigationModel
+
+@{
+	YearQuarter quarterViewing = ViewBag.YearQuarter;
+}
+<div id="site-navigation">
+	@using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" }))
+	{
+		<div id="browse">
+			<a href="@Url.Content("~/")" class="home roundcorners">Browse Classes</a>
+
+			<div class="nav-dropdown roundcorners">
+				<div id="nav-credit-options"><p><strong>Credit Classes</strong></p>
+					<ul>
+						@foreach (YearQuarter yrq in Model.NavigationQuarters)
+						{
+							<li>
+								<a class="yrq" href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">
+									<em>@yrq.FriendlyName</em>
+									@{
+										int yrqComparison = yrq.ID.CompareTo(Model.CurrentQuarter.ID);
+									}
+									@if (yrqComparison >= 0)
+									{
+										<span class="clarify">
+											@if (yrqComparison > 0) {
+												@:(upcoming)
+											}
+											else {
+												@:(current quarter)
+											}
+										</span>
+									}
+								</a>
+							</li>
+						}
+
+						<li class="browse-all-classes">
+							<a href="@Url.Action("AllClasses", "Classes")"><em><strong>All class descriptions</strong></em></a>
+						</li>
+					</ul>
+				</div>
+				<div id="nav-other-options"><p><strong>Other classes and workshops</strong></p>
+					<ul>
+						<li><a href="http://www.campusce.net/BC/Search/Search.aspx"><em>Continuing Education</em> <span class="clarify">(non-credit)</span></a></li>
+						<li><a href="http://bellevuecollege.edu/careers/sac_classes.html"><em>Center for Career Connections classes &amp; workshops</em></a></li>
+					</ul>
+				</div>
+			</div>
+
+    </div>
+
+		<div id="search" class="roundcorners">
+			<span id="search-text">Search</span>  <span id="search-tip">
+				<strong>Tip:</strong> you can search by course, title, subject, item number or instructor.
+			</span>
+
+			<label for="seach-quarter-select">Pick a quarter</label>
+			<select name="quarter" id="seach-quarter-select">
+				@foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
+				{
+					<option value="@yrq.FriendlyName.Replace(" ", string.Empty)" @if (quarterViewing != null && quarterViewing == yrq) { <text> selected="selected" </text> }>@yrq.FriendlyName</option>
+				}
+
+				<option value="CE">Continuing Education</option>
+			</select>
+
+			<label for="searh-keyword">Keywords</label>
+			<div id="searchfield-wrap" class="roundcorners">
+				<input type="text" class="searchInput" id="search-keyword" name="searchterm" maxlength="40" value="@(Request.QueryString["searchterm"] ?? string.Empty)" />
+				<div id="searchbutton-wrap">
+					<input type="submit" class="searchSubmit"  name="submit" value="Search" />
+				</div>
+			</div> <!-- searchfield-wrap -->
+		</div>
+
+		<div id="register">
+			<a href="http://bellevuecollege.edu/enrollment/registration/register/" class="roundcorners">Register</a>
+		</div>
+	}
+
+	<div class="clearer"></div>
+
+</div> <!-- #navbar   TODO: configurable? -->
+
 
 <script type="text/javascript">
-	$(document).ready(function () {
+	$(function () {
 
-		//when user clicks refine, show throbber
+		// when user clicks refine, show throbber
 		$('.searchSubmit').click(function () {
 			showThrobber();
 			$('#submitSearchForm').submit();
@@ -11,75 +96,3 @@
 
 	});
 </script>
-@{
-	YearQuarter quarterViewing = ViewBag.YearQuarter;
-	YearQuarter currentQuarter = ViewBag.CurrentYearQuarter;
-}
-<div id="site-navigation">
-@using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" })) {
-
-	<div id="browse"><a href="@Url.Content("~/")" class="home roundcorners">Browse Classes</a>
-
-        <div class="nav-dropdown roundcorners">
-            <div id="nav-credit-options"><p><strong>Credit Classes</strong></p>
-                <ul>
-
-                @foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
-                {
-									<li>
-										<a class="yrq" href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">
-											<em>@yrq.FriendlyName</em>
-										@{
-										int yrqComparison = yrq.ID.CompareTo(currentQuarter.ID);
-										}
-										@if (yrqComparison >= 0)
-										{
-											<span class="clarify">
-											@if (yrqComparison > 0) {
-													@:(upcoming)
-											} else {
-													@:(current quarter)
-											}
-											</span>
-										}
-										</a>
-									</li>
-                }
-									<li class="browse-all-classes"><a href="@Url.Action("AllClasses", "Classes")"><em><strong>All class descriptions</strong></em></a></li>
-                </ul>
-            </div>
-            <div id="nav-other-options"><p><strong>Other classes and workshops</strong></p>
-                <ul>
-                    <li><a href="http://www.campusce.net/BC/Search/Search.aspx"><em>Continuing Education</em> <span class="clarify">(non-credit)</span></a></li>
-                    <li><a href="http://bellevuecollege.edu/careers/sac_classes.html"><em>Center for Career Connections classes &amp; workshops</em></a></li>
-                </ul>
-            </div>
-        </div>
-
-    </div>
-	<div id="search" class="roundcorners">
-		<span id="search-text">Search</span>  <span id="search-tip"><strong>Tip:</strong> you can search by course, title, subject, item number or instructor.</span>
-		<label for="seach-quarter-select">Pick a quarter</label>
-        <select name="quarter" id="seach-quarter-select">
-				@foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
-		{
-					<option value="@yrq.FriendlyName.Replace(" ", "")" @if (quarterViewing != null && quarterViewing == yrq) { <text> selected="selected" </text> }>@yrq.FriendlyName</option>
-		}
-			<option value="CE">Continuing Education</option>
-		</select>
-
-		<label for="searh-keyword">Keywords</label>
-        <div id="searchfield-wrap" class="roundcorners">
-		    <input type="text" class="searchInput" id="search-keyword" name="searchterm" maxlength="40" value="@(Request.QueryString["searchterm"] ?? string.Empty)"/>
-		    <div id="searchbutton-wrap">
-                <input type="submit" class="searchSubmit"  name="submit" value="Search" />
-            </div>
-        </div> <!-- searchfield-wrap -->
-	</div>
-    <div id="register"><a href="http://bellevuecollege.edu/enrollment/registration/register/"  class="roundcorners">Register</a></div>
-}
-<div class="clearer"></div>
-
-</div> <!-- #navbar   TODO: configurable? -->
-
-

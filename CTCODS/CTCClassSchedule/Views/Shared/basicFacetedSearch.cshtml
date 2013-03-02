@@ -1,5 +1,6 @@
 ﻿@using CTCClassSchedule
 @using Ctc.Ods.Types
+@model IList<YearQuarter>
 @{
 	YearQuarter quarterViewing = ViewBag.YearQuarter;
 	string subject = string.Empty;
@@ -10,26 +11,23 @@
 	{
 		subject = ViewContext.RouteData.Values["Subject"].ToString();
 	}
-	@*else if (ViewData.Keys.Contains("Subject"))
-	{
-		subject = ViewData["Subject"].ToString();
-	}
-	*@
 }
 
 <div id="basicFacetedSearch" class="sidenav">
-		<h2>Browse for classes</h2>
+	<h2>Browse for classes</h2>
 	<h3>Subject</h3>
-		<ul class="subject">
-	@if (!string.IsNullOrWhiteSpace(subject))
- {
+
+	<ul class="subject">
+		@if (!string.IsNullOrWhiteSpace(subject))
+		{
 			<li @(ViewBag.activeClass)>
 				<span class="notlink">@subject</span>
 			</li>
- }
-				<li>
-				@Html.Partial("subjectNavigation")
-				</li>
+		}
+
+		<li>
+			@Html.Partial("subjectNavigation")
+		</li>
 	</ul>
 
 	<h3>Classes Offered:</h3>
@@ -37,18 +35,19 @@
 		<li @if (quarterViewing == null) { <text> class="active" </text> }>
 			<a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a>
 		</li>
-	@foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
- {
-		<li @if (quarterViewing != null && quarterViewing == yrq) { <text> class="active" </text> }>
-	@if (String.IsNullOrEmpty(subject))
-	{
-			<a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">@yrq.FriendlyName</a>
-	}
-	else
-	{
-			<a href="@Url.Action("YearQuarterSubject", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", ""), Subject = subject})">@yrq.FriendlyName</a>
-	}
-		</li>
- }
+
+		@foreach (YearQuarter yrq in Model)
+		{
+			<li @if (quarterViewing != null && quarterViewing == yrq) { <text> class="active" </text> }>
+			@if (String.IsNullOrEmpty(subject))
+			{
+				<a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">@yrq.FriendlyName</a>
+			}
+			else
+			{
+				<a href="@Url.Action("YearQuarterSubject", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", ""), Subject = subject})">@yrq.FriendlyName</a>
+			}
+			</li>
+		}
 	</ul>
 </div>
