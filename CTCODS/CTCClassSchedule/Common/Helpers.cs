@@ -451,15 +451,15 @@ namespace CTCClassSchedule.Common
       {
           sectionsEnum = (
 			      from c in sections
-                      // NOTE:  This logic assumes that data will only be saved in ClassScheduleDb after having come through
-                      //        the filter of the CtcApi - which normalizes spacing of the ClassID/SectionID field data.
                       join d in classes on c.ID.ToString() equals d.ClassID into t1
 			      from d in t1.DefaultIfEmpty()
-											join ss in db.SectionSeats on d.ClassID equals ss.ClassID into t2
+											join ss in db.SectionSeats on (d != null ? d.ClassID : "") equals ss.ClassID into t2
 											from ss in t2.DefaultIfEmpty()
-											join sm in db.SectionsMetas on d.ClassID equals sm.ClassID into t3
+											join sm in db.SectionsMetas on (d != null ? d.ClassID : "") equals sm.ClassID into t3
 											from sm in t3.DefaultIfEmpty()
-											join cm in db.CourseMetas on d.CourseID equals cm.CourseID into t4
+                      // NOTE:  This logic assumes that data will only be saved in ClassScheduleDb after having come through
+                      //        the filter of the CtcApi - which normalizes spacing of the ClassID/SectionID field data.
+                      join cm in db.CourseMetas on (d != null ? d.CourseID : "") equals cm.CourseID into t4
 											from cm in t4.DefaultIfEmpty()
 			      orderby c.Yrq.ID descending
 			      select new SectionWithSeats {
