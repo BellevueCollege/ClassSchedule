@@ -145,6 +145,8 @@
     <Compile Include="Common\HelperExtensions.cs" />
     <Compile Include="Common\Helpers.cs" />
     <Compile Include="Common\SectionsBlock.cs" />
+    <Compile Include="Common\SubjectInfo.cs" />
+    <Compile Include="Common\SubjectInfoResult.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\ClassesController.cs" />
@@ -159,6 +161,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ClassScheduleDb.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuarterNavigationModel.cs" />
+    <Compile Include="Models\SubjectViewModel.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
