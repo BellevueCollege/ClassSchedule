@@ -13,6 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataMigrationScripts", "Dat
 		Research\DataMigrationScripts\2-INSERT_Departments.sql = Research\DataMigrationScripts\2-INSERT_Departments.sql
 		Research\DataMigrationScripts\3-INSERT_Subjects.sql = Research\DataMigrationScripts\3-INSERT_Subjects.sql
 		Research\DataMigrationScripts\4-INSERT_SubjectsCoursePrefixes.sql = Research\DataMigrationScripts\4-INSERT_SubjectsCoursePrefixes.sql
+		Research\DataMigrationScripts\5-INSERT_SectionsMeta.sql = Research\DataMigrationScripts\5-INSERT_SectionsMeta.sql
+		Research\DataMigrationScripts\6-INSERT_SectionSeats.sql = Research\DataMigrationScripts\6-INSERT_SectionSeats.sql
+		Research\DataMigrationScripts\7-INSERT_CourseMeta.sql = Research\DataMigrationScripts\7-INSERT_CourseMeta.sql
 		Research\DataMigrationScripts\README.txt = Research\DataMigrationScripts\README.txt
 	EndProjectSection
 EndProject
