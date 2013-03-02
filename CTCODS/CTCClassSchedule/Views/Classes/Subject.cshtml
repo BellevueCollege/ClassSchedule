@@ -1,125 +1,112 @@
 ﻿@using CTCClassSchedule.Common
+@using CTCClassSchedule.Models
 @using Ctc.Ods.Types
-@model IEnumerable<Ctc.Ods.Types.Course>
+@model SubjectViewModel
 @{
-    ViewBag.PageTitle = ViewBag.Subject + "-" + @ViewBag.ProgramTitle + " Classes at Bellevue College";
+    ViewBag.PageTitle = Model.Slug + "-" + Model.DepartmentTitle + " Classes at Bellevue College";
 }
 
 <div id="scheduleMain">
-    @Html.Partial("quarterNavigation")
-    <div id="container" class="sidebar subject">
-        <p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>
-        <div id="sidebar">
-            @Html.Partial("basicFacetedSearch")
-        </div> <!-- #sidebar -->
+	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
+	<div id="container" class="sidebar subject">
+		<p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>
+		<div id="sidebar">
+			@Html.Partial("basicFacetedSearch", Model.NavigationQuarters)
+		</div> <!-- #sidebar -->
 
-        <div id="content">
-	    @if (ViewBag.ItemCount == 0)
-     {
-         string subject = ViewContext.RouteData.Values["Subject"].ToString();
-				<h1>No @subject classes were found</h1>
-				<p><strong>TIP:</strong> Try changing the <strong>Subject</strong> to the left.</p>
-     }
-     else
-     {
-
-         if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
-         {
-
-
-                    <h1 id="pageTitle">@ViewBag.ProgramTitle</h1>
-         }
-
-         if (!string.IsNullOrWhiteSpace(ViewBag.SubjectIntro))
-         {
-                     <p class="subjectdesc">@ViewBag.SubjectIntro</p>
-         }
-         if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
-         {
-		            <p id="programLink">
-					<strong>Need more info?</strong> <a href="@ViewBag.ProgramUrl">Visit the
-                        @if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
-                        {
-                            @ViewBag.AcademicProgram
-                        }
-                        else if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
-                        {
-                            @ViewBag.ProgramTitle
-                        }
-                        else
-                        {
-                            <text>Program</text>
-                        }
-                    website</a>
-				</p>
-         }
-
-
-
-		    <div id="classDescriptions">
-		    @foreach (var item in Model)
+		<div id="content">
+			@if (Model.Courses.Count() == 0)
 			{
-			    <div class="classInfo">
-            <h2 class="classHeading">
-							<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number })">
-								@Html.SectionCourseHeading(item)
-								@ViewHelpers.DisplayCredits(item)
-							</a>
-            </h2>
-
-			@if (string.Compare(item.YearQuarterBegin.ToString(), ViewBag.CurrentQuarter.ID.ToString()) == 1)
-	 {
-				<div class="upcomingChange">
-					New class effective starting @(ViewBag.CurrentQuarter.FriendlyName.ToString())
-				</div>
-
-	 }
-
-			@{
-				IList<CourseDescription> activeDescriptions = Helpers.getActiveCourseDescriptions(item, ViewBag.CurrentQuarter);
-			}
-			@if (activeDescriptions.Count() > 0)
-      {
-				        <p class="classDescription">
-				        @activeDescriptions.First().Description
-				        </p>
-
-				 if (activeDescriptions.Count() > 1)
-				 {
-								<div class="upcomingChange">
-									<h3>New description starting @item.Descriptions.ElementAt(1).YearQuarterBegin.FriendlyName.ToString()</h3>
-									<p>
-										@activeDescriptions[1].Description
-									</p>
-								</div>
-				 }
-
+				<h1>No @Model.Slug classes were found</h1>
+				<p><strong>TIP:</strong> Try changing the <strong>Subject</strong> to the left.</p>
 			}
 			else
 			{
-				        <p class="classDescription error">No class description found. Please report this via the feedback link at the top of this website</p>
-			}
+				if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
+				{
+					<h1 id="pageTitle">@Model.SubjectTitle</h1>
+				}
 
-                    <p class="classDetailsLink">
+				if (!string.IsNullOrWhiteSpace(Model.SubjectIntro))
+				{
+					<p class="subjectDesc">@Model.SubjectIntro</p>
+				}
+				if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
+				{
+					<p id="programLink">
+						<strong>Need more info?</strong>
+						<a href="@Model.DepartmentURL">Visit the
+							@if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
+							{
+								@Model.DepartmentTitle
+							}
+							else if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
+							{
+								@Model.SubjectTitle
+							}
+							else
+							{
+								<text>Program</text>
+							}
+							website
+						</a>
+					</p>
+				}
 
-				        @Html.ActionLink(String.Concat("View details for ", Helpers.SubjectWithCommonCourseFlag(item), " ", item.Number),
+				<div id="classDescriptions">
+					@foreach (Course item in Model.Courses)
+					{
+						<div class="classInfo">
+							<h2 class="classHeading">
+								<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number })">
+									@Html.SectionCourseHeading(item)
+									@ViewHelpers.DisplayCredits(item)
+								</a>
+							</h2>
+
+							@if (string.Compare(item.YearQuarterBegin.ToString(), Model.CurrentQuarter.ID.ToString()) == 1)
+							{
+								<div class="upcomingChange">
+									New class effective starting @(ViewBag.CurrentQuarter.FriendlyName.ToString())
+								</div>
+							}
+
+							@{
+								IList<CourseDescription> activeDescriptions = Helpers.getActiveCourseDescriptions(item, Model.CurrentQuarter);
+							}
+							@if (activeDescriptions.Count() > 0)
+							{
+								<p class="classDescription">
+									@activeDescriptions.First().Description
+								</p>
+
+								if (activeDescriptions.Count() > 1)
+								{
+									<div class="upcomingChange">
+										<h3>New description starting @item.Descriptions.ElementAt(1).YearQuarterBegin.FriendlyName.ToString()</h3>
+										<p>
+											@activeDescriptions[1].Description
+										</p>
+									</div>
+								}
+							}
+							else
+							{
+								<p class="classDescription error">No class description found. Please report this via the feedback link at the top of this website</p>
+							}
+
+							<p class="classDetailsLink">
+
+								@Html.ActionLink(String.Concat("View details for ", Helpers.SubjectWithCommonCourseFlag(item), " ", item.Number),
 																																"ClassDetails",
 																																"Classes",
-																																	new { YearQuarterID = "All", Subject = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number },
-																																null)
-		            </p>
-
-                </div>
-
+																																new { YearQuarterID = "All", Subject = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number },
+																															null)
+							 </p>
+						</div>
+					}
+				</div> <!-- #classDescriptions -->
 			}
-	    </div> <!-- #classInfoWrap -->
-     }
-        </div> <!-- #content -->
-
-
-
-
-
-
-</div> <!-- #container -->
+		</div> <!-- #content -->
+	</div> <!-- #container -->
 </div> <!-- schedulemain -->

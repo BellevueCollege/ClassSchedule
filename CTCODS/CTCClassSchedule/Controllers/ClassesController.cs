@@ -213,34 +213,39 @@ namespace CTCClassSchedule.Controllers
 		{
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
+				SubjectInfoResult subject = SubjectInfo.GetSubjectInfo(Subject);
+				IList<string> prefixes = subject.SubjectCoursePrefixes.Select(p => p.CoursePrefixID).ToList();
+				IEnumerable<Course> coursesEnum = (prefixes.Count > 0 ? repository.GetCourses(prefixes) : repository.GetCourses())
+																						.Distinct()
+																						.OrderBy(c => c.Subject)
+																						.ThenBy(c => c.Number);
 
-				IEnumerable<Course> coursesEnum = (Subject != null ? repository.GetCourses(SubjectPrefixes(Subject)) : repository.GetCourses()).Distinct();
+				SubjectViewModel model = new SubjectViewModel
+																 {
+																	 Courses = coursesEnum,
+																	 Slug = subject.Subject.Slug,
+																	 SubjectTitle = subject.Subject.Title,
+																	 SubjectIntro = subject.Subject.Intro,
+																	 DepartmentTitle = subject.Department.Title,
+																	 DepartmentURL = subject.Department.URL,
+																	 CurrentQuarter = repository.GetRegistrationQuarters(1)[0],
+																	 NavigationQuarters = Helpers.getYearQuarterListForMenus(repository)
+																 };
 
 				if (format == "json")
 				{
 					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-					return Json(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number), JsonRequestBehavior.AllowGet);
+					return Json(model, JsonRequestBehavior.AllowGet);
 				}
 
-				// Display the web page
-				ViewBag.Subject = Subject;
 
-				ViewBag.ItemCount = coursesEnum.Count();
+
+				ViewBag.Subject = Subject; // TODO: Refactor this out!
 				ViewBag.LinkParams = Helpers.getLinkParams(Request);
+				SetCommonViewBagVars(repository, string.Empty, string.Empty);
 
-
-
-				IList<YearQuarter> currentQuarter = repository.GetRegistrationQuarters(1);
-
-				ViewBag.CurrentQuarter = currentQuarter[0];
-
-				SetProgramInfoVars(Subject);
-
-				SetCommonViewBagVars(repository, "", "");
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
-
-				return View(coursesEnum.OrderBy(c => c.Subject).ThenBy(c => c.Number));
+				return View(model);
 			}
 		}
 
@@ -322,7 +327,8 @@ namespace CTCClassSchedule.Controllers
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
-					sections = repository.GetSections(SubjectPrefixes(Subject), yrq, facets);
+					IList<string> prefixes = SubjectInfo.GetSubjectPrefixes(Subject).Select(p => p.CoursePrefixID).ToList();
+					sections = repository.GetSections(prefixes, yrq, facets);
 				}
 
 				using (ClassScheduleDb db = new ClassScheduleDb())
@@ -354,7 +360,7 @@ namespace CTCClassSchedule.Controllers
 					TempData["DayDictionary"] = Helpers.getDayDictionary();
 
 					SetCommonViewBagVars(repository, avail, string.Empty);
-					SetProgramInfoVars(Subject, db);
+					SetProgramInfoVars(Subject, db); // TODO: Refactor out this function. Rely on a Model where possible rather than ViewBag variables
 
 					ViewBag.YearQuarter = yrq;
 					IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
@@ -425,7 +431,7 @@ namespace CTCClassSchedule.Controllers
 						ViewBag.CourseOutcome = getCourseOutcome(realSubject, realCourseID.Number);
 					}
 
-					SetProgramInfoVars(realSubject);
+					SetProgramInfoVars(realSubject);  // TODO: Refactor out this function. Rely on a Model where possible rather than ViewBag variables
 
 					ViewBag.CMSFootnote = getCMSFootnote(Subject, ClassNum, courseID);
 
@@ -921,7 +927,7 @@ namespace CTCClassSchedule.Controllers
 	  /// </summary>
 	  /// <param name="slug"></param>
 	  /// <param name="context"></param>
-	  // TODO: Refactor this code to return SubjectInfo. Instead of using ViewBag we should return the data to each View as the Model
+	  // TODO: Refactor this code to return SubjectInfo (see the Subject() action for example). Instead of using ViewBag we should return the data to each View as the Model
 		private void SetProgramInfoVars(string slug, ClassScheduleDb context = null)
 		{
 			using (_profiler.Step("Retrieving course program information"))
