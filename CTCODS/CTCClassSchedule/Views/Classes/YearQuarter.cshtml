@@ -1,12 +1,13 @@
 ﻿@using Ctc.Ods.Types
 @using CTCClassSchedule.Common
+@using CTCClassSchedule.Models
 @model IEnumerable<CTCClassSchedule.Models.Subject>
 @{
 	YearQuarter yrq = ViewBag.YearQuarter;
 	IEnumerable<char> alphabet = Model.Select(c => c.Title.First()).Distinct().ToList();
 }
 <div id="scheduleMain">
-    @Html.Partial("quarterNavigation")
+    @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu })
     <div id="container" class="sidebar">
         <div id="sidebar">
             @Html.Partial("advancedFacetedSearch")

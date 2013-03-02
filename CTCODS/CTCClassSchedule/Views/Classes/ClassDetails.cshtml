@@ -2,6 +2,7 @@
 @using CTCClassSchedule.Common;
 @using MvcMiniProfiler;
 @using Ctc.Ods.Types;
+@using CTCClassSchedule.Models
 @model IEnumerable<Course>
 
 @{
@@ -37,7 +38,7 @@
 	<div title="Edit Section" id="edit-section"></div>
 
 <div id="scheduleMain">
-	@Html.Partial("quarterNavigation")
+	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu })
 	<div id="container" class="nosidebar">
 				<div id="content">
 				@if (course != null)

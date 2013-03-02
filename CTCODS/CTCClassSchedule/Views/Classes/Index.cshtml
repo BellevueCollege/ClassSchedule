@@ -1,6 +1,6 @@
 ﻿@using CTCClassSchedule.Common
 @using Ctc.Ods.Types
-
+@using CTCClassSchedule.Models
 <!-- TODO: Make the title configurable in web.config. Possible? -->
 @{
     ViewBag.PageTitle = "Classes at Bellevue College";
@@ -9,7 +9,7 @@
 }
 
 <div id="page-wrapper" class="homepage">
-@Html.Partial("quarterNavigation")
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { NavigationQuarters = ViewBag.QuarterNavMenu, CurrentQuarter = currentQuarter })
 
 <div id="content" class="home">
 	<div id="home-main-content">

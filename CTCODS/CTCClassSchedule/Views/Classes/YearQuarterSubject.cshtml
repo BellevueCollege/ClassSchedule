@@ -1,7 +1,8 @@
 ﻿@using CTCClassSchedule
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Controllers
-@using MvcMiniProfiler;
+@using CTCClassSchedule.Models
+@using MvcMiniProfiler
 @using Ctc.Ods.Types
 @model IList<CTCClassSchedule.SectionsBlock>
 @{
@@ -34,9 +35,7 @@
 
 }
 <div id="scheduleMain">
-	@{
-		Html.RenderPartial("quarterNavigation");
-	}
+	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu })
 	<div id="container" class="sidebar">
 		<p id="sectionTitle">
 			<a href="@Url.Action("YearQuarter", "Classes")">@FriendlyYRQ</a></p>
@@ -77,17 +76,17 @@
 				<p id="programLink">
 					<strong>Need more info?</strong> <a href="@ViewBag.ProgramUrl">Visit the
 						@if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
-						{
+			{
 							@ViewBag.AcademicProgram
-						}
-						else if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
-						{
+			}
+			else if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
+			{
 							@ViewBag.ProgramTitle
-						}
-						else
-						{
+			}
+			else
+			{
 							<text>Program</text>
-						}
+			}
 						website</a>
 				</p>
 		 }
@@ -117,28 +116,28 @@
 
 				<h2 class="classHeading">
 					@if (block.LinkedSections.Count > 0)
-					{
+		 {
 						<span class="combinationClass">Combination class:</span><br />
-					}
+		 }
 					<a href="@Url.Action("ClassDetails", "Classes", route)">
 						@Html.SectionCourseHeading(firstSection)
 						@ViewHelpers.DisplayCredits(firstSection)
 					</a>
 					@{
-						 IList<SectionWithSeats> commonLinkedSections = ClassesController.ParseCommonHeadingLinkedSections(block.LinkedSections);
+		 IList<SectionWithSeats> commonLinkedSections = ClassesController.ParseCommonHeadingLinkedSections(block.LinkedSections);
 					}
 						 @foreach (SectionWithSeats linkedSec in commonLinkedSections)
-						 {
+			 {
 						<br />
 						<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
 							@Html.SectionCourseHeading(linkedSec)
 							@ViewHelpers.DisplayCredits(linkedSec)
 						</a>
-							}
+			 }
 				</h2> @* classHeading *@
 				<div class="classInfo">
 					@if (Helpers.isAdmin(Context))
-					{
+		 {
 							 @Ajax.ActionLink("Edit",
 																"ClassEdit",
 																"Api",
@@ -158,51 +157,51 @@
 																},
 																new { @class = "edit_button" })
 
-					}
+		 }
 					<div class="classDetails">
 						@if (!string.IsNullOrWhiteSpace(firstSection.CustomTitle))
-						{
-							// NOTE: do not display HP description from this page
+			{
+				// NOTE: do not display HP description from this page
 							@Html.Raw(firstSection.CustomDescription)
-						}
+			}
 						<ul>
 							<li class="classDetailsLink">
 								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", route, null)
 							</li>
 							@foreach (SectionWithSeats linkedSec in commonLinkedSections)
-							{
+			 {
 								<li class="classDetailsLink">
 									@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber }, null)
 								</li>
-							}
+			 }
 						</ul>
 					</div>
 					<p class="classNotes">
 						@{
-								// save footnotes to pass to sub-view
-								ViewData["CourseFootnotes"] = block.CommonFootnotes;
+			 // save footnotes to pass to sub-view
+			 ViewData["CourseFootnotes"] = block.CommonFootnotes;
 						}
 						@ViewHelpers.DisplayFootnotes(block.CommonFootnotes, firstSection.CourseFootnotes)
 					</p>
 				</div> <!--classInfo -->
 				<ul class='course-block @(thisYrq.CompareTo(currentYrq) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
 					@{
-						 foreach (SectionWithSeats sec in block.Sections)
-						 {
+			 foreach (SectionWithSeats sec in block.Sections)
+			 {
 
-							 //bothSections includes a master and its subordinate linked section(s)
-							 IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
-							 IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
+				 //bothSections includes a master and its subordinate linked section(s)
+				 IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
+				 IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
 
-							 if (linked.Count > 0)
-							 {
-								 multipleSections = multipleSections.Union(linked).ToList();
-							 }
+				 if (linked.Count > 0)
+				 {
+					 multipleSections = multipleSections.Union(linked).ToList();
+				 }
 
-							 // NOTE: We must pass the current ViewData object to RenderPartial here.
-							 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-							 Html.RenderPartial("Sections", multipleSections.ToList(), ViewData);
-						 }
+				 // NOTE: We must pass the current ViewData object to RenderPartial here.
+				 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+				 Html.RenderPartial("Sections", multipleSections.ToList(), ViewData);
+			 }
 					}
 				</ul>
 					 } @* !sec.IsLinked *@
@@ -246,7 +245,7 @@
 		});
 
 			@if (Helpers.isEditor(Context))
-			{
+	 {
 				<text>
 				var cmsFootnotePlaceholder = "<em>[Enter additional notes]</em>";
 
@@ -342,11 +341,11 @@
 						$(this).removeClass('section-listing-edit edit-hover');
 				});
 				</text>
-			}
+	 }
 
 
 			@if (Helpers.isAdmin(Context))
-			{
+	 {
 				<text>
 				$('.classInfo').hover(
 					function () {
