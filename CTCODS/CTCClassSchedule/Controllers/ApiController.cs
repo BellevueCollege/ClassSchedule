@@ -53,17 +53,28 @@ namespace CTCClassSchedule.Controllers
 			{
 				IList<CoursePrefix> data;
 				data = string.IsNullOrWhiteSpace(YearQuarter) || YearQuarter.ToUpper() == "ALL" ? db.GetCourseSubjects() : db.GetCourseSubjects(Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter));
+			  IList<string> apiSubjects = data.Select(s => s.Subject).ToList();
 
 			  IList<ScheduleCoursePrefix> subjectList;
         using (ClassScheduleDb classScheduleDb = new ClassScheduleDb())
         {
-          subjectList = (from s in classScheduleDb.Subjects
-				                 join p in classScheduleDb.SubjectsCoursePrefixes on s.SubjectID equals p.SubjectID
-				                 where data.Select(c => c.Subject).Contains(p.CoursePrefixID.TrimEnd('&'))
+          // Entity Framework doesn't support all the functionality that LINQ does, so first grab the records from the database...
+          var dbSubjects = (from s in classScheduleDb.Subjects
+                            join p in classScheduleDb.SubjectsCoursePrefixes on s.SubjectID equals p.SubjectID
+                            select new
+                                     {
+                                       s.Slug,
+                                       p.CoursePrefixID,
+                                       s.Title
+                                     })
+                            .ToList();
+          // ...then apply the necessary filtering (e.g. TrimEnd() - which isn't fully supported by EF
+          subjectList = (from s in dbSubjects
+				                 where apiSubjects.Contains(s.CoursePrefixID.TrimEnd('&'))
 				                 select new ScheduleCoursePrefix
 				                          {
                                     Slug = s.Slug,
-				                            Subject = p.CoursePrefixID,
+				                            Subject = s.CoursePrefixID,
 				                            Title = s.Title
 				                          })
 				                .OrderBy(s => s.Title)
