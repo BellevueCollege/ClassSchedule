@@ -6,41 +6,40 @@
   @Html.ValidationSummary(true)
 
 	<fieldset id="ProgramEdit">
-		@Html.HiddenFor(model => model.ItemToUpdate.Abbreviation)
-		@Html.HiddenFor(model => model.ItemToUpdate.URL)
+		@Html.HiddenFor(model => model.Subject.Slug)
 		@Html.Hidden("referrer", (Request != null && Request.UrlReferrer != null) ? Request.UrlReferrer.ToString() : string.Empty)
 
 	<div class="left">
 		<div class="editor-label">
-		  @Html.LabelFor(model => model.ItemToUpdate.Title)
+		  @Html.LabelFor(model => model.Subject.Title)
 		</div>
 		<div class="editor-field">
-			@Html.TextBoxFor(model => model.ItemToUpdate.Title, new { @class = "subject-text-field", @maxlength = "50" })
-			@Html.ValidationMessageFor(model => model.ItemToUpdate.Title)
+			@Html.TextBoxFor(model => model.Subject.Title, new { @class = "subject-text-field", @maxlength = "50" })
+			@Html.ValidationMessageFor(model => model.Subject.Title)
 		</div>
 
 		<!-- Subject Merging -->
 		<div class="editor-label">
-			Subjects to merge with @Model.ItemToUpdate.URL
+			Course prefixes to merge with this subject.
 		</div>
 		<div class="editor-field">
 			<ul class="subject-merger subject-text-field">
 				@{
-					if (Model.MergedSubjects != null)
+					if (Model.MergedPrefixes != null)
 					{
-						foreach (string url in Model.MergedSubjects)
+						foreach (string prefix in Model.MergedPrefixes)
 						{
 						<li class="subject-choice">
-							<span>@url.Trim()</span>
-							<input name="MergeSubjects" value="@url.Trim()" type="hidden" />
+							<span>@prefix.Trim()</span>
+							<input name="MergedPrefixes" value="@prefix.Trim()" type="hidden" />
 							<span class="subject-choice-close ui-icon ui-icon-close"></span>
 						</li>
 						}
 						<li class="subject-new">
 							<select id="newSubjectMerge">
-								@foreach (string subject in Model.Subjects)
+								@foreach (string prefix in Model.AllCoursePrefixes)
 								{
-									<option>@subject</option>
+									<option>@prefix</option>
 								}
 							</select>
 						</li>
@@ -50,62 +49,61 @@
 		</div>
 
 		<div class="editor-label">
-			@Html.LabelFor(model => model.ItemToUpdate.Intro)
+			@Html.LabelFor(model => model.Subject.Intro)
 		</div>
 		<div class="editor-field">
-			@Html.TextAreaFor(model => Model.ItemToUpdate.Intro, new { @class = "subject-text-area", @cols = 60, @rows = 7 })
-			@Html.ValidationMessageFor(model => model.ItemToUpdate.Intro)
+			@Html.TextAreaFor(model => Model.Subject.Intro, new { @class = "subject-text-area", @cols = 60, @rows = 7 })
+			@Html.ValidationMessageFor(model => model.Subject.Intro)
 		</div>
 	</div>
 
 	<div class="right">
 		<div class="editor-label">
-			@Html.LabelFor(model => model.ItemToUpdate.AcademicProgram, "Academic Program (if different than subject)")
+			@Html.LabelFor(model => model.Department.Title, "Department")
 		</div>
 		<div class="editor-field">
-			@Html.TextBoxFor(model => model.ItemToUpdate.AcademicProgram, new { @class = "subject-text-field", @maxlength = "50" })
-			@Html.ValidationMessageFor(model => model.ItemToUpdate.AcademicProgram)
+			@Html.TextBoxFor(model => model.Department.Title, new { @class = "subject-text-field", @maxlength = "50" })
+			@Html.ValidationMessageFor(model => model.Department.Title)
 		</div>
 
 		<div class="editor-label">
-			@Html.LabelFor(model => model.ItemToUpdate.ProgramURL, "Academic Program Website")
+			@Html.LabelFor(model => model.Department.URL, "Department Website")
 		</div>
 		<div class="editor-field">
-			@Html.TextBoxFor(model => model.ItemToUpdate.ProgramURL, new { @class = "subject-text-field", @maxlength = "255" })
-			@Html.ValidationMessageFor(model => model.ItemToUpdate.ProgramURL)
+			@Html.TextBoxFor(model => model.Department.URL, new { @class = "subject-text-field", @maxlength = "255" })
+			@Html.ValidationMessageFor(model => model.Department.URL)
 		</div>
 
 		<div class="editor-label">
-			@Html.LabelFor(model => model.ItemToUpdate.Division)
+			@Html.LabelFor(model => model.Division.Title, "Division")
 		</div>
 		<div class="editor-field">
-			@Html.TextBoxFor(model => model.ItemToUpdate.Division, new { @class = "subject-text-field", @maxlength = "50" })
-			@Html.ValidationMessageFor(model => model.ItemToUpdate.Division)
+			@Html.TextBoxFor(model => model.Division.Title, new { @class = "subject-text-field", @maxlength = "50" })
+			@Html.ValidationMessageFor(model => model.Division.Title)
 		</div>
 
 		<div class="editor-label">
-			@Html.LabelFor(model => model.ItemToUpdate.DivisionURL)
+			@Html.LabelFor(model => model.Division.URL, "Division URL")
 		</div>
 		<div class="editor-field">
-			@Html.TextBoxFor(model => model.ItemToUpdate.DivisionURL, new { @maxlength = "50" })
-			@Html.ValidationMessageFor(model => model.ItemToUpdate.DivisionURL)
+			@Html.TextBoxFor(model => model.Division.URL, new { @maxlength = "50" })
+			@Html.ValidationMessageFor(model => model.Division.URL)
 		</div>
   </div>
 	</fieldset>
 
-<div id="lastModifiedBy">
-	@if (Model.ItemToUpdate.LastUpdated != null)
-	{
-		<text>Last modified by </text>@Model.ItemToUpdate.LastUpdatedBy<text> on </text>@Model.ItemToUpdate.LastUpdated
-	}
-</div>
+	<div id="lastModifiedBy">
+		@if (Model.Subject.LastUpdated != null)
+		{
+			<text>Last modified by </text>@Model.Subject.LastUpdatedBy<text> on </text>@Model.Subject.LastUpdated
+		}
+	</div>
 
-<div class="bottom">
-	<p>
-		<input type="submit" value="Save" /> <a href="@Request.UrlReferrer.ToString()" id="cancelEdit">Cancel</a>
-	</p>
-</div>
-
+	<div class="bottom">
+		<p>
+			<input type="submit" value="Save" /> <a href="@Request.UrlReferrer.ToString()" id="cancelEdit">Cancel</a>
+		</p>
+	</div>
 }
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>

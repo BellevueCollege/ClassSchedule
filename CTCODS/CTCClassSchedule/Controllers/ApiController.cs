@@ -17,6 +17,7 @@ using CtcApi.Web.Mvc;
 using System.Text.RegularExpressions;
 using System.Configuration;
 using Microsoft.Security.Application;
+using System.Diagnostics;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -382,7 +383,6 @@ namespace CTCClassSchedule.Controllers
 			return Redirect(referrer);
 		}
 
-    //Generation of the Program Edit dialog box
     /// <summary>
     ///
     /// </summary>
@@ -390,42 +390,41 @@ namespace CTCClassSchedule.Controllers
     /// <returns></returns>
     [AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
     [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-    public ActionResult ProgramEdit(string Abbreviation)
+		public ActionResult ProgramEdit(string Slug)
     {
-      ////*******************************************************************************************************************************************
-      //// TODO: Do we need the ProgramEdit method any more? Or should we split its functionality into new methods that handle those specific areas?
-      ////*******************************************************************************************************************************************
+      //*******************************************************************************************************************************************
+      // TODO: Do we need the ProgramEdit method any more? Or should we split its functionality into new methods that handle those specific areas?
+			// -- Yes, eventually it will make sense to break this into 3 edit modals (or areas) for Subject, Department, and Division.
+			//    However I don't believe we are currently displaying lists of Departments or Divisions anywhere yet. - Andrew C. (3/4/13)
+      //*******************************************************************************************************************************************
+			if (HttpContext.User.Identity.IsAuthenticated)
+			{
+				// Get a list of all course prefixes to present the user when they merge/unmerge prefixes to a subject
+				IList<string> allPrefixes;
+				using (OdsRepository repository = new OdsRepository())
+				{
+					allPrefixes = repository.GetCourseSubjects().Select(s => s.Subject).ToList(); // TODO: This list strips out the '&' char, so we can't
+																																												//       differentiate between ACCT& and ACCT
+				}
 
-      //if (HttpContext.User.Identity.IsAuthenticated)
-      //{
-      //  //ProgramInformation itemToUpdate = new ProgramInformation();
-      //  using (ClassScheduleDb db = new ClassScheduleDb())
-      //  {
-      //    try
-      //    {
-      //      var itemToUpdate = db.ProgramInformations.First(s => s.Abbreviation == Abbreviation);
-      //      IList<string> mergedSubjects = db.ProgramInformations.Where(c => c.URL == Abbreviation && c.Abbreviation != Abbreviation).Select(c => c.Abbreviation).ToList();
-      //      IList<string> subjectChoices = db.ProgramInformations.Where(c => c.Abbreviation != Abbreviation && !mergedSubjects.Contains(c.Abbreviation))
-      //                                                           .Select(c => c.Abbreviation).OrderBy(c => c).ToList();
+				// Construct the model and return it
+				using (ClassScheduleDb db = new ClassScheduleDb())
+				{
+					SubjectInfoResult programInfo = SubjectInfo.GetSubjectInfo(Slug);
+					ProgramEditModel model = new ProgramEditModel
+					{
+						Subject = programInfo.Subject,
+						Department = programInfo.Department,
+						Division = programInfo.Division,
+						MergedPrefixes = programInfo.SubjectCoursePrefixes.Select(s => s.CoursePrefixID).ToList(),
+						//AllCoursePrefixes = allPrefixes
+					};
 
-      //      subjectChoices.Insert(0, string.Empty);
+					return PartialView(model);
+				}
+			}
 
-      //      ProgramEditModel model = new ProgramEditModel
-      //      {
-      //        ItemToUpdate = itemToUpdate,
-      //        Subjects = subjectChoices,
-      //        MergedSubjects = mergedSubjects
-      //      };
-
-      //      return PartialView(model);
-      //    }
-      //    catch (InvalidOperationException e)
-      //    {
-      //      Trace.Write(e);
-      //    }
-      //  }
-      //}
-
+			// TODO: This is bad practice. Should return an error.
       return PartialView();
     }
 
@@ -438,7 +437,7 @@ namespace CTCClassSchedule.Controllers
     [HttpPost]
     [ValidateInput(false)]
     [AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
-    public ActionResult ProgramEdit(FormCollection collection, ICollection<string> MergeSubjects)
+		public ActionResult ProgramEdit(FormCollection collection, ICollection<string> MergedPrefixes)
     {
       //*******************************************************************************************************************************************
       // TODO: Do we need the ProgramEdit method any more? Or should we split its functionality into new methods that handle those specific areas?
