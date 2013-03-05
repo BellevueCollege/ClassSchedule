@@ -50,9 +50,13 @@ IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_Sect
 DROP VIEW [dbo].[vw_SectionFootnote]
 GO
 
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_ClassScheduleData]'))
+DROP VIEW [dbo].[vw_ClassScheduleData]
+GO
+
 
 /*-----------------------------------------------------------------------------------------------------------
-  RedGate-generated script for migrating remaining data
+  RedGate-generated script for updating data structure.
 
               *****************************************************************************
               ** WARNING                                                                 **
