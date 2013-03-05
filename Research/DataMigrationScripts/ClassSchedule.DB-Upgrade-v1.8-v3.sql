@@ -1,3 +1,9 @@
+
+
+-- TODO: Sanity check that we're in a ClassSchedule database before starting.
+
+
+
 /*-----------------------------------------------------------------------------------------------------------
   Back up existing database
  -----------------------------------------------------------------------------------------------------------*/
@@ -9,11 +15,43 @@
   Remove extraneous objects
  -----------------------------------------------------------------------------------------------------------*/
 
--- TODO
+-- The new table has a PK with the same name, so we need to get rid of this one to avoid a naming collision
+IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[SeatAvailability]') AND name = N'PK_SeatAvailibility')
+ALTER TABLE [dbo].[SeatAvailability] DROP CONSTRAINT [PK_SeatAvailibility]
+GO
+
+-- No longer needed. Should have been dropped long ago.
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Temp_SectionFootnotesImport]') AND type in (N'U'))
+DROP TABLE [dbo].[Temp_SectionFootnotesImport]
+GO
+
+-- The following views are no longer needed/used in the new database schema
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_ProgramInformation]'))
+DROP VIEW [dbo].[vw_ProgramInformation]
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_SectionFootnote]'))
+DROP VIEW [dbo].[vw_SectionFootnote]
+GO
 
 
 /*-----------------------------------------------------------------------------------------------------------
-  Migrate data into tables manually
+  RedGate-generated script for migrating remaining data
+
+              *****************************************************************************
+              ** WARNING                                                                 **
+              ** ----------------------------------------------------------------------- **
+              ** This script was generated as a difference between databases at          **
+              ** Bellevue College. If you are another college, this portion of the       **
+              ** upgrade script may not work properly.                                   **
+              **                   !! IT MAY EVEN BREAK YOUR DATABASE !!                 **
+              *****************************************************************************
+ -----------------------------------------------------------------------------------------------------------*/
+
+
+
+/*-----------------------------------------------------------------------------------------------------------
+  Perform data migrations that are too complex to set up easily in RedGate SQL Compare
  -----------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------
@@ -181,7 +219,3 @@ SELECT
 	,c.LastUpdated
 FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].CourseFootnote c
 
-
-/*-----------------------------------------------------------------------------------------------------------
-  RedGate-generated script for migrating remaining data
- -----------------------------------------------------------------------------------------------------------*/
