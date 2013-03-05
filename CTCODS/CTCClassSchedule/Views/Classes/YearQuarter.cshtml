@@ -7,49 +7,46 @@
 	IEnumerable<char> alphabet = Model.Select(c => c.Title.First()).Distinct().ToList();
 }
 <div id="scheduleMain">
-    @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu })
-    <div id="container" class="sidebar">
-        <div id="sidebar">
-            @Html.Partial("advancedFacetedSearch")
-        </div> <!-- #sidebar -->
+  @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu })
+  <div id="container" class="sidebar">
+    <div id="sidebar">
+        @Html.Partial("advancedFacetedSearch")
+    </div> <!-- #sidebar -->
 
-        <div id="content">
+    <div id="content">
 
-		@if (ViewBag.ErrorMsg.Length > 0) {
-			@Html.Partial("ErrorMsg")
-		}
+			@if (ViewBag.ErrorMsg.Length > 0) {
+				@Html.Partial("ErrorMsg")
+			}
 
-		<h1 id="pageTitle">@yrq.FriendlyName Credit Classes</h1>
+			<h1 id="pageTitle">@yrq.FriendlyName Credit Classes</h1>
 
-		@Html.Partial("a_to_z", alphabet)
-
-
-		@if (Helpers.isAdmin(Context))
-		{
-			<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
-		}
-
-		@if (Model.Count() == 0)
-		{
-			string letter = Request.QueryString["letter"];
-			<div id="error-noclassesfound">
-				<h2>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h2>
-				<p><em>TIP:</em> Information for @yrq.FriendlyName may not be available yet.</p>
-			</div>
-		}
-		else
-		{
-			Html.RenderPartial("subjectList", Model);
-		}
+			@Html.Partial("a_to_z", alphabet)
 
 
-	<div title="Edit Subject Information" id="edit-program"></div>
+			@if (Helpers.isAdmin(Context))
+			{
+				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
+			}
+
+			@if (Model.Count() == 0)
+			{
+				string letter = Request.QueryString["letter"];
+				<div id="error-noclassesfound">
+					<h2>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h2>
+					<p><em>TIP:</em> Information for @yrq.FriendlyName may not be available yet.</p>
+				</div>
+			}
+			else
+			{
+				Html.RenderPartial("subjectList", Model);
+			}
 
 
+			<div title="Edit Subject Information" id="edit-program"></div>
 
-
-        </div> <!-- #content -->
-    </div> <!-- #container -->
+    </div> <!-- #content -->
+  </div> <!-- #container -->
 </div>
 
 <script type="text/javascript">
