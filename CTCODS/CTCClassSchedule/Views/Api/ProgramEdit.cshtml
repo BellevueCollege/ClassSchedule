@@ -6,90 +6,92 @@
   @Html.ValidationSummary(true)
 
 	<fieldset id="ProgramEdit">
+		@Html.HiddenFor(model => model.Subject.SubjectID)
 		@Html.HiddenFor(model => model.Subject.Slug)
-		@Html.Hidden("referrer", (Request != null && Request.UrlReferrer != null) ? Request.UrlReferrer.ToString() : string.Empty)
+		<div class="left">
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Subject.Title)
+			</div>
+			<div class="editor-field">
+				@Html.TextBoxFor(model => model.Subject.Title, new { @class = "subject-text-field", @maxlength = "50" })
+				@Html.ValidationMessageFor(model => model.Subject.Title)
+			</div>
 
-	<div class="left">
-		<div class="editor-label">
-		  @Html.LabelFor(model => model.Subject.Title)
-		</div>
-		<div class="editor-field">
-			@Html.TextBoxFor(model => model.Subject.Title, new { @class = "subject-text-field", @maxlength = "50" })
-			@Html.ValidationMessageFor(model => model.Subject.Title)
-		</div>
-
-		<!-- Subject Merging -->
-		<div class="editor-label">
-			Course prefixes to merge with this subject.
-		</div>
-		<div class="editor-field">
-			<ul class="subject-merger subject-text-field">
-				@{
-					if (Model.MergedPrefixes != null)
-					{
-						foreach (string prefix in Model.MergedPrefixes)
-						{
-						<li class="subject-choice">
-							<span>@prefix.Trim()</span>
-							<input name="MergedPrefixes" value="@prefix.Trim()" type="hidden" />
-							<span class="subject-choice-close ui-icon ui-icon-close"></span>
-						</li>
+			<!-- Subject Merging -->
+			<div class="editor-label">
+				Modify Subject's Course Prefixes
+			</div>
+			<div class="editor-field">
+				<ul class="subject-merger subject-text-field">
+					@{
+							IList<string> mergedPrefixes = Model.Subject.SubjectsCoursePrefixes.Select(s => s.CoursePrefixID).ToList();
+							foreach (string prefix in mergedPrefixes)
+							{
+								<li class="subject-choice">
+									<span>@prefix.Trim()</span>
+									<input name="PrefixesToMerge" value="@prefix.Trim()" type="hidden" />
+									<span class="subject-choice-close ui-icon ui-icon-close"></span>
+								</li>
+							}
+							<li class="subject-new">
+								<select id="newSubjectMerge">
+									<option>Select</option>
+									@foreach (string prefix in Model.AllCoursePrefixes)
+									{
+										@* Don't output an option if thhe prefix is already merged *@
+										if (!mergedPrefixes.Contains(prefix))
+										{
+											<option>@prefix</option>
+										}
+									}
+								</select>
+							</li>
 						}
-						<li class="subject-new">
-							<select id="newSubjectMerge">
-								@foreach (string prefix in Model.AllCoursePrefixes)
-								{
-									<option>@prefix</option>
-								}
-							</select>
-						</li>
-					}
-				}
-			</ul>
+				</ul>
+			</div>
+
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Subject.Intro)
+			</div>
+			<div class="editor-field">
+				@Html.TextAreaFor(model => Model.Subject.Intro, new { @class = "subject-text-area", @cols = 60, @rows = 7 })
+				@Html.ValidationMessageFor(model => model.Subject.Intro)
+			</div>
 		</div>
 
-		<div class="editor-label">
-			@Html.LabelFor(model => model.Subject.Intro)
-		</div>
-		<div class="editor-field">
-			@Html.TextAreaFor(model => Model.Subject.Intro, new { @class = "subject-text-area", @cols = 60, @rows = 7 })
-			@Html.ValidationMessageFor(model => model.Subject.Intro)
-		</div>
-	</div>
+		<div class="right">
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Department.Title, "Department")
+			</div>
+			<div class="editor-field">
+				@Html.TextBoxFor(model => model.Department.Title, new { @class = "subject-text-field", @maxlength = "50" })
+				@Html.ValidationMessageFor(model => model.Department.Title)
+			</div>
 
-	<div class="right">
-		<div class="editor-label">
-			@Html.LabelFor(model => model.Department.Title, "Department")
-		</div>
-		<div class="editor-field">
-			@Html.TextBoxFor(model => model.Department.Title, new { @class = "subject-text-field", @maxlength = "50" })
-			@Html.ValidationMessageFor(model => model.Department.Title)
-		</div>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Department.URL, "Department Website")
+			</div>
+			<div class="editor-field">
+				@Html.TextBoxFor(model => model.Department.URL, new { @class = "subject-text-field", @maxlength = "255" })
+				@Html.ValidationMessageFor(model => model.Department.URL)
+			</div>
 
-		<div class="editor-label">
-			@Html.LabelFor(model => model.Department.URL, "Department Website")
-		</div>
-		<div class="editor-field">
-			@Html.TextBoxFor(model => model.Department.URL, new { @class = "subject-text-field", @maxlength = "255" })
-			@Html.ValidationMessageFor(model => model.Department.URL)
-		</div>
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Division.Title, "Division")
+			</div>
+			<div class="editor-field">
+				@Html.TextBoxFor(model => model.Division.Title, new { @class = "subject-text-field", @maxlength = "50" })
+				@Html.ValidationMessageFor(model => model.Division.Title)
+			</div>
 
-		<div class="editor-label">
-			@Html.LabelFor(model => model.Division.Title, "Division")
+			<div class="editor-label">
+				@Html.LabelFor(model => model.Division.URL, "Division URL")
+			</div>
+			<div class="editor-field">
+				@Html.TextBoxFor(model => model.Division.URL, new { @class = "subject-text-field", @maxlength = "50" })
+				@Html.ValidationMessageFor(model => model.Division.URL)
+			</div>
 		</div>
-		<div class="editor-field">
-			@Html.TextBoxFor(model => model.Division.Title, new { @class = "subject-text-field", @maxlength = "50" })
-			@Html.ValidationMessageFor(model => model.Division.Title)
-		</div>
-
-		<div class="editor-label">
-			@Html.LabelFor(model => model.Division.URL, "Division URL")
-		</div>
-		<div class="editor-field">
-			@Html.TextBoxFor(model => model.Division.URL, new { @maxlength = "50" })
-			@Html.ValidationMessageFor(model => model.Division.URL)
-		</div>
-  </div>
 	</fieldset>
 
 	<div id="lastModifiedBy">
@@ -109,12 +111,7 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 <script type="text/javascript">
-	/* change the title of the dialog box to include the URL value (ex. ALDAC) */
 	$(function () {
-		var url = $("input#ItemToUpdate_Abbreviation").val();
-		var titleHTML = "Edit Subject Information - " + url;
-		$("span.ui-dialog-title").html(titleHTML);
-
 		$("#cancelEdit").click(function (e) {
 			e.preventDefault();
 			$(".ui-dialog").hide();
@@ -127,9 +124,9 @@
 			subjectToRemove = $(this).parent();
 
 			// Add option back into the drop down list alphabetically
+			var subjectToAdd = '<option>' + $(subjectToRemove).text() + '</option>';
 			$('#newSubjectMerge').children().each(function () {
-				if ($(this).text() > $(subjectToRemove).text()) {
-					var subjectToAdd = '<option>' + $(subjectToRemove).text() + '</option>';
+				if ($(this).text() != 'Select' && $(this).text() > $(subjectToRemove).text()) {
 					$(subjectToAdd).insertBefore($(this));
 					return false;
 				}
@@ -144,7 +141,7 @@
 			var selectedSubject = $(this).find(':selected');
 
 			if ($('#newSubjectMerge').prop('selectedIndex') > 0) {
-				var optionToAdd = '<li class="subject-choice"><span>' + selectedSubject.text() + '</span><input name="mergeSubjects" value="' + selectedSubject.text() + '" type="hidden"><span class="subject-choice-close ui-icon ui-icon-close"></span></li>';
+				var optionToAdd = '<li class="subject-choice"><span>' + selectedSubject.text() + '</span><input name="PrefixesToMerge" value="' + selectedSubject.text() + '" type="hidden"><span class="subject-choice-close ui-icon ui-icon-close"></span></li>';
 				$(optionToAdd).insertBefore($(this).parent());
 				selectedSubject.remove();
 				$('#newSubjectMerge').prop('selectedIndex', 0);

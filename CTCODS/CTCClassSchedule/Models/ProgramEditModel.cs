@@ -14,8 +14,5 @@ namespace CTCClassSchedule
 		public Division Division { get; set; }
 
 		public IEnumerable<string> AllCoursePrefixes { get; set; }
-
-		public IEnumerable<string> MergedPrefixes { get; set; }
-
 	}
 }

@@ -18,12 +18,14 @@ using System.Text.RegularExpressions;
 using System.Configuration;
 using Microsoft.Security.Application;
 using System.Diagnostics;
+using Ctc.Ods.Config;
 
 namespace CTCClassSchedule.Controllers
 {
 	public class ApiController : Controller
 	{
 	  private ILog _log = LogManager.GetCurrentClassLogger();
+		private readonly ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
 
 	  public ApiController()
 		{
@@ -401,10 +403,18 @@ namespace CTCClassSchedule.Controllers
 			{
 				// Get a list of all course prefixes to present the user when they merge/unmerge prefixes to a subject
 				IList<string> allPrefixes;
+				string commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar;
 				using (OdsRepository repository = new OdsRepository())
 				{
-					allPrefixes = repository.GetCourseSubjects().Select(s => s.Subject).ToList(); // TODO: This list strips out the '&' char, so we can't
-																																												//       differentiate between ACCT& and ACCT
+					// TODO: This list strips out the '&' char, so we can't differentiate between ACCT& and ACCT.
+					//			 It also only returns prefixes for which contains future sections - Andrew C (3/4/2013)
+					//allPrefixes = repository.GetCourseSubjects().Select(s => s.Subject).ToList();
+
+					// TODO: This is a temp workaround for getting a list of all Course Prefixes since the GetCourseSubjects() method
+					//			 does not return the expected results. - Andrew C (3/4/2013)
+					allPrefixes = repository.GetCourses().Select(c => String.Concat(c.Subject, c.IsCommonCourse ? commonCourseChar : string.Empty))
+																							 .Distinct()
+																							 .ToList();
 				}
 
 				// Construct the model and return it
@@ -416,7 +426,6 @@ namespace CTCClassSchedule.Controllers
 						Subject = programInfo.Subject,
 						Department = programInfo.Department,
 						Division = programInfo.Division,
-						MergedPrefixes = programInfo.SubjectCoursePrefixes.Select(s => s.CoursePrefixID).ToList(),
 						AllCoursePrefixes = allPrefixes
 					};
 
@@ -424,7 +433,7 @@ namespace CTCClassSchedule.Controllers
 				}
 			}
 
-			// TODO: This is bad practice. Should return an error.
+			// TODO: This is bad practice. Should return a descriptive error.
       return PartialView();
     }
 
@@ -437,94 +446,56 @@ namespace CTCClassSchedule.Controllers
     [HttpPost]
     [ValidateInput(false)]
     [AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
-		public ActionResult ProgramEdit(FormCollection collection, ICollection<string> MergedPrefixes)
+		public ActionResult ProgramEdit(ProgramEditModel Model, ICollection<string> PrefixesToMerge)
     {
-      //*******************************************************************************************************************************************
-      // TODO: Do we need the ProgramEdit method any more? Or should we split its functionality into new methods that handle those specific areas?
-      //*******************************************************************************************************************************************
-      string referrer = collection["referrer"];
+			if (HttpContext.User.Identity.IsAuthenticated == true)
+			{
+				if (ModelState.IsValid)
+				{
+					using (ClassScheduleDb db = new ClassScheduleDb())
+					{
+						// Lookup the subject being edited
+						Subject subject = db.Subjects.Where(s => s.Slug.Equals(Model.Subject.Slug, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+						Department department = subject.Department;
+						Division division = department.Division;
 
-      //if (HttpContext.User.Identity.IsAuthenticated == true)
-      //{
+						// Update the proper fields
+						subject.Title = Model.Subject.Title;
+						subject.Intro = StripHtml(Model.Subject.Intro);
+						subject.LastUpdated = DateTime.Now;
+						subject.LastUpdatedBy = HttpContext.User.Identity.Name;
+						department.Title = Model.Department.Title;
+						department.URL = Model.Department.URL;
+						division.Title = Model.Division.Title;
+						division.URL = Model.Division.URL;
 
-      //  string Username = HttpContext.User.Identity.Name;
+						// Unmerge subjects
+						IList<SubjectsCoursePrefix> unmergables = subject.SubjectsCoursePrefixes.Where(s => !PrefixesToMerge.Contains(s.CoursePrefixID)).ToList();
+						foreach (SubjectsCoursePrefix prefix in unmergables)
+						{
+							subject.SubjectsCoursePrefixes.Remove(prefix);
+						}
 
+						// Merge subjects
+						IList<string> currentlyMergedPrefixes = subject.SubjectsCoursePrefixes.Select(s => s.CoursePrefixID).ToList();
+						IEnumerable<string> mergables = PrefixesToMerge.Where(m => !currentlyMergedPrefixes.Contains(m));
+						foreach (string prefix in mergables)
+						{
+							subject.SubjectsCoursePrefixes.Add(new SubjectsCoursePrefix {
+								SubjectID = subject.SubjectID,
+								CoursePrefixID = prefix
+							});
+						}
 
-      //  string DivisionURL = collection["itemToUpdate.DivisionURL"];
-      //  string Division = collection["itemToUpdate.Division"];
-      //  string ProgramURL = collection["itemToUpdate.ProgramURL"];
-      //  string AcademicProgram = collection["itemToUpdate.AcademicProgram"];
-      //  string Intro = collection["itemToUpdate.Intro"];
-      //  string Title = collection["itemToUpdate.Title"];
-      //  string Abbreviation = collection["itemToUpdate.Abbreviation"];
-      //  string URL = collection["itemToUpdate.URL"];
+						// Commit changes to database
+						db.SaveChanges();
+					}
+				}
 
-      //  Intro = StripHtml(Intro);
+			}
 
-      //  if (ModelState.IsValid)
-      //  {
-      //    bool itemFound = false;
-      //    using (ClassScheduleDb db = new ClassScheduleDb())
-      //    {
-      //      ProgramInformation itemToUpdate = new ProgramInformation();
-      //      if (db.ProgramInformations.Any(s => s.Abbreviation == Abbreviation))
-      //      {
-      //        itemToUpdate = db.ProgramInformations.First(s => s.Abbreviation == Abbreviation);
-      //        itemFound = true;
-      //      }
-
-      //      itemToUpdate.LastUpdated = DateTime.Now;
-      //      itemToUpdate.LastUpdatedBy = Username;
-      //      itemToUpdate.DivisionURL = DivisionURL;
-      //      itemToUpdate.Division = Division;
-      //      itemToUpdate.ProgramURL = ProgramURL;
-      //      itemToUpdate.AcademicProgram = AcademicProgram;
-      //      itemToUpdate.Intro = Intro;
-      //      itemToUpdate.Title = Title;
-
-      //      //add the item to the database if it doesn't exist.
-      //      if (itemFound == false)
-      //      {
-      //        //add the primary key only to inserts
-      //        itemToUpdate.Abbreviation = Abbreviation;
-
-      //        //add the newly created item to the entity update queue
-      //        db.AddToProgramInformations(itemToUpdate);
-      //      }
-
-
-
-      //      // Perform subject merging/unmerging
-      //      if (MergeSubjects == null) { MergeSubjects = new List<string>(); }
-      //      IList<ProgramInformation> mergedSubjects = db.ProgramInformations.Where(c => c.URL == Abbreviation).ToList();
-
-      //      // Merge subjects
-      //      foreach (string abbr in MergeSubjects)
-      //      {
-      //        if (db.ProgramInformations.Any(s => s.Abbreviation == abbr))
-      //        {
-      //          db.ProgramInformations.First(s => s.Abbreviation == abbr).URL = Abbreviation;
-      //        }
-      //      }
-
-      //      // Unmerge subjects
-      //      foreach (string abbr in mergedSubjects.Select(s => s.Abbreviation))
-      //      {
-      //        if (!MergeSubjects.Contains(abbr) && abbr != Abbreviation)
-      //        {
-      //          ProgramInformation program = db.ProgramInformations.First(s => s.Abbreviation == abbr);
-      //          program.URL = program.Abbreviation;
-      //        }
-      //      }
-
-
-      //      //save to the db (whether item existed or not)
-      //      db.SaveChanges();
-      //    }
-      //  }
-      //}
-
-      return Redirect(referrer);
+			// Refresh the page to display the updated info
+			return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri);
     }
 
 	  #region Private methods

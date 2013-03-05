@@ -1580,12 +1580,12 @@ a.edit_button
 
 
 
-#ProgramEdit .SubjectTextfield
+#ProgramEdit .subject-text-field
 {
 	width: 380px;
 }
 
-#SectionEdit .SubjectTextfield
+#SectionEdit .subject-text-field
 {
 	width: 500px;
 }
@@ -1595,7 +1595,53 @@ a.edit_button
 	margin-right: 15px;
 }
 
+ul.subject-merger {
+	padding:2px 2px 4px 2px;
+	border:1px solid #C6C6C6;
+	overflow:auto;
+}
+ul.subject-merger li {
+	display: block;
+	float: left;
+	width: 66px;
+	padding: 2px 2px 2px 2px;
+	margin: 2px 2px 0px 2px;
+}
+ul.subject-merger li.subject-choice {
+	background-color:#DEE7F8;
+	border:1px solid #CAD8F3;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	padding:2px 2px;
+	margin-right: 2px;
+}
+ul.subject-merger li.subject-choice:hover {
+	background-color:#bbcef1;
+	border-color:#6d95e0;
+}
+ul.subject-merger li.subject-new {
+	padding: 3px;
+}
 
+ul.subject-merger select {
+	-moz-box-sizing:border-box;
+	border:none;
+	margin:0;
+	padding-top:1px;
+	width:68px;
+	border-color:#C6C6C6;
+	background-color:#FFFFFF;
+	color:#333333;
+}
+ul.subject-merger li.subject-choice span.subject-choice-close
+{
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	top: 2px;
+	float: right;
+}
 
 /* end program edit */
 
@@ -1663,7 +1709,7 @@ a.edit_button
 .text-editable
 {
 	display: inline-block;
-	min-width: 200px;
+	min-width: 125px;
 	min-height: 15px;
 	background-color: #f1f1f1;
 	padding: 0 5px;
