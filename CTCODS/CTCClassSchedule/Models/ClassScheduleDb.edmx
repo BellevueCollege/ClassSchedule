@@ -59,7 +59,7 @@
           </Key>
           <Property Name="CourseID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Footnote" Type="varchar(max)" />
-          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="9" />
+          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="100" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
         <EntityType Name="CourseSearch">
@@ -80,7 +80,7 @@
           <Property Name="Title" Type="varchar" MaxLength="255" />
           <Property Name="URL" Type="varchar" MaxLength="255" />
           <Property Name="ProgramChairSID" Type="varchar" MaxLength="9" />
-          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="9" />
+          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="100" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
         <EntityType Name="Divisions">
@@ -90,7 +90,7 @@
           <Property Name="DivisionID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="varchar" MaxLength="255" />
           <Property Name="URL" Type="varchar" MaxLength="255" />
-          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="9" />
+          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="100" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
         <EntityType Name="SectionCourseCrosslistings">
@@ -116,8 +116,8 @@
           <Property Name="ClassID" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="Footnote" Type="varchar(max)" />
           <Property Name="Title" Type="varchar" MaxLength="255" />
-          <Property Name="Description" Type="varchar" MaxLength="255" />
-          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="9" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="100" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
         <EntityType Name="Subjects">
@@ -129,7 +129,7 @@
           <Property Name="Title" Type="varchar" MaxLength="255" />
           <Property Name="Intro" Type="varchar(max)" />
           <Property Name="Slug" Type="varchar" Nullable="false" MaxLength="63" />
-          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="9" />
+          <Property Name="LastUpdatedBy" Type="varchar" MaxLength="100" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
         <EntityType Name="SubjectsCoursePrefixes">
@@ -157,9 +157,6 @@
           <Property Name="StudentsEnrolled" Type="int" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'ClassSchedule.dbo.vw_ClassScheduleData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
         <Association Name="FK_Departments_Division">
           <End Role="Divisions" Type="ClassSchedule.Models.Store.Divisions" Multiplicity="0..1" />
           <End Role="Departments" Type="ClassSchedule.Models.Store.Departments" Multiplicity="*" />
