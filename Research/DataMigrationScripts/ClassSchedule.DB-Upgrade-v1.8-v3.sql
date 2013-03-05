@@ -1,15 +1,27 @@
-
-
--- TODO: Sanity check that we're in a ClassSchedule database before starting.
-
+/*-----------------------------------------------------------------------------------------------------------
+  Sanity check that we're in a ClassSchedule database before starting.
+ -----------------------------------------------------------------------------------------------------------*/
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[ProgramInformation]') OR object_id = OBJECT_ID(N'[dbo].[SeatAvailability]'))
+BEGIN
+	RAISERROR('The current database does not appear to be a ClassSchedule database. Please change to a ClassSchedule database', 18, 0)
+	-- do not execute the remaining script (NOTE: needs to be turned back OFF later)
+	-- see http://stackoverflow.com/questions/659188/sql-server-stop-or-break-execution-of-a-sql-script
+	SET NOEXEC ON
+END
 
 
 /*-----------------------------------------------------------------------------------------------------------
   Back up existing database
  -----------------------------------------------------------------------------------------------------------*/
+-- adapted from http://www.sqlexamples.info/SQL/tsql_backup_database.htm
+DECLARE @fileName varchar(90)
+DECLARE @fileDate varchar(20)
 
--- TODO
+SET @fileDate = CONVERT(VARCHAR(20), GETDATE(),112)
+SET @fileName = 'F:\Backup\'+DB_NAME()+'-Upgrade-v1_8-v3-'+@fileDate+'.bak'
 
+BACKUP DATABASE DB_NAME() TO DISK = @fileName
+GO
 
 /*-----------------------------------------------------------------------------------------------------------
   Remove extraneous objects
@@ -28,6 +40,10 @@ GO
 -- The following views are no longer needed/used in the new database schema
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_ProgramInformation]'))
 DROP VIEW [dbo].[vw_ProgramInformation]
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_SeatAvailability]'))
+DROP VIEW [dbo].[vw_SeatAvailability]
 GO
 
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_SectionFootnote]'))
@@ -219,3 +235,11 @@ SELECT
 	,c.LastUpdated
 FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].CourseFootnote c
 
+
+/*-----------------------------------------------------------------------------------------------------------
+  Clean-up, etc.
+ -----------------------------------------------------------------------------------------------------------*/
+
+-- re-enable execution of script
+-- see http://stackoverflow.com/questions/659188/sql-server-stop-or-break-execution-of-a-sql-script
+SET NOEXEC OFF
