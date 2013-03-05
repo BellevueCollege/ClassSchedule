@@ -41,16 +41,20 @@ namespace CTCClassSchedule.Common
 
 				result = new SubjectInfoResult();
 				result.Subject = subject;
-				result.Department = subject.Department;
-				result.Division = result.Department.Division;
 				result.SubjectCoursePrefixes = subject.SubjectsCoursePrefixes.ToList();
+				result.Department = subject.Department;
 
-				// If the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
-				// or empty just return it, otherwise prepend iwth the current school url.
-				string deptUrl = result.Department.URL ?? string.Empty;
-				if (!string.IsNullOrWhiteSpace(deptUrl) && !Regex.IsMatch(deptUrl, @"^https?://"))
+				if (result.Department != null)
 				{
-					result.Department.URL = deptUrl;
+					// If the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
+					// or empty just return it, otherwise prepend with the current school url.
+					string deptUrl = result.Department.URL ?? string.Empty;
+					if (!string.IsNullOrWhiteSpace(deptUrl) && !Regex.IsMatch(deptUrl, @"^https?://"))
+					{
+						result.Department.URL = deptUrl;
+					}
+
+					result.Division = result.Department.Division;
 				}
 			}
 
