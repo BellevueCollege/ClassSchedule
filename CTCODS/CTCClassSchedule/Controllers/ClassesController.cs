@@ -47,6 +47,7 @@ namespace CTCClassSchedule.Controllers
 			return View();
 		}
 
+
 		/// <summary>
 		/// GET: /Classes/Export/{YearQuarterID}
 		/// </summary>
@@ -153,6 +154,7 @@ namespace CTCClassSchedule.Controllers
 				throw new UnauthorizedAccessException("You do not have sufficient privileges to export course data.");
 			}
 		}
+
 
 		/// <summary>
 		/// GET: /Classes/All
@@ -311,8 +313,6 @@ namespace CTCClassSchedule.Controllers
 		}
 
 
-
-
 		/// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
@@ -380,6 +380,7 @@ namespace CTCClassSchedule.Controllers
 			}
 		}
 
+
 		/// <summary>
 		/// GET: /Classes/All/{Subject}/{ClassNum}
 		/// </summary>
@@ -439,7 +440,6 @@ namespace CTCClassSchedule.Controllers
 				return View(courses);
 			}
 		}
-
 
 
 		/// <summary>
@@ -966,36 +966,6 @@ namespace CTCClassSchedule.Controllers
 				    }
 				  }
 				}
-			}
-		}
-
-		/// <summary>
-		/// Gets a list of course prefixes for the specified subject
-		/// </summary>
-		/// <param name="slug"></param>
-		/// <returns></returns>
-		/// <remarks>
-		/// This method looks
-		/// up these mappings in the application database for the appropriate
-		/// list of actual prefix abbreviations.
-		/// </remarks>
-		private List<string> SubjectPrefixes(string slug)
-		{
-			using (ClassScheduleDb db = new ClassScheduleDb())
-			{
-				List<int> subjectIds = db.Subjects.Where(s => s.Slug.Equals(slug, StringComparison.OrdinalIgnoreCase)).Select(s => s.SubjectID).ToList();
-				List<string> prefixList = db.SubjectsCoursePrefixes.Where(s => subjectIds.Contains(s.SubjectID)).Select(s => s.CoursePrefixID).ToList();
-
-				return prefixList;
-			}
-		}
-		private List<string> SubjectPrefixes(int subjectId)
-		{
-			using (ClassScheduleDb db = new ClassScheduleDb())
-			{
-				List<string> prefixList = db.SubjectsCoursePrefixes.Where(s => s.SubjectID == subjectId).Select(s => s.CoursePrefixID).ToList();
-
-				return prefixList;
 			}
 		}
 		#endregion
