@@ -9,7 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Research", "Research", "{73
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataMigrationScripts", "DataMigrationScripts", "{1DB2FE02-F732-42C6-85F0-B7E8EA9449EA}"
 	ProjectSection(SolutionItems) = preProject
-		Research\DataMigrationScripts\ClassSchedule.DB-Upgrade-v1.8-v3.sql = Research\DataMigrationScripts\ClassSchedule.DB-Upgrade-v1.8-v3.sql
+		Research\DataMigrationScripts\1-ClassSchedule.DB-Upgrade-v1.8-v3.sql = Research\DataMigrationScripts\1-ClassSchedule.DB-Upgrade-v1.8-v3.sql
+		2-ClassSchedule.DB-PostUpgradeCleanUp-v1.8-v3.sql = 2-ClassSchedule.DB-PostUpgradeCleanUp-v1.8-v3.sql
 		Research\DataMigrationScripts\README.txt = Research\DataMigrationScripts\README.txt
 	EndProjectSection
 EndProject
