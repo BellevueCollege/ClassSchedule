@@ -51,21 +51,18 @@
 
 	@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
 	{
-    @* TODO: ProgramEdit functionality needs to be completely rewritten *@
 		@Ajax.ActionLink("Edit",
 				              "ProgramEdit",
 				              "Api",
-				              new
-				                {
-				                  Abbreviation = item.Slug @* <-- Slug is placeholder to get code to compile. *@
-				                },
-				              new AjaxOptions
-				                {
-				                  UpdateTargetId = "edit-program",
-				                  HttpMethod = "GET",
-				                  InsertionMode = InsertionMode.Replace,
-				                  OnBegin = "$('#edit-program').dialog('open');",
-				                },
+				              new {
+												Slug = item.Slug
+				              },
+				              new AjaxOptions {
+												UpdateTargetId = "edit-program",
+												HttpMethod = "GET",
+												InsertionMode = InsertionMode.Replace,
+												OnBegin = "$('#edit-program').dialog('open');",
+				              },
 				              new { @class = "edit_button" })
 	}
 
