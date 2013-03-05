@@ -417,7 +417,7 @@ namespace CTCClassSchedule.Controllers
 						Department = programInfo.Department,
 						Division = programInfo.Division,
 						MergedPrefixes = programInfo.SubjectCoursePrefixes.Select(s => s.CoursePrefixID).ToList(),
-						//AllCoursePrefixes = allPrefixes
+						AllCoursePrefixes = allPrefixes
 					};
 
 					return PartialView(model);
