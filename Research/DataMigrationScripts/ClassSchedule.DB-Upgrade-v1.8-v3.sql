@@ -475,34 +475,6 @@ ELSE PRINT 'The database update failed'
 GO
 DROP TABLE #tmpErrors
 GO
-/*
-Start of RedGate SQL Source Control versioning database-level extended properties.
-*/
-DECLARE @RG_SC_VERSION BIGINT
-SET @RG_SC_VERSION = 1118
-IF EXISTS (SELECT 1 FROM fn_listextendedproperty(N'SQLSourceControl Database Revision', NULL, NULL, NULL, NULL, NULL, NULL))
-  EXEC sp_dropextendedproperty N'SQLSourceControl Database Revision', NULL, NULL, NULL, NULL, NULL, NULL
-EXEC sp_addextendedproperty N'SQLSourceControl Database Revision', @RG_SC_VERSION, NULL, NULL, NULL, NULL, NULL, NULL
-GO
-IF EXISTS (SELECT 1 FROM fn_listextendedproperty(N'SQLSourceControl Scripts Location', NULL, NULL, NULL, NULL, NULL, NULL))
-  EXEC sp_dropextendedproperty N'SQLSourceControl Scripts Location', NULL, NULL, NULL, NULL, NULL, NULL
-EXEC sp_addextendedproperty N'SQLSourceControl Scripts Location',  N'<?xml version="1.0" encoding="utf-16" standalone="yes"?>
-<ISOCCompareLocation version="1" type="TfsLocation">
-  <ServerUrl>https://tfsvs.wacollabcoop.org/tfs/bellevuecollege</ServerUrl>
-  <SourceControlFolder>$/ODSAPI/ODSAPI/CTCODS/CTCClassSchedule.DB</SourceControlFolder>
-</ISOCCompareLocation>', NULL, NULL, NULL, NULL, NULL, NULL
-GO
-IF EXISTS (SELECT 1 FROM fn_listextendedproperty(N'SQLSourceControl Migration Scripts Location', NULL, NULL, NULL, NULL, NULL, NULL))
-  EXEC sp_dropextendedproperty N'SQLSourceControl Migration Scripts Location', NULL, NULL, NULL, NULL, NULL, NULL
-EXEC sp_addextendedproperty N'SQLSourceControl Migration Scripts Location',  N'<?xml version="1.0" encoding="utf-16" standalone="yes"?>
-<ISOCCompareLocation version="1" type="TfsLocation">
-  <ServerUrl>https://tfsvs.wacollabcoop.org/tfs/bellevuecollege</ServerUrl>
-  <SourceControlFolder>$/ODSAPI/ODSAPI/CTCODS/CTCClassSchedule.DB.MigrationScripts</SourceControlFolder>
-</ISOCCompareLocation>', NULL, NULL, NULL, NULL, NULL, NULL
-GO
-/*
-End of RedGate SQL Source Control versioning database-level extended properties.
-*/
 IF EXISTS (SELECT * FROM tempdb..sysobjects WHERE id=OBJECT_ID('tempdb..#tmpErrors')) IF EXISTS(SELECT * FROM #tmpErrors) ROLLBACK TRANSACTION
 GO
 IF @@TRANCOUNT>0 BEGIN
