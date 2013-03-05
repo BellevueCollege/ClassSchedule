@@ -489,13 +489,15 @@ GO
 
 
 /*-----------------------------------------------------------------------------------------------------------
-  Perform data migrations that are too complex to set up easily in RedGate SQL Compare
+  Migrate the data into the new database structure.
+  NOTE: Red Gate's tools work best when data comparisons are 1:1 (table-table), so these migrations were
+        written manually.
  -----------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------
   Divisions
  -----------------------------------------------------------------------------*/
-/*
+--/*
 INSERT INTO dbo.Divisions
         ( Title ,
           URL ,
@@ -509,20 +511,20 @@ SELECT
       ,(
 		SELECT TOP 1
 			p.[LastUpdatedBy]
-		FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].[ProgramInformation] p
+		FROM [ProgramInformation] p
 		WHERE NOT p.lastupdated IS null
 		and p.Division = d.Division AND p.DivisionURL = d.divisionurl
 		ORDER BY p.lastupdated DESC
 		) AS LastUpdatedBy
       ,MAX(d.[LastUpdated]) AS LastUpdated
-  FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].[ProgramInformation] d
+  FROM [ProgramInformation] d
   GROUP BY d.Division, d.DivisionURL
 GO
 
 /*-----------------------------------------------------------------------------
   Departments
  -----------------------------------------------------------------------------*/
-/*
+--/*
 INSERT INTO dbo.Departments
         ( Title ,
           URL ,
@@ -542,13 +544,13 @@ SELECT
       ,(
 		SELECT TOP 1
 			p.[LastUpdatedBy]
-		FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].[ProgramInformation] p
+		FROM [ProgramInformation] p
 		WHERE NOT p.lastupdated IS null
 		and p.[AcademicProgram] = d.[AcademicProgram] AND p.ProgramURL = d.ProgramURL
 		ORDER BY p.lastupdated DESC
 		) AS LastUpdatedBy
       ,MAX(d.[LastUpdated]) AS LastUpdated
-  FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].[ProgramInformation] d
+  FROM [ProgramInformation] d
   GROUP BY d.[AcademicProgram], d.ProgramURL
   ORDER BY d.[AcademicProgram]
 GO
@@ -556,7 +558,7 @@ GO
 /*-----------------------------------------------------------------------------
   Subjects
  -----------------------------------------------------------------------------*/
-/*
+--/*
 INSERT INTO dbo.Subjects
         ( DepartmentID
 					Title,
@@ -574,23 +576,21 @@ SELECT
       ,(
 		SELECT TOP 1
 			p.[LastUpdatedBy]
-		FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].[ProgramInformation] p
+		FROM [ProgramInformation] p
 		WHERE NOT p.lastupdated IS null
 		and p.Title = d.Title AND ISNULL(p.[Intro], '') = ISNULL(d.[Intro], '')
 		ORDER BY p.lastupdated DESC
 		) AS LastUpdatedBy
       ,MAX(d.[LastUpdated]) AS LastUpdated
-  FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].[ProgramInformation] d
+  FROM [ProgramInformation] d
   GROUP BY d.Title, ISNULL(d.Intro, ''), d.URL
   ORDER BY d.Title
 GO
 
-SELECT * FROM dbo.Subjects
-
 /*-----------------------------------------------------------------------------
   SubjectsCoursePrefixes
  -----------------------------------------------------------------------------*/
-/*
+--/*
 INSERT INTO dbo.SubjectsCoursePrefixes
         ( SubjectID, CoursePrefixID )
 --*/
@@ -598,13 +598,13 @@ SELECT DISTINCT
 	s.SubjectID
 	,p.Abbreviation
 FROM dbo.Subjects s
-JOIN [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].[ProgramInformation] p
-	ON p.URL = s.Slug
+JOIN [ProgramInformation] p	ON p.URL = s.Slug
+GO
 
 /*-----------------------------------------------------------------------------
   SectionsMeta
  -----------------------------------------------------------------------------*/
-/*
+--/*
 INSERT INTO dbo.SectionsMeta
         ( ClassID ,
           Footnote ,
@@ -621,12 +621,13 @@ SELECT
 	,c.CustomDescription
 	,c.LastUpdatedBy
 	,c.LastUpdated
-FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].SectionFootnote c
+FROM SectionFootnote c
+GO
 
 /*-----------------------------------------------------------------------------
   SectionSeats
  -----------------------------------------------------------------------------*/
-/*
+--/*
 INSERT INTO dbo.SectionSeats
         ( ClassID ,
           SeatsAvailable ,
@@ -637,12 +638,13 @@ SELECT
 	c.ClassID
 	,c.SeatsAvailable
 	,c.LastUpdated
-FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].SeatAvailability c
+FROM SeatAvailability c
+GO
 
 /*-----------------------------------------------------------------------------
   CourseMeta
  -----------------------------------------------------------------------------*/
-/*
+--/*
 INSERT INTO dbo.CourseMeta
         ( CourseID ,
           Footnote ,
@@ -655,7 +657,8 @@ SELECT
 	,c.Footnote
 	,c.LastUpdatedBy
 	,c.LastUpdated
-FROM [MSSQL-D01\TESTMSSQL2008].[ClassSchedule].[dbo].CourseFootnote c
+FROM CourseFootnote c
+GO
 
 
 /*-----------------------------------------------------------------------------------------------------------
