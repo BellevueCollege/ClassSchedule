@@ -452,22 +452,63 @@ namespace CTCClassSchedule.Controllers
 			{
 				if (ModelState.IsValid)
 				{
+					string username = HttpContext.User.Identity.Name;
 					using (ClassScheduleDb db = new ClassScheduleDb())
 					{
 						// Lookup the subject being edited
 						Subject subject = db.Subjects.Where(s => s.Slug.Equals(Model.Subject.Slug, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-						Department department = subject.Department;
-						Division division = department.Division;
 
 						// Update the proper fields
 						subject.Title = Model.Subject.Title;
 						subject.Intro = StripHtml(Model.Subject.Intro);
 						subject.LastUpdated = DateTime.Now;
-						subject.LastUpdatedBy = HttpContext.User.Identity.Name;
-						department.Title = Model.Department.Title;
-						department.URL = Model.Department.URL;
-						division.Title = Model.Division.Title;
-						division.URL = Model.Division.URL;
+						subject.LastUpdatedBy = username;
+
+						// If the department does not already exist, create it
+						// TODO: ProgramEdit ideally should not handle creation of Departments
+						Department department = subject.Department;
+						if (department == null)
+						{
+							department = new Department
+							{
+								Title = Model.Department.Title,
+								URL = Model.Department.URL,
+								LastUpdated = DateTime.Now,
+								LastUpdatedBy = username
+							};
+
+							db.Departments.AddObject(department);
+							subject.DepartmentID = department.DepartmentID;
+						}
+						else
+						{
+							department.Title = Model.Department.Title;
+							department.URL = Model.Department.URL;
+						}
+
+						// If the division does not already exist, create it
+						// TODO: ProgramEdit ideally should not handle creation of Divisions
+						Division division = department.Division;
+						if (division == null)
+						{
+							division = new Division
+							{
+								Title = Model.Division.Title,
+								URL = Model.Division.URL,
+								LastUpdated = DateTime.Now,
+								LastUpdatedBy = username
+							};
+
+							db.Divisions.AddObject(division);
+							department.DivisionID = division.DivisionID;
+						}
+						else
+						{
+							division.Title = Model.Division.Title;
+							division.URL = Model.Division.URL;
+						}
+
+
 
 						// Unmerge subjects
 						IList<SubjectsCoursePrefix> unmergables = subject.SubjectsCoursePrefixes.Where(s => !PrefixesToMerge.Contains(s.CoursePrefixID)).ToList();
@@ -486,6 +527,7 @@ namespace CTCClassSchedule.Controllers
 								CoursePrefixID = prefix
 							});
 						}
+
 
 						// Commit changes to database
 						db.SaveChanges();
