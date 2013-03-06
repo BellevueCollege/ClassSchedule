@@ -1,16 +1,18 @@
 ﻿@using CTCClassSchedule.Models
+@using Ctc.Ods.Types
 @model IEnumerable<Subject>
 
 @{
     ViewBag.PageTitle = "All Class Descriptions at Bellevue College";
 		// TODO: provide a default alphabet if the ViewBag is empty
-		IEnumerable<char> alphabet = ViewBag.Alphabet;
+    IEnumerable<char> alphabet = Model.Select(c => c.Title.First()).Distinct().ToList();
+    IList<YearQuarter> QuarterNavMenu = ViewBag.QuarterNavMenu;
 }
 <div id="scheduleMain">
-    @Html.Partial("quarterNavigation", new QuarterNavigationModel { NavigationQuarters = ViewBag.QuarterNavMenu })
+    @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = QuarterNavMenu })
     <div id="container" class="sidebar">
         <div id="sidebar">
-            @Html.Partial("basicFacetedSearch")
+            @Html.Partial("basicFacetedSearch", QuarterNavMenu)
         </div> <!-- #sidebar -->
 
         <div id="content">
