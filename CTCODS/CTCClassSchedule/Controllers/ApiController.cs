@@ -452,6 +452,12 @@ namespace CTCClassSchedule.Controllers
 			{
 				if (ModelState.IsValid)
 				{
+					// If no prefixes are being merged, instantiate an empty collection so LINQ queries don't fail
+					if (PrefixesToMerge == null)
+					{
+						PrefixesToMerge = new List<string>();
+					}
+
 					string username = HttpContext.User.Identity.Name;
 					using (ClassScheduleDb db = new ClassScheduleDb())
 					{
