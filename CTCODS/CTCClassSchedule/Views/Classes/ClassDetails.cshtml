@@ -143,7 +143,56 @@
 						</div>
 					}
 
-					@* COMMENTS HERE *@
+					@* ***************************************************************************************************
+							Temporarily removed in order to meet initial public launch. We may want to re-enable this block
+
+								- 4/05/2012, shawn.south@bellevuecollege.edu
+						 ***************************************************************************************************
+					@if (course.Footnotes.Count > 0)
+					{
+						<div id="courseFootnotes">
+							<h2>Details:</h2>
+							<p>
+								<span id="odsCourseFootnotes">
+									@foreach (string footnote in course.Footnotes.Where(f => !String.IsNullOrWhiteSpace(f)))
+									{
+										@footnote;
+									}
+								</span>
+								@if (course.Footnotes.Any(f => f.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0))
+								{
+									<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/entrycode/">How to clear prerequisites?</a>
+								}
+							</p>
+						</div>
+					}
+
+					@* Show footnotes, and upcoming changes to footnotes. Save this for a future release
+					@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote) || _courses[0].Footnotes.Count > 0)
+					{
+						<div id="courseFootnotes">
+							<h2>Details:</h2>
+							<p>
+								@ViewHelpers.DisplayFootnotes(course.Footnotes, ViewBag.CMSFootnote)
+							</p>
+						</div>
+					}
+
+					@if (_courses.Count > 1)
+					{
+						if (_courses[1].Footnotes.Count > 0 && !_courses[0].Footnotes.SequenceEqual(_courses[1].Footnotes))
+						{
+							<div class="upcomingChange">
+								<h3>New details starting @_courses[1].YearQuarterBegin.FriendlyName</h3>
+								<p>
+									@ViewHelpers.DisplayFootnotes(_courses[1].Footnotes, ViewBag.CMSFootnote)
+								</p>
+							</div>
+						}
+					}
+					*@
+
+
 
 					@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote))
 					{
