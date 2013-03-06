@@ -172,17 +172,14 @@ namespace CTCClassSchedule.Controllers
 				{
 					IList<Subject> subjects = db.Subjects.ToList();
 
-                    IEnumerable<Subject> subjectsEnum;
+          IEnumerable<Subject> subjectsEnum;
 					if (letter != null)
 					{
-					    subjectsEnum = from s in subjects
-					                   where s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
-					                   select s;
+					  subjectsEnum = db.Subjects.Where(s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase));
 					}
 					else
 					{
-					    subjectsEnum = subjects;
-					    ;
+					  subjectsEnum = subjects;
 					}
 
 					if (format == "json")
@@ -193,7 +190,7 @@ namespace CTCClassSchedule.Controllers
 					}
 
 					// set up all the ancillary data we'll need to display the View
-					SetCommonViewBagVars(repository, "", letter);
+					SetCommonViewBagVars(repository, string.Empty, letter);
 					ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 					ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? "All" : letter.ToUpper());
 					ViewBag.LinkParams = Helpers.getLinkParams(Request);
@@ -263,23 +260,36 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-
 				// TODO: Refactor the following code into its own method
 				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					IList<Subject> subjects = db.Subjects.ToList();
+					// Compile a list of active subjects
+					string commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar;
+					IEnumerable<string> activePrefixes = repository.GetCourseSubjects(yrq).Select(p => p.Subject);
+					IList<Subject> subjects = new List<Subject>();
+					foreach (Subject sub in db.Subjects)
+					{
+						// TODO: whether the CoursePrefix has active courses or not, any Prefix with a '&' will be included
+						//			 because GetCourseSubjects() does not include the common course char.
+						if (sub.SubjectsCoursePrefixes.Select(sp => sp.CoursePrefixID).Any(sp => activePrefixes.Contains(sp.TrimEnd(commonCourseChar.ToCharArray()))))
+						{
+							subjects.Add(sub);
+						}
+					}
+
+
 					IEnumerable<Subject> subjectsEnum;
 					if (letter != null)
 					{
-					    subjectsEnum = (from s in subjects
-					                    where s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)
-					                    select s).Distinct();
+					    subjectsEnum = subjects.Where(s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)).Distinct();
 					}
 					else
 					{
 					    subjectsEnum = subjects;
 					}
+					subjectsEnum.OrderBy(s => s.Title);
+
 
 					if (format == "json")
 					{
