@@ -16,11 +16,13 @@ END
 -- adapted from http://www.sqlexamples.info/SQL/tsql_backup_database.htm
 DECLARE @fileName varchar(90)
 DECLARE @fileDate varchar(20)
+DECLARE @dbName VARCHAR(100)
 
 SET @fileDate = CONVERT(VARCHAR(20), GETDATE(),112)
-SET @fileName = 'F:\Backup\'+DB_NAME()+'-Upgrade-v1_8-v3-'+@fileDate+'.bak'
+SET @dbName = DB_NAME()
+SET @fileName = 'F:\Backup\'+@dbName+'-Upgrade-v1_8-v3-'+@fileDate+'.bak'
 
-BACKUP DATABASE DB_NAME() TO DISK = @fileName
+BACKUP DATABASE @dbName TO DISK = @fileName
 GO
 
 /*-----------------------------------------------------------------------------------------------------------
@@ -215,54 +217,6 @@ GO
 PRINT N'Creating primary key [PK_Courses] on [dbo].[CourseMeta]'
 GO
 ALTER TABLE [dbo].[CourseMeta] ADD CONSTRAINT [PK_Courses] PRIMARY KEY CLUSTERED  ([CourseID])
-GO
-IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
-GO
-IF @@TRANCOUNT=0 BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
-GO
-PRINT N'Altering [dbo].[vw_ClassScheduleData]'
-GO
-
-
-ALTER VIEW [dbo].[vw_ClassScheduleData]
-AS
-SELECT
-	c.ClassID
-	,c.YearQuarterID
-	,c.CourseID
-	,CASE
-		WHEN isNULL(c.LastUpdated, DateAdd(day, - 1, getdate())) > isNULL(s.LastUpdated, DATEADD(day, - 2, getdate()))
-			THEN CASE
-				WHEN c.ClassCapacity - c.StudentsEnrolled < 0
-					THEN 0
-				ELSE c.ClassCapacity - c.StudentsEnrolled
-			END
-		ELSE s.SeatsAvailable
-	 END AS SeatsAvailable
-	,CASE
-		WHEN isNULL(c.LastUpdated, DateAdd(day, - 1, getdate())) > isNULL(s.LastUpdated, DATEADD(day, - 2, getdate()))
-			THEN c.LastUpdated
-		ELSE s.LastUpdated
-	 END AS LastUpdated
-	,cm.Footnote AS CourseFootnote
-	,sm.Footnote AS SectionFootnote
-	--,p.Abbreviation
-	--,p.ProgramURL
-	--,p.Title
-	--,p.URL
-	--,p.Division
-	--,p.ContactName
-	--,p.ContactPhone
-	--,p.Intro
-	,sm.Title
-	,sm.Description
-FROM dbo.vw_Class c
-LEFT OUTER JOIN dbo.SectionSeats s ON c.ClassID = s.ClassID
-LEFT OUTER JOIN dbo.SectionsMeta sm ON c.ClassID = sm.ClassID
-LEFT OUTER JOIN dbo.CourseMeta cm ON c.CourseID = cm.CourseID
---LEFT OUTER JOIN dbo.ProgramInformation AS p ON c.Department = p.Abbreviation
-
-
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
 GO
@@ -564,8 +518,8 @@ GO
  -----------------------------------------------------------------------------*/
 --/*
 INSERT INTO dbo.Subjects
-        ( DepartmentID
-					Title,
+        ( DepartmentID,
+		  Title,
           Intro,
           Slug,
           LastUpdatedBy,
@@ -574,7 +528,7 @@ INSERT INTO dbo.Subjects
 --*/
 SELECT
 			(SELECT DepartmentID FROM Departments WHERE Title = MIN(d.AcademicProgram) AND URL = MIN(d.ProgramURL)) AS DepartmentID
-      d.[Title]
+      ,d.[Title]
       ,ISNULL(d.[Intro], '')
 	    ,d.[URL]
       ,(
