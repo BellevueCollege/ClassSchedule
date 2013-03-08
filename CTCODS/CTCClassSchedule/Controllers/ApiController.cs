@@ -163,54 +163,6 @@ namespace CTCClassSchedule.Controllers
     /// <summary>
     ///
     /// </summary>
-    /// <param name="collection"></param>
-    /// <returns></returns>
-    [HttpPost]
-		[ValidateInput(false)]
-		[AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
-		public ActionResult SectionEdit(FormCollection collection)
-		{
-			string referrer = collection["referrer"];
-
-			if (HttpContext.User.Identity.IsAuthenticated == true)
-			{
-				string itemNumber = collection["ItemNumber"];
-				string yrq = collection["Yrq"];
-				string username = HttpContext.User.Identity.Name;
-				string sectionFootnotes = collection["section.SectionFootnotes"];
-				string classID = itemNumber + yrq;
-				string customTitle = collection["section.CustomTitle"];
-				string customDescription = collection["section.CustomDescription"];
-
-
-				customDescription = StripHtml(customDescription);
-				sectionFootnotes = StripHtml(sectionFootnotes);
-
-				SectionsMeta itemToUpdate;
-
-				if (ModelState.IsValid)
-				{
-					using (ClassScheduleDb db = new ClassScheduleDb())
-					{
-					  itemToUpdate = GetItemToUpdate(db.SectionsMetas, s => s.ClassID == classID);
-
-            itemToUpdate.ClassID = classID;
-            itemToUpdate.Footnote = sectionFootnotes;
-            itemToUpdate.LastUpdated = DateTime.Now;
-            itemToUpdate.LastUpdatedBy = username;
-            itemToUpdate.Title = customTitle == string.Empty ? null : customTitle;
-            itemToUpdate.Description = customDescription;
-
-						db.SaveChanges();
-					}
-				}
-			}
-			return Redirect(referrer);
-		}
-
-    /// <summary>
-    ///
-    /// </summary>
     /// <param name="CourseNumber"></param>
     /// <param name="Subject"></param>
     /// <param name="IsCommonCourse"></param>
