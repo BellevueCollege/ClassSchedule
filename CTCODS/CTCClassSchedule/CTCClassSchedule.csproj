@@ -162,6 +162,7 @@
       <DependentUpon>ClassScheduleDb.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\QuarterNavigationModel.cs" />
+    <Compile Include="Models\SectionEditModel.cs" />
     <Compile Include="Models\SubjectViewModel.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
