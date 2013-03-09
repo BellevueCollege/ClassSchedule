@@ -1567,6 +1567,37 @@ a.edit_button
 	border: none;
 }
 
+ul.cross-list-merger {
+	padding:2px 2px 4px 2px;
+	border:1px solid #C6C6C6;
+	overflow:auto;
+}
+ul.cross-list-merger li {
+	display: block;
+	float: left;
+	width: 66px;
+	padding: 2px 2px 2px 2px;
+	margin: 2px 2px 0px 2px;
+}
+ul.cross-list-merger .cross-listed-course-choice {
+	background-color:#DEE7F8;
+	border:1px solid #CAD8F3;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	padding:2px 2px;
+	margin-right: 2px;
+}
+
+ul.cross-list-merger .cross-listed-course-choice-close:hover {
+	background-color:#bbcef1;
+	border-color:#6d95e0;
+}
+
+ul.cross-list-merger li.cross-list-course-new {
+	padding: 3px;
+}
+
 /* end section edit */
 
 

@@ -115,25 +115,23 @@
 			<li class="editing">
 				@if (Context.User.Identity.Name.Length > 0 && Helpers.isEditor(Context))
 		{
-					@Ajax.ActionLink("Edit",
-														"SectionEdit",
-                            "Classes",
-														new
-														{
-															itemNumber = Model[0].ID.ItemNumber.ToString(),
-															yrq = Model[0].ID.YearQuarter.ToString(),
-															subject = Model[0].CourseSubject.ToString(),
-															classNum = Model[0].CourseNumber.ToString()
-														},
-														new AjaxOptions
-														{
-															UpdateTargetId = "edit-section",
-															HttpMethod = "GET",
-															InsertionMode = InsertionMode.Replace,
-															OnBegin = "$('#edit-section').dialog('open');",
-															OnComplete = "spinner.stop();",
-														},
-														new { @class = "edit_button" })
+		  @Ajax.ActionLink("Edit",
+		                   "SectionEdit",
+		                   "Classes",
+		                   new
+		                     {
+		                       itemNumber = Model[0].ID.ItemNumber,
+		                       yrq = Model[0].ID.YearQuarter
+		                     },
+		                   new AjaxOptions
+		                     {
+		                       UpdateTargetId = "edit-section",
+		                       HttpMethod = "GET",
+		                       InsertionMode = InsertionMode.Replace,
+		                       OnBegin = "$('#edit-section').dialog('open');",
+		                       OnComplete = "spinner.stop();",
+		                     },
+		                   new { @class = "edit_button" })
 		}
 		</li>
 		@* Don't add a footnote DIV if there are no footnotes

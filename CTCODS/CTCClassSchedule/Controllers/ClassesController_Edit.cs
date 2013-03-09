@@ -28,10 +28,6 @@ namespace CTCClassSchedule.Controllers
 	 * ClassController object when the project is built.
 	 *
 	 *		- 1/11/2012, shawn.south@bellevuecollege.edu
-	 *
-	 * Much of the code can be referenced here: https://wiki.jasig.org/pages/viewpage.action?pageId=32210981
-	 * -Nathan 2/21/2012
-	 *
 	 */
 	public partial class ClassesController : Controller
   {
@@ -47,7 +43,7 @@ namespace CTCClassSchedule.Controllers
 	  /// accessing protected data/functionality. For example; in response to the user clicking a "Log in"
 	  /// button.
 	  /// </remarks>
-	  ///
+    /// <seealso cref="https://wiki.jasig.org/pages/viewpage.action?pageId=32210981">Jasig - ASP.NET MVC + CAS</seealso>
 	  [CASAuthorize]
 	  public ActionResult Authenticate()
 	  {
@@ -55,7 +51,12 @@ namespace CTCClassSchedule.Controllers
 	    return Redirect(url);
 	  }
 
-	  public ActionResult Logout()
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    /// <seealso cref="https://wiki.jasig.org/pages/viewpage.action?pageId=32210981">Jasig - ASP.NET MVC + CAS</seealso>
+    public ActionResult Logout()
 	  {
 
 	    string url = Request.UrlReferrer == null ? CasAuthentication.ServerName : Request.UrlReferrer.ToString();
@@ -80,129 +81,137 @@ namespace CTCClassSchedule.Controllers
 	  /// </summary>
 	  /// <param name="itemNumber"></param>
 	  /// <param name="yrq"></param>
-	  /// <param name="subject"></param>
-	  /// <param name="classNum"></param>
 	  /// <returns></returns>
 	  [AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
 	  [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-	  public ActionResult SectionEdit(string itemNumber, string yrq, string subject, string classNum)
+	  public ActionResult SectionEdit(string itemNumber, string yrq)
 	  {
-	    string classID = itemNumber + yrq;
-
 	    if (HttpContext.User.Identity.IsAuthenticated)
 	    {
-
-	      using (OdsRepository respository = new OdsRepository(HttpContext))
+	      try
 	      {
-	        IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(respository);
-	        ViewBag.QuarterNavMenu = yrqRange;
+	        ISectionID sectionID = SectionID.FromString(string.Concat(itemNumber, yrq));
 
-	        ICourseID courseID = CourseID.FromString(subject, classNum);
-	        IList<Section> sections;
-	        sections = respository.GetSections(courseID);
-
-	        Section editSection = null;
-	        foreach (Section section in sections)
+	        using (OdsRepository respository = new OdsRepository(HttpContext))
 	        {
-	          if (section.ID.ToString() == classID)
+	          IList<Section> sections = respository.GetSections(new List<ISectionID> {sectionID});
+
+	          if (sections != null && sections.Count > 0)
 	          {
-	            editSection = section;
-	            break;
+	            using (ClassScheduleDb db = new ClassScheduleDb())
+	            {
+	              IList<SectionWithSeats> sectionsEnum = Helpers.GetSectionsWithSeats(yrq, sections, db);
+
+	              if (sectionsEnum != null && sectionsEnum.Count > 0)
+	              {
+	                if (sectionsEnum.Count > 1)
+	                {
+	                  _log.Warn(m => m("Expected to only receive one Section to Edit, but received {0}. Using the first.", sectionsEnum.Count));
+	                }
+
+	                SectionWithSeats section = sectionsEnum.First();
+	                string secID = section.ID.ToString();
+
+	                SectionEditModel sectionModel = new SectionEditModel
+	                                                  {
+	                                                    SectionToEdit = section,
+	                                                    CrossListedCourses = db.SectionCourseCrosslistings.Where(x => x.ClassID == secID)
+	                                                                           .Select(x => x.CourseID)
+                                                                             .Distinct()
+	                                                                           .ToList()
+	                                                  };
+
+	                return PartialView(sectionModel);
+	              }
+	              _log.Warn(m => m("Cannot Edit Section '{0}' - no records found.", sectionID));
+	              return PartialView(null);
+	            }
 	          }
-	        }
-
-	        sections.Clear();
-	        sections.Add(editSection);
-
-	        IEnumerable<SectionWithSeats> sectionsEnum;
-	        SectionsMeta itemToUpdate = null;
-	        using (ClassScheduleDb db = new ClassScheduleDb())
-	        {
-	          sectionsEnum = Helpers.GetSectionsWithSeats(yrqRange[0].ID, sections, db);
-
-	          if (db.SectionsMetas.Any(s => s.ClassID == classID))
-	          {
-	            itemToUpdate = db.SectionsMetas.Single(s => s.ClassID == classID);
-	          }
-
-	          List<SectionWithSeats> localSections = (from s in sectionsEnum
-	                                                  select new SectionWithSeats
-	                                                           {
-	                                                             ParentObject = s,
-	                                                             SectionFootnotes =
-	                                                               MvcApplication.SafePropertyToString(itemToUpdate,
-	                                                                                                   "Footnote",
-	                                                                                                   string.Empty),
-	                                                             LastUpdated =
-	                                                               MvcApplication.SafePropertyToString(itemToUpdate,
-	                                                                                                   "LastUpdated",
-	                                                                                                   string.Empty),
-	                                                             LastUpdatedBy =
-	                                                               MvcApplication.SafePropertyToString(itemToUpdate,
-	                                                                                                   "LastUpdatedBy",
-	                                                                                                   string.Empty),
-	                                                             CustomTitle =
-	                                                               MvcApplication.SafePropertyToString(itemToUpdate,
-	                                                                                                   "Title",
-	                                                                                                   string.Empty),
-	                                                             CustomDescription =
-	                                                               MvcApplication.SafePropertyToString(itemToUpdate,
-	                                                                                                   "Description",
-	                                                                                                   string.Empty),
-	                                                           }).ToList();
-
-	          return PartialView(localSections);
+	          _log.Debug(m => m("Unable to Edit Section '{0}' - the API returned no records.", sectionID));
 	        }
 	      }
+	      catch (Exception ex)
+	      {
+	        _log.Error(m => m("An exception occurred while attempting to display Edit dialog for Section '{0}':\n{1}", string.Concat(itemNumber,yrq), ex ));
+	      }
 	    }
-	    return PartialView();
+	    else
+	    {
+        _log.Warn(m => m("Unable to display Section Edit dialog - User is not authenticated."));
+      }
+
+	    return PartialView(null);
 	  }
 
 	  /// <summary>
-	  ///
+	  /// Saves the updated <see cref="Section"/> information
 	  /// </summary>
 	  /// <param name="collection"></param>
 	  /// <returns></returns>
 	  [HttpPost]
+    // BUG: I'm concerned that form input is not being validated by the following line
+    // It looks like this was added to work around common issues with passing FormCollection objects in MVC3,
+    // but I'm sure there is a better way to handle this - such that input from the form is being validated.
+    //  - shawn.south@bellevuecollege.edu, 3/7/2013
 	  [ValidateInput(false)]
 	  [AuthorizeFromConfig(RoleKey = "ApplicationEditor")]
 	  public ActionResult SectionEdit(FormCollection collection)
 	  {
+
+/* TODO: Refactor saving Section information
+ *
+ *  1.  Receive a collection of course crosslistings (see Api/ProgramEdit - can we just pass the collection,
+ *      or do we need to pass the Model too?
+ *
+ *  2.  If needed, refactor other SectionEdit to pass a SectionMeta to the view.
+ *
+ *  3.  Remove ValidateInputAttribute once we've replaced FormCollection parameter.
+ */
 	    string referrer = collection["referrer"];
 
-	    if (HttpContext.User.Identity.IsAuthenticated == true)
+	    if (HttpContext.User.Identity.IsAuthenticated)
 	    {
 	      string itemNumber = collection["ItemNumber"];
 	      string yrq = collection["Yrq"];
 	      string username = HttpContext.User.Identity.Name;
-	      string sectionFootnotes = collection["section.SectionFootnotes"];
+	      string sectionFootnotes = StripHtml(collection["section.SectionFootnotes"]);
 	      string classID = itemNumber + yrq;
 	      string customTitle = collection["section.CustomTitle"];
-	      string customDescription = collection["section.CustomDescription"];
-
-
-	      customDescription = StripHtml(customDescription);
-	      sectionFootnotes = StripHtml(sectionFootnotes);
-
-	      SectionsMeta itemToUpdate;
+	      string customDescription = StripHtml(collection["section.CustomDescription"]);
 
 	      if (ModelState.IsValid)
 	      {
 	        using (ClassScheduleDb db = new ClassScheduleDb())
 	        {
-	          itemToUpdate = GetItemToUpdate(db.SectionsMetas, s => s.ClassID == classID);
+	          try
+	          {
+	            SectionsMeta itemToUpdate = GetItemToUpdate(db.SectionsMetas, s => s.ClassID == classID);
 
-	          itemToUpdate.ClassID = classID;
-	          itemToUpdate.Footnote = sectionFootnotes;
-	          itemToUpdate.LastUpdated = DateTime.Now;
-	          itemToUpdate.LastUpdatedBy = username;
-	          itemToUpdate.Title = customTitle == string.Empty ? null : customTitle;
-	          itemToUpdate.Description = customDescription;
+	            itemToUpdate.ClassID = classID;
+	            itemToUpdate.Footnote = sectionFootnotes;
+	            itemToUpdate.LastUpdated = DateTime.Now;
+	            itemToUpdate.LastUpdatedBy = username;
+	            itemToUpdate.Title = customTitle == string.Empty ? null : customTitle;
+	            itemToUpdate.Description = customDescription;
 
-	          db.SaveChanges();
+	            db.SaveChanges();
+	          }
+	          catch (Exception ex)
+	          {
+	            _log.Error(m => m("Section changes NOT saved - {0}", ex));
+	          }
 	        }
 	      }
+	      else
+	      {
+	        _log.Warn(m => m("Section changes NOT saved - ModelState is not Valid."));
+	      }
 	    }
+      else
+      {
+        _log.Warn(m => m("Section changes NOT saved - User is not authenticated."));
+      }
+
 	    return Redirect(referrer);
 	  }
 

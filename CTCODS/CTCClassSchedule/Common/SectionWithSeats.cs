@@ -5,7 +5,7 @@ namespace CTCClassSchedule
 {
 	public class SectionWithSeats : Section
 	{
-		public int? SeatsAvailable { get; set; }
+	  public int? SeatsAvailable { get; set; }
 		public string LastUpdated { get; set; }
 		public string LastUpdatedBy { get; set; }
 		public string CourseFootnotes { get; set; }
@@ -22,7 +22,7 @@ namespace CTCClassSchedule
     /// to determine IF a relationship exists - once we know that one does, then we can query
     /// the database to find out what they are.
     /// </remarks>
-    public bool IsCrossListed { get; set; }
+    public bool IsCrossListed{get;set;}
 
 		/// <summary>
 		/// Provides a means to set protected values of the parent object.
@@ -72,5 +72,5 @@ namespace CTCClassSchedule
 				LinkedTo = value.LinkedTo;
 			}
 		}
-	}
+  }
 }

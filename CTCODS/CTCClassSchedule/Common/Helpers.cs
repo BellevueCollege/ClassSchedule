@@ -438,11 +438,10 @@ namespace CTCClassSchedule.Common
 			// Reference: http://forums.asp.net/post/2848021.aspx
 			db.vw_Class.MergeOption = MergeOption.OverwriteChanges;
 
-      string yrqID = YearQuarter.FromString(currentYrq).ID;
 			IList<vw_Class> classes;
       using (profiler.Step("API::Get Class Schedule Specific Data()"))
       {
-				classes = db.vw_Class.Where(c => c.YearQuarterID == yrqID).ToList();
+				classes = db.vw_Class.Where(c => c.YearQuarterID == currentYrq).ToList();
       }
 
 
@@ -458,7 +457,7 @@ namespace CTCClassSchedule.Common
 											join sm in db.SectionsMetas on (d != null ? d.ClassID : "") equals sm.ClassID into t3
 											from sm in t3.DefaultIfEmpty()
                       // NOTE:  This logic assumes that data will only be saved in ClassScheduleDb after having come through
-                      //        the filter of the CtcApi - which normalizes spacing of the ClassID/SectionID field data.
+                      //        the filter of the CtcApi - which normalizes spacing of the CourseID field data.
                       join cm in db.CourseMetas on (d != null ? d.CourseID : "") equals cm.CourseID into t4
 											from cm in t4.DefaultIfEmpty()
 			      orderby c.Yrq.ID descending
@@ -470,12 +469,14 @@ namespace CTCClassSchedule.Common
 													CourseFootnotes = cm != null && !string.IsNullOrWhiteSpace(cm.Footnote) ? cm.Footnote : string.Empty,
 													CourseTitle = sm != null && !string.IsNullOrWhiteSpace(sm.Title) ? sm.Title : c.CourseTitle,
 													CustomDescription = sm != null && !string.IsNullOrWhiteSpace(sm.Description) ? sm.Description : string.Empty,
-/* IMPLEMENT IN FUTURE RELEASE
-                          IsCrossListed = db.SectionCourseCrosslistings.Any(x => c.ID.ToString() == x.ClassID)
- */
-											}).OrderBy(x => x.CourseNumber).ThenBy(x => x.CourseTitle).ToList();
-      }
+											}).OrderBy(s => s.CourseNumber).ThenBy(s => s.CourseTitle).ToList();
 
+        // Flag sections that are cross-linked with a Course
+        foreach (string sec in db.SectionCourseCrosslistings.Select(x => x.ClassID).Distinct())
+        {
+          sectionsEnum.Single(s => s.ID.ToString() == sec).IsCrossListed = true;
+        }
+      }
 
 			return sectionsEnum;
 		}
