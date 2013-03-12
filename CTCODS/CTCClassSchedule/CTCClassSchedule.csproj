@@ -136,6 +136,7 @@
     <Compile Include="Common\ActionOutputCacheAttribute.cs" />
     <Compile Include="Common\AutomatedFootnotesConfig.cs" />
     <Compile Include="Common\AutomatedFootnotesSection.cs" />
+    <Compile Include="Common\BoolExtensions.cs" />
     <Compile Include="Common\ClassFootnote.cs" />
     <Compile Include="Common\CourseOutcomes.cs" />
     <Compile Include="Common\CASAuthorizeAttribute.cs" />
