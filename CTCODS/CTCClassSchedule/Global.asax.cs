@@ -22,20 +22,20 @@ namespace CTCClassSchedule
 			routes.IgnoreRoute("ScheduleError.aspx");
 			//routes.IgnoreRoute("favicon.ico");
 
-			 //map all URLs to this route, but then restrict which routes to ignore via the constraints
-			//dictionary. So in this case, this route will match (and thus ignore) all requests for
-			//favicon.ico (no matter which directory). Since we told routing to ignore this requests,
-			//normal ASP.NET processing of these requests will occur.
+			// Map all URLs to this route, but then restrict which routes to ignore via the constraints
+			// dictionary. So in this case, this route will match (and thus ignore) all requests for
+			// favicon.ico (no matter which directory). Since we told routing to ignore this requests,
+			// normal ASP.NET processing of these requests will occur.
 			routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
-			// API calls the application exposesl
+			// API calls the application exposes
 			routes.MapRoute("ApiSubjects", "Api/Subjects", new { controller = "Api", action = "Subjects" });
 			routes.MapRoute("ApiSectionEdit", "Classes/SectionEdit", new { controller = "Classes", action = "SectionEdit" });
 			routes.MapRoute("ApiClassEdit", "Api/ClassEdit", new { controller = "Api", action = "ClassEdit" });
 			routes.MapRoute("ApiProgramEdit", "Api/ProgramEdit", new { controller = "Api", action = "ProgramEdit" });
 			routes.MapRoute("ApiUpdateSectionFootnote", "Api/UpdateSectionFootnote", new { controller = "Api", action = "UpdateSectionFootnote" });
 
-			// Couese data export for paper class schedule
+			// Course data export for paper class schedule
 			routes.MapRoute("CoursesExport", "Export/{YearQuarterID}", new { controller = "Classes", action = "Export", YearQuarterID = UrlParameter.Optional });
 
 			// Authentication
@@ -44,14 +44,15 @@ namespace CTCClassSchedule
 
 			// Default application routes
 			routes.MapRoute("getSeats", "getseats", new { controller = "Classes", action = "getSeats" });
-			routes.MapRoute("ClassDetails", "{YearQuarterID}/{Subject}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
+			routes.MapRoute("ClassDetails", "Class/{Prefix}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
 			routes.MapRoute("Subject", "All/{Subject}", new { controller = "Classes", action = "Subject" });
 
 			routes.MapRoute("YearQuarterSubject", "{YearQuarter}/{Subject}", new { controller = "Classes", action = "YearQuarterSubject" });
 			routes.MapRoute("AllClasses", "All", new { controller = "Classes", action = "AllClasses" });
 			routes.MapRoute("Search", "Search", new { controller = "Search", action = "Index" });
 			routes.MapRoute("YearQuarter", "{YearQuarter}", new { controller = "Classes", action = "YearQuarter" });
-			routes.MapRoute("Default", "", new { controller = "Classes", action = "Index" });
+			routes.MapRoute("Index", "", new { controller = "Classes", action = "Index" });
+
 		}
 
 		/// <summary>
