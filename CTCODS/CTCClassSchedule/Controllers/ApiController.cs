@@ -55,7 +55,7 @@ namespace CTCClassSchedule.Controllers
 			using (OdsRepository db = new OdsRepository(HttpContext))
 			{
 				IList<CoursePrefix> data;
-				data = string.IsNullOrWhiteSpace(YearQuarter) || YearQuarter.ToUpper() == "ALL" ? db.GetCourseSubjects() : db.GetCourseSubjects(Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter));
+				data = string.IsNullOrWhiteSpace(YearQuarter) || YearQuarter.Equals("All", StringComparison.OrdinalIgnoreCase) ? db.GetCourseSubjects() : db.GetCourseSubjects(Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter));
 			  IList<string> apiSubjects = data.Select(s => s.Subject).ToList();
 
 			  IList<ScheduleCoursePrefix> subjectList;
@@ -85,7 +85,7 @@ namespace CTCClassSchedule.Controllers
 				                .ToList();
         }
 
-			  if (format == "json")
+        if (format == "json")
 				{
 					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data

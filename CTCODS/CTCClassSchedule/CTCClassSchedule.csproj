@@ -140,6 +140,8 @@
     <Compile Include="Common\ClassFootnote.cs" />
     <Compile Include="Common\CourseOutcomes.cs" />
     <Compile Include="Common\CASAuthorizeAttribute.cs" />
+    <Compile Include="Models\AdvancedFacetedSearchModel.cs" />
+    <Compile Include="Models\ClassDetailsModel.cs" />
     <Compile Include="Models\ProgramEditModel.cs" />
     <Compile Include="Common\Encryption64.cs" />
     <Compile Include="Common\HelperContainers.cs" />
@@ -163,8 +165,9 @@
       <DependentUpon>ClassScheduleDb.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\QuarterNavigationModel.cs" />
-    <Compile Include="Models\SectionEditModel.cs" />
+    <Compile Include="Models\SectionsViewModel.cs" />
     <Compile Include="Models\SubjectViewModel.cs" />
+    <Compile Include="Models\YearQuarterSubjectModel.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

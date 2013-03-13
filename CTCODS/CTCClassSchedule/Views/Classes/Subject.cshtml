@@ -58,7 +58,7 @@
 					{
 						<div class="classInfo">
 							<h2 class="classHeading">
-								<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number })">
+								<a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number })">
 									@Html.SectionCourseHeading(item)
 									@ViewHelpers.DisplayCredits(item)
 								</a>
@@ -100,7 +100,7 @@
 								@Html.ActionLink(String.Concat("View details for ", Helpers.SubjectWithCommonCourseFlag(item), " ", item.Number),
 																																"ClassDetails",
 																																"Classes",
-																																new { YearQuarterID = "All", Subject = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number },
+                                                                new { Prefix = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number },
 																															null)
 							 </p>
 						</div>

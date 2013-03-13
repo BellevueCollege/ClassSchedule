@@ -231,16 +231,13 @@ namespace CTCClassSchedule.Controllers
 																	 NavigationQuarters = Helpers.getYearQuarterListForMenus(repository)
 																 };
 
-				if (format == "json")
+        if (format == "json")
 				{
 					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
 					return Json(model, JsonRequestBehavior.AllowGet);
 				}
 
-
-
-				ViewBag.Subject = Subject; // TODO: Refactor this out!
 				ViewBag.LinkParams = Helpers.getLinkParams(Request);
 				SetCommonViewBagVars(repository, string.Empty, string.Empty);
 
@@ -291,7 +288,7 @@ namespace CTCClassSchedule.Controllers
 					subjectsEnum.OrderBy(s => s.Title);
 
 
-					if (format == "json")
+          if (format == "json")
 					{
 						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
@@ -299,7 +296,6 @@ namespace CTCClassSchedule.Controllers
 					}
 
 					// set up all the ancillary data we'll need to display the View
-
 					SetCommonViewBagVars(repository, avail, letter);
 					ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
 
@@ -334,6 +330,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
+        // Get the courses to display on the View
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
 				{
@@ -341,6 +338,7 @@ namespace CTCClassSchedule.Controllers
 					sections = repository.GetSections(prefixes, yrq, facets);
 				}
 
+        IList<SectionsBlock> courseBlocks = new List<SectionsBlock>();
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					IList<SectionWithSeats> sectionsEnum;
@@ -349,44 +347,52 @@ namespace CTCClassSchedule.Controllers
 						sectionsEnum = Helpers.GetSectionsWithSeats(yrq.ID, sections, db);
 					}
 
-					IList<SectionsBlock> courseBlocks = groupSectionsIntoBlocks(sectionsEnum, db);
-					if (format == "json")
-					{
-						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
-						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-						return Json(courseBlocks, JsonRequestBehavior.AllowGet);
-					}
+					courseBlocks = groupSectionsIntoBlocks(sectionsEnum, db);
+        }
 
-					// set up all the ancillary data we'll need to display the View
-					ViewBag.timestart = timestart;
-					ViewBag.timeend = timeend;
-					ViewBag.avail = avail;
-					ViewBag.latestart = latestart;
 
-					ViewBag.LinkParams = Helpers.getLinkParams(Request);
-					ViewBag.Subject = Subject;
+        // Construct the model
+        SubjectInfoResult subject = SubjectInfo.GetSubjectInfo(Subject);
+        IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
+        YearQuarterSubjectModel model = new YearQuarterSubjectModel
+        {
+          Courses = courseBlocks,
+          CurrentQuarter = repository.CurrentYearQuarter,
+          CurrentRegistrationQuarter = yrqRange[0],
+          NavigationQuarters = yrqRange,
+          ViewingQuarter = yrq,
+          Slug = subject.Subject.Slug,
+          SubjectTitle = subject.Subject.Title,
+          SubjectIntro = subject.Subject.Intro,
+          DepartmentTitle = subject.Department.Title,
+          DepartmentURL = subject.Department.URL,
+        };
 
-					//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
-					TempData["DayDictionary"] = Helpers.getDayDictionary();
 
-					SetCommonViewBagVars(repository, avail, string.Empty);
-					SetProgramInfoVars(Subject, db); // TODO: Refactor out this function. Rely on a Model where possible rather than ViewBag variables
-
-					ViewBag.YearQuarter = yrq;
-					IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
-					ViewBag.QuarterNavMenu = yrqRange;
-					ViewBag.CurrentRegistrationQuarter = yrqRange[0];
-
-					ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid, f_telecourse);
-					ViewBag.Days = Helpers.ConstructDaysList(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
-
-					// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
-					IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
-					routeValues.Add("YearQuarterID", YearQuarter);
-					ViewBag.RouteValues = routeValues;
-
-					return View(courseBlocks);
+        if (format == "json")
+				{
+					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+					return Json(model, JsonRequestBehavior.AllowGet);
 				}
+
+
+        // set up all the ancillary data we'll need to display the View
+				ViewBag.timestart = timestart;
+				ViewBag.timeend = timeend;
+				ViewBag.avail = avail;
+				ViewBag.latestart = latestart;
+        ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid, f_telecourse);
+        ViewBag.Days = Helpers.ConstructDaysList(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
+        ViewBag.LinkParams = Helpers.getLinkParams(Request);
+        SetCommonViewBagVars(repository, avail, string.Empty);
+
+        // TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
+				IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
+				routeValues.Add("YearQuarterID", YearQuarter);
+				ViewBag.RouteValues = routeValues;
+
+				return View(model);
 			}
 		}
 
@@ -396,59 +402,69 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		///
 		[OutputCache(CacheProfile = "ClassDetailsCacheTime")]
-		public ActionResult ClassDetails(string YearQuarterID, string Subject, string ClassNum)
+		public ActionResult ClassDetails(string Prefix, string ClassNum)
 		{
-			ICourseID courseID = CourseID.FromString(Subject, ClassNum);
-			// YearQuarter.FromString(YearQuarterID);
-
+      ICourseID courseID = CourseID.FromString(Prefix, ClassNum);
+      ClassDetailsModel model = new ClassDetailsModel();
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
-				IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
-				ViewBag.QuarterNavMenu = yrqRange;
-
 				IList<Course> courses;
 				using (_profiler.Step("ODSAPI::GetCourses()"))
 				{
 					courses = repository.GetCourses(courseID);
 				}
 
+
+        IList<YearQuarter> navigationQuarters = Helpers.getYearQuarterListForMenus(repository);
+        IList<YearQuarter> quartersOffered = new List<YearQuarter>();
+        string learningOutcomes = string.Empty;
 				if (courses.Count > 0)
 				{
-					ICourseID realCourseID = CourseID.FromString(courses.First().CourseID);
-					realCourseID.IsCommonCourse = courses.First().IsCommonCourse;
-
 					using (_profiler.Step("Getting Course counts (per YRQ)"))
 					{
 						// Identify which, if any, of the current range of quarters has Sections for this Course
-						IList<YearQuarter> quartersOffered = new List<YearQuarter>(4);
-						foreach (YearQuarter quarter in yrqRange)
+						foreach (YearQuarter quarter in navigationQuarters)
 						{
 							// TODO: for better performance, overload method to accept more than one YRQ
-							int sectionCount = repository.SectionCountForCourse(realCourseID, quarter);
-							if (sectionCount > 0)
+							if (repository.SectionCountForCourse(courseID, quarter) > 0)
 							{
 								quartersOffered.Add(quarter);
 							}
 						}
-						ViewBag.QuartersOffered = quartersOffered;
 					}
 
-					string realSubject = realCourseID.IsCommonCourse ? string.Concat(realCourseID.Subject, _apiSettings.RegexPatterns.CommonCourseChar) : realCourseID.Subject;
-
-					using (_profiler.Step("Retrieving course outcomes"))
+          // Get the course learning outcomes
+          using (_profiler.Step("Retrieving course outcomes"))
 					{
-						ViewBag.CourseOutcome = getCourseOutcome(realSubject, realCourseID.Number);
+            learningOutcomes = getCourseOutcome(courseID);
 					}
-
-					SetProgramInfoVars(realSubject);  // TODO: Refactor out this function. Rely on a Model where possible rather than ViewBag variables
-
-					ViewBag.CMSFootnote = getCMSFootnote(Subject, ClassNum, courseID);
-
 				}
-				return View(courses);
+
+        // Create the model
+        model = new ClassDetailsModel
+        {
+          Courses = courses,
+          CurrentQuarter = repository.CurrentYearQuarter,
+          NavigationQuarters = navigationQuarters,
+          QuartersOffered = quartersOffered,
+          CMSFootnote = getCMSFootnote(courseID),
+          LearningOutcomes = learningOutcomes
+        };
+
+        Subject subject = SubjectInfo.GetSubjectFromPrefix(Prefix);
+        if (subject != null)
+        {
+          SubjectInfoResult programInfo = SubjectInfo.GetSubjectInfo(subject.Slug);
+          model.Slug = programInfo.Subject.Slug;
+          model.SubjectTitle = programInfo.Subject.Title;
+          model.SubjectIntro = programInfo.Subject.Intro;
+          model.DepartmentTitle = programInfo.Department.Title;
+          model.DepartmentURL = programInfo.Department.URL;
+        }
 			}
+
+      return View(model);
 		}
 
 
@@ -613,34 +629,22 @@ namespace CTCClassSchedule.Controllers
 		/// <param name="Subject">The course Subject</param>
 		/// <param name="ClassNum">The CourseNumber</param>
 		/// /// <param name="courseID">The courseID for the course.</param>
-		private string getCMSFootnote(string Subject, string CourseNum, ICourseID courseID)
+		private string getCMSFootnote(ICourseID courseId)
 		{
 			using (ClassScheduleDb db = new ClassScheduleDb())
 			{
 				using (_profiler.Step("Getting app-specific Section records from DB"))
 				{
 					CourseMeta item = null;
-					char[] trimChar = { '&' };
+					char trimChar = _apiSettings.RegexPatterns.CommonCourseChar.ToCharArray()[0];
 
-					string FullCourseID = Helpers.BuildCourseID(CourseNum, Subject.TrimEnd(trimChar), courseID.IsCommonCourse);
-					try
+          string FullCourseID = Helpers.BuildCourseID(courseId.Number, courseId.Subject.TrimEnd(), courseId.IsCommonCourse);
+          item = db.CourseMetas.Where(s => s.CourseID.Trim().Equals(FullCourseID, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+
+					if (item != null)
 					{
-						item = db.CourseMetas.Single(s => s.CourseID.Trim().ToUpper() == FullCourseID);
-
-						if (item != null)
-						{
-							return item.Footnote;
-						}
-
-
+						return item.Footnote;
 					}
-					catch (InvalidOperationException e)
-					{
-						Trace.Write("Course has no CMS footnote: " + e);
-					}
-
-
-
 
 				}
 			}
@@ -902,21 +906,21 @@ namespace CTCClassSchedule.Controllers
 		/// Gets the course outcome information by scraping the Bellevue College
 		/// course outcomes website
 		/// </summary>
-		private static dynamic getCourseOutcome(string Subject, string ClassNum)
+		private static dynamic getCourseOutcome(ICourseID courseId)
 		{
 			string CourseOutcome = string.Empty;
 			try
 			{
 				Service1Client client = new Service1Client();
-				ICourseID courseID = CourseID.FromString(Subject, ClassNum);
-				string realCourseID = Helpers.BuildCourseID(ClassNum, Subject, courseID.IsCommonCourse);
-				CourseOutcome = client.GetCourseOutcome(realCourseID);
+        string FullCourseID = Helpers.BuildCourseID(courseId.Number, courseId.Subject.TrimEnd(), courseId.IsCommonCourse);
+        CourseOutcome = client.GetCourseOutcome(FullCourseID);
 			}
 			catch (Exception)
 			{
 				CourseOutcome = "Error: Cannot find course outcome for this course or cannot connect to the course outcomes webservice.";
 			}
-			return CourseOutcome;
+
+      return CourseOutcome;
 		}
 
 		/// <summary>
@@ -924,59 +928,11 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		private void SetCommonViewBagVars(OdsRepository repository, string avail, string letter)
 		{
-			ViewBag.ErrorMsg = "";
+			ViewBag.ErrorMsg = string.Empty;
 			ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
 
 			ViewBag.letter = letter;
 			ViewBag.avail = string.IsNullOrWhiteSpace(avail) ? "all" : avail;
-			ViewBag.activeClass = " class=active";
-		}
-
-	  /// <summary>
-	  ///
-	  /// </summary>
-	  /// <param name="slug"></param>
-	  /// <param name="context"></param>
-	  // TODO: Refactor this code to return SubjectInfo (see the Subject() action for example). Instead of using ViewBag we should return the data to each View as the Model
-		private void SetProgramInfoVars(string slug, ClassScheduleDb context = null)
-		{
-			using (_profiler.Step("Retrieving course program information"))
-			{
-				using (context = context ?? new ClassScheduleDb())
-				{
-
-					Subject subject = context.Subjects.Where(s => s.Slug.Equals(slug, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-				  if (subject != null)
-				  {
-				    Department department = subject.Department;
-				    Division division = department != null ? department.Division : null;
-
-				    ViewBag.ProgramTitle = subject.Title ?? string.Empty;
-				    ViewBag.SubjectIntro = subject.Intro ?? string.Empty;
-				    if (department != null)
-				    {
-				      ViewBag.AcademicProgram = department.Title ?? string.Empty;
-				    }
-				    if (division != null)
-				    {
-				      ViewBag.DivisionURL = division.URL ?? string.Empty;
-				      ViewBag.DivisionTitle = division.Title ?? string.Empty;
-				    }
-
-				    // If the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
-				    // or empty just return it, otherwise prepend iwth the current school url.
-				    if (department != null)
-				    {
-				      string deptUrl = department.URL ?? string.Empty;
-				      if (!string.IsNullOrWhiteSpace(deptUrl) && !Regex.IsMatch(deptUrl, @"^https?://"))
-				      {
-				        deptUrl = ConfigurationManager.AppSettings["currentSchoolUrl"].UriCombine(deptUrl);
-				      }
-				      ViewBag.ProgramUrl = deptUrl;
-				    }
-				  }
-				}
-			}
 		}
 		#endregion
 

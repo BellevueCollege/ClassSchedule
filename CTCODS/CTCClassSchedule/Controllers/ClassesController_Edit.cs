@@ -112,7 +112,7 @@ namespace CTCClassSchedule.Controllers
 	                SectionWithSeats section = sectionsEnum.First();
 	                string secID = section.ID.ToString();
 
-	                SectionEditModel sectionModel = new SectionEditModel
+	                /*SectionEditModel sectionModel = new SectionEditModel
 	                                                  {
 	                                                    SectionToEdit = section,
 	                                                    CrossListedCourses = db.SectionCourseCrosslistings.Where(x => x.ClassID == secID)
@@ -121,7 +121,8 @@ namespace CTCClassSchedule.Controllers
 	                                                                           .ToList()
 	                                                  };
 
-	                return PartialView(sectionModel);
+	                return PartialView(sectionModel);*/
+
 	              }
 	              _log.Warn(m => m("Cannot Edit Section '{0}' - no records found.", sectionID));
 	              return PartialView(null);

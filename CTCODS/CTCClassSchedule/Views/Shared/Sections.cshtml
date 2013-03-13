@@ -2,156 +2,161 @@
 @using CTCClassSchedule
 @using CTCClassSchedule.Common
 @using Microsoft.Security.Application
-@using MvcMiniProfiler;
-@using System.Text.RegularExpressions;
-<!-- Would this perform better as an IEnumerable, rather than converting to List when passing the model from YearQuarterSubject or Search/Index? -->
-@model List<SectionWithSeats>
+@using MvcMiniProfiler
+@using System.Text.RegularExpressions
+@using CTCClassSchedule.Models
+@model SectionsViewModel
 @{
-	MiniProfiler _profiler = MiniProfiler.Current;
-	Dictionary<string, string> dict = TempData["DayDictionary"] as Dictionary<string, string>;
+  MiniProfiler _profiler = MiniProfiler.Current;
 
-	string sectionID = Model[0].ID.ToString();
-	string _searchTerm = Request.QueryString["searchterm"];
-
-	YearQuarter quarterViewing = ViewBag.YearQuarter;
-	YearQuarter currentQuarter = ViewBag.CurrentYearQuarter;
-
-	IEnumerable<string> _courseFootnotes = ViewData["CourseFootnotes"] as List<string> ?? new List<string>();
-
-	bool firstIteration = true;
+  string sectionID = Model.Sections[0].ID.ToString();
+  string _searchTerm = Request.QueryString["searchterm"];
 }
 
 <!-- SEARCHTERM: @_searchTerm -->
-<li class="section-listing" data-sectionid="@sectionID"><span class="item-number"><span class="descriptor">Item
-	number: </span>@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? Model[0].ID.ItemNumber : Html.FormatWithSearchTerm(_searchTerm, Model[0].ID.ItemNumber).ToString())</span>
+<li class="section-listing" data-sectionid="@sectionID"><span class="item-number"><span class="descriptor">
+	Item number: </span>@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? Model.Sections[0].ID.ItemNumber : Html.FormatWithSearchTerm(_searchTerm, Model.Sections[0].ID.ItemNumber).ToString())</span>
 	<ul class="section-details">
-		<li class="section"><span class="descriptor">Section: </span>@Model[0].SectionCode</li>
+		<li class="section"><span class="descriptor">Section: </span>@Model.Sections[0].SectionCode</li>
 		<li class="instructor"><span class="descriptor">Instructors:</span>
 			<ul>
-				@foreach (OfferedItem item in Model[0].Offered.OrderBy(o => o.SequenceOrder))
-		{
-			// instructors
-			if (firstIteration && string.IsNullOrWhiteSpace(item.InstructorName))
-			{
-				<li>Staff</li>
-			}
-			else
-			{
-				if (!string.IsNullOrWhiteSpace(item.InstructorName))
-				{
-					<li><a href="@Helpers.getProfileURL(Convert.ToString(item.InstructorID))">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a></li>
-				}
-				else
-				{
-					<li>&nbsp;</li>
-				}
-			}
-			firstIteration = false;
-		}
+        @{
+          bool firstIteration = true;
+        }
+        @foreach (OfferedItem item in Model.Sections[0].Offered.OrderBy(o => o.SequenceOrder))
+        {
+          // Instructors
+          if (firstIteration && string.IsNullOrWhiteSpace(item.InstructorName))
+          {
+            <li>Staff</li>
+          }
+          else
+          {
+            if (!string.IsNullOrWhiteSpace(item.InstructorName))
+            {
+              <li>
+                <a href="@Helpers.getProfileURL(item.InstructorID)">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a>
+              </li>
+            }
+            else
+            {
+              <li>&nbsp;</li>
+            }
+          }
+          firstIteration = false;
+        }
 			</ul>
 		</li>
-		<li><span class="descriptor">Meets: </span>
-			<ul class="meets">
-		@using (_profiler.Step("Rendering offered items"))
-		{
-
-			foreach (SectionWithSeats section in Model)
-			{
-				foreach (OfferedItem item in section.Offered.OrderBy(o => o.SequenceOrder))
-				{
-					// meeting times
-					<li>
-					@if (Model[0].IsOnline)
-					{
-
-						<span class="days online">
-								Online</span>
-						<span class="times"><span class="descriptor">&nbsp;</span>&nbsp;</span>
-						<span class="room"><span class="descriptor">&nbsp;</span>&nbsp;</span>
-					}
-					else
-					{
-						<span class="days">
-							<abbr title="@Helpers.getFriendlyDayRange(item.Days, dict)">
-																	@item.Days
-															</abbr>
-													</span>
-						<span class="times"><span class="descriptor">at </span>@String.Format("{0:t}", item.StartTime).Replace(" ", "")-@String.Format("{0:t}", item.EndTime).Replace(" ", "")</span>
-						<span class="room"><span class="descriptor">in </span>@item.Room</span>
-					}
-					</li>
-				}
-
-			} // end of iterate section list
-		}
-
-			</ul>
+		<li>
+      <span class="descriptor">Meets: </span>
+      <ul class="meets">
+        @using (_profiler.Step("Rendering offered items"))
+        {
+          foreach (SectionWithSeats section in Model.Sections)
+          {
+            foreach (OfferedItem item in section.Offered.OrderBy(o => o.SequenceOrder))
+            {
+              // Meeting times
+              <li>
+                @if (Model.Sections[0].IsOnline)
+                {
+                  <span class="days online">Online</span>
+                  <span class="times"><span class="descriptor">&nbsp;</span>&nbsp;</span>
+                  <span class="room"><span class="descriptor">&nbsp;</span>&nbsp;</span>
+                }
+                else
+                {
+                  <span class="days">
+                    <abbr title="@Helpers.getFriendlyDayRange(item.Days)">
+                      @item.Days
+                    </abbr>
+                  </span>
+                  <span class="times">
+                    <span class="descriptor">at </span>@String.Format("{0:t}", item.StartTime).Replace(" ", string.Empty)-@String.Format("{0:t}", item.EndTime).Replace(" ", string.Empty)
+                  </span>
+                  <span class="room">
+                    <span class="descriptor">in </span>@item.Room
+                  </span>
+                }
+              </li>
+            }
+          } // end of iterate section list
+        }
+      </ul>
 		</li>
 
-			@if (Model[0].Yrq.ID.CompareTo(currentQuarter.ID) >= 0 && Model[0].SeatsAvailable != int.MinValue)
-	 {
-				// course books link
-				<li class="bookstoreinfo">
-					<a href='@Helpers.getBookstoreBooksLink(Model)'>
-						<img src="@Url.Content("~/Content/images/books.gif")" alt="Required books/supplies" />
-					</a>
-				</li>
-				<li class="availability" id="availability-@sectionID"><span class="descriptor">Seat
-				Availability: </span>
-				@if (Model[0].SeatsAvailable <= 0 || Model[0].WaitlistCount > 0)
-		{
-					<strong class="seatsAvailable">
-						class full@(Model[0].WaitlistCount > 0 ? string.Format(", {0} on waitlist", Model[0].WaitlistCount) : string.Empty)
-					</strong>
-					<span class="course-updated"></span>
-		}
-		else
-		{
-					<strong class="seatsAvailable">@Model[0].SeatsAvailable</strong>
-					<span class="course-updated"><a id="@sectionID"><span class="ui-icon ui-icon-arrowrefresh-1-e"></span>updated <span class="update-time">@Model[0].LastUpdated</span></a></span>
-		}
-				</li>
-	 }
-			<li class="editing">
-				@if (Context.User.Identity.Name.Length > 0 && Helpers.isEditor(Context))
-		{
-		  @Ajax.ActionLink("Edit",
-		                   "SectionEdit",
-		                   "Classes",
-		                   new
-		                     {
-		                       itemNumber = Model[0].ID.ItemNumber,
-		                       yrq = Model[0].ID.YearQuarter
-		                     },
-		                   new AjaxOptions
-		                     {
-		                       UpdateTargetId = "edit-section",
-		                       HttpMethod = "GET",
-		                       InsertionMode = InsertionMode.Replace,
-		                       OnBegin = "$('#edit-section').dialog('open');",
-		                       OnComplete = "spinner.stop();",
-		                     },
-		                   new { @class = "edit_button" })
-		}
-		</li>
-		@* Don't add a footnote DIV if there are no footnotes
-			 Code based on: http://stackoverflow.com/questions/785715/how-can-i-strip-html-tags-from-a-string-in-asp-net
-		*@
-		@{
-			HelperResult footnotes = ViewHelpers.DisplayFootnotes(Model[0].Footnotes, Model[0].SectionFootnotes, _courseFootnotes, Model[0]);
-			if (!String.IsNullOrWhiteSpace(Regex.Replace(Regex.Replace(footnotes.ToString(), "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", String.Empty)) || Helpers.isEditor(Context))
-			{
-			<li class="section-notes"><span class="descriptor">Notes: </span>
-				<ul>
-					<li>
-						<span class="label">
-							@footnotes
-						</span>
-					</li>
+    @if (Model.Sections[0].Yrq.ID.CompareTo(Model.CurrentQuarter.ID) >= 0)
+    {
+      // Course books link
+      <li class="bookstoreinfo">
+        <a href='@Helpers.getBookstoreBooksLink(Model.Sections)'>
+          <img src="@Url.Content("~/Content/images/books.gif")" alt="Required books/supplies" />
+        </a>
+      </li>
 
-				</ul>
-			</li>
-			}
-		}
+      if (Model.Sections[0].SeatsAvailable != int.MinValue)
+      {
+        <li class="availability" id="availability-@sectionID">
+          <span class="descriptor">Seat Availability: </span>
+          @if (Model.Sections[0].SeatsAvailable <= 0 || Model.Sections[0].WaitlistCount > 0)
+          {
+            <strong class="seatsAvailable">
+              class full@(Model.Sections[0].WaitlistCount > 0 ? string.Format(", {0} on waitlist", Model.Sections[0].WaitlistCount) : string.Empty)
+            </strong>
+            <span class="course-updated"></span>
+          }
+          else
+          {
+            <strong class="seatsAvailable">@Model.Sections[0].SeatsAvailable</strong>
+            <span class="course-updated"><a id="@sectionID"><span class="ui-icon ui-icon-arrowrefresh-1-e"></span>updated <span class="update-time">@Model.Sections[0].LastUpdated</span></a></span>
+          }
+        </li>
+      }
+    }
+
+    <li class="editing">
+      @if (Context.User.Identity.Name.Length > 0 && Helpers.isEditor(Context))
+      {
+	      @Ajax.ActionLink("Edit",
+                          "SectionEdit",
+                          "Api",
+                          new
+                          {
+                            itemNumber = Model.Sections[0].ID.ItemNumber.ToString(),
+                            yrq = Model.Sections[0].ID.YearQuarter.ToString(),
+                            subject = Model.Sections[0].CourseSubject.ToString(),
+                            classNum = Model.Sections[0].CourseNumber.ToString()
+                          },
+                          new AjaxOptions
+                          {
+                            UpdateTargetId = "edit-section",
+                            HttpMethod = "GET",
+                            InsertionMode = InsertionMode.Replace,
+                            OnBegin = "$('#edit-section').dialog('open');",
+                            OnComplete = "spinner.stop();",
+                          },
+                          new { @class = "edit_button" })
+      }
+    </li>
+
+
+    @* Don't add a footnote DIV if there are no footnotes
+		    Code based on: http://stackoverflow.com/questions/785715/how-can-i-strip-html-tags-from-a-string-in-asp-net
+    *@
+    @{
+      HelperResult footnotes = ViewHelpers.DisplayFootnotes(Model.Sections[0].Footnotes, Model.Sections[0].SectionFootnotes, Model.CommonFootnotes, Model.Sections[0]);
+      if (!String.IsNullOrWhiteSpace(Regex.Replace(Regex.Replace(footnotes.ToString(), "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", String.Empty)) || Helpers.isEditor(Context))
+      {
+		    <li class="section-notes"><span class="descriptor">Notes: </span>
+			    <ul>
+				    <li>
+					    <span class="label">
+						    @footnotes
+					    </span>
+				    </li>
+			    </ul>
+		    </li>
+      }
+    }
 	</ul>
 </li>

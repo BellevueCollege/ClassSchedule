@@ -7,10 +7,10 @@
 	IEnumerable<char> alphabet = Model.Select(c => c.Title.First()).Distinct().ToList();
 }
 <div id="scheduleMain">
-  @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu })
+  @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu, ViewingQuarter = ViewBag.YearQuarter })
   <div id="container" class="sidebar">
     <div id="sidebar">
-        @Html.Partial("advancedFacetedSearch")
+        @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = yrq })
     </div> <!-- #sidebar -->
 
     <div id="content">

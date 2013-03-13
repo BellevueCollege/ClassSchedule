@@ -4,221 +4,187 @@
 @using CTCClassSchedule.Models
 @using MvcMiniProfiler
 @using Ctc.Ods.Types
-@model IList<CTCClassSchedule.SectionsBlock>
+@model YearQuarterSubjectModel
 @{
-	MiniProfiler _profiler = MiniProfiler.Current;
+  MiniProfiler _profiler = MiniProfiler.Current;
 
-	IDictionary<string, object> _routeValues = ViewBag.RouteValues;
-	_routeValues["YearQuarterID"] = "All";
-	_routeValues["Subject"] = Model.Count() > 0 ? Model.First().Sections.First().CourseSubject.Trim() : null;
-	RouteValueDictionary route = new RouteValueDictionary(_routeValues);
-
-
-	string courseID = string.Empty;
-	string sectionID = string.Empty;
-	string CourseTitle = string.Empty;
-
-	string FriendlyYRQ = string.Empty;
-	string thisYrq = string.Empty;
-
-	// Get the navigation list and other quarter information
-	string currentYrq = ViewBag.CurrentYearQuarter.ID;
-
-	if (ViewBag.YearQuarter != null)
-	{
-		YearQuarter yrq = ViewBag.YearQuarter;
-		thisYrq = yrq.ID;
-		FriendlyYRQ = yrq.FriendlyName;
-	}
-
-	ViewBag.PageTitle = FriendlyYRQ + " " + ViewBag.ProgramTitle + " Credit Class Schedule at Bellevue College";
-
+  ViewBag.PageTitle = Model.ViewingQuarter.FriendlyName + " " + Model.SubjectTitle + " Credit Class Schedule at Bellevue College";
 }
+
 <div id="scheduleMain">
-	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu })
+	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = Model.ViewingQuarter })
 	<div id="container" class="sidebar">
-		<p id="sectionTitle">
-			<a href="@Url.Action("YearQuarter", "Classes")">@FriendlyYRQ</a></p>
-		<div id="sidebar">
-			@{
-				Html.RenderPartial("advancedFacetedSearch");
-			}
-		</div>
-		<!-- #sidebar -->
+    <p id="sectionTitle">
+	    <a href="@Url.Action("YearQuarter", "Classes")">@Model.ViewingQuarter.FriendlyName</a>
+    </p>
+    <div id="sidebar">
+	    @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = Model.ViewingQuarter, SelectedSubject = Model.Slug })
+    </div><!-- #sidebar -->
+
 		<div id="content">
-			@if (Model.Count == 0)
-	 {
-		 string subject = ViewContext.RouteData.Values["Subject"].ToString();
-				<h1 id="pageTitle">
-					No @subject classes were found</h1>
-				<div id="error-noclassesfound">
-					<strong>TIP:</strong>
-					@Html.Partial("subjectNavigation") or try selecting fewer <em>Refine</em> options
-					to the left.
-				</div>
-	 }
-	 else
-	 {
+      @if (Model.Courses.Count == 0)
+      {
+        <h1 id="pageTitle">No @Model.Slug classes were found</h1>
+        <div id="error-noclassesfound">
+          <strong>TIP:</strong>
+          @Html.Partial("subjectNavigation", Model.ViewingQuarter) or try selecting fewer <em>Refine</em> options to the left.
+        </div>
+      }
+      else
+      {
+        <h1 id="pageTitle">
+	        @Model.SubjectTitle
+        </h1>
 
-				<h1 id="pageTitle">
-					@ViewBag.ProgramTitle
-				</h1>
+        if (!string.IsNullOrWhiteSpace(Model.SubjectIntro))
+        {
+          <p class="subjectdesc">@Model.SubjectIntro</p>
+        }
 
+        if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
+        {
+          <p id="programLink">
+            <strong>Need more info?</strong>
+            <a href="@Model.DepartmentURL">Visit the
+              @if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
+              {
+                @Model.DepartmentTitle
+              }
+              else if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
+              {
+                @Model.SubjectTitle
+              }
+              else
+              {
+                <text>Program</text>
+              }
+              website
+            </a>
+          </p>
+        }
 
+        if (Helpers.isAdmin(Context) || Helpers.isEditor(Context))
+        {
+          string role = Helpers.isAdmin(Context) ? "admin" : "editor";
+          <div class="message">@Context.User.Identity.Name! You have @role access to this section. [ <a class="toggleEditingMode" data-inlineMode="false">Enable Inline Editing</a> ]</div>
+        }
 
-		 if (!string.IsNullOrWhiteSpace(ViewBag.SubjectIntro))
-		 {
-				<p class="subjectdesc">@ViewBag.SubjectIntro</p>
-		 }
+        using (_profiler.Step("Rendering Sections by Course (outer loop)"))
+        {
+          foreach (SectionsBlock block in Model.Courses)
+          {
+            SectionWithSeats firstSection = block.Sections.First();
 
-		 if (!string.IsNullOrWhiteSpace(ViewBag.ProgramUrl))
-		 {
-				<p id="programLink">
-					<strong>Need more info?</strong> <a href="@ViewBag.ProgramUrl">Visit the
-						@if (!string.IsNullOrWhiteSpace(ViewBag.AcademicProgram))
-			{
-							@ViewBag.AcademicProgram
-			}
-			else if (!string.IsNullOrWhiteSpace(ViewBag.ProgramTitle))
-			{
-							@ViewBag.ProgramTitle
-			}
-			else
-			{
-							<text>Program</text>
-			}
-						website</a>
-				</p>
-		 }
+            if (firstSection != null)
+            {
+              if (!firstSection.IsLinked)
+              {
+                <h2 class="classHeading">
+                  @if (block.LinkedSections.Count > 0)
+                  {
+                    <span class="combinationClass">Combination class:</span><br />
+                  }
+                  <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber })">
+                    @Html.SectionCourseHeading(firstSection)
+                    @ViewHelpers.DisplayCredits(firstSection)
+                  </a>
+                  @{
+                    IList<SectionWithSeats> commonLinkedSections = ClassesController.ParseCommonHeadingLinkedSections(block.LinkedSections);
+                  }
+                  @foreach (SectionWithSeats linkedSec in commonLinkedSections)
+                  {
+                    <br />
+                    <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber })">
+                      @Html.SectionCourseHeading(linkedSec)
+                      @ViewHelpers.DisplayCredits(linkedSec)
+                    </a>
+                  }
+	              </h2> <!-- classHeading -->
 
-		 if (Helpers.isAdmin(Context))
-		 {
+                <div class="classInfo">
+                  @if (Helpers.isAdmin(Context))
+                  {
+                    @Ajax.ActionLink("Edit",
+                                      "ClassEdit",
+                                      "Api",
+                                      new {
+                                        CourseNumber = firstSection.CourseNumber,
+                                        Subject = firstSection.CourseSubject,
+                                        IsCommonCourse = firstSection.IsCommonCourse,
+                                      },
+                                      new AjaxOptions {
+                                        UpdateTargetId = "edit-class",
+                                        HttpMethod = "GET",
+                                        InsertionMode = InsertionMode.Replace,
+                                        OnBegin = "$('#edit-class').dialog('open');",
+                                        OnComplete = "spinner.stop();",
+                                      },
+                                      new { @class = "edit_button" })
+                  }
 
-				<div class="message">@Context.User.Identity.Name! You have admin access to this section. [ <a class="toggleEditingMode" data-inlineMode="false">Enable Inline Editing</a> ]</div>
-		 }
-		 else if (Helpers.isEditor(Context))
-		 {
-				<div class="message">@Context.User.Identity.Name! You have editor access to this section. [ <a class="toggleEditingMode" data-inlineMode="false">Enable Inline Editing</a> ]</div>
-		 }
+                  <div class="classDetails">
+                    @if (!string.IsNullOrWhiteSpace(firstSection.CustomTitle))
+                    {
+                      // NOTE: do not display HP description from this page
+                      @Html.Raw(firstSection.CustomDescription)
+                    }
+                    <ul>
+                      <li class="classDetailsLink">
+                        @Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber }, null)
+                      </li>
+                      @foreach (SectionWithSeats linkedSec in commonLinkedSections)
+                      {
+                        string linkedCourseId = Helpers.BuildCourseID(linkedSec.CourseNumber, linkedSec.CourseSubject, linkedSec.IsCommonCourse);
+                        <li class="classDetailsLink">
+                          @Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber }, null)
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                  <p class="classNotes">
+                    @ViewHelpers.DisplayFootnotes(block.CommonFootnotes, firstSection.CourseFootnotes)
+                  </p>
+                </div> <!--classInfo -->
 
-		 using (_profiler.Step("Rendering Sections by Course (outer loop)"))
-		 {
-			 foreach (SectionsBlock block in Model)
-			 {
-				 SectionWithSeats firstSection = block.Sections.First();
+                <ul class='course-block @(Model.ViewingQuarter.ID.CompareTo(Model.CurrentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
+                  @foreach (SectionWithSeats sec in block.Sections)
+                  {
+                    // Both Sections includes a master and its subordinate linked section(s)
+                    IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
+                    IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
 
-				 if (firstSection != null)
-				 {
-					 if (!firstSection.IsLinked)
-					 {
-						 route["Subject"] = Helpers.SubjectWithCommonCourseFlag(firstSection);
-						 route["ClassNum"] = firstSection.CourseNumber;
+                    if (linked.Count > 0)
+                    {
+	                    multipleSections = multipleSections.Union(linked).ToList();
+                    }
 
-				<h2 class="classHeading">
-					@if (block.LinkedSections.Count > 0)
-		 {
-						<span class="combinationClass">Combination class:</span><br />
-		 }
-					<a href="@Url.Action("ClassDetails", "Classes", route)">
-						@Html.SectionCourseHeading(firstSection)
-						@ViewHelpers.DisplayCredits(firstSection)
-					</a>
-					@{
-		 IList<SectionWithSeats> commonLinkedSections = ClassesController.ParseCommonHeadingLinkedSections(block.LinkedSections);
-					}
-						 @foreach (SectionWithSeats linkedSec in commonLinkedSections)
-			 {
-						<br />
-						<a href="@Url.Action("ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber })">
-							@Html.SectionCourseHeading(linkedSec)
-							@ViewHelpers.DisplayCredits(linkedSec)
-						</a>
-			 }
-				</h2> @* classHeading *@
-				<div class="classInfo">
-					@if (Helpers.isAdmin(Context))
-		 {
-							 @Ajax.ActionLink("Edit",
-																"ClassEdit",
-																"Api",
-																new
-																{
-																	CourseNumber = firstSection.CourseNumber,
-																	Subject = firstSection.CourseSubject,
-																	IsCommonCourse = firstSection.IsCommonCourse,
-																},
-																new AjaxOptions
-																{
-																	UpdateTargetId = "edit-class",
-																	HttpMethod = "GET",
-																	InsertionMode = InsertionMode.Replace,
-																	OnBegin = "$('#edit-class').dialog('open');",
-																	OnComplete = "spinner.stop();",
-																},
-																new { @class = "edit_button" })
+                    // NOTE: We must pass the current ViewData object to RenderPartial here.
+                    // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+                    Html.RenderPartial("Sections", new SectionsViewModel
+                    {
+                      Sections = multipleSections.ToList(),
+                      CurrentQuarter = Model.CurrentQuarter,
+                      ViewingQuarter = Model.ViewingQuarter,
+                      CommonFootnotes = block.CommonFootnotes,
+                    });
+                  }
+                </ul>
+              }
+            }
+          }
+        }
+      }
 
-		 }
-					<div class="classDetails">
-						@if (!string.IsNullOrWhiteSpace(firstSection.CustomTitle))
-			{
-				// NOTE: do not display HP description from this page
-							@Html.Raw(firstSection.CustomDescription)
-			}
-						<ul>
-							<li class="classDetailsLink">
-								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", route, null)
-							</li>
-							@foreach (SectionWithSeats linkedSec in commonLinkedSections)
-			 {
-								<li class="classDetailsLink">
-									@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber }, null)
-								</li>
-			 }
-						</ul>
-					</div>
-					<p class="classNotes">
-						@{
-			 // save footnotes to pass to sub-view
-			 ViewData["CourseFootnotes"] = block.CommonFootnotes;
-						}
-						@ViewHelpers.DisplayFootnotes(block.CommonFootnotes, firstSection.CourseFootnotes)
-					</p>
-				</div> <!--classInfo -->
-				<ul class='course-block @(thisYrq.CompareTo(currentYrq) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
-					@{
-			 foreach (SectionWithSeats sec in block.Sections)
-			 {
-
-				 //bothSections includes a master and its subordinate linked section(s)
-				 IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
-				 IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
-
-				 if (linked.Count > 0)
-				 {
-					 multipleSections = multipleSections.Union(linked).ToList();
-				 }
-
-				 // NOTE: We must pass the current ViewData object to RenderPartial here.
-				 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-				 Html.RenderPartial("Sections", multipleSections.ToList(), ViewData);
-			 }
-					}
-				</ul>
-					 } @* !sec.IsLinked *@
-				 }
-			 }
-		 }
-	 }
 			<div title="Edit Section" id="edit-section">
 			</div>
+
 			<div title="Edit Class" id="edit-class">
 			</div>
-		</div>
-		<!-- content -->
-	</div>
-	<!-- container -->
-</div>
-<!-- #scheduleMain -->
+
+		</div><!-- content -->
+	</div><!-- container -->
+</div><!-- #scheduleMain -->
+
 @section PageScripts
 {
 	<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>

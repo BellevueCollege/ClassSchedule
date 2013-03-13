@@ -1,8 +1,7 @@
 ﻿@using Ctc.Ods.Types
 @model CTCClassSchedule.Models.QuarterNavigationModel
-
 @{
-	YearQuarter quarterViewing = ViewBag.YearQuarter;
+  //Model.NavigationQuarters = Model.NavigationQuarters ?? new List<YearQuarter>();
 }
 <div id="site-navigation">
 	@using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" }))
@@ -58,9 +57,9 @@
 
 			<label for="seach-quarter-select">Pick a quarter</label>
 			<select name="quarter" id="seach-quarter-select">
-				@foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
+				@foreach (YearQuarter yrq in Model.NavigationQuarters)
 				{
-					<option value="@yrq.FriendlyName.Replace(" ", string.Empty)" @if (quarterViewing != null && quarterViewing == yrq) { <text> selected="selected" </text> }>@yrq.FriendlyName</option>
+					<option value="@yrq.FriendlyName.Replace(" ", string.Empty)" @if (Model.ViewingQuarter != null && Model.ViewingQuarter == yrq) { <text> selected="selected" </text> }>@yrq.FriendlyName</option>
 				}
 
 				<option value="CE">Continuing Education</option>

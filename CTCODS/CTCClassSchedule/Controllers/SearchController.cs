@@ -55,9 +55,6 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.Subject = Subject;
 			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
 
-			//add the dictionary that converts MWF -> Monday/Wednesday/Friday for section display.
-			TempData["DayDictionary"] = Helpers.getDayDictionary();
-
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s,
 			                                                f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
@@ -200,15 +197,13 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		private void setViewBagVars(string flex, string time, string days, string avail, string letter, OdsRepository repository)
 		{
-			ViewBag.ErrorMsg = "";
+			ViewBag.ErrorMsg = string.Empty;
 			ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
 
 			ViewBag.letter = letter;
 			ViewBag.flex = flex ?? "all";
 			ViewBag.time = time ?? "all";
 			ViewBag.avail = avail ?? "all";
-
-			ViewBag.activeClass = " class=active";
 		}
 		#endregion
 	}

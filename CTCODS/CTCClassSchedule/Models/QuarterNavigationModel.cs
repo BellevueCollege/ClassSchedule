@@ -9,6 +9,7 @@ namespace CTCClassSchedule.Models
 	public class QuarterNavigationModel
 	{
 		public YearQuarter CurrentQuarter { get; set; }
+    public YearQuarter ViewingQuarter { get; set; }
 		public IList<YearQuarter> NavigationQuarters { get; set; }
 	}
 }

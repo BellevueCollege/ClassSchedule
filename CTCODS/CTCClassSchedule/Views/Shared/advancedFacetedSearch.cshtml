@@ -2,288 +2,298 @@
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Models
 @using CTCClassSchedule
+@model AdvancedFacetedSearchModel
 @{
-	const int ANY = -1;
-	int _numCredits = Request.QueryString.SafeNameValueToInt32("numcredits", ANY);
+  const int ANY = -1;
+  int _numCredits = Request.QueryString.SafeNameValueToInt32("numcredits", ANY);
 
-	YearQuarter yrq = ViewBag.YearQuarter;
-	string subject = (ViewBag.Subject ?? string.Empty);
+  // construct the route values we'll pass to the ActionLink helper
+  IDictionary<string, object> routeParms = ViewBag.LinkParams;
 
-	if (subject.ToUpper() == "ALL")
-	{
-		subject = string.Empty;
-	}
-	// construct the route values we'll pass to the ActionLink helper
-	IDictionary<string, object> routeParms = ViewBag.LinkParams;
-
-	string QuarterParam = Request.QueryString["quarter"];
+  string QuarterParam = Request.QueryString["quarter"];
 }
-
-<script type="text/javascript">
-	$(document).ready(function () {
-		$('#timestart').timepicker({
-			numberOfMonths: 0,
-			ampm: true
-		});
-		$('#timeend').timepicker({
-			numberOfMonths: 0,
-			ampm: true
-		});
-
-		$('#submitjquery').html('<input type="submit" id="submit_days_times" name="submitbtn" value="Refine >" />');
-		$('#submit').html('');
-
-
-		//when user clicks refine, show throbber
-        $('#submit_days_times').click(function () {
-			showThrobber();
-			$('#daystimesform').submit();
-		});
-
-		if (!$("#radio_all").is(':checked')) {
-			$('#radio_all').click(function () {
-				showThrobber();
-				$('#daystimesform').submit();
-			});
-		}
-
-		if (!$("#radio_open").is(':checked')) {
-			$('#radio_open').click(function () {
-				showThrobber();
-				$('#daystimesform').submit();
-			});
-		}
-
-
-		//when class formats are clicked, auto submit the form
-		$('#f_oncampus').click(function () {
-			showThrobber();
-			$('#daystimesform').submit();
-		});
-
-
-		$('#f_online').click(function () {
-			showThrobber();
-			$('#daystimesform').submit();
-		});
-
-
-		$('#f_hybrid').click(function () {
-			showThrobber();
-			$('#daystimesform').submit();
-		});
-
-
-		$('#f_telecourse').click(function () {
-			showThrobber();
-			$('#daystimesform').submit();
-		});
-
-		$('#latestart').click(function () {
-			showThrobber();
-			$('#daystimesform').submit();
-		});
-
-		$('#numcredits').change(function () {
-			showThrobber();
-			$('#daystimesform').submit();
-		});
-
-
-		//when the user clicks uncheck all formats, uncheck them and resubmit the form.
-		$('#uncheckFormat').click(function (event) {
-			event.preventDefault();
-			$('#f_oncampus').removeAttr('checked');
-			$('#f_online').removeAttr('checked');
-			$('#f_hybrid').removeAttr('checked');
-			$('#f_telecourse').removeAttr('checked');
-			showThrobber();
-			$('#daystimesform').submit();
-		});
-
-
-
-	});
-</script>
 
 <div id="overlay"></div>
 <div id="lightbox">
- <img src="@Url.Content("~/Content/")images/ajax-loader_big.gif" />
+  <img src="@Url.Content("~/Content/")images/ajax-loader_big.gif" alt="" />
 </div>
 
 <div id="advancedFacetedSearch" class="sidenav">
-        <h2>Refine</h2>
+  <h2>Refine</h2>
 
-@* if the user has browsed vs. searched for a term, display a different subject chooser UI  *@
-    <h3>Subject</h3>
+  @* If the user has browsed vs. searched for a term, display a different subject chooser UI  *@
+  <h3>Subject</h3>
 	<ul class="subject">
-@if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
-{
-   if (!string.IsNullOrWhiteSpace(subject))
-	 {
-		 routeParms.Remove("Subject");
-			<li>
-				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">All</a>
-			</li>
-	 }
- foreach (string sub in Model)
- {
-	 if (sub.ToUpper() == (subject ?? string.Empty).ToUpper())
-	 {
-			<li class="active">
-						<span class="notlink">@sub</span>
-			</li>
-	 }
-	 else
-	 {
-		 routeParms["Subject"] = sub;
-				<li>
-				<a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@sub</a>
-				</li>
-	 }
- }
-}
-else
-{
-	if (!string.IsNullOrWhiteSpace(subject))
- {
-			<li @(ViewBag.activeClass)>
-				<span class="notlink">@subject</span>
-			</li>
- }
-				<li>
-				@Html.Partial("subjectNavigation")
-				</li>
-}
-</ul>
+    @if (Model.IsSearch)
+    {
+      if (String.IsNullOrWhiteSpace(Model.SelectedSubject))
+      {
+        // Display all available subjects
+        foreach (string slug in Model.Subjects)
+        {
+          // TODO: Pass SelectedSubject to Index/Search via a model
+          routeParms["Subject"] = slug;
+          <li>
+            <a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@slug</a>
+          </li>
+        }
+      }
+      else
+      {
+        // Display only the selected subject
+        <li>
+          @{
+            // TODO: Pass SelectedSubject to Index/Search via a model
+            routeParms.Remove("Subject");
+          }
+          <a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">All</a>
+        </li>
+        <li class="active">
+          <span class="notlink">@Model.SelectedSubject</span>
+        </li>
+      }
+    }
+    else
+    {
+      // This is not a search
+      if (!String.IsNullOrWhiteSpace(Model.SelectedSubject))
+      {
+        <li class="active">
+          <span class="notlink">@Model.SelectedSubject</span>
+        </li>
+      }
+      <li>
+        @Html.Partial("subjectNavigation", Model.ViewingQuarter)
+      </li>
+    }
+  </ul>
 
-@if (ViewContext.RouteData.Values["Controller"].Equals("Classes"))
-{
 
-		@:<form id="daystimesform" action="@Url.Content("~/")@(yrq != null ? yrq.FriendlyName.Replace(" ", "") : "All")/@subject" method="get">
 
-	if (routeParms.ContainsKey("letter"))
-	{
-			<input type="hidden" name="letter" value="@routeParms["letter"]" />
-	}
 
-}
-else if (ViewContext.RouteData.Values["Controller"].Equals("Search"))
-{
-	<div>
-		<form id="daystimesform" action="@Url.Content("~/" + ViewContext.RouteData.Values["Controller"])" method="get">
-		<!-- hidden fields to include in form -->
-		@if (!string.IsNullOrWhiteSpace(QuarterParam))
-	{
-			<input type="hidden" name="quarter" value="@QuarterParam"/>
-	}
+  @if (Model.IsSearch)
+  {
+    <div>
+      <form id="daystimesform" action="@Url.Content("~/Search/")" method="get">
 
-		@if (!string.IsNullOrWhiteSpace(subject))
-	{
-			<input type="hidden" name="Subject" value="@subject"/>
-	}
-		<input type="hidden" name="searchterm" value="@ViewBag.searchterm"/>
+      <!-- hidden fields to include in form -->
+      @if (!String.IsNullOrWhiteSpace(QuarterParam))
+      {
+        <input type="hidden" name="quarter" value="@QuarterParam"/>
+      }
+
+      @if (!String.IsNullOrWhiteSpace(Model.SelectedSubject))
+      {
+        <input type="hidden" name="Subject" value="@Model.SelectedSubject"/>
+      }
+      <input type="hidden" name="searchterm" value="@ViewBag.searchterm"/>
+	  </div>
+  }
+  else
+  {
+    @:<form id="daystimesform" action="@Url.Content("~/")@(Model.ViewingQuarter != null ? Model.ViewingQuarter.FriendlyName.Replace(" ", string.Empty) : "All")/@Model.SelectedSubject" method="get">
+
+    if (routeParms.ContainsKey("letter"))
+    {
+      <input type="hidden" name="letter" value="@routeParms["letter"]" />
+    }
+  }
+
+
+  <h3>Class Format</h3>
+  <div id="classformat">
+    @{
+      IList<GeneralFacetInfo> modalities = (IList<GeneralFacetInfo>)ViewBag.Modality;
+      IList<GeneralFacetInfo> days = (IList<GeneralFacetInfo>)ViewBag.Days;
+      bool showDaysAndTimes = true;
+    }
+    @if (modalities.Where(m => m.Selected == true).Count() > 0)
+    {
+      <p class="label_checkbox_pair">
+	      <a href="#" id="uncheckFormat">Uncheck all</a>
+      </p>
+    }
+
+    @foreach (GeneralFacetInfo m in modalities)
+    {
+	    @* Determine whether or not we should display Days & Times options *@
+      if (showDaysAndTimes && m.Title.Equals("Online", StringComparison.OrdinalIgnoreCase) && m.Selected && modalities.Where(o => o.Title.Equals("Online", StringComparison.OrdinalIgnoreCase) && o.Selected).Count() == 0)
+      {
+        showDaysAndTimes = false;
+      }
+
+		  <p class="label_checkbox_pair">
+		    <span>
+			    <input class="clear" type="checkbox" name="@m.ID" id="@m.ID" value="true" @if (m.Selected) { <text>checked='checked'</text> } />
+        </span>
+			  <label for="@m.ID">@m.Title</label>
+		  </p>
+    }
 	</div>
-}
-else
-{
-	@:<form id="daystimesform">
-}
-
-	<h3>Class Format</h3>
-	<div id="classformat">
-	@{
-		IList<GeneralFacetInfo> modalities = (IList<GeneralFacetInfo>)ViewBag.Modality;
-		IList<GeneralFacetInfo> days = (IList<GeneralFacetInfo>)ViewBag.Days;
-		bool showDaysAndTimes = true;
-	}
-	@if (modalities.Where(m => m.Selected == true).Count() > 0)
- {
-		<p class="label_checkbox_pair">
-			<a href="#" id="uncheckFormat">Uncheck all</a>
-		</p>
- }
- @foreach (GeneralFacetInfo m in modalities)
- {
-	 @* Determine whether or not we should display Days & Times options *@
-	 if (m.Title.ToUpper() == "ONLINE" && m.Selected && modalities.Where(o => o.Title.ToUpper() != "ONLINE" && o.Selected).Count() == 0) { showDaysAndTimes = false; }
-
-		<p class="label_checkbox_pair">
-		<span>
-			<input class="clear" type="checkbox" name="@m.ID" id="@m.ID" value="true" @if (m.Selected)
-																																						 { <text>checked='checked'</text> } /></span>
-			<label for="@m.ID">@m.Title</label>
-		</p>
- }
-	</div>
 
 
-	@if (showDaysAndTimes)
- {
-		<h3>Days & Times</h3>
-		<div id="times">
-		    <label><span title="Start Time" class="time-text">START</span><input id="timestart"  name="timestart" type="text" value="@ViewBag.timestart" /></label><span class="time-separator">-</span><label><span title="End Time" class="time-text">END</span><input id="timeend" name="timeend" type="text" value="@ViewBag.timeend" /></label>
-		</div>
+  @if (showDaysAndTimes)
+  {
+    <h3>Days & Times</h3>
+    <div id="times">
+      <label>
+        <span title="Start Time" class="time-text">START</span>
+        <input id="timestart"  name="timestart" type="text" value="@ViewBag.timestart" />
+      </label>
+      <span class="time-separator">-</span>
+      <label>
+        <span title="End Time" class="time-text">END</span>
+        <input id="timeend" name="timeend" type="text" value="@ViewBag.timeend" />
+      </label>
+    </div>
 
-		<div id="days">
-			@foreach (GeneralFacetInfo d in days)
-	 {
-				<div class="day">
-					<label class="daylabel @if (d.ID == "day_su" || d.ID == "day_s")
-														{  <text>weekend</text> }" for="days"><abbr title="@d.Title ">@d.Title</abbr></label>
-					<input type="checkbox" name="@d.ID" id="@d.ID"  value="true" @if (d.Selected)
-																																	{  <text>checked="checked"</text> } />
-				</div>
-	 }
-			<div id="submitjquery">
+    <div id="days">
+      @foreach (GeneralFacetInfo d in days)
+      {
+        <div class="day">
+          <label class="daylabel @if (d.ID == "day_su" || d.ID == "day_s")
+                                 { <text>weekend</text> }" for="days">
+            <abbr title="@d.Title ">@d.Title</abbr>
+          </label>
+          <input type="checkbox" name="@d.ID" id="@d.ID"  value="true" @if (d.Selected)
+                                                                       { <text>checked="checked"</text> } />
+        </div>
+      }
 
-			</div>
-		</div>
+      <div id="submitjquery"></div>
+    </div>
+  }
 
- }
-		<h3>Credits</h3>
-	<div id="numcredits-facet">
-		<p class="label_checkbox_pair">
-			<select class="clear"name="numcredits" id="numcredits" value="true">
-				<option @if (_numCredits == ANY)
-						{ <text>selected='selected'</text> }>Any</option>
-				@for (int i = 1; i <= 15; i++)
-		{
-					<option @if (_numCredits == i)
-						 { <text>selected='selected'</text> }>@i</option>
-		}
-			</select>
 
-		</p>
-	</div>
+  <h3>Credits</h3>
+  <div id="numcredits-facet">
+    <p class="label_checkbox_pair">
+      <select class="clear"name="numcredits" id="numcredits" value="true">
+        <option @if (_numCredits == ANY)
+                { <text>selected='selected'</text> }>Any</option>
+        @for (int i = 1; i <= 15; i++)
+        {
+          <option @if (_numCredits == i)
+                  { <text>selected='selected'</text> }>@i</option>
+        }
+      </select>
+
+    </p>
+  </div>
 
 	<h3>Other Options</h3>
 	<div id="latestart-facet">
 		<p class="label_checkbox_pair">
 			<input class="clear" type="checkbox" name="latestart" id="latestart" value="true" @if (@ViewBag.latestart == "true")
-																																										 { <text>checked='checked'</text> } />
+                                                                                     { <text>checked='checked'</text> } />
 			<label for="latestart">Late Start</label>
 		</p>
 	</div>
 
-
 	<h3>Availability</h3>
 	<ul id="availability-facet">
-
-
-		<li><label><input id="radio_all" type="radio" name="avail" value="All" @if (@ViewBag.avail == "All" || @ViewBag.avail == null)
-																																				 {  <text> checked="checked"</text> } /> All</label></li>
-		<li><label><input id="radio_open" type="radio" name="avail" value="Open"	@if (@ViewBag.avail == "Open")
-																																					 {  <text> checked="checked"</text> } /> Open</label></li>
+		<li>
+      <label>
+        <input id="radio_all" type="radio" name="avail" value="All" @if (@ViewBag.avail == "All" || @ViewBag.avail == null)
+                                                                    { <text> checked="checked"</text> } /> All
+      </label>
+    </li>
+		<li>
+      <label>
+        <input id="radio_open" type="radio" name="avail" value="Open"	@if (@ViewBag.avail == "Open")
+                                                                      { <text> checked="checked"</text> } /> Open
+      </label>
+    </li>
 	</ul>
-
 
 	<div id="submit">
 		<input type="submit" id="submit_days_times" name="submitbtn" value="Refine >" />
 	</div>
+
 </form>
-
-
-
-
 </div>
+
+
+<script type="text/javascript">
+  $(function () {
+    $('#timestart').timepicker({
+      numberOfMonths: 0,
+      ampm: true
+    });
+    $('#timeend').timepicker({
+      numberOfMonths: 0,
+      ampm: true
+    });
+
+    $('#submitjquery').html('<input type="submit" id="submit_days_times" name="submitbtn" value="Refine >" />');
+    $('#submit').html('');
+
+
+    //when user clicks refine, show throbber
+    $('#submit_days_times').click(function () {
+      showThrobber();
+      $('#daystimesform').submit();
+    });
+
+    if (!$("#radio_all").is(':checked')) {
+      $('#radio_all').click(function () {
+        showThrobber();
+        $('#daystimesform').submit();
+      });
+    }
+
+    if (!$("#radio_open").is(':checked')) {
+      $('#radio_open').click(function () {
+        showThrobber();
+        $('#daystimesform').submit();
+      });
+    }
+
+
+    //when class formats are clicked, auto submit the form
+    $('#f_oncampus').click(function () {
+      showThrobber();
+      $('#daystimesform').submit();
+    });
+
+
+    $('#f_online').click(function () {
+      showThrobber();
+      $('#daystimesform').submit();
+    });
+
+
+    $('#f_hybrid').click(function () {
+      showThrobber();
+      $('#daystimesform').submit();
+    });
+
+
+    $('#f_telecourse').click(function () {
+      showThrobber();
+      $('#daystimesform').submit();
+    });
+
+    $('#latestart').click(function () {
+      showThrobber();
+      $('#daystimesform').submit();
+    });
+
+    $('#numcredits').change(function () {
+      showThrobber();
+      $('#daystimesform').submit();
+    });
+
+
+    //when the user clicks uncheck all formats, uncheck them and resubmit the form.
+    $('#uncheckFormat').click(function (event) {
+      event.preventDefault();
+      $('#f_oncampus').removeAttr('checked');
+      $('#f_online').removeAttr('checked');
+      $('#f_hybrid').removeAttr('checked');
+      $('#f_telecourse').removeAttr('checked');
+      showThrobber();
+      $('#daystimesform').submit();
+    });
+  });
+</script>

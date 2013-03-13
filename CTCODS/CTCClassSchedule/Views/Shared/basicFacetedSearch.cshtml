@@ -20,13 +20,13 @@
 	<ul class="subject">
 		@if (!string.IsNullOrWhiteSpace(subject))
 		{
-			<li @(ViewBag.activeClass)>
+			<li class="active">
 				<span class="notlink">@subject</span>
 			</li>
 		}
 
 		<li>
-			@Html.Partial("subjectNavigation")
+			@Html.Partial("subjectNavigation", quarterViewing, new ViewDataDictionary())
 		</li>
 	</ul>
 
@@ -41,11 +41,11 @@
 			<li @if (quarterViewing != null && quarterViewing == yrq) { <text> class="active" </text> }>
 			@if (String.IsNullOrEmpty(subject))
 			{
-				<a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">@yrq.FriendlyName</a>
+				<a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", string.Empty)})">@yrq.FriendlyName</a>
 			}
 			else
 			{
-				<a href="@Url.Action("YearQuarterSubject", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", ""), Subject = subject})">@yrq.FriendlyName</a>
+				<a href="@Url.Action("YearQuarterSubject", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", string.Empty), Subject = subject})">@yrq.FriendlyName</a>
 			}
 			</li>
 		}

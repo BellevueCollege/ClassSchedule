@@ -1,10 +1,9 @@
 ﻿@using Ctc.Ods.Types
-
-
+@model YearQuarter
 @{
 	IDictionary<string, object> routeParms = new Dictionary<string, object>(Request.QueryString.Count + 2);
 	routeParms.Add("format", string.Empty);
-	routeParms.Add("YearQuarter", ViewBag.YearQuarter != null ? (ViewBag.YearQuarter as YearQuarter).FriendlyName.Replace(" ","") : "All");
+	routeParms.Add("YearQuarter", Model != null ? Model.FriendlyName.Replace(" ", string.Empty) : "All");
 
 	// TODO: move building the query string collection into the controller
 	foreach(string key in Request.QueryString.AllKeys)
@@ -18,32 +17,25 @@
 			routeParms[key] = Request.QueryString[key];
 		}
 	}
-    string href_link = @Url.Action("Subjects", "Api", routeParms);
+    string href_link = Url.Action("Subjects", "Api", routeParms);
 }
 
-
-
-
-
-    @Ajax.ActionLink("Change subject",
-                            "YearQuarter",
-							"Classes",
-							new RouteValueDictionary(routeParms),
-							new AjaxOptions
-							{
-								UpdateTargetId = "nav-choose-subjects",
-								HttpMethod = "POST",
-								InsertionMode = InsertionMode.Replace,
-								OnBegin = "$('#nav-choose-subjects').dialog('open');"
-							},
-                                  new { id = "change_subject", style = "color:red;" }
-                            )
+@Ajax.ActionLink("Change subject",
+                  "YearQuarter",
+							    "Classes",
+							    new RouteValueDictionary(routeParms),
+							    new AjaxOptions
+							    {
+								    UpdateTargetId = "nav-choose-subjects",
+								    HttpMethod = "POST",
+								    InsertionMode = InsertionMode.Replace,
+								    OnBegin = "$('#nav-choose-subjects').dialog('open');"
+							    },
+                  new { id = "change_subject" })
 
 
 <div id="nav-choose-subjects" title="Select new course subject"></div>
-<input type="hidden" id="javascriptEnabled" value="0"/>
-
-
+<input type="hidden" id="javascriptEnabled" value="0" />
 
 <script type="text/javascript">
     /* "processing" spinner */

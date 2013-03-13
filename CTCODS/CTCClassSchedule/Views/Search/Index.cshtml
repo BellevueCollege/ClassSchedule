@@ -28,10 +28,16 @@
 
 }
 <div id="scheduleMain" class="page-search">
-    @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu })
+    @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu, ViewingQuarter = yrq })
     <div id="container" class="sidebar">
         <div id="sidebar">
-            @Html.Partial("advancedFacetedSearch", Model.Subjects)
+          @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel
+          {
+            IsSearch = true,
+            ViewingQuarter = yrq,
+            Subjects = Model.Subjects,
+            SelectedSubject = ViewBag.Subject
+          })
         </div> <!-- #sidebar -->
 
         <div id="content">
@@ -69,9 +75,9 @@
 		{
 			IEnumerable<SectionWithSeats> remainingSections = orderedSections.Skip(processedCount);
 
-				@*
-				 TODO: do we have to worry about the first section being IsLinked?
-				*@
+			@*
+				TODO: do we have to worry about the first section being IsLinked?
+			*@
 			SectionWithSeats firstSection = remainingSections.First();
 
 			IEnumerable<SectionWithSeats> sectionBlock = remainingSections.TakeWhile(s =>
@@ -83,7 +89,6 @@
 
 			if (firstSection != null)
 			{
-
 				if (!firstSection.IsLinked)
 				{
 							@*
@@ -94,15 +99,12 @@
 					linkedSections = orderedSections.Where(s => s.IsLinked && s.Yrq.ID == firstSection.Yrq.ID && s.LinkedTo.Trim() == firstSection.ID.ItemNumber);
 					hasLinked = linkedSections.Count() > 0;
 
-					_routeValues["Subject"] = Helpers.SubjectWithCommonCourseFlag(firstSection);
-					_routeValues["ClassNum"] = firstSection.CourseNumber;
-
 				<h2 class="classHeading">
 			 @if (hasLinked)
 		{
 				  <span class="combinationClass">Combination class:</span><br />
 		}
-					<a href="@Url.Action("ClassDetails", "Classes", new RouteValueDictionary(_routeValues))">
+					<a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber })">
 						@Html.SectionCourseHeading(firstSection, searchTerm: _searchTerm)
 						@ViewHelpers.DisplayCredits(firstSection)
 					</a>
@@ -110,14 +112,12 @@
 		 {
 			 foreach (SectionWithSeats linkedSec in linkedSections)
 			 {
-				 _routeValues["ClassNum"] = linkedSec.CourseNumber;
-						<br />
-						<a href="@Url.Action("ClassDetails", "Classes", new RouteValueDictionary(_routeValues))">
-							@Html.SectionCourseHeading(linkedSec, _searchTerm)
-							@ViewHelpers.DisplayCredits(linkedSec)
-						</a>
+				  <br />
+				  <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber })">
+					  @Html.SectionCourseHeading(linkedSec, _searchTerm)
+					  @ViewHelpers.DisplayCredits(linkedSec)
+				  </a>
 			 }
-			 _routeValues["ClassNum"] = firstSection.CourseNumber;
 		 }
 				</h2> @* classHeading *@
 
@@ -134,25 +134,24 @@
 		 }
 		 else
 		 {
-						@Html.Raw(firstSection.CourseDescriptions.Count() == 0 ? "" : Html.FormatWithSearchTerm(_searchTerm, firstSection.CourseDescriptions[0].Description).ToString())
+						@Html.Raw(firstSection.CourseDescriptions.Count() == 0 ? string.Empty : Html.FormatWithSearchTerm(_searchTerm, firstSection.CourseDescriptions[0].Description).ToString())
 		 }
 						<ul>
 							<li class="classDetailsLink">
-								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", new RouteValueDictionary(_routeValues), null)
+								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber }, null)
 							</li>
 			@foreach (SectionWithSeats linkedSec in linkedSections)
 	 {
+     string linkedCourseId = Helpers.BuildCourseID(linkedSec.CourseNumber, linkedSec.CourseSubject, linkedSec.IsCommonCourse);
 							<li class="classDetailsLink">
-								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { YearQuarterID = "All", Subject = linkedSec.CourseSubject.Trim(), ClassNum = linkedSec.CourseNumber }, null)
+								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber }, null)
 							</li>
 	 }
 						</ul>
 					</div>
 					<p class="classNotes">
 						@{
-	 IList<string> commonFootnotes = Helpers.ExtractCommonFootnotes(sectionBlock).ToList();
-	 // save footnotes to pass to sub-view
-	 ViewData["CourseFootnotes"] = commonFootnotes;
+	            IList<string> commonFootnotes = Helpers.ExtractCommonFootnotes(sectionBlock).ToList();
 						}
 						@ViewHelpers.DisplayFootnotes(commonFootnotes, firstSection.CourseFootnotes)
 					</p>
@@ -173,7 +172,13 @@
 
 		 // NOTE: We must pass the current ViewData object to RenderPartial here.
 		 // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-		 Html.RenderPartial("Sections", multipleSections.ToList(), ViewData);
+     Html.RenderPartial("Sections", new SectionsViewModel
+     {
+       Sections = multipleSections.ToList(),
+       CurrentQuarter = ViewBag.CurrentYearQuarter,
+       ViewingQuarter = yrq,
+       CommonFootnotes = commonFootnotes,
+     });
 	 }
 					}
 				 </ul>
