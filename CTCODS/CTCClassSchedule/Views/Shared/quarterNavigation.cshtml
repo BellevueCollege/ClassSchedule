@@ -1,14 +1,11 @@
 ﻿@using Ctc.Ods.Types
 @model CTCClassSchedule.Models.QuarterNavigationModel
-@{
-  //Model.NavigationQuarters = Model.NavigationQuarters ?? new List<YearQuarter>();
-}
+
 <div id="site-navigation">
 	@using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" }))
 	{
 		<div id="browse">
 			<a href="@Url.Content("~/")" class="home roundcorners">Browse Classes</a>
-
 			<div class="nav-dropdown roundcorners">
 				<div id="nav-credit-options"><p><strong>Credit Classes</strong></p>
 					<ul>
