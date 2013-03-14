@@ -38,7 +38,7 @@
 									<option>Select</option>
 									@foreach (string prefix in Model.AllCoursePrefixes)
 									{
-										@* Don't output an option if thhe prefix is already merged *@
+										@* Don't output an option if the prefix is already merged *@
 										if (!mergedPrefixes.Contains(prefix))
 										{
 											<option>@prefix</option>
@@ -54,7 +54,7 @@
 				@Html.LabelFor(model => model.Subject.Intro)
 			</div>
 			<div class="editor-field">
-				@Html.TextAreaFor(model => Model.Subject.Intro, new { @class = "subject-text-area", @cols = 60, @rows = 7 })
+				@Html.TextAreaFor(model => Model.Subject.Intro, new { @class = "subject-text-field", @cols = 60, @rows = 7 })
 				@Html.ValidationMessageFor(model => model.Subject.Intro)
 			</div>
 		</div>
