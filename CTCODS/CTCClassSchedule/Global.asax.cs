@@ -44,7 +44,7 @@ namespace CTCClassSchedule
 
 			// Default application routes
 			routes.MapRoute("getSeats", "getseats", new { controller = "Classes", action = "getSeats" });
-			routes.MapRoute("ClassDetails", "Class/{Prefix}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
+			routes.MapRoute("ClassDetails", "All/{Prefix}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
 			routes.MapRoute("Subject", "All/{Subject}", new { controller = "Classes", action = "Subject" });
 
 			routes.MapRoute("YearQuarterSubject", "{YearQuarter}/{Subject}", new { controller = "Classes", action = "YearQuarterSubject" });
