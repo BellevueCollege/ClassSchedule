@@ -31,6 +31,9 @@ namespace CTCClassSchedule.Controllers
 		// GET: /Search/
 		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
+            //Items per page
+            const int itemsPerPage = 40;
+
 			// We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
 			searchterm = searchterm.Replace("\"", string.Empty);
 
@@ -99,8 +102,8 @@ namespace CTCClassSchedule.Controllers
 					NoSectionSearchResults = GetNoSectionSearchResults(db, searchterm, quarter);
 
 					sections = (from s in sections
-											join r in SearchResults on s.ID.ToString() equals r.ClassID
-											select s).ToList();
+								join r in SearchResults on s.ID.ToString() equals r.ClassID
+								select s).ToList();
 
 					sectionsEnum = Helpers.GetSectionsWithSeats(YRQ.ID, sections, db)
 																		.OrderBy(x => x.CourseNumber)
@@ -126,6 +129,8 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.CourseCount = courseCount;
 
 				IEnumerable<string> allSubjects;
+                ViewBag.TotalPages = Math.Ceiling(itemCount / (decimal)itemsPerPage);
+                ViewBag.CurrentPage = p_offset + 1;
 				using (_profiler.Step("Getting distinct list of subjects"))
 				{
 					allSubjects = sectionsEnum.Select(c => c.CourseSubject).Distinct().OrderBy(c => c);
@@ -133,10 +138,16 @@ namespace CTCClassSchedule.Controllers
 
 				using (_profiler.Step("Getting just records for page"))
 				{
-					sectionsEnum = sectionsEnum.Skip(p_offset * 40).Take(40).ToList();
+                    if (ViewBag.CurrentPage > ViewBag.TotalPages && ViewBag.TotalPages > 0)
+                    {
+                        p_offset = (int)(ViewBag.TotalPages)-1;
+                        ViewBag.CurrentPage = ViewBag.TotalPages;
+                    }
+
+                    sectionsEnum = sectionsEnum.Skip(p_offset * itemsPerPage).Take(itemsPerPage).ToList();
 				}
 
-				ViewBag.TotalPages = Math.Ceiling(itemCount / 40.0);
+
 
 				SearchResultsModel model = new SearchResultsModel
 								{
@@ -145,7 +156,7 @@ namespace CTCClassSchedule.Controllers
 										Subjects = allSubjects
 								};
 
-				ViewBag.CurrentPage = p_offset + 1;
+
 
 				return View(model);
 			}
