@@ -474,7 +474,10 @@ namespace CTCClassSchedule.Common
         // Flag sections that are cross-linked with a Course
         foreach (string sec in db.SectionCourseCrosslistings.Select(x => x.ClassID).Distinct())
         {
-          sectionsEnum.Single(s => s.ID.ToString() == sec).IsCrossListed = true;
+          if (sectionsEnum.Any(s => s.ID.ToString() == sec))
+          {
+            sectionsEnum.Single(s => s.ID.ToString() == sec).IsCrossListed = true;
+          }
         }
       }
 
