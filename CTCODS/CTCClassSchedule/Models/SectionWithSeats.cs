@@ -1,7 +1,6 @@
-﻿using CTCClassSchedule.Models;
 using Ctc.Ods.Types;
 
-namespace CTCClassSchedule
+namespace CTCClassSchedule.Models
 {
 	public class SectionWithSeats : Section
 	{
@@ -13,6 +12,8 @@ namespace CTCClassSchedule
 		public string CustomTitle { get; set; }
 		public string CustomDescription { get; set; }
 		public new string CourseTitle { get; set; }
+
+    public new ClassScheduleSectionID ID {get;set;}
 
     /// <summary>
     /// Identifies whether or not a cross-listing relationship exists in <see cref="ClassScheduleDb.SectionCourseCrosslistings"/>
@@ -45,7 +46,8 @@ namespace CTCClassSchedule
 			set
 			{
 				CourseID = value.CourseID;
-				ID = value.ID;
+        // ClassScheduleSectionID has additional Attributes that we need.
+				ID = new ClassScheduleSectionID(value.ID);
 				CourseNumber = value.CourseNumber;
 				CourseTitle = value.CourseTitle;
 				CourseSubject = value.CourseSubject;

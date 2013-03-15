@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CTCClassSchedule.Common;
+using CTCClassSchedule.Models;
 
 namespace CTCClassSchedule
 {

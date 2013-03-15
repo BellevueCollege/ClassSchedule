@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
 using System.Linq;
+using CTCClassSchedule.Models;
 using Ctc.Ods.Types;
 
 namespace CTCClassSchedule.Common

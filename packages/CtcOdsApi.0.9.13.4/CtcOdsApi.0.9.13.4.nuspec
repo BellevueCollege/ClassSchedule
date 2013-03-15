@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>CtcOdsApi</id>
+    <version>0.9.13.4</version>
+    <title>CTC ODS API</title>
+    <authors>Shawn South</authors>
+    <owners>Shawn South</owners>
+    <licenseUrl>http://www.opensource.org/licenses/lgpl-3.0.html</licenseUrl>
+    <projectUrl>https://skydrive.live.com/?cid=CFBF113FCE9E52C4&amp;id=CFBF113FCE9E52C4!118</projectUrl>
+    <iconUrl>https://sn2files.storage.live.com/y1piGsEP4o3zW3cU_o_64eFwkJ_J6uz6nB9qhLWGV6OM3DlpklUS72qdQc0uTUF9R_41yRLu2xwcDM/ctcodsapi-logo.jpg</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Common API for obtaining rich, multi-layer business objects from the ODS. For more info, visit https://tfs.wacollabcoop.org/sites/SharedProjects/ODSAPI/</description>
+    <releaseNotes />
+    <tags>CTC ODS API HP HP3000 SBCTC college Washington State</tags>
+    <references>
+      <reference file="CtcOdsApi.dll" />
+    </references>
+  </metadata>
+</package>
