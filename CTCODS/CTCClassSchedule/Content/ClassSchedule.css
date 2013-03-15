@@ -1102,7 +1102,7 @@ a.footnote-prereq  { color: #666}
 #classes-footer {
 	margin-top: 35px;
     overflow: hidden;
-    clear: both;
+    /*clear: both;*/
     background: #244281; /* Old browsers */
     background: -moz-linear-gradient(top,  #244281 0%, #3258a3 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#244281), color-stop(100%,#3258a3)); /* Chrome,Safari4+ */
