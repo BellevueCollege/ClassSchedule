@@ -1,10 +1,10 @@
 ﻿@using Ctc.Ods.Types
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Models
-@model IEnumerable<CTCClassSchedule.Models.Subject>
+@model IEnumerable<Subject>
 @{
 	YearQuarter yrq = ViewBag.YearQuarter;
-	IEnumerable<char> alphabet = Model.Select(c => c.Title.First()).Distinct().ToList();
+  IList<char> alphabet = ViewBag.alphabet;
 }
 <div id="scheduleMain">
   @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = ViewBag.QuarterNavMenu, ViewingQuarter = ViewBag.YearQuarter })
@@ -21,7 +21,7 @@
 
 			<h1 id="pageTitle">@yrq.FriendlyName Credit Classes</h1>
 
-			@Html.Partial("a_to_z", alphabet)
+			@Html.Partial("a_to_z", new AToZViewModel { LettersList = alphabet, ViewingLetter = ViewBag.letter == null ? (char?)null : ViewBag.letter[0] })
 
 
 			@if (Helpers.isAdmin(Context))
@@ -39,7 +39,7 @@
 			}
 			else
 			{
-				Html.RenderPartial("subjectList", Model);
+				Html.RenderPartial("subjectList", Model.ToList());
 			}
 
 

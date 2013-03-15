@@ -1,45 +1,39 @@
-﻿@model IEnumerable<char>
+﻿@model CTCClassSchedule.Models.AToZViewModel
 @{
 	// construct the route values we'll pass to the ActionLink helper
 	IDictionary<string, object> routeParms = ViewBag.LinkParams;
 	string Action = ViewContext.RouteData.Values["Action"].ToString();
+
+  routeParms.Remove("letter");
 }
 <p id="a_to_z">
-@if(Model.Count() > 0)
-{
-	routeParms.Remove("letter");
-	if (ViewBag.WhichClasses.Length > 2)
-	{
-		@Html.ActionLink("View All", Action, new RouteValueDictionary(routeParms), new { @class = "selected" })
-	}
-	else
-	{
-		@Html.ActionLink("View All", Action, new RouteValueDictionary(routeParms))
-	}
+  @if (Model.ViewingLetter == null)
+  {
+    @Html.ActionLink("View All", Action, new RouteValueDictionary(routeParms), new { @class = "selected" })
+  }
+  else
+  {
+    @Html.ActionLink("View All", Action, new RouteValueDictionary(routeParms))
+  }
 
-}
-@foreach (char lttr in Model)
-{
-	if (routeParms.Keys.Contains("letter"))
-	{
-		routeParms["letter"] = lttr.ToString();
-	}
-	else
-	{
-		routeParms.Add("letter", lttr.ToString());
-	}
 
-	if (ViewBag.WhichClasses.Length < 2 && lttr.Equals(ViewBag.WhichClasses[0]))
-	{
-		@Html.ActionLink(lttr.ToString(), Action, new RouteValueDictionary(routeParms), new { @class = "selected" })
-	}
-	else
-	{
-		@Html.ActionLink(lttr.ToString(), Action, new RouteValueDictionary(routeParms))
-	}
-}
+  @{
+    routeParms.Add("letter", string.Empty);
+  }
+  @foreach (char letter in Model.LettersList)
+  {
+    routeParms["letter"] = letter.ToString();
+    if(letter.Equals(Model.ViewingLetter))
+    {
+		  @Html.ActionLink(letter.ToString(), Action, new RouteValueDictionary(routeParms), new { @class = "selected" })
+    }
+    else
+    {
+      @Html.ActionLink(letter.ToString(), Action, new RouteValueDictionary(routeParms))
+    }
+  }
 
-@{
-	routeParms.Remove("letter");
-}
+  @{
+    routeParms.Remove("letter");
+  }
 </p>

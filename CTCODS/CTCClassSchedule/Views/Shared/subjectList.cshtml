@@ -1,5 +1,6 @@
 ﻿@using CTCClassSchedule.Common
-@model IEnumerable<CTCClassSchedule.Models.Subject>
+@using CTCClassSchedule.Models
+@model IList<Subject>
 
 @{
 	// construct the route values we'll pass to the ActionLink helper
@@ -16,7 +17,7 @@
 }
 
 
-@foreach (var item in Model)
+@foreach (Subject item in Model)
 {
 	char letter = item.Title.First();
 	if (letter != PreviousLetter)

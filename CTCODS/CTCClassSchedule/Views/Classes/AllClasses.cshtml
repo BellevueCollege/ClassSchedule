@@ -1,27 +1,23 @@
 ﻿@using CTCClassSchedule.Models
 @using Ctc.Ods.Types
-@model IEnumerable<Subject>
+@model AllClassesModel
 
 @{
     ViewBag.PageTitle = "All Class Descriptions at Bellevue College";
-		// TODO: provide a default alphabet if the ViewBag is empty
-    IEnumerable<char> alphabet = Model.Select(c => c.Title.First()).Distinct().ToList();
-    IList<YearQuarter> QuarterNavMenu = ViewBag.QuarterNavMenu;
 }
 <div id="scheduleMain">
-    @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = QuarterNavMenu })
-    <div id="container" class="sidebar">
-        <div id="sidebar">
-            @Html.Partial("basicFacetedSearch", QuarterNavMenu)
-        </div> <!-- #sidebar -->
+  @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
+  <div id="container" class="sidebar">
+    <div id="sidebar">
+      @Html.Partial("basicFacetedSearch", Model.NavigationQuarters)
+    </div> <!-- #sidebar -->
 
-        <div id="content">
+    <div id="content">
+      <h1 id="pageTitle">All Credit Classes &amp; Descriptions</h1>
 
-		<h1 id="pageTitle">All Credit Classes &amp; Descriptions</h1>
+      @Html.Partial("a_to_z", new AToZViewModel { LettersList = Model.LettersList, ViewingLetter = Model.ViewingLetter })
+      @Html.Partial("subjectList", Model.Subjects)
+    </div> <!-- #content -->
 
-	 @Html.Partial("a_to_z", alphabet)
-	 @Html.Partial("subjectList", Model)
-
-	</div> <!-- #content -->
-    </div> <!-- #container -->
+  </div> <!-- #container -->
 </div>

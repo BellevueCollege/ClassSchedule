@@ -170,32 +170,35 @@ namespace CTCClassSchedule.Controllers
 				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					IList<Subject> subjects = db.Subjects.ToList();
-
-          IEnumerable<Subject> subjectsEnum;
-					if (letter != null)
+          IList<Subject> subjects = db.Subjects.ToList();
+          IList<char> subjectLetters = subjects.Select(s => s.Title.First()).Distinct().ToList();
+          if (letter != null)
 					{
-					  subjectsEnum = db.Subjects.Where(s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase));
-					}
-					else
-					{
-					  subjectsEnum = subjects;
+            subjects = subjects.Where(s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)).ToList();
 					}
 
 					if (format == "json")
 					{
 						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-						return Json(subjectsEnum, JsonRequestBehavior.AllowGet);
+            return Json(subjects, JsonRequestBehavior.AllowGet);
 					}
+
+          // Construct the model
+          AllClassesModel model = new AllClassesModel
+          {
+            CurrentQuarter = repository.CurrentYearQuarter,
+            NavigationQuarters = Helpers.getYearQuarterListForMenus(repository),
+            Subjects = subjects,
+            LettersList = subjectLetters,
+            ViewingLetter = String.IsNullOrEmpty(letter) ? (char?)null : letter.First()
+          };
 
 					// set up all the ancillary data we'll need to display the View
 					SetCommonViewBagVars(repository, string.Empty, letter);
-					ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
-					ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? "All" : letter.ToUpper());
 					ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
-					return View(subjectsEnum);
+          return View(model);
 				}
 			}
 		}
@@ -274,6 +277,8 @@ namespace CTCClassSchedule.Controllers
 							subjects.Add(sub);
 						}
 					}
+
+          ViewBag.alphabet = subjects.Select(s => s.Title.First()).Distinct().ToList();
 
 
 					IEnumerable<Subject> subjectsEnum;
