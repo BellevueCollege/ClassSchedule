@@ -1328,7 +1328,6 @@ a.footnote-prereq  { color: #666}
 .weekend { font-weight: normal; color: #666}
 
 #times {
-	clear: both;
     overflow: hidden;
     margin: 7px 0 14px;
 }
@@ -1341,11 +1340,11 @@ a.footnote-prereq  { color: #666}
 #times label { width: 52px; display: block; float: left;}
 .time-separator {
     display: block;
-    float: left;
     font-weight: bold;
     padding-top: 11px;
     text-align: center;
-    width: 12px;}
+    width: 12px;
+    float:left;}
 .time-text {
     background-color: #F0F0F0;
     color: #003D79;
@@ -1353,7 +1352,8 @@ a.footnote-prereq  { color: #666}
     font-size: 11px;
     line-height: 14px;
     text-align: center;
-    width: 52px;}
+    width: 52px;
+    }
 
 #basicFacetedSearch h3,
 #advancedFacetedSearch h3 {
