@@ -1,61 +1,55 @@
-﻿@using CTCClassSchedule
-@model CTCClassSchedule.Models.SectionEditModel
+﻿@model CTCClassSchedule.Models.SectionEditModel
 
 <div id="SectionEdit">
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
 
-		if (Model != null && Model.SectionToEdit != null)
-		{
-		  SectionWithSeats section = Model.SectionToEdit;
+  if (Model != null && Model.SectionToEdit != null)
+  {
     <fieldset>
-        <legend>@(section.CourseSubject) @(section.CourseNumber) #@(section.ID.ItemNumber) - @(section.Yrq.FriendlyName)</legend>
+      <legend>@(Model.SectionToEdit.CourseSubject) @(Model.SectionToEdit.CourseNumber) #@(Model.SectionToEdit.ID.ItemNumber) - @(Model.SectionToEdit.Yrq.FriendlyName)</legend>
 
-				@Html.Hidden("CourseSubject", section.CourseSubject)
-				@Html.Hidden("CourseNumber", section.CourseNumber)
-				@Html.Hidden("ItemNumber", section.ID.ItemNumber)
-				@Html.Hidden("YRQ", section.Yrq.ID)
-				@Html.Hidden("Username", "test.user")
-        @Html.Hidden("referrer", (Request.UrlReferrer != null ? Request.UrlReferrer.ToString() : string.Empty))
+      @*Html.HiddenFor(m => m.SectionToEdit.ID)*@
+      <input type="hidden" name="sectionID" value="@Model.SectionToEdit.ID.ToString()"/>
 
       <div id="accordion">
-					<h3><a href="#">Notes</a></h3>
+					<h3><a href="javascript:void(0)">Notes</a></h3>
 					<div id="first">
 						<div class="editor-label">
-								@Html.LabelFor(model => section.Footnotes, "Default Notes:")
+								@Html.LabelFor(m => m.SectionToEdit.Footnotes, "Default Notes:")
 						</div>
 						<div class="editor-field">
-							@foreach (string footnote in section.Footnotes) {
+							@foreach (string footnote in Model.SectionToEdit.Footnotes) {
 								<text>@footnote</text>
 							}
 						</div>
 
 						<div class="editor-label">
-								@Html.LabelFor(model => section.SectionFootnotes, "Additional Notes:")
+								@Html.LabelFor(m => m.SectionToEdit.SectionFootnotes, "Additional Notes:")
 						</div>
 						<div class="editor-field">
-								@Html.TextAreaFor(model => section.SectionFootnotes, new { @class = "editSectionFootnotes", @cols = 80, @rows = 14 })
-								@Html.ValidationMessageFor(model => section.SectionFootnotes)
+								@Html.TextAreaFor(m => m.SectionToEdit.SectionFootnotes, new { @class = "editSectionFootnotes", @cols = 80, @rows = 14 })
+								@Html.ValidationMessageFor(m => m.SectionToEdit.SectionFootnotes)
 						</div>
 					</div>
 
-					<h3><a href="#">Advanced Options</a></h3>
+					<h3><a href="javascript:void(0)">Advanced Options</a></h3>
         <div id="second">
           <div class="editor-label">
-            @Html.LabelFor(model => section.CustomTitle, "Custom Title (makes section show as a different class)")
+            @Html.LabelFor(m => m.SectionToEdit.CustomTitle, "Custom Title (makes section show as a different class)")
           </div>
           <div class="editor-field">
 
-            @Html.TextBoxFor(model => section.CustomTitle, new { @class = "SubjectTextfield", @maxlength = "100" })
-            @Html.ValidationMessageFor(model => section.CustomTitle)
+            @Html.TextBoxFor(m => m.SectionToEdit.CustomTitle, new { @class = "SubjectTextfield", @maxlength = "100" })
+            @Html.ValidationMessageFor(m => m.SectionToEdit.CustomTitle)
           </div>
 
           <div class="editor-label">
-            @Html.LabelFor(model => section.CustomDescription, "Custom Description (only visibile when there is a custom title)")
+            @Html.LabelFor(m => m.SectionToEdit.CustomDescription, "Custom Description (only visibile when there is a custom title)")
           </div>
           <div class="editor-field">
-            @Html.TextAreaFor(model => section.CustomDescription, new { @class = "editSectionFootnotes", @cols = 80, @rows = 14 })
-            @Html.ValidationMessageFor(model => section.CustomDescription)
+            @Html.TextAreaFor(m => m.SectionToEdit.CustomDescription, new { @class = "editSectionFootnotes", @cols = 80, @rows = 14 })
+            @Html.ValidationMessageFor(m => m.SectionToEdit.CustomDescription)
           </div>
         </div>
 
@@ -67,7 +61,7 @@
           <div class="editor-field">
             <ul id="cross-listed-courses" class="cross-list-merger">
               @{
-                if (section.IsCrossListed && Model.CrossListedCourses != null)
+                if (Model.SectionToEdit.IsCrossListed && Model.CrossListedCourses != null)
                 {
                   foreach (string courseID in Model.CrossListedCourses)
                   {
@@ -96,9 +90,9 @@
       </div>
 
 				<div id="lastModifiedBy">
-				@if (section.LastUpdated != "")
+				@if (Model.SectionToEdit.LastUpdated != "")
     {
-					<text>Last modified by @(section.LastUpdatedBy) on</text> @(section.LastUpdated)
+					<text>Last modified by @(Model.SectionToEdit.LastUpdatedBy) on</text> @(Model.SectionToEdit.LastUpdated)
     }
 
 				</div>
