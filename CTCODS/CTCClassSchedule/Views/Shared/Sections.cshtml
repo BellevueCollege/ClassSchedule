@@ -157,4 +157,23 @@
       }
     }
 	</ul>
+  @if (Model.Sections[0].IsCrossListed)
+  {
+    <ul class="section-crosslisted-courses">
+      <li class="crosslisted-courseids">
+        Also offered as part of
+        <div id="cross-list-loading-placeholder">
+          Loading cross-listed courses...
+        </div>
+        @*        <ul>
+          <li>
+            <span class="cross-listed-course">
+              @footnotes
+            </span>
+          </li>
+        </ul>
+*@
+      </li>
+    </ul>
+  }
 </li>

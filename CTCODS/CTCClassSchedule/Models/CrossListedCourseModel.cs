@@ -8,5 +8,6 @@ namespace CTCClassSchedule.Models
     public string Title {get;set;}
     public decimal Credits {get;set;}
     public bool IsVariableCredits {get;set;}
+    public bool IsCommonCourse {get;set;}
   }
 }

@@ -1,4 +1,10 @@
-﻿using CTCClassSchedule.Controllers;
+﻿using System.Collections.Generic;
+using System.Linq;
+using CTCClassSchedule.Controllers;
+using CTCClassSchedule.Models;
+using Ctc.Ods;
+using Ctc.Ods.Types;
+using CtcApi.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting.Web;
@@ -69,13 +75,45 @@ namespace Test.CtcClassSchedule
     [TestMethod()]
     public void CrossLinkedCoursesTest()
     {
-      //ApiController target = new ApiController();
-      //string SectionID = "3003B234";
-      //JsonResult actual = target.CrossLinkedCourses(SectionID);
+      ApiController target = new ApiController();
+      string sectionID = "3003B234";
+      JsonResult actual = target.CrossLinkedCourses(sectionID);
 
-      //Assert.IsNotNull(actual);
+      Assert.IsNotNull(actual, "Returned Result is NULL");
+      Assert.IsNotNull(actual.Data, "JSON data is NULL");
+      Assert.IsInstanceOfType(actual.Data, typeof(IEnumerable<CrossListedCourseModel>));
 
-      Assert.Inconclusive("Verify the correctness of this test method.");
+      IEnumerable<CrossListedCourseModel> obj = actual.Data as IEnumerable<CrossListedCourseModel>;
+      Assert.IsNotNull(obj);
+
+      string[] courseIDs = obj.Select(o => ConstructCourseID(o.ID, o.IsCommonCourse)).ToArray();
+
+      if (courseIDs.Length > 0)
+      {
+        using (ClassScheduleDb db = new ClassScheduleDb())
+        {
+          IQueryable<SectionCourseCrosslisting> crosslistings = from x in db.SectionCourseCrosslistings
+                                                                where courseIDs.Contains(x.CourseID)
+                                                                select x;
+          Assert.IsTrue(crosslistings.Any(), "Did not find matching cross-listing record in the Class Schedule database. ('{0}' => [{1}]", sectionID, courseIDs.Mash());
+        }
+      }
+      else
+      {
+        Assert.Inconclusive("The method did not return any cross-linked CourseIDs for '{0}'", sectionID);
+      }
     }
+
+      /// <summary>
+      /// Constructs a CourseID string in the format "ENGL& 101"
+      /// </summary>
+      /// <param name="id"></param>
+      /// <param name="isCommonCourse"></param>
+      /// <returns></returns>
+      // HACK: isCommonCourse parameter is a work-around until CtcApi is fixed to correctly set the flag when instantiating from another ICourseID object.
+      private string ConstructCourseID(ICourseID id, bool isCommonCourse)
+      {
+        return string.Concat(string.Format("{0}{1} ", id.Subject, isCommonCourse ? "&" : string.Empty).Substring(0, 6), id.Number);
+      }
   }
 }

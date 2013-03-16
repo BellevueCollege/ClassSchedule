@@ -24,7 +24,10 @@ namespace CTCClassSchedule.Controllers
 {
 	public class ApiController : Controller
 	{
-	  private ILog _log = LogManager.GetCurrentClassLogger();
+    // Any section that has more than this many courses cross-listed with it will produce a warning in the application log.
+    const int MAX_COURSE_CROSSLIST_WARNING_THRESHOLD = 3;
+
+    private ILog _log = LogManager.GetCurrentClassLogger();
 		private readonly ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
 
 	  public ApiController()
@@ -98,6 +101,63 @@ namespace CTCClassSchedule.Controllers
 				return PartialView(subjectList);
 			}
 		}
+
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="sectionID"></param>
+    /// <returns></returns>
+    [HttpGet]
+    public JsonResult CrossLinkedCourses(string sectionID)
+    {
+      using (ClassScheduleDb db = new ClassScheduleDb())
+      {
+        string[] courseIDs = (from c in db.SectionCourseCrosslistings
+                              where c.ClassID == sectionID
+                              select c.CourseID).ToArray();
+
+        if (courseIDs.Length > 0)
+        {
+          // write a warning to the log if we've got too many courses cross-listed with this section
+          if (_log.IsWarnEnabled && courseIDs.Length > MAX_COURSE_CROSSLIST_WARNING_THRESHOLD)
+          {
+            _log.Warn(m => m("Cross-listing logic assumes a very small number of Courses will be cross-listed with any given Section, but is now being asked to process {0} Courses for '{1}'. (This warning triggers when more than {2} are detected.)",
+                              courseIDs.Length, sectionID, MAX_COURSE_CROSSLIST_WARNING_THRESHOLD));
+          }
+
+          using (OdsRepository ods = new OdsRepository())
+          {
+            List<Course> odsCourses = new List<Course>();
+            foreach (string crosslisting in courseIDs)
+            {
+              // TODO: Add a GetCourses() override to the CtcApi which takes more than one ICourseID
+              odsCourses.AddRange(ods.GetCourses(CourseID.FromString(crosslisting)));
+            }
+
+            IList<CrossListedCourseModel> courseList = (from c in odsCourses
+                                                        select new CrossListedCourseModel
+                                                                 {
+                                                                   // BUG: API doesn't property notify CourseID
+                                                                   ID = CourseID.FromString(c.CourseID),
+                                                                   // HACK: Remove IsCommonCourse property when API is fixed (see above)
+                                                                   IsCommonCourse = c.IsCommonCourse,
+                                                                   Credits = c.Credits,
+                                                                   IsVariableCredits = c.IsVariableCredits,
+                                                                   Title = c.Title
+                                                                 }).ToList();
+
+            // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+            // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+            return Json(courseList, JsonRequestBehavior.AllowGet);
+          }
+        }
+
+        // no course crosslisting were found
+        return Json(null, JsonRequestBehavior.AllowGet);
+      }
+    }
+
 
 	  // TODO: If save successful, return new (possibly trimmed) footnote text
 		/// <summary>
