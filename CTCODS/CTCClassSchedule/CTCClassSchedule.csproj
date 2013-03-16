@@ -145,6 +145,7 @@
     <Compile Include="Models\AdvancedFacetedSearchModel.cs" />
     <Compile Include="Models\AllClassesModel.cs" />
     <Compile Include="Models\ClassDetailsModel.cs" />
+    <Compile Include="Models\CrossListedCourseModel.cs" />
     <Compile Include="Models\ProgramEditModel.cs" />
     <Compile Include="Common\Encryption64.cs" />
     <Compile Include="Common\HelperContainers.cs" />
@@ -465,7 +466,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
