@@ -6,6 +6,7 @@
 @{
   const int ANY = -1;
   int _numCredits = Request.QueryString.SafeNameValueToInt32("numcredits", ANY);
+  int subjectsCount = Model.Subjects.Count();
 
   // construct the route values we'll pass to the ActionLink helper
   IDictionary<string, object> routeParms = ViewBag.LinkParams;
@@ -29,12 +30,21 @@
       if (String.IsNullOrWhiteSpace(Model.SelectedSubject))
       {
         // Display all available subjects
-        foreach (string slug in Model.Subjects)
+        if (subjectsCount > 1)
         {
-          // TODO: Pass SelectedSubject to Index/Search via a model
-          routeParms["Subject"] = slug;
-          <li>
-            <a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@slug</a>
+          foreach (string slug in Model.Subjects)
+          {
+            // TODO: Pass SelectedSubject to Index/Search via a model
+            routeParms["Subject"] = slug;
+            <li>
+              <a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@slug</a>
+            </li>
+          }
+        }
+        else if (subjectsCount == 1)
+        {
+          <li class="active">
+            <span class="notlink">@Model.Subjects.First()</span>
           </li>
         }
       }
@@ -43,8 +53,8 @@
         // Display only the selected subject
         <li>
           @{
-            // TODO: Pass SelectedSubject to Index/Search via a model
-            routeParms.Remove("Subject");
+        // TODO: Pass SelectedSubject to Index/Search via a model
+        routeParms.Remove("Subject");
           }
           <a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">All</a>
         </li>
@@ -124,7 +134,8 @@
 
 		  <p class="label_checkbox_pair">
 		    <span>
-			    <input class="clear" type="checkbox" name="@m.ID" id="@m.ID" value="true" @if (m.Selected) { <text>checked='checked'</text> } />
+			    <input class="clear" type="checkbox" name="@m.ID" id="@m.ID" value="true" @if (m.Selected)
+                                                                                 { <text>checked='checked'</text> } />
         </span>
 			  <label for="@m.ID">@m.Title</label>
 		  </p>
