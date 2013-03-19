@@ -31,7 +31,7 @@ namespace CTCClassSchedule.Common
 
 		public static string getBodyClasses(HttpContextBase Context)
 		{
-			string classes = "";
+			string classes = string.Empty;
 
 			if (Context.User.Identity.IsAuthenticated)
 			{
@@ -110,7 +110,7 @@ namespace CTCClassSchedule.Common
 		{
 			Encryption64 en = new Encryption64();
 
-			string returnString = "";
+			string returnString = string.Empty;
 			returnString = "http://bellevuecollege.edu/directory/PersonDetails.aspx?PersonID=" + en.Encrypt(SID,"!#$a54?5");
 			return returnString;
 
@@ -467,7 +467,7 @@ namespace CTCClassSchedule.Common
 								LastUpdated = (d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString("h:mm tt").ToLower(),
 													SectionFootnotes = sm != null && !string.IsNullOrWhiteSpace(sm.Footnote) ? sm.Footnote : string.Empty,
 													CourseFootnotes = cm != null && !string.IsNullOrWhiteSpace(cm.Footnote) ? cm.Footnote : string.Empty,
-													CourseTitle = sm != null && !string.IsNullOrWhiteSpace(sm.Title) ? sm.Title : c.CourseTitle,
+                          CustomTitle = sm != null && !string.IsNullOrWhiteSpace(sm.Title) ? sm.Title : c.CourseTitle,
 													CustomDescription = sm != null && !string.IsNullOrWhiteSpace(sm.Description) ? sm.Description : string.Empty,
 											}).OrderBy(s => s.CourseNumber).ThenBy(s => s.CourseTitle).ToList();
 
@@ -522,9 +522,10 @@ namespace CTCClassSchedule.Common
 			IList<CourseDescription> results = new List<CourseDescription>();
 			if (course.Descriptions != null && course.Descriptions.Count() > 0)
 			{
-				IList<CourseDescription> descriptions = course.Descriptions.Reverse().ToList();
-				results = descriptions.Where(q => String.Compare(q.YearQuarterBegin.ID, currentYrq.ID) > 0).ToList();
-				if (results.Count == 0) { results.Add(descriptions.First()); }
+        results = course.Descriptions.Where(d => String.Compare(d.YearQuarterBegin.ID, currentYrq.ID) <= 0)
+                                     .OrderBy(d => d.YearQuarterBegin.ID)
+                                     .Take(1)
+                                     .ToList();
 			}
 
 			return results;
