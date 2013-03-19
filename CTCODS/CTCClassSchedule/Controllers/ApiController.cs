@@ -107,9 +107,15 @@ namespace CTCClassSchedule.Controllers
     ///
     /// </summary>
     /// <param name="sectionID"></param>
-    /// <returns></returns>
+    /// <returns>
+    ///   <note type="">
+    ///     <code>
+    ///     [{"ID":{"Subject":"ENGL","Number":"101","IsCommonCourse":false},"Title":"English Composition I","Credits":5.0,"IsVariableCredits":false,"IsCommonCourse":true}]
+    ///     </code>
+    ///   </note>
+    /// </returns>
     [HttpGet]
-    public JsonResult CrossLinkedCourses(string sectionID)
+    public JsonResult CrossListedCourses(string sectionID)
     {
       using (ClassScheduleDb db = new ClassScheduleDb())
       {

@@ -34,6 +34,7 @@ namespace CTCClassSchedule
 			routes.MapRoute("ApiClassEdit", "Api/ClassEdit", new { controller = "Api", action = "ClassEdit" });
 			routes.MapRoute("ApiProgramEdit", "Api/ProgramEdit", new { controller = "Api", action = "ProgramEdit" });
 			routes.MapRoute("ApiUpdateSectionFootnote", "Api/UpdateSectionFootnote", new { controller = "Api", action = "UpdateSectionFootnote" });
+      routes.MapRoute("CrossListedCourses", "Api/CrossListedCourses", new { controller = "Api", action = "CrossListedCourses" });
 
 			// Course data export for paper class schedule
 			routes.MapRoute("CoursesExport", "Export/{YearQuarterID}", new { controller = "Classes", action = "Export", YearQuarterID = UrlParameter.Optional });

@@ -159,21 +159,26 @@
 	</ul>
   @if (Model.Sections[0].IsCrossListed)
   {
+    string secID = Model.Sections[0].ID.ToString();
+
     <ul class="section-crosslisted-courses">
-      <li class="crosslisted-courseids">
+      <li>
         Also offered as part of
-        <div id="cross-list-loading-placeholder">
-          Loading cross-listed courses...
+        <div id="courses-crosslisted-with-@secID" class="section-crosslisted-courses">
+          <noscript><strong>Javascript is required to load cross-listed courses.</strong></noscript>
         </div>
-        @*        <ul>
-          <li>
-            <span class="cross-listed-course">
-              @footnotes
-            </span>
-          </li>
-        </ul>
-*@
       </li>
     </ul>
+
+      <script type="text/javascript">
+      // dynamically load course cross-listings, if present
+      // NOTE: This script is inline so that it's only created when and where needed.
+        $(document).ready(function () {
+          var jsonUrl = "@Url.Action("CrossListedCourses", "Api", new {sectionID = secID})";
+          var quarter = "@(Model.CurrentQuarter.FriendlyName)";
+
+          LoadCrossListedCourses(jsonUrl, $('div#courses-crosslisted-with-@secID'), quarter);
+        });
+      </script>
   }
 </li>

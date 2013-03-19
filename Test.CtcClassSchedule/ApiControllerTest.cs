@@ -73,11 +73,11 @@ namespace Test.CtcClassSchedule
 
 
     [TestMethod()]
-    public void CrossLinkedCoursesTest()
+    public void CrossListedCoursesTest()
     {
       ApiController target = new ApiController();
       string sectionID = "3003B234";
-      JsonResult actual = target.CrossLinkedCourses(sectionID);
+      JsonResult actual = target.CrossListedCourses(sectionID);
 
       Assert.IsNotNull(actual, "Returned Result is NULL");
       Assert.IsNotNull(actual.Data, "JSON data is NULL");
