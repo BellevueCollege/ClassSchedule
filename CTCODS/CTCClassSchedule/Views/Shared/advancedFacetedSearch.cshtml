@@ -6,7 +6,7 @@
 @{
   const int ANY = -1;
   int _numCredits = Request.QueryString.SafeNameValueToInt32("numcredits", ANY);
-  int subjectsCount = Model.Subjects.Count();
+  int subjectsCount = Model.Subjects == null ? 0 : Model.Subjects.Count();
 
   // construct the route values we'll pass to the ActionLink helper
   IDictionary<string, object> routeParms = ViewBag.LinkParams;
@@ -53,8 +53,8 @@
         // Display only the selected subject
         <li>
           @{
-        // TODO: Pass SelectedSubject to Index/Search via a model
-        routeParms.Remove("Subject");
+            // TODO: Pass SelectedSubject to Index/Search via a model
+            routeParms.Remove("Subject");
           }
           <a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">All</a>
         </li>
