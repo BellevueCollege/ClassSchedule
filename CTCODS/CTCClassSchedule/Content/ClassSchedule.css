@@ -1575,9 +1575,12 @@ ul.cross-list-merger {
 ul.cross-list-merger li {
 	display: block;
 	float: left;
-	width: 66px;
 	padding: 2px 2px 2px 2px;
 	margin: 2px 2px 0px 2px;
+}
+ul.cross-list-merger li span
+{
+  display: inline-block;
 }
 ul.cross-list-merger .cross-listed-course-choice {
 	background-color:#DEE7F8;
@@ -1778,7 +1781,7 @@ ul.subject-merger li.subject-choice span.subject-choice-close
 }
 
 ul.section-crosslisted-courses {
-  margin-left: 1em;
+  margin-left: 0;
 }
 
 .section-cross-listed-course-title a {

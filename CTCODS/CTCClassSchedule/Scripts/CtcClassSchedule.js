@@ -83,14 +83,14 @@ function LoadCrossListedCourses(jsonUrl, div, quarter) {
         var courseCredits = "<span class=\"courseCredits\">&#8226; ";
 
         if (v.IsVariableCredits) {
-          courseCredits += "V1-" + v.Credits + "<abbr title='variable credits'>Cr.</abbr>";
+          courseCredits += "V1-" + v.Credits + " <abbr title='variable credits'>Cr.</abbr>";
         } else {
-          courseCredits += v.Credits + "<abbr title='credit(s)'>Cr.</abbr>";
+          courseCredits += v.Credits + " <abbr title='credit(s)'>Cr.</abbr>";
         }
         courseCredits += "</span>";
         console.log("courseCredits = '" + courseCredits + "'");
 
-        crossListedCourses += "<li class='section-cross-listed-course-title'><a href='" + searchHref + "'>" + courseID + courseTitle + "</a> " + courseCredits + "</li>";
+        crossListedCourses += "<li class='section-cross-listed-course-title'><a href='" + searchHref + "'>" + courseID + " " + courseTitle + "</a> " + courseCredits + "</li>";
       });
       console.log(crossListedCourses);
 

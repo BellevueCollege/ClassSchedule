@@ -66,9 +66,8 @@
                   foreach (string courseID in Model.CrossListedCourses)
                   {
                     <li class="cross-listed-course-choice">
-                      <span>@courseID</span>
+                      <span>@courseID</span><span class="cross-listed-course-choice-close ui-icon ui-icon-close"></span>
                       <input name="CrossListedCourses" value="@courseID" type="hidden" />
-                      <span class="cross-listed-course-choice-close ui-icon ui-icon-close"></span>
                     </li>
                   }
                 }
@@ -112,58 +111,57 @@
 }
 </div>
 
-<script src="@Url.Content("~/Content/js/jquery-1.6.4.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-<script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.8.17.custom.min.js")"></script>
+  <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+  <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+  <script type="text/javascript">
 
-<script type="text/javascript">
+    $(document).ready(function() {
+      $("#accordion").accordion();
 
-  $(document).ready(function () {
-    $("#accordion").accordion();
-
-    $("#cancelEdit").click(function (e) {
-      e.preventDefault();
-      $(".ui-dialog").hide();
-      showThrobber();
-      window.location.href = $(location).attr('href');
-    });
-
-    $(".ui-dialog").keydown(function (e) {
-      if (e.keyCode == 27) { // esc
+      $("#cancelEdit").click(function(e) {
+        e.preventDefault();
         $(".ui-dialog").hide();
         showThrobber();
         window.location.href = $(location).attr('href');
-      }
+      });
+
+      $(".ui-dialog").keydown(function(e) {
+        if (e.keyCode == 27) { // esc
+          $(".ui-dialog").hide();
+          showThrobber();
+          window.location.href = $(location).attr('href');
+        }
+      });
+
+      // Delete cross-listed course choices
+      $('#cross-listed-courses').on('click', '.cross-listed-course-choice-close', function() {
+        var courseToRemove = $(this).parent(); // Remove the courseID from the list of selected
+        $(courseToRemove).remove();
+      });
+
+      // Add a cross-listed course
+      $('#addCourseID').click(function() {
+        console.log('Clicked Add button');
+
+        var txtBox = $('#newCrossListCourseID');
+        var enteredCourseID = txtBox.val().toUpperCase();
+        console.log('Value = ' + enteredCourseID);
+
+        // only continue if we have a syntactically valid course ID (too expensive to call to the DB to completely validate)
+        if (enteredCourseID.length > 0 && enteredCourseID.match(/^([A-Z]{1,4}&?|[A-Z]{1,5})&{0}\s+\d{3,4}/)) {
+          var optionToAdd = '<li class="cross-listed-course-choice"><span>' + enteredCourseID + '</span><input name="CrossListedCourses" value="' + enteredCourseID + '" type="hidden"><span class="cross-listed-course-choice-close ui-icon ui-icon-close"></span></li>';
+          console.log('Adding ' + optionToAdd);
+
+          $('#cross-listed-courses').append(optionToAdd);
+
+          console.log("Clearing textbox.");
+          txtBox.val('');
+        } else {
+          // TODO: highlight empty field
+          alert("Please enter a valid CourseID (e.g. ENGL 101)");
+          txtBox.focus();
+          txtBox.select();
+        }
+      });
     });
-
-    // Delete cross-listed course choices
-    $('#cross-listed-courses .cross-listed-course-choice-close').click(function () {
-      var courseToRemove = $(this).parent(); // Remove the subject from the list of selected
-      $(courseToRemove).remove();
-    });
-
-    // Add a cross-listed course
-    $('#addCourseID').click(function () {
-      console.log('Clicked Add button');
-
-      var txtBox = $('#newCrossListCourseID');
-      var enteredCourseID = txtBox.val();
-      console.log('Value = ' + enteredCourseID);
-
-      if (enteredCourseID.length > 0) {
-        var optionToAdd = '<li class="cross-listed-course-choice"><span>' + enteredCourseID + '</span><input name="CrossListedCourses" value="' + enteredCourseID + '" type="hidden"><span class="cross-listed-course-choice-close ui-icon ui-icon-close"></span></li>';
-        console.log('Adding ' + optionToAdd);
-
-        $('#cross-listed-courses').append(optionToAdd);
-
-        console.log("Clearing textbox.");
-        txtBox.val('');
-      } else {
-        // TODO: validate CourseID entered
-        // TODO: highlight empty field
-        alert("Please enter a CourseID");
-      }
-    });
-  });
-</script>
+  </script>
