@@ -5,11 +5,12 @@
 
 $(document).ready(function() {
 
-  $('.course-updated a').click(function() {
+  $('.course-updated a').click(function () {
 
     var classID = this.id;
     var availability = '#availability-' + classID + ' .seatsAvailable';
-    var courseUpdated = '#availability-' + classID + ' .course-updated .update-time';
+    var courseUpdated = '#availability-' + classID + ' .course-updated';
+    var updateTime = '#availability-' + classID + ' .course-updated .update-time';
     var originalSeatsAvailable = $(availability).html();
 
     //load the throbber
@@ -21,24 +22,24 @@ $(document).ready(function() {
       type: 'POST',
       data: { classID: classID },
       timeout: 4000,
-      success: function(result) {
+      success: function (result) {
         var indexOfPipe = result.indexOf("|");
         var seatsAvailable = result.substring(0, indexOfPipe);
         var friendlyTime = result.substring(indexOfPipe + 1, result.length);
 
         if (seatsAvailable > 0) {
           $(availability).html(seatsAvailable);
-          $(courseUpdated).html(friendlyTime);
+          $(updateTime).html("updated " + friendlyTime);
         } else {
           $(availability).html("class full");
-          $('.course-updated').html("");
+          $(courseUpdated).empty();
         }
       },
-      error: function(x, t, m) {
-        //alert("got timeout");
+      error: function (x, t, m) {
         $(availability).html(originalSeatsAvailable);
-        $(courseUpdated).html("[service unavailable]");
+        $(updateTime).html("[service unavailable]");
       }
+
     });
   });
 });
