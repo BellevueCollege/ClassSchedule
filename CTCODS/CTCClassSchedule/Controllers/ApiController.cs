@@ -108,11 +108,11 @@ namespace CTCClassSchedule.Controllers
     /// </summary>
     /// <param name="sectionID"></param>
     /// <returns>
-    ///   <note type="">
+    ///   <example>
     ///     <code>
     ///     [{"ID":{"Subject":"ENGL","Number":"101","IsCommonCourse":false},"Title":"English Composition I","Credits":5.0,"IsVariableCredits":false,"IsCommonCourse":true}]
     ///     </code>
-    ///   </note>
+    ///   </example>
     /// </returns>
     [HttpGet]
     public JsonResult CrossListedCourses(string sectionID)
