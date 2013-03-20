@@ -210,7 +210,7 @@
 			window.location.href = $(location).attr('href');
 		});
 
-			@if (Helpers.isEditor(Context))
+	 @if (Helpers.isEditor(Context))
 	 {
 				<text>
 				var cmsFootnotePlaceholder = "<em>[Enter additional notes]</em>";
@@ -252,11 +252,13 @@
 
 				// Bind inline editing event behaviors
 				$('ul.section-details').find('span.cmsfootnote').each(function () {
-						$(this).bind('focusin', function() {
-							$(this).children().remove();
+            $(this).bind('focus', function(e) {
+              window.setTimeout(function() {
+                $(e.target).children().remove();
+              }, 100);
 						});
 
-						$(this).bind('focusout', function() {
+						$(this).bind('blur', function() {
 							var footnote = $(this).text().trim();
 							var classId = $(this).closest('.section-listing').attr('data-sectionid');
 							var footnoteRef = this;
@@ -271,7 +273,7 @@
 										$(footnoteRef).html(response.footnote);
 									}
 									if (response.result === true)	{
-										$(footnoteRef).append("<span id='textSuccessIcon' class='ui-icon ui-icon-check'></span>").parent().addClass('ui-state-highlight');
+										$(footnoteRef).append("<span id='textSuccessIcon' class='ui-icon ui-icon-check'></span>");
 									}
 								},
 								error: function (x, t, m) {
