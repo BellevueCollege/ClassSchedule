@@ -29,7 +29,8 @@ namespace CTCClassSchedule
 			routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
 			// API calls the application exposes
-			routes.MapRoute("ApiSubjects", "Api/Subjects", new { controller = "Api", action = "Subjects" });
+      routes.MapRoute("ApiGetSeats", "Api/GetSeats/", new { controller = "Api", action = "GetSeats" });
+      routes.MapRoute("ApiSubjects", "Api/Subjects/", new { controller = "Api", action = "Subjects" });
 			routes.MapRoute("ApiSectionEdit", "Classes/SectionEdit", new { controller = "Classes", action = "SectionEdit" });
 			routes.MapRoute("ApiClassEdit", "Api/ClassEdit", new { controller = "Api", action = "ClassEdit" });
 			routes.MapRoute("ApiProgramEdit", "Api/ProgramEdit", new { controller = "Api", action = "ProgramEdit" });
@@ -44,15 +45,16 @@ namespace CTCClassSchedule
 			routes.MapRoute("LogOut", "Logout", new { controller = "Classes", action = "Logout" });
 
 			// Default application routes
-			routes.MapRoute("getSeats", "getseats", new { controller = "Classes", action = "getSeats" });
-			routes.MapRoute("ClassDetails", "All/{Prefix}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
-			routes.MapRoute("Subject", "All/{Subject}", new { controller = "Classes", action = "Subject" });
+      routes.MapRoute("Index", "", new { controller = "Classes", action = "Index" });
 
-			routes.MapRoute("YearQuarterSubject", "{YearQuarter}/{Subject}", new { controller = "Classes", action = "YearQuarterSubject" });
-			routes.MapRoute("AllClasses", "All", new { controller = "Classes", action = "AllClasses" });
+      routes.MapRoute("AllClasses", "All", new { controller = "Classes", action = "AllClasses" });
+      routes.MapRoute("Subject", "All/{Subject}", new { controller = "Classes", action = "Subject" });
+			routes.MapRoute("ClassDetails", "All/{Prefix}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
+
 			routes.MapRoute("Search", "Search", new { controller = "Search", action = "Index" });
-			routes.MapRoute("YearQuarter", "{YearQuarter}", new { controller = "Classes", action = "YearQuarter" });
-			routes.MapRoute("Index", "", new { controller = "Classes", action = "Index" });
+
+      routes.MapRoute("YearQuarter", "{YearQuarter}", new { controller = "Classes", action = "YearQuarter" });
+      routes.MapRoute("YearQuarterSubject", "{YearQuarter}/{Subject}", new { controller = "Classes", action = "YearQuarterSubject" });
 
 		}
 
