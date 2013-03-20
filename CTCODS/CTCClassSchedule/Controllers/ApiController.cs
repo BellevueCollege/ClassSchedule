@@ -35,8 +35,78 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		}
 
+    //
+    // POST: /Api/Subjects
+    /// <summary>
+    /// Retrieves and updates Seats Available data for the specified <see cref="Section"/>
+    /// </summary>
+    /// <param name="classID"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public ActionResult GetSeats(string classID)
+    {
+      int? seats = null;
+      string friendlyTime = string.Empty;
+
+      string itemNumber = classID.Substring(0, 4);
+      string yrq = classID.Substring(4, 4);
+
+      CourseHPQuery query = new CourseHPQuery();
+      int hpSeats = query.FindOpenSeats(itemNumber, yrq);
+
+      using (ClassScheduleDb db = new ClassScheduleDb())
+      {
+        //if the HP query didn't fail, save the changes. Otherwise, leave the SeatAvailability table alone.
+        //This way, the correct number of seats can be pulled by the app and displayed instead of updating the
+        //table with a 0 for seats available.
+        if (hpSeats >= 0)
+        {
+          IQueryable<SectionSeat> seatsAvailableLocal = from s in db.SectionSeats
+                                                        where s.ClassID == classID
+                                                        select s;
+          int rows = seatsAvailableLocal.Count();
+
+          if (rows > 0)
+          {
+            // TODO: Should only be updating one record
+            //update the value
+            foreach (SectionSeat seat in seatsAvailableLocal)
+            {
+              seat.SeatsAvailable = hpSeats;
+              seat.LastUpdated = DateTime.Now;
+            }
+          }
+          else
+          {
+            //insert the value
+            SectionSeat newseat = new SectionSeat();
+            newseat.ClassID = classID;
+            newseat.SeatsAvailable = hpSeats;
+            newseat.LastUpdated = DateTime.Now;
+
+            //db.SeatAvailabilities.AddObject(newseat);
+          }
+
+          db.SaveChanges();
+        }
+
+        // retrieve updated seats data
+        IQueryable<SectionSeat> seatsAvailable = from s in db.SectionSeats
+                                                 where s.ClassID == classID
+                                                 select s;
+
+        SectionSeat newSeat = seatsAvailable.First();
+
+        seats = newSeat.SeatsAvailable;
+        friendlyTime = newSeat.LastUpdated.GetValueOrDefault().ToString("h:mm tt").ToLower();
+      }
+
+      string jsonReturnValue = string.Format("{0}|{1}", seats, friendlyTime);
+      return Json(jsonReturnValue);
+    }
+
 		//
-		// GET: /Api/Subjects
+		// POST: /Api/Subjects
 		/// <summary>
 		/// Returns an array of <see cref="Course"/> Subjects
 		/// </summary>
