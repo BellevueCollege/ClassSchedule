@@ -17,7 +17,6 @@
 			routeParms[key] = Request.QueryString[key];
 		}
 	}
-  string href_link = Url.Action("Subjects", "Api", routeParms);
 }
 
 @Ajax.ActionLink("Change subject",
@@ -53,7 +52,7 @@
 
     /* subject chooser pop-up dialog */
     $(document).ready(function () {
-        var href_value = "@href_link";
+        var href_value = "@Url.Action("Subjects", "Api", new RouteValueDictionary(routeParms))";
         $("#change_subject").attr('href', href_value);
 
 
