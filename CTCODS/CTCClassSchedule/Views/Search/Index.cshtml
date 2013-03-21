@@ -197,7 +197,7 @@
 			Html.RenderPartial("NoSectionCourses", Model.SearchResultNoSection);
 		}
 
-	@Html.Partial("Pager")
+	@Html.Partial("Pager", new PagerViewModel { CurrentPage = Model.CurrentPage, TotalPages = Model.TotalPages })
 
     </div> <!-- #content -->
     </div> <!-- #container -->

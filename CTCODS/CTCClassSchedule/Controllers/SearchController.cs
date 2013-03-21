@@ -31,8 +31,8 @@ namespace CTCClassSchedule.Controllers
 		// GET: /Search/
 		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
-            //Items per page
-            const int itemsPerPage = 40;
+      //Items per page
+      const int itemsPerPage = 40;
 
 			// We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
 			searchterm = searchterm.Replace("\"", string.Empty);
@@ -54,7 +54,6 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid, f_telecourse);
 			ViewBag.Days = Helpers.ConstructDaysList(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
 			ViewBag.avail = avail;
-			ViewBag.p_offset = p_offset;
 			ViewBag.Subject = Subject;
 			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
 
@@ -74,8 +73,8 @@ namespace CTCClassSchedule.Controllers
 				setViewBagVars(string.Empty, string.Empty, string.Empty, avail, string.Empty, repository);
 
 				YearQuarter YRQ = string.IsNullOrWhiteSpace(quarter) ? repository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
+        IList<YearQuarter> menuQuarters = Helpers.getYearQuarterListForMenus(repository);
 				ViewBag.YearQuarter = YRQ;
-				IList<YearQuarter> menuQuarters = Helpers.getYearQuarterListForMenus(repository);
 				ViewBag.QuarterNavMenu = menuQuarters;
 				ViewBag.CurrentRegistrationQuarter = menuQuarters[0];
 
@@ -119,42 +118,43 @@ namespace CTCClassSchedule.Controllers
 				// do not count Linked sections (since we don't display them)
 				IEnumerable<SectionWithSeats> countedSections = sectionsEnum.Where(s => !s.IsLinked);
 				int itemCount = countedSections.Count();
-				ViewBag.ItemCount = itemCount;
-
 				int courseCount;
 				using (_profiler.Step("Getting count of courses"))
 				{
 					courseCount = countedSections.Select(s => s.CourseID).Distinct().Count();
 				}
+        ViewBag.ItemCount = itemCount;
 				ViewBag.CourseCount = courseCount;
 
+
 				IEnumerable<string> allSubjects;
-                ViewBag.TotalPages = Math.Ceiling(itemCount / (decimal)itemsPerPage);
-                ViewBag.CurrentPage = p_offset + 1;
 				using (_profiler.Step("Getting distinct list of subjects"))
 				{
 					allSubjects = sectionsEnum.Select(c => c.CourseSubject).Distinct().OrderBy(c => c);
 				}
 
+
+        int totalPages = (int)Math.Round((itemCount / itemsPerPage)+0.5);
+        int currentPage = p_offset + 1;
 				using (_profiler.Step("Getting just records for page"))
 				{
-                    if (ViewBag.CurrentPage > ViewBag.TotalPages && ViewBag.TotalPages > 0)
-                    {
-                        p_offset = (int)(ViewBag.TotalPages)-1;
-                        ViewBag.CurrentPage = ViewBag.TotalPages;
-                    }
-
-                    sectionsEnum = sectionsEnum.Skip(p_offset * itemsPerPage).Take(itemsPerPage).ToList();
+          if (currentPage > totalPages && totalPages > 0)
+          {
+            currentPage = totalPages;
+          }
+          sectionsEnum = sectionsEnum.Skip(p_offset * itemsPerPage).Take(itemsPerPage).ToList();
 				}
 
 
 
 				SearchResultsModel model = new SearchResultsModel
-								{
-										Section = sectionsEnum,
-										SearchResultNoSection = NoSectionSearchResults,
-										Subjects = allSubjects
-								};
+				                            {
+									  Section = sectionsEnum,
+									  SearchResultNoSection = NoSectionSearchResults,
+									  Subjects = allSubjects,
+                                        TotalPages = totalPages,
+                                        CurrentPage = currentPage
+				                            };
 
 
 

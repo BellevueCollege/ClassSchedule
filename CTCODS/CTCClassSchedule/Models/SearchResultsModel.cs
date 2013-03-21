@@ -12,5 +12,9 @@ namespace CTCClassSchedule
 
 		public IEnumerable<string> Subjects { get; set; }
 
+    public int TotalPages { get; set; }
+
+    public int CurrentPage { get; set; }
+
 	}
 }

@@ -1,54 +1,40 @@
-﻿@{
-	string modifiedQueryString;
-	int firstChar = Request.QueryString.ToString().IndexOf("&p_offset");
-	if (firstChar != -1)
-	{
-		modifiedQueryString = Request.QueryString.ToString().Remove(firstChar);
-	}
-	else {
-		modifiedQueryString = Request.QueryString.ToString();
-	}
+﻿@using CTCClassSchedule.Models
+@model PagerViewModel
+@{
+  System.Collections.Specialized.NameValueCollection querystrings = HttpUtility.ParseQueryString(Request.Url.Query);
+  querystrings.Remove("p_offset");
 
-	string prev_offset, next_offset;
-	if (ViewBag.p_offset != 0)
-	{
-		 prev_offset = Convert.ToString(ViewBag.p_offset - 1);
-	}
-	else {
-		prev_offset = "0";
-	}
-
-	if (ViewBag.p_offset < ViewBag.ItemCount)
-	{
-		next_offset = Convert.ToString(ViewBag.p_offset + 1);
-	}
-	else {
-		next_offset = Convert.ToString(ViewBag.p_offset);
-	}
-
+  string modifiedQueryString = querystrings.ToString();
 }
 
 
-@if (ViewBag.ItemCount > 40) {
-       <div id="pager"><div id="pagerNums">
+@if (Model.TotalPages > 1)
+{
+  <div id="pager">
+    <div id="pagerNums">
+      @if (Model.CurrentPage > 1)
+      {
+        <a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@(Model.CurrentPage - 2)" id="pagerArrowLeft">&lt; Previous</a>
+      }
 
-		<a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@prev_offset" id="pagerArrowLeft">&lt; Previous</a> @Html.Raw("<span id='pagerPages'>Pages: ")
-		@for (int i = 0; i < (int)(ViewBag.TotalPages); i++)
-		{
-            if (((int)(ViewBag.CurrentPage) - 1) == i)
-			{
-				<span class="selected">@(i + 1)</span>
-			}
-			else {
-				<a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@i"> @(i + 1)</a>
-			}
-
-		}
-		@Html.Raw("</span>")
-        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+      <span id='pagerPages'>Pages:
+        @for (int i = 1; i <= Model.TotalPages; i++)
         {
-            <a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@next_offset" id="pagerArrowRight">Next &gt;</a>
+          if (Model.CurrentPage == i)
+          {
+            <span class="selected">@i</span>
+          }
+          else
+          {
+            <a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@(i - 1)"> @i</a>
+          }
         }
+      </span>
 
-     </div></div>
+      @if (Model.CurrentPage < Model.TotalPages)
+      {
+        <a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@Model.CurrentPage" id="pagerArrowRight">Next &gt;</a>
+      }
+    </div>
+  </div>
 }
