@@ -67,7 +67,7 @@
 							@if (string.Compare(item.YearQuarterBegin.ToString(), Model.CurrentQuarter.ID.ToString()) == 1)
 							{
 								<div class="upcomingChange">
-									New class effective starting @(ViewBag.CurrentQuarter.FriendlyName.ToString())
+									New class effective starting @(item.YearQuarterBegin.FriendlyName)
 								</div>
 							}
 
