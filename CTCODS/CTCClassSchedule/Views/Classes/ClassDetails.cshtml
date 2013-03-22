@@ -31,51 +31,71 @@
 				</h1>
 
 				<div class="aside">
-					@if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
-					{
-						<div class="generalInfo">
-							<h2>Department</h2>
-							@if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
-							{
-								<a href="@Model.DepartmentURL">
-									@if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
-									{
-										@Model.DepartmentTitle
-									}
-									else
-									{
-										@Model.SubjectTitle
-									}
-								</a>
-							}
-							else
-							{
-                if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
-								{
-									@Model.DepartmentTitle
-								}
-								else
-								{
-									@Model.SubjectTitle
-								}
-							}
-						</div>
-					}
+          @if (Model.SubjectsInfo.Any(i => !String.IsNullOrWhiteSpace(i.Subject.Title)))
+          {
+            <div class="generalInfo">
+              <h2>Department</h2>
+              <ul>
+                @foreach (SubjectInfoResult sub in Model.SubjectsInfo)
+                {
+                  <li>
+                    @if (!string.IsNullOrWhiteSpace(sub.Subject.Title))
+                    {
+							        if (!string.IsNullOrWhiteSpace(sub.Department.URL))
+                      {
+								        <a href="@sub.Department.URL">
+									        @if (!string.IsNullOrWhiteSpace(sub.Department.Title))
+                          {
+										        @sub.Department.Title
+                          }
+                          else
+                          {
+										        @sub.Subject.Title
+                          }
+								        </a>
+                      }
+                      else
+                      {
+                        if (!string.IsNullOrWhiteSpace(sub.Department.Title))
+                        {
+									        @sub.Department.Title
+                        }
+                        else
+                        {
+									        @sub.Subject.Title
+                        }
+                      }
+                    }
+                  </li>
+                }
+              </ul>
+            </div>
+          }
 
-					@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionTitle))
-					{
-						<div class="generalInfo">
-							<h2>Division</h2>
-							@if (!string.IsNullOrWhiteSpace(ViewBag.DivisionURL))
-							{
-								<a href="@ViewBag.DivisionURL">@ViewBag.DivisionTitle</a>
-							}
-							else
-							{
-								@ViewBag.DivisionTitle
-							}
-						</div>
-					}
+          @if (Model.SubjectsInfo.Any(i => !String.IsNullOrWhiteSpace(i.Division.Title)))
+          {
+            <div class="generalInfo">
+              <h2>Division</h2>
+              <ul>
+                @foreach (SubjectInfoResult sub in Model.SubjectsInfo)
+                {
+                  <li>
+                    @if (!string.IsNullOrWhiteSpace(sub.Division.Title))
+                    {
+                      if (!string.IsNullOrWhiteSpace(sub.Division.URL))
+                      {
+								        <a href="@sub.Division.URL">@sub.Division.Title</a>
+                      }
+                      else
+                      {
+								        @sub.Division.Title
+                      }
+                    }
+                  </li>
+                }
+              </ul>
+            </div>
+          }
 				</div><!-- aside -->
 
 				<div id="class-details">
@@ -219,7 +239,8 @@
 								{
 									int relativeOffset = Model.CurrentQuarter.FriendlyName.CompareTo(q.FriendlyName);
 									<li class="@(relativeOffset < 0 ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
-										@Html.ActionLink(q.FriendlyName, "YearQuarterSubject", new { YearQuarter = q.FriendlyName.Replace(" ", string.Empty), Subject = Model.Slug })
+                    @* TODO: Use the proper Slug, not the prefix. Currently we can't tell which Slug to use if the CoursePrefix is owned by multiple Subjects *@
+										@Html.ActionLink(q.FriendlyName, "YearQuarterSubject", new { YearQuarter = q.FriendlyName.Replace(" ", string.Empty), Subject = ViewContext.RouteData.Values["Prefix"].ToString() })
 
 										@if (relativeOffset == 0)
 										{

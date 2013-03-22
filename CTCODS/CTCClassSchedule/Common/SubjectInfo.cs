@@ -42,33 +42,19 @@ namespace CTCClassSchedule.Common
 		}
 
     /// <summary>
-    /// Takes a course <paramref name="prefix"/> parameter and attempts to return a single matching <see cref="Subject"/> entity.
+    /// Takes a course <paramref name="prefix"/> parameter and returns all <see cref="Subject"/>s which own the prefix <see cref="Subject"/> entity.
     /// </summary>
-    /// <remarks>This method is not absolutely secure. The database schema says that prefixes-to-subjects is a many-to-many relationship,
-    /// so theoretically a single <paramref name="prefix"/> could return one or more <see cref="Subject"/>s. This makes it impossible to
-    /// determine which <see cref="Subject"/>s a course belongs to based solely on course prefixes. However, realistically no course prefix
-    /// is (currently) merged with more than a single <see cref="Subject"/>. Therefore, we can abuse the fact that in reality, there is
-    /// effectively a many-to-one relationship between prefixes and <see cref="Subject"/>s.
-    /// TODO: In the future we may want to modify the database schema to make this many-to-one relationship explicit rather than implied.</remarks>
     /// <param name="prefix"></param>
-    /// <returns>The matching <see cref="Subject"/> entity, or null if no match was found</returns>
-    /// <exception cref="Exception">Throws a general exception if more than one subject is matched to the specified <paramref name="prefix"/></exception>
-    public static Subject GetSubjectFromPrefix(string prefix)
+    /// <returns>The a list of the matching <see cref="Subject"/> entities</returns>
+    public static IList<Subject> GetSubjectsFromPrefix(string prefix)
     {
-      Subject subject = null;
+      IList<Subject> results = new List<Subject>();
       using (ClassScheduleDb db = new ClassScheduleDb())
       {
-        IList<Subject> matches = db.SubjectsCoursePrefixes.Where(s => s.CoursePrefixID.Equals(prefix, StringComparison.OrdinalIgnoreCase))
-                                                          .Select(s => s.Subject).ToList();
-        if (matches.Count > 1)
-        {
-          string subjectList = matches.Select(s => s.Title).Aggregate((i, j) => i + ", " + j);
-          throw new Exception(String.Concat("The course prefix ", prefix, " belongs to more than one subject: ", subjectList, "."));
-        }
-        subject = matches.FirstOrDefault();
+        results = db.SubjectsCoursePrefixes.Where(s => s.CoursePrefixID.Equals(prefix, StringComparison.OrdinalIgnoreCase))
+                                           .Select(s => s.Subject).ToList();
       }
-
-      return subject;
+      return results;
     }
 
 		/// <summary>
