@@ -19,6 +19,7 @@ using System.Configuration;
 using Microsoft.Security.Application;
 using System.Diagnostics;
 using Ctc.Ods.Config;
+using System.Text;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -535,18 +536,19 @@ namespace CTCClassSchedule.Controllers
 
 
 						// Unmerge subjects
-						IList<SubjectsCoursePrefix> unmergables = subject.SubjectsCoursePrefixes.Where(s => !PrefixesToMerge.Contains(s.CoursePrefixID)).ToList();
+            IList<SubjectsCoursePrefix> unmergables = subject.CoursePrefixes.Where(s => !PrefixesToMerge.Contains(s.CoursePrefixID)).ToList();
 						foreach (SubjectsCoursePrefix prefix in unmergables)
 						{
-							subject.SubjectsCoursePrefixes.Remove(prefix);
+              subject.CoursePrefixes.Remove(prefix);
 						}
 
 						// Merge subjects
-						IList<string> currentlyMergedPrefixes = subject.SubjectsCoursePrefixes.Select(s => s.CoursePrefixID).ToList();
+            IList<string> currentlyMergedPrefixes = subject.CoursePrefixes.Select(s => s.CoursePrefixID).ToList();
 						IEnumerable<string> mergables = PrefixesToMerge.Where(m => !currentlyMergedPrefixes.Contains(m));
 						foreach (string prefix in mergables)
 						{
-							subject.SubjectsCoursePrefixes.Add(new SubjectsCoursePrefix {
+              subject.CoursePrefixes.Add(new SubjectsCoursePrefix
+              {
 								SubjectID = subject.SubjectID,
 								CoursePrefixID = prefix
 							});
@@ -563,6 +565,40 @@ namespace CTCClassSchedule.Controllers
 			// Refresh the page to display the updated info
 			return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri);
     }
+
+
+    /// <summary>
+    /// GET: /API/Export/{YearQuarterID}
+    /// </summary>
+    /// <returns>An Adobe InDesign formatted text file with all course data.</returns>
+    public FileResult Export(String YearQuarterID)
+    {
+      if (HttpContext.User.Identity.IsAuthenticated == true)
+      {
+        // Determine whether to use a specific Year Quarter, or the current Year Quarter
+        YearQuarter yrq;
+        if (String.IsNullOrEmpty(YearQuarterID))
+        {
+          using (OdsRepository _db = new OdsRepository())
+          {
+            yrq = _db.CurrentYearQuarter;
+          }
+        }
+        else
+        {
+          yrq = Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID);
+        }
+
+        // Return all the Class Schedule Data as a file
+        return ClassScheduleExporter.GetFile(yrq);
+      }
+      else
+      {
+        throw new UnauthorizedAccessException("You do not have sufficient privileges to export course data.");
+      }
+    }
+
+
 
 	  #region Private methods
 	  /// <summary>
@@ -597,14 +633,12 @@ namespace CTCClassSchedule.Controllers
 	    }
 	    catch (Exception ex)
 	    {
-	      stripped = Encoder.HtmlEncode(withHtml);
+	      stripped = Microsoft.Security.Application.Encoder.HtmlEncode(withHtml);
 	      _log.Warn(
 	        m => m("Unable to remove HTML from string '{0}'\nReturning HTML-encoded string instead.\n{1}", withHtml, ex));
 	    }
 	    return stripped;
 	  }
-
 	  #endregion
-
   }
 }

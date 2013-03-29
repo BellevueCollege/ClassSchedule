@@ -104,7 +104,6 @@ namespace CTCClassSchedule.Common
 			return isEditor;
 		}
 
-
 		// TODO: Jeremy, another optional/BCC specific way of getting data - find another way?
 		public static String getProfileURL(string SID)
 		{
@@ -316,6 +315,24 @@ namespace CTCClassSchedule.Common
 			}
 		}
 
+    /// <summary>
+    /// Take a full name and converts it to a short format, with the last name and first initial of
+    /// the first name (e.g. ANDREW CRASWELL -> CRASWELL A).
+    /// </summary>
+    /// <param name="fullName">The full name to be converted.</param>
+    /// <returns>A string with the short name version of the full name. If fullName was blank or empty, a null is returned.</returns>
+    public static string getShortNameFormat(string fullName)
+    {
+      string shortName = null;
+      if (!String.IsNullOrWhiteSpace(fullName))
+      {
+        int nameStartIndex = fullName.IndexOf(" ") + 1;
+        int nameEndIndex = fullName.Length - nameStartIndex;
+        shortName = String.Concat(fullName.Substring(nameStartIndex, nameEndIndex), " ", fullName.Substring(0, 1));
+      }
+
+      return shortName;
+    }
 
 		/// <summary>
 		///
@@ -334,8 +351,6 @@ namespace CTCClassSchedule.Common
 			};
 		}
 
-
-
 		static public IList<GeneralFacetInfo> ConstructModalityList(string f_oncampus, string f_online, string f_hybrid, string f_telecourse)
 		{
 			IList<GeneralFacetInfo> modality = new List<GeneralFacetInfo>(4);
@@ -347,7 +362,6 @@ namespace CTCClassSchedule.Common
 
 			return modality;
 		}
-
 
 		static public IList<GeneralFacetInfo> ConstructDaysList(string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s)
 		{
@@ -510,6 +524,89 @@ namespace CTCClassSchedule.Common
       return friendlyName.ToString().TrimEnd('/');
     }
 
+    /// <summary>
+    /// Groups a list of Sections by course, into descriptive SectionBlocks
+    /// </summary>
+    /// <param name="sections">List of sections to group</param>
+    /// <returns>List of SectionBlock objects which describe the block of sections</returns>
+    public static IList<SectionsBlock> groupSectionsIntoBlocks(IList<SectionWithSeats> sections, ClassScheduleDb db)
+    {
+      MiniProfiler profiler = MiniProfiler.Current;
+
+      IList<SectionsBlock> results = new List<SectionsBlock>();
+      IList<SectionWithSeats> allLinkedSections = sections.Where(s => s.IsLinked).ToList();
+      IList<SectionWithSeats> nonLinkedSections;
+
+      // sort by the markers indicators where we need to being a new block (w/ course title, etc.)
+      /* TODO: Implement a more configurable sort method. */
+      using (profiler.Step("Sorting sections in preparation for grouping and linking"))
+      {
+        /* COMMENT THIS LINE TO DEBUG
+        IEnumerable<SectionWithSeats> d1 = sections.Where(s => s.ID.ItemNumber.StartsWith("410"));
+        // END DEBUGGING */
+        nonLinkedSections = sections.Where(s => !s.IsLinked)
+                          .OrderBy(s => s.CourseNumber)
+                          .ThenBy(s => allLinkedSections.Where(l => l.LinkedTo == s.ID.ItemNumber).Count())
+                          .ThenByDescending(s => s.IsVariableCredits)
+                          .ThenBy(s => s.Credits)
+                          .ThenBy(s => s.IsTelecourse)
+                          .ThenBy(s => s.IsOnline)
+                          .ThenBy(s => s.IsHybrid)
+                          .ThenBy(s => s.IsOnCampus)
+                          .ThenBy(s => s.SectionCode).ToList();
+      }
+
+      // Group all the sections into course blocks and determine which sections linked
+      using (profiler.Step("Grouping/linking by course"))
+      {
+        int processedCount = 0;
+        while (processedCount < nonLinkedSections.Count)
+        {
+          SectionsBlock courseBlock = new SectionsBlock();
+          courseBlock.LinkedSections = new List<SectionWithSeats>();
+
+          IList<SectionWithSeats> remainingSections = nonLinkedSections.Skip(processedCount).ToList();
+          SectionWithSeats firstSection = remainingSections.First();
+
+          courseBlock.Sections = remainingSections.TakeWhile(s =>
+                                                             s.CourseID == firstSection.CourseID &&
+                                                             s.CourseTitle == firstSection.CourseTitle &&
+                                                             s.Credits == firstSection.Credits &&
+                                                             s.IsVariableCredits == firstSection.IsVariableCredits &&
+                                                             allLinkedSections.Count(l => l.LinkedTo == s.ID.ItemNumber) == allLinkedSections.Count(l => l.LinkedTo == firstSection.ID.ItemNumber))
+                                                             .ToList();
+
+          /* IMPLEMENT IN FUTURE RELEASE
+          // Get list of Section/Course cross-listings, if any
+				  if (courseBlock.Sections.Any(s => s.IsCrossListed))
+				  {
+            // NOTE:  This logic assumes that data will only be saved in ClassScheduleDb after having come through
+            //        the filter of the CtcApi - which normalizes spacing of the ClassID/SectionID field data.
+            courseBlock.CrossListings = db.SectionCourseCrosslistings.Where(x => courseBlock.Sections.Select(s => s.ID.ToString()).Contains(x.ClassID)).ToList();
+				  }
+          */
+
+          // Find all links associated to each of the grouped sections
+          foreach (SectionWithSeats sec in courseBlock.Sections)
+          {
+            SectionWithSeats sect = sec;  // Use copy of object to ensure cross-compiler compatibility
+            List<SectionWithSeats> linkedSections = allLinkedSections.Where(s => sect != null && s.LinkedTo == sect.ID.ItemNumber).ToList();
+            if (linkedSections.Count > 0)
+            {
+              courseBlock.LinkedSections.AddRange(linkedSections);
+            }
+          }
+
+          // Get a list of common footnotes shared with every section in the block
+          courseBlock.CommonFootnotes = Helpers.ExtractCommonFootnotes(courseBlock.Sections);
+
+          processedCount += courseBlock.Sections.Count();
+          results.Add(courseBlock);
+        }
+      }
+
+      return results;
+    }
 
 		/// <summary>
 		/// Retrieves all active and future course descriptions from a <see cref="Course"/>
