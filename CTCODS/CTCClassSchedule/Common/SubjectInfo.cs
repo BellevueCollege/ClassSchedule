@@ -76,7 +76,7 @@ namespace CTCClassSchedule.Common
         result = new SubjectInfoResult
         {
           Subject = subject,
-          SubjectCoursePrefixes = subject.SubjectsCoursePrefixes.ToList(),
+          CoursePrefixes = subject.CoursePrefixes.ToList(),
           Department = subject.Department ?? new Department(),
         };
         result.Division = result.Department.Division ?? new Division();
@@ -109,7 +109,7 @@ namespace CTCClassSchedule.Common
 					return result;
 				}
 
-				result = subject.SubjectsCoursePrefixes.ToList();
+        result = subject.CoursePrefixes.ToList();
 			}
 
 			return result;
