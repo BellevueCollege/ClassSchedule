@@ -279,19 +279,17 @@ namespace CTCClassSchedule.Common
       {
         SectionWithSeats primarySection = Node.Sections.First();
 
-        // Section title
+        // Section title(s)
         builder.AppendLine();
-        if (primarySection.IsLinked)
-        {
-          // How do we display linked courses?
-        }
-
         builder.AppendLine(getSectionExportHeader(primarySection));
-        IList<SectionWithSeats> commonLinkedSections = ClassesController.ParseCommonHeadingLinkedSections(Node.LinkedSections);
-        foreach (SectionWithSeats linkedSec in commonLinkedSections)
+        if (Node.LinkedSections.Count > 0)
         {
-          // TODO: How do we display linked courses?
-          //getSectionExportHeader(linkedSec)
+          IList<SectionWithSeats> commonLinkedSections = ClassesController.ParseCommonHeadingLinkedSections(Node.LinkedSections);
+          foreach (SectionWithSeats linkedSec in commonLinkedSections)
+          {
+            // Display all the linked section headers
+            builder.AppendLine(getSectionExportHeader(linkedSec));
+          }
         }
 
 
@@ -308,43 +306,31 @@ namespace CTCClassSchedule.Common
         // Output all meeting times for grouped sections
         foreach (SectionWithSeats sec in Node.Sections)
         {
-          // Both Sections includes a master and its subordinate linked section(s)
-          IEnumerable<SectionWithSeats> groupedSections = new List<SectionWithSeats>() { sec };
-          IList<SectionWithSeats> linked = Node.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
-
-          if (linked.Count > 0)
+          foreach (OfferedItem item in sec.Offered.OrderBy(o => o.SequenceOrder))
           {
-            groupedSections = groupedSections.Union(linked).ToList();
+            builder.AppendLine(buildOfferedItemsExportText(sec, item));
           }
 
-          foreach (SectionWithSeats currentSection in groupedSections)
+          // Section and course footnotes
+          footnotes = sec.SectionFootnotes;
+          if (!String.IsNullOrWhiteSpace(footnotes))
           {
-            foreach (OfferedItem item in currentSection.Offered.OrderBy(o => o.SequenceOrder))
-            {
-              builder.AppendLine(buildOfferedItemsExportText(currentSection, item));
-            }
-
-            // Section and course footnotes
-            footnotes = currentSection.SectionFootnotes;
-            if (!String.IsNullOrWhiteSpace(footnotes))
-            {
-              builder.AppendLine(String.Concat("<CLSN>", footnotes.Trim()));
-            }
+            builder.AppendLine(String.Concat("<CLSN>", footnotes.Trim()));
+          }
 
 
-            // Add Automated footnotes
-            // Only display the automated hybrid footnote on the last hybrid section to avoid duplicate footnotes
-            string hyrbidFootnote = AutomatedFootnotesConfig.Footnotes("hybrid").Text;
-            footnotes = AutomatedFootnotesConfig.getAutomatedFootnotesText(currentSection);
-            if (footnotes.Contains(hyrbidFootnote)
-                && currentSection != Node.Sections.Where(s => s.IsHybrid && currentSection.CourseNumber == s.CourseNumber && currentSection.Credits == s.Credits && currentSection.CourseTitle == s.CourseTitle && currentSection.CustomTitle == s.CustomTitle).LastOrDefault())
-            {
-              footnotes = footnotes.Replace(hyrbidFootnote, string.Empty);
-            }
-            if (!String.IsNullOrWhiteSpace(footnotes))
-            {
-              builder.AppendLine(String.Concat("<CLSY>", footnotes.Trim()));
-            }
+          // Add Automated footnotes
+          // Only display the automated hybrid footnote on the last hybrid section to avoid duplicate footnotes
+          string hyrbidFootnote = AutomatedFootnotesConfig.Footnotes("hybrid").Text;
+          footnotes = AutomatedFootnotesConfig.getAutomatedFootnotesText(sec);
+          if (footnotes.Contains(hyrbidFootnote)
+              && sec != Node.Sections.Where(s => s.IsHybrid && sec.CourseNumber == s.CourseNumber && sec.Credits == s.Credits && sec.CourseTitle == s.CourseTitle && sec.CustomTitle == s.CustomTitle).LastOrDefault())
+          {
+            footnotes = footnotes.Replace(hyrbidFootnote, string.Empty);
+          }
+          if (!String.IsNullOrWhiteSpace(footnotes))
+          {
+            builder.AppendLine(String.Concat("<CLSY>", footnotes.Trim()));
           }
         }
 
