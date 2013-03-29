@@ -138,6 +138,7 @@
     <Compile Include="Common\AutomatedFootnotesSection.cs" />
     <Compile Include="Common\BoolExtensions.cs" />
     <Compile Include="Common\ClassFootnote.cs" />
+    <Compile Include="Common\ClassScheduleExporter.cs" />
     <Compile Include="Common\CourseOutcomes.cs" />
     <Compile Include="Common\CASAuthorizeAttribute.cs" />
     <Compile Include="Models\AToZViewModel.cs" />
@@ -467,7 +468,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
