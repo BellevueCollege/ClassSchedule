@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -249,6 +250,7 @@ namespace CTCClassSchedule.Models
         private ObjectSet<Subject> _Subjects;
 
         #endregion
+
         #region AddTo Methods
 
         /// <summary>
@@ -340,8 +342,8 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
-    }
 
+    }
 
     #endregion
 
@@ -369,6 +371,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
         #region Primitive Properties
 
         /// <summary>
@@ -520,6 +523,7 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
+
     }
 
     /// <summary>
@@ -544,6 +548,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
         #region Primitive Properties
 
         /// <summary>
@@ -647,6 +652,7 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
+
     }
 
     /// <summary>
@@ -675,6 +681,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
         #region Primitive Properties
 
         /// <summary>
@@ -778,6 +785,7 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
+
     }
 
     /// <summary>
@@ -802,6 +810,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
         #region Primitive Properties
 
         /// <summary>
@@ -977,6 +986,7 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
+
         #region Navigation Properties
 
         /// <summary>
@@ -1040,6 +1050,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
     }
 
     /// <summary>
@@ -1064,6 +1075,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
         #region Primitive Properties
 
         /// <summary>
@@ -1191,6 +1203,7 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
+
         #region Navigation Properties
 
         /// <summary>
@@ -1216,6 +1229,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
     }
 
     /// <summary>
@@ -1242,6 +1256,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
         #region Primitive Properties
 
         /// <summary>
@@ -1300,6 +1315,7 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
+
     }
 
     /// <summary>
@@ -1324,6 +1340,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
         #region Primitive Properties
 
         /// <summary>
@@ -1403,6 +1420,7 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
+
     }
 
     /// <summary>
@@ -1427,6 +1445,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
         #region Primitive Properties
 
         /// <summary>
@@ -1578,6 +1597,7 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
+
     }
 
     /// <summary>
@@ -1604,6 +1624,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
         #region Primitive Properties
 
         /// <summary>
@@ -1779,6 +1800,7 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
+
         #region Navigation Properties
 
         /// <summary>
@@ -1826,7 +1848,7 @@ namespace CTCClassSchedule.Models
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("ClassSchedule.Models", "FK_SubjectsCoursePrefixes_Subjects", "SubjectsCoursePrefix")]
-        public EntityCollection<SubjectsCoursePrefix> SubjectsCoursePrefixes
+        public EntityCollection<SubjectsCoursePrefix> CoursePrefixes
         {
             get
             {
@@ -1842,6 +1864,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
     }
 
     /// <summary>
@@ -1868,6 +1891,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
         #region Primitive Properties
 
         /// <summary>
@@ -1926,6 +1950,7 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
+
         #region Navigation Properties
 
         /// <summary>
@@ -1967,6 +1992,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
     }
 
     /// <summary>
@@ -1991,6 +2017,7 @@ namespace CTCClassSchedule.Models
         }
 
         #endregion
+
         #region Primitive Properties
 
         /// <summary>
@@ -2214,8 +2241,10 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
+
     }
 
     #endregion
+
 
 }
