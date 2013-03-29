@@ -59,7 +59,7 @@
 						}	else {
 							isFirst = false;
 						}
-						@Html.ActionLink(yrq.FriendlyName, "Export", "Classes", new { YearQuarterID = yrq.ID }, null)
+						@Html.ActionLink(yrq.FriendlyName, "Export", "Api", new { YearQuarterID = yrq.ID }, null)
 					}
 					@Html.Raw(".")
 				}
