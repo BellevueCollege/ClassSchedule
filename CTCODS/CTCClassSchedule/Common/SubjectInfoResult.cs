@@ -11,6 +11,6 @@ namespace CTCClassSchedule.Common
 		public Subject Subject { get; set; }
 		public Department Department { get; set; }
 		public Division Division { get; set; }
-		public IList<SubjectsCoursePrefix> SubjectCoursePrefixes { get; set; }
+		public IList<SubjectsCoursePrefix> CoursePrefixes { get; set; }
 	}
 }

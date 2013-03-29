@@ -24,7 +24,7 @@
 			<div class="editor-field">
 				<ul class="subject-merger subject-text-field">
 					@{
-							IList<string> mergedPrefixes = Model.Subject.SubjectsCoursePrefixes.Select(s => s.CoursePrefixID).ToList();
+							IList<string> mergedPrefixes = Model.Subject.CoursePrefixes.Select(s => s.CoursePrefixID).ToList();
 							foreach (string prefix in mergedPrefixes)
 							{
 								<li class="subject-choice">

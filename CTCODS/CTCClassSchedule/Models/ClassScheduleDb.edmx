@@ -350,7 +350,7 @@
           <Property Type="String" Name="LastUpdatedBy" MaxLength="9" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastUpdated" />
           <NavigationProperty Name="Department" Relationship="ClassSchedule.Models.FK_Subjects_Departments" FromRole="Subject" ToRole="Department" />
-          <NavigationProperty Name="SubjectsCoursePrefixes" Relationship="ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects" FromRole="Subject" ToRole="SubjectsCoursePrefix" />
+          <NavigationProperty Name="CoursePrefixes" Relationship="ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects" FromRole="Subject" ToRole="SubjectsCoursePrefix" />
         </EntityType>
         <Association Name="FK_Departments_Division">
           <End Type="ClassSchedule.Models.Division" Role="Division" Multiplicity="0..1" />
@@ -542,7 +542,7 @@
         <EntityTypeShape EntityType="ClassSchedule.Models.CourseMeta" Width="1.5" PointX="12.375" PointY="1.125" Height="1.7879850260416674" />
         <EntityTypeShape EntityType="ClassSchedule.Models.SectionCourseCrosslisting" Width="1.5" PointX="2.875" PointY="1.125" Height="1.4033821614583388" />
         <EntityTypeShape EntityType="ClassSchedule.Models.SectionsMeta" Width="1.5" PointX="4.625" PointY="1.125" Height="2.1725878906250031" />
-        <EntityTypeShape EntityType="ClassSchedule.Models.SubjectsCoursePrefix" Width="1.5" PointX="3.25" PointY="4" Height="1.5956835937500031" />
+        <EntityTypeShape EntityType="ClassSchedule.Models.SubjectsCoursePrefix" Width="1.5" PointX="3.375" PointY="4.25" Height="1.5956835937500031" />
         <EntityTypeShape EntityType="ClassSchedule.Models.SectionSeat" Width="1.5" PointX="6.375" PointY="1.125" Height="1.5956835937500031" />
         <EntityTypeShape EntityType="ClassSchedule.Models.vw_Class" Width="1.5" PointX="0.5" PointY="0.625" Height="2.7494921875000031" />
         <EntityTypeShape EntityType="ClassSchedule.Models.Department" Width="1.5" PointX="8.25" PointY="4.25" Height="2.749492187499996" />
@@ -556,8 +556,8 @@
           <ConnectorPoint PointX="7.375" PointY="5.624746093749998" />
         </AssociationConnector>
         <AssociationConnector Association="ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects" >
-          <ConnectorPoint PointX="5.875" PointY="4.9228417968750016" />
-          <ConnectorPoint PointX="4.75" PointY="4.9228417968750016" />
+          <ConnectorPoint PointX="5.875" PointY="5.0478417968750016" />
+          <ConnectorPoint PointX="4.875" PointY="5.0478417968750016" />
         </AssociationConnector>
         </Diagram>
     </Diagrams>
