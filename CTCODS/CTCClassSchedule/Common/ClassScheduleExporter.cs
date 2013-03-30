@@ -31,11 +31,33 @@ namespace CTCClassSchedule.Common
     /// <returns>A FileResult with a text/plain UTF8 encoded file as an HTML response.</returns>
     public static FileResult GetFile(YearQuarter yearQuarter)
     {
+      StringBuilder fileText = new StringBuilder();
+
       // Convert each object to a node
       IList<IExportableNode> nodes = GetClassScheduleDataNodes(yearQuarter);
 
+      // Build a legend describing all the different tags and flags
+      fileText.AppendLine("* Class Schedule Course Export -- " + yearQuarter.FriendlyName);
+      fileText.AppendLine("*");
+      fileText.AppendLine("* Legend:");
+      fileText.AppendLine("* <CLS9>   -- Division title");
+      fileText.AppendLine("* <CLS1>   -- Subject title");
+      fileText.AppendLine("* <CLSP>   -- Subject intro");
+      fileText.AppendLine("* <CLS2>   -- Course header, or linked section headers");
+      fileText.AppendLine("* <CLS3>   -- HP footnotes, course footnotes, CMS footnotes, and common Section footnotes");
+      fileText.AppendLine("* <CLS5>   -- Default Section tag");
+      fileText.AppendLine("* <CLS6>   -- Evening Section");
+      fileText.AppendLine("* <CLS7>   -- Weekend Section");
+      fileText.AppendLine("* <CLSD>   -- Distance Education Section");
+      fileText.AppendLine("* <CLSA>   -- Section to be arranged");
+      fileText.AppendLine("* <CLSY>   -- Automated footnotes");
+      fileText.AppendLine("* <CLSN>   -- Section footnotes");
+      fileText.AppendLine("* [h]      -- Flags a hybrid Section");
+      fileText.AppendLine("* [online] -- Flags a hybrid Section");
+      fileText.AppendLine("* D110     -- Default room if no room was assigned to the Section");
+      fileText.AppendLine("* staff    -- Default instructor name if no instructor is assigned to the Section");
+
       // Build the contents of the file
-      StringBuilder fileText = new StringBuilder();
       foreach (IExportableNode node in nodes)
       {
         fileText.Append(node);
