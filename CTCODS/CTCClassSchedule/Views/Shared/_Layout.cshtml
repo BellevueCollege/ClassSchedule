@@ -1,61 +1,64 @@
 @using CTCClassSchedule.Common;
 @using CtcApi.Web.Security;
 @using CTCClassSchedule.Common;
+
+@{
+  string ver = ViewBag.Version;
+}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-<head>
-	<!-- VERSION: @Html.Raw(ViewBag.Version) -->
+  <head>
 
-	<title>@ViewBag.PageTitle</title>
-	<!-- TODO: Any hope for making this page configurable? -->
-	<link rel="stylesheet" href="/globals/btheme_v0.1/css/btheme_v0.1.2.css" type="text/css" />
-	<link rel="stylesheet" href="@Url.Content("~/Content/grids.css")" type="text/css" />
-	<link rel="stylesheet" href="@Url.Content("~/Content/automatic-image-slider.css")" type="text/css" />
-	<link rel="stylesheet" href="@Url.Content("~/Content/jquery-ui-1.8.17.custom.css")" type="text/css" />
-	<link rel="stylesheet" href="@Url.Content("~/Content/ClassSchedule.css")?v=3.0.1.1" type="text/css" />
+    <title>@ViewBag.PageTitle</title>
+    <!-- TODO: Any hope for making this page configurable? -->
+    <link rel="stylesheet" href="/globals/btheme_v0.1/css/btheme_v0.1.2.css" type="text/css" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/grids.css")" type="text/css" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/automatic-image-slider.css")" type="text/css" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/jquery-ui-1.8.17.custom.css")" type="text/css" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/ClassSchedule.css")?v=@ver" type="text/css" />
     <!--[if IE 7]>
-        <link rel="stylesheet" href="http://bellevuecollege.edu/globals/btheme_v0.1/css/ie7.css" type="text/css" />
-       <link rel="stylesheet" href="@Url.Content("~/Content/ie7.css")?v=0.1" type="text/css" />
+      <link rel="stylesheet" href="http://bellevuecollege.edu/globals/btheme_v0.1/css/ie7.css" type="text/css" />
+      <link rel="stylesheet" href="@Url.Content("~/Content/ie7.css")?v=@ver" type="text/css" />
     <![endif]-->
 
-	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js"></script>
-	<script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.8.17.custom.min.js")"></script>
-	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.unobtrusive-ajax.min.js"></script>
-	<script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-timepicker-addon.js")"></script>
+    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.8.17.custom.min.js")"></script>
+    <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-timepicker-addon.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/classes.js")"></script>
-	<script type="text/javascript" src="/globals/btheme_v0.1/js/searchbox.js"></script>
-	<script type="text/javascript" src="@Url.Content("~/Scripts/spin.min.js")"></script>	<!-- from http://fgnass.github.com/spin.js/ -->
-	<script type="text/javascript">
+    <script type="text/javascript" src="/globals/btheme_v0.1/js/searchbox.js"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/spin.min.js")"></script>	<!-- from http://fgnass.github.com/spin.js/ -->
+    <script type="text/javascript">
 		// global values used by multiple client scripts
-		var g_ajaxLoaderImgPath = "@Url.Content("~/Content/images/ajax-loader.gif")";
-		var g_getSeatsUrl = "@Url.Action("GetSeats", "Api")";
-		var g_updateCMSFootnoteUrl = "@Url.Action("UpdateSectionFootnote", "Api")";
-		var g_searchRootUrl = "@Url.Action("Index", "Search")";
+      var g_ajaxLoaderImgPath = "@Url.Content("~/Content/images/ajax-loader.gif")";
+      var g_getSeatsUrl = "@Url.Action("GetSeats", "Api")";
+      var g_updateCMSFootnoteUrl = "@Url.Action("UpdateSectionFootnote", "Api")";
+      var g_searchRootUrl = "@Url.Action("Index", "Search")";
 
-        //feedbackform
-        $(document).ready(function() {
+      //feedbackform
+      $(document).ready(function() {
 
-	        $("#feedbackdialog").append($("<iframe>").attr({
-			    src: "//bellevuecollege.edu/classesfeedback/?iframe=true",
-			    width: "100%",
-			    height: "100%"
-		      })).dialog({
-			    autoOpen: false,
-			    height: 400,
-			    width: 500,
-			    modal: true
-	        });
-
-	        $( "#betaFeedback" ).click(function() {
-			        $( "#feedbackdialog" ).dialog( "open" );
-			        return false;
-	        });
+        $("#feedbackdialog").append($("<iframe>").attr({
+          src: "//bellevuecollege.edu/classesfeedback/?iframe=true",
+          width: "100%",
+          height: "100%"
+        })).dialog({
+          autoOpen: false,
+          height: 400,
+          width: 500,
+          modal: true
         });
-	</script>
-	@RenderSection("PageScripts", false)
 
-	@MvcMiniProfiler.MiniProfiler.RenderIncludes()
-</head>
+        $( "#betaFeedback" ).click(function() {
+          $( "#feedbackdialog" ).dialog( "open" );
+          return false;
+        });
+      });
+    </script>
+    @RenderSection("PageScripts", false)
+
+    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
+  </head>
 
 
 
