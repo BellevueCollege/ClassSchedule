@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using CTCClassSchedule.Models;
 using System.Text.RegularExpressions;
+using Common.Logging;
 
 namespace CTCClassSchedule.Common
 {
@@ -15,7 +16,9 @@ namespace CTCClassSchedule.Common
 	/// </remarks>
 	public static class SubjectInfo
 	{
-		/// <summary>
+	  private static ILog _log = LogManager.GetCurrentClassLogger();
+
+	  /// <summary>
 		/// Finds a <see cref="Subject"/> based on its <paramref name="slug"/> identifier
 		/// </summary>
 		/// <param name="slug">The slug identifier for a given <see cref="Subject"/></param>
@@ -70,6 +73,49 @@ namespace CTCClassSchedule.Common
 				Subject subject = GetSubject(slug, context);
 				if (subject == null)
 				{
+					return result;
+				}
+
+        result = new SubjectInfoResult
+        {
+          Subject = subject,
+          CoursePrefixes = subject.CoursePrefixes.ToList(),
+          Department = subject.Department ?? new Department(),
+        };
+        result.Division = result.Department.Division ?? new Division();
+
+        // If the url is a fully qualified url (e.g. http://continuinged.bellevuecollege.edu/about)
+        // or empty just return it, otherwise prepend with the current school url.
+        string deptUrl = result.Department.URL ?? string.Empty;
+        if (!string.IsNullOrWhiteSpace(deptUrl) && !Regex.IsMatch(deptUrl, @"^https?://"))
+        {
+          result.Department.URL = deptUrl;
+        }
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Gathers a <see cref="Subject"/>'s related <see cref="Department"/>, <see cref="Division"/>, and <see cref="SubjectsCoursePrefix"/>s
+		/// </summary>
+		/// <param name="prefix">The prefix identifier for a given <see cref="Subject"/></param>
+		/// <returns>An instance of <see cref="SubjectInfoResult"/> containing data related to the <see cref="Subject"/>, or null if the subject was not found.</returns>
+		public static SubjectInfoResult GetSubjectInfoFromPrefix(string prefix)
+		{
+			SubjectInfoResult result = null;
+			using (ClassScheduleDb context = new ClassScheduleDb())
+			{
+//        Subject subject = context.Subjects.Where(s => s.Slug.Equals(slug, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+			  Subject subject = (from s in context.Subjects
+			                    join p in context.SubjectsCoursePrefixes on s.SubjectID equals p.SubjectID into j
+			                    from sub in j
+			                    where sub.CoursePrefixID == prefix
+			                    select s).FirstOrDefault();
+
+				if (subject == null)
+				{
+          _log.Warn(m => m("Failed to retrieve Subject record for PrefixID '{0}'", prefix));
 					return result;
 				}
 

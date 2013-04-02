@@ -246,32 +246,31 @@ namespace CTCClassSchedule.Controllers
 					courseBlocks = Helpers.groupSectionsIntoBlocks(sectionsEnum, db);
         }
 
-
         // Construct the model
-        SubjectInfoResult subject = SubjectInfo.GetSubjectInfo(Subject);
+        SubjectInfoResult subject = SubjectInfo.GetSubjectInfoFromPrefix(Subject);
         IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
-        YearQuarterSubjectModel model = new YearQuarterSubjectModel
-        {
-          Courses = courseBlocks,
-          CurrentQuarter = repository.CurrentYearQuarter,
-          CurrentRegistrationQuarter = yrqRange[0],
-          NavigationQuarters = yrqRange,
-          ViewingQuarter = yrq,
-          Slug = subject.Subject.Slug,
-          SubjectTitle = subject.Subject.Title,
-          SubjectIntro = subject.Subject.Intro,
-          DepartmentTitle = subject.Department.Title,
-          DepartmentURL = subject.Department.URL,
-        };
 
+			  YearQuarterSubjectModel model = new YearQuarterSubjectModel
+			                                    {
+			                                      Courses = courseBlocks,
+			                                      CurrentQuarter = repository.CurrentYearQuarter,
+			                                      CurrentRegistrationQuarter = yrqRange[0],
+			                                      NavigationQuarters = yrqRange,
+			                                      ViewingQuarter = yrq,
+                                            // if we were unable to determine a Slug, use the Subject (e.g. Prefix) that brought us here
+			                                      Slug = subject != null ? subject.Subject.Slug : Subject,
+			                                      SubjectTitle = subject != null ? subject.Subject.Title : string.Empty,
+			                                      SubjectIntro = subject != null ? subject.Subject.Intro : string.Empty,
+			                                      DepartmentTitle = subject != null ? subject.Department.Title : string.Empty,
+			                                      DepartmentURL = subject != null ? subject.Department.URL : string.Empty,
+			                                    };
 
-        if (format == "json")
-				{
-					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
-					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-					return Json(model, JsonRequestBehavior.AllowGet);
-				}
-
+			    if (format == "json")
+			    {
+			      // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+			      // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+			      return Json(model, JsonRequestBehavior.AllowGet);
+			    }
 
         // set up all the ancillary data we'll need to display the View
 				ViewBag.timestart = timestart;

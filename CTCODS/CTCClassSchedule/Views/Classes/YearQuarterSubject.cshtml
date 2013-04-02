@@ -24,6 +24,9 @@
 		<div id="content">
       @if (Model.Courses.Count == 0)
       {
+        @*
+        TODO: The Subject (aka Prefix) should be displayed to the user here, not the Slug - the slug is only for URL construction, the Subject is the user info
+        *@
         <h1 id="pageTitle">No @Model.Slug classes were found</h1>
         <div id="error-noclassesfound">
           <strong>TIP:</strong>
