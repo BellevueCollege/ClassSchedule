@@ -436,16 +436,20 @@ namespace CTCClassSchedule.Controllers
 																							 .ToList();
 				}
 
+
 				// Construct the model and return it
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
+          // Exclude all prefixes which have already been merged -- a prefix can only belong ot a single subject
+          IList<string> mergablePrefixes = allPrefixes.Except(db.SubjectsCoursePrefixes.Select(p => p.CoursePrefixID)).ToList();
+
 					SubjectInfoResult programInfo = SubjectInfo.GetSubjectInfo(Slug);
 					ProgramEditModel model = new ProgramEditModel
 					{
 						Subject = programInfo.Subject,
 						Department = programInfo.Department,
 						Division = programInfo.Division,
-						AllCoursePrefixes = allPrefixes
+            AllCoursePrefixes = mergablePrefixes
 					};
 
 					return PartialView(model);

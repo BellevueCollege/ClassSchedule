@@ -336,26 +336,17 @@ namespace CTCClassSchedule.Controllers
 					}
 				}
 
-        IList<Subject> subjects = SubjectInfo.GetSubjectsFromPrefix(Prefix);
-        IList<SubjectInfoResult> subjectsInfo = new List<SubjectInfoResult>();
-        foreach (Subject sub in subjects)
-        {
-          subjectsInfo.Add(SubjectInfo.GetSubjectInfo(sub.Slug));
-        }
-
         // Create the model
         model = new ClassDetailsModel
         {
-          SubjectsInfo = subjectsInfo,
           Courses = courses,
           CurrentQuarter = repository.CurrentYearQuarter,
           NavigationQuarters = navigationQuarters,
           QuartersOffered = quartersOffered,
           CMSFootnote = getCMSFootnote(courseID),
-          LearningOutcomes = learningOutcomes
+          LearningOutcomes = learningOutcomes,
         };
 
-        /*
         Subject subject = SubjectInfo.GetSubjectFromPrefix(Prefix);
         if (subject != null)
         {
@@ -366,7 +357,6 @@ namespace CTCClassSchedule.Controllers
           model.DepartmentTitle = programInfo.Department.Title;
           model.DepartmentURL = programInfo.Department.URL;
         }
-        */
 			}
 
       return View(model);

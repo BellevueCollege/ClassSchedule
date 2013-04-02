@@ -49,15 +49,23 @@ namespace CTCClassSchedule.Common
     /// </summary>
     /// <param name="prefix"></param>
     /// <returns>The a list of the matching <see cref="Subject"/> entities</returns>
-    public static IList<Subject> GetSubjectsFromPrefix(string prefix)
+    public static Subject GetSubjectFromPrefix(string prefix)
     {
-      IList<Subject> results = new List<Subject>();
+      Subject result = null;
       using (ClassScheduleDb db = new ClassScheduleDb())
       {
-        results = db.SubjectsCoursePrefixes.Where(s => s.CoursePrefixID.Equals(prefix, StringComparison.OrdinalIgnoreCase))
-                                           .Select(s => s.Subject).ToList();
+        // The CoursePrefixID is the primary key, so we know there will not be more than one result
+        result = db.SubjectsCoursePrefixes.Where(s => s.CoursePrefixID.Equals(prefix, StringComparison.OrdinalIgnoreCase))
+                                           .Select(s => s.Subject).FirstOrDefault();
       }
-      return results;
+
+      if (result == null)
+      {
+        _log.Warn(m => m("Failed to retrieve Subject record for PrefixID '{0}'", prefix));
+        return result;
+      }
+
+      return result;
     }
 
 		/// <summary>
@@ -106,7 +114,6 @@ namespace CTCClassSchedule.Common
 			SubjectInfoResult result = null;
 			using (ClassScheduleDb context = new ClassScheduleDb())
 			{
-//        Subject subject = context.Subjects.Where(s => s.Slug.Equals(slug, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
 			  Subject subject = (from s in context.Subjects
 			                    join p in context.SubjectsCoursePrefixes on s.SubjectID equals p.SubjectID into j
 			                    from sub in j
