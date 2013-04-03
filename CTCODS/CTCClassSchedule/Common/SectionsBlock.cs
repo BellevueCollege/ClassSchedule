@@ -25,9 +25,10 @@ namespace CTCClassSchedule
 		/// </summary>
 		public IEnumerable<string> CommonFootnotes { get; set; }
 
-    /// <summary>
-    /// Collection of cross-listed <see cref="Section"/>/<see cref="Course"/> relationships
+	  /// <summary>
+    /// Indicates whether the current block of <see cref="Section"/>s (e.g. a <see cref="Course"/>)
+    /// is cross-listed
     /// </summary>
-	  public IEnumerable<SectionCourseCrosslisting> CrossListings {get;set;}
+	  public bool IsCrosslisted {get;set;}
 	}
 }

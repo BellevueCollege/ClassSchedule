@@ -507,6 +507,7 @@ namespace CTCClassSchedule.Common
         {"DAILY","Daily/"},
         {"ARRANGED","Arranged/"},
         {"M","Monday/"},
+        /* HACK: See .Replace() comment below */
         {"Th","Xhursday/"},
         {"W","Wednesday/"},
         {"T","Tuesday/"},
@@ -519,23 +520,32 @@ namespace CTCClassSchedule.Common
       {
         friendlyName.Replace(key, daysDictionary[key]);
       }
+      // HACK: If we don't obscure the "T" in Thursday, it will be replaced by the Tuesday evaluation.
       friendlyName.Replace("X", "T");
 
       return friendlyName.ToString().TrimEnd('/');
     }
 
-    /// <summary>
-    /// Groups a list of Sections by course, into descriptive SectionBlocks
-    /// </summary>
-    /// <param name="sections">List of sections to group</param>
-    /// <returns>List of SectionBlock objects which describe the block of sections</returns>
-    public static IList<SectionsBlock> groupSectionsIntoBlocks(IList<SectionWithSeats> sections, ClassScheduleDb db)
+	  /// <summary>
+	  /// Groups a list of Sections by course, into descriptive SectionBlocks
+	  /// </summary>
+	  /// <param name="sections">List of sections to group</param>
+	  /// <param name="db"></param>
+	  /// <returns>List of SectionBlock objects which describe the block of sections</returns>
+	  public static IList<SectionsBlock> groupSectionsIntoBlocks(IList<SectionWithSeats> sections, ClassScheduleDb db)
     {
       MiniProfiler profiler = MiniProfiler.Current;
 
       IList<SectionsBlock> results = new List<SectionsBlock>();
       IList<SectionWithSeats> allLinkedSections = sections.Where(s => s.IsLinked).ToList();
       IList<SectionWithSeats> nonLinkedSections;
+
+      // minimize trips to the database, since this collection should be relatively small
+      IList<SectionCourseCrosslisting> crosslistings;
+      using (profiler.Step("Retrieving Section/Course cross-listings"))
+      {
+        crosslistings = db.SectionCourseCrosslistings.ToList();
+      }
 
       // sort by the markers indicators where we need to being a new block (w/ course title, etc.)
       /* TODO: Implement a more configurable sort method. */
@@ -576,15 +586,8 @@ namespace CTCClassSchedule.Common
                                                              allLinkedSections.Count(l => l.LinkedTo == s.ID.ItemNumber) == allLinkedSections.Count(l => l.LinkedTo == firstSection.ID.ItemNumber))
                                                              .ToList();
 
-          /* IMPLEMENT IN FUTURE RELEASE
-          // Get list of Section/Course cross-listings, if any
-				  if (courseBlock.Sections.Any(s => s.IsCrossListed))
-				  {
-            // NOTE:  This logic assumes that data will only be saved in ClassScheduleDb after having come through
-            //        the filter of the CtcApi - which normalizes spacing of the ClassID/SectionID field data.
-            courseBlock.CrossListings = db.SectionCourseCrosslistings.Where(x => courseBlock.Sections.Select(s => s.ID.ToString()).Contains(x.ClassID)).ToList();
-				  }
-          */
+          // Flag whether or not this course block is crosslisted with other sections
+          courseBlock.IsCrosslisted = crosslistings.Any(x => x.CourseID == firstSection.CourseID);
 
           // Find all links associated to each of the grouped sections
           foreach (SectionWithSeats sec in courseBlock.Sections)
@@ -598,7 +601,7 @@ namespace CTCClassSchedule.Common
           }
 
           // Get a list of common footnotes shared with every section in the block
-          courseBlock.CommonFootnotes = Helpers.ExtractCommonFootnotes(courseBlock.Sections);
+          courseBlock.CommonFootnotes = ExtractCommonFootnotes(courseBlock.Sections);
 
           processedCount += courseBlock.Sections.Count();
           results.Add(courseBlock);

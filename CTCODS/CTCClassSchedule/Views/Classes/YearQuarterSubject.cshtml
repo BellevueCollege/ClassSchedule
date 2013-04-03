@@ -1,4 +1,5 @@
-﻿@using CTCClassSchedule
+﻿@using System.Text.RegularExpressions
+@using CTCClassSchedule
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Controllers
 @using CTCClassSchedule.Models
@@ -171,6 +172,34 @@
                       CommonFootnotes = block.CommonFootnotes,
                     });
                   }
+                  <li>
+@if (block.IsCrosslisted)
+  {
+    string courseID = firstSection.CourseID;
+    // because we're using this in an attribute name, replace invalid characters w/ dashes
+    string uniqueID = Regex.Replace(courseID.Replace('&','-'), @"\s+", "-");
+
+    <ul class="section-crosslisted-courses">
+      <li>
+        Also offered as part of
+        <div id="courses-crosslisted-with-@uniqueID" class="section-crosslisted-courses">
+          <noscript><strong>Javascript is required to load cross-listed courses.</strong></noscript>
+        </div>
+      </li>
+    </ul>
+
+      <script type="text/javascript">
+      // dynamically load course cross-listings, if present
+      // NOTE: This script is inline so that it's only created when and where needed.
+        $(function () {
+          var jsonUrl = "@Url.Action("CrossListedCourses", "Api", new {courseID = courseID})";
+          var quarter = "@(Model.CurrentQuarter.FriendlyName)";
+
+          LoadCrossListedCourses(jsonUrl, $('div#courses-crosslisted-with-@uniqueID'), quarter);
+        });
+      </script>
+  }
+                  </li>
                 </ul>
               }
             }

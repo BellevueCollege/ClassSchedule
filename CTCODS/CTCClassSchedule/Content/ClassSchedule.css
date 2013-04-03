@@ -1777,11 +1777,11 @@ ul.subject-merger li.subject-choice span.subject-choice-close
 
 
 .section-crosslisted-courses {
-  color: black;
+  color: gray;
 }
 
 ul.section-crosslisted-courses {
-  margin-left: 0;
+  margin-left: 20px;
 }
 
 .section-cross-listed-course-title a {

@@ -73,11 +73,12 @@ namespace Test.CtcClassSchedule
 
 
     [TestMethod()]
-    public void CrossListedCoursesTest()
+    public void CrossListedCourses_NotCommonCourse()
     {
       ApiController target = new ApiController();
-      string sectionID = "3003B234";
-      JsonResult actual = target.CrossListedCourses(sectionID);
+//      string courseID = ConstructCourseID(CourseID.FromString("MATH","255"), false);
+      string courseID = ConstructCourseID(CourseID.FromString("CEO","196"), false);
+      JsonResult actual = target.CrossListedCourses(courseID);
 
       Assert.IsNotNull(actual, "Returned Result is NULL");
       Assert.IsNotNull(actual.Data, "JSON data is NULL");
@@ -86,21 +87,53 @@ namespace Test.CtcClassSchedule
       IEnumerable<CrossListedCourseModel> obj = actual.Data as IEnumerable<CrossListedCourseModel>;
       Assert.IsNotNull(obj);
 
-      string[] courseIDs = obj.Select(o => ConstructCourseID(o.ID, o.IsCommonCourse)).ToArray();
+      string[] sectionIDs = obj.Select(o => o.SectionID.ToString()).ToArray();
 
-      if (courseIDs.Length > 0)
+      if (sectionIDs.Length > 0)
       {
         using (ClassScheduleDb db = new ClassScheduleDb())
         {
           IQueryable<SectionCourseCrosslisting> crosslistings = from x in db.SectionCourseCrosslistings
-                                                                where courseIDs.Contains(x.CourseID)
+                                                                where sectionIDs.Contains(x.ClassID)
                                                                 select x;
-          Assert.IsTrue(crosslistings.Any(), "Did not find matching cross-listing record in the Class Schedule database. ('{0}' => [{1}]", sectionID, courseIDs.Mash());
+          Assert.IsTrue(crosslistings.Any(), "Did not find matching cross-listing record in the Class Schedule database. ('{0}' => [{1}]", courseID, sectionIDs.Mash());
         }
       }
       else
       {
-        Assert.Inconclusive("The method did not return any cross-linked CourseIDs for '{0}'", sectionID);
+        Assert.Inconclusive("The method did not return any cross-linked SectionIDs for '{0}'", courseID);
+      }
+    }
+
+    [TestMethod()]
+    public void CrossListedCourses_CommonCourse()
+    {
+      ApiController target = new ApiController();
+      string courseID = ConstructCourseID(CourseID.FromString("ART","107"), true);
+      JsonResult actual = target.CrossListedCourses(courseID);
+
+      Assert.IsNotNull(actual, "Returned Result is NULL");
+      Assert.IsNotNull(actual.Data, "JSON data is NULL");
+      Assert.IsInstanceOfType(actual.Data, typeof(IEnumerable<CrossListedCourseModel>));
+
+      IEnumerable<CrossListedCourseModel> obj = actual.Data as IEnumerable<CrossListedCourseModel>;
+      Assert.IsNotNull(obj);
+
+      string[] sectionIDs = obj.Select(o => o.SectionID.ToString()).ToArray();
+
+      if (sectionIDs.Length > 0)
+      {
+        using (ClassScheduleDb db = new ClassScheduleDb())
+        {
+          IQueryable<SectionCourseCrosslisting> crosslistings = from x in db.SectionCourseCrosslistings
+                                                                where sectionIDs.Contains(x.ClassID)
+                                                                select x;
+          Assert.IsTrue(crosslistings.Any(), "Did not find matching cross-listing record in the Class Schedule database. ('{0}' => [{1}]", courseID, sectionIDs.Mash());
+        }
+      }
+      else
+      {
+        Assert.Inconclusive("The method did not return any cross-linked SectionIDs for '{0}'", courseID);
       }
     }
 
@@ -113,7 +146,12 @@ namespace Test.CtcClassSchedule
       // HACK: isCommonCourse parameter is a work-around until CtcApi is fixed to correctly set the flag when instantiating from another ICourseID object.
       private string ConstructCourseID(ICourseID id, bool isCommonCourse)
       {
-        return string.Concat(string.Format("{0}{1} ", id.Subject, isCommonCourse ? "&" : string.Empty).Substring(0, 6), id.Number);
+        string subject = string.Format("{0}{1}", id.Subject, isCommonCourse ? "&" : string.Empty);
+        if (subject.Length < 6)
+        {
+          subject = string.Concat(subject, " ");
+        }
+        return string.Concat(subject, id.Number);
       }
   }
 }

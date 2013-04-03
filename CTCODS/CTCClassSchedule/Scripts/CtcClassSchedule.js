@@ -54,56 +54,60 @@ function LoadCrossListedCourses(jsonUrl, div, quarter) {
     url: jsonUrl,
     // JSONP does not seem to be working for some reason. 3/19/2013 - shawn.south@bellevuecollege.edu
     dataType: 'json',
-    success: function(data) {
+    success: function (data) {
       console.log("Received:");
       console.log(data);
 
-      var crossListedCourses = "";
+      if (data != null) {
+        var crossListedCourses = "";
 
-      // loop through the return data and build a heading for each cross-listed course.
-      $.each(data, function(k, v) {
-        console.log("Processing: '" + k + "' = '" + v + "'");
+        // loop through the return data and build a heading for each cross-listed course.
+        $.each(data, function (k, v) {
+          console.log("Processing: '" + k + "' = '" + v + "'");
 
-        // TODO: Move construction of course heading into a shared function
-        var cid = v.ID.Subject + (v.IsCommonCourse ? "&amp;" : "") + " " + v.ID.Number;
+          // TODO: Move construction of course heading into a shared function
+          var cid = v.CourseID.Subject + (v.IsCommonCourse ? "&amp;" : "") + " " + v.CourseID.Number;
 
-        // convert the search query to the expected format
-        var searchID = cid.replace(/\s+/g, '+').replace(/\&amp;/g, "%26");
-        var searchQuarter = quarter.replace(/\s+/g, '');
+          // convert the search query to the expected format
+          var searchID = cid.replace(/\s+/g, '+').replace(/\&amp;/g, "%26");
+          var searchQuarter = quarter.replace(/\s+/g, '');
 
-        // generate the lookup link (via search)
-        var searchHref = g_searchRootUrl + "?quarter=" + searchQuarter + "&searchterm=" + searchID;
+          // generate the lookup link (via search)
+          var searchHref = g_searchRootUrl + "?quarter=" + searchQuarter + "&searchterm=" + searchID;
 
-        var courseID = "<span class=\"courseID\">" + cid + "</span>";
-        console.log("courseID = '" + courseID + "'");
+          var courseID = "<span class=\"courseID\">" + cid + "</span>";
+          console.log("courseID = '" + courseID + "'");
 
-        var courseTitle = "<span class=\"courseTitle\">" + v.Title + "</span>";
-        console.log("courseTitle = '" + courseTitle + "'");
+          var courseTitle = "<span class=\"courseTitle\">" + v.Title + "</span>";
+          console.log("courseTitle = '" + courseTitle + "'");
 
-        var courseCredits = "<span class=\"courseCredits\">&#8226; ";
+          var courseCredits = "<span class=\"courseCredits\">&#8226; ";
 
-        if (v.IsVariableCredits) {
-          courseCredits += "V1-" + v.Credits + " <abbr title='variable credits'>Cr.</abbr>";
-        } else {
-          courseCredits += v.Credits + " <abbr title='credit(s)'>Cr.</abbr>";
+          if (v.IsVariableCredits) {
+            courseCredits += "V1-" + v.Credits + " <abbr title='variable credits'>Cr.</abbr>";
+          } else {
+            courseCredits += v.Credits + " <abbr title='credit(s)'>Cr.</abbr>";
+          }
+          courseCredits += "</span>";
+          console.log("courseCredits = '" + courseCredits + "'");
+
+          crossListedCourses += "<li class='section-cross-listed-course-title'><a href='" + searchHref + "'>" + courseID + " " + courseTitle + "</a> " + courseCredits + "</li>";
+        });
+        console.log(crossListedCourses);
+
+        // account for possible failure in generating the list of courses
+        if (crossListedCourses == "") {
+          crossListedCourses = "<li>FAILED TO RETRIEVE CROSS-LISTED COURSES</li>";
         }
-        courseCredits += "</span>";
-        console.log("courseCredits = '" + courseCredits + "'");
 
-        crossListedCourses += "<li class='section-cross-listed-course-title'><a href='" + searchHref + "'>" + courseID + " " + courseTitle + "</a> " + courseCredits + "</li>";
-      });
-      console.log(crossListedCourses);
-
-      // account for possible failure in generating the list of courses
-      if (crossListedCourses == "") {
-        crossListedCourses = "<li>FAILED TO RETRIEVE CROSS-LISTED COURSES</li>";
+        div.html(
+          "<ul>" + crossListedCourses + "</ul>"
+        );
+      } else {
+        div.html("(Not found)");
       }
-
-      div.html(
-        "<ul>" + crossListedCourses + "</ul>"
-      );
     },
-    error: function(ex, xhr) {
+    error: function (ex, xhr) {
       console.log("Error: " + ex.message);
       console.log(xhr);
     }
