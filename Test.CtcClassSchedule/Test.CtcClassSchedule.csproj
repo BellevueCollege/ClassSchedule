@@ -47,10 +47,10 @@
       <HintPath>..\packages\Common.Logging.Elmah.1.2.1\lib\net40\Common.Logging.Elmah.dll</HintPath>
     </Reference>
     <Reference Include="CtcApi">
-      <HintPath>..\packages\CtcApi.0.9.13.1\lib\net40\CtcApi.dll</HintPath>
+      <HintPath>..\packages\CtcApi.0.9.13.2\lib\net40\CtcApi.dll</HintPath>
     </Reference>
     <Reference Include="CtcOdsApi">
-      <HintPath>..\packages\CtcOdsApi.0.9.13.4\lib\net40\CtcOdsApi.dll</HintPath>
+      <HintPath>..\CTCODS\CTCClassSchedule\bin\CtcOdsApi.dll</HintPath>
     </Reference>
     <Reference Include="DotNetCasClient">
       <HintPath>..\packages\DotNetCasClient.1.0.1\lib\DotNetCasClient.dll</HintPath>
@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -1050,12 +1050,12 @@
             </returns>
             <exception cref="T:System.NotImplementedException"/>
         </member>
-        <member name="T:Ctc.Ods.CourseID">
+        <member name="T:Ctc.Ods.Types.CourseID">
             <summary>
             Representa the unique ID for a <see cref="T:Ctc.Ods.Types.Course"/>
             </summary>
             <remarks>
-            This is a combination of the <see cref="P:Ctc.Ods.CourseID.Subject"/> and <see cref="P:Ctc.Ods.CourseID.Number"/>
+            This is a combination of the <see cref="P:Ctc.Ods.Types.CourseID.Subject"/> and <see cref="P:Ctc.Ods.Types.CourseID.Number"/>
             </remarks>
         </member>
         <member name="T:Ctc.Ods.Types.ICourseID">
@@ -1085,21 +1085,22 @@
             </summary>
             <seealso cref="P:Ctc.Ods.Types.ICourseID.Subject"/>
         </member>
-        <member name="M:Ctc.Ods.CourseID.#ctor(System.String,System.String)">
+        <member name="M:Ctc.Ods.Types.CourseID.#ctor(System.String,System.String,System.Boolean)">
             <summary>
 
             </summary>
             <param name="subject"></param>
             <param name="number"></param>
+            <param name="isCommonCourse"></param>
         </member>
-        <member name="M:Ctc.Ods.CourseID.FromString(System.String)">
+        <member name="M:Ctc.Ods.Types.CourseID.FromString(System.String)">
             <summary>
 
             </summary>
             <param name="courseId"></param>
             <returns></returns>
         </member>
-        <member name="M:Ctc.Ods.CourseID.FromString(System.String,System.String)">
+        <member name="M:Ctc.Ods.Types.CourseID.FromString(System.String,System.String)">
             <summary>
 
             </summary>
@@ -1107,7 +1108,7 @@
             <param name="number"></param>
             <returns></returns>
         </member>
-        <member name="M:Ctc.Ods.CourseID.ToString">
+        <member name="M:Ctc.Ods.Types.CourseID.ToString">
             <summary>
             Returns a <see cref="T:System.String"/> that represents the current <see cref="T:Ctc.Ods.Types.ICourseID"/>.
             </summary>
@@ -1116,7 +1117,7 @@
             </returns>
             <filterpriority>2</filterpriority>
         </member>
-        <member name="M:Ctc.Ods.CourseID.Equals(Ctc.Ods.Types.ICourseID)">
+        <member name="M:Ctc.Ods.Types.CourseID.Equals(Ctc.Ods.Types.ICourseID)">
             <summary>
             Indicates whether the current object is equal to another object of the same type.
             </summary>
@@ -1125,7 +1126,7 @@
             </returns>
             <param name="other">An object to compare with this object.</param>
         </member>
-        <member name="M:Ctc.Ods.CourseID.Equals(Ctc.Ods.CourseID)">
+        <member name="M:Ctc.Ods.Types.CourseID.Equals(Ctc.Ods.Types.CourseID)">
             <summary>
             Indicates whether the current object is equal to another object of the same type.
             </summary>
@@ -1134,7 +1135,7 @@
             </returns>
             <param name="other">An object to compare with this object.</param>
         </member>
-        <member name="M:Ctc.Ods.CourseID.Equals(System.String)">
+        <member name="M:Ctc.Ods.Types.CourseID.Equals(System.String)">
             <summary>
             Indicates whether the current object is equal to a <see cref="T:System.String"/> representing the same value.
             </summary>
@@ -1143,7 +1144,7 @@
             </returns>
             <param name="other">A string to compare with this object.</param>
         </member>
-        <member name="M:Ctc.Ods.CourseID.Equals(System.Object)">
+        <member name="M:Ctc.Ods.Types.CourseID.Equals(System.Object)">
             <summary>
             Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
             </summary>
@@ -1152,7 +1153,7 @@
             </returns>
             <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
         </member>
-        <member name="M:Ctc.Ods.CourseID.GetHashCode">
+        <member name="M:Ctc.Ods.Types.CourseID.GetHashCode">
             <summary>
             Serves as a hash function for a particular type.
             </summary>
@@ -1161,39 +1162,39 @@
             </returns>
             <filterpriority>2</filterpriority>
         </member>
-        <member name="M:Ctc.Ods.CourseID.op_Equality(Ctc.Ods.CourseID,Ctc.Ods.CourseID)">
+        <member name="M:Ctc.Ods.Types.CourseID.op_Equality(Ctc.Ods.Types.CourseID,Ctc.Ods.Types.CourseID)">
             <summary>
             </summary>
             <param name="left"></param>
             <param name="right"></param>
             <returns></returns>
         </member>
-        <member name="M:Ctc.Ods.CourseID.op_Inequality(Ctc.Ods.CourseID,Ctc.Ods.CourseID)">
+        <member name="M:Ctc.Ods.Types.CourseID.op_Inequality(Ctc.Ods.Types.CourseID,Ctc.Ods.Types.CourseID)">
             <summary>
             </summary>
             <param name="left"></param>
             <param name="right"></param>
             <returns></returns>
         </member>
-        <member name="P:Ctc.Ods.CourseID.CommonCourseChar">
+        <member name="P:Ctc.Ods.Types.CourseID.CommonCourseChar">
             <summary>
 
             </summary>
         </member>
-        <member name="P:Ctc.Ods.CourseID.Subject">
+        <member name="P:Ctc.Ods.Types.CourseID.Subject">
             <summary>
             Departmental prefix for the course (e.g. ART)
             </summary>
-            <seealso cref="P:Ctc.Ods.CourseID.Number"/>
-            <seealso cref="P:Ctc.Ods.CourseID.IsCommonCourse"/>
+            <seealso cref="P:Ctc.Ods.Types.CourseID.Number"/>
+            <seealso cref="P:Ctc.Ods.Types.CourseID.IsCommonCourse"/>
         </member>
-        <member name="P:Ctc.Ods.CourseID.Number">
+        <member name="P:Ctc.Ods.Types.CourseID.Number">
             <summary>
             The (typically numeric) identifier for the course (e.g. 101)
             </summary>
-            <seealso cref="P:Ctc.Ods.CourseID.Subject"/>
+            <seealso cref="P:Ctc.Ods.Types.CourseID.Subject"/>
         </member>
-        <member name="P:Ctc.Ods.CourseID.IsCommonCourse">
+        <member name="P:Ctc.Ods.Types.CourseID.IsCommonCourse">
             <summary>
             Indicates whether this CourseID represents a <a href="http://www.sbctc.ctc.edu/college/e_commoncoursenumbering.aspx">Common Course</a>
             </summary>
@@ -2297,7 +2298,6 @@
             will silentsly return <i>false</i> if it encounters an error during the conversion attempt.
             </remarks>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Ctc.Ods.Utility.ParseCourseID(System.String,System.Boolean@,System.String@,System.String@,System.String)" -->
         <member name="M:Ctc.Ods.Utility.IsAlphaNumeric(System.String)">
             <summary>
             Identifies whether or not the supplied value contains letters and/or numbers
@@ -3143,7 +3143,7 @@
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetSections(System.Collections.Generic.IList{Ctc.Ods.Types.ICourseID},Ctc.Ods.Types.YearQuarter,System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
             <summary>
-            Retrieve all Sections specified in the provided list of <see cref="T:Ctc.Ods.CourseID"/>s
+            Retrieve all Sections specified in the provided list of <see cref="T:Ctc.Ods.Types.CourseID"/>s
             </summary>
             <param name="courseIds"></param>
             <param name="yrq"></param>

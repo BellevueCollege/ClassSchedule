@@ -2,6 +2,7 @@
 using System.Linq;
 using CTCClassSchedule.Controllers;
 using CTCClassSchedule.Models;
+using CtcApi.Extensions;
 using Ctc.Ods;
 using Ctc.Ods.Types;
 using CtcApi.Extensions;
