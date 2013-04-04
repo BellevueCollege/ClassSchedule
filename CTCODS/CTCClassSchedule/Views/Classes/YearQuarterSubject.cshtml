@@ -190,10 +190,10 @@
 
       <script type="text/javascript">
       // dynamically load course cross-listings, if present
-      // NOTE: This script is inline so that it's only created when and where needed.
+      // NOTE: This script is inline so that it's only created for the courses that need it.
         $(function () {
           var jsonUrl = "@Url.Action("CrossListedCourses", "Api", new {courseID = courseID})";
-          var quarter = "@(Model.CurrentQuarter.FriendlyName)";
+          var quarter = "@(Model.ViewingQuarter.FriendlyName)";
 
           LoadCrossListedCourses(jsonUrl, $('div#courses-crosslisted-with-@uniqueID'), quarter);
         });
