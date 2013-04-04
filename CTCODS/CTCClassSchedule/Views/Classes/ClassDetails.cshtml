@@ -31,71 +31,60 @@
 				</h1>
 
 				<div class="aside">
-          @if (Model.SubjectsInfo.Any(i => !String.IsNullOrWhiteSpace(i.Subject.Title)))
-          {
-            <div class="generalInfo">
-              <h2>Department</h2>
-              <ul>
-                @foreach (SubjectInfoResult sub in Model.SubjectsInfo)
+          <div class="generalInfo">
+            <h2>Department</h2>
+            <ul>
+              <li>
+                @if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
                 {
-                  <li>
-                    @if (!string.IsNullOrWhiteSpace(sub.Subject.Title))
-                    {
-							        if (!string.IsNullOrWhiteSpace(sub.Department.URL))
+							    if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
+                  {
+								    <a href="@Model.DepartmentURL">
+									    @if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
                       {
-								        <a href="@sub.Department.URL">
-									        @if (!string.IsNullOrWhiteSpace(sub.Department.Title))
-                          {
-										        @sub.Department.Title
-                          }
-                          else
-                          {
-										        @sub.Subject.Title
-                          }
-								        </a>
+										    @Model.DepartmentTitle
                       }
                       else
                       {
-                        if (!string.IsNullOrWhiteSpace(sub.Department.Title))
-                        {
-									        @sub.Department.Title
-                        }
-                        else
-                        {
-									        @sub.Subject.Title
-                        }
+										    @Model.SubjectTitle
                       }
+								    </a>
+                  }
+                  else
+                  {
+                    if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
+                    {
+									    @Model.DepartmentTitle
                     }
-                  </li>
+                    else
+                    {
+									    @Model.SubjectTitle
+                    }
+                  }
                 }
-              </ul>
-            </div>
-          }
+              </li>
+            </ul>
+          </div>
 
-          @if (Model.SubjectsInfo.Any(i => !String.IsNullOrWhiteSpace(i.Division.Title)))
-          {
-            <div class="generalInfo">
-              <h2>Division</h2>
-              <ul>
-                @foreach (SubjectInfoResult sub in Model.SubjectsInfo)
+          <div class="generalInfo">
+            <h2>Division</h2>
+            <ul>
+              <li>
+                @if (!string.IsNullOrWhiteSpace(Model.DivisionTitle))
                 {
-                  <li>
-                    @if (!string.IsNullOrWhiteSpace(sub.Division.Title))
-                    {
-                      if (!string.IsNullOrWhiteSpace(sub.Division.URL))
-                      {
-								        <a href="@sub.Division.URL">@sub.Division.Title</a>
-                      }
-                      else
-                      {
-								        @sub.Division.Title
-                      }
-                    }
-                  </li>
+                  if (!string.IsNullOrWhiteSpace(Model.DivisionURL))
+                  {
+								    <a href="@Model.DivisionURL">@Model.DivisionTitle</a>
+                  }
+                  else
+                  {
+								    @Model.DivisionTitle
+                  }
                 }
-              </ul>
-            </div>
-          }
+              </li>
+            </ul>
+          </div>
+
 				</div><!-- aside -->
 
 				<div id="class-details">
