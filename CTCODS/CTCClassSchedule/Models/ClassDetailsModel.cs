@@ -18,6 +18,8 @@ namespace CTCClassSchedule.Models
     public string SubjectIntro { get; set; }
     public string DepartmentTitle { get; set; }
     public string DepartmentURL { get; set; }
+    public string DivisionTitle { get; set; }
+    public string DivisionURL { get; set; }
     public string CMSFootnote { get; set; }
     public string LearningOutcomes { get; set; }
   }
