@@ -356,6 +356,8 @@ namespace CTCClassSchedule.Controllers
           model.SubjectIntro = programInfo.Subject.Intro;
           model.DepartmentTitle = programInfo.Department.Title;
           model.DepartmentURL = programInfo.Department.URL;
+          model.DivisionTitle = programInfo.Division.Title;
+          model.DivisionURL = programInfo.Division.URL;
         }
 			}
 
