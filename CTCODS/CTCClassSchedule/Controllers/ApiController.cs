@@ -543,26 +543,28 @@ namespace CTCClassSchedule.Controllers
 						}
 
 
-
-						// Unmerge subjects
-            IList<SubjectsCoursePrefix> unmergables = subject.CoursePrefixes.Where(s => !PrefixesToMerge.Contains(s.CoursePrefixID)).ToList();
-						foreach (SubjectsCoursePrefix prefix in unmergables)
-						{
-              subject.CoursePrefixes.Remove(prefix);
-						}
-
-						// Merge subjects
-            IList<string> currentlyMergedPrefixes = subject.CoursePrefixes.Select(s => s.CoursePrefixID).ToList();
-						IEnumerable<string> mergables = PrefixesToMerge.Where(m => !currentlyMergedPrefixes.Contains(m));
-						foreach (string prefix in mergables)
-						{
-              subject.CoursePrefixes.Add(new SubjectsCoursePrefix
+            // Only allow merging/unmerging of prefixes if at least one prefix is assigned to the subject
+            if (PrefixesToMerge.Count > 0)
+            {
+              // Unmerge subjects
+              IList<SubjectsCoursePrefix> unmergables = subject.CoursePrefixes.Where(s => !PrefixesToMerge.Contains(s.CoursePrefixID)).ToList();
+              foreach (SubjectsCoursePrefix prefix in unmergables)
               {
-								SubjectID = subject.SubjectID,
-								CoursePrefixID = prefix
-							});
-						}
+                subject.CoursePrefixes.Remove(prefix);
+              }
 
+              // Merge subjects
+              IList<string> currentlyMergedPrefixes = subject.CoursePrefixes.Select(s => s.CoursePrefixID).ToList();
+              IEnumerable<string> mergables = PrefixesToMerge.Where(m => !currentlyMergedPrefixes.Contains(m));
+              foreach (string prefix in mergables)
+              {
+                subject.CoursePrefixes.Add(new SubjectsCoursePrefix
+                {
+                  SubjectID = subject.SubjectID,
+                  CoursePrefixID = prefix
+                });
+              }
+            }
 
 						// Commit changes to database
 						db.SaveChanges();
