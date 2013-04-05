@@ -156,14 +156,14 @@ namespace CTCClassSchedule.Controllers
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					// Compile a list of active subjects
-					string commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar;
-					IEnumerable<string> activePrefixes = repository.GetCourseSubjects(yrq).Select(p => p.Subject);
+          char[] commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar.ToCharArray();
+					IEnumerable<string> activePrefixes = repository.GetCourseSubjects(yrq, facets).Select(p => p.Subject);
 					IList<Subject> subjects = new List<Subject>();
 					foreach (Subject sub in db.Subjects)
 					{
 						// TODO: whether the CoursePrefix has active courses or not, any Prefix with a '&' will be included
 						//			 because GetCourseSubjects() does not include the common course char.
-            if (sub.CoursePrefixes.Select(sp => sp.CoursePrefixID).Any(sp => activePrefixes.Contains(sp.TrimEnd(commonCourseChar.ToCharArray()))))
+            if (sub.CoursePrefixes.Select(sp => sp.CoursePrefixID).Any(sp => activePrefixes.Contains(sp.TrimEnd(commonCourseChar))))
 						{
 							subjects.Add(sub);
 						}
