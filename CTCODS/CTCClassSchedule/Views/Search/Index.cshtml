@@ -14,7 +14,7 @@
 
   int itemCount = Model.ItemCount;
   int _courseCount = Model.Courses.Count;
-  String classDesc = _courseCount == 1 ? "class" : "classes";
+  String classDesc = _courseCount == 1 ? "course" : "courses";
   String sectionDesc = itemCount == 1 ? "section" : "sections";
 
   string _searchTerm = ViewBag.searchterm;
@@ -91,19 +91,6 @@
 
 				<div class="classInfo">
 					<div class="classDetails">
-					@*
-					*************************************************************************************
-					TODO: Is this a bug? Should it be checking .CustomDescription?
-					*************************************************************************************
-					*@
-					@if (!string.IsNullOrWhiteSpace(firstSection.CustomDescription))
-     {
-						@Html.Raw(Html.FormatWithSearchTerm(_searchTerm, firstSection.CustomDescription).ToString())
-     }
-     else
-     {
-						@Html.Raw(firstSection.CourseDescriptions.Count() == 0 ? string.Empty : Html.FormatWithSearchTerm(_searchTerm, firstSection.CourseDescriptions[0].Description).ToString())
-     }
 						<ul>
 							<li class="classDetailsLink">
 								@Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber }, null)
