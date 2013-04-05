@@ -34,28 +34,7 @@ namespace CTCClassSchedule.Common
       StringBuilder fileText = new StringBuilder();
 
       // Convert each object to a node
-      IList<IExportableNode> nodes = GetClassScheduleDataNodes(yearQuarter);
-
-      // Build a legend describing all the different tags and flags
-      fileText.AppendLine("* Class Schedule Course Export -- " + yearQuarter.FriendlyName);
-      fileText.AppendLine("*");
-      fileText.AppendLine("* Legend:");
-      fileText.AppendLine("* <CLS9>   -- Division title");
-      fileText.AppendLine("* <CLS1>   -- Subject title");
-      fileText.AppendLine("* <CLSP>   -- Subject intro");
-      fileText.AppendLine("* <CLS2>   -- Course header, or linked section headers");
-      fileText.AppendLine("* <CLS3>   -- HP footnotes, course footnotes, CMS footnotes, and common Section footnotes");
-      fileText.AppendLine("* <CLS5>   -- Default Section tag");
-      fileText.AppendLine("* <CLS6>   -- Evening Section");
-      fileText.AppendLine("* <CLS7>   -- Weekend Section");
-      fileText.AppendLine("* <CLSD>   -- Distance Education Section");
-      fileText.AppendLine("* <CLSA>   -- Section to be arranged");
-      fileText.AppendLine("* <CLSY>   -- Automated footnotes");
-      fileText.AppendLine("* <CLSN>   -- Section footnotes");
-      fileText.AppendLine("* [h]      -- Flags a hybrid Section");
-      fileText.AppendLine("* [online] -- Flags a hybrid Section");
-      fileText.AppendLine("* D110     -- Default room if no room was assigned to the Section");
-      fileText.AppendLine("* staff    -- Default instructor name if no instructor is assigned to the Section");
+      Queue<IExportableNode> nodes = GetClassScheduleDataNodes(yearQuarter);
 
       // Build the contents of the file
       foreach (IExportableNode node in nodes)
@@ -73,17 +52,19 @@ namespace CTCClassSchedule.Common
 
 
     /// <summary>
-    /// Gets a grouping of all Class Schedule data to export, and converts them to a series of <see cref="IExportableNode"/>s
+    /// Gets a grouping of all Class Schedule data to export, and converts them to a queue of <see cref="IExportableNode"/>s
     /// which each contain the logic necessary for converting the contained data (<see cref="Division"/>, <see cref="Section"/>, etc)
     /// to a string format.
     /// </summary>
     /// <param name="yearQuarter">The quarter which is being exported.</param>
-    /// <returns>A list of <see cref="IExportableNode"/>s representing Class Schedule data, in the proper sorted order.</returns>
-    private static IList<IExportableNode> GetClassScheduleDataNodes(YearQuarter yearQuarter)
+    /// <returns>A queue of <see cref="IExportableNode"/>s representing Class Schedule data, in the proper sorted order.</returns>
+    private static Queue<IExportableNode> GetClassScheduleDataNodes(YearQuarter yearQuarter)
     {
-      IList<IExportableNode> nodes = new List<IExportableNode>();
+      Queue<IExportableNode> nodes = new Queue<IExportableNode>();
       GroupedClassScheduleData divisionSections = GroupClassScheduleData(yearQuarter);
 
+      // Add a default Legend node which outputs all header info
+      nodes.Enqueue(new ExportableLegendNode(yearQuarter));
 
       // Convert all Division, Subjects, and Sections into exportable nodes
       // Sort each group of data as we convert it to nodes
@@ -91,11 +72,11 @@ namespace CTCClassSchedule.Common
       {
         foreach (Subject sub in divisionSections[div].Keys.OrderBy(d => d.Title)) // Subjects
         {
-          nodes.Add(new ExportableSubjectNode(sub));
+          nodes.Enqueue(new ExportableSubjectNode(sub));
 
           foreach (SectionsBlock block in divisionSections[div][sub]) // Sections
           {
-            nodes.Add(new ExportableSectionsBlockNode(block));
+            nodes.Enqueue(new ExportableSectionsBlockNode(block));
           }
         }
       }
@@ -171,7 +152,7 @@ namespace CTCClassSchedule.Common
 
 
 
-
+    // TODO: Refactor the inheritance so that ExportableLegendNode does not need to reimplement methods that belong to ExportableNode<T>
 
     /// <summary>
     /// This interface is empty, and only serves the purpose of allowing all
@@ -209,7 +190,7 @@ namespace CTCClassSchedule.Common
       /// <summary>
       /// Constructor which enforces an object is passed, and stored in the Node property.
       /// </summary>
-      /// <param name="node"></param>
+      /// <param name="node">The value to store as a node.</param>
       public ExportableNode(T node)
       {
         Node = node;
@@ -221,6 +202,65 @@ namespace CTCClassSchedule.Common
       /// </summary>
       /// <returns>A string representation of the Node.</returns>
       protected abstract string ExportNodeAsString();
+
+      /// <summary>
+      /// Basic ToString override which returns the string representation of the Node.
+      /// The method is sealed so that inheriting classes cannot override this behavior.
+      /// </summary>
+      /// <returns></returns>
+      public sealed override string ToString()
+      {
+        return ExportNodeAsString();
+      }
+    }
+
+    /// <summary>
+    /// An exportable node class which holds logic for outputting a text representation
+    /// of the definition legend.
+    /// </summary>
+    private class ExportableLegendNode : IExportableNode
+    {
+      private YearQuarter _yearQuarter;
+      private StringBuilder _builder;
+
+      /// <summary>
+      /// Constructor for the Legend node.
+      /// </summary>
+      /// <param name="yearQuarter">The quarter that this Legend represents.</param>
+      public ExportableLegendNode(YearQuarter yearQuarter)
+      {
+        _yearQuarter = yearQuarter;
+        _builder = new StringBuilder();
+      }
+
+      /// <summary>
+      /// Contains the logic used to output the definition Legend
+      /// </summary>
+      /// <returns>A string representation of the Legend.</returns>
+      protected string ExportNodeAsString()
+      {
+        _builder.AppendLine("* Class Schedule Course Export -- " + _yearQuarter.FriendlyName);
+        _builder.AppendLine("*");
+        _builder.AppendLine("* Legend:");
+        _builder.AppendLine("* <CLS9>   -- Division title");
+        _builder.AppendLine("* <CLS1>   -- Subject title");
+        _builder.AppendLine("* <CLSP>   -- Subject intro");
+        _builder.AppendLine("* <CLS2>   -- Course header, or linked section headers");
+        _builder.AppendLine("* <CLS3>   -- HP footnotes, course footnotes, CMS footnotes, and common Section footnotes");
+        _builder.AppendLine("* <CLS5>   -- Default Section tag");
+        _builder.AppendLine("* <CLS6>   -- Evening Section");
+        _builder.AppendLine("* <CLS7>   -- Weekend Section");
+        _builder.AppendLine("* <CLSD>   -- Distance Education Section");
+        _builder.AppendLine("* <CLSA>   -- Section to be arranged");
+        _builder.AppendLine("* <CLSY>   -- Automated footnotes");
+        _builder.AppendLine("* <CLSN>   -- Section footnotes");
+        _builder.AppendLine("* [h]      -- Flags a hybrid Section");
+        _builder.AppendLine("* [online] -- Flags a hybrid Section");
+        _builder.AppendLine("* D110     -- Default room if no room was assigned to the Section");
+        _builder.AppendLine("* staff    -- Default instructor name if no instructor is assigned to the Section");
+
+        return _builder.ToString();
+      }
 
       /// <summary>
       /// Basic ToString override which returns the string representation of the Node.
