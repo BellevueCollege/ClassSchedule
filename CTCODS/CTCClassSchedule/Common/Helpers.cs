@@ -31,26 +31,26 @@ namespace CTCClassSchedule.Common
 
 		public static string getBodyClasses(HttpContextBase Context)
 		{
-			string classes = string.Empty;
+			string classes = String.Empty;
 
 			if (Context.User.Identity.IsAuthenticated)
 			{
 				string appSetting = ConfigurationManager.AppSettings["ApplicationDeveloper"];
-				if (!string.IsNullOrWhiteSpace(appSetting))
+				if (!String.IsNullOrWhiteSpace(appSetting))
 				{
 					string[] roles = appSetting.Split(',');
 					classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, roles) ? "role-developer" : "";
 				}
 
 				appSetting = ConfigurationManager.AppSettings["ApplicationAdmin"];
-				if (!string.IsNullOrWhiteSpace(appSetting))
+				if (!String.IsNullOrWhiteSpace(appSetting))
 				{
 					string[] roles = appSetting.Split(',');
 					classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, roles) ? " role-schedule-editors " : "";
 				}
 
 				appSetting = ConfigurationManager.AppSettings["ApplicationEditor"];
-				if (!string.IsNullOrWhiteSpace(appSetting))
+				if (!String.IsNullOrWhiteSpace(appSetting))
 				{
 					string[] roles = appSetting.Split(',');
 					classes += ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, roles) ? " role-admin " : "";
@@ -75,7 +75,7 @@ namespace CTCClassSchedule.Common
 			if (Context.User.Identity.IsAuthenticated)
 			{
 				string appSetting = ConfigurationManager.AppSettings["ApplicationAdmin"];
-				if (!string.IsNullOrWhiteSpace(appSetting))
+				if (!String.IsNullOrWhiteSpace(appSetting))
 				{
 					string[] roles = appSetting.Split(',');
 					isAdmin = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, roles) ? true : false;
@@ -95,7 +95,7 @@ namespace CTCClassSchedule.Common
 			if (Context.User.Identity.IsAuthenticated)
 			{
 				string appSetting = ConfigurationManager.AppSettings["ApplicationEditor"];
-				if (!string.IsNullOrWhiteSpace(appSetting))
+				if (!String.IsNullOrWhiteSpace(appSetting))
 				{
 					string[] roles = appSetting.Split(',');
 					isEditor = ActiveDirectoryRoleProvider.IsUserInRoles(Context.User, roles) ? true : false;
@@ -109,7 +109,7 @@ namespace CTCClassSchedule.Common
 		{
 			Encryption64 en = new Encryption64();
 
-			string returnString = string.Empty;
+			string returnString = String.Empty;
 			returnString = "http://bellevuecollege.edu/directory/PersonDetails.aspx?PersonID=" + en.Encrypt(SID,"!#$a54?5");
 			return returnString;
 
@@ -122,11 +122,11 @@ namespace CTCClassSchedule.Common
 			for (int i = 0; i < linkedSections.Count; i++)
 			{
 				SectionWithSeats sec = linkedSections[i];
-				resultURL.AppendFormat("{0}{1}__{2}__{3}{4}__{5}", (i > 0? "%2C" : string.Empty),
+				resultURL.AppendFormat("{0}{1}__{2}__{3}{4}__{5}", (i > 0? "%2C" : String.Empty),
 																	getYRQValueForBookstoreURL(sec.Yrq),
 																	sec.CourseSubject,
 																	sec.CourseNumber,
-																	(sec.IsCommonCourse ? "%26" : string.Empty),
+																	(sec.IsCommonCourse ? "%26" : String.Empty),
 																	sec.ID.ItemNumber);
 			}
 
@@ -241,7 +241,7 @@ namespace CTCClassSchedule.Common
 					}
 					catch
 					{
-						throw new System.FormatException("Number of credits was not a valid integer");
+						throw new FormatException("Number of credits was not a valid integer");
 					}
 				}
 
@@ -477,12 +477,12 @@ namespace CTCClassSchedule.Common
 			      orderby c.Yrq.ID descending
 			      select new SectionWithSeats {
 								ParentObject = c,
-								SeatsAvailable = ss != null ? ss.SeatsAvailable : int.MinValue,	// allows us to identify past quarters (with no availability info)
+								SeatsAvailable = ss != null ? ss.SeatsAvailable : Int32.MinValue,	// allows us to identify past quarters (with no availability info)
 								LastUpdated = (d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString("h:mm tt").ToLower(),
-													SectionFootnotes = sm != null && !string.IsNullOrWhiteSpace(sm.Footnote) ? sm.Footnote : string.Empty,
-													CourseFootnotes = cm != null && !string.IsNullOrWhiteSpace(cm.Footnote) ? cm.Footnote : string.Empty,
-                          CustomTitle = sm != null && !string.IsNullOrWhiteSpace(sm.Title) ? sm.Title : c.CourseTitle,
-													CustomDescription = sm != null && !string.IsNullOrWhiteSpace(sm.Description) ? sm.Description : string.Empty,
+													SectionFootnotes = sm != null && !String.IsNullOrWhiteSpace(sm.Footnote) ? sm.Footnote : String.Empty,
+													CourseFootnotes = cm != null && !String.IsNullOrWhiteSpace(cm.Footnote) ? cm.Footnote : String.Empty,
+                          CustomTitle = sm != null && !String.IsNullOrWhiteSpace(sm.Title) ? sm.Title : c.CourseTitle,
+													CustomDescription = sm != null && !String.IsNullOrWhiteSpace(sm.Description) ? sm.Description : String.Empty,
 											}).OrderBy(s => s.CourseNumber).ThenBy(s => s.CourseTitle).ToList();
 
         // Flag sections that are cross-linked with a Course
@@ -502,7 +502,7 @@ namespace CTCClassSchedule.Common
     {
       StringBuilder friendlyName = new StringBuilder(dayString);
       IDictionary<string, string> daysDictionary = new Dictionary<string, string>
-      {
+                                                     {
         {"Online","Online/"},
         {"DAILY","Daily/"},
         {"ARRANGED","Arranged/"},
@@ -736,14 +736,14 @@ namespace CTCClassSchedule.Common
 		/// <returns></returns>
 		static public string FormatWithSearchTerm(string searchTerm, string text, params object[] args)
 		{
-			if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(searchTerm))
+			if (String.IsNullOrWhiteSpace(text) || String.IsNullOrWhiteSpace(searchTerm))
 			{
 				return text;
 			}
 
 			if (args != null && args.Length > 0)
 			{
-				text = string.Format(text, args);
+				text = String.Format(text, args);
 			}
 			return Regex.Replace(text, searchTerm, @"<em class='keyword'>$&</em>", RegexOptions.IgnoreCase);
 		}
@@ -801,8 +801,8 @@ namespace CTCClassSchedule.Common
 
 		static private string getYRQValueForBookstoreURL(YearQuarter yrq)
 		{
-			string quarter = string.Empty;
-			string year = string.Empty;
+			string quarter = String.Empty;
+			string year = String.Empty;
 
 			if (yrq != null)
 			{
@@ -828,5 +828,30 @@ namespace CTCClassSchedule.Common
 
 			return String.Concat(quarter, year);
 		}
+
+	  public static IList<SectionWithSeats> ParseCommonHeadingLinkedSections(List<SectionWithSeats> linkedSections)
+	  {
+	    string prevCourseID = String.Empty;
+	    string prevTitle = String.Empty;
+	    decimal prevCredits = 0;
+	    bool prevIsVariableCredits = false;
+
+	    IList<SectionWithSeats> common = new List<SectionWithSeats>(linkedSections.Count);
+
+	    foreach (SectionWithSeats section in linkedSections)
+	    {
+	      if (!(section.CourseID == prevCourseID && section.CourseTitle == prevTitle && section.Credits == prevCredits && section.IsVariableCredits == prevIsVariableCredits))
+	      {
+	        common.Add(section);
+	      }
+
+	      prevCourseID = section.CourseID;
+	      prevTitle = section.CourseTitle;
+	      prevCredits = section.Credits;
+	      prevIsVariableCredits = section.IsVariableCredits;
+	    }
+
+	    return common;
+	  }
 	}
 }

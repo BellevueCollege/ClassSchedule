@@ -19,7 +19,8 @@ namespace CTCClassSchedule.Controllers
 {
 	public class SearchController : Controller
 	{
-		readonly private MiniProfiler _profiler = MiniProfiler.Current;
+    const int ITEMS_PER_PAGE = 40;
+    readonly private MiniProfiler _profiler = MiniProfiler.Current;
 		private ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
 
 		public SearchController()
@@ -31,9 +32,6 @@ namespace CTCClassSchedule.Controllers
 		// GET: /Search/
 		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
-      //Items per page
-      const int itemsPerPage = 40;
-
 			// We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
 			searchterm = searchterm.Replace("\"", string.Empty);
 
@@ -51,81 +49,78 @@ namespace CTCClassSchedule.Controllers
 
 			ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
-			ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid, f_telecourse);
+      ViewBag.avail = avail;
+      ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid, f_telecourse);
 			ViewBag.Days = Helpers.ConstructDaysList(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
-			ViewBag.avail = avail;
 			ViewBag.Subject = Subject;
 			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
+      ViewBag.ErrorMsg = string.Empty;
 
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s,
 			                                                f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
-			// TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
-			IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
-			routeValues.Add("YearQuarterID", quarter);
-			ViewBag.RouteValues = routeValues;
-			// TODO: Aren't link parameters part of the route values? Let's merge these two somehow.
-			// (Is RouteValues even being used?)
 			ViewBag.LinkParams = Helpers.getLinkParams(Request, "submit");
 
-			using (OdsRepository repository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository())
 			{
-				setViewBagVars(string.Empty, string.Empty, string.Empty, avail, string.Empty, repository);
-
-				YearQuarter YRQ = string.IsNullOrWhiteSpace(quarter) ? repository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
+				YearQuarter yrq = string.IsNullOrWhiteSpace(quarter) ? repository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
         IList<YearQuarter> menuQuarters = Helpers.getYearQuarterListForMenus(repository);
-				ViewBag.YearQuarter = YRQ;
-				ViewBag.QuarterNavMenu = menuQuarters;
-				ViewBag.CurrentRegistrationQuarter = menuQuarters[0];
+			  QuarterNavigationModel quarterNavigation = new QuarterNavigationModel
+			                                               {
+			                                                 NavigationQuarters = menuQuarters,
+			                                                 CurrentQuarter = menuQuarters[0],
+			                                                 ViewingQuarter = yrq,
+			                                               };
 
 				IList<Section> sections;
 				using (_profiler.Step("API::GetSections()"))
 				{
 					if (string.IsNullOrWhiteSpace(Subject))
 					{
-						sections = repository.GetSections(YRQ, facets);
+						sections = repository.GetSections(yrq, facets);
 					}
 					else
 					{
-						IList<string> subjects = new List<string> {Subject, string.Concat(Subject, _apiSettings.RegexPatterns.CommonCourseChar)};
-						sections = repository.GetSections(subjects, YRQ, facets);
+            IList<string> prefixes = SubjectInfo.GetSubjectPrefixes(Subject).Select(p => p.CoursePrefixID).ToList();
+						sections = repository.GetSections(prefixes, yrq, facets);
 					}
 				}
 
-				IList<SectionWithSeats> sectionsEnum;
-				IList<SearchResult> SearchResults;
-				IList<SearchResultNoSection> NoSectionSearchResults;
-				using (ClassScheduleDb db = new ClassScheduleDb())
+        int currentPage;
+        int totalPages;
+        int itemCount;
+        IList<SectionWithSeats> sectionsEnum;
+				IList<SearchResult> searchResults;
+        SearchResultNoSectionModel noSectionSearchResults;
+			  IList<SectionsBlock> courseBlocks;
+			  using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					SearchResults = GetSearchResults(db, searchterm, quarter);
-					NoSectionSearchResults = GetNoSectionSearchResults(db, searchterm, quarter);
+					searchResults = GetSearchResults(db, searchterm, quarter);
+					noSectionSearchResults = GetNoSectionSearchResults(db, searchterm, yrq);
 
-					sections = (from s in sections
-								join r in SearchResults on s.ID.ToString() equals r.ClassID
-								select s).ToList();
+          sections = (from s in sections
+                      join r in searchResults on s.ID.ToString() equals r.ClassID
+                      select s).ToList();
 
-					sectionsEnum = Helpers.GetSectionsWithSeats(YRQ.ID, sections, db)
-																		.OrderBy(x => x.CourseNumber)
-																		.ThenBy(x => x.CourseTitle)
-																		.ThenBy(s => s.IsTelecourse)
-																		.ThenBy(s => s.IsOnline)
-																		.ThenBy(s => s.IsHybrid)
-																		.ThenBy(s => s.IsOnCampus)
-																		.ThenBy(s => s.SectionCode).ToList();;
+					sectionsEnum = Helpers.GetSectionsWithSeats(yrq.ID, sections, db);
+
+          // do not count Linked sections (since we don't display them)
+          itemCount = sectionsEnum.Count(s => !s.IsLinked);
+
+				  totalPages = (int)Math.Round((itemCount / ITEMS_PER_PAGE) + 0.5);
+				  currentPage = p_offset + 1;
+
+          using (_profiler.Step("Getting just records for page"))
+          {
+            if (currentPage > totalPages && totalPages > 0)
+            {
+              currentPage = totalPages;
+            }
+            sectionsEnum = sectionsEnum.Skip(p_offset * ITEMS_PER_PAGE).Take(ITEMS_PER_PAGE).ToList();
+          }
+
+          courseBlocks = Helpers.groupSectionsIntoBlocks(sectionsEnum, db);
 				}
-
-
-				// do not count Linked sections (since we don't display them)
-				IEnumerable<SectionWithSeats> countedSections = sectionsEnum.Where(s => !s.IsLinked);
-				int itemCount = countedSections.Count();
-				int courseCount;
-				using (_profiler.Step("Getting count of courses"))
-				{
-					courseCount = countedSections.Select(s => s.CourseID).Distinct().Count();
-				}
-        ViewBag.ItemCount = itemCount;
-				ViewBag.CourseCount = courseCount;
-
 
 				IEnumerable<string> allSubjects;
 				using (_profiler.Step("Getting distinct list of subjects"))
@@ -133,55 +128,42 @@ namespace CTCClassSchedule.Controllers
 					allSubjects = sectionsEnum.Select(c => c.CourseSubject).Distinct().OrderBy(c => c);
 				}
 
-
-        int totalPages = (int)Math.Round((itemCount / itemsPerPage)+0.5);
-        int currentPage = p_offset + 1;
-				using (_profiler.Step("Getting just records for page"))
-				{
-          if (currentPage > totalPages && totalPages > 0)
-          {
-            currentPage = totalPages;
-          }
-          sectionsEnum = sectionsEnum.Skip(p_offset * itemsPerPage).Take(itemsPerPage).ToList();
-				}
-
-
-
-				SearchResultsModel model = new SearchResultsModel
-				                            {
-									  Section = sectionsEnum,
-									  SearchResultNoSection = NoSectionSearchResults,
-									  Subjects = allSubjects,
-                                        TotalPages = totalPages,
-                                        CurrentPage = currentPage
-				                            };
-
-
-
+        SearchResultsModel model = new SearchResultsModel
+			                               {
+			                                 ItemCount = itemCount,
+                                       TotalPages = totalPages,
+                                       CurrentPage = currentPage,
+                                       Courses = courseBlocks,
+			                                 SearchResultNoSection = noSectionSearchResults,
+			                                 AllSubjects = allSubjects,
+                                       QuarterNavigation = quarterNavigation,
+			                               };
 				return View(model);
 			}
 		}
 
 		#region helper methods
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="db"></param>
-		/// <param name="searchterm"></param>
-		/// <param name="quarter"></param>
-		/// <returns></returns>
-		private IList<SearchResultNoSection> GetNoSectionSearchResults(ClassScheduleDb db, string searchterm, string quarter)
+	  /// <summary>
+	  ///
+	  /// </summary>
+	  /// <param name="db"></param>
+	  /// <param name="searchterm"></param>
+	  /// <param name="yrq"></param>
+	  /// <returns></returns>
+    private SearchResultNoSectionModel GetNoSectionSearchResults(ClassScheduleDb db, string searchterm, YearQuarter yrq)
 		{
 			SqlParameter[] parms = {
 							new SqlParameter("SearchWord", searchterm),
-							new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
+							new SqlParameter("YearQuarterID", yrq.ID)
 			                       };
 
-			using (_profiler.Step("Executing 'other classes' stored procedure"))
-			{
-				return db.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms).ToList();
-			}
-		}
+      SearchResultNoSectionModel model = new SearchResultNoSectionModel {SearchedYearQuarter = yrq};
+	    using (_profiler.Step("Executing 'other classes' stored procedure"))
+      {
+        model.NoSectionSearchResults = db.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms).ToList();
+      }
+      return model;
+    }
 
 		/// <summary>
 		///
@@ -201,20 +183,6 @@ namespace CTCClassSchedule.Controllers
 			{
 				return db.ExecuteStoreQuery<SearchResult>("usp_ClassSearch @SearchWord, @YearQuarterID", parms).ToList();
 			}
-		}
-
-		/// <summary>
-		/// Sets all of the common ViewBag variables
-		/// </summary>
-		private void setViewBagVars(string flex, string time, string days, string avail, string letter, OdsRepository repository)
-		{
-			ViewBag.ErrorMsg = string.Empty;
-			ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
-
-			ViewBag.letter = letter;
-			ViewBag.flex = flex ?? "all";
-			ViewBag.time = time ?? "all";
-			ViewBag.avail = avail ?? "all";
 		}
 		#endregion
 	}

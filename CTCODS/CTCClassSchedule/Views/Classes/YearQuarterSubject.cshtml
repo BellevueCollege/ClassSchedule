@@ -93,7 +93,7 @@
                     @ViewHelpers.DisplayCredits(firstSection)
                   </a>
                   @{
-                    IList<SectionWithSeats> commonLinkedSections = ClassesController.ParseCommonHeadingLinkedSections(block.LinkedSections);
+                    IList<SectionWithSeats> commonLinkedSections = Helpers.ParseCommonHeadingLinkedSections(block.LinkedSections);
                   }
                   @foreach (SectionWithSeats linkedSec in commonLinkedSections)
                   {
@@ -130,6 +130,7 @@
                     @if (!string.IsNullOrWhiteSpace(firstSection.CustomTitle))
                     {
                       // NOTE: do not display HP description from this page
+                      // BUG: ? Why not display HP description, if no CustomDescription has been defined?
                       @Html.Raw(firstSection.CustomDescription)
                     }
                     <ul>

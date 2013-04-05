@@ -172,6 +172,7 @@
       <DependentUpon>ClassScheduleDb.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\QuarterNavigationModel.cs" />
+    <Compile Include="Models\SearchResultNoSectionModel.cs" />
     <Compile Include="Models\SectionsViewModel.cs" />
     <Compile Include="Models\SectionEditModel.cs" />
     <Compile Include="Models\SectionEditModelBinder.cs" />
@@ -469,7 +470,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

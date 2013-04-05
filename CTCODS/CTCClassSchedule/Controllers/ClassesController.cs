@@ -429,30 +429,5 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.avail = string.IsNullOrWhiteSpace(avail) ? "all" : avail;
 		}
 		#endregion
-
-		public static IList<SectionWithSeats> ParseCommonHeadingLinkedSections(List<SectionWithSeats> linkedSections)
-		{
-			string prevCourseID = string.Empty;
-			string prevTitle = string.Empty;
-			decimal prevCredits = 0;
-			bool prevIsVariableCredits = false;
-
-			IList<SectionWithSeats> common = new List<SectionWithSeats>(linkedSections.Count);
-
-			foreach (SectionWithSeats section in linkedSections)
-			{
-				if (!(section.CourseID == prevCourseID && section.CourseTitle == prevTitle && section.Credits == prevCredits && section.IsVariableCredits == prevIsVariableCredits))
-				{
-					common.Add(section);
-				}
-
-				prevCourseID = section.CourseID;
-				prevTitle = section.CourseTitle;
-				prevCredits = section.Credits;
-				prevIsVariableCredits = section.IsVariableCredits;
-			}
-
-			return common;
-		}
 	}
 }

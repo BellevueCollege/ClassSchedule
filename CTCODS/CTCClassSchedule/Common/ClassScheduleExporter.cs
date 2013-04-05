@@ -306,7 +306,7 @@ namespace CTCClassSchedule.Common
         builder.AppendLine(getSectionExportHeader(primarySection));
         if (Node.LinkedSections.Count > 0)
         {
-          IList<SectionWithSeats> commonLinkedSections = ClassesController.ParseCommonHeadingLinkedSections(Node.LinkedSections);
+          IList<SectionWithSeats> commonLinkedSections = Helpers.ParseCommonHeadingLinkedSections(Node.LinkedSections);
           foreach (SectionWithSeats linkedSec in commonLinkedSections)
           {
             // Display all the linked section headers
