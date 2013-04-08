@@ -255,7 +255,7 @@ namespace CTCClassSchedule.Common
         _builder.AppendLine("* <CLSY>   -- Automated footnotes");
         _builder.AppendLine("* <CLSN>   -- Section footnotes");
         _builder.AppendLine("* [h]      -- Flags a hybrid Section");
-        _builder.AppendLine("* [online] -- Flags a hybrid Section");
+        _builder.AppendLine("* [online] -- Flags an online Section");
         _builder.AppendLine("* D110     -- Default room if no room was assigned to the Section");
         _builder.AppendLine("* staff    -- Default instructor name if no instructor is assigned to the Section");
 
