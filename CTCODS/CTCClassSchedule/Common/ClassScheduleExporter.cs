@@ -18,11 +18,11 @@ namespace CTCClassSchedule.Common
   /// Static class to manage exporting all Class Schedule data to an Adobe InDesign format
   /// which is used for the print version of the Class Schedule.
   /// </summary>
-  public static class ClassScheduleExporter
+  internal static class ClassScheduleExporter
   {
 
     /// <summary>
-    /// Manages the collection of all CLass Schedule data, and outputs it as a file.
+    /// Manages the collection of all Class Schedule data, and outputs it as a file.
     /// </summary>
     /// <remarks>
     /// This is the only public method in the class. It serves as a bootstrap for the export process.
@@ -53,7 +53,7 @@ namespace CTCClassSchedule.Common
 
     /// <summary>
     /// Gets a grouping of all Class Schedule data to export, and converts them to a queue of <see cref="IExportableNode"/>s
-    /// which each contain the logic necessary for converting the contained data (<see cref="Division"/>, <see cref="Section"/>, etc)
+    /// which each contain the logic necessary for converting the contained data (ex: <see cref="Division"/>, <see cref="Section"/>, etc)
     /// to a string format.
     /// </summary>
     /// <param name="yearQuarter">The quarter which is being exported.</param>
@@ -160,8 +160,7 @@ namespace CTCClassSchedule.Common
     /// implement this interface.
     ///
     /// It is not necessary to expose any functionality, since the ToString()
-    /// method is used to output the nodes contents. This method inherits from
-    /// <see cref="Object"/> regardless.
+    /// method is used to output the node's contents.
     /// </summary>
     private interface IExportableNode
     {
@@ -305,7 +304,11 @@ namespace CTCClassSchedule.Common
 
         builder.AppendFormat("<CLS1>{0}\n", Node.Title);
         builder.AppendFormat("<CLS9>{0}\n", Node.Department.Division.Title);
-        builder.AppendFormat("<CLSP>{0}\n", Node.Intro);
+
+        if (!String.IsNullOrWhiteSpace(Node.Intro))
+        {
+          builder.AppendFormat("<CLSP>{0}\n", Node.Intro);
+        }
 
         return builder.ToString();
       }
@@ -317,7 +320,7 @@ namespace CTCClassSchedule.Common
     /// for file exportation.
     ///
     /// The logic contatined is complex, and outputs all sections, linked sections,
-    /// aggregates common footnotes, and also aggregates automated hybrid footnotes where possible/
+    /// aggregates common footnotes, and also aggregates automated hybrid footnotes where possible.
     /// </summary>
     private class ExportableSectionsBlockNode : ExportableNode<SectionsBlock>
     {
@@ -343,22 +346,22 @@ namespace CTCClassSchedule.Common
 
         // Section title(s)
         builder.AppendLine();
-        builder.AppendLine(getSectionExportHeader(primarySection));
+        builder.AppendLine(GetSectionExportHeader(primarySection));
         if (Node.LinkedSections.Count > 0)
         {
           IList<SectionWithSeats> commonLinkedSections = Helpers.ParseCommonHeadingLinkedSections(Node.LinkedSections);
           foreach (SectionWithSeats linkedSec in commonLinkedSections)
           {
             // Display all the linked section headers
-            builder.AppendLine(getSectionExportHeader(linkedSec));
+            builder.AppendLine(GetSectionExportHeader(linkedSec));
           }
         }
 
 
 
         // Add Course and HP footnotes
-        string footnotes = String.Concat(Node.CommonFootnotes, " ", primarySection.CourseFootnotes);
-        if (String.IsNullOrWhiteSpace(footnotes))
+        string footnotes = String.Concat(string.Join(" ", Node.CommonFootnotes), " ", primarySection.CourseFootnotes).Trim();
+        if (!String.IsNullOrWhiteSpace(footnotes))
         {
           builder.AppendLine(String.Concat("<CLS3>", footnotes));
         }
@@ -370,14 +373,14 @@ namespace CTCClassSchedule.Common
         {
           foreach (OfferedItem item in sec.Offered.OrderBy(o => o.SequenceOrder))
           {
-            builder.AppendLine(buildOfferedItemsExportText(sec, item));
+            builder.AppendLine(BuildOfferedItemsExportText(sec, item));
           }
 
           // Section and course footnotes
-          footnotes = sec.SectionFootnotes;
+          footnotes = GetSectionFootnotes(primarySection.Footnotes, primarySection.SectionFootnotes, Node.CommonFootnotes);
           if (!String.IsNullOrWhiteSpace(footnotes))
           {
-            builder.AppendLine(String.Concat("<CLSN>", footnotes.Trim()));
+            builder.AppendLine(String.Concat("<CLSN>", footnotes));
           }
 
 
@@ -407,7 +410,7 @@ namespace CTCClassSchedule.Common
       /// </summary>
       /// <param name="section">The <see cref="SectionWithSeats"/> used to construct the header.</param>
       /// <returns>A string representation of the sections header.</returns>
-      private static string getSectionExportHeader(SectionWithSeats section)
+      private static string GetSectionExportHeader(SectionWithSeats section)
       {
         string creditsText = section.Credits.ToString();
         if (section.Credits == Math.Floor(section.Credits))
@@ -428,7 +431,7 @@ namespace CTCClassSchedule.Common
       /// <param name="section">The SectionWithSeats object that the OfferedItem belongs to.</param>
       /// <param name="item">The OfferedItem object whose data should be recorded.</param>
       ///
-      private static string buildOfferedItemsExportText(SectionWithSeats section, OfferedItem item)
+      private static string BuildOfferedItemsExportText(SectionWithSeats section, OfferedItem item)
       {
         // Configurables
         string onlineDaysStr = "[online]";
@@ -451,7 +454,7 @@ namespace CTCClassSchedule.Common
         }
 
         // Get the tag code that describes the offered item. The tag is determined by the primary offered item
-        string tagStr = getSectionExportTag(section, item);
+        string tagStr = GetSectionExportTag(section, item);
 
 
         // Set or override variable values for tags that have special conditions
@@ -491,7 +494,7 @@ namespace CTCClassSchedule.Common
       /// <param name="section">The Section being evaluated.</param>
       /// <param name="item">The particular OfferedItem within the given Section being evaluated.</param>
       /// <returns>A string containing the tag code that represents the given Section.</returns>
-      private static string getSectionExportTag(SectionWithSeats section, OfferedItem item)
+      private static string GetSectionExportTag(SectionWithSeats section, OfferedItem item)
       {
         string tag = "<CLS5>";
         string distanceEdMinStr = "7000";
@@ -504,7 +507,7 @@ namespace CTCClassSchedule.Common
         {
           tag = "<CLS7>";
         }
-        else if (isEveningCourse(primary)) // Evening course
+        else if (IsEveningCourse(primary)) // Evening course
         {
           tag = "<CLS6>";
         }
@@ -521,11 +524,46 @@ namespace CTCClassSchedule.Common
       }
 
       /// <summary>
+      /// Takes section footnotes and the CMS footnotes, and returns a single combined string of all footnotes -- taking
+      /// into account duplicates, or any specific footnotes which should be ignored (such as footnotes common to the course).
+      /// </summary>
+      /// <param name="hpFootnotes">List of section footnotes from the HP.</param>
+      /// <param name="cmsFootnote">The CMS footnote.</param>
+      /// <param name="toIgnore">List of any footnotes which should be ignored.</param>
+      /// <returns>A single string aggregate of all footnotes.</returns>
+      private static string GetSectionFootnotes(IEnumerable<string> hpFootnotes, string cmsFootnote, IEnumerable<string> toIgnore)
+      {
+        StringBuilder footnotes = new StringBuilder();
+
+        // Section footnotes
+        foreach (string footnote in hpFootnotes.Distinct())
+	      {
+		      if (!string.IsNullOrWhiteSpace(footnote))
+		      {
+			      // skip any footnotes in the supplied ignore list (used to avoid duplicates)
+			      if (toIgnore == null || toIgnore.Count() <= 0 || !toIgnore.Contains(footnote))
+			      {
+				      footnotes.Append(footnote);
+			      }
+		      }
+	      }
+
+        // CMS footnotes
+		    //    ensure we don't have duplicates
+        if (!string.IsNullOrWhiteSpace(cmsFootnote) && !hpFootnotes.Contains(cmsFootnote))
+		    {
+          footnotes.Append(cmsFootnote);
+		    }
+
+        return footnotes.ToString().Trim();
+      }
+
+      /// <summary>
       /// Takes an offered item and determines whether the course qualifies as an evening course.
       /// </summary>
       /// <param name="course">The OfferedItem to evaluate.</param>
       /// <returns>True if evening course, otherwise false.</returns>
-      private static bool isEveningCourse(OfferedItem course)
+      private static bool IsEveningCourse(OfferedItem course)
       {
         bool isEvening = false;
 
