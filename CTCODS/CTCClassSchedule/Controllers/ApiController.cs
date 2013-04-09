@@ -582,6 +582,7 @@ namespace CTCClassSchedule.Controllers
     /// GET: /API/Export/{YearQuarterID}
     /// </summary>
     /// <returns>An Adobe InDesign formatted text file with all course data.</returns>
+    [AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
     public FileResult Export(String YearQuarterID)
     {
       if (HttpContext.User.Identity.IsAuthenticated == true)
