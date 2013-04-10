@@ -228,8 +228,7 @@
 								{
 									int relativeOffset = Model.CurrentQuarter.FriendlyName.CompareTo(q.FriendlyName);
 									<li class="@(relativeOffset < 0 ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
-                    @* TODO: Use the proper Slug, not the prefix. Currently we can't tell which Slug to use if the CoursePrefix is owned by multiple Subjects *@
-										@Html.ActionLink(q.FriendlyName, "YearQuarterSubject", new { YearQuarter = q.FriendlyName.Replace(" ", string.Empty), Subject = ViewContext.RouteData.Values["Prefix"].ToString() })
+										@Html.ActionLink(q.FriendlyName, "YearQuarterSubject", new { YearQuarter = q.FriendlyName.Replace(" ", string.Empty), Subject = Model.Slug })
 
 										@if (relativeOffset == 0)
 										{
