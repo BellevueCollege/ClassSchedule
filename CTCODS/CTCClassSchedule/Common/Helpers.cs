@@ -532,7 +532,7 @@ namespace CTCClassSchedule.Common
 	  /// <param name="sections">List of sections to group</param>
 	  /// <param name="db"></param>
 	  /// <returns>List of SectionBlock objects which describe the block of sections</returns>
-	  public static IList<SectionsBlock> groupSectionsIntoBlocks(IList<SectionWithSeats> sections, ClassScheduleDb db)
+	  public static IList<SectionsBlock> GroupSectionsIntoBlocks(IList<SectionWithSeats> sections, ClassScheduleDb db)
     {
       MiniProfiler profiler = MiniProfiler.Current;
 

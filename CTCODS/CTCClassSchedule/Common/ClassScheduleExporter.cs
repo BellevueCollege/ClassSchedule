@@ -149,7 +149,7 @@ namespace CTCClassSchedule.Common
                                    s => s.Departments.SelectMany(de => de.Subjects)
                                                      .Where(r => sectionsWithSeats.Any(q => r.CoursePrefixes.Any(p => p.CoursePrefixID == q.CourseSubject)))
                                                      .ToDictionary(k => k,
-                                                                   v => Helpers.groupSectionsIntoBlocks(sectionsWithSeats.Where(q => v.CoursePrefixes.Any(p => q.CourseSubject == p.CoursePrefixID)).ToList(), db))
+                                                                   v => Helpers.GroupSectionsIntoBlocks(sectionsWithSeats.Where(q => v.CoursePrefixes.Any(p => q.CourseSubject == p.CoursePrefixID)).ToList(), db))
                                  );
 
       }

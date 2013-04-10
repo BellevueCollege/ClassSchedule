@@ -243,7 +243,21 @@ namespace CTCClassSchedule.Controllers
 						sectionsEnum = Helpers.GetSectionsWithSeats(yrq.ID, sections, db);
 					}
 
-					courseBlocks = Helpers.groupSectionsIntoBlocks(sectionsEnum, db);
+#if DEBUG
+          /* COMMENT THIS LINE FOR DEBUGGING/TROUBLESHOOTING
+				  string zItemNum = "1069", zYrq = "B234";
+          if (sectionsEnum.Any(s => s.ID.ItemNumber == zItemNum && s.ID.YearQuarter == zYrq))
+				  {
+				    SectionWithSeats foo = sectionsEnum.Where(s => s.ID.ItemNumber == zItemNum && s.ID.YearQuarter == zYrq).First();
+            Debugger.Break(); // examine foo
+				  }
+          else
+          {
+            Debug.Print("ClassID '{0}{1}' not found.", zItemNum, zYrq);
+          }
+          // */
+#endif
+					courseBlocks = Helpers.GroupSectionsIntoBlocks(sectionsEnum, db);
         }
 
         // Construct the model

@@ -119,7 +119,7 @@ namespace CTCClassSchedule.Controllers
             sectionsEnum = sectionsEnum.Skip(p_offset * ITEMS_PER_PAGE).Take(ITEMS_PER_PAGE).ToList();
           }
 
-          courseBlocks = Helpers.groupSectionsIntoBlocks(sectionsEnum, db);
+          courseBlocks = Helpers.GroupSectionsIntoBlocks(sectionsEnum, db);
 				}
 
 				IEnumerable<string> allSubjects;
