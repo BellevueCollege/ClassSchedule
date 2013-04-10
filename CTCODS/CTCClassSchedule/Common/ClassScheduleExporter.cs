@@ -127,6 +127,13 @@ namespace CTCClassSchedule.Common
           for (int i = 0; i < (divisionPrefixes.Count / batch)+1; i++)
           {
             IList<string> prefixes = divisionPrefixes.Skip(i * batch).Take(batch).ToList();
+
+            // *************************************************************************************************************
+            // We shouldn't need to be concerned about prefixes at this point - we want all Sections for the given quarter.
+            // Once we have them, we can break them down by prefix/subject. But there's no need to pre-filter our retrieval
+            // from the ODS.
+            // *************************************************************************************************************
+
             sections.AddRange(repository.GetSections(prefixes, yearQuarter));
           }
 
