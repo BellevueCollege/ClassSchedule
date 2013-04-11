@@ -520,7 +520,7 @@ namespace CTCClassSchedule.Common
       {
         friendlyName.Replace(key, daysDictionary[key]);
       }
-      // HACK: If we don't obscure the "T" in Thursday, it will be replaced by the Tuesday evaluation.
+      // HACK: If we don't obscure the "T" in Thursday, it will be replaced by the Tuesday evaluation, resulting in "Tuesdayhursday".
       friendlyName.Replace("X", "T");
 
       return friendlyName.ToString().TrimEnd('/');
@@ -557,6 +557,7 @@ namespace CTCClassSchedule.Common
         nonLinkedSections = sections.Where(s => !s.IsLinked)
                           .OrderBy(s => s.CourseNumber)
                           .ThenBy(s => allLinkedSections.Where(l => l.LinkedTo == s.ID.ItemNumber).Count())
+                          .ThenBy(s => s.CourseTitle)
                           .ThenByDescending(s => s.IsVariableCredits)
                           .ThenBy(s => s.Credits)
                           .ThenBy(s => s.IsTelecourse)
@@ -580,7 +581,7 @@ namespace CTCClassSchedule.Common
 
           courseBlock.Sections = remainingSections.TakeWhile(s =>
                                                              s.CourseID == firstSection.CourseID &&
-                                                             ((Section)s).CourseTitle == ((Section)firstSection).CourseTitle &&
+                                                             s.CourseTitle == firstSection.CourseTitle &&
                                                              s.Credits == firstSection.Credits &&
                                                              s.IsVariableCredits == firstSection.IsVariableCredits &&
                                                              allLinkedSections.Count(l => l.LinkedTo == s.ID.ItemNumber) == allLinkedSections.Count(l => l.LinkedTo == firstSection.ID.ItemNumber))
