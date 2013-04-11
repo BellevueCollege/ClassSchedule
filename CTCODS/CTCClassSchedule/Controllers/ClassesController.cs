@@ -234,6 +234,22 @@ namespace CTCClassSchedule.Controllers
 					sections = repository.GetSections(prefixes, yrq, facets);
 				}
 
+#if DEBUG
+          /* COMMENT THIS LINE FOR DEBUGGING/TROUBLESHOOTING
+        Debug.Print("==> sections");
+        string zItemNum = "1230", zYrq = "B234";  // ENGL 266
+        if (sections.Any(s => s.ID.ItemNumber == zItemNum && s.ID.YearQuarter == zYrq))
+        {
+          Section foo = sections.Where(s => s.ID.ItemNumber == zItemNum && s.ID.YearQuarter == zYrq).First();
+          Debug.Print("\n{0} - {1} {2}\t(Linked to: {3})", foo.ID, foo.CourseID, foo.CourseTitle, foo.LinkedTo);
+        }
+        else
+        {
+          Debug.Print("ClassID '{0}{1}' not found.", zItemNum, zYrq);
+        }
+        // */
+#endif
+
         IList<SectionsBlock> courseBlocks = new List<SectionsBlock>();
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
@@ -245,11 +261,12 @@ namespace CTCClassSchedule.Controllers
 
 #if DEBUG
           /* COMMENT THIS LINE FOR DEBUGGING/TROUBLESHOOTING
-				  string zItemNum = "1069", zYrq = "B234";
+				  Debug.Print("==> sectionsEnum");
+				  zItemNum = "1230"; zYrq = "B234"; // ENGL 266
           if (sectionsEnum.Any(s => s.ID.ItemNumber == zItemNum && s.ID.YearQuarter == zYrq))
 				  {
 				    SectionWithSeats foo = sectionsEnum.Where(s => s.ID.ItemNumber == zItemNum && s.ID.YearQuarter == zYrq).First();
-            Debugger.Break(); // examine foo
+				    Debug.Print("\n{0} - {1} {2}\t(Linked to: {3})", foo.ID, foo.CourseID, foo.CourseTitle, foo.LinkedTo);
 				  }
           else
           {

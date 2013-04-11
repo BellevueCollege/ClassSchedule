@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Objects;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -534,7 +535,20 @@ namespace CTCClassSchedule.Common
 	  /// <returns>List of SectionBlock objects which describe the block of sections</returns>
 	  public static IList<SectionsBlock> GroupSectionsIntoBlocks(IList<SectionWithSeats> sections, ClassScheduleDb db)
     {
-      MiniProfiler profiler = MiniProfiler.Current;
+#if DEBUG
+  /* COMMENT THIS LINE TO DEBUG
+      if (sections.Any(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "266"))
+      {
+        SectionWithSeats zengl266 = sections.Where(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "266").First();
+        Debug.Print("\n{0} - {1} {2}\t[{4}]\t(Linked to: {3})\n", zengl266.ID, zengl266.CourseID, zengl266.CourseTitle, zengl266.LinkedTo, zengl266.IsLinked ? "LINKED" : string.Empty);
+      }
+      else
+      {
+        Debug.Print("\nENGL 266 - NOT FOUND AMONG SECTIONS.\n");
+      }
+      // END DEBUGGING */
+#endif
+	    MiniProfiler profiler = MiniProfiler.Current;
 
       IList<SectionsBlock> results = new List<SectionsBlock>();
       IList<SectionWithSeats> allLinkedSections = sections.Where(s => s.IsLinked).ToList();
@@ -551,9 +565,11 @@ namespace CTCClassSchedule.Common
       /* TODO: Implement a more configurable sort method. */
       using (profiler.Step("Sorting sections in preparation for grouping and linking"))
       {
-        /* COMMENT THIS LINE TO DEBUG
+#if DEBUG
+  /* COMMENT THIS LINE TO DEBUG
         IEnumerable<SectionWithSeats> d1 = sections.Where(s => s.ID.ItemNumber.StartsWith("410"));
         // END DEBUGGING */
+#endif
         nonLinkedSections = sections.Where(s => !s.IsLinked)
                           .OrderBy(s => s.CourseNumber)
                           .ThenBy(s => allLinkedSections.Where(l => l.LinkedTo == s.ID.ItemNumber).Count())
@@ -567,6 +583,35 @@ namespace CTCClassSchedule.Common
                           .ThenBy(s => s.SectionCode).ToList();
       }
 
+#if DEBUG
+  /* COMMENT THIS LINE TO DEBUG
+	    foreach (SectionWithSeats zs in nonLinkedSections.Where(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "101"))
+	    {
+	      Debug.Print("{0} - {1} {2}\t{3}\t(Linked sections: {4})", zs.ID, zs.CourseID, zs.CourseTitle, zs.IsLinked ? " [LINKED] " : string.Empty,
+	                  allLinkedSections.Count(l => l.LinkedTo == zs.ID.ItemNumber));
+	    }
+      if (!allLinkedSections.Any(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "266"))
+	    {
+	      Debug.Print("\nENGL 266 - NOT FOUND AMONG LINKED SECTIONS.");
+	    }
+	    else
+	    {
+        SectionWithSeats zengl266 = allLinkedSections.Where(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "266").First();
+        Debug.Print("\n{0} - {1} {2}\t(Linked to: {3})", zengl266.ID, zengl266.CourseID, zengl266.CourseTitle, zengl266.LinkedTo);
+      }
+
+      if (!allLinkedSections.Any(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "246"))
+	    {
+	      Debug.Print("\nENGL& 246 - NOT FOUND AMONG LINKED SECTIONS.");
+	    }
+	    else
+	    {
+        SectionWithSeats zengl246 = allLinkedSections.Where(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "246").First();
+        Debug.Print("\n{0} - {1} {2}\t(Linked to: {3})", zengl246.ID, zengl246.CourseID, zengl246.CourseTitle, zengl246.LinkedTo);
+      }
+      // END DEBUGGING */
+#endif
+
       // Group all the sections into course blocks and determine which sections linked
       using (profiler.Step("Grouping/linking by course"))
       {
@@ -579,13 +624,28 @@ namespace CTCClassSchedule.Common
           IList<SectionWithSeats> remainingSections = nonLinkedSections.Skip(processedCount).ToList();
           SectionWithSeats firstSection = remainingSections.First();
 
-          courseBlock.Sections = remainingSections.TakeWhile(s =>
-                                                             s.CourseID == firstSection.CourseID &&
-                                                             s.CourseTitle == firstSection.CourseTitle &&
-                                                             s.Credits == firstSection.Credits &&
-                                                             s.IsVariableCredits == firstSection.IsVariableCredits &&
-                                                             allLinkedSections.Count(l => l.LinkedTo == s.ID.ItemNumber) == allLinkedSections.Count(l => l.LinkedTo == firstSection.ID.ItemNumber))
-                                                             .ToList();
+          if (allLinkedSections.Any(l => l.LinkedTo == firstSection.ID.ItemNumber))
+          {
+
+
+            /* --------------------------------------------------------------------------------------------------------------------
+             * TODO: This logic isn't working. Instead, it is giving all the Sections the course header of the combination class.
+             -------------------------------------------------------------------------------------------------------------------- */
+
+
+            // If a Section has other Sections linked to it, then it should be displayed in its own block
+            courseBlock.Sections = new List<SectionWithSeats> {firstSection};
+          }
+          else
+          {
+            courseBlock.Sections = remainingSections.TakeWhile(s =>
+                                                               s.CourseID == firstSection.CourseID &&
+                                                               s.CourseTitle == firstSection.CourseTitle &&
+                                                               s.Credits == firstSection.Credits &&
+                                                               s.IsVariableCredits == firstSection.IsVariableCredits &&
+                                                               allLinkedSections.All(l => l.LinkedTo != s.ID.ItemNumber)
+                                                               ).ToList();
+          }
 
           // Flag whether or not this course block is crosslisted with other sections
           courseBlock.IsCrosslisted = crosslistings.Any(x => x.CourseID == firstSection.CourseID);
