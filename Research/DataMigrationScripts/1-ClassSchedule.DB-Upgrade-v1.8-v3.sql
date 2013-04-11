@@ -80,7 +80,7 @@ to synchronize it with:
 
 You are recommended to back up your database before running this script
 
-Script created by SQL Compare version 10.3.1 from Red Gate Software Ltd at 3/5/2013 12:25:23 PM
+Script created by SQL Compare version 10.3.8 from Red Gate Software Ltd at 4/11/2013 3:58:29 PM
 
 */
 IF EXISTS (SELECT * FROM tempdb..sysobjects WHERE id=OBJECT_ID('tempdb..#tmpErrors')) DROP TABLE #tmpErrors
@@ -102,6 +102,136 @@ GO
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
 GO
 BEGIN TRANSACTION
+GO
+PRINT N'Altering [dbo].[usp_ClassSearch]'
+GO
+
+
+-- =============================================
+-- Author:
+-- Create date: 8/23/2011
+-- Description:	Performs a full-text search on class details
+-- CHANGE HISTORY:
+--		3/26/2013 johanna.aqui
+--		documented procedure
+-- =============================================
+
+ALTER procedure [dbo].[usp_ClassSearch]
+(
+	@SearchWord nvarchar(100)
+	,@YearQuarterID char(4)
+)
+
+AS
+/*
+DECLARE @SearchWord nvarchar(100), @YearQuarterID char(4)
+SELECT @SearchWord = 'deved', @YearQuarterID = 'B124'
+--*/
+
+declare @SearchString nvarchar(100) --preserve original string typed in by the user
+set @SearchString = @SearchWord
+
+set @SearchWord = RTRIM(@SearchWord)
+SET @SearchWord = N'("' + REPLACE(@SearchWord, ' ', '*" AND "') + '*")'
+
+
+/*
+select @SearchWord
+
+select
+*
+from
+ClassSearch
+where ClassID='0640B121'
+where CONTAINS((SearchGroup1, SearchGroup2, SearchGroup3), @SearchWord)
+--*/
+
+--Create an empty table based on ClassSearch
+select
+ClassID
+,0 as SearchGroup
+,0 as SearchRank
+into #Results
+from ClassSearch
+where 1<>1
+
+
+--Search through each search group 1 - 4 in the ClassSearch table, filtered by YRQ
+insert #Results
+select FT_TBL.ClassID, 1, KEY_TBL.RANK
+from ClassSearch AS FT_TBL
+join CONTAINSTABLE(ClassSearch, SearchGroup1,@SearchWord) AS KEY_TBL
+            ON FT_TBL.ClassID = KEY_TBL.[KEY]
+where RIGHT(ClassID, 4) = @YearQuarterID
+ORDER BY KEY_TBL.RANK DESC;
+
+insert into #Results
+select FT_TBL.ClassID, 2, KEY_TBL.RANK
+from ClassSearch AS FT_TBL
+join CONTAINSTABLE(ClassSearch, SearchGroup2,@SearchWord) AS KEY_TBL
+            ON FT_TBL.ClassID = KEY_TBL.[KEY]
+where
+RIGHT(ClassID, 4) = @YearQuarterID
+and FT_TBL.ClassID not in (select ClassID from #Results)
+ORDER BY KEY_TBL.RANK DESC;
+
+insert into #Results
+select FT_TBL.ClassID, 3, KEY_TBL.RANK
+from ClassSearch AS FT_TBL
+join CONTAINSTABLE(ClassSearch, SearchGroup3,@SearchWord) AS KEY_TBL
+            ON FT_TBL.ClassID = KEY_TBL.[KEY]
+where
+RIGHT(ClassID, 4) = @YearQuarterID
+and FT_TBL.ClassID not in (select ClassID from #Results)
+ORDER BY KEY_TBL.RANK DESC;
+
+insert into #Results
+select FT_TBL.ClassID, 4, KEY_TBL.RANK
+from ClassSearch AS FT_TBL
+join CONTAINSTABLE(ClassSearch, SearchGroup4,@SearchWord) AS KEY_TBL
+            ON FT_TBL.ClassID = KEY_TBL.[KEY]
+where
+RIGHT(ClassID, 4) = @YearQuarterID
+and FT_TBL.ClassID not in (select ClassID from #Results)
+ORDER BY KEY_TBL.RANK DESC;
+
+
+
+--
+insert into #Results
+SELECT FT_TBL.ClassID, 0, 0
+FROM ClassSearch AS FT_TBL
+WHERE RIGHT(ClassID, 4) = @YearQuarterID
+AND ItemYrqLink IN (SELECT LEFT(ClassID, 4) FROM #Results)
+and FT_TBL.ClassID not in (select ClassID from #Results)
+
+
+
+-- Log the searching trends
+insert SearchLog (SearchString,Group1Results,Group2Results,Group3Results)
+select
+@SearchString as SearchString
+,(select COUNT(*) from #Results where SearchGroup=1) as Group1Results
+,(select COUNT(*) from #Results where SearchGroup=2) as Group2Results
+,(select COUNT(*) from #Results where SearchGroup=3) as Group3Results
+
+
+-- Return the search results
+select
+--c.*
+r.ClassID
+,r.SearchGroup
+,r.SearchRank
+from #Results r
+--left outer join vw_ClassSearch c on r.ClassID = c.ClassID
+--order by r.SearchGroup, r.SearchRank DESC
+
+drop table #Results
+
+GO
+IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
+GO
+IF @@TRANCOUNT=0 BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
 GO
 PRINT N'Altering [dbo].[vw_Class]'
 GO
@@ -299,17 +429,17 @@ PRINT N'Creating [dbo].[SubjectsCoursePrefixes]'
 GO
 CREATE TABLE [dbo].[SubjectsCoursePrefixes]
 (
-[SubjectID] [int] NOT NULL,
-[CoursePrefixID] [varchar] (5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[CoursePrefixID] [varchar] (5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SubjectID] [int] NOT NULL
 )
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
 GO
 IF @@TRANCOUNT=0 BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
 GO
-PRINT N'Creating primary key [PK_SubjectsCoursePrefixes] on [dbo].[SubjectsCoursePrefixes]'
+PRINT N'Creating primary key [PK_SubjectsCoursePrefixes_1] on [dbo].[SubjectsCoursePrefixes]'
 GO
-ALTER TABLE [dbo].[SubjectsCoursePrefixes] ADD CONSTRAINT [PK_SubjectsCoursePrefixes] PRIMARY KEY CLUSTERED  ([SubjectID], [CoursePrefixID])
+ALTER TABLE [dbo].[SubjectsCoursePrefixes] ADD CONSTRAINT [PK_SubjectsCoursePrefixes_1] PRIMARY KEY CLUSTERED  ([CoursePrefixID])
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
 GO
@@ -397,6 +527,7 @@ PRINT N'Altering permissions on [dbo].[SectionCourseCrosslistings]'
 GO
 GRANT SELECT ON  [dbo].[SectionCourseCrosslistings] TO [WebApplicationUser]
 GRANT INSERT ON  [dbo].[SectionCourseCrosslistings] TO [WebApplicationUser]
+GRANT DELETE ON  [dbo].[SectionCourseCrosslistings] TO [WebApplicationUser]
 GRANT UPDATE ON  [dbo].[SectionCourseCrosslistings] TO [WebApplicationUser]
 GO
 PRINT N'Altering permissions on [dbo].[SectionSeats]'
@@ -421,6 +552,7 @@ PRINT N'Altering permissions on [dbo].[SubjectsCoursePrefixes]'
 GO
 GRANT SELECT ON  [dbo].[SubjectsCoursePrefixes] TO [WebApplicationUser]
 GRANT INSERT ON  [dbo].[SubjectsCoursePrefixes] TO [WebApplicationUser]
+GRANT DELETE ON  [dbo].[SubjectsCoursePrefixes] TO [WebApplicationUser]
 GRANT UPDATE ON  [dbo].[SubjectsCoursePrefixes] TO [WebApplicationUser]
 GO
 IF EXISTS (SELECT * FROM #tmpErrors) ROLLBACK TRANSACTION
@@ -514,7 +646,7 @@ SELECT
 GO
 
 /*-----------------------------------------------------------------------------
-  Subjects
+  Subjects - everything except ALDAC (because there are duplicate URL entries).
  -----------------------------------------------------------------------------*/
 --/*
 INSERT INTO dbo.Subjects
@@ -541,6 +673,40 @@ SELECT
 		) AS LastUpdatedBy
       ,MAX(d.[LastUpdated]) AS LastUpdated
   FROM [ProgramInformation] d
+  WHERE d.URL <> 'aldac'
+  GROUP BY d.Title, ISNULL(d.Intro, ''), d.URL
+  ORDER BY d.Title
+GO
+
+/*-----------------------------------------------------------------------------
+  ALDAC Subjects - with the extraneous entry weeded out
+ -----------------------------------------------------------------------------*/
+--/*
+INSERT INTO dbo.Subjects
+        ( DepartmentID,
+		  Title,
+          Intro,
+          Slug,
+          LastUpdatedBy,
+          LastUpdated
+        )
+--*/
+SELECT
+			(SELECT DepartmentID FROM Departments WHERE Title = MIN(d.AcademicProgram) AND URL = MIN(d.ProgramURL)) AS DepartmentID
+      ,d.[Title]
+      ,ISNULL(d.[Intro], '')
+	    ,d.[URL]
+      ,(
+		SELECT TOP 1
+			p.[LastUpdatedBy]
+		FROM [ProgramInformation] p
+		WHERE NOT p.lastupdated IS null
+		and p.Title = d.Title AND ISNULL(p.[Intro], '') = ISNULL(d.[Intro], '')
+		ORDER BY p.lastupdated DESC
+		) AS LastUpdatedBy
+      ,MAX(d.[LastUpdated]) AS LastUpdated
+  FROM [ProgramInformation] d
+  WHERE d.URL = 'aldac' AND NOT d.LastUpdated IS null
   GROUP BY d.Title, ISNULL(d.Intro, ''), d.URL
   ORDER BY d.Title
 GO
