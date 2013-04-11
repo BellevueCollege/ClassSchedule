@@ -195,9 +195,9 @@ namespace CTCClassSchedule.Controllers
 	              bool changed = false;
 
                 // TODO: Strip HTML from input before assigning
-                if (TestAndUpdate(Model.SectionToEdit.CustomTitle != sectionMeta.Title, ref changed))
+                if (TestAndUpdate(Model.SectionToEdit.CourseTitle != sectionMeta.Title, ref changed))
                 {
-	                sectionMeta.Title = Model.SectionToEdit.CustomTitle;
+	                sectionMeta.Title = Model.SectionToEdit.CourseTitle;
 	              }
                 if (TestAndUpdate(Model.SectionToEdit.CustomDescription != sectionMeta.Description, ref changed))
 	              {
@@ -219,7 +219,7 @@ namespace CTCClassSchedule.Controllers
 	              sectionMeta = new SectionsMeta
 	                               {
 	                                 ClassID = sectionID,
-	                                 Title = Model.SectionToEdit.CustomTitle,
+	                                 Title = Model.SectionToEdit.CourseTitle,
 	                                 Description = Model.SectionToEdit.CustomDescription,
 	                                 Footnote = Model.SectionToEdit.SectionFootnotes,
 	                                 LastUpdated = DateTime.Now,

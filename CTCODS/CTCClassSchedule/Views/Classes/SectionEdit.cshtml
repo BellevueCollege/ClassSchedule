@@ -36,12 +36,12 @@
 					<h3><a href="javascript:void(0)">Advanced Options</a></h3>
         <div id="second">
           <div class="editor-label">
-            @Html.LabelFor(m => m.SectionToEdit.CustomTitle, "Custom Title (makes section show as a different class)")
+            @Html.LabelFor(m => m.SectionToEdit.CourseTitle, "Custom Title (makes section show as a different class)")
           </div>
           <div class="editor-field">
 
-            @Html.TextBoxFor(m => m.SectionToEdit.CustomTitle, new { @class = "SubjectTextfield", @maxlength = "100" })
-            @Html.ValidationMessageFor(m => m.SectionToEdit.CustomTitle)
+            @Html.TextBoxFor(m => m.SectionToEdit.CourseTitle, new { @class = "SubjectTextfield", @maxlength = "100" })
+            @Html.ValidationMessageFor(m => m.SectionToEdit.CourseTitle)
           </div>
 
           <div class="editor-label">

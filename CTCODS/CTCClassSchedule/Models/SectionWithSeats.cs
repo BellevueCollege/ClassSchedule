@@ -9,11 +9,11 @@ namespace CTCClassSchedule.Models
 		public string LastUpdatedBy { get; set; }
 		public string CourseFootnotes { get; set; }
 		public string SectionFootnotes { get; set; }
-		public string CustomTitle { get; set; }
 		public string CustomDescription { get; set; }
-		public new string CourseTitle { get; set; }
 
-    public new ClassScheduleSectionID ID {get;set;}
+    // override properties from parent
+    public new string CourseTitle { get; set; }
+    public new ClassScheduleSectionID ID { get; set; }
 
     /// <summary>
     /// Identifies whether or not a cross-listing relationship exists in <see cref="ClassScheduleDb.SectionCourseCrosslistings"/>
@@ -49,7 +49,7 @@ namespace CTCClassSchedule.Models
         // ClassScheduleSectionID has additional Attributes that we need.
 				ID = new ClassScheduleSectionID(value.ID);
 				CourseNumber = value.CourseNumber;
-				CourseTitle = value.CourseTitle;
+//				CourseTitle = value.CourseTitle;
 				CourseSubject = value.CourseSubject;
 				CourseDescriptions = value.CourseDescriptions;
 				Credits = value.Credits;

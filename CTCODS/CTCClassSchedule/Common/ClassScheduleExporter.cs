@@ -396,7 +396,7 @@ namespace CTCClassSchedule.Common
           string hyrbidFootnote = AutomatedFootnotesConfig.Footnotes("hybrid").Text;
           footnotes = AutomatedFootnotesConfig.getAutomatedFootnotesText(sec);
           if (footnotes.Contains(hyrbidFootnote)
-              && sec != Node.Sections.Where(s => s.IsHybrid && sec.CourseNumber == s.CourseNumber && sec.Credits == s.Credits && sec.CourseTitle == s.CourseTitle && sec.CustomTitle == s.CustomTitle).LastOrDefault())
+              && sec != Node.Sections.Where(s => s.IsHybrid && sec.CourseNumber == s.CourseNumber && sec.Credits == s.Credits && sec.CourseTitle == s.CourseTitle).LastOrDefault())
           {
             footnotes = footnotes.Replace(hyrbidFootnote, string.Empty);
           }

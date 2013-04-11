@@ -481,7 +481,7 @@ namespace CTCClassSchedule.Common
 								LastUpdated = (d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString("h:mm tt").ToLower(),
 													SectionFootnotes = sm != null && !String.IsNullOrWhiteSpace(sm.Footnote) ? sm.Footnote : String.Empty,
 													CourseFootnotes = cm != null && !String.IsNullOrWhiteSpace(cm.Footnote) ? cm.Footnote : String.Empty,
-                          CustomTitle = sm != null && !String.IsNullOrWhiteSpace(sm.Title) ? sm.Title : c.CourseTitle,
+                          CourseTitle = sm != null && !String.IsNullOrWhiteSpace(sm.Title) ? sm.Title : c.CourseTitle,
 													CustomDescription = sm != null && !String.IsNullOrWhiteSpace(sm.Description) ? sm.Description : String.Empty,
 											}).OrderBy(s => s.CourseNumber).ThenBy(s => s.CourseTitle).ToList();
 
@@ -580,7 +580,7 @@ namespace CTCClassSchedule.Common
 
           courseBlock.Sections = remainingSections.TakeWhile(s =>
                                                              s.CourseID == firstSection.CourseID &&
-                                                             s.CourseTitle == firstSection.CourseTitle &&
+                                                             ((Section)s).CourseTitle == ((Section)firstSection).CourseTitle &&
                                                              s.Credits == firstSection.Credits &&
                                                              s.IsVariableCredits == firstSection.IsVariableCredits &&
                                                              allLinkedSections.Count(l => l.LinkedTo == s.ID.ItemNumber) == allLinkedSections.Count(l => l.LinkedTo == firstSection.ID.ItemNumber))
@@ -840,13 +840,13 @@ namespace CTCClassSchedule.Common
 
 	    foreach (SectionWithSeats section in linkedSections)
 	    {
-	      if (!(section.CourseID == prevCourseID && section.CourseTitle == prevTitle && section.Credits == prevCredits && section.IsVariableCredits == prevIsVariableCredits))
+	      if (!(section.CourseID == prevCourseID && ((Section)section).CourseTitle == prevTitle && section.Credits == prevCredits && section.IsVariableCredits == prevIsVariableCredits))
 	      {
 	        common.Add(section);
 	      }
 
 	      prevCourseID = section.CourseID;
-	      prevTitle = section.CourseTitle;
+	      prevTitle = ((Section)section).CourseTitle;
 	      prevCredits = section.Credits;
 	      prevIsVariableCredits = section.IsVariableCredits;
 	    }

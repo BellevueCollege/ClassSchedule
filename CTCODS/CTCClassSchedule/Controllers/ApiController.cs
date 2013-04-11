@@ -226,7 +226,7 @@ namespace CTCClassSchedule.Controllers
                                                              IsCommonCourse = c.IsCommonCourse,
                                                              Credits = c.Credits,
                                                              IsVariableCredits = c.IsVariableCredits,
-                                                             Title = c.CustomTitle ?? c.CourseTitle
+                                                             Title = c.CourseTitle
                                                            }).ToList();
 
             // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)

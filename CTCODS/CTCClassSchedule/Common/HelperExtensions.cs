@@ -156,7 +156,7 @@ namespace CTCClassSchedule.Common
 		public static IHtmlString SectionCourseHeading(this HtmlHelper html, SectionWithSeats sec, string credits = null, string searchTerm = null)
 		{
 			string subject = Helpers.SubjectWithCommonCourseFlag(sec);
-			return SectionCourseHeading(html, subject, sec.CourseNumber, sec.CustomTitle ?? sec.CourseTitle, credits, searchTerm);
+			return SectionCourseHeading(html, subject, sec.CourseNumber, sec.CourseTitle, credits, searchTerm);
 		}
 
 		public static IHtmlString SectionCourseHeading(this HtmlHelper html, Course course, string credits = null, string searchTerm = null)
