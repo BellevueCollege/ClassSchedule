@@ -316,9 +316,8 @@ namespace CTCClassSchedule.Controllers
 
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
-				ICourseID courseID = CourseID.FromString(Subject, CourseNumber);
-        // TODO: Do we need the following line because CourseID.FromString() is not returning the correct ICourseID?
 				string fullCourseId = Helpers.BuildCourseID(CourseNumber, Subject, IsCommonCourse);
+        ICourseID courseID = CourseID.FromString(fullCourseId);
 
 				CourseMeta itemToUpdate = null;
 				var hpFootnotes = string.Empty;

@@ -1,4 +1,6 @@
-﻿@model CTCClassSchedule.Models.SectionEditModel
+﻿@using System.Configuration
+@using Ctc.Ods.Config
+@model CTCClassSchedule.Models.SectionEditModel
 
 <div id="SectionEdit">
 @using (Html.BeginForm()) {
@@ -6,8 +8,11 @@
 
   if (Model != null && Model.SectionToEdit != null)
   {
+    ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
+    string commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar;
+
     <fieldset>
-      <legend>@(Model.SectionToEdit.CourseSubject) @(Model.SectionToEdit.CourseNumber) #@(Model.SectionToEdit.ID.ItemNumber) - @(Model.SectionToEdit.Yrq.FriendlyName)</legend>
+      <legend>@String.Concat(Model.SectionToEdit.CourseSubject, Model.SectionToEdit.IsCommonCourse ? commonCourseChar : string.Empty) @Model.SectionToEdit.CourseNumber #@Model.SectionToEdit.ID.ItemNumber - @Model.SectionToEdit.Yrq.FriendlyName</legend>
 
       @*Html.HiddenFor(m => m.SectionToEdit.ID)*@
       <input type="hidden" name="sectionID" value="@Model.SectionToEdit.ID.ToString()"/>
