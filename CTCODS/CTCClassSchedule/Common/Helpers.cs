@@ -383,7 +383,7 @@ namespace CTCClassSchedule.Common
 		/// Gets the <see cref="YearQuarter"/> for the current, and previous 3 quarters.
 		/// This drives the dynamic YRQ navigation bar
 		/// </summary>
-		static public IList<YearQuarter> getYearQuarterListForMenus(OdsRepository repository)
+		static public IList<YearQuarter> GetYearQuarterListForMenus(OdsRepository repository)
 		{
 			IList<YearQuarter> currentFutureQuarters = repository.GetRegistrationQuarters(4);
 			return currentFutureQuarters;
@@ -392,7 +392,7 @@ namespace CTCClassSchedule.Common
 		/// <summary>
 		/// Gets the <see cref="YearQuarter"/> for the current, and future 2 quarters.
 		/// </summary>
-		static public IList<YearQuarter> getFutureQuarters(OdsRepository repository)
+		static public IList<YearQuarter> GetFutureQuarters(OdsRepository repository)
 		{
 			IList<YearQuarter> futureQuarters = repository.GetFutureQuarters(3);
 			return futureQuarters;

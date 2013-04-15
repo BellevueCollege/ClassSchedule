@@ -41,8 +41,8 @@ namespace CTCClassSchedule.Controllers
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
 				ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
-				ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
-				ViewBag.RegistrationQuarters = Helpers.getFutureQuarters(repository);
+				ViewBag.QuarterNavMenu = Helpers.GetYearQuarterListForMenus(repository);
+				ViewBag.RegistrationQuarters = Helpers.GetFutureQuarters(repository);
 			}
 			return View();
 		}
@@ -79,7 +79,7 @@ namespace CTCClassSchedule.Controllers
           AllClassesModel model = new AllClassesModel
           {
             CurrentQuarter = repository.CurrentYearQuarter,
-            NavigationQuarters = Helpers.getYearQuarterListForMenus(repository),
+            NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository),
             Subjects = subjects,
             LettersList = subjectLetters,
             ViewingLetter = String.IsNullOrEmpty(letter) ? (char?)null : letter.First()
@@ -122,7 +122,7 @@ namespace CTCClassSchedule.Controllers
 																	 DepartmentTitle = subject.Department.Title,
 																	 DepartmentURL = subject.Department.URL,
 																	 CurrentQuarter = repository.GetRegistrationQuarters(1)[0],
-																	 NavigationQuarters = Helpers.getYearQuarterListForMenus(repository)
+																	 NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository)
 																 };
 
         if (format == "json")
@@ -193,7 +193,7 @@ namespace CTCClassSchedule.Controllers
 
 					// set up all the ancillary data we'll need to display the View
 					SetCommonViewBagVars(repository, avail, letter);
-					ViewBag.QuarterNavMenu = Helpers.getYearQuarterListForMenus(repository);
+					ViewBag.QuarterNavMenu = Helpers.GetYearQuarterListForMenus(repository);
 
 					ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? "All" : letter.ToUpper());
 
@@ -279,7 +279,7 @@ namespace CTCClassSchedule.Controllers
 
         // Construct the model
         SubjectInfoResult subject = SubjectInfo.GetSubjectInfoFromPrefix(Subject);
-        IList<YearQuarter> yrqRange = Helpers.getYearQuarterListForMenus(repository);
+        IList<YearQuarter> yrqRange = Helpers.GetYearQuarterListForMenus(repository);
 
 			  YearQuarterSubjectModel model = new YearQuarterSubjectModel
 			                                    {
@@ -342,7 +342,7 @@ namespace CTCClassSchedule.Controllers
 				}
 
 
-        IList<YearQuarter> navigationQuarters = Helpers.getYearQuarterListForMenus(repository);
+        IList<YearQuarter> navigationQuarters = Helpers.GetYearQuarterListForMenus(repository);
         IList<YearQuarter> quartersOffered = new List<YearQuarter>();
         string learningOutcomes = string.Empty;
 				if (courses.Count > 0)

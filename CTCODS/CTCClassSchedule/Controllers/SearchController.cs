@@ -64,7 +64,7 @@ namespace CTCClassSchedule.Controllers
 			using (OdsRepository repository = new OdsRepository())
 			{
 				YearQuarter yrq = string.IsNullOrWhiteSpace(quarter) ? repository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
-        IList<YearQuarter> menuQuarters = Helpers.getYearQuarterListForMenus(repository);
+        IList<YearQuarter> menuQuarters = Helpers.GetYearQuarterListForMenus(repository);
 			  QuarterNavigationModel quarterNavigation = new QuarterNavigationModel
 			                                               {
 			                                                 NavigationQuarters = menuQuarters,
