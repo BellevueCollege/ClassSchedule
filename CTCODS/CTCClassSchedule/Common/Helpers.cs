@@ -486,6 +486,22 @@ namespace CTCClassSchedule.Common
 													CustomDescription = sm != null && !String.IsNullOrWhiteSpace(sm.Description) ? sm.Description : String.Empty,
 											}).OrderBy(s => s.CourseNumber).ThenBy(s => s.CourseTitle).ToList();
 
+#if DEBUG
+          /* COMMENT THIS LINE TO DEBUG
+      if (sectionsEnum.Any(s => s.CourseSubject.StartsWith("ACCT") && s.CourseNumber == "203" && s.IsCommonCourse))
+      {
+        SectionWithSeats zSec = sectionsEnum.Where(s => s.CourseSubject.StartsWith("ACCT") && s.CourseNumber == "202" && s.IsCommonCourse).First();
+        string s1 = zSec.ID.ToString();
+        Debug.Print("\n{0} - {1} {2}\t{3}\t(Crosslinks: {4})\n", zSec.ID, zSec.CourseID, zSec.IsCommonCourse ? "(&)" : string.Empty, zSec.CourseTitle,
+                                                                 db.SectionCourseCrosslistings.Select(x => x.ClassID).Distinct().Count(x => x == s1));
+      }
+      else
+      {
+        Debug.Print("\nACCT& 202 - NOT FOUND AMONG SECTIONS.\n");
+      }
+      // END DEBUGGING */
+#endif
+
         // Flag sections that are cross-linked with a Course
         foreach (string sec in db.SectionCourseCrosslistings.Select(x => x.ClassID).Distinct())
         {
@@ -623,16 +639,11 @@ namespace CTCClassSchedule.Common
 
           IList<SectionWithSeats> remainingSections = nonLinkedSections.Skip(processedCount).ToList();
           SectionWithSeats firstSection = remainingSections.First();
+          // TODO: Replace BuildCourseID() with this logic - and pull in CommonCourceChar from .config
+          string blockCourseID = string.Format("{0}{1} {2}", firstSection.CourseSubject, firstSection.IsCommonCourse ? "&" : string.Empty, firstSection.CourseNumber);
 
           if (allLinkedSections.Any(l => l.LinkedTo == firstSection.ID.ItemNumber))
           {
-
-
-            /* --------------------------------------------------------------------------------------------------------------------
-             * TODO: This logic isn't working. Instead, it is giving all the Sections the course header of the combination class.
-             -------------------------------------------------------------------------------------------------------------------- */
-
-
             // If a Section has other Sections linked to it, then it should be displayed in its own block
             courseBlock.Sections = new List<SectionWithSeats> {firstSection};
           }
@@ -647,8 +658,16 @@ namespace CTCClassSchedule.Common
                                                                ).ToList();
           }
 
+#if DEBUG
+          /* COMMENT THIS LINE TO DEBUG
+          Debug.Print("\nProcessing block: {0} - {1} {2}\t{3}\t(Crosslinks: {4})", firstSection.ID, firstSection.CourseID,
+                                                                                     firstSection.IsCommonCourse ? "(&)" : string.Empty,
+                                                                                     firstSection.CourseTitle,
+                                                                                     crosslistings.Count(x => x.CourseID == blockCourseID));
+          // END DEBUGGING */
+#endif
           // Flag whether or not this course block is crosslisted with other sections
-          courseBlock.IsCrosslisted = crosslistings.Any(x => x.CourseID == firstSection.CourseID);
+          courseBlock.IsCrosslisted = crosslistings.Any(x => x.CourseID == blockCourseID);
 
           // Find all links associated to each of the grouped sections
           foreach (SectionWithSeats sec in courseBlock.Sections)

@@ -1,10 +1,8 @@
 ﻿@using System.Text.RegularExpressions
 @using CTCClassSchedule
 @using CTCClassSchedule.Common
-@using CTCClassSchedule.Controllers
 @using CTCClassSchedule.Models
 @using MvcMiniProfiler
-@using Ctc.Ods.Types
 @model YearQuarterSubjectModel
 @{
   MiniProfiler _profiler = MiniProfiler.Current;
@@ -170,14 +168,15 @@
                   <li>
 @if (block.IsCrosslisted)
   {
-    string courseID = firstSection.CourseID;
+    // TODO: Replace Helpers.BuildCourseID() with this logic - and pull in CommonCourceChar from .config
+    string courseID = string.Format("{0}{1} {2}", firstSection.CourseSubject, firstSection.IsCommonCourse ? "&" : string.Empty, firstSection.CourseNumber);
     // because we're using this in an attribute name, replace invalid characters w/ dashes
-    string uniqueID = Regex.Replace(courseID.Replace('&','-'), @"\s+", "-");
+    string cssID = Regex.Replace(courseID.Replace('&','-'), @"\s+", "-");
 
     <ul class="section-crosslisted-courses">
       <li>
         Also offered as part of
-        <div id="courses-crosslisted-with-@uniqueID" class="section-crosslisted-courses">
+        <div id="courses-crosslisted-with-@cssID" class="section-crosslisted-courses">
           <noscript><strong>Javascript is required to load cross-listed courses.</strong></noscript>
         </div>
       </li>
@@ -190,7 +189,7 @@
           var jsonUrl = "@Url.Action("CrossListedCourses", "Api", new {courseID = courseID})";
           var quarter = "@(Model.ViewingQuarter.FriendlyName)";
 
-          LoadCrossListedCourses(jsonUrl, $('div#courses-crosslisted-with-@uniqueID'), quarter);
+          LoadCrossListedCourses(jsonUrl, $('div#courses-crosslisted-with-@cssID'), quarter);
         });
       </script>
   }
