@@ -489,6 +489,20 @@ namespace CTCClassSchedule.Common
 													CustomDescription = sm != null && !String.IsNullOrWhiteSpace(sm.Description) ? sm.Description : String.Empty,
 											}).OrderBy(s => s.CourseNumber).ThenBy(s => s.CourseTitle).ToList();
 
+          string _availValue = "";
+          if (HttpContext.Current.Request.QueryString["avail"] != null)
+          {
+              _availValue = HttpContext.Current.Request.QueryString["avail"].ToString();
+          }
+          if (_availValue == "Open")
+          {
+              sectionsEnum = (from open in sectionsEnum
+                             where open.SeatsAvailable != 0
+                             select open).ToList();
+          }
+
+
+
 #if DEBUG
           /* COMMENT THIS LINE TO DEBUG
       if (sectionsEnum.Any(s => s.CourseSubject.StartsWith("ACCT") && s.CourseNumber == "203" && s.IsCommonCourse))
