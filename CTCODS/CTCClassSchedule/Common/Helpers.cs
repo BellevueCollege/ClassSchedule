@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Objects;
+// ReSharper disable RedundantUsingDirective
 using System.Diagnostics;
+// ReSharper restore RedundantUsingDirective
 using System.Linq;
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Web.Mvc;
 using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
@@ -111,6 +111,7 @@ namespace CTCClassSchedule.Common
 			Encryption64 en = new Encryption64();
 
 			string returnString = String.Empty;
+      // TODO: store encryption key in .config settings
 			returnString = "http://bellevuecollege.edu/directory/PersonDetails.aspx?PersonID=" + en.Encrypt(SID,"!#$a54?5");
 			return returnString;
 
@@ -123,10 +124,12 @@ namespace CTCClassSchedule.Common
 			for (int i = 0; i < linkedSections.Count; i++)
 			{
 				SectionWithSeats sec = linkedSections[i];
+        // TODO: can we make the bookstore link template configurable in case it needs to change?
 				resultURL.AppendFormat("{0}{1}__{2}__{3}{4}__{5}", (i > 0? "%2C" : String.Empty),
 																	getYRQValueForBookstoreURL(sec.Yrq),
 																	sec.CourseSubject,
 																	sec.CourseNumber,
+                                  // TODO: get CommonCourseChar from .config instead of hard-coding
 																	(sec.IsCommonCourse ? "%26" : String.Empty),
 																	sec.ID.ItemNumber);
 			}
@@ -135,7 +138,7 @@ namespace CTCClassSchedule.Common
 		}
 
 		/// <summary>
-		/// returns an IList<ISectionFacet> that contains all of the facet information
+		/// returns an IList<ISectionFacet/> that contains all of the facet information
 		/// passed into the app by the user clicking on the faceted search left pane
 		/// facets accepted: flex, time, days, availability
 		/// </summary>

@@ -147,6 +147,7 @@ namespace CTCClassSchedule.Controllers
                             .ToList();
           // ...then apply the necessary filtering (e.g. TrimEnd() - which isn't fully supported by EF
           subjectList = (from s in dbSubjects
+                         // TODO: replace hard-coded '&' with CommonCourseChar from .config
 				                 where apiSubjects.Contains(s.CoursePrefixID.TrimEnd('&'))
 				                 select new ScheduleCoursePrefix
 				                          {
