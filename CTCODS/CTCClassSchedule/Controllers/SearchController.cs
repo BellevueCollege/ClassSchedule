@@ -81,7 +81,7 @@ namespace CTCClassSchedule.Controllers
 					}
 					else
 					{
-            IList<string> prefixes = SubjectInfo.GetSubjectPrefixes(Subject).Select(p => p.CoursePrefixID).ToList();
+            IList<string> prefixes = SubjectInfo.GetSubjectPrefixes(Subject);
 						sections = repository.GetSections(prefixes, yrq, facets);
 					}
 				}

@@ -146,23 +146,26 @@ namespace CTCClassSchedule.Common
 			return result;
 		}
 
-		/// <summary>
-		/// Gathers a List of <see cref="SubjectsCoursePrefix"/> based on the <see cref="Subject"/>'s <paramref name="slug"/> identifier
-		/// </summary>
-		/// <param name="slug">The slug identifier for a given <see cref="Subject"/></param>
-		/// <returns>A List of all <see cref="SubjectsCoursePrefix"/>s located for the given <see cref="Subject"/></returns>
-		public static IList<SubjectsCoursePrefix> GetSubjectPrefixes(string slug)
+	  /// <summary>
+	  /// Gathers a List of <see cref="SubjectsCoursePrefix"/> based on the <see cref="Subject"/>'s <paramref name="slug"/> identifier
+	  /// </summary>
+	  /// <param name="slug">The slug identifier for a given <see cref="Subject"/></param>
+	  /// <returns>A List of all <see cref="SubjectsCoursePrefix"/>s located for the given <see cref="Subject"/></returns>
+	  public static IList<string> GetSubjectPrefixes(string slug)
 		{
-			IList<SubjectsCoursePrefix> result = new List<SubjectsCoursePrefix>();
+			IList<string> result = new List<string>();
 			using (ClassScheduleDb context = new ClassScheduleDb())
 			{
 				Subject subject = GetSubject(slug, context);
 				if (subject == null)
 				{
-					return result;
+          // if we didn't find a custom subject relationship, use the URL slug
+          result.Add(slug);
 				}
-
-        result = subject.CoursePrefixes.ToList();
+				else
+				{
+          result = subject.CoursePrefixes.Select(p => p.CoursePrefixID).ToList();
+        }
 			}
 
 			return result;
