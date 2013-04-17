@@ -24,6 +24,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
 using System.Web.Caching;
+using Common.Logging;
 using Ctc.Ods.Config;
 using Ctc.Ods.Customizations;
 using Ctc.Ods.Extensions;
@@ -36,6 +37,8 @@ namespace Ctc.Ods.Data
 	/// </summary>
 	public class OdsRepository : IDisposable
 	{
+    private ILog _log = LogManager.GetCurrentClassLogger();
+
 		OdsContext _context;
 		private YearQuarter _currentYearQuarter;
 		private ApiSettings _settings;
@@ -123,11 +126,16 @@ namespace Ctc.Ods.Data
 			{
 				if (_currentYearQuarter == null)
 				{
-					YearQuarterEntity yrq = _DbContext.YearQuarters.FromCache(CacheItemPriority.Default, TimeSpan.FromMinutes(Settings.YearQuarter.Cache))
+          _log.Debug("Retrieving current YearQuarter from DB or HttpRuntime.Cache");
+					YearQuarterEntity yrq = _DbContext.YearQuarters.FromCache(TimeSpan.FromMinutes(Settings.YearQuarter.Cache))
 																												.Where(quarter => quarter.LastClassDay >= Utility.Today && quarter.YearQuarterID != Settings.YearQuarter.Max)
 																												.OrderBy(quarter => quarter.YearQuarterID)
 																												.Take(1).Single();
 					_currentYearQuarter = YearQuarter.FromString(yrq.YearQuarterID);
+				}
+				else
+				{
+          _log.Debug("Using current YearQuarter already in memory. (NOTE: This is NOT cache - it is a class variable.");
 				}
 				return _currentYearQuarter;
 			}
@@ -173,7 +181,8 @@ namespace Ctc.Ods.Data
 																													orderby y.YearQuarterID descending
 																													select y;
 
-			return quarters.FromCache(CacheItemPriority.Default, TimeSpan.FromMinutes(Settings.YearQuarter.Cache))
+      _log.Debug("Retrieving current YearQuarter from DB or HttpRuntime.Cache");
+      return quarters.FromCache(TimeSpan.FromMinutes(Settings.YearQuarter.Cache))
 										.Take(count)
 										.Select(q => new YearQuarter
 																	{
@@ -204,7 +213,8 @@ namespace Ctc.Ods.Data
 																													orderby y.YearQuarterID ascending
 																													select y;
 
-			return quarters.FromCache(CacheItemPriority.Default, TimeSpan.FromMinutes(Settings.YearQuarter.Cache))
+      _log.Debug("Retrieving current YearQuarter from DB or HttpRuntime.Cache");
+      return quarters.FromCache(TimeSpan.FromMinutes(Settings.YearQuarter.Cache))
 										.Take(count)
 										.Select(q => new YearQuarter
 										{
@@ -709,7 +719,7 @@ namespace Ctc.Ods.Data
 										CourseID = section.joinedData.sectionData.CourseID,
 																	// use CourseTitle2 from the Course table, otherwise fall back to CourseTitle, then the course title from the Section (i.e. Class) table
 																	// NOTE: This is Bellevue College logic. If different logic is desired, we should move this to the Section class
-																	_CourseTitle = _DbContext.Courses.Where(c => c.CourseID == section.joinedData.sectionData.CourseID && c.YearQuarterEnd.CompareTo(section.joinedData.sectionData.YearQuarterID) > 0)
+																	_CourseTitle = _DbContext.Courses.Where(c => c.CourseID == section.joinedData.sectionData.CourseID && c.YearQuarterEnd.CompareTo(section.joinedData.sectionData.YearQuarterID) >= 0)
 																																	 .Select(c => c.Title2 ?? c.Title1).DefaultIfEmpty(section.joinedData.sectionData.CourseTitle).FirstOrDefault(),
 										Credits = section.joinedData.sectionData.Credits,
 										SectionCode = section.joinedData.sectionData.Section,

@@ -19,12 +19,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CTC ODS API")]
-[assembly: AssemblyDescription("Common API for obtaining rich, multi-layer business objects from the ODS. For more info, visit https://tfs.wacollabcoop.org/sites/SharedProjects/ODSAPI/")]
+[assembly: AssemblyTitle("CtcApi")]
+[assembly: AssemblyDescription("Common API for use by Washington State community and technical colleges. For more info, visit http://codemastershawn.com/kb/index.php/CTC_API")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Washington State Board Community and Technical Colleges - Information Technology (SBCTC-IT)")]
-[assembly: AssemblyProduct("CTCODSAPI")]
-[assembly: AssemblyCopyright("Copyright © 2011 Bellevue College and Peninsula College")]
+[assembly: AssemblyProduct("CtcApi")]
+[assembly: AssemblyCopyright("Copyright © 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -34,7 +34,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("906cd37f-f370-4ce3-a60c-908d1724f70d")]
+[assembly: Guid("d6aec63f-eced-4318-83a0-b927dfbf27d5")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -46,5 +46,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.9.14.0")]
-[assembly: AssemblyFileVersion("0.9.14.0")]
+[assembly: AssemblyVersion("0.9.15.0")]
+[assembly: AssemblyFileVersion("0.9.15.0")]

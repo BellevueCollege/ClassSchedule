@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>CtcOdsApi</id>
-    <version>0.9.14.0</version>
+    <version>0.9.15.0</version>
     <title>CTC ODS API</title>
     <authors>Shawn South</authors>
     <owners>Shawn South</owners>
@@ -13,6 +13,9 @@
     <description>Common API for obtaining rich, multi-layer business objects from the ODS. For more info, visit https://tfs.wacollabcoop.org/sites/SharedProjects/ODSAPI/</description>
     <releaseNotes />
     <tags>CTC ODS API HP HP3000 SBCTC college Washington State</tags>
+    <dependencies>
+      <dependency id="Common.Logging" version="2.1.2" />
+    </dependencies>
     <references>
       <reference file="CtcOdsApi.dll" />
     </references>
