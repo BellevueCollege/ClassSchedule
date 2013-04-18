@@ -126,56 +126,22 @@ namespace CTCClassSchedule.Controllers
 		[HttpPost]
 		public ActionResult Subjects(string format, string YearQuarter)
 		{
-			using (OdsRepository db = new OdsRepository(HttpContext))
+		  IList<ScheduleCoursePrefix> subjectList = GetSubjectList(YearQuarter);
+
+      if (format == "json")
 			{
-				IList<CoursePrefix> data;
-				data = string.IsNullOrWhiteSpace(YearQuarter) || YearQuarter.Equals("All", StringComparison.OrdinalIgnoreCase) ? db.GetCourseSubjects() : db.GetCourseSubjects(Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter));
-			  IList<string> apiSubjects = data.Select(s => s.Subject).ToList();
-
-			  IList<ScheduleCoursePrefix> subjectList;
-        using (ClassScheduleDb classScheduleDb = new ClassScheduleDb())
-        {
-          // Entity Framework doesn't support all the functionality that LINQ does, so first grab the records from the database...
-          var dbSubjects = (from s in classScheduleDb.Subjects
-                            join p in classScheduleDb.SubjectsCoursePrefixes on s.SubjectID equals p.SubjectID
-                            select new
-                                     {
-                                       s.Slug,
-                                       p.CoursePrefixID,
-                                       s.Title
-                                     })
-                            .ToList();
-          // ...then apply the necessary filtering (e.g. TrimEnd() - which isn't fully supported by EF
-          subjectList = (from s in dbSubjects
-                         // TODO: replace hard-coded '&' with CommonCourseChar from .config
-				                 where apiSubjects.Contains(s.CoursePrefixID.TrimEnd('&'))
-				                 select new ScheduleCoursePrefix
-				                          {
-                                    Slug = s.Slug,
-				                            Subject = s.CoursePrefixID,
-				                            Title = s.Title
-				                          })
-				                .OrderBy(s => s.Title)
-				                .Distinct()
-				                .ToList();
-        }
-
-        if (format == "json")
-				{
-					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
-					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-					return Json(subjectList, JsonRequestBehavior.AllowGet);
-				}
-
-				ViewBag.LinkParams = Helpers.getLinkParams(Request);
-				ViewBag.SubjectsColumns = 2;
-
-				return PartialView(subjectList);
+				// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+				// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+				return Json(subjectList, JsonRequestBehavior.AllowGet);
 			}
-		}
 
+			ViewBag.LinkParams = Helpers.getLinkParams(Request);
+			ViewBag.SubjectsColumns = 2;
 
-    /// <summary>
+      return PartialView(subjectList);
+    }
+
+	  /// <summary>
     ///
     /// </summary>
     /// <param name="courseID"></param>
@@ -598,19 +564,64 @@ namespace CTCClassSchedule.Controllers
         }
         else
         {
-          yrq = Ctc.Ods.Types.YearQuarter.FromString(YearQuarterID);
+          yrq = YearQuarter.FromString(YearQuarterID);
         }
 
         // Return all the Class Schedule Data as a file
         return ClassScheduleExporter.GetFile(yrq);
       }
-      else
-      {
-        throw new UnauthorizedAccessException("You do not have sufficient privileges to export course data.");
-      }
+
+      throw new UnauthorizedAccessException("You do not have sufficient privileges to export course data.");
     }
 
+	  #region Static methods
+	  /// <summary>
+	  ///
+	  /// </summary>
+	  /// <param name="yearQuarter"></param>
+	  /// <returns></returns>
+	  public static IList<ScheduleCoursePrefix> GetSubjectList(string yearQuarter)
+	  {
+	    IList<ScheduleCoursePrefix> subjectList;
+	    using (OdsRepository db = new OdsRepository())
+	    {
+	      IList<CoursePrefix> data;
+	      data = string.IsNullOrWhiteSpace(yearQuarter) || yearQuarter.Equals("All", StringComparison.OrdinalIgnoreCase)
+	               ? db.GetCourseSubjects()
+	               : db.GetCourseSubjects(YearQuarter.FromFriendlyName(yearQuarter));
+	      IList<string> apiSubjects = data.Select(s => s.Subject).ToList();
 
+	      using (ClassScheduleDb classScheduleDb = new ClassScheduleDb())
+	      {
+	        // Entity Framework doesn't support all the functionality that LINQ does, so first grab the records from the database...
+	        var dbSubjects = (from s in classScheduleDb.Subjects
+	                          join p in classScheduleDb.SubjectsCoursePrefixes on s.SubjectID equals p.SubjectID
+	                          select new
+	                                   {
+	                                     s.Slug,
+	                                     p.CoursePrefixID,
+	                                     s.Title
+	                                   })
+	          .ToList();
+	        // ...then apply the necessary filtering (e.g. TrimEnd() - which isn't fully supported by EF
+	        subjectList = (from s in dbSubjects
+	                       // TODO: replace hard-coded '&' with CommonCourseChar from .config
+	                       where apiSubjects.Contains(s.CoursePrefixID.TrimEnd('&'))
+	                       select new ScheduleCoursePrefix
+	                                {
+	                                  Slug = s.Slug,
+	                                  Subject = s.CoursePrefixID,
+	                                  Title = s.Title
+	                                })
+	          .OrderBy(s => s.Title)
+	          .Distinct()
+	          .ToList();
+	      }
+	    }
+	    return subjectList;
+	  }
+
+	  #endregion
 
 	  #region Private methods
 	  /// <summary>
