@@ -248,22 +248,23 @@ namespace CTCClassSchedule.Common
         _builder.AppendLine("* Class Schedule Course Export -- " + _yearQuarter.FriendlyName);
         _builder.AppendLine("*");
         _builder.AppendLine("* Legend:");
-        _builder.AppendLine("* <CLS9>   -- Division title");
-        _builder.AppendLine("* <CLS1>   -- Subject title");
-        _builder.AppendLine("* <CLSP>   -- Subject intro");
+        _builder.AppendLine("* <CLS9>   -- Division name");
+        _builder.AppendLine("* <CLS1>   -- Program name (subject)");
+        _builder.AppendLine("* <CLSP>   -- Program intro");
         _builder.AppendLine("* <CLS2>   -- Course header, or linked section headers");
-        _builder.AppendLine("* <CLS3>   -- HP footnotes, course footnotes, CMS footnotes, and common Section footnotes");
-        _builder.AppendLine("* <CLS5>   -- Default Section tag");
-        _builder.AppendLine("* <CLS6>   -- Evening Section");
-        _builder.AppendLine("* <CLS7>   -- Weekend Section");
-        _builder.AppendLine("* <CLSD>   -- Distance Education Section");
+        _builder.AppendLine("* <CLS3>   -- HP footnotes, CMS course footnotes, and common Section footnotes");
+        _builder.AppendLine("* <CLS5>   -- Default section tag");
+        _builder.AppendLine("* <CLS6>   -- Evening section");
+        _builder.AppendLine("* <CLS7>   -- Weekend section");
+        _builder.AppendLine("* <CLSD>   -- Distance Education section");
         _builder.AppendLine("* <CLSA>   -- Section to be arranged");
         _builder.AppendLine("* <CLSY>   -- Automated footnotes");
         _builder.AppendLine("* <CLSN>   -- Section footnotes");
-        _builder.AppendLine("* [h]      -- Flags a hybrid Section");
-        _builder.AppendLine("* [online] -- Flags an online Section");
-        _builder.AppendLine("* D110     -- Default room if no room was assigned to the Section");
-        _builder.AppendLine("* staff    -- Default instructor name if no instructor is assigned to the Section");
+        _builder.AppendLine("* [h]      -- Hybrid section flag");
+        _builder.AppendLine("* [online] -- Online section flag");
+        _builder.AppendLine("* [-]      -- separates a course title and the number of credits");
+        _builder.AppendLine("* D110     -- Default room if no room was assigned to the section");
+        _builder.AppendLine("* staff    -- Default instructor name if no instructor is assigned to the section");
 
         return _builder.ToString();
       }
