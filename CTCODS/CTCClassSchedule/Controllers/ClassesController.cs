@@ -149,9 +149,14 @@ namespace CTCClassSchedule.Controllers
 			YearQuarter yrq	= string.IsNullOrWhiteSpace(YearQuarter) ? null : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
+
+
+
+
+
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
-				// TODO: Refactor the following code into its own method
+				// TODO: Refactor the following code to use ApiController.GetSubjectList()
 				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
@@ -171,7 +176,6 @@ namespace CTCClassSchedule.Controllers
 
           ViewBag.alphabet = subjects.Select(s => s.Title.First()).Distinct().ToList();
 
-
 					IEnumerable<Subject> subjectsEnum;
 					if (letter != null)
 					{
@@ -181,8 +185,6 @@ namespace CTCClassSchedule.Controllers
 					{
 					    subjectsEnum = subjects;
 					}
-					subjectsEnum.OrderBy(s => s.Title);
-
 
           if (format == "json")
 					{
@@ -209,7 +211,7 @@ namespace CTCClassSchedule.Controllers
 
 					ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
-					return View(subjectsEnum);
+          return View(subjectsEnum.OrderBy(s => s.Title));
 				}
 			}
 		}
