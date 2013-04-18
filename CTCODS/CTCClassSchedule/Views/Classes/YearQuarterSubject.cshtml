@@ -125,10 +125,12 @@
                   }
 
                   <div class="classDetails">
+				            @*
+                      NOTE: Only display a custom description, if one exists, otherwise don't display a description
+                      See http://irwiki.bellevuecollege.edu/wiki/Class_Schedule#Displaying_of_Course_Descriptions
+                    *@
                     @if (!string.IsNullOrWhiteSpace(firstSection.CustomDescription))
                     {
-                      // NOTE: do not display HP description from this page
-                      // BUG: ? Why not display HP description, if no CustomDescription has been defined?
                       @Html.Raw(firstSection.CustomDescription)
                     }
                     <ul>
