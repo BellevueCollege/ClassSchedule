@@ -264,6 +264,7 @@ namespace CTCClassSchedule.Controllers
 #if DEBUG
           /* COMMENT THIS LINE FOR DEBUGGING/TROUBLESHOOTING
 				  Debug.Print("==> sectionsEnum");
+//				  string zItemNum, zYrq;
 				  zItemNum = "1230"; zYrq = "B234"; // ENGL 266
           if (sectionsEnum.Any(s => s.ID.ItemNumber == zItemNum && s.ID.YearQuarter == zYrq))
 				  {
@@ -274,6 +275,10 @@ namespace CTCClassSchedule.Controllers
           {
             Debug.Print("ClassID '{0}{1}' not found.", zItemNum, zYrq);
           }
+          // */
+
+          /* COMMENT THIS LINE FOR DEBUGGING/TROUBLESHOOTING
+				  IEnumerable<SectionWithSeats> s1 = sectionsEnum.Where(s => s.CourseSubject == "ENGL" && s.CourseNumber == "239");
           // */
 #endif
 					courseBlocks = Helpers.GroupSectionsIntoBlocks(sectionsEnum, db);

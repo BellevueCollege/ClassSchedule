@@ -94,11 +94,9 @@
         </a>
       </li>
 
-      if (Model.Sections[0].SeatsAvailable != int.MinValue)
-      {
         <li class="availability" id="availability-@sectionID">
           <span class="descriptor">Seat Availability: </span>
-          @if (Model.Sections[0].SeatsAvailable <= 0 || Model.Sections[0].WaitlistCount > 0)
+          @if (Model.Sections[0].WaitlistCount > 0 || Model.Sections[0].SeatsAvailable == 0)
           {
             <strong class="seatsAvailable">
               class full@(Model.Sections[0].WaitlistCount > 0 ? string.Format(", {0} on waitlist", Model.Sections[0].WaitlistCount) : string.Empty)
@@ -107,11 +105,19 @@
           }
           else
           {
+            if (Model.Sections[0].SeatsAvailable < 0)
+            {
+              // e.g. int.MinValue
+            <strong class="seatsAvailable">(unknown)</strong>
+            <span class="course-updated"><a id="@sectionID"><span class="ui-icon ui-icon-arrowrefresh-1-e"></span><span class="update-time">update</span></a></span>
+            }
+            else
+            {
             <strong class="seatsAvailable">@Model.Sections[0].SeatsAvailable</strong>
             <span class="course-updated"><a id="@sectionID"><span class="ui-icon ui-icon-arrowrefresh-1-e"></span><span class="update-time">updated @Model.Sections[0].LastUpdated</span></a></span>
+            }
           }
         </li>
-      }
     }
 
     <li class="editing">
