@@ -17,7 +17,7 @@
 }
 
 
-@foreach (Subject item in Model)
+@foreach (Subject item in Model.OrderBy(s => s.Title))
 {
 	char letter = item.Title.First();
 	if (letter != PreviousLetter)
