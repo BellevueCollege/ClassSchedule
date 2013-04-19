@@ -99,9 +99,6 @@ namespace CTCClassSchedule.Common
       // rules for exporting the data
       using (ClassScheduleDb db = new ClassScheduleDb())
       {
-        // Get all course prefixes
-        //List<string> allPrefixes = db.SubjectsCoursePrefixes.Select(p => p.CoursePrefixID).Distinct().ToList();
-
         // Get all course prefixes grouped by subject
         IEnumerable<Subject> subjects;
         Dictionary<Subject, List<string>> subjectPrefixes;
@@ -119,24 +116,9 @@ namespace CTCClassSchedule.Common
         IList<SectionWithSeats> sectionsWithSeats;
         using (OdsRepository repository = new OdsRepository())
 			  {
-          IList<string> divisionPrefixes = subjectPrefixes.Values.SelectMany(p => p).Distinct().ToList();
           List<Section> sections = new List<Section>();
 
-          // TODO: Make this more efficient -- passing all prefixes at once throws a LINQ error because the query is too complex
-          int batch = 20;
-          for (int i = 0; i < (divisionPrefixes.Count / batch)+1; i++)
-          {
-            IList<string> prefixes = divisionPrefixes.Skip(i * batch).Take(batch).ToList();
-
-            // *************************************************************************************************************
-            // We shouldn't need to be concerned about prefixes at this point - we want all Sections for the given quarter.
-            // Once we have them, we can break them down by prefix/subject. But there's no need to pre-filter our retrieval
-            // from the ODS.
-            // *************************************************************************************************************
-
-            sections.AddRange(repository.GetSections(prefixes, yearQuarter));
-          }
-
+          sections.AddRange(repository.GetSections(yearQuarter));
           sectionsWithSeats = Helpers.GetSectionsWithSeats(yearQuarter.ID, sections, db);
         }
 
