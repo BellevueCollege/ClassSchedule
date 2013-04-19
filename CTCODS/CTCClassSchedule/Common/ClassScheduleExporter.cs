@@ -13,6 +13,8 @@ namespace CTCClassSchedule.Common
 {
   // A short alias for the data structure used to group Class Schedule data logically
   using GroupedClassScheduleData = Dictionary<Division, Dictionary<Subject, IList<SectionsBlock>>>;
+  using Ctc.Ods.Config;
+  using System.Configuration;
 
   /// <summary>
   /// Static class to manage exporting all Class Schedule data to an Adobe InDesign format
@@ -20,7 +22,6 @@ namespace CTCClassSchedule.Common
   /// </summary>
   internal static class ClassScheduleExporter
   {
-
     /// <summary>
     /// Manages the collection of all Class Schedule data, and outputs it as a file.
     /// </summary>
@@ -95,6 +96,10 @@ namespace CTCClassSchedule.Common
     {
       GroupedClassScheduleData divisionSectionsBlock = new GroupedClassScheduleData();
 
+      // Get the common course char
+      ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
+      string commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar;
+
       // Convert Class Schedule data into a List of exportable nodes, which contain
       // rules for exporting the data
       using (ClassScheduleDb db = new ClassScheduleDb())
@@ -123,15 +128,15 @@ namespace CTCClassSchedule.Common
         }
 
         // A final LINQ query which converts the returned SectionsWithSeats to the final complex data structure
-        divisionSectionsBlock = (from d in subjects.Where(r => sectionsWithSeats.Any(q => r.CoursePrefixes.Any(p => p.CoursePrefixID == q.CourseSubject)))
+        divisionSectionsBlock = (from d in subjects.Where(r => sectionsWithSeats.Any(q => r.CoursePrefixes.Any(p => p.CoursePrefixID == (q.IsCommonCourse ? String.Concat(q.CourseSubject, commonCourseChar) : q.CourseSubject))))
                                                    .Select(s => s.Department.Division)
                                                    .Distinct()
                                  select d).ToDictionary(
                                    d => d,
                                    s => s.Departments.SelectMany(de => de.Subjects)
-                                                     .Where(r => sectionsWithSeats.Any(q => r.CoursePrefixes.Any(p => p.CoursePrefixID == q.CourseSubject)))
+                                                     .Where(r => sectionsWithSeats.Any(q => r.CoursePrefixes.Any(p => p.CoursePrefixID == (q.IsCommonCourse ? String.Concat(q.CourseSubject, commonCourseChar) : q.CourseSubject))))
                                                      .ToDictionary(k => k,
-                                                                   v => Helpers.GroupSectionsIntoBlocks(sectionsWithSeats.Where(q => v.CoursePrefixes.Any(p => q.CourseSubject == p.CoursePrefixID)).ToList(), db))
+                                                                   v => Helpers.GroupSectionsIntoBlocks(sectionsWithSeats.Where(q => v.CoursePrefixes.Any(p => (q.IsCommonCourse ? String.Concat(q.CourseSubject, commonCourseChar) : q.CourseSubject) == p.CoursePrefixID)).ToList(), db))
                                  );
 
       }
