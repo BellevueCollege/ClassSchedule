@@ -677,6 +677,11 @@ namespace CTCClassSchedule.Common
 
 #if DEBUG
           /* COMMENT THIS LINE TO DEBUG
+          // use the following variable as a conditional for breakpoints
+          bool foo = courseBlock.Sections.Any(s => s.CourseSubject == "ACCT");
+          // END DEBUGGING */
+
+          /* COMMENT THIS LINE TO DEBUG
           Debug.Print("\nProcessing block: {0} - {1} {2}\t{3}\t(Crosslinks: {4})", firstSection.ID, firstSection.CourseID,
                                                                                      firstSection.IsCommonCourse ? "(&)" : string.Empty,
                                                                                      firstSection.CourseTitle,
