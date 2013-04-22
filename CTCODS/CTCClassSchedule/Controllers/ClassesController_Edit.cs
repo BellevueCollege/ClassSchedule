@@ -40,7 +40,7 @@ namespace CTCClassSchedule.Controllers
 	  /// <summary>
 	  /// A stub method for forcing authentication
 	  /// </summary>
-	  /// <returns>Nothing. (Not sure what, if anything, the rendering engine actually does with this.)</returns>
+	  /// <returns>An HTTP redirect to the saved referral page.</returns>
 	  /// <remarks>
 	  /// Call this action method if you need to authenticate a user in without it being a side effect of
 	  /// accessing protected data/functionality. For example; in response to the user clicking a "Log in"
@@ -50,9 +50,25 @@ namespace CTCClassSchedule.Controllers
 	  [CASAuthorize]
 	  public ActionResult Authenticate()
 	  {
-	    string url = HttpContext.Session["ReferralUrlForCas"].ToString();
-	    return Redirect(url);
-	  }
+      string url;
+
+      if (HttpContext.Session != null)
+	    {
+	      url = HttpContext.Session[CASAuthorizeAttribute.REFERRER_SESSION_LABEL].ToString();
+	    }
+      else
+      {
+        url = System.Web.HttpContext.Current.Session[CASAuthorizeAttribute.REFERRER_SESSION_LABEL].ToString();
+      }
+
+      // if we didn't find a Referral URL, default to the home page.
+	    if (string.IsNullOrWhiteSpace(url))
+	    {
+	      url = HttpContext.Request.ApplicationPath;
+	    }
+
+      return Redirect(url);
+    }
 
     /// <summary>
     ///
