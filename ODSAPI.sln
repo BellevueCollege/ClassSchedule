@@ -20,17 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataMigrationScripts", "Dat
 		Research\DataMigrationScripts\README.txt = Research\DataMigrationScripts\README.txt
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backup", "Backup", "{7B0031F5-A7DA-40A3-8E76-73F418C6ACB5}"
-	ProjectSection(SolutionItems) = preProject
-		Research\DataMigrationScripts\1-INSERT_Divisions.sql = Research\DataMigrationScripts\1-INSERT_Divisions.sql
-		Research\DataMigrationScripts\2-INSERT_Departments.sql = Research\DataMigrationScripts\2-INSERT_Departments.sql
-		Research\DataMigrationScripts\3-INSERT_Subjects.sql = Research\DataMigrationScripts\3-INSERT_Subjects.sql
-		Research\DataMigrationScripts\4-INSERT_SubjectsCoursePrefixes.sql = Research\DataMigrationScripts\4-INSERT_SubjectsCoursePrefixes.sql
-		Research\DataMigrationScripts\5-INSERT_SectionsMeta.sql = Research\DataMigrationScripts\5-INSERT_SectionsMeta.sql
-		Research\DataMigrationScripts\6-INSERT_SectionSeats.sql = Research\DataMigrationScripts\6-INSERT_SectionSeats.sql
-		Research\DataMigrationScripts\7-INSERT_CourseMeta.sql = Research\DataMigrationScripts\7-INSERT_CourseMeta.sql
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.CtcClassSchedule", "Test.CtcClassSchedule\Test.CtcClassSchedule.csproj", "{028B1153-E975-410D-9D1D-F97E3F6F8171}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HTML", "HTML", "{DFA593C8-DEC4-4F1C-9441-AD4F666ADA7B}"
@@ -89,6 +78,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1DB2FE02-F732-42C6-85F0-B7E8EA9449EA} = {73BECA23-C79E-4BB1-B9C9-F73DC2A5F3E1}
 		{DFA593C8-DEC4-4F1C-9441-AD4F666ADA7B} = {73BECA23-C79E-4BB1-B9C9-F73DC2A5F3E1}
-		{7B0031F5-A7DA-40A3-8E76-73F418C6ACB5} = {1DB2FE02-F732-42C6-85F0-B7E8EA9449EA}
 	EndGlobalSection
 EndGlobal
