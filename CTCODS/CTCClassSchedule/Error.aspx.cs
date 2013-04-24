@@ -15,19 +15,12 @@ namespace CTCClassSchedule
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			Exception exception = Application["LastError"] as Exception;
-			string stackTrace;
 
 			if (exception != null)
 			{
 				// Specific error messages checked for and enabled here
 				Message_ValidationError.Visible = (exception is HttpRequestValidationException);
 				Message_DatabaseError.Visible = (exception is SqlException || exception is DataException);
-
-				stackTrace = exception.ToString();
-			}
-			else
-			{
-				stackTrace = "An error occurred, but no error information was found!";
 			}
 
 			// Display a generic error message if Exception is not one of those specified above.

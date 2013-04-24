@@ -36,11 +36,9 @@
 				<h3>(Unknown)</h3>
 			</asp:Panel>
 
-<!-- Exception stack trace ******************************************************************************************
-
-<asp:Literal ID="StackTrace" runat="server"></asp:Literal>
-
-****************************************************************************************************************** -->
+      <div>
+        If this error persists please <a href="https://bellevuecollege.edu/requestcenter/Requests/NewRequest.aspx?CategoryID=233&TaskTypeID=382">submit a ticket</a>.
+      </div>
 	  </div>
   </form>
 

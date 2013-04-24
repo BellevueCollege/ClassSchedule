@@ -15,14 +15,9 @@
 
     <div id="content">
 
-			@if (ViewBag.ErrorMsg.Length > 0) {
-				@Html.Partial("ErrorMsg")
-			}
-
 			<h1 id="pageTitle">@yrq.FriendlyName Credit Classes</h1>
 
 			@Html.Partial("a_to_z", new AToZViewModel { LettersList = alphabet, ViewingLetter = ViewBag.letter == null ? (char?)null : ViewBag.letter[0] })
-
 
 			@if (Helpers.isAdmin(Context))
 			{
