@@ -6,6 +6,9 @@ CREATE TABLE [dbo].[CourseSearch]
 [CourseInfo] [varchar] (4065) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 ) ON [PRIMARY]
 GO
+GRANT SELECT ON  [dbo].[CourseSearch] TO [WebApplicationUser]
+GO
+
 ALTER TABLE [dbo].[CourseSearch] ADD CONSTRAINT [PK_CourseSearch] PRIMARY KEY CLUSTERED  ([CourseKey]) ON [PRIMARY]
 GO
 CREATE FULLTEXT INDEX ON [dbo].[CourseSearch] KEY INDEX [PK_CourseSearch] ON [IX_ClassSearch]

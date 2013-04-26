@@ -43,6 +43,9 @@
     <Content Include="Security\Schemas\db_owner.sql">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Security\Users\CAMPUS_andrew.craswell.sql">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Security\Users\campus_ELasater-N216D%24.sql">
       <SubType>Content</SubType>
     </Content>
@@ -58,7 +61,16 @@
     <Content Include="Security\Users\CAMPUS_maricel.medina.sql">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Security\Users\CAMPUS_N216-E027543%24.sql">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Security\Users\CAMPUS_N216J-E027168%24.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\CAMPUS_s.mohamed.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\CAMPUS_SSOUTHDT-N216K%24.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Security\Users\CAMPUS_SSOUTHVM1-N216K%24.sql">
@@ -67,7 +79,22 @@
     <Content Include="Security\Users\CAMPUS_tiis-schedulebetaqa.sql">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Security\Users\campus_w-bc-classes.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\campus_w-bc-classesbeta.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\CAMPUS_w-in-ws-canvassync.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\CAMPUS_w-in-ws-canvassyncqa.sql">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Security\Users\ClassSchedule_WebUser.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\svc-datareader-dev.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Storage\Full Text Catalogs\IX_ClassSearch.sql">
@@ -88,28 +115,34 @@
     <Content Include="Tables\dbo.ClassSearch.sql">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Tables\dbo.CourseFootnote.sql">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Tables\dbo.CourseFootnoteW.sql">
+    <Content Include="Tables\dbo.CourseMeta.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Tables\dbo.CourseSearch.sql">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Tables\dbo.ProgramInformation.sql">
+    <Content Include="Tables\dbo.Departments.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.Divisions.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Tables\dbo.SearchLog.sql">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Tables\dbo.SeatAvailability.sql">
+    <Content Include="Tables\dbo.SectionCourseCrosslistings.sql">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Tables\dbo.SectionFootnote.sql">
+    <Content Include="Tables\dbo.SectionSeats.sql">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Tables\dbo.SectionFootnoteW.sql">
+    <Content Include="Tables\dbo.SectionsMeta.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.Subjects.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.SubjectsCoursePrefixes.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Views\dbo.vw_Class.sql">
@@ -122,15 +155,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Views\dbo.vw_CourseSearch.sql">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Views\dbo.vw_ProgramInformation.sql">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Views\dbo.vw_SeatAvailability.sql">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Views\dbo.vw_SectionFootnote.sql">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

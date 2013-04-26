@@ -5,6 +5,15 @@ SET ANSI_NULLS ON
 GO
 
 
+-- =============================================
+-- Author:
+-- Create date: 8/23/2011
+-- Description:	Performs a full-text search on class details
+-- CHANGE HISTORY:
+--		3/26/2013 johanna.aqui
+--		documented procedure
+-- =============================================
+
 CREATE procedure [dbo].[usp_ClassSearch]
 (
 	@SearchWord nvarchar(100)
@@ -35,6 +44,7 @@ where ClassID='0640B121'
 where CONTAINS((SearchGroup1, SearchGroup2, SearchGroup3), @SearchWord)
 --*/
 
+--Create an empty table based on ClassSearch
 select
 ClassID
 ,0 as SearchGroup
@@ -43,6 +53,8 @@ into #Results
 from ClassSearch
 where 1<>1
 
+
+--Search through each search group 1 - 4 in the ClassSearch table, filtered by YRQ
 insert #Results
 select FT_TBL.ClassID, 1, KEY_TBL.RANK
 from ClassSearch AS FT_TBL
@@ -82,6 +94,8 @@ and FT_TBL.ClassID not in (select ClassID from #Results)
 ORDER BY KEY_TBL.RANK DESC;
 
 
+
+--
 insert into #Results
 SELECT FT_TBL.ClassID, 0, 0
 FROM ClassSearch AS FT_TBL
@@ -91,6 +105,7 @@ and FT_TBL.ClassID not in (select ClassID from #Results)
 
 
 
+-- Log the searching trends
 insert SearchLog (SearchString,Group1Results,Group2Results,Group3Results)
 select
 @SearchString as SearchString
@@ -99,6 +114,7 @@ select
 ,(select COUNT(*) from #Results where SearchGroup=3) as Group3Results
 
 
+-- Return the search results
 select
 --c.*
 r.ClassID
@@ -111,6 +127,7 @@ from #Results r
 drop table #Results
 
 GO
+
 
 
 GRANT EXECUTE ON  [dbo].[usp_ClassSearch] TO [WebApplicationUser]

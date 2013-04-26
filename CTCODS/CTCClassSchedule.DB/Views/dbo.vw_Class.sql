@@ -4,6 +4,7 @@ GO
 SET ANSI_NULLS ON
 GO
 
+
 CREATE view [dbo].[vw_Class]
 AS
 SELECT c.[ClassID]
@@ -24,6 +25,7 @@ SELECT c.[ClassID]
 			THEN l.ClusterEnrolled
 			ELSE c.[StudentsEnrolled]
 		END AS StudentsEnrolled
+	  ,u.LastUpdated
 /* COMMENT THIS LINE FOR DEBUGGING
 	  ,c.ClusterItemNumber AS "(ClusterItemNumber)"
 	  ,c.ClassCapacity AS "(ClassCapacity)"
@@ -32,13 +34,22 @@ SELECT c.[ClassID]
 	  ,l.ClusterEnrolled AS "(ClusterEnrolled)"
 --*/
   FROM [ODS].[dbo].[vw_Class] c
-  LEFT JOIN [ODS].[dbo].[vw_ClassCluster] l ON l.ClusterItemNumber = c.ClusterItemNumber AND l.YearQuarterID = c.YearQuarterID
+	LEFT JOIN [ODS].[dbo].[vw_ClassCluster] l ON l.ClusterItemNumber = c.ClusterItemNumber AND l.YearQuarterID = c.YearQuarterID
 /* COMMENT THIS LINE FOR DEBUGGING
   WHERE NOT c.ClusterItemNumber IS NULL
   AND c.YearQuarterID >= 'B012'
   ORDER BY c.YearQuarterID
 --*/
+	LEFT OUTER JOIN (
+		SELECT TOP (1)
+			UpdateDate AS LastUpdated
+		FROM ODS.dbo.vw_TableTransferLog
+		WHERE (ODSTableName = 'Class')
+		ORDER BY LastUpdated DESC
+	) AS u ON 1 = 1
+
 GO
+
 
 GRANT SELECT ON  [dbo].[vw_Class] TO [WebApplicationUser]
 GO
