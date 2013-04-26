@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{dc6cc6d9-3191-4ee2-86ac-8300677d38f4}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MyRootNamespace</RootNamespace>
+    <AssemblyName>MyAssemblyName</AssemblyName>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="RedGate.ssc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="RedGateDatabaseInfo.xml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Roles\db_datareader.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Roles\db_datawriter.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Roles\db_owner.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Roles\WebApplicationUser.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Schemas\db_owner.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\campus_ELasater-N216D%24.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\CAMPUS_elasater.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\CAMPUS_JUAN-VM-WIN7%24.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\campus_julloa.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\CAMPUS_maricel.medina.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\CAMPUS_N216J-E027168%24.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\CAMPUS_SSOUTHVM1-N216K%24.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\CAMPUS_tiis-schedulebetaqa.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Security\Users\ClassSchedule_WebUser.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Storage\Full Text Catalogs\IX_ClassSearch.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Stored Procedures\dbo.usp_ClassSearch.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Stored Procedures\dbo.usp_CourseSearch.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Stored Procedures\dbo.usp_PopulateClassSearchTables.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Stored Procedures\dbo.usp_UPSERT_SeatsAvailable.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.ClassSearch.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.CourseFootnote.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.CourseFootnoteW.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.CourseSearch.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.ProgramInformation.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.SearchLog.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.SeatAvailability.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.SectionFootnote.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Tables\dbo.SectionFootnoteW.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Views\dbo.vw_Class.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Views\dbo.vw_ClassScheduleData.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Views\dbo.vw_ClassSearch.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Views\dbo.vw_CourseSearch.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Views\dbo.vw_ProgramInformation.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Views\dbo.vw_SeatAvailability.sql">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Views\dbo.vw_SectionFootnote.sql">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assemblies\" />
+    <Folder Include="Database Triggers\" />
+    <Folder Include="Data\" />
+    <Folder Include="Defaults\" />
+    <Folder Include="Extended Properties\" />
+    <Folder Include="Functions\" />
+    <Folder Include="Rules\" />
+    <Folder Include="Search Property Lists\" />
+    <Folder Include="Security\" />
+    <Folder Include="Security\Asymmetric Keys\" />
+    <Folder Include="Security\Certificates\" />
+    <Folder Include="Security\Roles\" />
+    <Folder Include="Security\Schemas\" />
+    <Folder Include="Security\Symmetric Keys\" />
+    <Folder Include="Security\Users\" />
+    <Folder Include="Sequences\" />
+    <Folder Include="Service Broker\" />
+    <Folder Include="Service Broker\Contracts\" />
+    <Folder Include="Service Broker\Event Notifications\" />
+    <Folder Include="Service Broker\Message Types\" />
+    <Folder Include="Service Broker\Queues\" />
+    <Folder Include="Service Broker\Remote Service Bindings\" />
+    <Folder Include="Service Broker\Routes\" />
+    <Folder Include="Service Broker\Services\" />
+    <Folder Include="Storage\" />
+    <Folder Include="Storage\Full Text Catalogs\" />
+    <Folder Include="Storage\Full Text Stoplists\" />
+    <Folder Include="Storage\Partition Functions\" />
+    <Folder Include="Storage\Partition Schemes\" />
+    <Folder Include="Stored Procedures\" />
+    <Folder Include="Synonyms\" />
+    <Folder Include="Tables\" />
+    <Folder Include="Types\" />
+    <Folder Include="Types\User-defined Data Types\" />
+    <Folder Include="Types\XML Schema Collections\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+  <Target Name="Build">
+  </Target>
+  <Target Name="Rebuild">
+  </Target>
+  <Target Name="Clean">
+  </Target>
+  <Target Name="GetFrameWorkPaths">
+  </Target>
+</Project>
