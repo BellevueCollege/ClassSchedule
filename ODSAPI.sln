@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HTML", "HTML", "{DFA593C8-D
 		Research\HTML\hpsectionquery.html = Research\HTML\hpsectionquery.html
 	EndProjectSection
 EndProject
-Project("{596CF2E3-0E3C-47CC-A161-0A910B38ED71}") = "RedGateDatabaseProject", "CTCODS\CTCClassSchedule.DB\RedGateDatabaseProject.rgproj", "{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}"
+Project("{596CF2E3-0E3C-47CC-A161-0A910B38ED71}") = "CTCClassSchedule.DB", "CTCODS\CTCClassSchedule.DB\CTCClassSchedule.DB.rgproj", "{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -41,7 +41,7 @@ Global
 		SccProjectUniqueName2 = Test.CtcClassSchedule\\Test.CtcClassSchedule.csproj
 		SccProjectName2 = Test.CtcClassSchedule
 		SccLocalPath2 = Test.CtcClassSchedule
-		SccProjectUniqueName3 = CTCODS\\CTCClassSchedule.DB\\RedGateDatabaseProject.rgproj
+		SccProjectUniqueName3 = CTCODS\\CTCClassSchedule.DB\\CTCClassSchedule.DB.rgproj
 		SccProjectName3 = CTCODS/CTCClassSchedule.DB
 		SccLocalPath3 = CTCODS\\CTCClassSchedule.DB
 	EndGlobalSection
