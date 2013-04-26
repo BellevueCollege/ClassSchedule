@@ -7,6 +7,10 @@ CREATE TABLE [dbo].[ClassSearch]
 [SearchGroup4] [varchar] (4435) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ItemYrqLink] [char] (4) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 ) ON [PRIMARY]
+GO
+GRANT SELECT ON  [dbo].[ClassSearch] TO [WebApplicationUser]
+GO
+
 ALTER TABLE [dbo].[ClassSearch] ADD
 CONSTRAINT [PK_ClassSearch] PRIMARY KEY CLUSTERED  ([ClassID]) ON [PRIMARY]
 CREATE FULLTEXT INDEX ON [dbo].[ClassSearch] KEY INDEX [PK_ClassSearch] ON [IX_ClassSearch]
