@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Data.Objects;
-using System.Data.Objects.DataClasses;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Web.Mvc;
 using Common.Logging;
@@ -360,12 +357,18 @@ namespace CTCClassSchedule.Controllers
 
           using (ClassScheduleDb db = new ClassScheduleDb())
 					{
-						itemToUpdate = GetItemToUpdate(db.CourseMetas, s => s.CourseID == courseId);
+					  bool exists = db.CourseMetas.Any(c => c.CourseID == courseId);
+					  itemToUpdate = exists ? db.CourseMetas.Single(c => c.CourseID == courseId) : new CourseMeta();
 
 						itemToUpdate.CourseID = courseId;
 						itemToUpdate.Footnote = footnote;
 						itemToUpdate.LastUpdated = DateTime.Now;
 						itemToUpdate.LastUpdatedBy = username;
+
+					  if (!exists)
+					  {
+					    db.CourseMetas.AddObject(itemToUpdate);
+					  }
 
 						db.SaveChanges();
 					}
@@ -624,19 +627,6 @@ namespace CTCClassSchedule.Controllers
 	  #endregion
 
 	  #region Private methods
-	  /// <summary>
-	  ///
-	  /// </summary>
-	  /// <typeparam name="T"></typeparam>
-	  /// <param name="entities"></param>
-	  /// <param name="expression"></param>
-	  /// <returns>Either a <typeparamref name="T"/> object that meets the specified <paramref name="expression"/>, or a new instance.</returns>
-	  private static T GetItemToUpdate<T>(ObjectSet<T> entities, Expression<Func<T, bool>> expression)
-	    where T : EntityObject, new()
-	  {
-	    return entities.Any(expression) ? entities.Single(expression) : new T();
-	  }
-
 	  /// <summary>
 	  ///
 	  /// </summary>
