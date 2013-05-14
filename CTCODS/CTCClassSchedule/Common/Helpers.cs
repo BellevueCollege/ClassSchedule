@@ -713,27 +713,17 @@ namespace CTCClassSchedule.Common
       return results;
     }
 
-		/// <summary>
-		/// Retrieves all active and future course descriptions from a <see cref="Course"/>
-		/// </summary>
-		/// <param name="course">The course to process</param>
-		/// <param name="currentYrq">The current YRQ</param>
-		/// <returns>An ordered list of CourseDescriptions sorted current first</returns>
-		public static IList<CourseDescription> getActiveCourseDescriptions(Course course, YearQuarter currentYrq)
-		{
-			IList<CourseDescription> results = new List<CourseDescription>();
-			if (course.Descriptions != null && course.Descriptions.Count() > 0)
-			{
-        results = course.Descriptions.Where(d => String.Compare(d.YearQuarterBegin.ID, currentYrq.ID) <= 0)
-                                     .OrderBy(d => d.YearQuarterBegin.ID)
-                                     .Take(1)
-                                     .ToList();
-			}
+    // TODO: Remove BuildCourseID()
+    // It should not be necessary, and undoes much of the work the API performs to make code less reliant on HP-specific formatting
 
-			return results;
-		}
-
-		public static string BuildCourseID(string CourseNumber, string CourseSubject, bool IsCommonCourse)
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="CourseNumber"></param>
+    /// <param name="CourseSubject"></param>
+    /// <param name="IsCommonCourse"></param>
+    /// <returns></returns>
+	  public static string BuildCourseID(string CourseNumber, string CourseSubject, bool IsCommonCourse)
 		{
 			char[] CourseID = new char[8];
 

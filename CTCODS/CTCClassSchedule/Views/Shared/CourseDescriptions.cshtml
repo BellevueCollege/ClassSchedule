@@ -1,0 +1,60 @@
+﻿@using System.Diagnostics
+@using Ctc.Ods.Types
+@model IEnumerable<CourseDescription>
+
+@{
+  const string NO_DESCRIPTION_MSG = "No class description found. Please report this via the feedback link to the right of this website.";
+
+  YearQuarter currentQuarter = ViewData["CurrentQuarter"] as YearQuarter;
+}
+
+@if (currentQuarter != null)
+{
+  string currentYrq = currentQuarter.ID;
+
+  // TODO: Fix CtcOdsApi to only return current & future descriptions
+  // Get a list of only the descriptions that became active before or during the current quarter, with most current first
+  IList<CourseDescription> descriptions = Model.Where(d => d.YearQuarterBegin.ID.CompareTo(currentYrq) <= 0).OrderByDescending(d => d.YearQuarterBegin.ID).ToList();
+
+  if (descriptions.Any())
+  {
+    CourseDescription currentDesc = descriptions.First();
+
+    if (string.IsNullOrWhiteSpace(currentDesc.Description))
+    {
+	  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
+    }
+    else
+    {
+    <p class="classDescription">@currentDesc.Description</p>
+    }
+
+    // now get a list of only future planned descriptions, in order
+    descriptions = Model.Where(d => d.YearQuarterBegin.ID.CompareTo(currentYrq) > 0).OrderBy(d => d.YearQuarterBegin.ID).ToList();
+
+    if (descriptions.Any())
+    {
+      CourseDescription futureDesc = descriptions.First();
+		  <div class="upcomingChange">
+			  <h3>New description starting @(futureDesc.YearQuarterBegin.FriendlyName)</h3>
+		  @if (string.IsNullOrWhiteSpace(futureDesc.Description))
+    {
+			  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
+    }
+    else
+    {
+        <p class="classDescription">@futureDesc.Description</p>
+    }
+		  </div>
+    }
+  }
+  else
+  {
+	  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
+  }
+}
+else
+{
+  <!-- Unable to determine current quarter - skipping course descriptions. -->
+  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
+}

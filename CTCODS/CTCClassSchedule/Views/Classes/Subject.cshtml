@@ -15,7 +15,7 @@
 		</div> <!-- #sidebar -->
 
 		<div id="content">
-			@if (Model.Courses.Count() == 0)
+			@if (!Model.Courses.Any())
 			{
 				<h1>No @Model.Slug classes were found</h1>
 				<p><strong>TIP:</strong> Try changing the <strong>Subject</strong> to the left.</p>
@@ -71,40 +71,21 @@
 								</div>
 							}
 
-							@{
-								IList<CourseDescription> activeDescriptions = Helpers.getActiveCourseDescriptions(item, Model.CurrentQuarter);
-							}
-							@if (activeDescriptions.Count() > 0)
-							{
-								<p class="classDescription">
-									@activeDescriptions.First().Description
-								</p>
+						  @Html.Partial("CourseDescriptions", item.Descriptions, new ViewDataDictionary
+						                                        {
+                                                      new KeyValuePair<string, object>("CurrentQuarter", Model.CurrentQuarter)
+						                                        })
 
-								if (activeDescriptions.Count() > 1)
-								{
-									<div class="upcomingChange">
-										<h3>New description starting @item.Descriptions.ElementAt(1).YearQuarterBegin.FriendlyName.ToString()</h3>
-										<p>
-											@activeDescriptions[1].Description
-										</p>
-									</div>
-								}
-							}
-							else
-							{
-								<p class="classDescription error">No class description found. Please report this via the feedback link at the top of this website</p>
-							}
-
-							<p class="classDetailsLink">
+						  <p class="classDetailsLink">
 
 								@Html.ActionLink(String.Concat("View details for ", Helpers.SubjectWithCommonCourseFlag(item), " ", item.Number),
-																																"ClassDetails",
-																																"Classes",
+                                                                "ClassDetails",
+                                                                "Classes",
                                                                 new { Prefix = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number },
-																															null)
+                                                                null)
 							 </p>
 						</div>
-					}
+          }
 				</div> <!-- #classDescriptions -->
 			}
 		</div> <!-- #content -->

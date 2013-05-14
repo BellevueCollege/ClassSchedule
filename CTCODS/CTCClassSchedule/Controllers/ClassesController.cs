@@ -121,7 +121,7 @@ namespace CTCClassSchedule.Controllers
 																	 SubjectIntro = subject.Subject.Intro,
 																	 DepartmentTitle = subject.Department.Title,
 																	 DepartmentURL = subject.Department.URL,
-																	 CurrentQuarter = repository.GetRegistrationQuarters(1)[0],
+																	 CurrentQuarter = repository.CurrentYearQuarter,
 																	 NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository)
 																 };
 
@@ -148,11 +148,6 @@ namespace CTCClassSchedule.Controllers
 		{
 			YearQuarter yrq	= string.IsNullOrWhiteSpace(YearQuarter) ? null : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
-
-
-
-
-
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{

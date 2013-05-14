@@ -401,6 +401,7 @@
     <Content Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </Content>
+    <Content Include="Views\Shared\CourseDescriptions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Classes\YearQuarter.cshtml" />
@@ -471,7 +472,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

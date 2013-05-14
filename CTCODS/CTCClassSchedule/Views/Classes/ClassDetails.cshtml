@@ -119,31 +119,11 @@
 						}
 					}
 
-					@{
-						IList<CourseDescription> activeDescriptions = Helpers.getActiveCourseDescriptions(course, Model.CurrentQuarter);
-						string currentDescription = "* NO DESCRIPTION FOUND *"; // default if no description found
-					}
-					@if (activeDescriptions.Count > 0)
-					{
-						currentDescription = string.IsNullOrWhiteSpace(activeDescriptions[0].Description) ? currentDescription : activeDescriptions[0].Description;
-					}
+				  @Html.Partial("CourseDescriptions", course.Descriptions, new ViewDataDictionary
+						                                        {
+                                                      new KeyValuePair<string, object>("CurrentQuarter", Model.CurrentQuarter)
+						                                        })
 
-					<div id="courseDescription">
-						<h2>Description:</h2>
-						<p>
-							@currentDescription
-						</p>
-					</div>
-
-					@if (activeDescriptions.Count > 1)
-					{
-						<div class="upcomingChange">
-							<h3>New description starting @activeDescriptions[1].YearQuarterBegin.FriendlyName</h3>
-							<p>
-								@(string.IsNullOrWhiteSpace(activeDescriptions[1].Description) ? "* NO DESCRIPTION FOUND*" : activeDescriptions[1].Description)
-							</p>
-						</div>
-					}
 
 					@* ***************************************************************************************************
 							Temporarily removed in order to meet initial public launch. We may want to re-enable this block
@@ -197,7 +177,7 @@
 
 
 					@if (!string.IsNullOrWhiteSpace(Model.CMSFootnote))
-					{
+     {
 						<div id="courseFootnotes">
 							<h2>Details:</h2>
 							<p>
@@ -206,43 +186,43 @@
 								</span>
 							</p>
 						</div>
-					}
+     }
 
 					@if (!string.IsNullOrWhiteSpace(Model.LearningOutcomes) && !Model.LearningOutcomes.StartsWith("Error:"))
-					{
+     {
 						<div id="courseOutcome">
 							<h2>Outcomes:</h2>
 							<p>After completing this class, students should be able to:</p>
 							@Html.Raw(Model.LearningOutcomes)
 						</div>
-					}
+     }
 				</div> <!-- class-details -->
 
-				if (Model.QuartersOffered != null && Model.QuartersOffered.Count > 0)
-				{
+     if (Model.QuartersOffered != null && Model.QuartersOffered.Count > 0)
+     {
 					<div id="allSectionsbyQuarter">
 						<div class="offeredQuarters">
 							<h2>Offered:</h2>
 							<ul>
 								@foreach (YearQuarter q in Model.QuartersOffered)
-								{
-									int relativeOffset = Model.CurrentQuarter.FriendlyName.CompareTo(q.FriendlyName);
+        {
+          int relativeOffset = Model.CurrentQuarter.FriendlyName.CompareTo(q.FriendlyName);
 									<li class="@(relativeOffset < 0 ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
 										@Html.ActionLink(q.FriendlyName, "YearQuarterSubject", new { YearQuarter = q.FriendlyName.Replace(" ", string.Empty), Subject = Model.Slug })
 
 										@if (relativeOffset == 0)
-										{
+          {
 											<span>(current quarter)</span>
-										}
+          }
 									</li>
-								}
+        }
 							</ul>
 						</div> <!-- offeredQuarters -->
 					</div> <!-- allSectionsbyQuarter -->
-				}
-			}
-			else
-			{
+     }
+      }
+   else
+   {
 				<h1>Sorry, we don't appear to have any courses with the ID &quot;@courseId&quot;</h1>
 			}
 		</div> <!-- content -->
