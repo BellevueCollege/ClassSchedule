@@ -382,8 +382,6 @@
       <LastGenOutput>ClassScheduleDb.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="App_Code\ViewHelpers.cshtml" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -472,7 +470,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
