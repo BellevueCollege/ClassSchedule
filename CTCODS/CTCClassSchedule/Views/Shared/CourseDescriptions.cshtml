@@ -14,31 +14,43 @@
 
   // TODO: Fix CtcOdsApi to only return current & future descriptions
   // Get a list of only the descriptions that became active before or during the current quarter, with most current first
-  IList<CourseDescription> descriptions = Model.Where(d => d.YearQuarterBegin.ID.CompareTo(currentYrq) <= 0).OrderByDescending(d => d.YearQuarterBegin.ID).ToList();
+  IList<CourseDescription> current = Model.Where(d => d.YearQuarterBegin.ID.CompareTo(currentYrq) <= 0).OrderByDescending(d => d.YearQuarterBegin.ID).ToList();
 
-  if (descriptions.Any())
+  // now get a list of only future planned descriptions, in order
+  IList<CourseDescription> future = Model.Where(d => d.YearQuarterBegin.ID.CompareTo(currentYrq) > 0).OrderBy(d => d.YearQuarterBegin.ID).ToList();
+
+  if (current.Any())
   {
-    CourseDescription currentDesc = descriptions.First();
+    CourseDescription currentDesc = current.First();
 
-    if (string.IsNullOrWhiteSpace(currentDesc.Description))
+    if (string.IsNullOrWhiteSpace(currentDesc.Description) && !future.Any())
     {
+    <!-- A current course description was found, but no actual description text exists. AND no future course descriptions were found -->
 	  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
     }
     else
     {
     <p class="classDescription">@currentDesc.Description</p>
     }
-
-    // now get a list of only future planned descriptions, in order
-    descriptions = Model.Where(d => d.YearQuarterBegin.ID.CompareTo(currentYrq) > 0).OrderBy(d => d.YearQuarterBegin.ID).ToList();
-
-    if (descriptions.Any())
+  }
+  else
+  {
+    if (!future.Any())
     {
-      CourseDescription futureDesc = descriptions.First();
-		  <div class="upcomingChange">
-			  <h3>New description starting @(futureDesc.YearQuarterBegin.FriendlyName)</h3>
-		  @if (string.IsNullOrWhiteSpace(futureDesc.Description))
+    <!-- No current or future course descriptions found -->
+	  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
+    }
+  }
+
+  if (future.Any())
+  {
+    CourseDescription futureDesc = future.First();
+
+     <div class="upcomingChange">
+			  <h3>Description starting @(futureDesc.YearQuarterBegin.FriendlyName)</h3>
+    @if (string.IsNullOrWhiteSpace(futureDesc.Description))
     {
+        <!-- A future course description was found, but no actual description text exists -->
 			  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
     }
     else
@@ -46,11 +58,6 @@
         <p class="classDescription">@futureDesc.Description</p>
     }
 		  </div>
-    }
-  }
-  else
-  {
-	  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
   }
 }
 else

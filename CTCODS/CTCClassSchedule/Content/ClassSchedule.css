@@ -217,6 +217,10 @@ textarea
     margin: 0;
     padding: 10px 20px 11px;}
 
+.subject .new {
+    margin: 0;
+    padding: 0 20px;
+}
 
 
 
@@ -1782,6 +1786,7 @@ ul.subject-merger li.subject-choice span.subject-choice-close
 
 ul.section-crosslisted-courses {
   margin-left: 20px;
+  font-size: 14px;
 }
 
 .section-cross-listed-course-title a {

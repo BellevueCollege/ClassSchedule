@@ -64,11 +64,9 @@
 								</a>
 							</h2>
 
-							@if (string.Compare(item.YearQuarterBegin.ToString(), Model.CurrentQuarter.ID.ToString()) == 1)
+							@if (string.Compare(item.YearQuarterBegin.ToString(), Model.CurrentQuarter.ID) == 1)
 							{
-								<div class="upcomingChange">
-									New class effective starting @(item.YearQuarterBegin.FriendlyName)
-								</div>
+								<div class="upcomingChange new">New class</div>
 							}
 
 						  @Html.Partial("CourseDescriptions", item.Descriptions, new ViewDataDictionary
