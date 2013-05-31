@@ -69,7 +69,7 @@ function LoadCrossListedCourses(jsonUrl, div, quarter) {
           var cid = v.CourseID.Subject + (v.IsCommonCourse ? "&amp;" : "") + " " + v.CourseID.Number;
 
           // convert the search query to the expected format
-          var searchID = cid.replace(/\s+/g, '+').replace(/\&amp;/g, "%26");
+          var searchID = v.SectionID.ItemNumber;
           var searchQuarter = quarter.replace(/\s+/g, '');
 
           // generate the lookup link (via search)
