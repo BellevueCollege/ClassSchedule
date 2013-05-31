@@ -1,5 +1,6 @@
 ﻿@using CTCClassSchedule.Common
 @using Microsoft.Security.Application
+@using Ctc.Ods.Types
 @model CTCClassSchedule.Models.SearchResultNoSectionModel
 @{
 	// at the moment, this view is only used in search results. 11/15/2011, shawn.south@bellevuecollege.edu
@@ -9,14 +10,21 @@
 <h2>Classes not offered @Model.SearchedYearQuarter.FriendlyName, but match your search:</h2>
 
 <ul>
-@foreach (var item in Model.NoSectionSearchResults) {
+@foreach (SearchResultNoSection item in Model.NoSectionSearchResults)
+{
+  CourseID courseId = Helpers.getCourseIdFromString(item.CourseID);
+
 	<li>
         <strong>
-            <span class="courseID">@Html.FormatWithSearchTerm(_searchTerm, item.CourseID)</span>
-            <span class="courseTitle">@Html.FormatWithSearchTerm(_searchTerm, item.CourseTitle)</span>
-            <span class="courseCredits">&#8226; @Html.CreditsValue(item.Credits, "<span class='error'>UNK</span>") @* Remove any trailing zero-decimals *@
-                <abbr title="Credit(s) ">Cr.</abbr>
-            </span>
+          <span class="classHeading noPadding">
+            <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(courseId), ClassNum = courseId.Number })">
+              <span class="courseID">@Html.FormatWithSearchTerm(_searchTerm, item.CourseID)</span>
+              <span class="courseTitle">@Html.FormatWithSearchTerm(_searchTerm, item.CourseTitle)</span>
+              <span class="courseCredits">&#8226; @Html.CreditsValue(item.Credits, "<span class='error'>UNK</span>") @* Remove any trailing zero-decimals *@
+                  <abbr title="Credit(s) ">Cr.</abbr>
+              </span>
+            </a>
+          </span>
         </strong>
         <br />
         <span class="courseDescription">@Html.FormatWithSearchTerm(_searchTerm, Encoder.HtmlEncode(item.CourseDescription)) </span>

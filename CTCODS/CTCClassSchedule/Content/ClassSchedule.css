@@ -1086,6 +1086,11 @@ ul.section-details li.section-notes
 .classHeading a:hover,
 .classHeading a:focus { text-decoration: underline;}
 
+.noPadding
+{
+  padding: 0;
+}
+
 .course-updated a:hover {
 	cursor:pointer;
 }

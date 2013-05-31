@@ -15,6 +15,7 @@ using CtcApi.Web.Security;
 using MvcMiniProfiler;
 using System.Configuration;
 using System.Text;
+using Ctc.Ods.Config;
 
 namespace CTCClassSchedule.Common
 {
@@ -256,6 +257,19 @@ namespace CTCClassSchedule.Common
 
 			return facets;
 		}
+
+    public static CourseID getCourseIdFromString(string courseId)
+    {
+      int ix = courseId.IndexOfAny(new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' });
+      string subject = courseId.Substring(0, ix).TrimEnd();
+      string courseNumber = courseId.Substring(ix, courseId.Length - ix).TrimStart();
+
+      // Get the common course char
+      ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
+      string commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar;
+
+      return new CourseID(subject.Replace(commonCourseChar, string.Empty), courseNumber, subject.Contains(commonCourseChar));
+    }
 
 		/// <summary>
 		/// Returns a friendly time in sentance form given a datetime. This value
@@ -784,6 +798,12 @@ namespace CTCClassSchedule.Common
 		{
 			return SubjectWithCommonCourseFlag(course.Subject, course.IsCommonCourse);
 		}
+
+    public static string SubjectWithCommonCourseFlag(CourseID course)
+    {
+      return SubjectWithCommonCourseFlag(course.Subject, course.IsCommonCourse);
+    }
+
 
 		private static string SubjectWithCommonCourseFlag(string subject, bool isCommonCourse)
 		{
