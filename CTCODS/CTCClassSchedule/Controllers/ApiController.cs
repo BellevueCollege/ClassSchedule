@@ -158,7 +158,7 @@ namespace CTCClassSchedule.Controllers
                                where c.CourseID == courseID
                                select c.ClassID).ToArray();
         // HACK: SectionID constructors are currently protected, so we have to manually create them
-        IList<ISectionID> sectionIDs = new List<ISectionID>(classIDs.Length);
+        IList<ISectionID> sectionIDs = new List<ISectionID>();
         foreach (string id in classIDs)
         {
           sectionIDs.Add(SectionID.FromString(id));
@@ -176,9 +176,14 @@ namespace CTCClassSchedule.Controllers
           using (OdsRepository ods = new OdsRepository())
           {
             IList<Section> odsSections = ods.GetSections(sectionIDs);
-            YearQuarter yrq = ods.CurrentYearQuarter;
 
-            IList<SectionWithSeats> classScheduleSections = Helpers.GetSectionsWithSeats(yrq.ToString(), odsSections, db);
+            // Get SectionWithSeats data by quarter
+            List<SectionWithSeats> classScheduleSections = new List<SectionWithSeats>();
+            foreach (YearQuarter yrq in odsSections.Select(p => p.Yrq).Distinct())
+            {
+              classScheduleSections.AddRange(Helpers.GetSectionsWithSeats(yrq.ToString(), odsSections.Where(p => p.Yrq.Equals(yrq)).ToList(), db));
+            }
+
 
             IList<CrossListedCourseModel> crosslistings = (from c in classScheduleSections
                                                            select new CrossListedCourseModel
