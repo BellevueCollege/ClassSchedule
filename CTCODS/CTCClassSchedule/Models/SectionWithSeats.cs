@@ -5,8 +5,9 @@ namespace CTCClassSchedule.Models
 	public class SectionWithSeats : Section
 	{
 	  public int? SeatsAvailable { get; set; }
-		public string LastUpdated { get; set; }
-		public string LastUpdatedBy { get; set; }
+    public string SeatsLastUpdated { get; set; }
+    public string LastUpdated { get; set; }
+    public string LastUpdatedBy { get; set; }
 		public string CourseFootnotes { get; set; }
 		public string SectionFootnotes { get; set; }
 		public string CustomDescription { get; set; }
@@ -74,5 +75,6 @@ namespace CTCClassSchedule.Models
 				LinkedTo = value.LinkedTo;
 			}
 		}
-  }
+
+	}
 }

@@ -496,6 +496,7 @@ namespace CTCClassSchedule.Common
 			      select new SectionWithSeats {
 								ParentObject = c,
 								SeatsAvailable = ss != null ? ss.SeatsAvailable : Int32.MinValue,	// allows us to identify past quarters (with no availability info)
+                          SeatsLastUpdated = (ss != null ? ss.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString("h:mm tt").ToLower(),
 								LastUpdated = (d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString("h:mm tt").ToLower(),
 													SectionFootnotes = sm != null && !String.IsNullOrWhiteSpace(sm.Footnote) ? sm.Footnote : String.Empty,
 													CourseFootnotes = cm != null && !String.IsNullOrWhiteSpace(cm.Footnote) ? cm.Footnote : String.Empty,
@@ -546,7 +547,7 @@ namespace CTCClassSchedule.Common
 			return sectionsEnum;
 		}
 
-    public static string getFriendlyDayRange(string dayString)
+	  public static string getFriendlyDayRange(string dayString)
     {
       StringBuilder friendlyName = new StringBuilder(dayString);
       IDictionary<string, string> daysDictionary = new Dictionary<string, string>
