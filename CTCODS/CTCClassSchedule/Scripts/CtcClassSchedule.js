@@ -29,10 +29,11 @@ $(document).ready(function() {
 
         if (seatsAvailable > 0) {
           $(availability).html(seatsAvailable);
-          $(updateTime).html("updated " + friendlyTime);
+          $(updateTime).html("refreshed " + friendlyTime);
         } else {
           $(availability).html("class full");
-          $(courseUpdated).empty();
+          $(updateTime).html("refreshed " + friendlyTime);
+          //$(courseUpdated).empty();
         }
       },
       error: function (x, t, m) {
