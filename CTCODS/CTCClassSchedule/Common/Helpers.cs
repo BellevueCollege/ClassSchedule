@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using CTCClassSchedule.Properties;
 using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
@@ -496,7 +497,7 @@ namespace CTCClassSchedule.Common
 			      select new SectionWithSeats {
 								ParentObject = c,
 								SeatsAvailable = ss != null ? ss.SeatsAvailable : Int32.MinValue,	// allows us to identify past quarters (with no availability info)
-                          SeatsLastUpdated = (ss != null ? ss.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString("h:mm tt").ToLower(),
+                          SeatsLastUpdated = (ss != null ? ss.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString(Settings.Default.SeatUpdatedDateTimeFormat).ToLower(),
 								LastUpdated = (d != null ? d.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString("h:mm tt").ToLower(),
 													SectionFootnotes = sm != null && !String.IsNullOrWhiteSpace(sm.Footnote) ? sm.Footnote : String.Empty,
 													CourseFootnotes = cm != null && !String.IsNullOrWhiteSpace(cm.Footnote) ? cm.Footnote : String.Empty,
