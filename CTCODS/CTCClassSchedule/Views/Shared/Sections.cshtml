@@ -23,28 +23,38 @@
         @{
           bool firstIteration = true;
         }
-        @foreach (OfferedItem item in Model.Sections[0].Offered.OrderBy(o => o.SequenceOrder))
-        {
-          // Instructors
-          if (firstIteration && string.IsNullOrWhiteSpace(item.InstructorName))
+			  @if (Model.Sections[0].Offered.Any())
+			  {
+          foreach (OfferedItem item in Model.Sections[0].Offered.OrderBy(o => o.SequenceOrder))
           {
-            <li>Staff</li>
-          }
-          else
-          {
-            if (!string.IsNullOrWhiteSpace(item.InstructorName))
+            // Instructors
+            if (firstIteration && string.IsNullOrWhiteSpace(item.InstructorName))
             {
-              <li>
-                <a href="@Helpers.getProfileURL(item.InstructorID)">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a>
-              </li>
+            <li>Staff</li>
             }
             else
             {
+              if (!string.IsNullOrWhiteSpace(item.InstructorName))
+              {
+              <li>
+                <a href="@Helpers.getProfileURL(item.InstructorID)">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a>
+              </li>
+              }
+              else
+              {
               <li>&nbsp;</li>
+              }
             }
+            firstIteration = false;
           }
-          firstIteration = false;
-        }
+			  }
+			  else
+			  {
+			    <li>
+			      <!-- No section offerings found -->
+            &nbsp;
+			    </li>
+			  }
 			</ul>
 		</li>
 		<li>
@@ -54,8 +64,10 @@
         {
           foreach (SectionWithSeats section in Model.Sections)
           {
-            foreach (OfferedItem item in section.Offered.OrderBy(o => o.SequenceOrder))
+            if (section.Offered.Any())
             {
+              foreach (OfferedItem item in section.Offered.OrderBy(o => o.SequenceOrder))
+              {
               // Meeting times
               <li>
                 @if (Model.Sections[0].IsOnline)
@@ -78,6 +90,16 @@
                     <span class="descriptor">in </span>@item.Room
                   </span>
                 }
+              </li>
+              }
+            }
+            else
+            {
+              <li>
+                <!-- No section offerings found -->
+                <span class="days">&nbsp;</span>
+                <span class="times"><span class="descriptor">&nbsp;</span>&nbsp;</span>
+                <span class="room"><span class="descriptor">&nbsp;</span>&nbsp;</span>
               </li>
             }
           } // end of iterate section list
