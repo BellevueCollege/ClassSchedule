@@ -146,20 +146,20 @@
 
       // Add a cross-listed course
       $('#addCourseID').click(function() {
-        console.log('Clicked Add button');
+       // console.log('Clicked Add button');
 
         var txtBox = $('#newCrossListCourseID');
         var enteredCourseID = txtBox.val().toUpperCase();
-        console.log('Value = ' + enteredCourseID);
+       // console.log('Value = ' + enteredCourseID);
 
         // only continue if we have a syntactically valid course ID (too expensive to call to the DB to completely validate)
         if (enteredCourseID.length > 0 && enteredCourseID.match(/^([A-Z]{1,4}&?|[A-Z]{1,5})&{0}\s+\d{3,4}/)) {
           var optionToAdd = '<li class="cross-listed-course-choice"><span>' + enteredCourseID + '</span><input name="CrossListedCourses" value="' + enteredCourseID + '" type="hidden"><span class="cross-listed-course-choice-close ui-icon ui-icon-close"></span></li>';
-          console.log('Adding ' + optionToAdd);
+         // console.log('Adding ' + optionToAdd);
 
           $('#cross-listed-courses').append(optionToAdd);
 
-          console.log("Clearing textbox.");
+         // console.log("Clearing textbox.");
           txtBox.val('');
         } else {
           // TODO: highlight empty field

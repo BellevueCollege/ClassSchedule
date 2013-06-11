@@ -47,7 +47,7 @@ $(document).ready(function() {
 
 
 function LoadCrossListedCourses(jsonUrl, div, quarter) {
-  console.log("Loading cross-listed courses...");
+  //console.log("Loading cross-listed courses...");
   div.html("Loading cross-listed courses...");
 
   // TODO: move this code into a function that we can put in an external file
@@ -56,15 +56,15 @@ function LoadCrossListedCourses(jsonUrl, div, quarter) {
     // JSONP does not seem to be working for some reason. 3/19/2013 - shawn.south@bellevuecollege.edu
     dataType: 'json',
     success: function (data) {
-      console.log("Received:");
-      console.log(data);
+      //console.log("Received:");
+      //console.log(data);
 
       if (data != null) {
         var crossListedCourses = "";
 
         // loop through the return data and build a heading for each cross-listed course.
         $.each(data, function (k, v) {
-          console.log("Processing: '" + k + "' = '" + v + "'");
+          //console.log("Processing: '" + k + "' = '" + v + "'");
 
           // TODO: Move construction of course heading into a shared function
           var cid = v.CourseID.Subject + (v.IsCommonCourse ? "&amp;" : "") + " " + v.CourseID.Number;
@@ -77,10 +77,10 @@ function LoadCrossListedCourses(jsonUrl, div, quarter) {
           var searchHref = g_searchRootUrl + "?quarter=" + searchQuarter + "&searchterm=" + searchID;
 
           var courseID = "<span class=\"courseID\">" + cid + "</span>";
-          console.log("courseID = '" + courseID + "'");
+          //console.log("courseID = '" + courseID + "'");
 
           var courseTitle = "<span class=\"courseTitle\">" + v.Title + "</span>";
-          console.log("courseTitle = '" + courseTitle + "'");
+         // console.log("courseTitle = '" + courseTitle + "'");
 
           var courseCredits = "<span class=\"courseCredits\">&#8226; ";
 
@@ -90,11 +90,11 @@ function LoadCrossListedCourses(jsonUrl, div, quarter) {
             courseCredits += v.Credits + " <abbr title='credit(s)'>Cr.</abbr>";
           }
           courseCredits += "</span>";
-          console.log("courseCredits = '" + courseCredits + "'");
+         // console.log("courseCredits = '" + courseCredits + "'");
 
           crossListedCourses += "<li class='section-cross-listed-course-title'><a href='" + searchHref + "'>" + courseID + " " + courseTitle + "</a> " + courseCredits + "</li>";
         });
-        console.log(crossListedCourses);
+        //console.log(crossListedCourses);
 
         // account for possible failure in generating the list of courses
         if (crossListedCourses == "") {
@@ -109,8 +109,8 @@ function LoadCrossListedCourses(jsonUrl, div, quarter) {
       }
     },
     error: function (ex, xhr) {
-      console.log("Error: " + ex.message);
-      console.log(xhr);
+      //console.log("Error: " + ex.message);
+      //console.log(xhr);
     }
   });
 }
