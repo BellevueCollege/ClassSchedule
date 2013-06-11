@@ -1001,7 +1001,7 @@ ul.class-description
 }
 .course-updated a
 {
-    text-decoration: none;
+    text-decoration: underline;
     color: #666;
     position: relative;
     padding-left: 16px;
