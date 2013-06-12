@@ -32,7 +32,8 @@ $(document).ready(function() {
           $(updateTime).html("refreshed " + friendlyTime);
         } else {
           $(availability).html("class full");
-          $(updateTime).html("refreshed " + friendlyTime);
+//          $(updateTime).html("refreshed " + friendlyTime);
+          $(updateTime).html("re-check");
           //$(courseUpdated).empty();
         }
       },
