@@ -155,6 +155,8 @@
   @if (block.IsCrosslisted)
   {
     string courseID = firstSection.CourseID;
+    //This variable is introduced because of bug#3206 in fogbugz
+    string courseIDmodified = string.Format("{0}{1} {2}", firstSection.CourseSubject, firstSection.IsCommonCourse ? "&" : string.Empty, firstSection.CourseNumber);
     // because we're using this in an attribute name, replace invalid characters w/ dashes
     string uniqueID = Regex.Replace(courseID.Replace('&', '-'), @"\s+", "-");
 
@@ -171,9 +173,8 @@
       // dynamically load course cross-listings, if present
       // NOTE: This script is inline so that it's only created for the courses that need it.
         $(function () {
-          var jsonUrl = "@Url.Action("CrossListedCourses", "Api", new { courseID = courseID })";
+          var jsonUrl = "@Url.Action("CrossListedCourses", "Api", new { courseID = courseIDmodified })";
           var quarter = "@(Model.QuarterNavigation.ViewingQuarter.FriendlyName)";
-
           LoadCrossListedCourses(jsonUrl, $('div#courses-crosslisted-with-@uniqueID'), quarter);
         });
       </script>
