@@ -148,9 +148,6 @@
     <Content Include="Views\dbo.vw_Class.sql">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Views\dbo.vw_ClassScheduleData.sql">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Views\dbo.vw_ClassSearch.sql">
       <SubType>Content</SubType>
     </Content>
