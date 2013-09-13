@@ -5,15 +5,21 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using Common.Logging;
 using Encoder = Microsoft.Security.Application.Encoder;
 
 namespace CTCClassSchedule
 {
 	public class CourseHPQuery
 	{
-		//code to grab the open seats and return as string
+	  private ILog _log = LogManager.GetCurrentClassLogger();
+
+	  //code to grab the open seats and return as string
     public int FindOpenSeats (string itemNumber, string YRQ)
     {
+      string classID = string.Concat(itemNumber, YRQ);
+      _log.Debug(m => m("Looking up live Seat Availability data for '{0}'...", classID));
+
 			//much of this is from: http://msdn.microsoft.com/en-us/library/debx8sh9.aspx
 
 			// TODO: gracefully handle missing AppSetting value
@@ -26,8 +32,9 @@ namespace CTCClassSchedule
 
 			string postData = GetPostData(itemNumber, YRQ);
       byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+      _log.Trace(m => m("POST data: \n{0}", postData));
 
-			request.ContentLength = byteArray.Length;
+      request.ContentLength = byteArray.Length;
 
 	string result;
 			try
@@ -55,10 +62,12 @@ namespace CTCClassSchedule
 											result = reader.ReadToEnd();
 										}
 
+									  _log.Trace(m => m("Response returned from WTS: \n\n{0}", result));
+
 										// Detect "server busy"
 										if (Regex.IsMatch(result, "503 Service Unavailable", RegexOptions.IgnoreCase))
 										{
-											Trace.WriteLine(string.Format("Call to '{0}' returned '{1}'", request.RequestUri, "503 Service Unavailable"));
+                      _log.Warn(m => m("[SeatAvailability: {1}]Call to '{0}' returned 'Service Unavailable'.", request.RequestUri, classID));
 											return -1;
 										}
 
@@ -81,15 +90,20 @@ namespace CTCClassSchedule
 							}
 							else
 							{
-								Trace.WriteLine(string.Format("Call to '{0}' returned '{1}'", request.RequestUri, ((HttpWebResponse)response).StatusCode));
+                _log.Warn(m => m("[SeatAvailability: {2}] Call to '{0}' returned '{1}'", request.RequestUri, ((HttpWebResponse)response).StatusCode, classID));
 							}
+						}
+						else
+						{
+              _log.Warn(m => m("[SeatAvailability: {1}] Call to '{0}' returned a NULL response.", request.RequestUri, classID));
 						}
 					}
 				}
 				return -1;
 			}
-			catch
+			catch (Exception ex)
 			{
+			  _log.Warn(m => m("An Exception occurred while looking up seat info: {0}", ex));
 				//if the service cannot be reached, return a -1 for seats available.
 				return -1;
 			}
