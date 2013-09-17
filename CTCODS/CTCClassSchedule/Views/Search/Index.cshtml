@@ -173,7 +173,8 @@
       // dynamically load course cross-listings, if present
       // NOTE: This script is inline so that it's only created for the courses that need it.
         $(function () {
-          var jsonUrl = "@Url.Action("CrossListedCourses", "Api", new { courseID = courseIDmodified })";
+          @* WARNING: If we don't specify .Raw() output below, the query parameter separator (&) will be encoded (&amp;), which breaks the URL *@
+          var jsonUrl = "@Html.Raw(Url.Action("CrossListedCourses", "Api", new { courseID = courseIDmodified, yearQuarterID = Model.QuarterNavigation.ViewingQuarter.ID }))";
           var quarter = "@(Model.QuarterNavigation.ViewingQuarter.FriendlyName)";
           LoadCrossListedCourses(jsonUrl, $('div#courses-crosslisted-with-@uniqueID'), quarter);
         });

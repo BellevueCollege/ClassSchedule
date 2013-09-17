@@ -704,8 +704,8 @@ namespace CTCClassSchedule.Common
                                                                                      crosslistings.Count(x => x.CourseID == blockCourseID));
           // END DEBUGGING */
 #endif
-          // Flag whether or not this course block is crosslisted with other sections
-          courseBlock.IsCrosslisted = crosslistings.Any(x => x.CourseID == blockCourseID);
+          // Flag whether or not this course block is crosslisted with other sections offered in the same quarter
+          courseBlock.IsCrosslisted = crosslistings.Any(x => x.CourseID == blockCourseID && x.ClassID.EndsWith(firstSection.Yrq.ID));
 
           // Find all links associated to each of the grouped sections
           foreach (SectionWithSeats sec in courseBlock.Sections)

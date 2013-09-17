@@ -139,75 +139,88 @@ namespace CTCClassSchedule.Controllers
     }
 
 	  /// <summary>
-    ///
-    /// </summary>
-    /// <param name="courseID"></param>
-    /// <returns>
-    ///   <example>
-    ///     <code>
-    ///     [{"ID":{"Subject":"ENGL","Number":"101","IsCommonCourse":false},"Title":"English Composition I","Credits":5.0,"IsVariableCredits":false,"IsCommonCourse":true}]
-    ///     </code>
-    ///   </example>
-    /// </returns>
-    [HttpGet]
-    public JsonResult CrossListedCourses(string courseID)
-    {
-      using (ClassScheduleDb db = new ClassScheduleDb())
-      {
-        string[] classIDs = (from c in db.SectionCourseCrosslistings
-                               where c.CourseID == courseID
-                               select c.ClassID).ToArray();
-        // HACK: SectionID constructors are currently protected, so we have to manually create them
-        IList<ISectionID> sectionIDs = new List<ISectionID>();
-        foreach (string id in classIDs)
-        {
-          sectionIDs.Add(SectionID.FromString(id));
-        }
+	  ///
+	  /// </summary>
+	  /// <param name="courseID"></param>
+	  /// <param name="yearQuarterID"></param>
+	  /// <returns>
+	  ///   <example>
+	  ///     <code>
+	  ///     [{"ID":{"Subject":"ENGL","Number":"101","IsCommonCourse":false},"Title":"English Composition I","Credits":5.0,"IsVariableCredits":false,"IsCommonCourse":true}]
+	  ///     </code>
+	  ///   </example>
+	  /// </returns>
+	  [HttpGet]
+    public JsonResult CrossListedCourses(string courseID, string yearQuarterID)
+	  {
+	    // TODO: Validate incoming yearQuarterID value
+      // see https://github.com/BellevueCollege/CtcApi/issues/8
 
-        if (sectionIDs.Count > 0)
-        {
-          // write a warning to the log if we've got too many courses cross-listed with this section
-          if (_log.IsWarnEnabled && sectionIDs.Count > MAX_COURSE_CROSSLIST_WARNING_THRESHOLD)
-          {
-            _log.Warn(m => m("Cross-listing logic assumes a very small number of Sections will be cross-listed with any given Course, but is now being asked to process {0} Sections for '{1}'. (This warning triggers when more than {2} are detected.)",
-                              sectionIDs.Count, courseID, MAX_COURSE_CROSSLIST_WARNING_THRESHOLD));
+	    if (yearQuarterID.Length != 4)
+	    {
+	      _log.Error(m => m("An invalid YearQuarterID was provided for looking up cross-listed sections: '{0}'", yearQuarterID));
+	    }
+	    else
+	    {
+	      using (ClassScheduleDb db = new ClassScheduleDb())
+	      {
+	        string[] classIDs = (from c in db.SectionCourseCrosslistings
+	                             where c.CourseID == courseID
+	                                   && c.ClassID.EndsWith(yearQuarterID)
+	                             select c.ClassID).ToArray();
+
+	        if (!classIDs.Any())
+	        {
+            _log.Warn(m => m("No cross-listed Sections were found for Course '{0}' in '{1}'", courseID, yearQuarterID));
           }
+	        else
+	        {
+	          int count = classIDs.Count();
+	          _log.Trace(m => m("{0} cross-listed sections found for '{1}': [{2}]", count, courseID, classIDs.Mash()));
 
-          using (OdsRepository ods = new OdsRepository())
-          {
-            IList<Section> odsSections = ods.GetSections(sectionIDs);
+            // HACK: SectionID constructors are currently protected, so we have to manually create them
+	          IList<ISectionID> sectionIDs = new List<ISectionID>(count);
+	          foreach (string id in classIDs)
+	          {
+	            sectionIDs.Add(SectionID.FromString(id));
+	          }
 
-            // Get SectionWithSeats data by quarter
-            List<SectionWithSeats> classScheduleSections = new List<SectionWithSeats>();
-            foreach (YearQuarter yrq in odsSections.Select(p => p.Yrq).Distinct())
-            {
-              classScheduleSections.AddRange(Helpers.GetSectionsWithSeats(yrq.ToString(), odsSections.Where(p => p.Yrq.Equals(yrq)).ToList(), db));
-            }
+	          // write a warning to the log if we've got too many courses cross-listed with this section
+	          if (_log.IsWarnEnabled && sectionIDs.Count > MAX_COURSE_CROSSLIST_WARNING_THRESHOLD)
+	          {
+	            _log.Warn(m => m("Cross-listing logic assumes a very small number of Sections will be cross-listed with any given Course, but is now being asked to process {0} Sections for '{1}'. (This warning triggers when more than {2} are detected.)",
+	                              sectionIDs.Count, courseID, MAX_COURSE_CROSSLIST_WARNING_THRESHOLD));
+	          }
 
+	          using (OdsRepository ods = new OdsRepository())
+	          {
+	            IList<Section> odsSections = ods.GetSections(sectionIDs);
 
-            IList<CrossListedCourseModel> crosslistings = (from c in classScheduleSections
-                                                           select new CrossListedCourseModel
-                                                           {
-                                                             // BUG: API doesn't property notify CourseID in derived class
-                                                             CourseID = CourseID.FromString(c.CourseID),
-                                                             SectionID = c.ID,
-                                                             // HACK: Remove IsCommonCourse property when API is fixed (see above)
-                                                             IsCommonCourse = c.IsCommonCourse,
-                                                             Credits = c.Credits,
-                                                             IsVariableCredits = c.IsVariableCredits,
-                                                             Title = c.CourseTitle
-                                                           }).ToList();
+	            IList<SectionWithSeats> classScheduleSections = Helpers.GetSectionsWithSeats(yearQuarterID,
+	                                                                                         odsSections.ToList(), db);
 
-            // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
-            // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-            return Json(crosslistings, JsonRequestBehavior.AllowGet);
-          }
-        }
+	            IList<CrossListedCourseModel> crosslistings = (from c in classScheduleSections
+	                                                           select new CrossListedCourseModel
+	                                                                    {
+	                                                                      // BUG: API doesn't property notify CourseID in derived class
+	                                                                      CourseID = CourseID.FromString(c.CourseID),
+	                                                                      SectionID = c.ID,
+	                                                                      // HACK: Remove IsCommonCourse property when API is fixed (see above)
+	                                                                      IsCommonCourse = c.IsCommonCourse,
+	                                                                      Credits = c.Credits,
+	                                                                      IsVariableCredits = c.IsVariableCredits,
+	                                                                      Title = c.CourseTitle
+	                                                                    }).ToList();
 
-        // no course crosslisting were found
-        return Json(null, JsonRequestBehavior.AllowGet);
-      }
-    }
+	            // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+	            // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+	            return Json(crosslistings, JsonRequestBehavior.AllowGet);
+	          }
+	        }
+	      }
+	    }
+	    return Json(null, JsonRequestBehavior.AllowGet);
+	  }
 
 
 	  // TODO: If save successful, return new (possibly trimmed) footnote text
