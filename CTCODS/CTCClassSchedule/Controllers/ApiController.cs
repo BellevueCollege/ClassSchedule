@@ -40,7 +40,6 @@ namespace CTCClassSchedule.Controllers
     /// </summary>
     /// <param name="classID"></param>
     /// <returns></returns>
-    [HttpPost]
     public ActionResult GetSeats(string classID)
     {
       int? seats = null;
@@ -120,9 +119,10 @@ namespace CTCClassSchedule.Controllers
 		///			http://localhost/Api/Subjects?format=json
 		///		</example>
 		/// </remarks>
-		[HttpPost]
 		public ActionResult Subjects(string format, string YearQuarter)
 		{
+		  _log.Trace(m => m("Called: [classes/Api/Subjects?format={0}&YearQuarter={1}], From (referrer): [{2}]", format, YearQuarter, Request.UrlReferrer));
+
 		  IList<ScheduleCoursePrefix> subjectList = GetSubjectList(YearQuarter);
 
       if (format == "json")
