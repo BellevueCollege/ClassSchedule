@@ -152,7 +152,7 @@
        });
      }
                   <li>
-  @if (block.IsCrosslisted)
+  @if (block.IsCrosslisted && block.LinkedSections.Count <= 0)
   {
     string courseID = firstSection.CourseID;
     //This variable is introduced because of bug#3206 in fogbugz

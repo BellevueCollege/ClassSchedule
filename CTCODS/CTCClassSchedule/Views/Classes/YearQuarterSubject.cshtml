@@ -174,7 +174,7 @@
                     });
                   }
                   <li>
-@if (block.IsCrosslisted)
+@if (block.IsCrosslisted && block.LinkedSections.Count <= 0)
   {
     // TODO: Replace Helpers.BuildCourseID() with this logic - and pull in CommonCourseChar from .config
     string courseID = string.Format("{0}{1} {2}", firstSection.CourseSubject, firstSection.IsCommonCourse ? "&" : string.Empty, firstSection.CourseNumber);
