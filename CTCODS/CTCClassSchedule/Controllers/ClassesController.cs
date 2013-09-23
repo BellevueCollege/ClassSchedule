@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Mvc;
 using Ctc.Ods;
 using Ctc.Ods.Config;
@@ -146,69 +148,94 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "YearQuarterCacheTime")]
 		public ActionResult YearQuarter(String YearQuarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string letter, string latestart, string numcredits, string format)
 		{
-			YearQuarter yrq	= string.IsNullOrWhiteSpace(YearQuarter) ? null : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
+		  _log.Trace(m => m("Calling: [.../classes/{0}...] From (referrer): [{1}]", YearQuarter, Request.UrlReferrer));
 
-			using (OdsRepository repository = new OdsRepository(HttpContext))
-			{
-				// TODO: Refactor the following code to use ApiController.GetSubjectList()
-				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
-				using (ClassScheduleDb db = new ClassScheduleDb())
-				{
-					// Compile a list of active subjects
-          char[] commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar.ToCharArray();
-					IEnumerable<string> activePrefixes = repository.GetCourseSubjects(yrq, facets).Select(p => p.Subject);
-					IList<Subject> subjects = new List<Subject>();
-					foreach (Subject sub in db.Subjects)
-					{
-						// TODO: whether the CoursePrefix has active courses or not, any Prefix with a '&' will be included
-						//			 because GetCourseSubjects() does not include the common course char.
-            if (sub.CoursePrefixes.Select(sp => sp.CoursePrefixID).Any(sp => activePrefixes.Contains(sp.TrimEnd(commonCourseChar))))
-						{
-							subjects.Add(sub);
-						}
-					}
+      // TODO: come up with a better way to maintain various State flags
+      ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid, f_telecourse);
+      ViewBag.Days = Helpers.ConstructDaysList(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
+      ViewBag.LinkParams = Helpers.getLinkParams(Request);
+      ViewBag.timestart = timestart;
+      ViewBag.timeend = timeend;
+      ViewBag.latestart = latestart;
+      ViewBag.avail = avail;
+      IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, f_telecourse, avail, latestart, numcredits);
 
-          ViewBag.alphabet = subjects.Select(s => s.Title.First()).Distinct().ToList();
+      YearQuarterModel model = new YearQuarterModel
+      {
+        ViewingSubjects = new List<Subject>(),
+        SubjectLetters = new List<char>(),
+      };
 
-					IEnumerable<Subject> subjectsEnum;
-					if (letter != null)
-					{
-					    subjectsEnum = subjects.Where(s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)).Distinct();
-					}
-					else
-					{
-					    subjectsEnum = subjects;
-					}
+      try
+      {
+        YearQuarter yrq = string.IsNullOrWhiteSpace(YearQuarter)
+                            ? null
+                            : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
+        model.ViewingQuarter = yrq;
 
-          if (format == "json")
-					{
-						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
-						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-						return Json(subjectsEnum, JsonRequestBehavior.AllowGet);
-					}
+        using (OdsRepository repository = new OdsRepository(HttpContext))
+        {
+          model.NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository);
 
-					// set up all the ancillary data we'll need to display the View
-					SetCommonViewBagVars(repository, avail, letter);
-					ViewBag.QuarterNavMenu = Helpers.GetYearQuarterListForMenus(repository);
+          // set up all the ancillary data we'll need to display the View
+          SetCommonViewBagVars(repository, avail, letter);
 
-					ViewBag.WhichClasses = (string.IsNullOrWhiteSpace(letter) ? "All" : letter.ToUpper());
+          // TODO: Refactor the following code to use ApiController.GetSubjectList()
+          // after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
+          using (ClassScheduleDb db = new ClassScheduleDb())
+          {
+            // Compile a list of active subjects
+            char[] commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar.ToCharArray();
+            IEnumerable<string> activePrefixes = repository.GetCourseSubjects(yrq, facets).Select(p => p.Subject);
 
-					ViewBag.timestart = timestart;
-					ViewBag.timeend = timeend;
-					ViewBag.latestart = latestart;
-					ViewBag.avail = avail;
-					ViewBag.Subject = "All";
-					ViewBag.YearQuarter = yrq;
+            IList<Subject> subjects = new List<Subject>();
+            // NOTE: Unable to reduce the following loop to a LINQ statement because it complains about not being able to use TrimEnd(char[]) w/ LINQ-to-Entities
+            // (Although it appears to be doing so just fine in the if statement below). - shawn.south@bellevuecollege.edu
+            foreach (Subject sub in db.Subjects)
+            {
+              // TODO: whether the CoursePrefix has active courses or not, any Prefix with a '&' will be included
+              //			 because GetCourseSubjects() does not include the common course char.
+              if (
+                sub.CoursePrefixes.Select(sp => sp.CoursePrefixID)
+                   .Any(sp => activePrefixes.Contains(sp.TrimEnd(commonCourseChar))))
+              {
+                subjects.Add(sub);
+              }
+            }
 
-					ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid, f_telecourse);
-					ViewBag.Days = Helpers.ConstructDaysList(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
+            model.SubjectLetters = subjects.Select(s => s.Title.First()).Distinct().ToList();
+            model.ViewingSubjects = (letter != null
+                                       ? subjects.Where(
+                                         s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)).Distinct()
+                                       : subjects
+                                    ).ToList();
 
-					ViewBag.LinkParams = Helpers.getLinkParams(Request);
+            if (format == "json")
+            {
+              // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+              // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+              return Json(model, JsonRequestBehavior.AllowGet);
+            }
 
-          return View(subjectsEnum.OrderBy(s => s.Title));
-				}
-			}
+            return View(model);
+          }
+        }
+      }
+      catch (ArgumentOutOfRangeException ex)
+      {
+        if (ex.Message.ToUpper().Contains("MUST BE A VALID QUARTER TITLE"))
+        {
+          throw new HttpException(404, string.Format("'{0}' is not a recognized Quarter.", YearQuarter), ex);
+        }
+        _log.Error(m => m("An unhandled ArgumentOutOfRangeException ocurred, returning an empty Model to the YearQuarter view."), ex);
+      }
+      catch (Exception ex)
+		  {
+		    _log.Error(m => m("An unhandled exception occurred, returning an empty Model to the YearQuarter view."), ex);
+		  }
+
+      // empty model
+		  return View(model);
 		}
 
 
