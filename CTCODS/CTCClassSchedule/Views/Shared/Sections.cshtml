@@ -118,7 +118,7 @@
 
         <li class="availability" id="availability-@sectionID">
           <span class="descriptor">Seat Availability: </span>
-          @if (Model.Sections[0].SeatsAvailable <= 0 || Model.Sections[0].WaitlistCount > 0)
+          @if (Model.Sections[0].SeatsAvailable == 0 || Model.Sections[0].WaitlistCount > 0)
           {
             if (Model.Sections[0].WaitlistCount > 0)
             {
