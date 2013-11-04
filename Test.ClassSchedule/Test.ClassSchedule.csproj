@@ -135,9 +135,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CTCClassSchedule\CTCClassSchedule.csproj">
+    <ProjectReference Include="..\ClassSchedule\ClassSchedule.Web.csproj">
       <Project>{D0DFD430-8A10-440D-A564-4E113D57A079}</Project>
-      <Name>CTCClassSchedule</Name>
+      <Name>ClassSchedule.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
