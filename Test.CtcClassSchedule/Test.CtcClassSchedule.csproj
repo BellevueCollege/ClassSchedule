@@ -47,10 +47,10 @@
       <HintPath>..\packages\Common.Logging.Elmah.1.2.1\lib\net40\Common.Logging.Elmah.dll</HintPath>
     </Reference>
     <Reference Include="CtcApi">
-      <HintPath>..\packages\CtcApi.0.9.13.2\lib\net40\CtcApi.dll</HintPath>
+      <HintPath>..\packages\CtcApi.0.9.15.0\lib\net40\CtcApi.dll</HintPath>
     </Reference>
     <Reference Include="CtcOdsApi">
-      <HintPath>..\CTCODS\CTCClassSchedule\bin\CtcOdsApi.dll</HintPath>
+      <HintPath>..\packages\CtcOdsApi.0.9.15.0\lib\net40\CtcOdsApi.dll</HintPath>
     </Reference>
     <Reference Include="DotNetCasClient">
       <HintPath>..\packages\DotNetCasClient.1.0.1\lib\DotNetCasClient.dll</HintPath>
@@ -135,7 +135,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CTCODS\CTCClassSchedule\CTCClassSchedule.csproj">
+    <ProjectReference Include="..\CTCClassSchedule\CTCClassSchedule.csproj">
       <Project>{D0DFD430-8A10-440D-A564-4E113D57A079}</Project>
       <Name>CTCClassSchedule</Name>
     </ProjectReference>

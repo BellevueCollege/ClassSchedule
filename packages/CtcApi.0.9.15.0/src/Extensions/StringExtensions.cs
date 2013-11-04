@@ -23,7 +23,7 @@ using Common.Logging;
 namespace CtcApi.Extensions
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	/// <remarks>
 	///		<note type="tip">
@@ -131,7 +131,7 @@ namespace CtcApi.Extensions
 #if EXTRA_VERBOSE
 				_log.Trace(m => m("Returing TitleCased value: '{0}'", result));
 #endif
-				return result.ToString();
+				return result.ToString();				
 			}
 
 			return src;

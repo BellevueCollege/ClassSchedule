@@ -23,12 +23,12 @@ namespace CtcApi.Web.Mvc
 	public class BaseController : Controller
 	{
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public IStateProvider SessionWrapper {get;set;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="instance">
 		///		The actual <see cref="Assembly"/> which is using this base class.

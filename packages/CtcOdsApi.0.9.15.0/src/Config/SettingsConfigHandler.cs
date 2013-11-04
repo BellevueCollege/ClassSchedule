@@ -38,7 +38,7 @@ namespace Ctc.Ods.Config
 			if (section == null)
 				return result;
 			XmlSerializer ser = new XmlSerializer(typeof(ApiSettings));
-
+			
 			using (XmlNodeReader reader = new XmlNodeReader(section))
 			{
 				result = (ApiSettings)ser.Deserialize(reader);

@@ -20,12 +20,12 @@ namespace CtcApi.Testing
 	public class FakeHttpHelper
 	{
 		private TestWebRequest _testRequest;
-
+		
 		/// <summary>
 		/// Gets or sets the text body of the <see cref="WebResponse"/> to simulate
 		/// </summary
 		public string ResponseText{get;set;}
-
+		
 		/// <summary>
 		/// Gets or sets the <see cref="WebRequest"/> headers expected to be set by the code being tested.
 		/// </summary
@@ -36,7 +36,7 @@ namespace CtcApi.Testing
 		{
 			ExpectedHeaders = new NameValueCollection();
 		}
-
+		
 		/// <summary></summary>
 		/// <param name="schema">
 		/// The URL schema to inject into the <see cref="WebRequest"/> factory. URLs
@@ -51,7 +51,7 @@ namespace CtcApi.Testing
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public void AssertExpectedHeaders()
 		{
@@ -62,7 +62,7 @@ namespace CtcApi.Testing
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="method"></param>
 		public void AssertRequestMethod(string method)
@@ -114,7 +114,7 @@ namespace CtcApi.Testing
 	}
 
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	public class TestWebRequest : WebRequest
 	{
@@ -133,7 +133,7 @@ namespace CtcApi.Testing
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public MemoryStream RequestStream
 		{
@@ -151,7 +151,7 @@ namespace CtcApi.Testing
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public MemoryStream ResponseStream
 		{
@@ -187,7 +187,7 @@ namespace CtcApi.Testing
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="responseText"></param>
 		/// <returns></returns>
@@ -229,7 +229,7 @@ namespace CtcApi.Testing
 	}
 
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	public class TestWebReponse : WebResponse
 	{
@@ -237,7 +237,7 @@ namespace CtcApi.Testing
 		private WebHeaderCollection _headers = new WebHeaderCollection();
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public override WebHeaderCollection Headers
 		{

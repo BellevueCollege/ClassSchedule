@@ -53,7 +53,7 @@ namespace CtcApi.Config
 				return (attributes[0] as XmlTypeAttribute).TypeName;
 // ReSharper restore PossibleNullReferenceException
 			}
-
+				
 			throw new InvalidOperationException(string.Format("Unable to find an XmlTypeAttribute for '{0}'", typeof(T)));
 		}
 

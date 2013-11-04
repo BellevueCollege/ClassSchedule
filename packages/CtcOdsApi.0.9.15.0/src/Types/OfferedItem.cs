@@ -29,7 +29,7 @@ namespace Ctc.Ods.Types
 		private string _instructorName = string.Empty;
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public OfferedItem()
 		{
@@ -54,19 +54,19 @@ namespace Ctc.Ods.Types
         public string Days{get;internal set;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
         [DataMember]
         public DateTime? StartTime{get;internal set;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
         [DataMember]
         public DateTime? EndTime{get;internal set;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
         [DataMember]
         public string InstructorID{get;internal set;}
@@ -85,13 +85,13 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
         [DataMember]
         public string InstructorEmail{get;set;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
         [DataMember]
         public string Room{get;internal set;}
@@ -103,7 +103,7 @@ namespace Ctc.Ods.Types
         public bool IsPrimary { get { return SequenceOrder == 0; } }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
         [DataMember]
         public int SequenceOrder {get; protected set;}

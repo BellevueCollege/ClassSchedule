@@ -39,7 +39,7 @@ namespace Ctc.Ods.Types
 		/// </remarks>
 		/// <seealso cref="ISectionID"/>
 		string ItemNumber { get; }
-
+		
 		/// <summary>
 		/// A 4-character <i>Year-Quarter (YRQ)</i>
 		/// </summary>
@@ -47,14 +47,14 @@ namespace Ctc.Ods.Types
 		string YearQuarter { get; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="other"></param>
 		/// <returns></returns>
 		bool Equals(string other);
 
 	  /// <summary>
-	  ///
+	  /// 
 	  /// </summary>
 	  /// <returns></returns>
 	  string ToString();

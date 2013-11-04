@@ -32,11 +32,11 @@ namespace Ctc.Ods.Config
 	///		To use this class; the following must be configured in the .config file for the executing context:
 	///		<code lang="xml">
 	///			<configuration>
-	///
+	///			
 	///				<configSections>
 	///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 	///				</configSections>
-	///
+	///				
 	///				<ctcOdsApiSettings>
 	///					<regex CommonCourseChar="&amp;"/>
 	///					<yearQuarter minValue="0000" maxValue="Z999" registrationLeadDays="14" cache="30"/>
@@ -49,7 +49,7 @@ namespace Ctc.Ods.Config
 	///						<rule action="exclude" column="SectionStatusID4" position="contains" value="N"/>
 	///					</classFlags>
 	///				</ctcOdsApiSettings>
-	///
+	///				
 	///			</configuration>
 	///		</code>
 	/// </para>
@@ -82,7 +82,7 @@ namespace Ctc.Ods.Config
 					return (attributes[0] as XmlTypeAttribute).TypeName;
 // ReSharper restore PossibleNullReferenceException
 				}
-
+				
 				throw new InvalidOperationException("Unable to find an XmlTypeAttribute for ApiSettings");
 			}
 		}
@@ -125,15 +125,15 @@ namespace Ctc.Ods.Config
     ///		defines the default value that will be listed on the class schedule (ex: "Arranged").</para>
 		///		<code lang="xml">
 		///			<configuration>
-		///
+		///			
 		///				<configSections>
 		///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 		///				</configSections>
-		///
+		///				
 		///				<ctcOdsApiSettings>
 		///					<sectionDaysDefault valueToReplace="ARRANGED" newValue="Arranged"/>
 		///				</ctcOdsApiSettings>
-		///
+		///				
 		///			</configuration>
 		///		</code>
     /// </remarks>
@@ -155,15 +155,15 @@ namespace Ctc.Ods.Config
 		///		the smallest value that is programmatically recognized.</para>
 		///		<code lang="xml">
 		///			<configuration>
-		///
+		///			
 		///				<configSections>
 		///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 		///				</configSections>
-		///
+		///				
 		///				<ctcOdsApiSettings>
 		///					<yearQuarter minValue="0000"/>
 		///				</ctcOdsApiSettings>
-		///
+		///				
 		///			</configuration>
 		///		</code>
 		/// </remarks>
@@ -180,15 +180,15 @@ namespace Ctc.Ods.Config
 		///		the largest value that is programmatically recognized.</para>
 		///		<code lang="xml">
 		///			<configuration>
-		///
+		///			
 		///				<configSections>
 		///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 		///				</configSections>
-		///
+		///				
 		///				<ctcOdsApiSettings>
 		///					<yearQuarter maxValue="Z999"/>
 		///				</ctcOdsApiSettings>
-		///
+		///				
 		///			</configuration>
 		///		</code>
 		/// </remarks>
@@ -208,15 +208,15 @@ namespace Ctc.Ods.Config
 		///		</para>
 		///		<code lang="xml">
 		///			<configuration>
-		///
+		///			
 		///				<configSections>
 		///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 		///				</configSections>
-		///
+		///				
 		///				<ctcOdsApiSettings>
 		///					<yearQuarter registrationLeadDays="14"/>
 		///				</ctcOdsApiSettings>
-		///
+		///				
 		///			</configuration>
 		///		</code>
 		/// </remarks>
@@ -239,15 +239,15 @@ namespace Ctc.Ods.Config
 		///		<para>The following configuration example will cache YRQ information for one (1) hour:</para>
 		///		<code lang="xml">
 		///			<configuration>
-		///
+		///			
 		///				<configSections>
 		///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 		///				</configSections>
-		///
+		///				
 		///				<ctcOdsApiSettings>
 		///					<yearQuarter cache="60"/>
 		///				</ctcOdsApiSettings>
-		///
+		///				
 		///			</configuration>
 		///		</code>
 		/// </remarks>
@@ -262,17 +262,17 @@ namespace Ctc.Ods.Config
 	/// <remarks>
 	///		<code lang="xml">
 	///			<configuration>
-	///
+	///			
 	///				<configSections>
 	///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 	///				</configSections>
-	///
+	///				
 	///				<ctcOdsApiSettings>
 	///					<classFlags online="3">
 	///						<rule action="exclude" column="SectionStatusID1" position="contains" value="X"/>
 	///					</classFlags>
 	///				</ctcOdsApiSettings>
-	///
+	///				
 	///			</configuration>
 	///		</code>
 	/// </remarks>
@@ -337,17 +337,17 @@ namespace Ctc.Ods.Config
 	/// <remarks>
 	///		<code lang="xml">
 	///			<configuration>
-	///
+	///			
 	///				<configSections>
 	///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 	///				</configSections>
-	///
+	///				
 	///				<ctcOdsApiSettings>
 	///					<classFlags>
 	///						<rule action="exclude" column="SectionStatusID1" position="contains" value="X"/>
 	///					</classFlags>
 	///				</ctcOdsApiSettings>
-	///
+	///				
 	///			</configuration>
 	///		</code>
 	/// </remarks>
@@ -408,15 +408,15 @@ namespace Ctc.Ods.Config
 	/// <remarks>
 	///		<code lang="xml">
 	///			<configuration>
-	///
+	///			
 	///				<configSections>
 	///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 	///				</configSections>
-	///
+	///				
 	///				<ctcOdsApiSettings>
 	///					<regex CommonCourseChar="&amp;"/>
 	///				</ctcOdsApiSettings>
-	///
+	///				
 	///			</configuration>
 	///		</code>
 	/// </remarks>
@@ -445,15 +445,15 @@ namespace Ctc.Ods.Config
         /// <remarks>
 				///		<code lang="xml">
 				///			<configuration>
-				///
+				///			
 				///				<configSections>
 				///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 				///				</configSections>
-				///
+				///				
 				///				<ctcOdsApiSettings>
 				///					<sectionDaysDefault valueToReplace="ARRANGED" newValue="Arranged"/>
 				///				</ctcOdsApiSettings>
-				///
+				///				
 				///			</configuration>
 				///		</code>
         /// </remarks>
@@ -467,15 +467,15 @@ namespace Ctc.Ods.Config
         /// <remarks>
 				///		<code lang="xml">
 				///			<configuration>
-				///
+				///			
 				///				<configSections>
 				///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 				///				</configSections>
-				///
+				///				
 				///				<ctcOdsApiSettings>
 				///					<sectionDaysDefault valueToReplace="ARRANGED" newValue="Arranged"/>
 				///				</ctcOdsApiSettings>
-				///
+				///				
 				///			</configuration>
 				///		</code>
         /// </remarks>
@@ -496,15 +496,15 @@ namespace Ctc.Ods.Config
 				/// <remarks>
 				///		<code lang="xml">
 				///			<configuration>
-				///
+				///			
 				///				<configSections>
 				///					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
 				///				</configSections>
-				///
+				///				
 				///				<ctcOdsApiSettings>
 				///					<lateStartDefinition daysCount="20"/>
 				///				</ctcOdsApiSettings>
-				///
+				///				
 				///			</configuration>
 				///		</code>
 				/// </remarks>

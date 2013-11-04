@@ -30,12 +30,12 @@ namespace Ctc.Ods.Data
 		public DbSet<Footnote> Footnote { get; set; }
 		public DbSet<CoursePrefixEntity> CoursePrefixes { get; set; }
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <remarks>NOTE: This data is cached via <see cref="QueryResultCacheExtension"/></remarks>
 		public DbSet<DayEntity> Days { get; set; }
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <remarks>NOTE: This data is cached via <see cref="QueryResultCacheExtension"/></remarks>
 		public DbSet<YearQuarterEntity> YearQuarters{get;set;}
@@ -86,13 +86,13 @@ namespace Ctc.Ods.Data
 			 * http://weblogs.asp.net/manavi/archive/2011/01/03/inheritance-mapping-strategies-with-entity-framework-code-first-ctp5-part-3-table-per-concrete-type-tpc-and-choosing-strategy-guidelines.aspx
 			 *****************************************************************************************/
 			modelBuilder.Entity<CourseDescription2Entity>().Map(m => {
-										m.MapInheritedProperties();
-										m.ToTable("vw_CourseDescription2");
+			                                                    	m.MapInheritedProperties();
+			                                                    	m.ToTable("vw_CourseDescription2");
 			                                                    });
 
 			modelBuilder.Entity<CourseDescription1Entity>().Map(m => {
-										m.MapInheritedProperties();
-										m.ToTable("vw_CourseDescription");
+			                                                    	m.MapInheritedProperties();
+			                                                    	m.ToTable("vw_CourseDescription");
 			                                                    });
 		}
 

@@ -88,8 +88,8 @@ namespace Ctc.Ods.Customizations
 																																		.Take(1)
 																																		// ...and any upcoming description changes
 																																		.Union(_descriptionsEntity.Where(d => d.CourseID.StartsWith(subject) && d.CourseID.EndsWith(courseNumber))
-																																				.Where(d => d.YearQuarterBegin.CompareTo(strYrqId) > 0)
-																																				.OrderBy(d => d.YearQuarterBegin)
+						       																														.Where(d => d.YearQuarterBegin.CompareTo(strYrqId) > 0)
+						       																														.OrderBy(d => d.YearQuarterBegin)
 																																		).Select(c => new CourseDescription
 																																										{
 																																												CourseID = c.CourseID,
@@ -104,7 +104,7 @@ namespace Ctc.Ods.Customizations
 				// if we weren't given a valid _descriptionsEntity, return an empty list
 				return new List<CourseDescription>();
 			}
-
+			
 			throw new ArgumentNullException("yrq", "YearQuarter cannot be null.");
 		}
 	}

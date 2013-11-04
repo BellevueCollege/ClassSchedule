@@ -19,7 +19,7 @@ using System.Runtime.Serialization;
 namespace Ctc.Ods.Types
 {
   /// <summary>
-  ///
+  /// 
   /// </summary>
   [DataContract]
   public class SectionID : ISectionID, IEquatable<SectionID>, IEquatable<string>
@@ -94,7 +94,7 @@ namespace Ctc.Ods.Types
 
     #region Equality members
     /// <summary>
-    ///
+    /// 
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
@@ -104,7 +104,7 @@ namespace Ctc.Ods.Types
     }
 
     /// <summary>
-    ///
+    /// 
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
@@ -163,7 +163,7 @@ namespace Ctc.Ods.Types
     }
 
     /// <summary>
-    /// Serves as a hash function for a particular type.
+    /// Serves as a hash function for a particular type. 
     /// </summary>
     /// <returns>
     /// A hash code for the current <see cref="T:System.Object"/>.

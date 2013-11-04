@@ -18,14 +18,14 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Ctc.Ods
+namespace Ctc.Ods 
 {
 	///<summary>
 	///</summary>
 	public static class CommonExtensions
 	{
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="val"></param>
 		/// <param name="append"></param>
@@ -39,7 +39,7 @@ namespace Ctc.Ods
         if (String.IsNullOrEmpty(val)) return append;
         if (String.IsNullOrEmpty(append)) return val;
         return val.TrimEnd('/') + "/" + append.TrimStart('/');
-    }
+    } 
 
 		/// <summary>
 		/// Creates an MD5 fingerprint of the string.

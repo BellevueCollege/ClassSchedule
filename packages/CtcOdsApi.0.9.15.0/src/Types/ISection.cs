@@ -25,62 +25,62 @@ namespace Ctc.Ods.Types
 	public interface ISection : IRichDataObject, IEquatable<ISection>
 	{
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		ISectionID ID{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		string CourseSubject{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		string CourseNumber{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		IList<CourseDescription> CourseDescriptions{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		YearQuarter Yrq {get;}
 
         /// <summary>
-        ///
+        /// 
         /// </summary>
         DateTime? StartDate {get;}
-
+        
         /// <summary>
-        ///
+        /// 
         /// </summary>
         DateTime? EndDate {get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		string CourseID{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		string CourseTitle{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		Decimal Credits{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		string SectionCode {get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		IEnumerable<string> Footnotes {get;}
 
@@ -95,55 +95,55 @@ namespace Ctc.Ods.Types
 		int WaitlistCount{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		bool IsOnline {get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		bool IsCommonCourse{get;}
 
         /// <summary>
-        ///
+        /// 
         /// </summary>
         bool IsContinuousEnrollment{get;}
 
         /// <summary>
-        ///
+        /// 
         /// </summary>
         bool IsVariableCredits {get;}
 
         /// <summary>
-        ///
+        /// 
         /// </summary>
         bool IsDifferentStartDate {get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		IEnumerable<OfferedItem> Offered{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		bool IsOnCampus{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		bool IsTelecourse{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		bool IsHybrid{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		bool IsLinked{get;}
 
@@ -157,7 +157,7 @@ namespace Ctc.Ods.Types
 		string LinkedTo{get;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		bool IsDifferentEndDate{get;}

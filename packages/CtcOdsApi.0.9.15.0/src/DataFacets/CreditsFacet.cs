@@ -29,7 +29,7 @@ namespace Ctc.Ods
         private int _credits;
 
         ///<summary>
-        ///
+        /// 
         ///</summary>
         ///<param name="credits">Number of credits to filter for</param>
         public CreditsFacet(int credits)

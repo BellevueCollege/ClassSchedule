@@ -59,7 +59,7 @@ namespace Ctc.Ods.Data
 		/// </summary>
 		/// <seealso cref="Title2"/>
 		public string Title1{get;set;}
-
+		
 		/// <summary>
 		/// Alternate title of the course
 		/// </summary>

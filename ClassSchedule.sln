@@ -1,0 +1,99 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{305B62EE-42FA-4AB2-861C-63F72E5AAEDC}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		ClassSchedule.vsmdi = ClassSchedule.vsmdi
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+		UpdateClassScheduleDataFromProduction.sdc = UpdateClassScheduleDataFromProduction.sdc
+		UpdateClassScheduleODSDataFromProduction.sdc = UpdateClassScheduleODSDataFromProduction.sdc
+		UpgradeInstructions-v2-v3.txt = UpgradeInstructions-v2-v3.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Research", "Research", "{73BECA23-C79E-4BB1-B9C9-F73DC2A5F3E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataMigrationScripts", "DataMigrationScripts", "{1DB2FE02-F732-42C6-85F0-B7E8EA9449EA}"
+	ProjectSection(SolutionItems) = preProject
+		Research\DataMigrationScripts\1-ClassSchedule.DB-Upgrade-v1.8-v3.sql = Research\DataMigrationScripts\1-ClassSchedule.DB-Upgrade-v1.8-v3.sql
+		Research\DataMigrationScripts\2-ClassSchedule.DB-PostUpgradeCleanUp-v1.8-v3.sql = Research\DataMigrationScripts\2-ClassSchedule.DB-PostUpgradeCleanUp-v1.8-v3.sql
+		Research\DataMigrationScripts\README.txt = Research\DataMigrationScripts\README.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTCClassSchedule", "CTCClassSchedule\CTCClassSchedule.csproj", "{D0DFD430-8A10-440D-A564-4E113D57A079}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.CtcClassSchedule", "Test.CtcClassSchedule\Test.CtcClassSchedule.csproj", "{028B1153-E975-410D-9D1D-F97E3F6F8171}"
+EndProject
+Project("{596CF2E3-0E3C-47CC-A161-0A910B38ED71}") = "CTCClassSchedule.DB", "CTCClassSchedule.DB\CTCClassSchedule.DB.rgproj", "{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = ClassSchedule.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Development|Any CPU = Development|Any CPU
+		Development|x86 = Development|x86
+		Production|Any CPU = Production|Any CPU
+		Production|x86 = Production|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+		Test|Any CPU = Test|Any CPU
+		Test|x86 = Test|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Development|x86.ActiveCfg = Debug|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Production|Any CPU.ActiveCfg = Release|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Production|Any CPU.Build.0 = Release|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Production|x86.ActiveCfg = Release|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Release|x86.ActiveCfg = Release|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Test|Any CPU.Build.0 = Test|Any CPU
+		{D0DFD430-8A10-440D-A564-4E113D57A079}.Test|x86.ActiveCfg = Test|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Development|x86.ActiveCfg = Debug|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Production|Any CPU.ActiveCfg = Release|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Production|Any CPU.Build.0 = Release|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Production|x86.ActiveCfg = Release|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Release|x86.ActiveCfg = Release|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Test|Any CPU.Build.0 = Release|Any CPU
+		{028B1153-E975-410D-9D1D-F97E3F6F8171}.Test|x86.ActiveCfg = Release|Any CPU
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Debug|x86.ActiveCfg = Debug|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Debug|x86.Build.0 = Debug|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Development|Any CPU.ActiveCfg = Debug|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Development|x86.ActiveCfg = Debug|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Development|x86.Build.0 = Debug|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Production|Any CPU.ActiveCfg = Release|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Production|x86.ActiveCfg = Release|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Production|x86.Build.0 = Release|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Release|Any CPU.ActiveCfg = Release|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Release|x86.ActiveCfg = Release|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Release|x86.Build.0 = Release|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Test|Any CPU.ActiveCfg = Release|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Test|x86.ActiveCfg = Release|x86
+		{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}.Test|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1DB2FE02-F732-42C6-85F0-B7E8EA9449EA} = {73BECA23-C79E-4BB1-B9C9-F73DC2A5F3E1}
+		{DFA593C8-DEC4-4F1C-9441-AD4F666ADA7B} = {73BECA23-C79E-4BB1-B9C9-F73DC2A5F3E1}
+	EndGlobalSection
+EndGlobal

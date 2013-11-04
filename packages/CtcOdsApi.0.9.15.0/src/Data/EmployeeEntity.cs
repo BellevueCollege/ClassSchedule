@@ -40,17 +40,17 @@ namespace Ctc.Ods.Data
 		public string AliasName{get;set;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string FirstName{get;set;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string LastName{get;set;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string WorkEmail{get;set;}
 	}

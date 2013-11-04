@@ -19,13 +19,13 @@ using Ctc.Ods.Config;
 namespace Ctc.Ods.Data
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	[Table("vw_Waitlist")]
 	class WaitlistEntity
 	{
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[Key]
 		public string ClassID{get;set;}

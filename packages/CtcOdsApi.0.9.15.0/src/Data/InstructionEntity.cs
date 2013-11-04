@@ -19,7 +19,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Ctc.Ods.Data
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	[Table("vw_Instruction")]
 	internal class InstructionEntity

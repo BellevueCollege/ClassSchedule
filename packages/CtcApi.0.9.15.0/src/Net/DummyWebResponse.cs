@@ -18,7 +18,7 @@ using System.Net;
 namespace CtcApi.Net
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	public class DummyWebResponse : WebResponse
 	{

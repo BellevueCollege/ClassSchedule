@@ -26,33 +26,33 @@ namespace Ctc.Ods.Data
 	public class SectionEntity
 	{
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[Key]
 		public string ClassID { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string Section { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string YearQuarterID { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string ItemNumber { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string ItemYRQLink { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string ClusterItemNumber { get; set; }
 
@@ -62,7 +62,7 @@ namespace Ctc.Ods.Data
 		public int? ClassCapacity { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public int? ClusterCapacity { get; set; }
 
@@ -74,18 +74,18 @@ namespace Ctc.Ods.Data
 
 		#region Course info
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[Required]
 		public string CourseID { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string CourseTitle { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public Decimal Credits { get; set; }
 
@@ -93,12 +93,12 @@ namespace Ctc.Ods.Data
 
 		#region Instructor info
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string InstructorSID { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string InstructorName { get; set; }
 
@@ -106,32 +106,32 @@ namespace Ctc.Ods.Data
 
 		#region When & where
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string DayID { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public DateTime? StartDate { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public DateTime? EndDate { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public DateTime? StartTime { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public DateTime? EndTime { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string Room { get; set; }
 
@@ -160,17 +160,17 @@ namespace Ctc.Ods.Data
 		public bool? VariableCredits { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string SectionStatusID1 { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string SectionStatusID2 { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string SectionStatusID4 { get; set; }
 
@@ -178,12 +178,12 @@ namespace Ctc.Ods.Data
 
 		#region Footnotes
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string FootnoteID1 { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string FootnoteID2 { get; set; }
 

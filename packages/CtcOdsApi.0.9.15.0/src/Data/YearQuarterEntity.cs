@@ -26,18 +26,18 @@ namespace Ctc.Ods.Data
 	internal class YearQuarterEntity
 	{
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[Key]
 		public string YearQuarterID{get;set;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public DateTime FirstClassDay{get;set;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public DateTime LastClassDay{get;set;}
 	}

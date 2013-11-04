@@ -24,7 +24,7 @@ using Ctc.Ods.Types;
 namespace Ctc.Ods
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	public class DaysFacet : ISectionFacet
 	{
@@ -40,22 +40,22 @@ namespace Ctc.Ods
 			/// All days
 			/// </summary>
 			All = 0x0,
-
+			
 			/// <summary>
 			/// Sunday
 			/// </summary>
 			Sunday = 0x2,
-
+			
 			/// <summary>
 			/// Monday
 			/// </summary>
 			Monday = 0x4,
-
+			
 			/// <summary>
 			/// Tuesday
 			/// </summary>
 			Tuesday = 0x10,
-
+			
 			/// <summary>
 			/// Wednesday
 			/// </summary>
@@ -78,7 +78,7 @@ namespace Ctc.Ods
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="option"></param>
 		public DaysFacet(Options option)
@@ -98,40 +98,40 @@ namespace Ctc.Ods
 			if (dbContext != null)
 			{
 				OdsContext db = dbContext as OdsContext;
-
+				
 				if (db != null)
 				{
 					if (_option == Options.All) {
 						// don't filter by days
 						return s => true;
 					}
-
+					
 					string days = GetDaysTitle();
 
 					if (days == "MTWThF")
 					{
 						return s => db.InstructionDetails.Join(db.Days, i => i.DayID, d => d.DayID, (i, d) => new {i, d})
-																	 .Any(h => h.i.ClassID == s.ClassID && (h.d.Title == days || h.d.Title.ToUpper() == "DAILY"));
+					            											 .Any(h => h.i.ClassID == s.ClassID && (h.d.Title == days || h.d.Title.ToUpper() == "DAILY"));
 					}
 					// else
 					return s => db.InstructionDetails.Join(db.Days, i => i.DayID, d => d.DayID, (i, d) => new {i, d})
-																 .Any(h => h.d.Title == days && h.i.ClassID == s.ClassID);
+					            										 .Any(h => h.d.Title == days && h.i.ClassID == s.ClassID);
 				}
-
+				
 				throw new ArgumentNullException("dbContext", "Database context is not valid.");
 			}
-
+			
 			throw new ArgumentNullException("dbContext", "Database context is null.");
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <returns></returns>
 		private string GetDaysTitle()
 		{
 			StringBuilder title = new StringBuilder(10);
-
+			
 			if ((_option & Options.Monday) == Options.Monday) {
 				title.Append("M");
 			}

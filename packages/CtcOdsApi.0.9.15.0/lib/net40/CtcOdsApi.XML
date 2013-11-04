@@ -16,7 +16,7 @@
         </member>
         <member name="T:Ctc.Ods.IDataFacet">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:Ctc.Ods.ISectionFacet.GetFilter``1(System.Data.Entity.DbContext)">
@@ -40,7 +40,7 @@
         </member>
         <member name="T:Ctc.Ods.ModalityFacet">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:Ctc.Ods.ModalityFacet.GetFilter``1(System.Data.Entity.DbContext)">
@@ -56,7 +56,7 @@
         </member>
         <member name="M:Ctc.Ods.ModalityFacet.#ctor(Ctc.Ods.ModalityFacet.Options)">
             <summary>
-
+            
             </summary>
             <param name="option"></param>
         </member>
@@ -92,12 +92,12 @@
         </member>
         <member name="T:Ctc.Ods.Data.WaitlistEntity">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.WaitlistEntity.ClassID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.WaitlistEntity.SID">
@@ -130,7 +130,7 @@
         </member>
         <member name="T:Ctc.Ods.Types.ICourseDescription">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ICourseDescription.CourseID">
@@ -150,17 +150,17 @@
         </member>
         <member name="T:Ctc.Ods.Data.InstructionEntity">
             <summary>
-
+            
             </summary>
         </member>
         <member name="T:Ctc.Ods.Types.YearQuarter">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:Ctc.Ods.Types.YearQuarter.#ctor(System.String)">
             <summary>
-
+            
             </summary>
             <param name="yearQuarterId"></param>
             <seealso cref="M:Ctc.Ods.Types.YearQuarter.FromString(System.String)"/>
@@ -205,7 +205,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.YearQuarter.ToYearQuarterID(System.String)">
              <summary>
-
+             
              </summary>
              <param name="quarter">YearQuarter in a "friendly" format (e.g. "Fall2011", "Fall 2011")</param>
              <returns>An YearQuarterID value (e.g. "B122")</returns>
@@ -217,9 +217,9 @@
             </summary>
             <param name="yrq">A 4-character YRQ code.</param>
             <returns>
-		A user-friendly string for the quarter in the form "Fall 2010". Can also return <see cref="F:Ctc.Ods.Types.YearQuarter.MIN_FRIENDLY_NAME"/>
-		or <see cref="F:Ctc.Ods.Types.YearQuarter.MAX_FRIENDLY_NAME"/>, if the value of <paramref name="yrq"/> represents either of the valid
-		limits.
+            	A user-friendly string for the quarter in the form "Fall 2010". Can also return <see cref="F:Ctc.Ods.Types.YearQuarter.MIN_FRIENDLY_NAME"/>
+            	or <see cref="F:Ctc.Ods.Types.YearQuarter.MAX_FRIENDLY_NAME"/>, if the value of <paramref name="yrq"/> represents either of the valid
+            	limits.
             </returns>
             <seealso cref="P:Ctc.Ods.Config.ApiSettings.YearQuarter"/>
             <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="yrq"/> is not a 4-character value.</exception>
@@ -248,7 +248,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.YearQuarter.GetHashCode">
             <summary>
-            Serves as a hash function for a particular type.
+            Serves as a hash function for a particular type. 
             </summary>
             <returns>
             A hash code for the current <see cref="T:System.Object"/>.
@@ -257,7 +257,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.YearQuarter.op_Equality(Ctc.Ods.Types.YearQuarter,Ctc.Ods.Types.YearQuarter)">
             <summary>
-
+            
             </summary>
             <param name="left"></param>
             <param name="right"></param>
@@ -265,7 +265,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.YearQuarter.op_Inequality(Ctc.Ods.Types.YearQuarter,Ctc.Ods.Types.YearQuarter)">
             <summary>
-
+            
             </summary>
             <param name="left"></param>
             <param name="right"></param>
@@ -273,7 +273,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.YearQuarter.GetYear(System.Char,System.Char)">
             <summary>
-
+            
             </summary>
             <param name="year"></param>
             <param name="modifer"></param>
@@ -281,7 +281,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.YearQuarter.IsValid(System.String)">
             <summary>
-
+            
             </summary>
             <param name="yrq"></param>
             <returns></returns>
@@ -306,7 +306,7 @@
         </member>
         <member name="P:Ctc.Ods.Types.YearQuarter.ID">
             <summary>
-            The 4-character code that represents this YearQuarterID
+            The 4-character code that represents this YearQuarterID 
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.YearQuarter.FriendlyName">
@@ -406,39 +406,39 @@
             </summary>
             <remarks>
             <para>
-		<see cref="T:Ctc.Ods.Config.ApiSettings"/> provides access to a custom configuration node which allows the consuming
-		application to define configuration settings appropriate to their environment.
+            	<see cref="T:Ctc.Ods.Config.ApiSettings"/> provides access to a custom configuration node which allows the consuming
+            	application to define configuration settings appropriate to their environment.
             </para>
             <para>
-		To use this class; the following must be configured in the .config file for the executing context:
-		<code lang="xml">
-			<configuration>
-
-				<configSections>
-					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
-				</configSections>
-
-				<ctcOdsApiSettings>
-					<regex CommonCourseChar="&amp;"/>
-					<yearQuarter minValue="0000" maxValue="Z999" registrationLeadDays="14" cache="30"/>
-					<waitlist status="W-LISTED"/>
-					<classFlags online="3" hybrid="8" telecourse="1">
-						<rule action="exclude" column="SectionStatusID1" position="contains" value="X"/>
-						<rule action="exclude" column="SectionStatusID1" position="contains" value="Z"/>
-						<rule action="exclude" column="SectionStatusID2" position="contains" value="A"/>
-						<rule action="exclude" column="SectionStatusID4" position="contains" value="M"/>
-						<rule action="exclude" column="SectionStatusID4" position="contains" value="N"/>
-					</classFlags>
-				</ctcOdsApiSettings>
-
-			</configuration>
-		</code>
+            	To use this class; the following must be configured in the .config file for the executing context:
+            	<code lang="xml">
+            		<configuration>
+            		
+            			<configSections>
+            				<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
+            			</configSections>
+            			
+            			<ctcOdsApiSettings>
+            				<regex CommonCourseChar="&amp;"/>
+            				<yearQuarter minValue="0000" maxValue="Z999" registrationLeadDays="14" cache="30"/>
+            				<waitlist status="W-LISTED"/>
+            				<classFlags online="3" hybrid="8" telecourse="1">
+            					<rule action="exclude" column="SectionStatusID1" position="contains" value="X"/>
+            					<rule action="exclude" column="SectionStatusID1" position="contains" value="Z"/>
+            					<rule action="exclude" column="SectionStatusID2" position="contains" value="A"/>
+            					<rule action="exclude" column="SectionStatusID4" position="contains" value="M"/>
+            					<rule action="exclude" column="SectionStatusID4" position="contains" value="N"/>
+            				</classFlags>
+            			</ctcOdsApiSettings>
+            			
+            		</configuration>
+            	</code>
             </para>
             <para>
-		And; then loaded with the following line of code:
-		<code lang="c#">
-			ApiSettings settings = (ApiSettings)ConfigurationManager.GetSection(ApiSettings.SectionName);
-		</code>
+            	And; then loaded with the following line of code:
+            	<code lang="c#">
+            		ApiSettings settings = (ApiSettings)ConfigurationManager.GetSection(ApiSettings.SectionName);
+            	</code>
             </para>
             </remarks>
         </member>
@@ -447,7 +447,7 @@
             Gets the name of the XML configuration node for this class
             </summary>
             <exception cref="T:System.InvalidOperationException">
-		Unable to identify the XML <see cref="P:System.Xml.Serialization.XmlTypeAttribute.TypeName"/> for this class.
+            	Unable to identify the XML <see cref="P:System.Xml.Serialization.XmlTypeAttribute.TypeName"/> for this class.
             </exception>
         </member>
         <member name="P:Ctc.Ods.Config.ApiSettings.ClassFlags">
@@ -481,21 +481,21 @@
             Provides rules for displaying a <see cref="T:Ctc.Ods.Types.Section"/>'s <i>Days</i> information
             </summary>
             <remarks>
-		<para>When no class days are specified for a section, this element
-		defines the default value that will be listed on the class schedule (ex: "Arranged").</para>
-		<code lang="xml">
-			<configuration>
-
-				<configSections>
-					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
-				</configSections>
-
-				<ctcOdsApiSettings>
-					<sectionDaysDefault valueToReplace="ARRANGED" newValue="Arranged"/>
-				</ctcOdsApiSettings>
-
-			</configuration>
-		</code>
+            	<para>When no class days are specified for a section, this element
+            	defines the default value that will be listed on the class schedule (ex: "Arranged").</para>
+            	<code lang="xml">
+            		<configuration>
+            		
+            			<configSections>
+            				<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
+            			</configSections>
+            			
+            			<ctcOdsApiSettings>
+            				<sectionDaysDefault valueToReplace="ARRANGED" newValue="Arranged"/>
+            			</ctcOdsApiSettings>
+            			
+            		</configuration>
+            	</code>
             </remarks>
         </member>
         <member name="T:Ctc.Ods.Config.YearQuarterNode">
@@ -508,21 +508,21 @@
              The lowest allowed <see cref="P:Ctc.Ods.Types.YearQuarter.ID"/> value
             </summary>
              <remarks>
-			<para>This is not expected to represent a usable <see cref="T:Ctc.Ods.Types.YearQuarter"/> value, but rather
-			the smallest value that is programmatically recognized.</para>
-			<code lang="xml">
-				<configuration>
-
-					<configSections>
-						<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
-					</configSections>
-
-					<ctcOdsApiSettings>
-						<yearQuarter minValue="0000"/>
-					</ctcOdsApiSettings>
-
-				</configuration>
-			</code>
+            		<para>This is not expected to represent a usable <see cref="T:Ctc.Ods.Types.YearQuarter"/> value, but rather
+            		the smallest value that is programmatically recognized.</para>
+            		<code lang="xml">
+            			<configuration>
+            			
+            				<configSections>
+            					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
+            				</configSections>
+            				
+            				<ctcOdsApiSettings>
+            					<yearQuarter minValue="0000"/>
+            				</ctcOdsApiSettings>
+            				
+            			</configuration>
+            		</code>
              </remarks>
              <seealso cref="T:Ctc.Ods.Config.YearQuarterNode">&gt;yearQuarter&lt;</seealso>
              <seealso cref="P:Ctc.Ods.Config.YearQuarterNode.Max">&gt;maxValue&lt;</seealso>
@@ -532,21 +532,21 @@
              The largest allowed <see cref="P:Ctc.Ods.Types.YearQuarter.ID"/> value
             </summary>
              <remarks>
-			<para>This is not expected to represent a usable <see cref="T:Ctc.Ods.Types.YearQuarter"/> value, but rather
-			the largest value that is programmatically recognized.</para>
-			<code lang="xml">
-				<configuration>
-
-					<configSections>
-						<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
-					</configSections>
-
-					<ctcOdsApiSettings>
-						<yearQuarter maxValue="Z999"/>
-					</ctcOdsApiSettings>
-
-				</configuration>
-			</code>
+            		<para>This is not expected to represent a usable <see cref="T:Ctc.Ods.Types.YearQuarter"/> value, but rather
+            		the largest value that is programmatically recognized.</para>
+            		<code lang="xml">
+            			<configuration>
+            			
+            				<configSections>
+            					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
+            				</configSections>
+            				
+            				<ctcOdsApiSettings>
+            					<yearQuarter maxValue="Z999"/>
+            				</ctcOdsApiSettings>
+            				
+            			</configuration>
+            		</code>
              </remarks>
              <seealso cref="T:Ctc.Ods.Config.YearQuarterNode">&gt;yearQuarter&lt;</seealso>
              <seealso cref="P:Ctc.Ods.Config.YearQuarterNode.Min">&gt;minValue&lt;</seealso>
@@ -556,24 +556,24 @@
             Days in advance of registration to start showing quarter information
             </summary>
             <remarks>
-		<para>
-		The setting below indicates the "current registration quarter" should begin 14 days before
-		the opening of registration. This allows users to access data before registration actually
-		opens.
-		</para>
-		<code lang="xml">
-			<configuration>
-
-				<configSections>
-					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
-				</configSections>
-
-				<ctcOdsApiSettings>
-					<yearQuarter registrationLeadDays="14"/>
-				</ctcOdsApiSettings>
-
-			</configuration>
-		</code>
+            	<para>
+            	The setting below indicates the "current registration quarter" should begin 14 days before
+            	the opening of registration. This allows users to access data before registration actually
+            	opens.
+            	</para>
+            	<code lang="xml">
+            		<configuration>
+            		
+            			<configSections>
+            				<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
+            			</configSections>
+            			
+            			<ctcOdsApiSettings>
+            				<yearQuarter registrationLeadDays="14"/>
+            			</ctcOdsApiSettings>
+            			
+            		</configuration>
+            	</code>
             </remarks>
             <seealso cref="T:Ctc.Ods.Config.YearQuarterNode">&gt;yearQuarter&lt;</seealso>
         </member>
@@ -582,27 +582,27 @@
             How long to cache <see cref="T:Ctc.Ods.Types.YearQuarter"/> data, in minutes
             </summary>
             <remarks>
-		<para>
-		Data from both the <i>YearQuarter</i> and <i>WebRegistrationSetting</i> table will be cached
-		for this many minutes.
-		</para>
-		<note type="important">This caching only applies to queries for <i>only</i> data from these tables.
-		It is not cached when this data is joined with other data.
-		</note>
-		<para>The following configuration example will cache YRQ information for one (1) hour:</para>
-		<code lang="xml">
-			<configuration>
-
-				<configSections>
-					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
-				</configSections>
-
-				<ctcOdsApiSettings>
-					<yearQuarter cache="60"/>
-				</ctcOdsApiSettings>
-
-			</configuration>
-		</code>
+            	<para>
+            	Data from both the <i>YearQuarter</i> and <i>WebRegistrationSetting</i> table will be cached
+            	for this many minutes.
+            	</para>
+            	<note type="important">This caching only applies to queries for <i>only</i> data from these tables.
+            	It is not cached when this data is joined with other data.
+            	</note>
+            	<para>The following configuration example will cache YRQ information for one (1) hour:</para>
+            	<code lang="xml">
+            		<configuration>
+            		
+            			<configSections>
+            				<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
+            			</configSections>
+            			
+            			<ctcOdsApiSettings>
+            				<yearQuarter cache="60"/>
+            			</ctcOdsApiSettings>
+            			
+            		</configuration>
+            	</code>
             </remarks>
             <seealso cref="T:Ctc.Ods.Config.YearQuarterNode">&gt;yearQuarter&lt;</seealso>
         </member>
@@ -611,21 +611,21 @@
             Encapsulates a collection of one or more <see cref="T:Ctc.Ods.Config.ClassRule"/>s
             </summary>
             <remarks>
-		<code lang="xml">
-			<configuration>
-
-				<configSections>
-					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
-				</configSections>
-
-				<ctcOdsApiSettings>
-					<classFlags online="3">
-						<rule action="exclude" column="SectionStatusID1" position="contains" value="X"/>
-					</classFlags>
-				</ctcOdsApiSettings>
-
-			</configuration>
-		</code>
+            	<code lang="xml">
+            		<configuration>
+            		
+            			<configSections>
+            				<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
+            			</configSections>
+            			
+            			<ctcOdsApiSettings>
+            				<classFlags online="3">
+            					<rule action="exclude" column="SectionStatusID1" position="contains" value="X"/>
+            				</classFlags>
+            			</ctcOdsApiSettings>
+            			
+            		</configuration>
+            	</code>
             </remarks>
         </member>
         <member name="P:Ctc.Ods.Config.ClassFlags.Rules">
@@ -678,21 +678,21 @@
             Represents a filter rule for retrieving class data from ODS
             </summary>
             <remarks>
-		<code lang="xml">
-			<configuration>
-
-				<configSections>
-					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
-				</configSections>
-
-				<ctcOdsApiSettings>
-					<classFlags>
-						<rule action="exclude" column="SectionStatusID1" position="contains" value="X"/>
-					</classFlags>
-				</ctcOdsApiSettings>
-
-			</configuration>
-		</code>
+            	<code lang="xml">
+            		<configuration>
+            		
+            			<configSections>
+            				<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
+            			</configSections>
+            			
+            			<ctcOdsApiSettings>
+            				<classFlags>
+            					<rule action="exclude" column="SectionStatusID1" position="contains" value="X"/>
+            				</classFlags>
+            			</ctcOdsApiSettings>
+            			
+            		</configuration>
+            	</code>
             </remarks>
             <seealso cref="T:Ctc.Ods.Config.ClassFlags"/>
             <seealso cref="T:Ctc.Ods.Config.ApiSettings"/>
@@ -740,19 +740,19 @@
             Contains regular expression <see cref="T:Ctc.Ods.Config.ApiSettings"/>
             </summary>
             <remarks>
-		<code lang="xml">
-			<configuration>
-
-				<configSections>
-					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
-				</configSections>
-
-				<ctcOdsApiSettings>
-					<regex CommonCourseChar="&amp;"/>
-				</ctcOdsApiSettings>
-
-			</configuration>
-		</code>
+            	<code lang="xml">
+            		<configuration>
+            		
+            			<configSections>
+            				<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
+            			</configSections>
+            			
+            			<ctcOdsApiSettings>
+            				<regex CommonCourseChar="&amp;"/>
+            			</ctcOdsApiSettings>
+            			
+            		</configuration>
+            	</code>
             </remarks>
             <seealso cref="T:Ctc.Ods.Config.ApiSettings"/>
         </member>
@@ -773,19 +773,19 @@
             The old "default" in the ODS to find
             </summary>
             <remarks>
-		<code lang="xml">
-			<configuration>
-
-				<configSections>
-					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
-				</configSections>
-
-				<ctcOdsApiSettings>
-					<sectionDaysDefault valueToReplace="ARRANGED" newValue="Arranged"/>
-				</ctcOdsApiSettings>
-
-			</configuration>
-		</code>
+            	<code lang="xml">
+            		<configuration>
+            		
+            			<configSections>
+            				<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
+            			</configSections>
+            			
+            			<ctcOdsApiSettings>
+            				<sectionDaysDefault valueToReplace="ARRANGED" newValue="Arranged"/>
+            			</ctcOdsApiSettings>
+            			
+            		</configuration>
+            	</code>
             </remarks>
             <seealso cref="P:Ctc.Ods.Config.DefaultSectionDaysNode.NewValue">&gt;newValue&lt;</seealso>
         </member>
@@ -794,19 +794,19 @@
             The new default value
             </summary>
             <remarks>
-		<code lang="xml">
-			<configuration>
-
-				<configSections>
-					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
-				</configSections>
-
-				<ctcOdsApiSettings>
-					<sectionDaysDefault valueToReplace="ARRANGED" newValue="Arranged"/>
-				</ctcOdsApiSettings>
-
-			</configuration>
-		</code>
+            	<code lang="xml">
+            		<configuration>
+            		
+            			<configSections>
+            				<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi"/>
+            			</configSections>
+            			
+            			<ctcOdsApiSettings>
+            				<sectionDaysDefault valueToReplace="ARRANGED" newValue="Arranged"/>
+            			</ctcOdsApiSettings>
+            			
+            		</configuration>
+            	</code>
             </remarks>
             <seealso cref="P:Ctc.Ods.Config.DefaultSectionDaysNode.ValueToFind">&gt;valueToReplace&lt;</seealso>
         </member>
@@ -820,19 +820,19 @@
             Defines how many days after the start of a quarter a class needs to start in order to be called a "Late Start" class.
             </summary>
             <remarks>
-		<code lang="xml">
-			<configuration>
-
-				<configSections>
-					<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
-				</configSections>
-
-				<ctcOdsApiSettings>
-					<lateStartDefinition daysCount="20"/>
-				</ctcOdsApiSettings>
-
-			</configuration>
-		</code>
+            	<code lang="xml">
+            		<configuration>
+            		
+            			<configSections>
+            				<section name="ctcOdsApiSettings" type="Ctc.Ods.Config.SettingsConfigHandler, CtcOdsApi" />
+            			</configSections>
+            			
+            			<ctcOdsApiSettings>
+            				<lateStartDefinition daysCount="20"/>
+            			</ctcOdsApiSettings>
+            			
+            		</configuration>
+            	</code>
             </remarks>
         </member>
         <member name="T:Ctc.Ods.Config.ClassRuleAction">
@@ -873,7 +873,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.OfferedItem.#ctor">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.OfferedItem.ID">
@@ -892,17 +892,17 @@
         </member>
         <member name="P:Ctc.Ods.Types.OfferedItem.StartTime">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.OfferedItem.EndTime">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.OfferedItem.InstructorID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.OfferedItem.InstructorName">
@@ -915,12 +915,12 @@
         </member>
         <member name="P:Ctc.Ods.Types.OfferedItem.InstructorEmail">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.OfferedItem.Room">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.OfferedItem.IsPrimary">
@@ -930,7 +930,7 @@
         </member>
         <member name="P:Ctc.Ods.Types.OfferedItem.SequenceOrder">
             <summary>
-
+            
             </summary>
         </member>
         <member name="T:Ctc.Ods.Data.WebRegistrationSettingEntity">
@@ -973,38 +973,38 @@
             </summary>
             <param name="courseId">The course ID to retrieve the description for.</param>
             <param name="yrq">
-		The <see cref="T:Ctc.Ods.Types.YearQuarter"/> to retrieve the description for. If not supplied, will default to the
-		<see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>.
+            	The <see cref="T:Ctc.Ods.Types.YearQuarter"/> to retrieve the description for. If not supplied, will default to the
+            	<see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>.
             </param>
             <remarks>
-		<para>
-		This interface provides a customization point for schools to provide their own business logic
-		for retrieving current and future course descriptions from the ODS. It was necessary to create
-		this customization because the HP (and thus the ODS) contains two course description tables
-		(<i>CourseDescription</i> and <i>CourseDescription2</i> in the ODS), and different schools
-		utilize these in different ways.
-		</para>
-		<note type="important">
-		For compatibility, schools implementing <see cref="T:Ctc.Ods.Customizations.ICourseDescriptionStrategy"/> should ensure
-		that their implementation returns records in the expected order.
-		</note>
+            	<para>
+            	This interface provides a customization point for schools to provide their own business logic
+            	for retrieving current and future course descriptions from the ODS. It was necessary to create
+            	this customization because the HP (and thus the ODS) contains two course description tables
+            	(<i>CourseDescription</i> and <i>CourseDescription2</i> in the ODS), and different schools
+            	utilize these in different ways.
+            	</para>
+            	<note type="important">
+            	For compatibility, schools implementing <see cref="T:Ctc.Ods.Customizations.ICourseDescriptionStrategy"/> should ensure
+            	that their implementation returns records in the expected order.
+            	</note>
             </remarks>
             <returns>
             A collection of <see cref="T:Ctc.Ods.Data.CourseDescriptionEntityBase">course description entites</see>:
             <list type="table">
-		<item>
-			<term>First record</term>
-			<description>
-				The course description for the specified <paramref name="yrq"/> (or <see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>
-				if not supplied.
-			</description>
-		</item>
-		<item>
-			<term>Successive records</term>
-			<description>
-				Future course description updates, in the order they will be updated (by YearQuarter).
-			</description>
-		</item>
+            	<item>
+            		<term>First record</term>
+            		<description>
+            			The course description for the specified <paramref name="yrq"/> (or <see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>
+            			if not supplied.
+            		</description>
+            	</item>
+            	<item>
+            		<term>Successive records</term>
+            		<description>
+            			Future course description updates, in the order they will be updated (by YearQuarter).
+            		</description>
+            	</item>
             </list>
             </returns>
         </member>
@@ -1024,8 +1024,8 @@
             </summary>
             <param name="courseId">The course ID to retrieve the description for.</param>
             <param name="yrq">
-		The <see cref="T:Ctc.Ods.Types.YearQuarter"/> to retrieve the description for. If not supplied, will default to the
-		<see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>.
+            	The <see cref="T:Ctc.Ods.Types.YearQuarter"/> to retrieve the description for. If not supplied, will default to the
+            	<see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>.
             </param>
             <remarks>
             This class provides a default fallback in situations where the instantiation of a custom <see cref="T:Ctc.Ods.Customizations.ICourseDescriptionStrategy"/> fails.
@@ -1033,19 +1033,19 @@
             <returns>
             A collection of <see cref="T:Ctc.Ods.Data.CourseDescriptionEntityBase">course description entites</see>:
             <list type="table">
-		<item>
-			<term>First record</term>
-			<description>
-				The course description for the specified <paramref name="yrq"/> (or <see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>
-				if not supplied.
-			</description>
-		</item>
-		<item>
-			<term>Successive records</term>
-			<description>
-				Future course description updates, in the order they will be updated (by YearQuarter).
-			</description>
-		</item>
+            	<item>
+            		<term>First record</term>
+            		<description>
+            			The course description for the specified <paramref name="yrq"/> (or <see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>
+            			if not supplied.
+            		</description>
+            	</item>
+            	<item>
+            		<term>Successive records</term>
+            		<description>
+            			Future course description updates, in the order they will be updated (by YearQuarter).
+            		</description>
+            	</item>
             </list>
             </returns>
             <exception cref="T:System.NotImplementedException"/>
@@ -1087,7 +1087,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.CourseID.#ctor(System.String,System.String,System.Boolean)">
             <summary>
-
+            
             </summary>
             <param name="subject"></param>
             <param name="number"></param>
@@ -1095,14 +1095,14 @@
         </member>
         <member name="M:Ctc.Ods.Types.CourseID.FromString(System.String)">
             <summary>
-
+            
             </summary>
             <param name="courseId"></param>
             <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Types.CourseID.FromString(System.String,System.String)">
             <summary>
-
+            
             </summary>
             <param name="subject"></param>
             <param name="number"></param>
@@ -1155,7 +1155,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.CourseID.GetHashCode">
             <summary>
-            Serves as a hash function for a particular type.
+            Serves as a hash function for a particular type. 
             </summary>
             <returns>
             A hash code for the current <see cref="T:System.Object"/>.
@@ -1178,7 +1178,7 @@
         </member>
         <member name="P:Ctc.Ods.Types.CourseID.CommonCourseChar">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.CourseID.Subject">
@@ -1280,7 +1280,7 @@
             <remarks>
             This should be the fully-qualified class name, including namespaces
             <example>
-		Ctc.Ods.Customizations.BellevueCollegeCourseDescriptionStrategy
+            	Ctc.Ods.Customizations.BellevueCollegeCourseDescriptionStrategy
             </example>
             </remarks>
         </member>
@@ -1308,7 +1308,7 @@
         </member>
         <member name="T:Ctc.Ods.Types.IRichDataObject">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ICourse.CourseID">
@@ -1402,7 +1402,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.Course.GetHashCode">
             <summary>
-            Serves as a hash function for a particular type.
+            Serves as a hash function for a particular type. 
             </summary>
             <returns>
             A hash code for the current <see cref="T:System.Object"/>.
@@ -1518,7 +1518,7 @@
         </member>
         <member name="P:Ctc.Ods.Types.Course._Footnotes">
             <summary>
-
+            
             </summary>
         </member>
         <member name="T:Ctc.Ods.LateStartFacet">
@@ -1543,7 +1543,7 @@
             A <see cref="T:Ctc.Ods.Types.Section"/> provides a rich, heirarchical represenation of the data found in
             the <i>vw_Class</i> view of the ODS. This allows the .NET developer to work with a logical
             object rather than being limited by the schematic designs of the HP3000 data source.
-
+            
             To obtain one or more <see cref="T:Ctc.Ods.Types.Section"/> objects use the <see cref="T:Ctc.Ods.Data.OdsRepository"/>
             </remarks>
             <seealso cref="T:Ctc.Ods.Data.OdsRepository"/>
@@ -1555,62 +1555,62 @@
         </member>
         <member name="P:Ctc.Ods.Types.ISection.ID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.CourseSubject">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.CourseNumber">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.CourseDescriptions">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.Yrq">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.StartDate">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.EndDate">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.CourseID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.CourseTitle">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.Credits">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.SectionCode">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.Footnotes">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.WaitlistCount">
@@ -1623,52 +1623,52 @@
         </member>
         <member name="P:Ctc.Ods.Types.ISection.IsOnline">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.IsCommonCourse">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.IsContinuousEnrollment">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.IsVariableCredits">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.IsDifferentStartDate">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.Offered">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.IsOnCampus">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.IsTelecourse">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.IsHybrid">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.IsLinked">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.LinkedTo">
@@ -1682,7 +1682,7 @@
         </member>
         <member name="P:Ctc.Ods.Types.ISection.IsDifferentEndDate">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.ISection.LastRegistrationDate">
@@ -1690,12 +1690,12 @@
             The latest date to register for the <see cref="T:Ctc.Ods.Types.Section"/>
             </summary>
             <remarks>
-		<note type="note">
-			<para>
-			Per SBCTC policy, this value defaults to the "the last instructional day of the course" (e.g. <see cref="P:Ctc.Ods.Types.ISection.EndDate"/>)
-			</para>
-			- <a href="http://www.sbctc.ctc.edu/general/policymanual/_a-policymanual-ch5Append.aspx">http://www.sbctc.ctc.edu/general/policymanual/_a-policymanual-ch5Append.aspx</a>
-		</note>
+            	<note type="note">
+            		<para>
+            		Per SBCTC policy, this value defaults to the "the last instructional day of the course" (e.g. <see cref="P:Ctc.Ods.Types.ISection.EndDate"/>)
+            		</para>
+            		- <a href="http://www.sbctc.ctc.edu/general/policymanual/_a-policymanual-ch5Append.aspx">http://www.sbctc.ctc.edu/general/policymanual/_a-policymanual-ch5Append.aspx</a>
+            	</note>
             </remarks>
             <seealso cref="P:Ctc.Ods.Types.ISection.IsContinuousEnrollment"/>
             <seealso cref="P:Ctc.Ods.Types.ISection.StartDate"/>
@@ -1703,17 +1703,17 @@
         </member>
         <member name="M:Ctc.Ods.Types.Section.#ctor">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:Ctc.Ods.Types.Section.#ctor(System.String)">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:Ctc.Ods.Types.Section.#ctor(Ctc.Ods.Types.ISectionID)">
             <summary>
-
+            
             </summary>
             <param name="sectionId"></param>
         </member>
@@ -1728,27 +1728,27 @@
         </member>
         <member name="M:Ctc.Ods.Types.Section.Equals(Ctc.Ods.Types.Section)">
             <summary>
-
+            
             </summary>
             <param name="other"></param>
             <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Types.Section.Equals(System.Object)">
             <summary>
-
+            
             </summary>
             <param name="obj"></param>
             <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Types.Section.GetHashCode">
             <summary>
-
+            
             </summary>
             <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Types.Section.op_Equality(Ctc.Ods.Types.Section,Ctc.Ods.Types.Section)">
             <summary>
-
+            
             </summary>
             <param name="left"></param>
             <param name="right"></param>
@@ -1756,7 +1756,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.Section.op_Inequality(Ctc.Ods.Types.Section,Ctc.Ods.Types.Section)">
             <summary>
-
+            
             </summary>
             <param name="left"></param>
             <param name="right"></param>
@@ -1780,72 +1780,72 @@
         </member>
         <member name="P:Ctc.Ods.Types.Section.CourseSubject">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.CourseNumber">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.CourseDescriptions">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.Yrq">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.StartDate">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.EndDate">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.IsOnline">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.IsOnCampus">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.IsTelecourse">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.IsHybrid">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.IsContinuousEnrollment">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.IsVariableCredits">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.IsDifferentStartDate">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.IsLinked">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.LinkedTo">
@@ -1859,42 +1859,42 @@
         </member>
         <member name="P:Ctc.Ods.Types.Section.IsDifferentEndDate">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section._YearQuarterID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section._CourseDescriptions1">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section._CourseDescriptions2">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section._Footnote1">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section._Footnote2">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section._SBCTCMisc1">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section._ContinuousSequentialIndicator">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section._LastRegistrationDate">
@@ -1905,47 +1905,47 @@
         </member>
         <member name="P:Ctc.Ods.Types.Section._CourseTitle">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section._CourseFootnotes">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.SectionCode">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.Footnotes">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.CourseID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.IsCommonCourse">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.CourseTitle">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.Credits">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.Offered">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.Section.WaitlistCount">
@@ -1971,12 +1971,12 @@
             The latest date to register for the <see cref="T:Ctc.Ods.Types.Section"/>
             </summary>
             <remarks>
-		<note type="note">
-			<para>
-			Per SBCTC policy, this value defaults to the "the last instructional day of the course" (e.g. <see cref="P:Ctc.Ods.Types.Section.EndDate"/>)
-			</para>
-			- <a href="http://www.sbctc.ctc.edu/general/policymanual/_a-policymanual-ch5Append.aspx">http://www.sbctc.ctc.edu/general/policymanual/_a-policymanual-ch5Append.aspx</a>
-		</note>
+            	<note type="note">
+            		<para>
+            		Per SBCTC policy, this value defaults to the "the last instructional day of the course" (e.g. <see cref="P:Ctc.Ods.Types.Section.EndDate"/>)
+            		</para>
+            		- <a href="http://www.sbctc.ctc.edu/general/policymanual/_a-policymanual-ch5Append.aspx">http://www.sbctc.ctc.edu/general/policymanual/_a-policymanual-ch5Append.aspx</a>
+            	</note>
             </remarks>
             <seealso cref="P:Ctc.Ods.Types.Section.IsContinuousEnrollment"/>
             <seealso cref="P:Ctc.Ods.Types.Section.StartDate"/>
@@ -1997,14 +1997,14 @@
         </member>
         <member name="M:Ctc.Ods.Types.ISectionID.Equals(System.String)">
             <summary>
-
+            
             </summary>
             <param name="other"></param>
             <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Types.ISectionID.ToString">
             <summary>
-
+            
             </summary>
             <returns></returns>
         </member>
@@ -2032,32 +2032,32 @@
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.ClassID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.Section">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.YearQuarterID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.ItemNumber">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.ItemYRQLink">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.ClusterItemNumber">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.ClassCapacity">
@@ -2067,7 +2067,7 @@
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.ClusterCapacity">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.StudentsEnrolled">
@@ -2078,57 +2078,57 @@
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.CourseID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.CourseTitle">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.Credits">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.InstructorSID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.InstructorName">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.DayID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.StartDate">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.EndDate">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.StartTime">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.EndTime">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.Room">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.LastRegistrationDate">
@@ -2154,27 +2154,27 @@
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.SectionStatusID1">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.SectionStatusID2">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.SectionStatusID4">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.FootnoteID1">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.SectionEntity.FootnoteID2">
             <summary>
-
+            
             </summary>
         </member>
         <member name="T:Ctc.Ods.Data.EmployeeEntity">
@@ -2199,17 +2199,17 @@
         </member>
         <member name="P:Ctc.Ods.Data.EmployeeEntity.FirstName">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.EmployeeEntity.LastName">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.EmployeeEntity.WorkEmail">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:Ctc.Ods.YearQuarterFacet.GetFilter``1(System.Data.Entity.DbContext)">
@@ -2235,7 +2235,7 @@
         </member>
         <member name="M:Ctc.Ods.Utility.GetApiSettings">
             <summary>
-
+            
             </summary>
             <returns></returns>
         </member>
@@ -2249,7 +2249,7 @@
             the HP3000) with the <paramref name="timeSpan">time</paramref> supplied.
             </returns>
             <remarks>
-		<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
+            	<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
             </remarks>
         </member>
         <member name="M:Ctc.Ods.Utility.DigitToChar(System.UInt16)">
@@ -2258,14 +2258,14 @@
             </summary>
             <param name="value">A single digit unsigned number</param>
             <returns>
-		A <see langref="char"/> representation of the number provided.
-		<note type="important">This is <b>NOT</b> the ASCII character.</note>
+            	A <see langref="char"/> representation of the number provided.
+            	<note type="important">This is <b>NOT</b> the ASCII character.</note>
             </returns>
             <remarks>
-		<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
-		<para>
-		This method was originally created to support <see cref="T:Ctc.Ods.Types.YearQuarter"/> calculations.
-		</para>
+            	<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
+            	<para>
+            	This method was originally created to support <see cref="T:Ctc.Ods.Types.YearQuarter"/> calculations.
+            	</para>
             </remarks>
         </member>
         <member name="M:Ctc.Ods.Utility.CircularDigitSum(System.UInt16,System.Int16)">
@@ -2275,20 +2275,20 @@
             <param name="value">A single digit unsigned number</param>
             <param name="adder">How much to add to <paramref name="value"/></param>
             <returns>
-		If <paramref name="value"/> is at either end of the single digit range (0 or 9)
-		<paramref name="adder"/> is applied to the opposite end, so that the incrementation
-		wraps around the range. Otherwise the sum of <paramref name="value"/> and
-		<paramref name="adder"/>
+            	If <paramref name="value"/> is at either end of the single digit range (0 or 9)
+            	<paramref name="adder"/> is applied to the opposite end, so that the incrementation
+            	wraps around the range. Otherwise the sum of <paramref name="value"/> and
+            	<paramref name="adder"/>
             </returns>
             <remarks>
-		<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
-		<note type="caution">
-		At the moment, this method only supports an <paramref name="adder"/> value of
-		1 or -1.
-		</note>
-		<para>
-		This method was originally created to support <see cref="T:Ctc.Ods.Types.YearQuarter"/> calculations.
-		</para>
+            	<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
+            	<note type="caution">
+            	At the moment, this method only supports an <paramref name="adder"/> value of
+            	1 or -1.
+            	</note>
+            	<para>
+            	This method was originally created to support <see cref="T:Ctc.Ods.Types.YearQuarter"/> calculations.
+            	</para>
             </remarks>
         </member>
         <member name="M:Ctc.Ods.Utility.SafeConvertToBool(System.String)">
@@ -2297,8 +2297,8 @@
             </summary>
             <param name="value">The value to attempt to convert</param>
             <returns>
-		<i>true</i> if <paramref name="value"/> is equivalent to <see cref="F:System.Boolean.TrueString"/>,
-		otherwise <i>false</i>.
+            	<i>true</i> if <paramref name="value"/> is equivalent to <see cref="F:System.Boolean.TrueString"/>,
+            	otherwise <i>false</i>.
             </returns>
             <remarks>
             Unlike the standard <see cref="T:System.Boolean"/> conversion methods, <b>SafeConvertToBool</b>
@@ -2311,11 +2311,11 @@
             </summary>
             <param name="strValue">The value to check.</param>
             <returns>
-		<i>True</i> if <paramref name="strValue"/> contains alphanumeric characters,
-		otherwise <i>false</i>.
+            	<i>True</i> if <paramref name="strValue"/> contains alphanumeric characters,
+            	otherwise <i>false</i>.
             </returns>
             <remarks>
-		<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
+            	<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
             </remarks>
         </member>
         <member name="M:Ctc.Ods.Utility.IsNumber(System.String)">
@@ -2325,7 +2325,7 @@
             <param name="str"></param>
             <returns></returns>
             <remarks>
-		<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
+            	<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
             </remarks>
         </member>
         <member name="M:Ctc.Ods.Utility.TitleCase(System.String)">
@@ -2335,9 +2335,9 @@
             <param name="str"></param>
             <returns></returns>
             <remarks>
-		<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
-		This method utilizes code taken from <a href="http://channel9.msdn.com/forums/TechOff/252814-Howto-Capitalize-first-char-of-words-in-a-string-NETC/">this
-		forum post</a>.
+            	<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
+            	This method utilizes code taken from <a href="http://channel9.msdn.com/forums/TechOff/252814-Howto-Capitalize-first-char-of-words-in-a-string-NETC/">this
+            	forum post</a>.
             </remarks>
         </member>
         <member name="M:Ctc.Ods.Utility.GetApplicationVersion(System.Reflection.Assembly,System.String)">
@@ -2346,38 +2346,38 @@
             </summary>
             <param name="dll"></param>
             <param name="format">
-		A simple <see langref="string"/> template. The following token placeholders are recognized:
-		<list type="table">
-			<listheader>
-				<term>Token</term>
-				<description>Replaced with</description>
-			</listheader>
-			<item>
-				<term>{MAJOR}</term>
-				<description><see cref="P:System.Version.Major"/></description>
-			</item>
-			<item>
-				<term>{MINOR}</term>
-				<description><see cref="P:System.Version.Minor"/></description>
-			</item>
-			<item>
-				<term>{REVISION}</term>
-				<description><see cref="P:System.Version.Revision"/></description>
-			</item>
-			<item>
-				<term>{BUILD}</term>
-				<description><see cref="P:System.Version.Build"/></description>
-			</item>
-		</list>
+            	A simple <see langref="string"/> template. The following token placeholders are recognized:
+            	<list type="table">
+            		<listheader>
+            			<term>Token</term>
+            			<description>Replaced with</description>
+            		</listheader>
+            		<item>
+            			<term>{MAJOR}</term>
+            			<description><see cref="P:System.Version.Major"/></description>
+            		</item>
+            		<item>
+            			<term>{MINOR}</term>
+            			<description><see cref="P:System.Version.Minor"/></description>
+            		</item>
+            		<item>
+            			<term>{REVISION}</term>
+            			<description><see cref="P:System.Version.Revision"/></description>
+            		</item>
+            		<item>
+            			<term>{BUILD}</term>
+            			<description><see cref="P:System.Version.Build"/></description>
+            		</item>
+            	</list>
             </param>
             <returns>A string representation of the <paramref name="dll"/>'s <see cref="T:System.Version"/></returns>
             <remarks>
-		<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
+            	<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
             </remarks>
         </member>
         <member name="M:Ctc.Ods.Utility.ReplaceIfPresent(System.String@,System.String,System.Int32)">
             <summary>
-
+            
             </summary>
             <param name="buffer"></param>
             <param name="token"></param>
@@ -2395,7 +2395,7 @@
             The canononical name of the currently executing <see cref="T:System.Reflection.Assembly"/>
             </summary>
             <remarks>
-		<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
+            	<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
             </remarks>
         </member>
         <member name="P:Ctc.Ods.Utility.Today">
@@ -2403,7 +2403,7 @@
             Replacement for <see cref="P:System.DateTime.Today"/> which can be overriden in the .config file
             </summary>
             <remarks>
-		<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
+            	<note type="caution">THIS MEMBER DOES NOT YET HAVE UNIT TESTS</note>
             Use this property in place of <see cref="P:System.DateTime.Today"/> becuase it permits overriding the
             current date by setting the <see cref="F:Ctc.Ods.Utility.DATE_OVERRIDE_KEY"/> in the application's .config
             file. This can be very useful for testing and/or troubleshooting.
@@ -2438,50 +2438,50 @@
         </member>
         <member name="T:Ctc.Ods.Customizations.IOdsDataMapper`1">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:Ctc.Ods.Customizations.IOdsDataMapper`1.GetData(System.Data.Entity.DbContext)">
             <summary>
-
+             
             </summary>
             <param name="db"></param>
             <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Customizations.IOdsDataMapper`1.AddFacet(Ctc.Ods.IDataFacet)">
             <summary>
-
+            
             </summary>
             <param name="facet"></param>
         </member>
         <member name="T:Ctc.Ods.Customizations.DefaultSectionMapper">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:Ctc.Ods.Customizations.DefaultSectionMapper.GetData(Ctc.Ods.Data.OdsContext)">
             <summary>
-
+             
             </summary>
             <param name="db"></param>
             <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Customizations.DefaultSectionMapper.AddFacet(Ctc.Ods.ISectionFacet)">
             <summary>
-
+            
             </summary>
             <param name="facet"></param>
         </member>
         <member name="M:Ctc.Ods.Customizations.DefaultSectionMapper.GetData(System.Data.Entity.DbContext)">
             <summary>
-
+             
             </summary>
             <param name="db"></param>
             <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Customizations.DefaultSectionMapper.AddFacet(Ctc.Ods.IDataFacet)">
             <summary>
-
+            
             </summary>
             <param name="facet"></param>
         </member>
@@ -2525,13 +2525,13 @@
         </member>
         <member name="P:Ctc.Ods.Data.OdsContext.Days">
             <summary>
-
+            
             </summary>
             <remarks>NOTE: This data is cached via <see cref="T:Ctc.Ods.Extensions.QueryResultCacheExtension"/></remarks>
         </member>
         <member name="P:Ctc.Ods.Data.OdsContext.YearQuarters">
             <summary>
-
+            
             </summary>
             <remarks>NOTE: This data is cached via <see cref="T:Ctc.Ods.Extensions.QueryResultCacheExtension"/></remarks>
         </member>
@@ -2551,7 +2551,7 @@
         </member>
         <member name="M:Ctc.Ods.LinqExtensions.ToConcatenatedString``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.String},System.String)">
             <summary>
-
+            
             </summary>
             <typeparam name="T"></typeparam>
             <param name="source"></param>
@@ -2573,7 +2573,7 @@
         </member>
         <member name="M:Ctc.Ods.LinqExtensions.ToLinkedList``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
-
+            
             </summary>
             <typeparam name="T"></typeparam>
             <param name="source"></param>
@@ -2680,7 +2680,7 @@
         </member>
         <member name="M:Ctc.Ods.CommonExtensions.UriCombine(System.String,System.String)">
             <summary>
-
+            
             </summary>
             <param name="val"></param>
             <param name="append"></param>
@@ -2709,7 +2709,7 @@
         </member>
         <member name="T:Ctc.Ods.Types.SectionID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:Ctc.Ods.Types.SectionID.#ctor(System.String,System.String)">
@@ -2737,14 +2737,14 @@
         </member>
         <member name="M:Ctc.Ods.Types.SectionID.Equals(System.String)">
             <summary>
-
+            
             </summary>
             <param name="other"></param>
             <returns></returns>
         </member>
         <member name="M:Ctc.Ods.Types.SectionID.Equals(Ctc.Ods.Types.ISectionID)">
             <summary>
-
+            
             </summary>
             <param name="other"></param>
             <returns></returns>
@@ -2769,7 +2769,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.SectionID.GetHashCode">
             <summary>
-            Serves as a hash function for a particular type.
+            Serves as a hash function for a particular type. 
             </summary>
             <returns>
             A hash code for the current <see cref="T:System.Object"/>.
@@ -2808,17 +2808,17 @@
         </member>
         <member name="T:Ctc.Ods.Data.InstructorEntity">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.InstructorEntity.SID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.InstructorEntity.WorkEmail">
             <summary>
-
+            
             </summary>
         </member>
         <member name="T:Ctc.Ods.Customizations.PeninsulaCollegeCourseDescriptionStrategy">
@@ -2841,25 +2841,25 @@
             </summary>
             <param name="courseId">The course ID to retrieve the description for.</param>
             <param name="yrq">
-		The <see cref="T:Ctc.Ods.Types.YearQuarter"/> to retrieve the description for. If not supplied, will default to the
-		<see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>.
+            	The <see cref="T:Ctc.Ods.Types.YearQuarter"/> to retrieve the description for. If not supplied, will default to the
+            	<see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>.
             </param>
             <returns>
             A collection of <see cref="T:Ctc.Ods.Data.CourseDescriptionEntityBase">course description entites</see>:
             <list type="table">
-		<item>
-			<term>First record</term>
-			<description>
-				The course description for the specified <paramref name="yrq"/> (or <see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>
-				if not supplied.
-			</description>
-		</item>
-		<item>
-			<term>Successive records</term>
-			<description>
-				Future course description updates, in the order they will be updated (by YearQuarter).
-			</description>
-		</item>
+            	<item>
+            		<term>First record</term>
+            		<description>
+            			The course description for the specified <paramref name="yrq"/> (or <see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>
+            			if not supplied.
+            		</description>
+            	</item>
+            	<item>
+            		<term>Successive records</term>
+            		<description>
+            			Future course description updates, in the order they will be updated (by YearQuarter).
+            		</description>
+            	</item>
             </list>
             </returns>
             <exception cref="T:System.ArgumentNullException"><paramref name="yrq"/> is null.</exception>
@@ -2883,25 +2883,25 @@
             </summary>
             <param name="courseId">The course ID to retrieve the description for.</param>
             <param name="yrq">
-		The <see cref="T:Ctc.Ods.Types.YearQuarter"/> to retrieve the description for. If not supplied, will default to the
-		<see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>.
+            	The <see cref="T:Ctc.Ods.Types.YearQuarter"/> to retrieve the description for. If not supplied, will default to the
+            	<see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>.
             </param>
             <returns>
             A collection of <see cref="T:Ctc.Ods.Data.CourseDescriptionEntityBase">course description entites</see>:
             <list type="table">
-		<item>
-			<term>First record</term>
-			<description>
-				The course description for the specified <paramref name="yrq"/> (or <see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>
-				if not supplied.
-			</description>
-		</item>
-		<item>
-			<term>Successive records</term>
-			<description>
-				Future course description updates, in the order they will be updated (by YearQuarter).
-			</description>
-		</item>
+            	<item>
+            		<term>First record</term>
+            		<description>
+            			The course description for the specified <paramref name="yrq"/> (or <see cref="P:Ctc.Ods.Data.OdsRepository.CurrentYearQuarter"/>
+            			if not supplied.
+            		</description>
+            	</item>
+            	<item>
+            		<term>Successive records</term>
+            		<description>
+            			Future course description updates, in the order they will be updated (by YearQuarter).
+            		</description>
+            	</item>
             </list>
             </returns>
             <exception cref="T:System.ArgumentNullException"><paramref name="yrq"/> is null.</exception>
@@ -2913,25 +2913,25 @@
              <remarks>
              An "available" <see cref="T:Ctc.Ods.Types.Section"/> is currently defined as:
              <list type="bullet">
-			<item>
-				<description>
-				<b>Normal Section:</b> <i>ClassCapacity</i> - <i>StudentsEnrolled</i>
-				</description>
-			</item>
-			<item>
-				<description>
-				<b>Clustered Section:</b> max(<i>ClusterCapacity</i>) - sum(<i>StudentsEnrolled</i>)
-				</description>
-			</item>
-			<item>
-				<description>
-				<b>And</b> Does not have a <see cref="P:Ctc.Ods.Data.OdsContext.WaitListCounts">Waitlist</see>
-				</description>
-			</item>
+            		<item>
+            			<description>
+            			<b>Normal Section:</b> <i>ClassCapacity</i> - <i>StudentsEnrolled</i>
+            			</description>
+            		</item>
+            		<item>
+            			<description>
+            			<b>Clustered Section:</b> max(<i>ClusterCapacity</i>) - sum(<i>StudentsEnrolled</i>)
+            			</description>
+            		</item>
+            		<item>
+            			<description>
+            			<b>And</b> Does not have a <see cref="P:Ctc.Ods.Data.OdsContext.WaitListCounts">Waitlist</see>
+            			</description>
+            		</item>
              </list>
-
+             
              NOTE: If these rules do not match the logic needed by your school, create a custom "availability" <see cref="T:Ctc.Ods.ISectionFacet">Facet</see> to use instead.
-
+             
              </remarks>
         </member>
         <member name="M:Ctc.Ods.AvailabilityFacet.#ctor(Ctc.Ods.AvailabilityFacet.Options)">
@@ -2948,25 +2948,25 @@
             <remarks>
             An "available" <see cref="T:Ctc.Ods.Types.Section"/> is currently defined as:
             <list type="bullet">
-		<item>
-			<description>
-			<b>Normal Section:</b> <i>ClassCapacity</i> - <i>StudentsEnrolled</i>
-			</description>
-		</item>
-		<item>
-			<description>
-			<b>Clustered Section:</b> max(<i>ClusterCapacity</i>) - sum(<i>StudentsEnrolled</i>)
-			</description>
-		</item>
-		<item>
-			<description>
-			<b>And</b> Does not have a <see cref="P:Ctc.Ods.Data.OdsContext.WaitListCounts">Waitlist</see>
-			</description>
-		</item>
+            	<item>
+            		<description>
+            		<b>Normal Section:</b> <i>ClassCapacity</i> - <i>StudentsEnrolled</i>
+            		</description>
+            	</item>
+            	<item>
+            		<description>
+            		<b>Clustered Section:</b> max(<i>ClusterCapacity</i>) - sum(<i>StudentsEnrolled</i>)
+            		</description>
+            	</item>
+            	<item>
+            		<description>
+            		<b>And</b> Does not have a <see cref="P:Ctc.Ods.Data.OdsContext.WaitListCounts">Waitlist</see>
+            		</description>
+            	</item>
             </list>
-
+            
             NOTE: If these rules do not match the logic needed by your school, create a custom "availability" <see cref="T:Ctc.Ods.ISectionFacet">Facet</see> to use instead.
-
+            
             </remarks>
             <exception cref="T:System.ArgumentNullException"><paramref name="dbContext"/>Is null, or is not a valid <see cref="T:Ctc.Ods.Data.OdsContext"/></exception>
         </member>
@@ -3000,9 +3000,9 @@
             Creates a new Repository instance for accessing data from the ODS
             </summary>
             <param name="context">
-		The <see cref="T:System.Web.HttpContextBase">HttpContext</see> of the calling application. This can be used
-		to obtain information about the currently executing context, store information in context-based
-		<i>state bags</i>, etc.
+            	The <see cref="T:System.Web.HttpContextBase">HttpContext</see> of the calling application. This can be used
+            	to obtain information about the currently executing context, store information in context-based
+            	<i>state bags</i>, etc.
             </param>
             <seealso cref="T:Ctc.Ods.Config.ApiSettings"/>
         </member>
@@ -3028,14 +3028,14 @@
             </summary>
             <returns></returns>
             <remarks>
-		<example>
-			<code type="cs">
+            	<example>
+            		<code type="cs">
             using (OdsRepository repository = new OdsRepository())
             {
-		IEnumerable&lt;Course&gt; courses = repository.GetCourses();
+            	IEnumerable&lt;Course&gt; courses = repository.GetCourses();
             }
-			</code>
-		</example>
+            		</code>
+            	</example>
             </remarks>
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetCourses(System.String,System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
@@ -3061,19 +3061,19 @@
             <param name="courseId"></param>
             <param name="facetOptions"></param>
             <returns>
-		<note type="note">
-		This method may return more than one <see cref="T:Ctc.Ods.Types.Course"/> record.
-		</note>
+            	<note type="note">
+            	This method may return more than one <see cref="T:Ctc.Ods.Types.Course"/> record.
+            	</note>
             </returns>
             <remarks>
-		<example>
-			<code type="cs">
-		using (OdsRepository repository = new OdsRepository())
-		{
-			IList&lt;Course&gt; courses = repository.GetCourses(CourseID.FromString("ART 101"));
-		}
-			</code>
-		</example>
+            	<example>
+            		<code type="cs">
+            	using (OdsRepository repository = new OdsRepository())
+            	{
+            		IList&lt;Course&gt; courses = repository.GetCourses(CourseID.FromString("ART 101"));
+            	}
+            		</code>
+            	</example>
             </remarks>
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetCourseDescription(Ctc.Ods.Types.ICourseID,Ctc.Ods.Types.YearQuarter)">
@@ -3092,9 +3092,9 @@
             <param name="courseId">Only retrieve <see cref="T:Ctc.Ods.Types.Course"/>s for the specified <see cref="T:Ctc.Ods.Types.ICourseID"/></param>
             <param name="subjects">Only retrieve <see cref="T:Ctc.Ods.Types.Course"/>s with the specified subject prefix(es).</param>
             <remarks>
-		If any <see cref="!:GetCourses()"/> method was called without specifying any <see cref="T:Ctc.Ods.ISectionFacet"/>s, this method
-		will retrieve all current and future <see cref="T:Ctc.Ods.Types.Course"/>s after applying the remaining filter requests (e.g.
-		<paramref name="courseId"/>, <paramref name="subjects"/>, etc.)
+            	If any <see cref="!:GetCourses()"/> method was called without specifying any <see cref="T:Ctc.Ods.ISectionFacet"/>s, this method
+            	will retrieve all current and future <see cref="T:Ctc.Ods.Types.Course"/>s after applying the remaining filter requests (e.g.
+            	<paramref name="courseId"/>, <paramref name="subjects"/>, etc.)
             </remarks>
             <returns></returns>
         </member>
@@ -3115,7 +3115,7 @@
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetSections(Ctc.Ods.Types.ICourseID,Ctc.Ods.Types.YearQuarter,System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
             <summary>
-
+            
             </summary>
             <param name="courseId"></param>
             <param name="yrq"></param>
@@ -3133,7 +3133,7 @@
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetSections(System.Collections.Generic.IList{System.String},Ctc.Ods.Types.YearQuarter,System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
             <summary>
-
+            
             </summary>
             <param name="subjects"></param>
             <param name="yrq"></param>
@@ -3190,14 +3190,14 @@
             <returns>Filtered list of CourseSubjects by the supplied char</returns>
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.GetCourseSubjects(Ctc.Ods.Types.YearQuarter,System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
-		<summary>
+            	<summary>
              Returns a list of Course Subjects which have active <see cref="T:Ctc.Ods.Types.Section"/>s for
              the <see cref="T:Ctc.Ods.Types.YearQuarter"/> specified
-		</summary>
-		<param name="yrq"></param>
+            	</summary>
+            	<param name="yrq"></param>
             <param name="facetOptions"></param>
             <returns></returns>
-		<exception cref="T:System.NotImplementedException"></exception>
+            	<exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.SectionCountForCourse(Ctc.Ods.Types.ICourseID,Ctc.Ods.Types.YearQuarter,System.Collections.Generic.IList{Ctc.Ods.ISectionFacet})">
             <summary>
@@ -3219,12 +3219,12 @@
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.Dispose">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:Ctc.Ods.Data.OdsRepository.Dispose(System.Boolean)">
             <summary>
-
+            
             </summary>
             <param name="disposing"></param>
         </member>
@@ -3234,15 +3234,15 @@
             </summary>
             <param name="courseID">The ID of the course we want description(s) for</param>
             <param name="yrq">
-		The <see cref="T:Ctc.Ods.Types.YearQuarter"/> we want the description for. This will be the first <see cref="T:Ctc.Ods.Types.CourseDescription"/> in the
-		returned list. Any additional <see cref="T:Ctc.Ods.Types.CourseDescription"/>s in the list will be planned future updates.</param>
+            	The <see cref="T:Ctc.Ods.Types.YearQuarter"/> we want the description for. This will be the first <see cref="T:Ctc.Ods.Types.CourseDescription"/> in the
+            	returned list. Any additional <see cref="T:Ctc.Ods.Types.CourseDescription"/>s in the list will be planned future updates.</param>
             <param name="descriptionCollections">
-		The collections of <see cref="T:Ctc.Ods.Types.CourseDescription"/> objects to use in our logic. At this time, the business logic expects
-		two (2) collections to be passed.
+            	The collections of <see cref="T:Ctc.Ods.Types.CourseDescription"/> objects to use in our logic. At this time, the business logic expects
+            	two (2) collections to be passed.
             </param>
             <returns>A list of <see cref="T:Ctc.Ods.Types.CourseDescription"/>s, with the currently active one at index 0, and in order of implementation.</returns>
             <exception cref="T:System.ApplicationException">
-		The configured <see cref="P:Ctc.Ods.Customizations.Types.CourseDescriptionStrategy"/> was unable to be loaded.
+            	The configured <see cref="P:Ctc.Ods.Customizations.Types.CourseDescriptionStrategy"/> was unable to be loaded.
             </exception>
         </member>
         <member name="P:Ctc.Ods.Data.OdsRepository._DbContext">
@@ -3294,22 +3294,22 @@
             </summary>
             <remarks>
             This value can then be passed to other methods which take a parameter array of expressions.
-		<example>
-			<code>
+            	<example>
+            		<code>
             SectionFilters filters = new SectionFilters();
-
+            
             filters.Add(s =&gt; s.YearQuarterID.CompareTo("B014") &gt; 0);
             filters.Add(s =&gt; !String.IsNullOrWhitespace(s.DayID));
-
+            
             var sections = _context.Sections.CompoundWhere(filters.FilterArray);
-			</code>
-		</example>
+            		</code>
+            	</example>
             </remarks>
             <seealso cref="M:Ctc.Ods.LinqExtensions.CompoundWhere``1(System.Linq.IQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}}[])"/>
         </member>
         <member name="T:Ctc.Ods.Types.CourseDescription">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Types.CourseDescription.CourseID">
@@ -3340,12 +3340,12 @@
         </member>
         <member name="T:Ctc.Ods.DaysFacet">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:Ctc.Ods.DaysFacet.#ctor(Ctc.Ods.DaysFacet.Options)">
             <summary>
-
+            
             </summary>
             <param name="option"></param>
         </member>
@@ -3360,7 +3360,7 @@
         </member>
         <member name="M:Ctc.Ods.DaysFacet.GetDaysTitle">
             <summary>
-
+            
             </summary>
             <returns></returns>
         </member>
@@ -3443,7 +3443,7 @@
         </member>
         <member name="M:Ctc.Ods.Types.CoursePrefix.GetHashCode">
             <summary>
-            Serves as a hash function for a particular type.
+            Serves as a hash function for a particular type. 
             </summary>
             <returns>
             A hash code for the current <see cref="T:System.Object"/>.
@@ -3471,7 +3471,7 @@
         </member>
         <member name="P:Ctc.Ods.Types.CoursePrefix._Subject">
             <summary>
-
+            
             </summary>
             <seealso cref="P:Ctc.Ods.Types.CoursePrefix.Subject"/>
         </member>
@@ -3510,7 +3510,7 @@
         </member>
         <member name="P:Ctc.Ods.RegistrationQuartersFacet.Settings">
             <summary>
-
+            
             </summary>
         </member>
         <member name="T:Ctc.Ods.Data.YearQuarterEntity">
@@ -3521,17 +3521,17 @@
         </member>
         <member name="P:Ctc.Ods.Data.YearQuarterEntity.YearQuarterID">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.YearQuarterEntity.FirstClassDay">
             <summary>
-
+            
             </summary>
         </member>
         <member name="P:Ctc.Ods.Data.YearQuarterEntity.LastClassDay">
             <summary>
-
+            
             </summary>
         </member>
         <member name="T:Ctc.Ods.Data.DayEntity">
@@ -3582,7 +3582,7 @@
         </member>
         <member name="M:Ctc.Ods.CreditsFacet.#ctor(System.Int32)">
             <summary>
-
+             
             </summary>
             <param name="credits">Number of credits to filter for</param>
         </member>

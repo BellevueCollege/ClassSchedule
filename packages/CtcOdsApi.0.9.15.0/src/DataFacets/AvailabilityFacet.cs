@@ -46,9 +46,9 @@ namespace Ctc.Ods
 	///			</description>
 	///		</item>
 	/// </list>
-	///
+	/// 
 	/// NOTE: If these rules do not match the logic needed by your school, create a custom "availability" <see cref="ISectionFacet">Facet</see> to use instead.
-	///
+	/// 
 	/// </remarks>
 	public class AvailabilityFacet : ISectionFacet
 	{
@@ -104,9 +104,9 @@ namespace Ctc.Ods
 		///			</description>
 		///		</item>
 		/// </list>
-		///
+		/// 
 		/// NOTE: If these rules do not match the logic needed by your school, create a custom "availability" <see cref="ISectionFacet">Facet</see> to use instead.
-		///
+		/// 
 		/// </remarks>
 		/// <exception cref="ArgumentNullException"><paramref name="dbContext"/>Is null, or is not a valid <see cref="OdsContext"/></exception>
 		public Expression<Func<T, bool>> GetFilter <T>(DbContext dbContext) where T : SectionEntity
@@ -116,25 +116,25 @@ namespace Ctc.Ods
 				if (dbContext != null)
 				{
 					OdsContext db = dbContext as OdsContext;
-
+					
 					if (db != null)
 					{
 						return s => db.Sections.Where(section => section.ClusterItemNumber != null)
-															 .GroupBy(section => section.ClassID, section => section, (id, sec) => new
-																								{
-																									ClassID = id,
-																									Capacity = sec.Max(c => c.ClusterCapacity),
-																									Enrolled = sec.Sum(c => c.StudentsEnrolled)
-																								})
-															 .Where(cluster => (cluster.Capacity - cluster.Enrolled) > 0)
-															 .Select(section => section.ClassID)
-															 .Union(
-																	db.Sections.Where(sect => sect.ClusterItemNumber == null)
-																						 .Where(sect => sect.ClassCapacity - sect.StudentsEnrolled > 0)
-																						 .Select(sect => sect.ClassID)
-															 )
+								     							 .GroupBy(section => section.ClassID, section => section, (id, sec) => new
+								     		                                                                      						{
+								     		                                                                      							ClassID = id,
+								     		                                                                      							Capacity = sec.Max(c => c.ClusterCapacity),
+								     		                                                                      							Enrolled = sec.Sum(c => c.StudentsEnrolled)
+								     		                                                                      						})
+								     							 .Where(cluster => (cluster.Capacity - cluster.Enrolled) > 0)
+								     							 .Select(section => section.ClassID)
+								     							 .Union(
+								     							 		db.Sections.Where(sect => sect.ClusterItemNumber == null)
+								     							 							 .Where(sect => sect.ClassCapacity - sect.StudentsEnrolled > 0)
+								     							 							 .Select(sect => sect.ClassID)
+								     							 )
 																	 .Where(id => !db.WaitListCounts.Where(w => w.Status == _waitlistStatus).Select(w => w.ClassID).Contains(id))
-															 .Contains(s.ClassID);
+								     							 .Contains(s.ClassID);
 					}
 
 					throw new ArgumentNullException("dbContext", "Not a valid ODS database context");

@@ -43,13 +43,13 @@ namespace Ctc.Ods
 				{
 					return s => s.StartDate.HasValue &&
 											SqlFunctions.DateAdd("day", (_days * -1), s.StartDate) >= db.YearQuarters.Where(y => y.YearQuarterID == s.YearQuarterID)
-																																									 .Select(y => y.FirstClassDay)
+							  																																		 .Select(y => y.FirstClassDay)
 																																										 .FirstOrDefault();
 				}
-
+				
 				throw new ArgumentNullException("dbContext", "Database context is not valid.");
 			}
-
+			
 			throw new ArgumentNullException("dbContext", "Database context is null.");
 		}
 	}

@@ -44,22 +44,22 @@ namespace Ctc.Ods
 				if(whereClause.Length > 1)
 				{
 					int clauseCount = whereClause.Length - 1;
-
+			
 					Expression<Func<T, bool>>[] newClauses = new Expression<Func<T, bool>>[clauseCount];
 					Array.Copy(whereClause, 1, newClauses, 0, clauseCount);
-
+			
 					filtered = filtered.CompoundWhere(newClauses);
 				}
-
+	
 				return filtered;
 			}
-
+			
 			// invalid whereClause - keep going with unaltered source
 			return source;
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="source"></param>
@@ -96,7 +96,7 @@ namespace Ctc.Ods
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="source"></param>

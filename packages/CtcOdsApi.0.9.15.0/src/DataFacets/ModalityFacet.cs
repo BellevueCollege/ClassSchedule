@@ -25,7 +25,7 @@ using Ctc.Ods.Types;
 namespace Ctc.Ods
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	public class ModalityFacet : ISectionFacet
 	{
@@ -92,7 +92,7 @@ namespace Ctc.Ods
 				{
 					// Construct a list of ClassIDs that match the specified modality/ies...
 					IQueryable<SectionEntity> includes = db.Sections.Where(s => false).Select (s => s);	// hack to produce a valid, but empty collection
-
+					
 					if ((_option & Options.Online) == Options.Online)
 					{
 						includes = includes.Union(db.Sections.Where(i => i.SBCTCMisc1.StartsWith(onlineFlag)).Select(i => i));
@@ -113,15 +113,15 @@ namespace Ctc.Ods
 					// ... and then filter by that list
 					return s => includes.Any(i => i.ClassID == s.ClassID);
 				}
-
+				
 				throw new ArgumentNullException("dbContext", "Database context is not valid.");
 			}
-
+			
 			throw new ArgumentNullException("dbContext", "Database context is null.");
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="option"></param>
 		public ModalityFacet(Options option)

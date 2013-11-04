@@ -23,7 +23,7 @@ using Ctc.Ods.Config;
 namespace Ctc.Ods.Types
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	[DataContract]
 	public class YearQuarter : IEquatable<YearQuarter>
@@ -32,7 +32,7 @@ namespace Ctc.Ods.Types
 
 		#region Public members
 		/// <summary>
-		/// The 4-character code that represents this YearQuarterID
+		/// The 4-character code that represents this YearQuarterID 
 		/// </summary>
 		[DataMember]
 		public string ID { get; internal set; }
@@ -54,7 +54,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="yearQuarterId"></param>
 		/// <seealso cref="FromString"/>
@@ -147,7 +147,7 @@ namespace Ctc.Ods.Types
 		#endregion
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="quarter">YearQuarter in a "friendly" format (e.g. "Fall2011", "Fall 2011")</param>
 		/// <returns>An YearQuarterID value (e.g. "B122")</returns>
@@ -327,7 +327,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		/// Serves as a hash function for a particular type.
+		/// Serves as a hash function for a particular type. 
 		/// </summary>
 		/// <returns>
 		/// A hash code for the current <see cref="T:System.Object"/>.
@@ -339,7 +339,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="left"></param>
 		/// <param name="right"></param>
@@ -350,7 +350,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="left"></param>
 		/// <param name="right"></param>
@@ -372,7 +372,7 @@ namespace Ctc.Ods.Types
 		private string _friendlyName;
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="year"></param>
 		/// <param name="modifer"></param>
@@ -394,7 +394,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="yrq"></param>
 		/// <returns></returns>
@@ -440,7 +440,7 @@ namespace Ctc.Ods.Types
 		private static char GetYearMod(ushort century, ushort decade)
 		{
 			ushort modChar;
-
+			
 			// The year 2000 started using letters for the YRQ ID
 			if (century > 19)
 			{

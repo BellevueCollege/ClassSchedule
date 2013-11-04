@@ -58,10 +58,10 @@ namespace Ctc.Ods.Data
 /* Disabled storing OdsContext in cache because:
  * 1) This post mentions a DataContext object shouldn't be kept around: http://stackoverflow.com/questions/460831/linq-to-sql-return-from-function-as-iqueryablet
  * 2) It doesn't seem to be giving us that much benefit.
- *
+ * 
  * - 10/04/2011, shawn.south@bellevuecollege.edu */
 
-					//Cache cache = _httpContext != null ? _httpContext.Cache : null;
+ 					//Cache cache = _httpContext != null ? _httpContext.Cache : null;
 
 					//if (cache != null && cache["OdsContext"] != null)
 					//{
@@ -178,7 +178,7 @@ namespace Ctc.Ods.Data
 																														// include the quarter we're currently in, even if registration is no longer open for it
 																														 || y.LastClassDay <= today)
 																														 && y.YearQuarterID != maxYrq
-																													orderby y.YearQuarterID descending
+																													orderby y.YearQuarterID descending 
 																													select y;
 
       _log.Debug("Retrieving current YearQuarter from DB or HttpRuntime.Cache");
@@ -210,7 +210,7 @@ namespace Ctc.Ods.Data
 																														// include the quarter we're currently in, even if registration is no longer open for it
 																														 || y.LastClassDay >= today)
 																														 && y.YearQuarterID != maxYrq
-																													orderby y.YearQuarterID ascending
+																													orderby y.YearQuarterID ascending 
 																													select y;
 
       _log.Debug("Retrieving current YearQuarter from DB or HttpRuntime.Cache");
@@ -256,18 +256,18 @@ namespace Ctc.Ods.Data
 																		.OrderBy(h => h.course.CourseID.Replace(_commonCourseChar, " "))
 																		.Distinct()
 																		.Select(h => new Course
-																			{
-																					CourseID = h.course.CourseID,
-																					Credits = h.course.Credits,
-																					Title = h.course.Title2 ?? h.course.Title1,
-																					_CourseDescriptions1 = _DbContext.CourseDescriptions1.Where(d => d.CourseID == h.course.CourseID),
-																					_CourseDescriptions2 = _DbContext.CourseDescriptions2.Where(d => d.CourseID == h.course.CourseID),
+						             												{
+						             														CourseID = h.course.CourseID,
+						             														Credits = h.course.Credits,
+						             														Title = h.course.Title2 ?? h.course.Title1,
+						             														_CourseDescriptions1 = _DbContext.CourseDescriptions1.Where(d => d.CourseID == h.course.CourseID),
+						             														_CourseDescriptions2 = _DbContext.CourseDescriptions2.Where(d => d.CourseID == h.course.CourseID),
 																										_YearQuarterBegin = h.course.YearQuarterBegin,
 																										_YearQuarterEnd = h.course.YearQuarterEnd,
 																										IsVariableCredits = (h.course.VariableCredits ?? false),
 																										_Footnotes = _DbContext.Footnote.Where(f => h.course.FootnoteID1 == f.FootnoteId || h.course.FootnoteID2 == f.FootnoteId)
 																										                                .Select(f => f.FootnoteText)
-																			});
+						             												});
 			}
 			else
 			{
@@ -300,18 +300,18 @@ namespace Ctc.Ods.Data
 																	.Where(h => (h.course.YearQuarterEnd ?? Settings.YearQuarter.Max).CompareTo(yrqId) >= 0)
 																	.Distinct()
 																	.Select(h => new Course
-																			{
-																					CourseID = h.course.CourseID,
-																					Credits = h.course.Credits,
-																					Title = h.course.Title2 ?? h.course.Title1,
-																					_CourseDescriptions1 = _DbContext.CourseDescriptions1.Where(d => d.CourseID == h.course.CourseID),
-																					_CourseDescriptions2 = _DbContext.CourseDescriptions2.Where(d => d.CourseID == h.course.CourseID),
+						             												{
+						             														CourseID = h.course.CourseID,
+						             														Credits = h.course.Credits,
+						             														Title = h.course.Title2 ?? h.course.Title1,
+						             														_CourseDescriptions1 = _DbContext.CourseDescriptions1.Where(d => d.CourseID == h.course.CourseID),
+						             														_CourseDescriptions2 = _DbContext.CourseDescriptions2.Where(d => d.CourseID == h.course.CourseID),
 																										_YearQuarterBegin = h.course.YearQuarterBegin,
 																										_YearQuarterEnd = h.course.YearQuarterEnd,
 																										IsVariableCredits = h.course.VariableCredits ?? false,
 																										_Footnotes = _DbContext.Footnote.Where(f => h.course.FootnoteID1 == f.FootnoteId || h.course.FootnoteID2 == f.FootnoteId)
 																										                                .Select(f => f.FootnoteText)
-																			});
+						             												});
 			}
 			else
 			{
@@ -349,18 +349,18 @@ namespace Ctc.Ods.Data
 																	.Where(h => (h.course.YearQuarterEnd ?? Settings.YearQuarter.Max).CompareTo(yrqId) >= 0)
 																	.Distinct()
 																	.Select(h => new Course
-																			{
-																					CourseID = h.course.CourseID,
-																					Credits = h.course.Credits,
-																					Title = h.course.Title2 ?? h.course.Title1,
-																					_CourseDescriptions1 = _DbContext.CourseDescriptions1.Where(d => d.CourseID == h.course.CourseID),
-																					_CourseDescriptions2 = _DbContext.CourseDescriptions2.Where(d => d.CourseID == h.course.CourseID),
+						             												{
+						             														CourseID = h.course.CourseID,
+						             														Credits = h.course.Credits,
+						             														Title = h.course.Title2 ?? h.course.Title1,
+						             														_CourseDescriptions1 = _DbContext.CourseDescriptions1.Where(d => d.CourseID == h.course.CourseID),
+						             														_CourseDescriptions2 = _DbContext.CourseDescriptions2.Where(d => d.CourseID == h.course.CourseID),
 																										_YearQuarterBegin = h.course.YearQuarterBegin,
 																										_YearQuarterEnd = h.course.YearQuarterEnd,
 																										IsVariableCredits = h.course.VariableCredits ?? false,
 																										_Footnotes = _DbContext.Footnote.Where(f => h.course.FootnoteID1 == f.FootnoteId || h.course.FootnoteID2 == f.FootnoteId)
 																										                                .Select(f => f.FootnoteText)
-																			});
+						             												});
 			}
 			else
 			{
@@ -412,18 +412,18 @@ namespace Ctc.Ods.Data
 						.Where(h => (h.course.YearQuarterEnd ?? Settings.YearQuarter.Max).CompareTo(yrqId) >= 0)
 						.Distinct()
 						.Select(h => new Course
-								{
-										CourseID = h.course.CourseID,
-										Credits = h.course.Credits,
-										Title = h.course.Title2 ?? h.course.Title1,
-										_CourseDescriptions1 = _DbContext.CourseDescriptions1.Where(d => d.CourseID == h.course.CourseID),
-										_CourseDescriptions2 = _DbContext.CourseDescriptions2.Where(d => d.CourseID == h.course.CourseID),
+						             	{
+						             			CourseID = h.course.CourseID,
+						             			Credits = h.course.Credits,
+						             			Title = h.course.Title2 ?? h.course.Title1,
+						             			_CourseDescriptions1 = _DbContext.CourseDescriptions1.Where(d => d.CourseID == h.course.CourseID),
+						             			_CourseDescriptions2 = _DbContext.CourseDescriptions2.Where(d => d.CourseID == h.course.CourseID),
 			                        _YearQuarterBegin = h.course.YearQuarterBegin,
 															_YearQuarterEnd = h.course.YearQuarterEnd,
-										IsVariableCredits = h.course.VariableCredits ?? false,
+						             			IsVariableCredits = h.course.VariableCredits ?? false,
 															_Footnotes = _DbContext.Footnote.Where(f => h.course.FootnoteID1 == f.FootnoteId || h.course.FootnoteID2 == f.FootnoteId)
 																										          .Select(f => f.FootnoteText)
-								});
+						             	});
 			}
 			else
 			{
@@ -463,7 +463,7 @@ namespace Ctc.Ods.Data
 			IQueryable<CourseEntity> courseData = _DbContext.Courses.Select(c => c);
 
 			string yrqId = (yrq != null) ? yrq.ID : CurrentYearQuarter.ID;
-
+			
 			// filter by active-in-current-or-future YRQ
 			courseData = courseData.Where(c => (c.YearQuarterEnd ?? Settings.YearQuarter.Max).CompareTo(yrqId) >= 0);
 
@@ -553,7 +553,7 @@ namespace Ctc.Ods.Data
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="courseId"></param>
 		/// <param name="yrq"></param>
@@ -609,7 +609,7 @@ namespace Ctc.Ods.Data
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="subjects"></param>
 		/// <param name="yrq"></param>
@@ -621,7 +621,7 @@ namespace Ctc.Ods.Data
 			{
 				return GetSections(subjects.First(), yrq, facetOptions);
 			}
-
+			
 			string[] prefixes = subjects.ToArray();
 
 			SectionFilters filters = new SectionFilters(this);
@@ -648,10 +648,10 @@ namespace Ctc.Ods.Data
 			string[] ids = sectionIds.Select(s => s.ToString()).ToArray();
 
 			SectionFilters filters = new SectionFilters(this)
-							{
-									s => ids.Contains(s.ClassID.Trim()),
+			                         	{
+			                         			s => ids.Contains(s.ClassID.Trim()),
 																		facetOptions
-							};
+			                         	};
 
 			IQueryable<Section> sections = GetSections(filters);
 			return sections.ToList();
@@ -714,45 +714,45 @@ namespace Ctc.Ods.Data
 					.OrderBy(s => s.joinedData.sectionData.YearQuarterID)	// apply a default sort order (expected to be the most common desired)
 					.ThenBy(s => s.joinedData.sectionData.CourseID.Replace(_commonCourseChar, " "))
 					.Select(section => new Section
-								{
-										ClassID = section.joinedData.sectionData.ClassID,
-										CourseID = section.joinedData.sectionData.CourseID,
+					                   	{
+					                   			ClassID = section.joinedData.sectionData.ClassID,
+					                   			CourseID = section.joinedData.sectionData.CourseID,
 																	// use CourseTitle2 from the Course table, otherwise fall back to CourseTitle, then the course title from the Section (i.e. Class) table
 																	// NOTE: This is Bellevue College logic. If different logic is desired, we should move this to the Section class
 																	_CourseTitle = _DbContext.Courses.Where(c => c.CourseID == section.joinedData.sectionData.CourseID && c.YearQuarterEnd.CompareTo(section.joinedData.sectionData.YearQuarterID) >= 0)
 																																	 .Select(c => c.Title2 ?? c.Title1).DefaultIfEmpty(section.joinedData.sectionData.CourseTitle).FirstOrDefault(),
-										Credits = section.joinedData.sectionData.Credits,
-										SectionCode = section.joinedData.sectionData.Section,
-										_YearQuarterID = section.joinedData.sectionData.YearQuarterID,
+					                   			Credits = section.joinedData.sectionData.Credits,
+					                   			SectionCode = section.joinedData.sectionData.Section,
+					                   			_YearQuarterID = section.joinedData.sectionData.YearQuarterID,
                                   StartDate = section.joinedData.sectionData.StartDate,
                                   EndDate = section.joinedData.sectionData.EndDate,
-										// count up how many students are waitlisted for each section
-										WaitlistCount = _DbContext.WaitListCounts.Where(w => w.Status == waitlistStatus && w.ClassID == section.joinedData.sectionData.ClassID).Count(),
-										// Construct the collection of instructor/day/time/location information...
-										Offered = _DbContext.InstructionDetails.Where(i => i.ClassID == section.joinedData.sectionData.ClassID)
+					                   			// count up how many students are waitlisted for each section
+					                   			WaitlistCount = _DbContext.WaitListCounts.Where(w => w.Status == waitlistStatus && w.ClassID == section.joinedData.sectionData.ClassID).Count(),
+					                   			// Construct the collection of instructor/day/time/location information...
+					                   			Offered = _DbContext.InstructionDetails.Where(i => i.ClassID == section.joinedData.sectionData.ClassID)
 																																				 .OrderBy(i => i.SessionSequence)
-																													 .Select(i => new OfferedItem
-																																	{
-																																			// get the Day text (e.g. MW, TTh)
-																																			Days = _DbContext.Days.Where(d => d.DayID == i.DayID)
+					                   																						 .Select(i => new OfferedItem
+					                   					        																				{
+					                   					        																						// get the Day text (e.g. MW, TTh)
+					                   					        																						Days = _DbContext.Days.Where(d => d.DayID == i.DayID)
                                                                                                                 .Select(d => d.Title == defaultDaysValue.ValueToFind ? defaultDaysValue.NewValue : d.Title)
                                                                                                                 .DefaultIfEmpty(defaultDaysValue.NewValue)
-																																														.FirstOrDefault(),
-																																			StartTime = i.StartTime,
-																																			EndTime = i.EndTime,
-																																			InstructorID = i.InstructorSID,
-																																			InstructorName = _DbContext.Employees.Where(e => e.SID == i.InstructorSID)
-																																																						// string.Format() not supported by EF, but string.Concat() is
+					                   					        																																	.FirstOrDefault(),
+					                   					        																						StartTime = i.StartTime,
+					                   					        																						EndTime = i.EndTime,
+					                   					        																						InstructorID = i.InstructorSID,
+					                   					        																						InstructorName = _DbContext.Employees.Where(e => e.SID == i.InstructorSID)
+					                   					        																																									// string.Format() not supported by EF, but string.Concat() is
 																																																															 .Select(e => String.Concat(e.AliasName ?? e.FirstName, " ", e.LastName))
 																																																															 .DefaultIfEmpty(string.Empty)
 																																																															 .FirstOrDefault(),
-																																			InstructorEmail = _DbContext.Employees.Where(e => e.SID == i.InstructorSID)
-																																																						.Select(e => e.WorkEmail ?? String.Concat(e.ADUserName, "@", emailDomain))
-																																																						.DefaultIfEmpty(String.Empty)
-																																																						.FirstOrDefault(),
-																																			Room = i.Room,
+					                   					        																						InstructorEmail = _DbContext.Employees.Where(e => e.SID == i.InstructorSID)
+					                   					        																																									.Select(e => e.WorkEmail ?? String.Concat(e.ADUserName, "@", emailDomain))
+					                   					        																																									.DefaultIfEmpty(String.Empty)
+					                   					        																																									.FirstOrDefault(),
+					                   					        																						Room = i.Room,
 																																													_SessionSequence = i.SessionSequence ?? "00"
-																																	}),
+					                   					        																				}),
 																	IsLinked = section.joinedData.sectionData.ItemYRQLink != null && section.joinedData.sectionData.ItemYRQLink != section.joinedData.sectionData.ItemNumber,
 																	LinkedTo = section.joinedData.sectionData.ItemYRQLink,
 																	_Footnote1 = section.joinedData.Footnote1 ?? string.Empty,
@@ -772,20 +772,20 @@ namespace Ctc.Ods.Data
 																	// As per SBCTC policy (http://www.sbctc.ctc.edu/general/policymanual/_a-policymanual-ch5Append.aspx), the default
 																	// "last registration date" is the "last instructional day of the course" - 2/24/2012, shawn.south@bellevuecollege.edu
 																	// TODO: Use LastClassDay of quarter if EndDate is null
-										_LastRegistrationDate = section.joinedData.sectionData.LastRegistrationDate ?? section.joinedData.sectionData.EndDate,
-										IsVariableCredits = section.joinedData.sectionData.VariableCredits ?? false,
-										IsDifferentStartDate = section.joinedData.sectionData.StartDate.HasValue && section.joinedData.sectionData.StartDate !=
-										             _DbContext.YearQuarters.Where(y => y.YearQuarterID == section.joinedData.sectionData.YearQuarterID)
-													.Select(y => y.FirstClassDay)
+					                   			_LastRegistrationDate = section.joinedData.sectionData.LastRegistrationDate ?? section.joinedData.sectionData.EndDate,
+					                   			IsVariableCredits = section.joinedData.sectionData.VariableCredits ?? false,
+					                   			IsDifferentStartDate = section.joinedData.sectionData.StartDate.HasValue && section.joinedData.sectionData.StartDate !=
+					                   			             _DbContext.YearQuarters.Where(y => y.YearQuarterID == section.joinedData.sectionData.YearQuarterID)
+					                   			             		.Select(y => y.FirstClassDay)
 																									.DefaultIfEmpty(DateTime.MaxValue)
-													.FirstOrDefault(),
-										IsDifferentEndDate = section.joinedData.sectionData.EndDate.HasValue && section.joinedData.sectionData.EndDate !=
-										                    _DbContext.YearQuarters.Where(y => y.YearQuarterID == section.joinedData.sectionData.YearQuarterID)
-														.Select(y => y.LastClassDay)
+					                   			             		.FirstOrDefault(),
+					                   			IsDifferentEndDate = section.joinedData.sectionData.EndDate.HasValue && section.joinedData.sectionData.EndDate !=
+					                   			                    _DbContext.YearQuarters.Where(y => y.YearQuarterID == section.joinedData.sectionData.YearQuarterID)
+					                   			                    		.Select(y => y.LastClassDay)
 																													.DefaultIfEmpty(DateTime.MaxValue)
-														.FirstOrDefault(),
+					                   			                    		.FirstOrDefault(),
 
-								});
+					                   	});
 			Debug.Print("==> Created [{0}] Sections.  {1}", sections.Count(), DateTime.Now);
 			Debug.Flush();
 
@@ -814,10 +814,10 @@ namespace Ctc.Ods.Data
 			            join c in _DbContext.Sections on prefix.CoursePrefixID equals c.CourseID.Substring(0, 5)	// left 5 characters
 			            where c.YearQuarterID.CompareTo(CurrentYearQuarter.ID) >= 0
 			            select new CoursePrefix
-						{
-								_Subject = prefix.CoursePrefixID.Replace(ccChar, ""),	// ignore Common Course denominator at this level
-								Title = prefix.Title
-						}
+			                   	{
+			                   			_Subject = prefix.CoursePrefixID.Replace(ccChar, ""),	// ignore Common Course denominator at this level
+			                   			Title = prefix.Title
+			                   	}
 			           );
 
 			return subjects.Distinct().OrderBy(p => p.Title).ToList();
@@ -843,10 +843,10 @@ namespace Ctc.Ods.Data
 			            join c in _DbContext.Sections on prefix.CoursePrefixID equals c.CourseID.Substring(0, 5) // left 5 characters
 			            where c.YearQuarterID.CompareTo(CurrentYearQuarter.ID) >= 0 && prefix.CoursePrefixID.StartsWith(character)
 			            select new CoursePrefix
-						{
-								_Subject = prefix.CoursePrefixID.Replace(ccChar, ""),	// ignore Common Course denominator at this level
-								Title = prefix.Title
-						}
+			                   	{
+			                   			_Subject = prefix.CoursePrefixID.Replace(ccChar, ""),	// ignore Common Course denominator at this level
+			                   			Title = prefix.Title
+			                   	}
 			           );
 
 			return subjects.Distinct().OrderBy(p => p.Title).ToList();
@@ -866,7 +866,7 @@ namespace Ctc.Ods.Data
 
 			SectionFilters filters = new SectionFilters(this);
 			filters.Add(s => s.YearQuarterID == yrq.ID);
-
+			
 			if (facetOptions != null && facetOptions.Count > 0)
 			{
 				filters.Add(facetOptions);
@@ -878,10 +878,10 @@ namespace Ctc.Ods.Data
 			                                                                   (p, s) => new { p, s })
 					.Where(h => h.s.YearQuarterID == yrq.ID)
 					.Select(h => new CoursePrefix
-							{
-									_Subject = h.p.CoursePrefixID.Replace(ccChar, ""),	// ignore Common Course denominator at this level
-									Title = h.p.Title
-							}
+					             	{
+					             			_Subject = h.p.CoursePrefixID.Replace(ccChar, ""),	// ignore Common Course denominator at this level
+					             			Title = h.p.Title
+					             	}
 					);
 			return subjects.Distinct().OrderBy(p => p.Title).ToList();
 		}
@@ -944,7 +944,7 @@ namespace Ctc.Ods.Data
 
 		#region Implementation of Dispose
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public void Dispose()
 		{
@@ -953,7 +953,7 @@ namespace Ctc.Ods.Data
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="disposing"></param>
 		private void Dispose(bool disposing)
@@ -1009,7 +1009,7 @@ namespace Ctc.Ods.Data
 				                                                                      descriptionCollections,	// arguments passed to the constructor
 				                                                                      null, // use default CultureInfo
 				                                                                      null  // no client ActivationAttributes
-								) as ICourseDescriptionStrategy;
+				                      		) as ICourseDescriptionStrategy;
 
 				IList<CourseDescription> courseDescriptions;
 				if (descriptionStrategy != null)
@@ -1084,10 +1084,10 @@ namespace Ctc.Ods.Data
 			///		<example>
 			///			<code>
 			/// SectionFilters filters = new SectionFilters();
-			///
+			/// 
 			/// filters.Add(s => s.YearQuarterID.CompareTo("B014") > 0);
 			/// filters.Add(s => !String.IsNullOrWhitespace(s.DayID));
-			///
+			/// 
 			/// var sections = _context.Sections.CompoundWhere(filters.FilterArray);
 			///			</code>
 			///		</example>

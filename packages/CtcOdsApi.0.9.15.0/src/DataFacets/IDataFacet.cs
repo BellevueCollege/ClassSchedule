@@ -16,7 +16,7 @@
 namespace Ctc.Ods
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	public interface IDataFacet
 	{

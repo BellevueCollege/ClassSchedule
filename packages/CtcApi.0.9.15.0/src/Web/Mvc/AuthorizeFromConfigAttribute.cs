@@ -6,14 +6,14 @@ using CtcApi.Web.Security;
 namespace CtcApi.Web.Mvc
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	public class AuthorizeFromConfigAttribute : AuthorizeAttribute
 	{
 		private string[] _roles = new string[] { };
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="httpContext"></param>
 		/// <returns></returns>
@@ -27,7 +27,7 @@ namespace CtcApi.Web.Mvc
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string RoleKey
 		{

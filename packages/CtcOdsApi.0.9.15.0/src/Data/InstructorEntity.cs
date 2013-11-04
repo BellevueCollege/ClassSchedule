@@ -18,19 +18,19 @@ using System.ComponentModel.DataAnnotations;
 namespace Ctc.Ods.Data
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	[Table("vw_Instructor")]
 	internal class InstructorEntity
 	{
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[Key]
 		public string SID{get;set;}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public string WorkEmail{get;set;}
 	}

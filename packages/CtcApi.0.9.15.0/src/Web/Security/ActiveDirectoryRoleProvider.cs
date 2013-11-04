@@ -16,7 +16,7 @@ using Common.Logging;
 /**********************************************************************************************
  * This class was adapted from a code example found at:
  * http://stackoverflow.com/questions/726837/user-group-and-role-management-in-net-with-active-directory
- *
+ * 
  * TODO: This provider still needs a lot of work/customizing.
  * I've tweaked it enough to get it working so far. - 1/04/2012, shawn.south@bellevuecollege.edu
  * ********************************************************************************************/
@@ -46,27 +46,27 @@ namespace CtcApi.Web.Security
 		//             DO NOT REMOVE ANY OF THESE UNLESS YOU FULLY UNDERSTAND THE SECURITY IMPLICATIONS
 		//             VERYIFY THAT ALL CRITICAL USERS ARE IGNORED DURING TESTING
 		private String[] _DefaultUsersToIgnore = new String[]
-								{
-										"Administrator", "TsInternetUser", "Guest", "krbtgt", "Replicate", "SERVICE", "SMSService"
-								};
+		                                         	{
+		                                         			"Administrator", "TsInternetUser", "Guest", "krbtgt", "Replicate", "SERVICE", "SMSService"
+		                                         	};
 
 		// IMPORTANT - DEFAULT LIST OF ACTIVE DIRECTORY DOMAIN GROUPS TO "IGNORE"
 		//             PREVENTS ENUMERATION OF CRITICAL DOMAIN GROUP MEMBERSHIP
 		//             DO NOT REMOVE ANY OF THESE UNLESS YOU FULLY UNDERSTAND THE SECURITY IMPLICATIONS
 		//             VERIFY THAT ALL CRITICAL GROUPS ARE IGNORED DURING TESTING BY CALLING GetAllRoles MANUALLY
 		private String[] _defaultGroupsToIgnore = new String[]
-								{
-										"Domain Guests", "Domain Computers", "Group Policy Creator Owners", "Guests", "Users",
-										"Domain Users", "Pre-Windows 2000 Compatible Access", "Exchange Domain Servers", "Schema Admins",
-										"Enterprise Admins", "Domain Admins", "Cert Publishers", "Backup Operators", "Account Operators",
-										"Server Operators", "Print Operators", "Replicator", "Domain Controllers", "WINS Users",
-										"DnsAdmins", "DnsUpdateProxy", "DHCP Users", "DHCP Administrators", "Exchange Services",
-										"Exchange Enterprise Servers", "Remote Desktop Users", "Network Configuration Operators",
-										"Incoming Forest Trust Builders", "Performance Monitor Users", "Performance Log Users",
-										"Windows Authorization Access Group", "Terminal Server License Servers", "Distributed COM Users",
-										"Administrators", "Everybody", "RAS and IAS Servers", "MTS Trusted Impersonators",
-										"MTS Impersonators", "Everyone", "LOCAL", "Authenticated Users"
-								};
+		                                          	{
+		                                          			"Domain Guests", "Domain Computers", "Group Policy Creator Owners", "Guests", "Users",
+		                                          			"Domain Users", "Pre-Windows 2000 Compatible Access", "Exchange Domain Servers", "Schema Admins",
+		                                          			"Enterprise Admins", "Domain Admins", "Cert Publishers", "Backup Operators", "Account Operators",
+		                                          			"Server Operators", "Print Operators", "Replicator", "Domain Controllers", "WINS Users",
+		                                          			"DnsAdmins", "DnsUpdateProxy", "DHCP Users", "DHCP Administrators", "Exchange Services",
+		                                          			"Exchange Enterprise Servers", "Remote Desktop Users", "Network Configuration Operators",
+		                                          			"Incoming Forest Trust Builders", "Performance Monitor Users", "Performance Log Users",
+		                                          			"Windows Authorization Access Group", "Terminal Server License Servers", "Distributed COM Users",
+		                                          			"Administrators", "Everybody", "RAS and IAS Servers", "MTS Trusted Impersonators",
+		                                          			"MTS Impersonators", "Everyone", "LOCAL", "Authenticated Users"
+		                                          	};
 		#endregion
 
 		private ILog _log;
@@ -193,7 +193,7 @@ namespace CtcApi.Web.Security
 
 			if ( principal == null )
 				return;
-
+					
 			Debug.Print(principal.Name);
 
 			List<string> res = null;
@@ -304,9 +304,9 @@ namespace CtcApi.Web.Security
 
 					return (
 
-							from user in p.GetMembers( true )
-							where !_usersToIgnore.Contains( user.SamAccountName )
-							select user.SamAccountName
+					       		from user in p.GetMembers( true )
+					       		where !_usersToIgnore.Contains( user.SamAccountName )
+					       		select user.SamAccountName
 
 					       ).ToArray();
 				}
@@ -341,9 +341,9 @@ namespace CtcApi.Web.Security
 
 			return (
 
-					from role in roles.Except( _groupsToIgnore )
-					where !_isAdditiveGroupMode || _groupsToUse.Contains( role )
-					select role
+			       		from role in roles.Except( _groupsToIgnore )
+			       		where !_isAdditiveGroupMode || _groupsToUse.Contains( role )
+			       		select role
 
 			       ).ToArray();
 		}
@@ -370,9 +370,9 @@ namespace CtcApi.Web.Security
 				throw new ProviderException( String.Format( "The role '{0}' was not found.", rolename ) );
 
 			return (
-					from user in GetUsersInRole( rolename )
-					where user.ToLower().Contains( usernameToMatch.ToLower() )
-					select user
+			       		from user in GetUsersInRole( rolename )
+			       		where user.ToLower().Contains( usernameToMatch.ToLower() )
+			       		select user
 
 			       ).ToArray();
 		}
@@ -380,7 +380,7 @@ namespace CtcApi.Web.Security
 		#region Non Supported Base Class Functions
 
 		/// <summary>
-		/// AddUsersToRoles not supported.  For security and management purposes, ADRoleProvider only supports read operations against Active Direcory.
+		/// AddUsersToRoles not supported.  For security and management purposes, ADRoleProvider only supports read operations against Active Direcory. 
 		/// </summary>
 		public override void AddUsersToRoles( string[] usernames, string[] rolenames )
 		{
@@ -388,7 +388,7 @@ namespace CtcApi.Web.Security
 		}
 
 		/// <summary>
-		/// CreateRole not supported.  For security and management purposes, ADRoleProvider only supports read operations against Active Direcory.
+		/// CreateRole not supported.  For security and management purposes, ADRoleProvider only supports read operations against Active Direcory. 
 		/// </summary>
 		public override void CreateRole( string rolename )
 		{
@@ -396,7 +396,7 @@ namespace CtcApi.Web.Security
 		}
 
 		/// <summary>
-		/// DeleteRole not supported.  For security and management purposes, ADRoleProvider only supports read operations against Active Direcory.
+		/// DeleteRole not supported.  For security and management purposes, ADRoleProvider only supports read operations against Active Direcory. 
 		/// </summary>
 		public override bool DeleteRole( string rolename, bool throwOnPopulatedRole )
 		{
@@ -404,7 +404,7 @@ namespace CtcApi.Web.Security
 		}
 
 		/// <summary>
-		/// RemoveUsersFromRoles not supported.  For security and management purposes, ADRoleProvider only supports read operations against Active Direcory.
+		/// RemoveUsersFromRoles not supported.  For security and management purposes, ADRoleProvider only supports read operations against Active Direcory. 
 		/// </summary>
 		public override void RemoveUsersFromRoles( string[] usernames, string[] rolenames )
 		{
@@ -423,11 +423,11 @@ namespace CtcApi.Web.Security
 		private String[] ADSearch( String ConnectionString, String filter, String field )
 		{
 			DirectorySearcher searcher = new DirectorySearcher
-							{
-									SearchRoot = new DirectoryEntry( ConnectionString ),
-									Filter = filter,
-									PageSize = 500
-							};
+			                             	{
+			                             			SearchRoot = new DirectoryEntry( ConnectionString ),
+			                             			Filter = filter,
+			                             			PageSize = 500
+			                             	};
 			searcher.PropertiesToLoad.Clear();
 			searcher.PropertiesToLoad.Add( field );
 

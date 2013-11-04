@@ -18,7 +18,7 @@
         </member>
         <member name="T:Common.Logging.ILog">
             <summary>
-            A simple logging interface abstracting logging APIs.
+            A simple logging interface abstracting logging APIs. 
             </summary>
             <remarks>
             <para>
@@ -28,12 +28,12 @@
             <para>
             Each <see cref="T:Common.Logging.ILog"/> log method offers to pass in a <see cref="T:System.Action`1"/> instead of the actual message.
             Using this style has the advantage to defer possibly expensive message argument evaluation and formatting (and formatting arguments!) until the message gets
-            actually logged. If the message is not logged at all (e.g. due to <see cref="T:Common.Logging.LogLevel"/> settings),
+            actually logged. If the message is not logged at all (e.g. due to <see cref="T:Common.Logging.LogLevel"/> settings), 
             you won't have to pay the peformance penalty of creating the message.
             </para>
             </remarks>
             <example>
-            The example below demonstrates using callback style for creating the message, where the call to the
+            The example below demonstrates using callback style for creating the message, where the call to the 
             <see cref="M:System.Random.NextDouble"/> and the underlying <see cref="M:System.String.Format(System.String,System.Object[])"/> only happens, if level <see cref="F:Common.Logging.LogLevel.Debug"/> is enabled:
             <code>
             Log.Debug( m=&gt;m("result is {0}", random.NextDouble()) );
@@ -97,7 +97,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Trace"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -107,7 +107,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Trace"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -118,7 +118,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Trace"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -129,7 +129,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Trace"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -188,7 +188,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Debug"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -198,7 +198,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Debug"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -209,7 +209,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Debug"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -220,7 +220,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Debug"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -279,7 +279,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Info"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -289,7 +289,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Info"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -300,7 +300,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Info"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -311,7 +311,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Info"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -370,7 +370,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Warn"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -380,7 +380,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Warn"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -391,7 +391,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Warn"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -402,7 +402,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Warn"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -461,7 +461,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Error"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -471,7 +471,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Error"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -482,7 +482,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Error"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -493,7 +493,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Error"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -552,7 +552,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Fatal"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -562,7 +562,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Fatal"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -573,7 +573,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Fatal"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -584,7 +584,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Fatal"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -628,19 +628,19 @@
         </member>
         <member name="M:Common.Logging.Factory.AbstractLogger.#ctor">
             <summary>
-            Creates a new logger instance using <see cref="M:Common.Logging.Factory.AbstractLogger.WriteInternal(Common.Logging.LogLevel,System.Object,System.Exception)"/> for
+            Creates a new logger instance using <see cref="M:Common.Logging.Factory.AbstractLogger.WriteInternal(Common.Logging.LogLevel,System.Object,System.Exception)"/> for 
             writing log events to the underlying log system.
             </summary>
             <seealso cref="M:Common.Logging.Factory.AbstractLogger.GetWriteHandler"/>
         </member>
         <member name="M:Common.Logging.Factory.AbstractLogger.GetWriteHandler">
             <summary>
-            Override this method to use a different method than <see cref="M:Common.Logging.Factory.AbstractLogger.WriteInternal(Common.Logging.LogLevel,System.Object,System.Exception)"/>
+            Override this method to use a different method than <see cref="M:Common.Logging.Factory.AbstractLogger.WriteInternal(Common.Logging.LogLevel,System.Object,System.Exception)"/> 
             for writing log events to the underlying log system.
             </summary>
             <remarks>
             Usually you don't need to override thise method. The default implementation returns
-            <c>null</c> to indicate that the default handler <see cref="M:Common.Logging.Factory.AbstractLogger.WriteInternal(Common.Logging.LogLevel,System.Object,System.Exception)"/> should be
+            <c>null</c> to indicate that the default handler <see cref="M:Common.Logging.Factory.AbstractLogger.WriteInternal(Common.Logging.LogLevel,System.Object,System.Exception)"/> should be 
             used.
             </remarks>
         </member>
@@ -704,7 +704,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Trace"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -714,7 +714,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Trace"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -725,7 +725,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Trace"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -736,7 +736,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Trace"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -795,7 +795,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Debug"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -805,7 +805,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Debug"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -816,7 +816,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Debug"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -827,7 +827,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Debug"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -886,7 +886,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Info"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -896,7 +896,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Info"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -907,7 +907,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Info"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -918,7 +918,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Info"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -977,7 +977,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Warn"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -987,7 +987,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Warn"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -998,7 +998,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Warn"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -1009,7 +1009,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Warn"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -1068,7 +1068,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Error"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -1078,7 +1078,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Error"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -1089,7 +1089,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Error"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -1100,7 +1100,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Error"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -1159,7 +1159,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Fatal"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -1169,7 +1169,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Fatal"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatMessageCallback">A callback used by the logger to obtain the message if log level is matched</param>
@@ -1180,7 +1180,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Fatal"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -1191,7 +1191,7 @@
             Log a message with the <see cref="F:Common.Logging.LogLevel.Fatal"/> level using a callback to obtain the message
             </summary>
             <remarks>
-            Using this method avoids the cost of creating a message and evaluating message arguments
+            Using this method avoids the cost of creating a message and evaluating message arguments 
             that probably won't be logged due to loglevel settings.
             </remarks>
             <param name="formatProvider">An <see cref="T:System.IFormatProvider"/> that supplies culture-specific formatting information.</param>
@@ -1379,7 +1379,7 @@
         </member>
         <member name="T:Common.Logging.Simple.CapturingLogger">
             <summary>
-            A logger created by <see cref="T:Common.Logging.Simple.CapturingLoggerFactoryAdapter"/> that
+            A logger created by <see cref="T:Common.Logging.Simple.CapturingLoggerFactoryAdapter"/> that 
             sends all log events to the owning adapter's <see cref="M:Common.Logging.Simple.CapturingLoggerFactoryAdapter.AddEvent(Common.Logging.Simple.CapturingLoggerEvent)"/>
             </summary>
             <author>Erich Eichinger</author>
@@ -1468,7 +1468,7 @@
             <summary>
             Returns <see langword="true"/> if the current <see cref="T:Common.Logging.LogLevel"/> is greater than or
             equal to <see cref="F:Common.Logging.LogLevel.Info"/>. If it is, only messages with a <see cref="T:Common.Logging.LogLevel"/> of
-            <see cref="F:Common.Logging.LogLevel.Info"/>, <see cref="F:Common.Logging.LogLevel.Warn"/>, <see cref="F:Common.Logging.LogLevel.Error"/>, and
+            <see cref="F:Common.Logging.LogLevel.Info"/>, <see cref="F:Common.Logging.LogLevel.Warn"/>, <see cref="F:Common.Logging.LogLevel.Error"/>, and 
             <see cref="F:Common.Logging.LogLevel.Fatal"/> will be sent to <see cref="P:System.Console.Out"/>.
             </summary>
         </member>
@@ -1476,7 +1476,7 @@
             <summary>
             Returns <see langword="true"/> if the current <see cref="T:Common.Logging.LogLevel"/> is greater than or
             equal to <see cref="F:Common.Logging.LogLevel.Warn"/>. If it is, only messages with a <see cref="T:Common.Logging.LogLevel"/> of
-            <see cref="F:Common.Logging.LogLevel.Warn"/>, <see cref="F:Common.Logging.LogLevel.Error"/>, and <see cref="F:Common.Logging.LogLevel.Fatal"/>
+            <see cref="F:Common.Logging.LogLevel.Warn"/>, <see cref="F:Common.Logging.LogLevel.Error"/>, and <see cref="F:Common.Logging.LogLevel.Fatal"/> 
             will be sent to <see cref="P:System.Console.Out"/>.
             </summary>
         </member>
@@ -1578,7 +1578,7 @@
         </member>
         <member name="T:Common.Logging.Simple.CapturingLoggerFactoryAdapter">
             <summary>
-            An adapter, who's loggers capture all log events and send them to <see cref="M:Common.Logging.Simple.CapturingLoggerFactoryAdapter.AddEvent(Common.Logging.Simple.CapturingLoggerEvent)"/>.
+            An adapter, who's loggers capture all log events and send them to <see cref="M:Common.Logging.Simple.CapturingLoggerFactoryAdapter.AddEvent(Common.Logging.Simple.CapturingLoggerEvent)"/>. 
             Retrieve the list of log events from <see cref="F:Common.Logging.Simple.CapturingLoggerFactoryAdapter.LoggerEvents"/>.
             </summary>
             <remarks>
@@ -1589,13 +1589,13 @@
             // configure for capturing
             CapturingLoggerFactoryAdapter adapter = new CapturingLoggerFactoryAdapter();
             LogManager.Adapter = adapter;
-
+            
             // reset capture state
             adapter.Clear();
             // log something
             ILog log = LogManager.GetCurrentClassLogger();
             log.DebugFormat("Current Time:{0}", DateTime.Now);
-
+            
             // check logged data
             Assert.AreEqual(1, adapter.LoggerEvents.Count);
             Assert.AreEqual(LogLevel.Debug, adapter.LastEvent.Level);
@@ -1644,15 +1644,15 @@
         </member>
         <member name="T:Common.Logging.Simple.CommonLoggingTraceListener">
             <summary>
-            A <see cref="T:System.Diagnostics.TraceListener"/> implementation sending all <see cref="T:System.Diagnostics.Trace">System.Diagnostics.Trace</see> output to
+            A <see cref="T:System.Diagnostics.TraceListener"/> implementation sending all <see cref="T:System.Diagnostics.Trace">System.Diagnostics.Trace</see> output to 
             the Common.Logging infrastructure.
             </summary>
             <remarks>
             This listener captures all output sent by calls to <see cref="T:System.Diagnostics.Trace">System.Diagnostics.Trace</see> and
             and <see cref="T:System.Diagnostics.TraceSource"/> and sends it to an <see cref="T:Common.Logging.ILog"/> instance.<br/>
             The <see cref="T:Common.Logging.ILog"/> instance to be used is obtained by calling
-            <see cref="M:Common.Logging.LogManager.GetLogger(System.String)"/>. The name of the logger is created by passing
-            this listener's <see cref="P:System.Diagnostics.TraceListener.Name"/> and any <c>source</c> or <c>category</c> passed
+            <see cref="M:Common.Logging.LogManager.GetLogger(System.String)"/>. The name of the logger is created by passing 
+            this listener's <see cref="P:System.Diagnostics.TraceListener.Name"/> and any <c>source</c> or <c>category</c> passed 
             into this listener (see <see cref="M:System.Diagnostics.TraceListener.WriteLine(System.Object,System.String)"/> or <see cref="M:System.Diagnostics.TraceListener.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String,System.Object[])"/> for example).
             </remarks>
             <example>
@@ -1841,7 +1841,7 @@
         </member>
         <member name="T:Common.Logging.Configuration.DefaultConfigurationReader">
             <summary>
-            Implementation of <see cref="T:Common.Logging.IConfigurationReader"/> that uses the standard .NET
+            Implementation of <see cref="T:Common.Logging.IConfigurationReader"/> that uses the standard .NET 
             configuration APIs, ConfigurationSettings in 1.x and ConfigurationManager in 2.0
             </summary>
             <author>Mark Pollack</author>
@@ -1860,7 +1860,7 @@
             </summary>
             <remarks>
             <p>
-            Primary purpose of this method is to allow us to parse and
+            Primary purpose of this method is to allow us to parse and 
             load configuration sections using the same API regardless
             of the .NET framework version.
             </p>
@@ -1878,7 +1878,7 @@
             Object created by a corresponding <see cref="T:System.Configuration.IConfigurationSectionHandler"/>.
             </returns>
             <remarks>
-		<p>
+            	<p>
             Primary purpose of this method is to allow us to parse and
             load configuration sections using the same API regardless
             of the .NET framework version.
@@ -1941,7 +1941,7 @@
             Returns the first nonnull, nonempty value among its arguments.
             </summary>
             <remarks>
-            Also
+            Also 
             </remarks>
         </member>
         <member name="M:Common.Logging.Configuration.ArgUtils.TryParseEnum``1(``0,System.String)">
@@ -1985,7 +1985,7 @@
         <member name="M:Common.Logging.Configuration.ArgUtils.Guard(Common.Logging.Configuration.ArgUtils.Action,System.String,System.Object[])">
             <summary>
             Ensures any exception thrown by the given <paramref name="action"/> is wrapped with an
-            <see cref="T:Common.Logging.ConfigurationException"/>.
+            <see cref="T:Common.Logging.ConfigurationException"/>. 
             </summary>
             <remarks>
             If <paramref name="action"/> already throws a ConfigurationException, it will not be wrapped.
@@ -1997,7 +1997,7 @@
         <member name="M:Common.Logging.Configuration.ArgUtils.Guard``1(Common.Logging.Configuration.ArgUtils.Function{``0},System.String,System.Object[])">
             <summary>
             Ensures any exception thrown by the given <paramref name="function"/> is wrapped with an
-            <see cref="T:Common.Logging.ConfigurationException"/>.
+            <see cref="T:Common.Logging.ConfigurationException"/>. 
             </summary>
             <remarks>
             If <paramref name="function"/> already throws a ConfigurationException, it will not be wrapped.
@@ -2025,7 +2025,7 @@
         </member>
         <member name="T:Common.Logging.FormatMessageHandler">
             <summary>
-             The type of method that is passed into e.g. <see cref="M:Common.Logging.ILog.Debug(System.Action{Common.Logging.FormatMessageHandler})"/>
+             The type of method that is passed into e.g. <see cref="M:Common.Logging.ILog.Debug(System.Action{Common.Logging.FormatMessageHandler})"/> 
              and allows the callback method to "submit" it's message to the underlying output system.
             </summary>
             <param name="format">the format argument as in <see cref="M:System.String.Format(System.String,System.Object[])"/></param>
@@ -2045,7 +2045,7 @@
                 &lt;configSections&gt;
                   &lt;sectionGroup name=&quot;common&quot;&gt;
                     &lt;section name=&quot;logging&quot; type=&quot;Common.Logging.ConfigurationSectionHandler, Common.Logging&quot; /&gt;
-                  &lt;/sectionGroup&gt;
+                  &lt;/sectionGroup&gt; 
                 &lt;/configSections&gt;
                 &lt;common&gt;
                   &lt;logging&gt;
@@ -2063,7 +2063,7 @@
         </member>
         <member name="M:Common.Logging.ConfigurationSectionHandler.#cctor">
             <summary>
-            Ensure static fields get initialized before any class member
+            Ensure static fields get initialized before any class member 
             can be accessed (avoids beforeFieldInit)
             </summary>
         </member>
@@ -2079,8 +2079,8 @@
             </summary>
             <param name="section"></param>
             <returns>
-            A <see cref="T:Common.Logging.Configuration.LogSetting"/> object containing the specified type that implements
-            <see cref="T:Common.Logging.ILoggerFactoryAdapter"/> along with zero or more properties that will be
+            A <see cref="T:Common.Logging.Configuration.LogSetting"/> object containing the specified type that implements 
+            <see cref="T:Common.Logging.ILoggerFactoryAdapter"/> along with zero or more properties that will be 
             passed to the logger factory adapter's constructor as an <see cref="T:System.Collections.IDictionary"/>.
             </returns>
         </member>
@@ -2156,42 +2156,42 @@
         </member>
         <member name="T:Common.Logging.LogManager">
             <summary>
-            Use the LogManager's <see cref="M:Common.Logging.LogManager.GetLogger(System.String)"/> or <see cref="M:Common.Logging.LogManager.GetLogger(System.Type)"/>
+            Use the LogManager's <see cref="M:Common.Logging.LogManager.GetLogger(System.String)"/> or <see cref="M:Common.Logging.LogManager.GetLogger(System.Type)"/> 
             methods to obtain <see cref="T:Common.Logging.ILog"/> instances for logging.
             </summary>
             <remarks>
-            For configuring the underlying log system using application configuration, see the example
-            at <see cref="T:Common.Logging.ConfigurationSectionHandler"/>.
+            For configuring the underlying log system using application configuration, see the example 
+            at <see cref="T:Common.Logging.ConfigurationSectionHandler"/>. 
             For configuring programmatically, see the example section below.
             </remarks>
             <example>
             The example below shows the typical use of LogManager to obtain a reference to a logger
             and log an exception:
             <code>
-
+            
             ILog log = LogManager.GetLogger(this.GetType());
             ...
-            try
-            {
-              /* .... */
+            try 
+            { 
+              /* .... */ 
             }
             catch(Exception ex)
             {
               log.ErrorFormat("Hi {0}", ex, "dude");
             }
-
+            
             </code>
             The example below shows programmatic configuration of the underlying log system:
             <code>
-
+            
             // create properties
             NameValueCollection properties = new NameValueCollection();
             properties["showDateTime"] = "true";
-
+            
             // set Adapter
-            Common.Logging.LogManager.Adapter = new
+            Common.Logging.LogManager.Adapter = new 
             Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter(properties);
-
+            
             </code>
             </example>
             <seealso cref="T:Common.Logging.ILog"/>
@@ -2221,7 +2221,7 @@
             </summary>
             <remarks>
             This is mainly used for unit testing, you wouldn't normally use this in your applications.<br/>
-            <b>Note:</b><see cref="T:Common.Logging.ILog"/> instances already handed out from this LogManager are not(!) affected.
+            <b>Note:</b><see cref="T:Common.Logging.ILog"/> instances already handed out from this LogManager are not(!) affected. 
             Resetting LogManager only affects new instances being handed out.
             </remarks>
         </member>
@@ -2232,11 +2232,11 @@
             </summary>
             <remarks>
             This is mainly used for unit testing, you wouldn't normally use this in your applications.<br/>
-            <b>Note:</b><see cref="T:Common.Logging.ILog"/> instances already handed out from this LogManager are not(!) affected.
+            <b>Note:</b><see cref="T:Common.Logging.ILog"/> instances already handed out from this LogManager are not(!) affected. 
             Resetting LogManager only affects new instances being handed out.
             </remarks>
             <param name="reader">
-            the <see cref="T:Common.Logging.IConfigurationReader"/> instance to obtain settings for
+            the <see cref="T:Common.Logging.IConfigurationReader"/> instance to obtain settings for 
             re-initializing the LogManager.
             </param>
         </member>
@@ -2246,7 +2246,7 @@
             on the currently configured <see cref="P:Common.Logging.LogManager.Adapter"/> using the type of the calling class.
             </summary>
             <remarks>
-            This method needs to inspect the <see cref="T:System.Diagnostics.StackTrace"/> in order to determine the calling
+            This method needs to inspect the <see cref="T:System.Diagnostics.StackTrace"/> in order to determine the calling 
             class. This of course comes with a performance penalty, thus you shouldn't call it too
             often in your application.
             </remarks>
@@ -2312,14 +2312,14 @@
         </member>
         <member name="M:Common.Logging.Configuration.LogSetting.#ctor(System.Type,System.Collections.Specialized.NameValueCollection)">
             <summary>
-
+            
             </summary>
             <param name="factoryAdapterType">
-            The <see cref="T:Common.Logging.ILoggerFactoryAdapter"/> type
+            The <see cref="T:Common.Logging.ILoggerFactoryAdapter"/> type 
             that will be used for creating <see cref="T:Common.Logging.ILog"/>
             </param>
             <param name="properties">
-            Additional user supplied properties that are passed to the
+            Additional user supplied properties that are passed to the 
             <paramref name="factoryAdapterType"/>'s constructor.
             </param>
         </member>
@@ -2342,9 +2342,9 @@
         <member name="T:Common.Logging.Simple.NamespaceDoc">
             <summary>
             <para>This namespace contains out-of-the-box adapters to intrinsic systems, namely
-            <see cref="T:Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter"/>, <see cref="T:Common.Logging.Simple.TraceLoggerFactoryAdapter"/> and the
+            <see cref="T:Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter"/>, <see cref="T:Common.Logging.Simple.TraceLoggerFactoryAdapter"/> and the 
             all output suppressing <see cref="T:Common.Logging.Simple.NoOpLoggerFactoryAdapter"/>.</para>
-            <para>For unit testing, you may also want to have a look at <see cref="T:Common.Logging.Simple.CapturingLoggerFactoryAdapter"/>
+            <para>For unit testing, you may also want to have a look at <see cref="T:Common.Logging.Simple.CapturingLoggerFactoryAdapter"/> 
             that allows to easily inspect logged messages.</para>
             <para>To route messages logged through the <see cref="T:System.Diagnostics.Trace"/> infrastructure back into
             Common.Logging, you can use <see cref="T:Common.Logging.Simple.CommonLoggingTraceListener"/></para>
@@ -2359,61 +2359,61 @@
             <summary>
             <h1>Overview</h1>
             <para>
-            There are a variety of logging implementations for .NET currently in use, log4net, Enterprise
-            Library Logging, NLog, to name the most popular. The downside of having differerent implementation
-            is that they do not share a common interface and therefore impose a particular logging
-            implementation on the users of your library. To solve this dependency problem the Common.Logging
-            library introduces a simple abstraction to allow you to select a specific logging implementation at
+            There are a variety of logging implementations for .NET currently in use, log4net, Enterprise 
+            Library Logging, NLog, to name the most popular. The downside of having differerent implementation 
+            is that they do not share a common interface and therefore impose a particular logging 
+            implementation on the users of your library. To solve this dependency problem the Common.Logging 
+            library introduces a simple abstraction to allow you to select a specific logging implementation at 
             runtime.
             </para>
             <para>
-            The library is based on work done by the developers of IBatis.NET and it's usage is inspired by
+            The library is based on work done by the developers of IBatis.NET and it's usage is inspired by 
             log4net. Many thanks to the developers of those projects!
             </para>
             <h1>Usage</h1>
             <para>
-            The core logging library Common.Logging provides the base logging <see cref="T:Common.Logging.ILog"/> interface as
+            The core logging library Common.Logging provides the base logging <see cref="T:Common.Logging.ILog"/> interface as 
             well as the global <see cref="T:Common.Logging.LogManager"/> that you use to instrument your code:
             </para>
             <code lang="C#">
-            ILog log = LogManager.GetLogger(this.GetType());
-
+            ILog log = LogManager.GetLogger(this.GetType());  
+            
             log.DebugFormat("Hi {0}", "dude");
             </code>
             <para>
-            To output the information logged, you need to tell Common.Logging, what underlying logging system
-            to use. Common.Logging already includes simple console and trace based logger implementations
-            usable out of the box. Adding the following configuration snippet to your app.config causes
+            To output the information logged, you need to tell Common.Logging, what underlying logging system 
+            to use. Common.Logging already includes simple console and trace based logger implementations 
+            usable out of the box. Adding the following configuration snippet to your app.config causes 
             Common.Logging to output all information to the console:
             </para>
             <code lang="XML">
-            &lt;configuration&gt;
-                &lt;configSections&gt;
-                  &lt;sectionGroup name="common"&gt;
-                    &lt;section name="logging" type="Common.Logging.ConfigurationSectionHandler, Common.Logging" /&gt;
-                  &lt;/sectionGroup&gt;
-                &lt;/configSections&gt;
-
-                &lt;common&gt;
-                  &lt;logging&gt;
-                    &lt;factoryAdapter type="Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter, Common.Logging"&gt;
-                      &lt;arg key="level" value="DEBUG" /&gt;
-                    &lt;/factoryAdapter&gt;
-                  &lt;/logging&gt;
-                &lt;/common&gt;
-            &lt;/configuration&gt;
+            &lt;configuration&gt; 
+                &lt;configSections&gt; 
+                  &lt;sectionGroup name="common"&gt; 
+                    &lt;section name="logging" type="Common.Logging.ConfigurationSectionHandler, Common.Logging" /&gt; 
+                  &lt;/sectionGroup&gt;  
+                &lt;/configSections&gt; 
+                 
+                &lt;common&gt; 
+                  &lt;logging&gt; 
+                    &lt;factoryAdapter type="Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter, Common.Logging"&gt; 
+                      &lt;arg key="level" value="DEBUG" /&gt; 
+                    &lt;/factoryAdapter&gt; 
+                  &lt;/logging&gt; 
+                &lt;/common&gt; 
+            &lt;/configuration&gt; 
             </code>
             <h1>Customizing</h1>
             <para>
-            In the case you want to integrate your own logging system that is not supported by Common.Logging yet, it is easily
+            In the case you want to integrate your own logging system that is not supported by Common.Logging yet, it is easily 
             possible to implement your own plugin by implementing <see cref="T:Common.Logging.ILoggerFactoryAdapter"/>.
-            For convenience there is a base <see cref="T:Common.Logging.Factory.AbstractCachingLoggerFactoryAdapter"/> implementation available that usually
+            For convenience there is a base <see cref="T:Common.Logging.Factory.AbstractCachingLoggerFactoryAdapter"/> implementation available that usually 
             makes implementing your own adapter a breeze.
             </para>
             <h1>&lt;system.diagnostics&gt; Integration</h1>
             <para>
             If your code already uses the .NET framework's built-in <a href="http://msdn.microsoft.com/library/system.diagnostics.trace.aspx">System.Diagnostics.Trace</a>
-            system, you can use <see cref="T:Common.Logging.Simple.CommonLoggingTraceListener"/> to redirect all trace output to the
+            system, you can use <see cref="T:Common.Logging.Simple.CommonLoggingTraceListener"/> to redirect all trace output to the 
             Common.Logging infrastructure.
             </para>
             </summary>
@@ -2435,33 +2435,33 @@
             <code>
             public class ConsoleOutLogger : AbstractSimpleLogger
             {
-              public ConsoleOutLogger(string logName, LogLevel logLevel, bool showLevel, bool showDateTime,
+              public ConsoleOutLogger(string logName, LogLevel logLevel, bool showLevel, bool showDateTime, 
             bool showLogName, string dateTimeFormat)
                   : base(logName, logLevel, showLevel, showDateTime, showLogName, dateTimeFormat)
               {
               }
-
+            
               protected override void WriteInternal(LogLevel level, object message, Exception e)
               {
                   // Use a StringBuilder for better performance
                   StringBuilder sb = new StringBuilder();
                   FormatOutput(sb, level, message, e);
-
+            
                   // Print to the appropriate destination
                   Console.Out.WriteLine(sb.ToString());
               }
             }
-
+            
             public class ConsoleOutLoggerFactoryAdapter : AbstractSimpleLoggerFactoryAdapter
             {
               public ConsoleOutLoggerFactoryAdapter(NameValueCollection properties)
                   : base(properties)
               { }
-
-              protected override ILog CreateLogger(string name, LogLevel level, bool showLevel, bool
+            
+              protected override ILog CreateLogger(string name, LogLevel level, bool showLevel, bool 
             showDateTime, bool showLogName, string dateTimeFormat)
               {
-                  ILog log = new ConsoleOutLogger(name, level, showLevel, showDateTime, showLogName,
+                  ILog log = new ConsoleOutLogger(name, level, showLevel, showDateTime, showLogName, 
             dateTimeFormat);
                   return log;
               }
@@ -2480,18 +2480,18 @@
             Initializes a new instance of the <see cref="T:Common.Logging.Simple.AbstractSimpleLoggerFactoryAdapter"/> class.
             </summary>
             <remarks>
-            Looks for level, showDateTime, showLogName, dateTimeFormat items from
+            Looks for level, showDateTime, showLogName, dateTimeFormat items from 
             <paramref name="properties"/> for use when the GetLogger methods are called.
-            <see cref="T:Common.Logging.ConfigurationSectionHandler"/> for more information on how to use the
-            standard .NET application configuraiton file (App.config/Web.config)
+            <see cref="T:Common.Logging.ConfigurationSectionHandler"/> for more information on how to use the 
+            standard .NET application configuraiton file (App.config/Web.config) 
             to configure this adapter.
             </remarks>
-            <param name="properties">The name value collection, typically specified by the user in
+            <param name="properties">The name value collection, typically specified by the user in 
             a configuration section named common/logging.</param>
         </member>
         <member name="M:Common.Logging.Simple.AbstractSimpleLoggerFactoryAdapter.#ctor(Common.Logging.LogLevel,System.Boolean,System.Boolean,System.Boolean,System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:Common.Logging.Simple.AbstractSimpleLoggerFactoryAdapter"/> class with
+            Initializes a new instance of the <see cref="T:Common.Logging.Simple.AbstractSimpleLoggerFactoryAdapter"/> class with 
             default settings for the loggers created by this factory.
             </summary>
         </member>
@@ -2567,7 +2567,7 @@
             Below is an example how to configure this adapter:
             <code>
             &lt;configuration&gt;
-
+            
               &lt;configSections&gt;
                 &lt;sectionGroup name="common"&gt;
                   &lt;section name="logging"
@@ -2575,7 +2575,7 @@
                            requirePermission="false" /&gt;
                 &lt;/sectionGroup&gt;
               &lt;/configSections&gt;
-
+            
               &lt;common&gt;
                 &lt;logging&gt;
                   &lt;factoryAdapter type="Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter, Common.Logging"&gt;
@@ -2583,7 +2583,7 @@
                   &lt;/factoryAdapter&gt;
                 &lt;/logging&gt;
               &lt;/common&gt;
-
+            
             &lt;/configuration&gt;
             </code>
             </example>
@@ -2597,7 +2597,7 @@
         </member>
         <member name="M:Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter"/> class using default
+            Initializes a new instance of the <see cref="T:Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter"/> class using default 
             settings.
             </summary>
         </member>
@@ -2606,18 +2606,18 @@
             Initializes a new instance of the <see cref="T:Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter"/> class.
             </summary>
             <remarks>
-            Looks for level, showDateTime, showLogName, dateTimeFormat items from
+            Looks for level, showDateTime, showLogName, dateTimeFormat items from 
             <paramref name="properties"/> for use when the GetLogger methods are called.
-            <see cref="T:Common.Logging.ConfigurationSectionHandler"/> for more information on how to use the
-            standard .NET application configuraiton file (App.config/Web.config)
+            <see cref="T:Common.Logging.ConfigurationSectionHandler"/> for more information on how to use the 
+            standard .NET application configuraiton file (App.config/Web.config) 
             to configure this adapter.
             </remarks>
-            <param name="properties">The name value collection, typically specified by the user in
+            <param name="properties">The name value collection, typically specified by the user in 
             a configuration section named common/logging.</param>
         </member>
         <member name="M:Common.Logging.Simple.ConsoleOutLoggerFactoryAdapter.#ctor(Common.Logging.LogLevel,System.Boolean,System.Boolean,System.Boolean,System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:Common.Logging.Simple.AbstractSimpleLoggerFactoryAdapter"/> class with
+            Initializes a new instance of the <see cref="T:Common.Logging.Simple.AbstractSimpleLoggerFactoryAdapter"/> class with 
             default settings for the loggers created by this factory.
             </summary>
         </member>
@@ -3113,7 +3113,7 @@
             Below is an example how to configure this adapter:
             <code>
             &lt;configuration&gt;
-
+            
               &lt;configSections&gt;
                 &lt;sectionGroup name="common"&gt;
                   &lt;section name="logging"
@@ -3121,7 +3121,7 @@
                            requirePermission="false" /&gt;
                 &lt;/sectionGroup&gt;
               &lt;/configSections&gt;
-
+            
               &lt;common&gt;
                 &lt;logging&gt;
                   &lt;factoryAdapter type="Common.Logging.Simple.NoOpLoggerFactoryAdapter, Common.Logging"&gt;
@@ -3129,7 +3129,7 @@
                   &lt;/factoryAdapter&gt;
                 &lt;/logging&gt;
               &lt;/common&gt;
-
+            
             &lt;/configuration&gt;
             </code>
             </example>
@@ -3150,14 +3150,14 @@
         </member>
         <member name="M:Common.Logging.Simple.NoOpLoggerFactoryAdapter.GetLogger(System.Type)">
             <summary>
-            Get a ILog instance by type
+            Get a ILog instance by type 
             </summary>
             <param name="type"></param>
             <returns></returns>
         </member>
         <member name="M:Common.Logging.Simple.NoOpLoggerFactoryAdapter.Common#Logging#ILoggerFactoryAdapter#GetLogger(System.String)">
             <summary>
-            Get a ILog instance by type name
+            Get a ILog instance by type name 
             </summary>
             <param name="name"></param>
             <returns></returns>
@@ -3167,7 +3167,7 @@
             Logger sending everything to the trace output stream using <see cref="T:System.Diagnostics.Trace"/>.
             </summary>
             <remarks>
-            Beware not to use <see cref="T:Common.Logging.Simple.CommonLoggingTraceListener"/> in combination with this logger as
+            Beware not to use <see cref="T:Common.Logging.Simple.CommonLoggingTraceListener"/> in combination with this logger as 
             this would result in an endless loop for obvious reasons!
             </remarks>
             <seealso cref="P:Common.Logging.LogManager.Adapter"/>
@@ -3211,13 +3211,13 @@
             Used to defer message formatting until it is really needed.
             </summary>
             <remarks>
-            This class also improves performance when multiple
+            This class also improves performance when multiple 
             <see cref="T:System.Diagnostics.TraceListener"/>s are configured.
             </remarks>
         </member>
         <member name="T:Common.Logging.Simple.TraceLoggerFactoryAdapter">
             <summary>
-            Factory for creating <see cref="T:Common.Logging.ILog"/> instances that send
+            Factory for creating <see cref="T:Common.Logging.ILog"/> instances that send 
             everything to the <see cref="T:System.Diagnostics.Trace"/> output stream.
             </summary>
             <remarks>
@@ -3227,7 +3227,7 @@
             Below is an example how to configure this adapter:
             <code>
             &lt;configuration&gt;
-
+            
               &lt;configSections&gt;
                 &lt;sectionGroup name="common"&gt;
                   &lt;section name="logging"
@@ -3235,7 +3235,7 @@
                            requirePermission="false" /&gt;
                 &lt;/sectionGroup&gt;
               &lt;/configSections&gt;
-
+            
               &lt;common&gt;
                 &lt;logging&gt;
                   &lt;factoryAdapter type="Common.Logging.Simple.TraceLoggerFactoryAdapter, Common.Logging"&gt;
@@ -3243,7 +3243,7 @@
                   &lt;/factoryAdapter&gt;
                 &lt;/logging&gt;
               &lt;/common&gt;
-
+            
             &lt;/configuration&gt;
             </code>
             </example>
@@ -3265,18 +3265,18 @@
             Initializes a new instance of the <see cref="T:Common.Logging.Simple.TraceLoggerFactoryAdapter"/> class.
             </summary>
             <remarks>
-            Looks for level, showDateTime, showLogName, dateTimeFormat items from
+            Looks for level, showDateTime, showLogName, dateTimeFormat items from 
             <paramref name="properties"/> for use when the GetLogger methods are called.
-            <see cref="T:Common.Logging.ConfigurationSectionHandler"/> for more information on how to use the
-            standard .NET application configuraiton file (App.config/Web.config)
+            <see cref="T:Common.Logging.ConfigurationSectionHandler"/> for more information on how to use the 
+            standard .NET application configuraiton file (App.config/Web.config) 
             to configure this adapter.
             </remarks>
-            <param name="properties">The name value collection, typically specified by the user in
+            <param name="properties">The name value collection, typically specified by the user in 
             a configuration section named common/logging.</param>
         </member>
         <member name="M:Common.Logging.Simple.TraceLoggerFactoryAdapter.#ctor(Common.Logging.LogLevel,System.Boolean,System.Boolean,System.Boolean,System.String,System.Boolean)">
             <summary>
-            Initializes a new instance of the <see cref="T:Common.Logging.Simple.AbstractSimpleLoggerFactoryAdapter"/> class with
+            Initializes a new instance of the <see cref="T:Common.Logging.Simple.AbstractSimpleLoggerFactoryAdapter"/> class with 
             default settings for the loggers created by this factory.
             </summary>
         </member>

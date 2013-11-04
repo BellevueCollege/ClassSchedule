@@ -18,7 +18,7 @@ using System.Runtime.Serialization;
 namespace Ctc.Ods.Types
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
     [DataContract]
 	public class CourseDescription : ICourseDescription

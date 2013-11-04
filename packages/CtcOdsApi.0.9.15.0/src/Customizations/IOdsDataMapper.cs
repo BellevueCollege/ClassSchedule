@@ -23,26 +23,26 @@ using Ctc.Ods.Types;
 namespace Ctc.Ods.Customizations
 {
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	internal interface IOdsDataMapper<T> where T : IRichDataObject
 	{
 		///<summary>
-		///
+		/// 
 		///</summary>
 		///<param name="db"></param>
 		///<returns></returns>
 		IList<T> GetData(DbContext db);
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="facet"></param>
 		void AddFacet(IDataFacet facet);
 	}
 
 	/// <summary>
-	///
+	/// 
 	/// </summary>
 	public class DefaultSectionMapper : IOdsDataMapper<Section>
 	{
@@ -50,7 +50,7 @@ namespace Ctc.Ods.Customizations
 		// how can we define expected methods, but not expose them externally??
 
 		///<summary>
-		///
+		/// 
 		///</summary>
 		///<param name="db"></param>
 		///<returns></returns>
@@ -60,7 +60,7 @@ namespace Ctc.Ods.Customizations
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="facet"></param>
 		internal void AddFacet(ISectionFacet facet)
@@ -69,7 +69,7 @@ namespace Ctc.Ods.Customizations
 		}
 
 		///<summary>
-		///
+		/// 
 		///</summary>
 		///<param name="db"></param>
 		///<returns></returns>
@@ -83,7 +83,7 @@ namespace Ctc.Ods.Customizations
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="facet"></param>
 		public void AddFacet(IDataFacet facet)

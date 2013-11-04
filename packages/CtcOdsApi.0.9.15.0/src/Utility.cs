@@ -77,7 +77,7 @@ namespace Ctc.Ods
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <returns></returns>
 		static public ApiSettings GetApiSettings()
@@ -224,7 +224,7 @@ namespace Ctc.Ods
 
 			StringBuilder result = new StringBuilder(str.ToLower());
 			result[0] = char.ToUpper(result[0]);
-
+			 
 			for( int i = 1; i < result.Length; ++i )
 			{
 				if( char.IsWhiteSpace(result[i - 1]) ) {
@@ -293,7 +293,7 @@ namespace Ctc.Ods
 
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="buffer"></param>
 		/// <param name="token"></param>
@@ -321,3 +321,5 @@ namespace Ctc.Ods
 		}
 	}
 }
+
+

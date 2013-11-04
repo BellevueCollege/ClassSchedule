@@ -34,7 +34,7 @@ namespace Ctc.Ods
 		private ApiSettings _settings;
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		private ApiSettings Settings
 		{
@@ -96,31 +96,31 @@ namespace Ctc.Ods
 						// include current and PREVIOUS quarters
 						int quarterCount = Math.Abs(_quarterCount);
 						filter = s => db.YearQuarters.Join(db.WebRegistrationSettings, y => y.YearQuarterID, r => r.YearQuarterID, (y, r) => new {y, r})
-														 .DefaultIfEmpty()
-														 .Where(c => (c.r.FirstRegistrationDate != null && c.r.FirstRegistrationDate <= _registrationDate || c.y.FirstClassDay <= _today)
-																					&& c.y.YearQuarterID != _yrqMax)
-														 .OrderByDescending(c => c.y.YearQuarterID)
-														 .Take(quarterCount)
-														 .Any(c => c.y.YearQuarterID == s.YearQuarterID);
+						                						 .DefaultIfEmpty()
+						                						 .Where(c => (c.r.FirstRegistrationDate != null && c.r.FirstRegistrationDate <= _registrationDate || c.y.FirstClassDay <= _today)
+						                						 							&& c.y.YearQuarterID != _yrqMax)
+						                						 .OrderByDescending(c => c.y.YearQuarterID)
+						                						 .Take(quarterCount)
+						                						 .Any(c => c.y.YearQuarterID == s.YearQuarterID);
 					}
 					else
 					{
 						// include current and FUTURE quarters
 						filter = s => db.YearQuarters.Join(db.WebRegistrationSettings, y => y.YearQuarterID, r => r.YearQuarterID, (y, r) => new {y, r})
-														 .DefaultIfEmpty()
-														 .Where(c => (c.r.LastRegistrationDate != null && c.r.LastRegistrationDate > _registrationDate || c.y.LastClassDay > _today)
-																					&& c.y.YearQuarterID != _yrqMax)
-														 .OrderBy(c => c.y.YearQuarterID)
-														 .Take(_quarterCount)
-														 .Any(c => c.y.YearQuarterID == s.YearQuarterID);
+						                						 .DefaultIfEmpty()
+						                						 .Where(c => (c.r.LastRegistrationDate != null && c.r.LastRegistrationDate > _registrationDate || c.y.LastClassDay > _today)
+						                						 							&& c.y.YearQuarterID != _yrqMax)
+						                						 .OrderBy(c => c.y.YearQuarterID)
+						                						 .Take(_quarterCount)
+						                						 .Any(c => c.y.YearQuarterID == s.YearQuarterID);
 					}
 
 					return filter;
 				}
-
+				
 				throw new ArgumentNullException("dbContext", "Not a valid ODS database context");
 			}
-
+			
 			throw new ArgumentNullException("dbContext", "Not a valid database context");
 		}
 	}

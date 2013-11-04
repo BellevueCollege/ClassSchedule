@@ -31,7 +31,7 @@ namespace Ctc.Ods.Types
 		private static string _commonCourseChar;
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		protected static string CommonCourseChar
 		{
@@ -67,7 +67,7 @@ namespace Ctc.Ods.Types
 
 		#region Constructors
 	  /// <summary>
-	  ///
+	  /// 
 	  /// </summary>
 	  /// <param name="subject"></param>
 	  /// <param name="number"></param>
@@ -84,7 +84,7 @@ namespace Ctc.Ods.Types
 
 		#region Factory methods
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="courseId"></param>
 		/// <returns></returns>
@@ -115,7 +115,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="subject"></param>
 		/// <param name="number"></param>
@@ -211,7 +211,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		/// Serves as a hash function for a particular type.
+		/// Serves as a hash function for a particular type. 
 		/// </summary>
 		/// <returns>
 		/// A hash code for the current <see cref="T:System.Object"/>.

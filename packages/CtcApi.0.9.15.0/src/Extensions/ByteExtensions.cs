@@ -12,7 +12,7 @@ namespace CtcApi.Extensions
 		private static ILog _log = LogManager.GetCurrentClassLogger();
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="data"></param>
 		/// <param name="filename"></param>

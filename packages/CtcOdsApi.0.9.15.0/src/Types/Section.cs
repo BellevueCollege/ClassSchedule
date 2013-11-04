@@ -30,7 +30,7 @@ namespace Ctc.Ods.Types
 	/// A <see cref="Section"/> provides a rich, heirarchical represenation of the data found in
 	/// the <i>vw_Class</i> view of the ODS. This allows the .NET developer to work with a logical
 	/// object rather than being limited by the schematic designs of the HP3000 data source.
-	///
+	/// 
 	/// To obtain one or more <see cref="Section"/> objects use the <see cref="OdsRepository"/>
 	/// </remarks>
 	/// <seealso cref="OdsRepository"/>
@@ -60,19 +60,19 @@ namespace Ctc.Ods.Types
 		public ISectionID ID { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public string CourseSubject { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public string CourseNumber { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public IList<CourseDescription> CourseDescriptions
@@ -90,66 +90,66 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public YearQuarter Yrq { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public DateTime? StartDate { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public DateTime? EndDate { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public bool IsOnline { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public bool IsOnCampus { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public bool IsTelecourse { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public bool IsHybrid { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public bool IsContinuousEnrollment { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public bool IsVariableCredits { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public bool IsDifferentStartDate { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public bool IsLinked { get; protected internal set; }
 
@@ -164,7 +164,7 @@ namespace Ctc.Ods.Types
 
 
         /// <summary>
-        ///
+        /// 
         /// </summary>
         [DataMember]
         public bool IsDifferentEndDate { get; protected internal set; }
@@ -173,7 +173,7 @@ namespace Ctc.Ods.Types
 
 		#region Internal values set only by the API
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		internal string _YearQuarterID
 		{
@@ -181,27 +181,27 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		internal IEnumerable<CourseDescription1Entity> _CourseDescriptions1 { private get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		internal IEnumerable<CourseDescription2Entity> _CourseDescriptions2 { private get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		internal string _Footnote1 { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		internal string _Footnote2 { get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		internal string _SBCTCMisc1
 		{
@@ -223,7 +223,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		internal string _ContinuousSequentialIndicator
 		{
@@ -249,25 +249,25 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		internal string _CourseTitle { private get; set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		internal IEnumerable<string> _CourseFootnotes { get; set; }
 
 		#endregion
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public string SectionCode { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public IEnumerable<string> Footnotes
@@ -294,7 +294,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public string CourseID
@@ -315,13 +315,13 @@ namespace Ctc.Ods.Types
     }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public bool IsCommonCourse { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public string CourseTitle
@@ -336,13 +336,13 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public Decimal Credits { get; protected internal set; }
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		[DataMember]
 		public IEnumerable<OfferedItem> Offered { get; protected internal set; }
@@ -361,7 +361,7 @@ namespace Ctc.Ods.Types
 
 		#region Constructors
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public Section()
 		{
@@ -372,7 +372,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		public Section(string sectionId)
 			: this()
@@ -381,7 +381,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="sectionId"></param>
 		public Section(ISectionID sectionId)
@@ -451,7 +451,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="other"></param>
 		/// <returns></returns>
@@ -469,7 +469,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
@@ -491,7 +491,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <returns></returns>
 		public override int GetHashCode()
@@ -500,7 +500,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="left"></param>
 		/// <param name="right"></param>
@@ -511,7 +511,7 @@ namespace Ctc.Ods.Types
 		}
 
 		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="left"></param>
 		/// <param name="right"></param>
