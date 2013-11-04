@@ -3,7 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{305B62EE-42FA-4AB2-861C-63F72E5AAEDC}"
 	ProjectSection(SolutionItems) = preProject
-		ClassSchedule.vsmdi = ClassSchedule.vsmdi
 		Local.testsettings = Local.testsettings
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 		UpdateClassScheduleDataFromProduction.sdc = UpdateClassScheduleDataFromProduction.sdc
@@ -27,9 +26,6 @@ EndProject
 Project("{596CF2E3-0E3C-47CC-A161-0A910B38ED71}") = "ClassSchedule.DB", "ClassSchedule.DB\ClassSchedule.DB.rgproj", "{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}"
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = ClassSchedule.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
