@@ -150,3 +150,11 @@ $RECYCLE.BIN/
 # Mac crap
 .DS_Store
 [Ww]orkstation*.config
+
+# =========================
+# Project specific
+# =========================
+
+# ignore all except example .config files
+**/_ConfigSource/*.config
+!**/_ConfigSource/EXAMPLE-*.config
