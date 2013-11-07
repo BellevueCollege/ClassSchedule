@@ -411,18 +411,18 @@
       <DependentUpon>web.config</DependentUpon>
     </Content>
     <Content Include="Views\Shared\CourseDescriptions.cshtml" />
-    <Content Include="_ConfigSource\RoleManager.config" />
-    <Content Include="_ConfigSource\CasClient.config" />
-    <Content Include="_ConfigSource\ElmahAuthorization.config" />
-    <Content Include="_ConfigSource\Authentication.config" />
-    <Content Include="_ConfigSource\AppSettings.config" />
-    <Content Include="_ConfigSource\ConnectionStrings.config" />
-    <Content Include="_ConfigSource\EXAMPLE-AppSettings.config" />
-    <Content Include="_ConfigSource\EXAMPLE-Authentication.config" />
-    <Content Include="_ConfigSource\EXAMPLE-CasClient.config" />
-    <Content Include="_ConfigSource\EXAMPLE-ConnectionStrings.config" />
-    <Content Include="_ConfigSource\EXAMPLE-ElmahAuthorization.config" />
-    <Content Include="_ConfigSource\EXAMPLE-RoleManager.config" />
+    <None Include="_ConfigSource\RoleManager.config" />
+    <None Include="_ConfigSource\CasClient.config" />
+    <None Include="_ConfigSource\ElmahAuthorization.config" />
+    <None Include="_ConfigSource\Authentication.config" />
+    <None Include="_ConfigSource\AppSettings.config" />
+    <None Include="_ConfigSource\ConnectionStrings.config" />
+    <None Include="_ConfigSource\EXAMPLE-AppSettings.config" />
+    <None Include="_ConfigSource\EXAMPLE-Authentication.config" />
+    <None Include="_ConfigSource\EXAMPLE-CasClient.config" />
+    <None Include="_ConfigSource\EXAMPLE-ConnectionStrings.config" />
+    <None Include="_ConfigSource\EXAMPLE-ElmahAuthorization.config" />
+    <None Include="_ConfigSource\EXAMPLE-RoleManager.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Classes\YearQuarter.cshtml" />
@@ -502,7 +502,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
