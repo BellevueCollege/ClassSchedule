@@ -135,7 +135,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassSchedule\ClassSchedule.Web.csproj">
+    <ProjectReference Include="..\ClassSchedule.Web\ClassSchedule.Web.csproj">
       <Project>{D0DFD430-8A10-440D-A564-4E113D57A079}</Project>
       <Name>ClassSchedule.Web</Name>
     </ProjectReference>

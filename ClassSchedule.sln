@@ -19,9 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataMigrationScripts", "Dat
 		Research\DataMigrationScripts\README.txt = Research\DataMigrationScripts\README.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassSchedule.Web", "ClassSchedule\ClassSchedule.Web.csproj", "{D0DFD430-8A10-440D-A564-4E113D57A079}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassSchedule.Web", "ClassSchedule.Web\ClassSchedule.Web.csproj", "{D0DFD430-8A10-440D-A564-4E113D57A079}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ClassSchedule", "Test.ClassSchedule\Test.ClassSchedule.csproj", "{028B1153-E975-410D-9D1D-F97E3F6F8171}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ClassSchedule", "Test.ClassSchedule.Web\Test.ClassSchedule.csproj", "{028B1153-E975-410D-9D1D-F97E3F6F8171}"
 EndProject
 Project("{596CF2E3-0E3C-47CC-A161-0A910B38ED71}") = "ClassSchedule.DB", "ClassSchedule.DB\ClassSchedule.DB.rgproj", "{DC6CC6D9-3191-4EE2-86AC-8300677D38F4}"
 EndProject
