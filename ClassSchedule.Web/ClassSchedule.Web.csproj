@@ -215,7 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app_offline.html" />
-    <Content Include="App_Readme\Elmah.txt" />
+    <None Include="App_Readme\Elmah.txt" />
     <Content Include="Content\automatic-image-slider.css" />
     <Content Include="Content\grids.css" />
     <Content Include="Content\ie7.css" />
@@ -269,57 +269,57 @@
     <Content Include="Content\js\jquery-ui-1.8.17.custom.min.js" />
     <Content Include="Content\js\jquery-ui-timepicker-addon.js" />
     <Content Include="Error.aspx" />
-    <Content Include="globals\btheme_v0.1\asp\footer_big.asp" />
-    <Content Include="globals\btheme_v0.1\asp\footer_small.asp" />
-    <Content Include="globals\btheme_v0.1\asp\header_big.asp" />
-    <Content Include="globals\btheme_v0.1\asp\header_menu.asp" />
-    <Content Include="globals\btheme_v0.1\asp\header_small.asp" />
-    <Content Include="globals\btheme_v0.1\asp\index.asp" />
-    <Content Include="globals\btheme_v0.1\asp\narrow.asp" />
-    <Content Include="globals\btheme_v0.1\asp\thick.html" />
-    <Content Include="globals\btheme_v0.1\common\bigfoot_content.html" />
-    <Content Include="globals\btheme_v0.1\common\header_bottom_big.html" />
-    <Content Include="globals\btheme_v0.1\common\header_bottom_small.html" />
-    <Content Include="globals\btheme_v0.1\common\header_top_big.html" />
-    <Content Include="globals\btheme_v0.1\common\header_top_small.html" />
-    <Content Include="globals\btheme_v0.1\common\legallinks.html" />
-    <Content Include="globals\btheme_v0.1\css\btheme0.5.css" />
-    <Content Include="globals\btheme_v0.1\css\btheme_v0.1.1.css" />
-    <Content Include="globals\btheme_v0.1\css\btheme_v0.1.2.css" />
-    <Content Include="globals\btheme_v0.1\css\btheme_v0.1.css" />
-    <Content Include="globals\btheme_v0.1\css\ie7.css" />
-    <Content Include="globals\btheme_v0.1\html_raw\narrow.html" />
-    <Content Include="globals\btheme_v0.1\html_raw\thick.html" />
-    <Content Include="globals\btheme_v0.1\img\bellevuecollege-bigblue.png" />
-    <Content Include="globals\btheme_v0.1\img\bellevuecollege-idbar.png" />
-    <Content Include="globals\btheme_v0.1\img\divider.png" />
-    <Content Include="globals\btheme_v0.1\img\facebook.png" />
-    <Content Include="globals\btheme_v0.1\img\flickr.png" />
-    <Content Include="globals\btheme_v0.1\img\foot-bg-wide.jpg" />
-    <Content Include="globals\btheme_v0.1\img\foot-bg.jpg" />
-    <Content Include="globals\btheme_v0.1\img\foot-col-sep.png" />
-    <Content Include="globals\btheme_v0.1\img\foot-legal-sep.gif" />
-    <Content Include="globals\btheme_v0.1\img\foot-shadow-bot.png" />
-    <Content Include="globals\btheme_v0.1\img\foot-shadow-top.png" />
-    <Content Include="globals\btheme_v0.1\img\foot-shadow.png" />
-    <Content Include="globals\btheme_v0.1\img\foot-square-sep.gif" />
-    <Content Include="globals\btheme_v0.1\img\head-botline.png" />
-    <Content Include="globals\btheme_v0.1\img\headbg.jpg" />
-    <Content Include="globals\btheme_v0.1\img\headbgshadow.png" />
-    <Content Include="globals\btheme_v0.1\img\headbgwide.jpg" />
-    <Content Include="globals\btheme_v0.1\img\headbgwidetile.jpg" />
-    <Content Include="globals\btheme_v0.1\img\homepage.png" />
-    <Content Include="globals\btheme_v0.1\img\linkedin.png" />
-    <Content Include="globals\btheme_v0.1\img\nav-highlight.png" />
-    <Content Include="globals\btheme_v0.1\img\search-loop-btn.png" />
-    <Content Include="globals\btheme_v0.1\img\translucentpixel.png" />
-    <Content Include="globals\btheme_v0.1\img\twitter.png" />
-    <Content Include="globals\btheme_v0.1\img\youtube.png" />
-    <Content Include="globals\btheme_v0.1\js\searchbox.js" />
-    <Content Include="globals\dropdown_about.asp" />
-    <Content Include="globals\dropdown_enrollment.asp" />
-    <Content Include="globals\dropdown_programs.asp" />
-    <Content Include="globals\dropdown_resources.asp" />
+    <None Include="globals\btheme_v0.1\asp\footer_big.asp" />
+    <None Include="globals\btheme_v0.1\asp\footer_small.asp" />
+    <None Include="globals\btheme_v0.1\asp\header_big.asp" />
+    <None Include="globals\btheme_v0.1\asp\header_menu.asp" />
+    <None Include="globals\btheme_v0.1\asp\header_small.asp" />
+    <None Include="globals\btheme_v0.1\asp\index.asp" />
+    <None Include="globals\btheme_v0.1\asp\narrow.asp" />
+    <None Include="globals\btheme_v0.1\asp\thick.html" />
+    <None Include="globals\btheme_v0.1\common\bigfoot_content.html" />
+    <None Include="globals\btheme_v0.1\common\header_bottom_big.html" />
+    <None Include="globals\btheme_v0.1\common\header_bottom_small.html" />
+    <None Include="globals\btheme_v0.1\common\header_top_big.html" />
+    <None Include="globals\btheme_v0.1\common\header_top_small.html" />
+    <None Include="globals\btheme_v0.1\common\legallinks.html" />
+    <None Include="globals\btheme_v0.1\css\btheme0.5.css" />
+    <None Include="globals\btheme_v0.1\css\btheme_v0.1.1.css" />
+    <None Include="globals\btheme_v0.1\css\btheme_v0.1.2.css" />
+    <None Include="globals\btheme_v0.1\css\btheme_v0.1.css" />
+    <None Include="globals\btheme_v0.1\css\ie7.css" />
+    <None Include="globals\btheme_v0.1\html_raw\narrow.html" />
+    <None Include="globals\btheme_v0.1\html_raw\thick.html" />
+    <None Include="globals\btheme_v0.1\img\bellevuecollege-bigblue.png" />
+    <None Include="globals\btheme_v0.1\img\bellevuecollege-idbar.png" />
+    <None Include="globals\btheme_v0.1\img\divider.png" />
+    <None Include="globals\btheme_v0.1\img\facebook.png" />
+    <None Include="globals\btheme_v0.1\img\flickr.png" />
+    <None Include="globals\btheme_v0.1\img\foot-bg-wide.jpg" />
+    <None Include="globals\btheme_v0.1\img\foot-bg.jpg" />
+    <None Include="globals\btheme_v0.1\img\foot-col-sep.png" />
+    <None Include="globals\btheme_v0.1\img\foot-legal-sep.gif" />
+    <None Include="globals\btheme_v0.1\img\foot-shadow-bot.png" />
+    <None Include="globals\btheme_v0.1\img\foot-shadow-top.png" />
+    <None Include="globals\btheme_v0.1\img\foot-shadow.png" />
+    <None Include="globals\btheme_v0.1\img\foot-square-sep.gif" />
+    <None Include="globals\btheme_v0.1\img\head-botline.png" />
+    <None Include="globals\btheme_v0.1\img\headbg.jpg" />
+    <None Include="globals\btheme_v0.1\img\headbgshadow.png" />
+    <None Include="globals\btheme_v0.1\img\headbgwide.jpg" />
+    <None Include="globals\btheme_v0.1\img\headbgwidetile.jpg" />
+    <None Include="globals\btheme_v0.1\img\homepage.png" />
+    <None Include="globals\btheme_v0.1\img\linkedin.png" />
+    <None Include="globals\btheme_v0.1\img\nav-highlight.png" />
+    <None Include="globals\btheme_v0.1\img\search-loop-btn.png" />
+    <None Include="globals\btheme_v0.1\img\translucentpixel.png" />
+    <None Include="globals\btheme_v0.1\img\twitter.png" />
+    <None Include="globals\btheme_v0.1\img\youtube.png" />
+    <None Include="globals\btheme_v0.1\js\searchbox.js" />
+    <None Include="globals\dropdown_about.asp" />
+    <None Include="globals\dropdown_enrollment.asp" />
+    <None Include="globals\dropdown_programs.asp" />
+    <None Include="globals\dropdown_resources.asp" />
     <Content Include="Scripts\CtcClassSchedule.js" />
     <Content Include="Scripts\jquery.ui.timepicker.js" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -445,8 +445,8 @@
     <Content Include="Views\Shared\subjectNavigation.cshtml" />
     <Content Include="Views\Api\Subjects.cshtml" />
     <Content Include="Views\Shared\Pager.cshtml" />
-    <Content Include="globals\btheme_v0.1\dotNET_MVC\header_small.cshtml" />
-    <Content Include="globals\btheme_v0.1\dotNET_MVC\footer_big.cshtml" />
+    <None Include="globals\btheme_v0.1\dotNET_MVC\header_small.cshtml" />
+    <None Include="globals\btheme_v0.1\dotNET_MVC\footer_big.cshtml" />
     <None Include="globals\btheme_v0.1\html_raw\.tmp_narrow.html.42343~" />
     <None Include="globals\btheme_v0.1\html_raw\.tmp_thick.html.70928~" />
     <None Include="globals\btheme_v0.1\php\footer_big.php" />
@@ -502,7 +502,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
