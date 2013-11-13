@@ -1,5 +1,6 @@
 ﻿@using CTCClassSchedule.Common
 @using CTCClassSchedule.Models
+@using CtcApi.Extensions
 @model IList<Subject>
 
 @{
@@ -42,7 +43,8 @@
 		{
 			routeParms.Add("YearQuarter", FriendlyYrq);
 		}
-		Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null));
+	  string linkText = String.Format("{0} ({1})", item.Title, item.CoursePrefixes.Select(p => p.CoursePrefixID).ToArray().Mash(", "));
+	  Write(Html.ActionLink(linkText, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null));
 	}
 	else
 	{
