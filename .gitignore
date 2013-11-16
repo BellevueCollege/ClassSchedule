@@ -155,6 +155,9 @@ $RECYCLE.BIN/
 # Project specific
 # =========================
 
-# ignore all except example .config files
+# ignore all except example .config & project files files
 **/_ConfigSource/*.config
 !**/_ConfigSource/EXAMPLE-*.config
+# Red-Gate SQL Data Compare project files
+*.sdc
+!EXAMPLE-*.sdc
