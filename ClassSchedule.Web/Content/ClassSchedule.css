@@ -1801,4 +1801,6 @@ ul.section-crosslisted-courses {
 
 .url-preview {
   background-color: white;
+  text-align: right;
+  width: 75%;
 }

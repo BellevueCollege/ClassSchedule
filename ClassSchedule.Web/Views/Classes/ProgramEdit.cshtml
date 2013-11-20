@@ -1,4 +1,5 @@
-﻿@model CTCClassSchedule.ProgramEditModel
+﻿@using CTCClassSchedule.Models
+@model CTCClassSchedule.ProgramEditModel
 
 
 @using (Html.BeginForm())
@@ -161,6 +162,14 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 <script type="text/javascript">
   $(function () {
+    var deptLinks = new Array();
+    @foreach (Department department in Model.AllDepartments)
+      {
+      <text>
+    deptLinks[@(department.DepartmentID)] = "@department.URL";
+      </text>
+      }
+
     $("#cancelEdit").click(function (e) {
       e.preventDefault();
       $(".ui-dialog").hide();
@@ -199,6 +208,27 @@
         selectedSubject.remove();
         $('#newSubjectMerge').prop('selectedIndex', 0);
       }
+    });
+    
+    // Update Department URL
+    $('#department-field select').change(function() {
+      var selected = $(this).find(":selected");
+      var id = selected.val();
+      console.log("New dept ID = '" + id + "'");
+      var title = selected.text();
+      console.log("New dept Title = '" + title + "'");
+
+      var preview = $('#department-url ul li');
+
+      var link = deptLinks[id];
+      console.log("New dept link = '" + link + "'");
+
+      if (link != null) {
+        preview.html('<a href="' + link + '">' + title + '</a>');
+      } else {
+        preview.text(title);
+      }
+
     });
   });
 </script>
