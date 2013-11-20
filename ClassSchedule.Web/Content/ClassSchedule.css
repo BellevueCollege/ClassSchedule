@@ -1798,3 +1798,7 @@ ul.section-crosslisted-courses {
   font-weight: bold;
   text-decoration: none;
 }
+
+.url-preview {
+  background-color: white;
+}

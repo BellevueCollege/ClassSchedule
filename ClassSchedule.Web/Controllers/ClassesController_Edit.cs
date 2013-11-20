@@ -96,7 +96,7 @@ namespace CTCClassSchedule.Controllers
 
     #region Editing program/Subject information
     /// <summary>
-    ///
+    /// Displays dialog for editing Subject info, incl. Dept & Division
     /// </summary>
     /// <param name="Abbreviation"></param>
     /// <returns></returns>
@@ -104,11 +104,6 @@ namespace CTCClassSchedule.Controllers
     [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
     public ActionResult ProgramEdit(string Slug)
     {
-      //*******************************************************************************************************************************************
-      // TODO: Do we need the ProgramEdit method any more? Or should we split its functionality into new methods that handle those specific areas?
-      // -- Yes, eventually it will make sense to break this into 3 edit modals (or areas) for Subject, Department, and Division.
-      //    However I don't believe we are currently displaying lists of Departments or Divisions anywhere yet. - Andrew C. (3/4/13)
-      //*******************************************************************************************************************************************
       if (HttpContext.User.Identity.IsAuthenticated)
       {
         // Get a list of all course prefixes to present the user when they merge/unmerge prefixes to a subject
@@ -116,17 +111,12 @@ namespace CTCClassSchedule.Controllers
         string commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar;
         using (OdsRepository repository = new OdsRepository())
         {
-          // TODO: This list strips out the '&' char, so we can't differentiate between ACCT& and ACCT.
-          //			 It also only returns prefixes for which contains future sections - Andrew C (3/4/2013)
-          //allPrefixes = repository.GetCourseSubjects().Select(s => s.Subject).ToList();
-
           // TODO: This is a temp workaround for getting a list of all Course Prefixes since the GetCourseSubjects() method
           //			 does not return the expected results. - Andrew C (3/4/2013)
           allPrefixes = repository.GetCourses().Select(c => String.Concat(c.Subject, c.IsCommonCourse ? commonCourseChar : string.Empty))
                                                .Distinct()
                                                .ToList();
         }
-
 
         // Construct the model and return it
         using (ClassScheduleDb db = new ClassScheduleDb())
@@ -135,13 +125,16 @@ namespace CTCClassSchedule.Controllers
           IList<string> mergablePrefixes = allPrefixes.Except(db.SubjectsCoursePrefixes.Select(p => p.CoursePrefixID)).ToList();
 
           SubjectInfoResult programInfo = SubjectInfo.GetSubjectInfo(Slug);
+          
           ProgramEditModel model = new ProgramEditModel
-          {
-            Subject = programInfo.Subject,
-            Department = programInfo.Department,
-            Division = programInfo.Division,
-            AllCoursePrefixes = mergablePrefixes
-          };
+                                     {
+                                       Subject = programInfo.Subject,
+                                       Department = programInfo.Department,
+                                       Division = programInfo.Division,
+                                       AllCoursePrefixes = mergablePrefixes,
+                                       AllDepartments = db.Departments.Where(d => (d.Title != null && d.Title != "") || d.DepartmentID == programInfo.Department.DepartmentID).ToList(),
+                                       AllDivisions = db.Divisions.Where(d => (d.Title != null && d.Title != "") || d.DivisionID == programInfo.Division.DivisionID).ToList()
+                                     };
 
           return PartialView(model);
         }
