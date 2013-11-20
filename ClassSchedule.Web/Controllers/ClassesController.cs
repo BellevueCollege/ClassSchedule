@@ -14,6 +14,7 @@ using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
+using CtcApi.Extensions;
 using MvcMiniProfiler;
 using System.Text;
 
@@ -77,6 +78,14 @@ namespace CTCClassSchedule.Controllers
             return Json(subjects, JsonRequestBehavior.AllowGet);
 					}
 
+#if DEBUG
+          Debug.Print("======= Subject list =======");
+				  foreach (Subject subject in subjects)
+				  {
+				    Debug.Print("{0} ({1})", subject.Title, subject.CoursePrefixes.Select(p => p.CoursePrefixID).ToArray().Mash(", "));
+				  }
+          Debug.Print("===== END Subject list =====");
+#endif
           // Construct the model
           AllClassesModel model = new AllClassesModel
           {

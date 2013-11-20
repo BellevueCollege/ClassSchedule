@@ -1,12 +1,15 @@
-﻿@using Ctc.Ods.Types
+﻿@using System.Diagnostics
+@using Ctc.Ods.Types
 @using CTCClassSchedule.Common
+@using CtcApi.Extensions
 @model IEnumerable<ScheduleCoursePrefix>
 @{
-	int columnCount = (ViewBag.SubjectsColumns != null ? (int)ViewBag.SubjectsColumns : 1);
-	IEnumerable<char> alphabet = Model.Select(s => s.Title.First()).Distinct();
+  int columnCount = (ViewBag.SubjectsColumns != null ? (int)ViewBag.SubjectsColumns : 1);
+  IEnumerable<char> alphabet = Model.Select(s => s.Title.First()).Distinct();
 }
 <style type="text/css">
-@for(int i = 1; i <= columnCount; i++) {
+@for (int i = 1; i <= columnCount; i++)
+{
 	<text>
 	#subjects-column-@i {
 		float: left;
@@ -25,8 +28,8 @@
 <a name="nav-subjects-top">&nbsp;</a>
 <div id="a_to_z">
 @{
-	// display the letters along the top for quick access
-	int loopCount = 0;
+  // display the letters along the top for quick access
+  int loopCount = 0;
 }
 @foreach (char lttr in alphabet)
 {
@@ -34,55 +37,69 @@
 }
 </div>
 @{
-	// construct the route values we'll pass to the ActionLink helper
-	IDictionary<string, object> routeParms = ViewBag.LinkParams;
+  // construct the route values we'll pass to the ActionLink helper
+  IDictionary<string, object> routeParms = ViewBag.LinkParams;
 
-	if (routeParms.Keys.Contains("Subject")) {
-		routeParms["Subject"] = string.Empty;
-	} else {
-		routeParms.Add("Subject", string.Empty);
-	}
+  if (routeParms.Keys.Contains("Subject"))
+  {
+    routeParms["Subject"] = string.Empty;
+  }
+  else
+  {
+    routeParms.Add("Subject", string.Empty);
+  }
 
-	IDictionary<string, object> linkAttributes = new Dictionary<string, object>(1);
-	// close the dialog window when a subject link is clicked
-	linkAttributes.Add("onClick", "$('#nav-choose-subjects').dialog('close');");
+  IDictionary<string, object> linkAttributes = new Dictionary<string, object>(1);
+  // close the dialog window when a subject link is clicked
+  linkAttributes.Add("onClick", "$('#nav-choose-subjects').dialog('close');");
 }
 <div id="subjects-list">
-	@foreach (char letter in alphabet) {
+	@foreach (char letter in alphabet)
+ {
 
-		IEnumerable<ScheduleCoursePrefix> titles = Model.Where(s => s.Title.StartsWith(letter.ToString()));
-		int count = 1,
-				// ensure that blank lines wind up in the last column by always rounding up
-				breakPoint = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(titles.Count()) / columnCount)),
-				columnNumber = 1;
+   IEnumerable<ScheduleCoursePrefix> titles = Model.Where(s => s.Title.StartsWith(letter.ToString()));
+   int count = 1,
+     // ensure that blank lines wind up in the last column by always rounding up
+       breakPoint = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(titles.Count()) / columnCount)),
+       columnNumber = 1;
 
 	 <div class="subjects-letter">
 		<h2><a name="nav-subjects-@letter">@letter</a></h2>
 
 		<div id="subjects-column-@columnNumber">
-			@foreach (var item in titles) {
-				if(count++ > breakPoint) {
-					// insert a column break
-					count = 1;
+			@foreach (var item in titles)
+   {
+     if (count++ > breakPoint)
+     {
+       // insert a column break
+       count = 1;
 		@:</div>
 		@:<div id="subjects-column-@(++columnNumber)">
 				}
 
-				// construct the appropriate link, maintaining any query string paramters
-				routeParms["Subject"] = item.Slug.Trim();
+     // construct the appropriate link, maintaining any query string paramters
+     routeParms["Subject"] = item.Slug.Trim();
 
 					<div class="subject">
-				@if (routeParms.Keys.Contains("YearQuarter") && routeParms["YearQuarter"] != null && !routeParms["YearQuarter"].ToString().IsEmpty() && routeParms["YearQuarter"].ToString().ToUpper() != "ALL")
-		{
-					Write(Html.ActionLink(item.Title, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), linkAttributes));
-				}
-		else
-		{
-					Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), linkAttributes));
-				}
+				
+					  @{
+     string linkText = item.Title;
+     string prefix = item.Subject;
+
+     linkText = String.Format("{0} ({1})", linkText, prefix);
+
+     if (routeParms.Keys.Contains("YearQuarter") && routeParms["YearQuarter"] != null && !routeParms["YearQuarter"].ToString().IsEmpty() && routeParms["YearQuarter"].ToString().ToUpper() != "ALL")
+     {
+       Write(Html.ActionLink(linkText, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), linkAttributes));
+     }
+     else
+     {
+       Write(Html.ActionLink(linkText, "Subject", "Classes", new RouteValueDictionary(routeParms), linkAttributes));
+     }
+   }
 			</div>
-			}
+   }
 		</div>
 	 </div>
-	}
+ }
 </div>

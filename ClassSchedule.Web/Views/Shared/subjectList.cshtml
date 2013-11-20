@@ -1,7 +1,14 @@
-﻿@using CTCClassSchedule.Common
+﻿@using System.Diagnostics
+@using CTCClassSchedule.Common
+@using CTCClassSchedule.Controllers
 @using CTCClassSchedule.Models
+@using Common.Logging
 @using CtcApi.Extensions
 @model IList<Subject>
+
+@functions {
+  private ILog _log = LogManager.GetCurrentClassLogger();
+}
 
 @{
 	// construct the route values we'll pass to the ActionLink helper
@@ -32,6 +39,20 @@
 	}
 
 	routeParms["Subject"] = item.Slug.Trim();
+  string linkText = item.Title;
+  IEnumerable<string> prefixes = item.CoursePrefixes.Select(p => p.CoursePrefixID);
+
+  if (prefixes.Any())
+  {
+    string[] prefixList = prefixes.Distinct().ToArray();
+    Debug.Assert(prefixList.Any(), "Lost prefixes for '{0}' after conversion to Array!", linkText);
+    linkText = String.Format("{0} ({1})", linkText, prefixList.Mash(", "));
+  }
+  else
+  {
+    _log.Warn(m => m("No CoursePrefixes found for '{0}'.", linkText));
+  }
+
 	<li class="subject-name">
 	@if (FriendlyYrq != "ALL")
 	{
@@ -43,12 +64,11 @@
 		{
 			routeParms.Add("YearQuarter", FriendlyYrq);
 		}
-	  string linkText = String.Format("{0} ({1})", item.Title, item.CoursePrefixes.Select(p => p.CoursePrefixID).ToArray().Mash(", "));
 	  Write(Html.ActionLink(linkText, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null));
 	}
 	else
 	{
-		Write(Html.ActionLink(item.Title, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
+		Write(Html.ActionLink(linkText, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
 	}
 
 
