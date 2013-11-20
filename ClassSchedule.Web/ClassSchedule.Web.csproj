@@ -400,7 +400,7 @@
     <Content Include="Views\Classes\SectionEdit.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Api\ClassEdit.cshtml" />
-    <Content Include="Views\Api\ProgramEdit.cshtml" />
+    <Content Include="Views\Classes\ProgramEdit.cshtml" />
     <Content Include="web.Test.config">
       <DependentUpon>web.config</DependentUpon>
     </Content>
@@ -502,7 +502,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
