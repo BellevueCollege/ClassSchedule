@@ -144,109 +144,78 @@ namespace CTCClassSchedule.Controllers
       return PartialView();
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="collection"></param>
-    /// <param name="MergeSubjects"></param>
-    /// <returns></returns>
-    [HttpPost]
+	  ///  <summary>
+	  /// 
+	  ///  </summary>
+	  /// <param name="model"></param>
+	  /// <param name="prefixesToMerge"></param>
+	  /// <returns></returns>
+	  [HttpPost]
     [ValidateInput(false)]
     [AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
-    public ActionResult ProgramEdit(ProgramEditModel Model, ICollection<string> PrefixesToMerge)
+    public ActionResult ProgramEdit(ProgramEditModel model, ICollection<string> prefixesToMerge)
     {
-      if (HttpContext.User.Identity.IsAuthenticated == true)
+      if (HttpContext.User.Identity.IsAuthenticated)
       {
         if (ModelState.IsValid)
         {
-          // If no prefixes are being merged, instantiate an empty collection so LINQ queries don't fail
-          if (PrefixesToMerge == null)
-          {
-            PrefixesToMerge = new List<string>();
-          }
-
           string username = HttpContext.User.Identity.Name;
           using (ClassScheduleDb db = new ClassScheduleDb())
           {
             // Lookup the subject being edited
-            Subject subject = db.Subjects.Where(s => s.Slug.Equals(Model.Subject.Slug, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+            Subject subject = db.Subjects.Where(s => s.Slug.Equals(model.Subject.Slug, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
 
-            // Update the proper fields
-            subject.Title = Model.Subject.Title;
-            subject.Intro = StripHtml(Model.Subject.Intro);
-            subject.LastUpdated = DateTime.Now;
-            subject.LastUpdatedBy = username;
-
-            // If the department does not already exist, create it
-            // TODO: ProgramEdit ideally should not handle creation of Departments
-            Department department = subject.Department;
-            if (department == null)
+            if (subject != null)
             {
-              department = new Department
+              // Update the proper fields
+              subject.Title = model.Subject.Title;
+              subject.Intro = StripHtml(model.Subject.Intro);
+              subject.LastUpdated = DateTime.Now;
+              subject.LastUpdatedBy = username;
+
+              if (subject.Department.DepartmentID != model.Department.DepartmentID)
               {
-                Title = Model.Department.Title,
-                URL = Model.Department.URL,
-                LastUpdated = DateTime.Now,
-                LastUpdatedBy = username
-              };
+                subject.DepartmentID = model.Department.DepartmentID;
+              }
+              // NOTE: Division is not related directly to a Subject - only through a Department
 
-              db.Departments.AddObject(department);
-              subject.DepartmentID = department.DepartmentID;
-            }
-            else
-            {
-              department.Title = Model.Department.Title;
-              department.URL = Model.Department.URL;
-            }
-
-            // If the division does not already exist, create it
-            // TODO: ProgramEdit ideally should not handle creation of Divisions
-            Division division = department.Division;
-            if (division == null)
-            {
-              division = new Division
+              // If no prefixes are being merged, instantiate an empty collection so LINQ queries don't fail
+              if (prefixesToMerge == null)
               {
-                Title = Model.Division.Title,
-                URL = Model.Division.URL,
-                LastUpdated = DateTime.Now,
-                LastUpdatedBy = username
-              };
-
-              db.Divisions.AddObject(division);
-              department.DivisionID = division.DivisionID;
-            }
-            else
-            {
-              division.Title = Model.Division.Title;
-              division.URL = Model.Division.URL;
-            }
-
-
-            // Only allow merging/unmerging of prefixes if at least one prefix is assigned to the subject
-            if (PrefixesToMerge.Count > 0)
-            {
-              // Unmerge subjects
-              IList<SubjectsCoursePrefix> unmergables = subject.CoursePrefixes.Where(s => !PrefixesToMerge.Contains(s.CoursePrefixID)).ToList();
-              foreach (SubjectsCoursePrefix prefix in unmergables)
-              {
-                subject.CoursePrefixes.Remove(prefix);
+                prefixesToMerge = new List<string>();
               }
 
-              // Merge subjects
-              IList<string> currentlyMergedPrefixes = subject.CoursePrefixes.Select(s => s.CoursePrefixID).ToList();
-              IEnumerable<string> mergables = PrefixesToMerge.Where(m => !currentlyMergedPrefixes.Contains(m));
-              foreach (string prefix in mergables)
+              // Only allow merging/unmerging of prefixes if at least one prefix is assigned to the subject
+              if (prefixesToMerge.Count > 0)
               {
-                subject.CoursePrefixes.Add(new SubjectsCoursePrefix
+                // Unmerge subjects
+                IList<SubjectsCoursePrefix> unmergables =
+                  subject.CoursePrefixes.Where(s => !prefixesToMerge.Contains(s.CoursePrefixID)).ToList();
+                foreach (SubjectsCoursePrefix prefix in unmergables)
                 {
-                  SubjectID = subject.SubjectID,
-                  CoursePrefixID = prefix
-                });
-              }
-            }
+                  subject.CoursePrefixes.Remove(prefix);
+                }
 
-            // Commit changes to database
-            db.SaveChanges();
+                // Merge subjects
+                IList<string> currentlyMergedPrefixes = subject.CoursePrefixes.Select(s => s.CoursePrefixID).ToList();
+                IEnumerable<string> mergables = prefixesToMerge.Where(m => !currentlyMergedPrefixes.Contains(m));
+                foreach (string prefix in mergables)
+                {
+                  subject.CoursePrefixes.Add(new SubjectsCoursePrefix
+                                               {
+                                                 SubjectID = subject.SubjectID,
+                                                 CoursePrefixID = prefix
+                                               });
+                }
+              }
+
+              // Commit changes to database
+              db.SaveChanges();
+            }
+            else
+            {
+              _log.Warn(m => m("Unable to save Subject info: Failed to find Subject data for slug '{0}'", model.Subject.Slug));
+            }
           }
         }
 

@@ -60,59 +60,61 @@
 			</div>
 		</div>
 
-		<div class="right">
-			<div class="editor-label">
-				@Html.LabelFor(model => model.Department.DepartmentID, "Department")
-			</div>
-		  <div id="department-field" class="editor-field">
-		    @Html.DropDownListFor(model => model.Department.DepartmentID, 
-                                       Model.AllDepartments.Select(d => new SelectListItem {Value = d.DepartmentID.ToString(), Text = d.Title}), 
-                                       new { @class = "subject-text-field", @maxlength = "50" })
-		    @Html.ValidationMessageFor(model => model.Department.DepartmentID)
-		  </div>
+	<div class="right">
+	  <div class="editor-label">
+	    @Html.LabelFor(model => model.Department.DepartmentID, "Department")
+	  </div>
+	  <div id="department-field" class="editor-field">
+	    @Html.DropDownListFor(model => model.Department.DepartmentID, 
+	                          Model.AllDepartments.Select(d => new SelectListItem {Value = d.DepartmentID.ToString(), Text = d.Title}), 
+	                          new { @class = "subject-text-field", @maxlength = "50" })
+	    @Html.ValidationMessageFor(model => model.Department.DepartmentID)
+	  </div>
 
-			<div class="editor-label">
-				@Html.LabelFor(model => model.Department.URL, "URL Preview")
-			  <noscript>
-			    <div>Preview will not update unless Javascript is enabled.</div>
-			  </noscript>
-			</div>
-			<div id="department-url" class="url-preview">
-		    @* NOTE: This UI was taken from ClassDetails.cshtml *@
-          <div class="generalInfo">
-            <h2>Department</h2>
-            <ul>
-              <li>
-                @if (!string.IsNullOrWhiteSpace(Model.Department.URL))
-                  {
-								    <a href="@Model.Department.URL">
-									    @if (!string.IsNullOrWhiteSpace(Model.Department.Title))
-                      {
-										    @Model.Department.Title
-                      }
-                      else
-                      {
-										    @Model.Subject.Title
-                      }
-								    </a>
-                  }
-                  else
-                  {
-                    if (!string.IsNullOrWhiteSpace(Model.Department.Title))
-                    {
-									    @Model.Department.Title
-                    }
-                    else
-                    {
-									    @Model.Subject.Title
-                    }
-                  }
-              </li>
-            </ul>
-          </div>
-			</div>
+	  <div class="editor-label">
+	    @Html.LabelFor(model => model.Department.URL, "URL Preview")
+	    <noscript>
+	      <div>Preview will not update unless Javascript is enabled.</div>
+	    </noscript>
+	  </div>
+	  <div id="department-url" class="url-preview">
+	    @* NOTE: This UI was taken from ClassDetails.cshtml *@
+	    <div class="generalInfo">
+	      <h2>Department</h2>
+	      <ul>
+	        <li>
+	          @if (!string.IsNullOrWhiteSpace(Model.Department.URL))
+	          {
+	            <a href="@Model.Department.URL">
+	              @if (!string.IsNullOrWhiteSpace(Model.Department.Title))
+	              {
+	                @Model.Department.Title
+	              }
+	              else
+	              {
+	                @Model.Subject.Title
+	              }
+	            </a>
+	          }
+	          else
+	          {
+	            if (!string.IsNullOrWhiteSpace(Model.Department.Title))
+	            {
+	              @Model.Department.Title
+	            }
+	            else
+	            {
+	              @Model.Subject.Title
+	            }
+	          }
+	        </li>
+	      </ul>
+	    </div>
+	  </div>
+      
+	  @*  Divisions do not have a direct association with Subjects - only through the Department
 
-			<div class="editor-label">
+		  <div class="editor-label">
 				@Html.LabelFor(model => model.Division.DivisionID, "Division")
 			</div>
 			<div id="division-field" class="editor-field">
@@ -129,23 +131,23 @@
 			  </noscript>
 			</div>
 		  <div id="division-url" class="url-preview">
-		    @* NOTE: This UI was taken from ClassDetails.cshtml *@
-		    <div class="generalInfo">
-		      <h2>Division</h2>
-		      <ul>
-		        <li>
-		          @if (!string.IsNullOrWhiteSpace(Model.Division.URL))
-		          {
-		            <a href="@Model.Division.URL">@Model.Division.Title</a>
-		          }
-		          else
-		          {
-		            @Model.Division.Title
-		          }
-		        </li>
-		      </ul>
-		    </div>
-		  </div>
+	  <div class="generalInfo">
+	    <h2>Division</h2>
+	    <ul>
+	      <li>
+	        @if (!string.IsNullOrWhiteSpace(Model.Division.URL))
+	        {
+	          <a href="@Model.Division.URL">@Model.Division.Title</a>
+	        }
+	        else
+	        {
+	          @Model.Division.Title
+	        }
+	      </li>
+	    </ul>
+	  </div>
+	</div>
+    *@
 		</div>
 	</fieldset>
 
@@ -218,6 +220,9 @@
 
       UpdatePreview($(this), $('#department-url ul li'), deptLinks);
     });
+
+    @* Divisions do not have a direct association with Subjects - only through the Department
+
     $('#division-field select').change(function() {
       var divLinks = new Array();
     @foreach (Division division in Model.AllDivisions) {
@@ -226,6 +231,7 @@
 
       UpdatePreview($(this), $('#division-url ul li'), divLinks);
     });
+*@
   });
 
   /** Update URL preview */
