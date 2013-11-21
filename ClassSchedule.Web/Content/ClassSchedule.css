@@ -1800,7 +1800,19 @@ ul.section-crosslisted-courses {
 }
 
 .url-preview {
-  background-color: white;
-  text-align: right;
   width: 75%;
+}
+
+.url-preview .generalInfo {
+  text-align: left;
+  background-color: white;
+  padding: 5px;
+}
+
+.url-preview .generalInfo h2 {
+  margin-top: 0px;
+}
+
+.url-preview a {
+  color: #003d79;
 }
