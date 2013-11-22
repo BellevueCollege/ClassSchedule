@@ -233,6 +233,10 @@ Version:10.2.3.5-->
       <action>SelectItem</action>
       <val>[dbo].[Instruction]:[dbo].[Instruction]</val>
     </value>
+    <value version="1" type="SelectTableEvent">
+      <action>SelectItem</action>
+      <val>[dbo].[WebRegistrationSetting]:[dbo].[WebRegistrationSetting]</val>
+    </value>
   </TableActions>
   <SessionSettings>15</SessionSettings>
   <DCGroupingStyle>0</DCGroupingStyle>

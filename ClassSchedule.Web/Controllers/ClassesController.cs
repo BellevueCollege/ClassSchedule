@@ -40,7 +40,7 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "IndexCacheTime")] // Caches for 1 day
 		public ActionResult Index()
 		{
-			using (OdsRepository repository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository())
 			{
 				ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
 				ViewBag.QuarterNavMenu = Helpers.GetYearQuarterListForMenus(repository);
