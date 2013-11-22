@@ -1803,16 +1803,6 @@ ul.section-crosslisted-courses {
   width: 75%;
 }
 
-.url-preview .generalInfo {
-  text-align: left;
-  background-color: white;
-  padding: 5px;
-}
-
-.url-preview .generalInfo h2 {
-  margin-top: 0px;
-}
-
 .url-preview a {
   color: #003d79;
 }

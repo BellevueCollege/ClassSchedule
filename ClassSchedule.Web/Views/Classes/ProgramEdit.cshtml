@@ -66,89 +66,27 @@
 	  </div>
 	  <div id="department-field" class="editor-field">
 	    @Html.DropDownListFor(model => model.Department.DepartmentID, 
-	                          Model.AllDepartments.Select(d => new SelectListItem {Value = d.DepartmentID.ToString(), Text = d.Title}), 
+	                          Model.AllDepartments.Select(d => new SelectListItem {Value = d.DepartmentID.ToString(), Text = d.Title}).OrderBy(i => i.Text), 
 	                          new { @class = "subject-text-field", @maxlength = "50" })
 	    @Html.ValidationMessageFor(model => model.Department.DepartmentID)
 	  </div>
 
 	  <div class="editor-label">
-	    @Html.LabelFor(model => model.Department.URL, "URL Preview")
+	    <div id="department-url" class="url-preview">
+	      @if (!string.IsNullOrWhiteSpace(Model.Department.URL))
+	      {
+	        <a href="@Model.Department.URL">Link preview</a>
+	      }
+	      else
+	      {
+         @:(No web page specified)
+	      }
+	    </div>
 	    <noscript>
 	      <div>Preview will not update unless Javascript is enabled.</div>
 	    </noscript>
 	  </div>
-	  <div id="department-url" class="url-preview">
-	    @* NOTE: This UI was taken from ClassDetails.cshtml *@
-	    <div class="generalInfo">
-	      <h2>Department</h2>
-	      <ul>
-	        <li>
-	          @if (!string.IsNullOrWhiteSpace(Model.Department.URL))
-	          {
-	            <a href="@Model.Department.URL">
-	              @if (!string.IsNullOrWhiteSpace(Model.Department.Title))
-	              {
-	                @Model.Department.Title
-	              }
-	              else
-	              {
-	                @Model.Subject.Title
-	              }
-	            </a>
-	          }
-	          else
-	          {
-	            if (!string.IsNullOrWhiteSpace(Model.Department.Title))
-	            {
-	              @Model.Department.Title
-	            }
-	            else
-	            {
-	              @Model.Subject.Title
-	            }
-	          }
-	        </li>
-	      </ul>
-	    </div>
-	  </div>
-      
-	  @*  Divisions do not have a direct association with Subjects - only through the Department
-
-		  <div class="editor-label">
-				@Html.LabelFor(model => model.Division.DivisionID, "Division")
-			</div>
-			<div id="division-field" class="editor-field">
-		    @Html.DropDownListFor(model => model.Division.DivisionID, 
-                                       Model.AllDivisions.Select(d => new SelectListItem {Value = d.DivisionID.ToString(), Text = d.Title}), 
-                                       new { @class = "subject-text-field", @maxlength = "50" })
-				@Html.ValidationMessageFor(model => model.Division.DivisionID)
-			</div>
-
-			<div class="editor-label">
-				@Html.LabelFor(model => model.Division.URL, "URL Preview:")
-			  <noscript>
-			    <div>Preview will not update unless Javascript is enabled.</div>
-			  </noscript>
-			</div>
-		  <div id="division-url" class="url-preview">
-	  <div class="generalInfo">
-	    <h2>Division</h2>
-	    <ul>
-	      <li>
-	        @if (!string.IsNullOrWhiteSpace(Model.Division.URL))
-	        {
-	          <a href="@Model.Division.URL">@Model.Division.Title</a>
-	        }
-	        else
-	        {
-	          @Model.Division.Title
-	        }
-	      </li>
-	    </ul>
-	  </div>
 	</div>
-    *@
-		</div>
 	</fieldset>
 
 	<div id="lastModifiedBy">
@@ -218,20 +156,8 @@
   @:deptLinks[@(department.DepartmentID)] = "@department.URL";
     }
 
-      UpdatePreview($(this), $('#department-url ul li'), deptLinks);
+      UpdatePreview($(this), $('#department-url'), deptLinks);
     });
-
-    @* Divisions do not have a direct association with Subjects - only through the Department
-
-    $('#division-field select').change(function() {
-      var divLinks = new Array();
-    @foreach (Division division in Model.AllDivisions) {
-  @:divLinks[@(division.DivisionID)] = "@division.URL";
-        }
-
-      UpdatePreview($(this), $('#division-url ul li'), divLinks);
-    });
-*@
   });
 
   /** Update URL preview */
@@ -242,11 +168,11 @@
     var selected = ddl.find(":selected");
     var id = selected.val();
     console.log("New dept ID = '" + id + "'");
-    var title = selected.text();
-    console.log("New dept Title = '" + title + "'");
 
     var link = links[id];
     console.log("New dept link = '" + link + "'");
+
+    var title = "Link preview";
 
     if (link && link != '') {
       container.html('<a href="' + link + '">' + title + '</a>');
