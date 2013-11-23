@@ -11,7 +11,8 @@ CREATE TABLE [dbo].[Departments]
 GO
 ALTER TABLE [dbo].[Departments] ADD CONSTRAINT [PK_Departments] PRIMARY KEY CLUSTERED  ([DepartmentID]) ON [PRIMARY]
 GO
-
+ALTER TABLE [dbo].[Departments] ADD CONSTRAINT [FK_Departments_Division] FOREIGN KEY ([DivisionID]) REFERENCES [dbo].[Divisions] ([DivisionID])
+GO
 GRANT SELECT ON  [dbo].[Departments] TO [WebApplicationUser]
 GRANT INSERT ON  [dbo].[Departments] TO [WebApplicationUser]
 GRANT UPDATE ON  [dbo].[Departments] TO [WebApplicationUser]
