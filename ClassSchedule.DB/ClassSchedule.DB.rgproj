@@ -35,16 +35,10 @@
     <Content Include="Security\Roles\db_datawriter.sql">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Security\Roles\db_owner.sql">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Security\Roles\WebApplicationUser.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Security\Schemas\db_owner.sql">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Security\Users\CAMPUS_andrew.craswell.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Security\Users\campus_ELasater-N216D%24.sql">
@@ -68,16 +62,7 @@
     <Content Include="Security\Users\CAMPUS_N216J-E027168%24.sql">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Security\Users\CAMPUS_s.mohamed.sql">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="Security\Users\CAMPUS_SSOUTHDT-N216K%24.sql">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Security\Users\CAMPUS_SSOUTHVM1-N216K%24.sql">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Security\Users\CAMPUS_tiis-schedulebetaqa.sql">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Security\Users\campus_w-bc-classes.sql">

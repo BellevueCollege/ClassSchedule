@@ -20,8 +20,6 @@ namespace CTCClassSchedule
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 			routes.IgnoreRoute("ScheduleError.aspx");
-			//routes.IgnoreRoute("favicon.ico");
-
 			// Map all URLs to this route, but then restrict which routes to ignore via the constraints
 			// dictionary. So in this case, this route will match (and thus ignore) all requests for
 			// favicon.ico (no matter which directory). Since we told routing to ignore this requests,
@@ -33,7 +31,6 @@ namespace CTCClassSchedule
       routes.MapRoute("ApiSubjects", "Api/Subjects/", new { controller = "Api", action = "Subjects" });
 			routes.MapRoute("ApiSectionEdit", "Classes/SectionEdit", new { controller = "Classes", action = "SectionEdit" });
 			routes.MapRoute("ApiClassEdit", "Api/ClassEdit", new { controller = "Api", action = "ClassEdit" });
-			routes.MapRoute("ApiProgramEdit", "Api/ProgramEdit", new { controller = "Api", action = "ProgramEdit" });
 			routes.MapRoute("ApiUpdateSectionFootnote", "Api/UpdateSectionFootnote", new { controller = "Api", action = "UpdateSectionFootnote" });
       routes.MapRoute("CrossListedCourses", "Api/CrossListedCourses", new { controller = "Api", action = "CrossListedCourses" });
 			routes.MapRoute("ScheduleExport", "Api/Export/{YearQuarterID}", new { controller = "Api", action = "Export", YearQuarterID = UrlParameter.Optional });
@@ -45,11 +42,14 @@ namespace CTCClassSchedule
 			// Default application routes
       routes.MapRoute("Index", "", new { controller = "Classes", action = "Index" });
 
+      // specific pages
+      routes.MapRoute("ProgramEdit", "ProgramEdit", new { controller = "Classes", action = "ProgramEdit" });
+      routes.MapRoute("Search", "Search", new { controller = "Search", action = "Index" });
+      
+      // views not limited to quarter
       routes.MapRoute("AllClasses", "All", new { controller = "Classes", action = "AllClasses" });
       routes.MapRoute("Subject", "All/{Subject}", new { controller = "Classes", action = "Subject" });
 			routes.MapRoute("ClassDetails", "All/{Prefix}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
-
-			routes.MapRoute("Search", "Search", new { controller = "Search", action = "Index" });
 
       routes.MapRoute("YearQuarter", "{YearQuarter}", new { controller = "Classes", action = "YearQuarter" });
       routes.MapRoute("YearQuarterSubject", "{YearQuarter}/{Subject}", new { controller = "Classes", action = "YearQuarterSubject" });

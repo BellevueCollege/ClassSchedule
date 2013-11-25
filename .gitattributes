@@ -25,6 +25,7 @@
 *.pubxml	eol=crlf
 *.rgproj	eol=crlf
 *.scpf		eol=crlf
+*.sdc		eol=crlf
 *.settings	eol=crlf
 *.sln		eol=crlf
 *.sql		eol=crlf

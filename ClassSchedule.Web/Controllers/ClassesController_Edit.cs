@@ -94,8 +94,140 @@ namespace CTCClassSchedule.Controllers
 
 	  #endregion
 
-	  #region Editing Section information
-	  /// <summary>
+    #region Editing program/Subject information
+    /// <summary>
+    /// Displays dialog for editing Subject info, incl. Dept & Division
+    /// </summary>
+    /// <param name="Abbreviation"></param>
+    /// <returns></returns>
+    [AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
+    [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+    public ActionResult ProgramEdit(string Slug)
+    {
+      if (HttpContext.User.Identity.IsAuthenticated)
+      {
+        // Get a list of all course prefixes to present the user when they merge/unmerge prefixes to a subject
+        IList<string> allPrefixes;
+        string commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar;
+        using (OdsRepository repository = new OdsRepository())
+        {
+          // TODO: This is a temp workaround for getting a list of all Course Prefixes since the GetCourseSubjects() method
+          //			 does not return the expected results. - Andrew C (3/4/2013)
+          allPrefixes = repository.GetCourses().Select(c => String.Concat(c.Subject, c.IsCommonCourse ? commonCourseChar : string.Empty))
+                                               .Distinct()
+                                               .ToList();
+        }
+
+        // Construct the model and return it
+        using (ClassScheduleDb db = new ClassScheduleDb())
+        {
+          // Exclude all prefixes which have already been merged -- a prefix can only belong ot a single subject
+          IList<string> mergablePrefixes = allPrefixes.Except(db.SubjectsCoursePrefixes.Select(p => p.CoursePrefixID)).ToList();
+
+          SubjectInfoResult programInfo = SubjectInfo.GetSubjectInfo(Slug);
+          
+          ProgramEditModel model = new ProgramEditModel
+                                     {
+                                       Subject = programInfo.Subject,
+                                       Department = programInfo.Department,
+                                       Division = programInfo.Division,
+                                       AllCoursePrefixes = mergablePrefixes,
+                                       AllDepartments = db.Departments.Where(d => (d.Title != null && d.Title != "") || d.DepartmentID == programInfo.Department.DepartmentID).ToList(),
+                                       AllDivisions = db.Divisions.Where(d => (d.Title != null && d.Title != "") || d.DivisionID == programInfo.Division.DivisionID).ToList()
+                                     };
+
+          return PartialView(model);
+        }
+      }
+
+      // TODO: This is bad practice. Should return a descriptive error.
+      return PartialView();
+    }
+
+	  ///  <summary>
+	  /// 
+	  ///  </summary>
+	  /// <param name="model"></param>
+	  /// <param name="prefixesToMerge"></param>
+	  /// <returns></returns>
+	  [HttpPost]
+    [ValidateInput(false)]
+    [AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
+    public ActionResult ProgramEdit(ProgramEditModel model, ICollection<string> prefixesToMerge)
+    {
+      if (HttpContext.User.Identity.IsAuthenticated)
+      {
+        if (ModelState.IsValid)
+        {
+          string username = HttpContext.User.Identity.Name;
+          using (ClassScheduleDb db = new ClassScheduleDb())
+          {
+            // Lookup the subject being edited
+            Subject subject = db.Subjects.Where(s => s.Slug.Equals(model.Subject.Slug, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+
+            if (subject != null)
+            {
+              // Update the proper fields
+              subject.Title = model.Subject.Title;
+              subject.Intro = StripHtml(model.Subject.Intro);
+              subject.LastUpdated = DateTime.Now;
+              subject.LastUpdatedBy = username;
+
+              if (subject.Department.DepartmentID != model.Department.DepartmentID)
+              {
+                subject.DepartmentID = model.Department.DepartmentID;
+              }
+              // NOTE: Division is not related directly to a Subject - only through a Department
+
+              // If no prefixes are being merged, instantiate an empty collection so LINQ queries don't fail
+              if (prefixesToMerge == null)
+              {
+                prefixesToMerge = new List<string>();
+              }
+
+              // Only allow merging/unmerging of prefixes if at least one prefix is assigned to the subject
+              if (prefixesToMerge.Count > 0)
+              {
+                // Unmerge subjects
+                IList<SubjectsCoursePrefix> unmergables =
+                  subject.CoursePrefixes.Where(s => !prefixesToMerge.Contains(s.CoursePrefixID)).ToList();
+                foreach (SubjectsCoursePrefix prefix in unmergables)
+                {
+                  subject.CoursePrefixes.Remove(prefix);
+                }
+
+                // Merge subjects
+                IList<string> currentlyMergedPrefixes = subject.CoursePrefixes.Select(s => s.CoursePrefixID).ToList();
+                IEnumerable<string> mergables = prefixesToMerge.Where(m => !currentlyMergedPrefixes.Contains(m));
+                foreach (string prefix in mergables)
+                {
+                  subject.CoursePrefixes.Add(new SubjectsCoursePrefix
+                                               {
+                                                 SubjectID = subject.SubjectID,
+                                                 CoursePrefixID = prefix
+                                               });
+                }
+              }
+
+              // Commit changes to database
+              db.SaveChanges();
+            }
+            else
+            {
+              _log.Warn(m => m("Unable to save Subject info: Failed to find Subject data for slug '{0}'", model.Subject.Slug));
+            }
+          }
+        }
+
+      }
+
+      // Refresh the page to display the updated info
+      return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri);
+    }
+    #endregion
+
+    #region Editing Section information
+    /// <summary>
 	  /// Displays the Section Edit dialog box
 	  /// </summary>
 	  /// <param name="itemNumber"></param>
