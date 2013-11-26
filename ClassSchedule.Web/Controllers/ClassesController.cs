@@ -64,7 +64,10 @@ namespace CTCClassSchedule.Controllers
 				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-          IList<Subject> subjects = db.Subjects.ToList();
+          // force CoursePrefixes to load up front for Subjects (otherwise we get an error trying to load after db has been disposed)
+          db.ContextOptions.LazyLoadingEnabled = false;
+          IList<Subject> subjects = db.Subjects.Include("CoursePrefixes").ToList();
+
           IList<char> subjectLetters = subjects.Select(s => s.Title.First()).Distinct().ToList();
           if (letter != null)
 					{
@@ -95,7 +98,7 @@ namespace CTCClassSchedule.Controllers
             LettersList = subjectLetters,
             ViewingLetter = String.IsNullOrEmpty(letter) ? (char?)null : letter.First()
           };
-
+          
 					// set up all the ancillary data we'll need to display the View
 					SetCommonViewBagVars(repository, string.Empty, letter);
 					ViewBag.LinkParams = Helpers.getLinkParams(Request);

@@ -40,7 +40,7 @@
 
 	routeParms["Subject"] = item.Slug.Trim();
   string linkText = item.Title;
-  IEnumerable<string> prefixes = item.CoursePrefixes.Select(p => p.CoursePrefixID);
+  IList<string> prefixes = item.CoursePrefixes.Select(p => p.CoursePrefixID).ToList();
 
 //  string[] prefixList = new string[] {};
 //  if (prefixes.Any())
