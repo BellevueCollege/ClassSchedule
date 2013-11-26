@@ -72,7 +72,7 @@
 	{
     link = Url.Action("Subject", "Classes", new RouteValueDictionary(routeParms));
 	}
-    <a href="@link">@linkText</a> @(prefixes.Any() ? string.Concat("(", prefixes.Distinct().ToArray().Mash(", "), ")") : string.Empty)
+    <a href="@Html.Raw(link)">@linkText</a> @(prefixes.Any() ? string.Concat("(", prefixes.Distinct().ToArray().Mash(", "), ")") : string.Empty)
 
 	@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
 	{

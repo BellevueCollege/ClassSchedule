@@ -85,13 +85,12 @@
      if (routeParms.Keys.Contains("YearQuarter") && routeParms["YearQuarter"] != null && !routeParms["YearQuarter"].ToString().IsEmpty() && routeParms["YearQuarter"].ToString().ToUpper() != "ALL")
      {
        link = Url.Action("YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms));
-       //       Write(Html.ActionLink(linkText, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), linkAttributes));
      }
      else
      {
        link = Url.Action("Subject", "Classes", new RouteValueDictionary(routeParms));
      }
-     <a href="@link" onclick="$('#nav-choose-subjects').dialog('close');">@linkText</a> @(!string.IsNullOrWhiteSpace(prefix) ? string.Concat("(", prefix, ")") : string.Empty)
+     <a href="@Html.Raw(link)" onclick="$('#nav-choose-subjects').dialog('close');">@linkText</a> @(!string.IsNullOrWhiteSpace(prefix) ? string.Concat("(", prefix, ")") : string.Empty)
    }
 			</div>
    }

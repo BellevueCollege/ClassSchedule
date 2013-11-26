@@ -8,14 +8,17 @@
 	// TODO: move building the query string collection into the controller
 	foreach(string key in Request.QueryString.AllKeys)
 	{
-		if (!routeParms.Keys.Contains(key))
-		{
-			routeParms.Add(key, Request.QueryString[key]);
-		}
-		else
-		{
-			routeParms[key] = Request.QueryString[key];
-		}
+	  if (key != null)
+	  {
+	    if (!routeParms.Keys.Contains(key))
+	    {
+	      routeParms.Add(key, Request.QueryString[key]);
+	    }
+	    else
+	    {
+	      routeParms[key] = Request.QueryString[key];
+	    }
+	  }
 	}
 }
 
@@ -52,7 +55,7 @@
 
     /* subject chooser pop-up dialog */
     $(document).ready(function () {
-        var href_value = "@Url.Action("Subjects", "Api", new RouteValueDictionary(routeParms))";
+        var href_value = "@Html.Raw(Url.Action("Subjects", "Api", new RouteValueDictionary(routeParms)))";
         $("#change_subject").attr('href', href_value);
 
 
