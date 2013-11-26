@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data.Objects;
 // ReSharper disable RedundantUsingDirective
 using System.Diagnostics;
@@ -144,7 +145,7 @@ namespace CTCClassSchedule.Common
 		/// passed into the app by the user clicking on the faceted search left pane
 		/// facets accepted: flex, time, days, availability
 		/// </summary>
-		static public IList<ISectionFacet> addFacets(string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string f_telecourse, string avail, string latestart, string numcredits)
+		static public IList<ISectionFacet> addFacets(string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits)
 		{
 			IList<ISectionFacet> facets = new List<ISectionFacet>();
 
@@ -158,10 +159,6 @@ namespace CTCClassSchedule.Common
 			if (!String.IsNullOrWhiteSpace(f_hybrid))
 			{
 				modality = (modality | ModalityFacet.Options.Hybrid);
-			}
-			if (!String.IsNullOrWhiteSpace(f_telecourse))
-			{
-				modality = (modality | ModalityFacet.Options.Telecourse);
 			}
 			if (!String.IsNullOrWhiteSpace(f_oncampus))
 			{
@@ -370,14 +367,13 @@ namespace CTCClassSchedule.Common
 			};
 		}
 
-		static public IList<GeneralFacetInfo> ConstructModalityList(string f_oncampus, string f_online, string f_hybrid, string f_telecourse)
+		static public IList<GeneralFacetInfo> ConstructModalityList(string f_oncampus, string f_online, string f_hybrid)
 		{
 			IList<GeneralFacetInfo> modality = new List<GeneralFacetInfo>(4);
 
 			modality.Add(getFacetInfo("f_oncampus", "On Campus", f_oncampus));
 			modality.Add(getFacetInfo("f_online", "Online", f_online));
 			modality.Add(getFacetInfo("f_hybrid", "Hybrid", f_hybrid));
-			modality.Add(getFacetInfo("f_telecourse", "Telecourse", f_telecourse));
 
 			return modality;
 		}
@@ -424,33 +420,27 @@ namespace CTCClassSchedule.Common
 		/// <param name="ignoreKeys">List of key values to ignore.</param>
 		static public IDictionary<string, object> getLinkParams(HttpRequestBase httpRequest, params string[] ignoreKeys)
 		{
-			IDictionary<string, object> linkParams = new Dictionary<string, object>(httpRequest.QueryString.Count);
-			foreach (string key in httpRequest.QueryString.AllKeys)
+      IList<string> incomingParams = httpRequest.QueryString.AllKeys.Union(httpRequest.Form.AllKeys).ToList();
+      IDictionary<string, object> linkParams = new Dictionary<string, object>(incomingParams.Count);
+
+      foreach (string key in incomingParams)
 			{
-				if (key != "X-Requested-With" && !ignoreKeys.Contains(key, StringComparer.OrdinalIgnoreCase))
+        // X-Requested-With is appended for AJAX calls.
+				if (key != null && key != "X-Requested-With" && !ignoreKeys.Contains(key, StringComparer.OrdinalIgnoreCase))
 				{
-					if (linkParams.ContainsKey(key))
-					{
-						linkParams[key] = httpRequest.QueryString[key];
-					}
-					else
-					{
-						linkParams.Add(key, httpRequest.QueryString[key]);
-					}
-				}
-			}
-			foreach (string key in httpRequest.Form.AllKeys)
-			{
-				if (!ignoreKeys.Contains(key, StringComparer.OrdinalIgnoreCase))
-				{
-					if (linkParams.ContainsKey(key))
-					{
-						linkParams[key] = httpRequest.Form[key];
-					}
-					else
-					{
-						linkParams.Add(key, httpRequest.Form[key]);
-					}
+          string value = httpRequest.QueryString.AllKeys.Contains(key) ? httpRequest.QueryString[key] : httpRequest.Form[key];
+
+				  if (!string.IsNullOrWhiteSpace(value))
+				  {
+				    if (linkParams.ContainsKey(key))
+				    {
+				      linkParams[key] = value;
+				    }
+				    else
+				    {
+				      linkParams.Add(key, value);
+				    }
+				  }
 				}
 			}
 			return linkParams;
