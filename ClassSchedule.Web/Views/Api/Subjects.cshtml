@@ -1,7 +1,5 @@
 ﻿@using System.Diagnostics
-@using Ctc.Ods.Types
 @using CTCClassSchedule.Common
-@using CtcApi.Extensions
 @model IEnumerable<ScheduleCoursePrefix>
 @{
   int columnCount = (ViewBag.SubjectsColumns != null ? (int)ViewBag.SubjectsColumns : 1);
@@ -48,10 +46,6 @@
   {
     routeParms.Add("Subject", string.Empty);
   }
-
-  IDictionary<string, object> linkAttributes = new Dictionary<string, object>(1);
-  // close the dialog window when a subject link is clicked
-  linkAttributes.Add("onClick", "$('#nav-choose-subjects').dialog('close');");
 }
 <div id="subjects-list">
 	@foreach (char letter in alphabet)
@@ -86,16 +80,18 @@
      string linkText = item.Title;
      string prefix = item.Subject;
 
-     linkText = String.Format("{0} ({1})", linkText, prefix);
+     string link;
 
      if (routeParms.Keys.Contains("YearQuarter") && routeParms["YearQuarter"] != null && !routeParms["YearQuarter"].ToString().IsEmpty() && routeParms["YearQuarter"].ToString().ToUpper() != "ALL")
      {
-       Write(Html.ActionLink(linkText, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), linkAttributes));
+       link = Url.Action("YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms));
+       //       Write(Html.ActionLink(linkText, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), linkAttributes));
      }
      else
      {
-       Write(Html.ActionLink(linkText, "Subject", "Classes", new RouteValueDictionary(routeParms), linkAttributes));
+       link = Url.Action("Subject", "Classes", new RouteValueDictionary(routeParms));
      }
+     <a href="@link" onclick="$('#nav-choose-subjects').dialog('close');">@linkText</a> @(!string.IsNullOrWhiteSpace(prefix) ? string.Concat("(", prefix, ")") : string.Empty)
    }
 			</div>
    }

@@ -42,16 +42,18 @@
   string linkText = item.Title;
   IEnumerable<string> prefixes = item.CoursePrefixes.Select(p => p.CoursePrefixID);
 
-  if (prefixes.Any())
-  {
-    string[] prefixList = prefixes.Distinct().ToArray();
-    Debug.Assert(prefixList.Any(), "Lost prefixes for '{0}' after conversion to Array!", linkText);
-    linkText = String.Format("{0} ({1})", linkText, prefixList.Mash(", "));
-  }
-  else
-  {
-    _log.Warn(m => m("No CoursePrefixes found for '{0}'.", linkText));
-  }
+//  string[] prefixList = new string[] {};
+//  if (prefixes.Any())
+//  {
+//    prefixList = prefixes.Distinct().ToArray();
+//    Debug.Assert(prefixList.Any(), "Lost prefixes for '{0}' after conversion to Array!", linkText);
+////    linkText = String.Format("{0} ({1})", linkText, prefixList.Mash(", "));
+//  }
+//  else
+//  {
+//    _log.Warn(m => m("No CoursePrefixes found for '{0}'.", linkText));
+//  }
+  string link;
 
 	<li class="subject-name">
 	@if (FriendlyYrq != "ALL")
@@ -64,13 +66,13 @@
 		{
 			routeParms.Add("YearQuarter", FriendlyYrq);
 		}
-	  Write(Html.ActionLink(linkText, "YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms), null));
+	  link = Url.Action("YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms));
 	}
 	else
 	{
-		Write(Html.ActionLink(linkText, "Subject", "Classes", new RouteValueDictionary(routeParms), null));
+    link = Url.Action("Subject", "Classes", new RouteValueDictionary(routeParms));
 	}
-
+    <a href="@link">@linkText</a> @(prefixes.Any() ? string.Concat("(", prefixes.Distinct().ToArray().Mash(", "), ")") : string.Empty)
 
 	@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
 	{
