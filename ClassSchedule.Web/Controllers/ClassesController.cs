@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using Common.Logging;
 using Ctc.Ods;
 using Ctc.Ods.Config;
 using Ctc.Ods.Data;
@@ -404,7 +405,7 @@ namespace CTCClassSchedule.Controllers
           // Get the course learning outcomes
           using (_profiler.Step("Retrieving course outcomes"))
 					{
-            learningOutcomes = getCourseOutcome(courseID);
+            learningOutcomes = Helpers.GetCourseOutcome(courseID);
 					}
 				}
 
@@ -468,28 +469,9 @@ namespace CTCClassSchedule.Controllers
       return null;
     }
 
-		/// <summary>
-		/// Gets the course outcome information by scraping the Bellevue College
-		/// course outcomes website
-		/// </summary>
-		private static dynamic getCourseOutcome(ICourseID courseId)
-		{
-			string CourseOutcome = string.Empty;
-			try
-			{
-				Service1Client client = new Service1Client();
-        string FullCourseID = Helpers.BuildCourseID(courseId.Number, courseId.Subject.TrimEnd(), courseId.IsCommonCourse);
-        CourseOutcome = client.GetCourseOutcome(FullCourseID);
-			}
-			catch (Exception)
-			{
-				CourseOutcome = "Error: Cannot find course outcome for this course or cannot connect to the course outcomes webservice.";
-			}
+    // QUESTION: Does GetCourseOutcomes() need to be dynamic?
 
-      return CourseOutcome;
-		}
-
-		/// <summary>
+	  /// <summary>
 		/// Sets all of the common ViewBag variables
 		/// </summary>
 		private void SetCommonViewBagVars(OdsRepository repository, string avail, string letter)
