@@ -181,13 +181,11 @@ namespace CTCClassSchedule.Controllers
 
       try
       {
-        YearQuarter yrq = string.IsNullOrWhiteSpace(YearQuarter)
-                            ? null
-                            : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
-        model.ViewingQuarter = yrq;
-
         using (OdsRepository repository = new OdsRepository(HttpContext))
         {
+          YearQuarter yrq = Helpers.DetermineRegistrationQuarter(YearQuarter, repository.CurrentRegistrationQuarter, RouteData);
+          model.ViewingQuarter = yrq;
+
           model.NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository);
 
           // set up all the ancillary data we'll need to display the View
@@ -252,17 +250,18 @@ namespace CTCClassSchedule.Controllers
 		}
 
 
-		/// <summary>
+	  /// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
-		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")] // Caches for 30 minutes
+		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")]
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, string format)
 		{
-			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, avail, latestart, numcredits);
 
-			using (OdsRepository repository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository())
 			{
+        YearQuarter yrq = Helpers.DetermineRegistrationQuarter(YearQuarter, repository.CurrentRegistrationQuarter, RouteData);
+
         // Get the courses to display on the View
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))

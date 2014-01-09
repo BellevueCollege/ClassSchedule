@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Routing;
 using CTCClassSchedule.Properties;
 using Common.Logging;
 using Ctc.Ods;
@@ -1034,6 +1035,35 @@ namespace CTCClassSchedule.Common
 	    }
 
 	    return courseOutcomes;
+	  }
+
+    /// <summary>
+    /// Allows user to enter "current" in URL in place of quarter
+    /// </summary>
+    /// <param name="quarter"></param>
+    /// <param name="currentQuarter"></param>
+    /// <param name="routeData"></param>
+    /// <returns></returns>
+	  public static YearQuarter DetermineRegistrationQuarter(string quarter, YearQuarter currentQuarter, RouteData routeData)
+	  {
+	    YearQuarter yrq;
+	    if (String.IsNullOrWhiteSpace(quarter))
+	    {
+	      yrq = null;
+	    }
+	    else
+	    {
+	      if (quarter.ToUpper() == "CURRENT")
+	      {
+	        yrq = currentQuarter;
+	        routeData.Values["YearQuarter"] = yrq.FriendlyName.Replace(" ", string.Empty);
+	      }
+	      else
+	      {
+	        yrq = YearQuarter.FromFriendlyName(quarter);
+	      }
+	    }
+	    return yrq;
 	  }
 	}
 }
