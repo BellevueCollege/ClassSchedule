@@ -4,7 +4,7 @@
 @using CTCClassSchedule.Models
 @using Common.Logging
 @using CtcApi.Extensions
-@model IList<Subject>
+@model IList<SubjectModel>
 
 @functions {
   private ILog _log = LogManager.GetCurrentClassLogger();
@@ -25,7 +25,7 @@
 }
 
 
-@foreach (Subject item in Model.OrderBy(s => s.Title))
+@foreach (SubjectModel item in Model.OrderBy(s => s.Title))
 {
 	char letter = item.Title.First();
 	if (letter != PreviousLetter)
@@ -40,7 +40,6 @@
 
 	routeParms["Subject"] = item.Slug.Trim();
   string linkText = item.Title;
-  IList<string> prefixes = item.CoursePrefixes.Select(p => p.CoursePrefixID).ToList();
 
 //  string[] prefixList = new string[] {};
 //  if (prefixes.Any())
@@ -72,7 +71,7 @@
 	{
     link = Url.Action("Subject", "Classes", new RouteValueDictionary(routeParms));
 	}
-    <a href="@Html.Raw(link)">@linkText</a> @(prefixes.Any() ? string.Concat("(", prefixes.Distinct().ToArray().Mash(", "), ")") : string.Empty)
+    <a href="@Html.Raw(link)">@linkText</a> @(item.CoursePrefixes.Any() ? string.Concat("(", item.CoursePrefixes.Distinct().ToArray().Mash(", "), ")") : string.Empty)
 
 	@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
 	{

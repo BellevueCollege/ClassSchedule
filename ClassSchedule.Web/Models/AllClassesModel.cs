@@ -9,7 +9,7 @@ namespace CTCClassSchedule.Models
   public class AllClassesModel
   {
     public YearQuarter CurrentQuarter { get; set; }
-    public IList<Subject> Subjects { get; set; }
+    public IList<SubjectModel> Subjects { get; set; }
     public IList<YearQuarter> NavigationQuarters { get; set; }
     public IList<char> LettersList { get; set; }
     public char? ViewingLetter { get; set; }

@@ -17,7 +17,7 @@ namespace CTCClassSchedule.Models
 
     public IDictionary<string, object> LinkParams {get;set;}
 
-    public List<Subject> ViewingSubjects {get;set;}
+    public List<SubjectModel> ViewingSubjects {get;set;}
 
     public IList<char> SubjectLetters {get;set;}
 

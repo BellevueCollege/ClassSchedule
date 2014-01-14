@@ -189,6 +189,7 @@
     <Compile Include="Models\SectionEditModelBinder.cs" />
     <Compile Include="Models\SectionIdModelBinder.cs" />
     <Compile Include="Models\SectionWithSeats.cs" />
+    <Compile Include="Models\SubjectModel.cs" />
     <Compile Include="Models\SubjectViewModel.cs" />
     <Compile Include="Models\YearQuarterModel.cs" />
     <Compile Include="Models\YearQuarterSubjectModel.cs" />
@@ -502,7 +503,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

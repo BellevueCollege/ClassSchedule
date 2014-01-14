@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Objects;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
-using Common.Logging;
 using Ctc.Ods;
 using Ctc.Ods.Config;
 using Ctc.Ods.Data;
@@ -17,7 +15,6 @@ using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
 using CtcApi.Extensions;
 using MvcMiniProfiler;
-using System.Text;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -57,7 +54,7 @@ namespace CTCClassSchedule.Controllers
 		///
 		[HttpGet]
 		[OutputCache(CacheProfile = "AllClassesCacheTime")] // Caches for 6 hours
-		public ActionResult AllClasses(string letter, string format)
+		public ActionResult AllClasses(string letter, string fmt)
 		{
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -75,7 +72,7 @@ namespace CTCClassSchedule.Controllers
             subjects = subjects.Where(s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)).ToList();
 					}
 
-					if (format == "json")
+					if (fmt == "json")
 					{
 						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
@@ -95,7 +92,12 @@ namespace CTCClassSchedule.Controllers
           {
             CurrentQuarter = repository.CurrentYearQuarter,
             NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository),
-            Subjects = subjects,
+            Subjects = subjects.Select(s => new SubjectModel
+                                              {
+                                                Title = s.Title,
+                                                Slug = s.Slug,
+                                                CoursePrefixes = s.CoursePrefixes.Select(p => p.CoursePrefixID).ToList()
+                                              }).ToList(),
             LettersList = subjectLetters,
             ViewingLetter = String.IsNullOrEmpty(letter) ? (char?)null : letter.First()
           };
@@ -113,11 +115,11 @@ namespace CTCClassSchedule.Controllers
 		///
 		/// </summary>
 		/// <param name="Subject"></param>
-		/// <param name="format"></param>
+		/// <param name="fmt"></param>
 		/// <returns></returns>
 		[HttpGet]
 		[OutputCache(CacheProfile = "SubjectCacheTime")]
-		public ActionResult Subject(string Subject, string format)
+		public ActionResult Subject(string Subject, string fmt)
 		{
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -140,7 +142,7 @@ namespace CTCClassSchedule.Controllers
 																	 NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository)
 																 };
 
-        if (format == "json")
+        if (fmt == "json")
 				{
 					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
@@ -175,7 +177,7 @@ namespace CTCClassSchedule.Controllers
 
       YearQuarterModel model = new YearQuarterModel
       {
-        ViewingSubjects = new List<Subject>(),
+        ViewingSubjects = new List<SubjectModel>(),
         SubjectLetters = new List<char>(),
       };
 
@@ -195,37 +197,51 @@ namespace CTCClassSchedule.Controllers
           // after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
           using (ClassScheduleDb db = new ClassScheduleDb())
           {
+//            db.ContextOptions.LazyLoadingEnabled = false;
+
             // Compile a list of active subjects
             char[] commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar.ToCharArray();
-            IEnumerable<string> activePrefixes = repository.GetCourseSubjects(yrq, facets).Select(p => p.Subject);
+            IList<string> activePrefixes = repository.GetCourseSubjects(yrq, facets).Select(p => p.Subject).ToList();
 
             IList<Subject> subjects = new List<Subject>();
             // NOTE: Unable to reduce the following loop to a LINQ statement because it complains about not being able to use TrimEnd(char[]) w/ LINQ-to-Entities
             // (Although it appears to be doing so just fine in the if statement below). - shawn.south@bellevuecollege.edu
-            foreach (Subject sub in db.Subjects)
+            
+            ObjectQuery<Subject> subjectQuery = db.Subjects;
+//            foreach (Subject sub in subjectQuery.Include("Department").Include("CoursePrefixes"))
+            foreach (Subject sub in subjectQuery)
             {
               // TODO: whether the CoursePrefix has active courses or not, any Prefix with a '&' will be included
               //			 because GetCourseSubjects() does not include the common course char.
-              if (
-                sub.CoursePrefixes.Select(sp => sp.CoursePrefixID)
-                   .Any(sp => activePrefixes.Contains(sp.TrimEnd(commonCourseChar))))
+              if (sub.CoursePrefixes.Select(sp => sp.CoursePrefixID).Any(sp => activePrefixes.Contains(sp.TrimEnd(commonCourseChar))))
               {
+                // force dependent data to be loaded
+                if (sub.Department != null && !sub.Department.DivisionReference.IsLoaded)
+                {
+                  sub.Department.DivisionReference.Load();
+                }
                 subjects.Add(sub);
               }
             }
 
             model.SubjectLetters = subjects.Select(s => s.Title.First()).Distinct().ToList();
             model.ViewingSubjects = (letter != null
-                                       ? subjects.Where(
-                                         s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)).Distinct()
+                                       ? subjects.Where(s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)).Distinct()
                                        : subjects
+                                    ).Select(s => new SubjectModel
+                                            {
+                                              Title = s.Title,
+                                              Slug = s.Slug,
+                                              CoursePrefixes = s.CoursePrefixes.Select(p => p.CoursePrefixID).ToList()
+                                            }
                                     ).ToList();
 
             if (format == "json")
             {
               // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
               // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-              return Json(model, JsonRequestBehavior.AllowGet);
+              JsonResult json = Json(model, JsonRequestBehavior.AllowGet);
+              return json;
             }
 
             return View(model);
@@ -254,7 +270,7 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
 		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")]
-		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, string format)
+		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, string format, string fmt)
 		{
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, avail, latestart, numcredits);
 
@@ -337,7 +353,7 @@ namespace CTCClassSchedule.Controllers
 			                                      DepartmentURL = subject != null ? subject.Department.URL : string.Empty,
 			                                    };
 
-			    if (format == "json")
+			    if (fmt == "json")
 			    {
 			      // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 			      // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
@@ -369,7 +385,7 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		///
 		[OutputCache(CacheProfile = "ClassDetailsCacheTime")]
-		public ActionResult ClassDetails(string Prefix, string ClassNum)
+		public ActionResult ClassDetails(string Prefix, string ClassNum, string fmt)
 		{
       ICourseID courseID = CourseID.FromString(Prefix, ClassNum);
       ClassDetailsModel model = new ClassDetailsModel();
@@ -433,6 +449,12 @@ namespace CTCClassSchedule.Controllers
         }
 			}
 
+      if (fmt == "json")
+      {
+        // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+        // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+        return Json(model, JsonRequestBehavior.AllowGet);
+      }
       return View(model);
 		}
 
