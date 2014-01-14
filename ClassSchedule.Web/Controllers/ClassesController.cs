@@ -197,8 +197,6 @@ namespace CTCClassSchedule.Controllers
           // after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
           using (ClassScheduleDb db = new ClassScheduleDb())
           {
-//            db.ContextOptions.LazyLoadingEnabled = false;
-
             // Compile a list of active subjects
             char[] commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar.ToCharArray();
             IList<string> activePrefixes = repository.GetCourseSubjects(yrq, facets).Select(p => p.Subject).ToList();
@@ -206,10 +204,7 @@ namespace CTCClassSchedule.Controllers
             IList<Subject> subjects = new List<Subject>();
             // NOTE: Unable to reduce the following loop to a LINQ statement because it complains about not being able to use TrimEnd(char[]) w/ LINQ-to-Entities
             // (Although it appears to be doing so just fine in the if statement below). - shawn.south@bellevuecollege.edu
-            
-            ObjectQuery<Subject> subjectQuery = db.Subjects;
-//            foreach (Subject sub in subjectQuery.Include("Department").Include("CoursePrefixes"))
-            foreach (Subject sub in subjectQuery)
+            foreach (Subject sub in db.Subjects)
             {
               // TODO: whether the CoursePrefix has active courses or not, any Prefix with a '&' will be included
               //			 because GetCourseSubjects() does not include the common course char.
