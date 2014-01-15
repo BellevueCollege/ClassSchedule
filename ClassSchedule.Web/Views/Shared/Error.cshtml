@@ -1,14 +1,38 @@
-﻿@model HandleErrorInfo
+﻿@using Common.Logging
+@model HandleErrorInfo
+@*
+This file is part of CtcClassSchedule.
 
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Oops, an error has occurred</title>
-</head>
-<body>
-  <h2>Oops, an error has occurred</h2>
-  <div>
-    If this error persists please <a href="https://bellevuecollege.edu/requestcenter/Requests/NewRequest.aspx?CategoryID=233&TaskTypeID=382">submit a ticket</a>.
-  </div>
-</body>
+  </head>
+  <body>
+    <h2>Oops, an error has occurred</h2>
+    <div>
+      If this error persists please <a href="https://bellevuecollege.edu/requestcenter/Requests/NewRequest.aspx?CategoryID=233&TaskTypeID=382">submit a ticket</a>.
+    </div>
+  </body>
 </html>
+@{
+  // If an exception occurred, it will be recorded/reported by ELMAH
+  if (Model == null)
+  {
+    ILog log = LogManager.GetCurrentClassLogger();
+    log.Error(m => m("The MVC error page was invoked, but no ErrorInfo was provided."));
+  }
+}
