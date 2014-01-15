@@ -1,6 +1,8 @@
 ﻿@using Ctc.Ods.Types
 @model YearQuarter
 @{
+  string linkID = string.Format("change_subject-{0}", Guid.NewGuid());
+  
 	IDictionary<string, object> routeParms = new Dictionary<string, object>(Request.QueryString.Count + 2);
 	routeParms.Add("format", string.Empty);
 	routeParms.Add("YearQuarter", Model != null ? Model.FriendlyName.Replace(" ", string.Empty) : "All");
@@ -33,45 +35,58 @@
 								    InsertionMode = InsertionMode.Replace,
 								    OnBegin = "$('#nav-choose-subjects').dialog('open');"
 							    },
-                  new { id = "change_subject" })
+                  new { id = linkID })
 
+  <script type="text/javascript">
+    /* subject chooser pop-up dialog */
+    $(document).ready(function () {
+      var href_value = "@Html.Raw(Url.Action("Subjects", "Api", new RouteValueDictionary(routeParms)))";
+      $("#@linkID").attr('href', href_value);
+    });
+  </script>
 
-<div id="nav-choose-subjects" title="Select new course subject"></div>
-<input type="hidden" id="javascriptEnabled" value="0" />
+@* Ensure that only one instance of the code, etc. is included in the page *@
+@if (!Convert.ToBoolean(ViewBag.SubjectChooserDisplayed))
+{
+  <div id="nav-choose-subjects" title="Select new course subject"></div>
+  <input type="hidden" id="javascriptEnabled" value="0" />
 
-<script type="text/javascript">
+  <script type="text/javascript">
     /* "processing" spinner */
     var opts = {
-        lines: 12, // The number of lines to draw
-        length: 7, // The length of each line
-        width: 5, // The line thickness
-        radius: 10, // The radius of the inner circle
-        color: '#000', // #rbg or #rrggbb
-        speed: 1, // Rounds per second
-        trail: 100, // Afterglow percentage
-        shadow: true // Whether to render a shadow
+      lines: 12, // The number of lines to draw
+      length: 7, // The length of each line
+      width: 5, // The line thickness
+      radius: 10, // The radius of the inner circle
+      color: '#000', // #rbg or #rrggbb
+      speed: 1, // Rounds per second
+      trail: 100, // Afterglow percentage
+      shadow: true // Whether to render a shadow
     };
     var spinner = new Spinner(opts);
 
     /* subject chooser pop-up dialog */
-    $(document).ready(function () {
-        var href_value = "@Html.Raw(Url.Action("Subjects", "Api", new RouteValueDictionary(routeParms)))";
-        $("#change_subject").attr('href', href_value);
+    $(document).ready(function() {
+      var href_value = "@Html.Raw(Url.Action("Subjects", "Api", new RouteValueDictionary(routeParms)))";
+      $("#change_subject").attr('href', href_value);
 
 
-        $("div#nav-choose-subjects").dialog({
-            autoOpen: false,
-            height: 500,
-            width: 600,
-            modal: true,
-            resizable: false,
-            open: function () {
-                // only show the spinner if we don't already have data in the dialog
-                if ($("div#nav-choose-subjects").html() == '') {
-                    spinner.spin(document.getElementById('nav-choose-subjects'));
-                }
-            }
-        })
+      $("div#nav-choose-subjects").dialog({
+        autoOpen: false,
+        height: 500,
+        width: 600,
+        modal: true,
+        resizable: false,
+        open: function() {
+          // only show the spinner if we don't already have data in the dialog
+          if ($("div#nav-choose-subjects").html() == '') {
+            spinner.spin(document.getElementById('nav-choose-subjects'));
+          }
+        }
+      });
 
     });
-</script>
+  </script>
+  
+  ViewBag.SubjectChooserDisplayed = true;
+}
