@@ -387,6 +387,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="_configSource\Smtp.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="globals\btheme_v0.1\dotNET\" />
@@ -419,6 +420,11 @@
       <DependentUpon>web.config</DependentUpon>
     </Content>
     <Content Include="Views\Shared\CourseDescriptions.cshtml" />
+    <Content Include="_configSource\ElmahMail.config" />
+    <Content Include="_configSource\EXAMPLE-ElmahMail.config" />
+    <Content Include="_configSource\EXAMPLE-NLog.config" />
+    <Content Include="_configSource\EXAMPLE-Smtp.config" />
+    <Content Include="_configSource\NLog.config" />
     <None Include="_configSource\RoleManager.config" />
     <None Include="_configSource\CasClient.config" />
     <None Include="_configSource\ElmahAuthorization.config" />
