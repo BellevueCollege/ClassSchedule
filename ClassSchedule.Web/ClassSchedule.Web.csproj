@@ -419,18 +419,18 @@
       <DependentUpon>web.config</DependentUpon>
     </Content>
     <Content Include="Views\Shared\CourseDescriptions.cshtml" />
-    <None Include="_ConfigSource\RoleManager.config" />
-    <None Include="_ConfigSource\CasClient.config" />
-    <None Include="_ConfigSource\ElmahAuthorization.config" />
-    <None Include="_ConfigSource\Authentication.config" />
-    <None Include="_ConfigSource\AppSettings.config" />
-    <None Include="_ConfigSource\ConnectionStrings.config" />
-    <None Include="_ConfigSource\EXAMPLE-AppSettings.config" />
-    <None Include="_ConfigSource\EXAMPLE-Authentication.config" />
-    <None Include="_ConfigSource\EXAMPLE-CasClient.config" />
-    <None Include="_ConfigSource\EXAMPLE-ConnectionStrings.config" />
-    <None Include="_ConfigSource\EXAMPLE-ElmahAuthorization.config" />
-    <None Include="_ConfigSource\EXAMPLE-RoleManager.config" />
+    <None Include="_configSource\RoleManager.config" />
+    <None Include="_configSource\CasClient.config" />
+    <None Include="_configSource\ElmahAuthorization.config" />
+    <None Include="_configSource\Authentication.config" />
+    <None Include="_configSource\AppSettings.config" />
+    <None Include="_configSource\ConnectionStrings.config" />
+    <None Include="_configSource\EXAMPLE-AppSettings.config" />
+    <None Include="_configSource\EXAMPLE-Authentication.config" />
+    <None Include="_configSource\EXAMPLE-CasClient.config" />
+    <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
+    <None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
+    <None Include="_configSource\EXAMPLE-RoleManager.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Classes\YearQuarter.cshtml" />
