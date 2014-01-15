@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Objects;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -18,7 +17,9 @@ using MvcMiniProfiler;
 
 namespace CTCClassSchedule.Controllers
 {
+// ReSharper disable RedundantExtendsListEntry
 	public partial class ClassesController : Controller
+// ReSharper restore RedundantExtendsListEntry
 	{
 		#region controller member vars
 		readonly private MiniProfiler _profiler = MiniProfiler.Current;
@@ -54,7 +55,7 @@ namespace CTCClassSchedule.Controllers
 		///
 		[HttpGet]
 		[OutputCache(CacheProfile = "AllClassesCacheTime")] // Caches for 6 hours
-		public ActionResult AllClasses(string letter, string fmt)
+		public ActionResult AllClasses(string letter, string format)
 		{
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -70,13 +71,6 @@ namespace CTCClassSchedule.Controllers
           if (letter != null)
 					{
             subjects = subjects.Where(s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)).ToList();
-					}
-
-					if (fmt == "json")
-					{
-						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
-						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-            return Json(subjects, JsonRequestBehavior.AllowGet);
 					}
 
 #if DEBUG
@@ -101,8 +95,16 @@ namespace CTCClassSchedule.Controllers
             LettersList = subjectLetters,
             ViewingLetter = String.IsNullOrEmpty(letter) ? (char?)null : letter.First()
           };
+
+
+          if (format == "json")
+          {
+            // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+            // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+            return Json(model, JsonRequestBehavior.AllowGet);
+          }
           
-					// set up all the ancillary data we'll need to display the View
+          // set up all the ancillary data we'll need to display the View
 					SetCommonViewBagVars(repository, string.Empty, letter);
 					ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
@@ -115,11 +117,11 @@ namespace CTCClassSchedule.Controllers
 		///
 		/// </summary>
 		/// <param name="Subject"></param>
-		/// <param name="fmt"></param>
+		/// <param name="format"></param>
 		/// <returns></returns>
 		[HttpGet]
 		[OutputCache(CacheProfile = "SubjectCacheTime")]
-		public ActionResult Subject(string Subject, string fmt)
+		public ActionResult Subject(string Subject, string format)
 		{
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -130,6 +132,7 @@ namespace CTCClassSchedule.Controllers
 																						.OrderBy(c => c.Subject)
 																						.ThenBy(c => c.Number);
 
+        // TODO: Utilize SubjectModel in SubjectViewModel
 				SubjectViewModel model = new SubjectViewModel
 																 {
 																	 Courses = coursesEnum,
@@ -142,7 +145,7 @@ namespace CTCClassSchedule.Controllers
 																	 NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository)
 																 };
 
-        if (fmt == "json")
+        if (format == "json")
 				{
 					// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 					// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
@@ -210,11 +213,6 @@ namespace CTCClassSchedule.Controllers
               //			 because GetCourseSubjects() does not include the common course char.
               if (sub.CoursePrefixes.Select(sp => sp.CoursePrefixID).Any(sp => activePrefixes.Contains(sp.TrimEnd(commonCourseChar))))
               {
-                // force dependent data to be loaded
-                if (sub.Department != null && !sub.Department.DivisionReference.IsLoaded)
-                {
-                  sub.Department.DivisionReference.Load();
-                }
                 subjects.Add(sub);
               }
             }
@@ -265,7 +263,7 @@ namespace CTCClassSchedule.Controllers
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
 		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")]
-		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, string format, string fmt)
+		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, string format)
 		{
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, avail, latestart, numcredits);
 
@@ -297,8 +295,8 @@ namespace CTCClassSchedule.Controllers
         // */
 #endif
 
-        IList<SectionsBlock> courseBlocks = new List<SectionsBlock>();
-				using (ClassScheduleDb db = new ClassScheduleDb())
+        IList<SectionsBlock> courseBlocks;
+			  using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					IList<SectionWithSeats> sectionsEnum;
 					using (_profiler.Step("Getting app-specific Section records from DB"))
@@ -348,7 +346,7 @@ namespace CTCClassSchedule.Controllers
 			                                      DepartmentURL = subject != null ? subject.Department.URL : string.Empty,
 			                                    };
 
-			    if (fmt == "json")
+			    if (format == "json")
 			    {
 			      // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
 			      // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
@@ -380,10 +378,10 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		///
 		[OutputCache(CacheProfile = "ClassDetailsCacheTime")]
-		public ActionResult ClassDetails(string Prefix, string ClassNum, string fmt)
+		public ActionResult ClassDetails(string Prefix, string ClassNum, string format)
 		{
       ICourseID courseID = CourseID.FromString(Prefix, ClassNum);
-      ClassDetailsModel model = new ClassDetailsModel();
+      ClassDetailsModel model;
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -426,7 +424,7 @@ namespace CTCClassSchedule.Controllers
           CurrentQuarter = repository.CurrentYearQuarter,
           NavigationQuarters = navigationQuarters,
           QuartersOffered = quartersOffered,
-          CMSFootnote = getCMSFootnote(courseID),
+          CMSFootnote = GetCmsFootnote(courseID),
           LearningOutcomes = learningOutcomes,
         };
 
@@ -444,7 +442,7 @@ namespace CTCClassSchedule.Controllers
         }
 			}
 
-      if (fmt == "json")
+      if (format == "json")
       {
         // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
         // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
@@ -460,20 +458,15 @@ namespace CTCClassSchedule.Controllers
     /// <summary>
     /// Takes a Subject, ClassNum and CourseID and finds the CMS Footnote for the course.
     /// </summary>
-    /// <param name="Subject">The course Subject</param>
-    /// <param name="ClassNum">The CourseNumber</param>
-    /// /// <param name="courseID">The courseID for the course.</param>
-    private string getCMSFootnote(ICourseID courseId)
+    /// <param name="courseID"></param>
+    private string GetCmsFootnote(ICourseID courseID)
     {
       using (ClassScheduleDb db = new ClassScheduleDb())
       {
         using (_profiler.Step("Getting app-specific Section records from DB"))
         {
-          CourseMeta item = null;
-          char trimChar = _apiSettings.RegexPatterns.CommonCourseChar.ToCharArray()[0];
-
-          string FullCourseID = Helpers.BuildCourseID(courseId.Number, courseId.Subject.TrimEnd(), courseId.IsCommonCourse);
-          item = db.CourseMetas.Where(s => s.CourseID.Trim().Equals(FullCourseID, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+          string fullCourseID = Helpers.BuildCourseID(courseID.Number, courseID.Subject.TrimEnd(), courseID.IsCommonCourse);
+          CourseMeta item = db.CourseMetas.Where(s => s.CourseID.Trim().Equals(fullCourseID, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
 
           if (item != null)
           {
@@ -484,8 +477,6 @@ namespace CTCClassSchedule.Controllers
       }
       return null;
     }
-
-    // QUESTION: Does GetCourseOutcomes() need to be dynamic?
 
 	  /// <summary>
 		/// Sets all of the common ViewBag variables
