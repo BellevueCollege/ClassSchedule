@@ -9,8 +9,6 @@ namespace CTCClassSchedule.Models
   {
     public IList<YearQuarter> NavigationQuarters {get;set;}
 
-    public string WhichClass {get;set;}
-
     public IList<GeneralFacetInfo> Modality {get;set;}
 
     public IList<GeneralFacetInfo> Days {get;set;}
