@@ -138,7 +138,19 @@ namespace CTCClassSchedule.Controllers
       return PartialView(subjectList);
     }
 
-	  /// <summary>
+	  public JsonResult Courses(IEnumerable<string> subjects, string yearQuarter)
+	  {
+      // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+      // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+      return Json(null, JsonRequestBehavior.AllowGet);
+	  }
+
+    public JsonResult Courses(string subject, string yearQuarter)
+    {
+      return Courses(new[] {subject}, yearQuarter);
+    }
+    
+    /// <summary>
 	  ///
 	  /// </summary>
 	  /// <param name="courseID"></param>
@@ -477,5 +489,5 @@ namespace CTCClassSchedule.Controllers
 
 	  #region Private methods
 	  #endregion
-  }
+	}
 }

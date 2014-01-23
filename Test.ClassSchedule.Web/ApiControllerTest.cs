@@ -15,10 +15,10 @@ namespace Test.CtcClassSchedule
 {
 
 
-    /// <summary>
-    ///This is a test class for ApiControllerTest and is intended
-    ///to contain all ApiControllerTest Unit Tests
-    ///</summary>
+  /// <summary>
+  ///This is a test class for ApiControllerTest and is intended
+  ///to contain all ApiControllerTest Unit Tests
+  ///</summary>
   [TestClass()]
   public class ApiControllerTest
   {
@@ -78,8 +78,8 @@ namespace Test.CtcClassSchedule
     public void CrossListedCourses_NotCommonCourse()
     {
       ApiController target = new ApiController();
-//      string courseID = ConstructCourseID(CourseID.FromString("MATH","255"), false);
-      string courseID = ConstructCourseID(CourseID.FromString("CEO","196"), false);
+      //      string courseID = ConstructCourseID(CourseID.FromString("MATH","255"), false);
+      string courseID = ConstructCourseID(CourseID.FromString("CEO", "196"), false);
       JsonResult actual = target.CrossListedCourses(courseID, "** INVALID YRQ **");
 
       Assert.IsNotNull(actual, "Returned Result is NULL");
@@ -112,7 +112,7 @@ namespace Test.CtcClassSchedule
     public void CrossListedCourses_CommonCourse()
     {
       ApiController target = new ApiController();
-      string courseID = ConstructCourseID(CourseID.FromString("ART","107"), true);
+      string courseID = ConstructCourseID(CourseID.FromString("ART", "107"), true);
       JsonResult actual = target.CrossListedCourses(courseID, "** INVALID YRQ **");
 
       Assert.IsNotNull(actual, "Returned Result is NULL");
@@ -140,21 +140,32 @@ namespace Test.CtcClassSchedule
       }
     }
 
-      /// <summary>
-      /// Constructs a CourseID string in the format "ENGL& 101"
-      /// </summary>
-      /// <param name="id"></param>
-      /// <param name="isCommonCourse"></param>
-      /// <returns></returns>
-      // HACK: isCommonCourse parameter is a work-around until CtcApi is fixed to correctly set the flag when instantiating from another ICourseID object.
-      private string ConstructCourseID(ICourseID id, bool isCommonCourse)
+    [TestMethod()]
+    public void Courses_OneSubject_LowerCase_NoQuarter()
+    {
+      ApiController target = new ApiController();
+      JsonResult actual = target.Courses("engl", null);
+
+      Assert.IsNotNull(actual, "Returned Result is NULL");
+      Assert.IsNotNull(actual.Data, "JSON data is NULL");
+      Assert.IsInstanceOfType(actual.Data, typeof(IEnumerable<Course>));
+    }
+
+    /// <summary>
+    /// Constructs a CourseID string in the format "ENGL& 101"
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="isCommonCourse"></param>
+    /// <returns></returns>
+    // HACK: isCommonCourse parameter is a work-around until CtcApi is fixed to correctly set the flag when instantiating from another ICourseID object.
+    private string ConstructCourseID(ICourseID id, bool isCommonCourse)
+    {
+      string subject = string.Format("{0}{1}", id.Subject, isCommonCourse ? "&" : string.Empty);
+      if (subject.Length < 6)
       {
-        string subject = string.Format("{0}{1}", id.Subject, isCommonCourse ? "&" : string.Empty);
-        if (subject.Length < 6)
-        {
-          subject = string.Concat(subject, " ");
-        }
-        return string.Concat(subject, id.Number);
+        subject = string.Concat(subject, " ");
       }
+      return string.Concat(subject, id.Number);
+    }
   }
 }
