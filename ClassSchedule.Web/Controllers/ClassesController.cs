@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using Ctc.Ods;
@@ -16,11 +14,12 @@ using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
 using CtcApi.Extensions;
 using MvcMiniProfiler;
-using System.Text;
 
 namespace CTCClassSchedule.Controllers
 {
+// ReSharper disable RedundantExtendsListEntry
 	public partial class ClassesController : Controller
+// ReSharper restore RedundantExtendsListEntry
 	{
 		#region controller member vars
 		readonly private MiniProfiler _profiler = MiniProfiler.Current;
@@ -74,13 +73,6 @@ namespace CTCClassSchedule.Controllers
             subjects = subjects.Where(s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)).ToList();
 					}
 
-					if (format == "json")
-					{
-						// NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
-						// but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-            return Json(subjects, JsonRequestBehavior.AllowGet);
-					}
-
 #if DEBUG
           Debug.Print("======= Subject list =======");
 				  foreach (Subject subject in subjects)
@@ -94,12 +86,25 @@ namespace CTCClassSchedule.Controllers
           {
             CurrentQuarter = repository.CurrentYearQuarter,
             NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository),
-            Subjects = subjects,
+            Subjects = subjects.Select(s => new SubjectModel
+                                              {
+                                                Title = s.Title,
+                                                Slug = s.Slug,
+                                                CoursePrefixes = s.CoursePrefixes.Select(p => p.CoursePrefixID).ToList()
+                                              }).ToList(),
             LettersList = subjectLetters,
             ViewingLetter = String.IsNullOrEmpty(letter) ? (char?)null : letter.First()
           };
+
+
+          if (format == "json")
+          {
+            // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+            // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+            return Json(model, JsonRequestBehavior.AllowGet);
+          }
           
-					// set up all the ancillary data we'll need to display the View
+          // set up all the ancillary data we'll need to display the View
 					SetCommonViewBagVars(repository, string.Empty, letter);
 					ViewBag.LinkParams = Helpers.getLinkParams(Request);
 
@@ -127,6 +132,7 @@ namespace CTCClassSchedule.Controllers
 																						.OrderBy(c => c.Subject)
 																						.ThenBy(c => c.Number);
 
+        // TODO: Utilize SubjectModel in SubjectViewModel
 				SubjectViewModel model = new SubjectViewModel
 																 {
 																	 Courses = coursesEnum,
@@ -174,19 +180,17 @@ namespace CTCClassSchedule.Controllers
 
       YearQuarterModel model = new YearQuarterModel
       {
-        ViewingSubjects = new List<Subject>(),
+        ViewingSubjects = new List<SubjectModel>(),
         SubjectLetters = new List<char>(),
       };
 
       try
       {
-        YearQuarter yrq = string.IsNullOrWhiteSpace(YearQuarter)
-                            ? null
-                            : Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
-        model.ViewingQuarter = yrq;
-
         using (OdsRepository repository = new OdsRepository(HttpContext))
         {
+          YearQuarter yrq = Helpers.DetermineRegistrationQuarter(YearQuarter, repository.CurrentRegistrationQuarter, RouteData);
+          model.ViewingQuarter = yrq;
+
           model.NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository);
 
           // set up all the ancillary data we'll need to display the View
@@ -198,7 +202,7 @@ namespace CTCClassSchedule.Controllers
           {
             // Compile a list of active subjects
             char[] commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar.ToCharArray();
-            IEnumerable<string> activePrefixes = repository.GetCourseSubjects(yrq, facets).Select(p => p.Subject);
+            IList<string> activePrefixes = repository.GetCourseSubjects(yrq, facets).Select(p => p.Subject).ToList();
 
             IList<Subject> subjects = new List<Subject>();
             // NOTE: Unable to reduce the following loop to a LINQ statement because it complains about not being able to use TrimEnd(char[]) w/ LINQ-to-Entities
@@ -207,9 +211,7 @@ namespace CTCClassSchedule.Controllers
             {
               // TODO: whether the CoursePrefix has active courses or not, any Prefix with a '&' will be included
               //			 because GetCourseSubjects() does not include the common course char.
-              if (
-                sub.CoursePrefixes.Select(sp => sp.CoursePrefixID)
-                   .Any(sp => activePrefixes.Contains(sp.TrimEnd(commonCourseChar))))
+              if (sub.CoursePrefixes.Select(sp => sp.CoursePrefixID).Any(sp => activePrefixes.Contains(sp.TrimEnd(commonCourseChar))))
               {
                 subjects.Add(sub);
               }
@@ -217,16 +219,22 @@ namespace CTCClassSchedule.Controllers
 
             model.SubjectLetters = subjects.Select(s => s.Title.First()).Distinct().ToList();
             model.ViewingSubjects = (letter != null
-                                       ? subjects.Where(
-                                         s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)).Distinct()
+                                       ? subjects.Where(s => s.Title.StartsWith(letter, StringComparison.OrdinalIgnoreCase)).Distinct()
                                        : subjects
+                                    ).Select(s => new SubjectModel
+                                            {
+                                              Title = s.Title,
+                                              Slug = s.Slug,
+                                              CoursePrefixes = s.CoursePrefixes.Select(p => p.CoursePrefixID).ToList()
+                                            }
                                     ).ToList();
 
             if (format == "json")
             {
               // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
               // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-              return Json(model, JsonRequestBehavior.AllowGet);
+              JsonResult json = Json(model, JsonRequestBehavior.AllowGet);
+              return json;
             }
 
             return View(model);
@@ -251,17 +259,18 @@ namespace CTCClassSchedule.Controllers
 		}
 
 
-		/// <summary>
+	  /// <summary>
 		/// GET: /Classes/{FriendlyYRQ}/{Subject}/
 		/// </summary>
-		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")] // Caches for 30 minutes
+		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")]
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, string format)
 		{
-			YearQuarter yrq = Ctc.Ods.Types.YearQuarter.FromFriendlyName(YearQuarter);
 			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, avail, latestart, numcredits);
 
-			using (OdsRepository repository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository())
 			{
+        YearQuarter yrq = Helpers.DetermineRegistrationQuarter(YearQuarter, repository.CurrentRegistrationQuarter, RouteData);
+
         // Get the courses to display on the View
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
@@ -286,8 +295,8 @@ namespace CTCClassSchedule.Controllers
         // */
 #endif
 
-        IList<SectionsBlock> courseBlocks = new List<SectionsBlock>();
-				using (ClassScheduleDb db = new ClassScheduleDb())
+        IList<SectionsBlock> courseBlocks;
+			  using (ClassScheduleDb db = new ClassScheduleDb())
 				{
 					IList<SectionWithSeats> sectionsEnum;
 					using (_profiler.Step("Getting app-specific Section records from DB"))
@@ -369,10 +378,10 @@ namespace CTCClassSchedule.Controllers
 		/// </summary>
 		///
 		[OutputCache(CacheProfile = "ClassDetailsCacheTime")]
-		public ActionResult ClassDetails(string Prefix, string ClassNum)
+		public ActionResult ClassDetails(string Prefix, string ClassNum, string format)
 		{
       ICourseID courseID = CourseID.FromString(Prefix, ClassNum);
-      ClassDetailsModel model = new ClassDetailsModel();
+      ClassDetailsModel model;
 
 			using (OdsRepository repository = new OdsRepository(HttpContext))
 			{
@@ -404,7 +413,7 @@ namespace CTCClassSchedule.Controllers
           // Get the course learning outcomes
           using (_profiler.Step("Retrieving course outcomes"))
 					{
-            learningOutcomes = getCourseOutcome(courseID);
+            learningOutcomes = Helpers.GetCourseOutcome(courseID);
 					}
 				}
 
@@ -415,7 +424,7 @@ namespace CTCClassSchedule.Controllers
           CurrentQuarter = repository.CurrentYearQuarter,
           NavigationQuarters = navigationQuarters,
           QuartersOffered = quartersOffered,
-          CMSFootnote = getCMSFootnote(courseID),
+          CMSFootnote = GetCmsFootnote(courseID),
           LearningOutcomes = learningOutcomes,
         };
 
@@ -433,6 +442,12 @@ namespace CTCClassSchedule.Controllers
         }
 			}
 
+      if (format == "json")
+      {
+        // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+        // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
+        return Json(model, JsonRequestBehavior.AllowGet);
+      }
       return View(model);
 		}
 
@@ -443,20 +458,15 @@ namespace CTCClassSchedule.Controllers
     /// <summary>
     /// Takes a Subject, ClassNum and CourseID and finds the CMS Footnote for the course.
     /// </summary>
-    /// <param name="Subject">The course Subject</param>
-    /// <param name="ClassNum">The CourseNumber</param>
-    /// /// <param name="courseID">The courseID for the course.</param>
-    private string getCMSFootnote(ICourseID courseId)
+    /// <param name="courseID"></param>
+    private string GetCmsFootnote(ICourseID courseID)
     {
       using (ClassScheduleDb db = new ClassScheduleDb())
       {
         using (_profiler.Step("Getting app-specific Section records from DB"))
         {
-          CourseMeta item = null;
-          char trimChar = _apiSettings.RegexPatterns.CommonCourseChar.ToCharArray()[0];
-
-          string FullCourseID = Helpers.BuildCourseID(courseId.Number, courseId.Subject.TrimEnd(), courseId.IsCommonCourse);
-          item = db.CourseMetas.Where(s => s.CourseID.Trim().Equals(FullCourseID, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+          string fullCourseID = Helpers.BuildCourseID(courseID.Number, courseID.Subject.TrimEnd(), courseID.IsCommonCourse);
+          CourseMeta item = db.CourseMetas.Where(s => s.CourseID.Trim().Equals(fullCourseID, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
 
           if (item != null)
           {
@@ -468,28 +478,7 @@ namespace CTCClassSchedule.Controllers
       return null;
     }
 
-		/// <summary>
-		/// Gets the course outcome information by scraping the Bellevue College
-		/// course outcomes website
-		/// </summary>
-		private static dynamic getCourseOutcome(ICourseID courseId)
-		{
-			string CourseOutcome = string.Empty;
-			try
-			{
-				Service1Client client = new Service1Client();
-        string FullCourseID = Helpers.BuildCourseID(courseId.Number, courseId.Subject.TrimEnd(), courseId.IsCommonCourse);
-        CourseOutcome = client.GetCourseOutcome(FullCourseID);
-			}
-			catch (Exception)
-			{
-				CourseOutcome = "Error: Cannot find course outcome for this course or cannot connect to the course outcomes webservice.";
-			}
-
-      return CourseOutcome;
-		}
-
-		/// <summary>
+	  /// <summary>
 		/// Sets all of the common ViewBag variables
 		/// </summary>
 		private void SetCommonViewBagVars(OdsRepository repository, string avail, string letter)

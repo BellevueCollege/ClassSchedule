@@ -8,7 +8,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Routing;
 using CTCClassSchedule.Properties;
+using Common.Logging;
 using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
@@ -18,12 +20,15 @@ using MvcMiniProfiler;
 using System.Configuration;
 using System.Text;
 using Ctc.Ods.Config;
+using Encoder = Microsoft.Security.Application.Encoder;
 
 namespace CTCClassSchedule.Common
 {
 	public static class Helpers
 	{
-		/// <summary>
+	  private static readonly ILog _log = LogManager.GetCurrentClassLogger();
+
+	  /// <summary>
 		/// Useful if a helper method works with a timespan and should default to
 		/// either 12:00am or 23:59pm (start time/end time).
 		/// </summary>
@@ -266,7 +271,7 @@ namespace CTCClassSchedule.Common
       ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
       string commonCourseChar = _apiSettings.RegexPatterns.CommonCourseChar;
 
-      return new CourseID(subject.Replace(commonCourseChar, string.Empty), courseNumber, subject.Contains(commonCourseChar));
+      return new CourseID(subject.Replace(commonCourseChar, String.Empty), courseNumber, subject.Contains(commonCourseChar));
     }
 
 		/// <summary>
@@ -430,7 +435,7 @@ namespace CTCClassSchedule.Common
 				{
           string value = httpRequest.QueryString.AllKeys.Contains(key) ? httpRequest.QueryString[key] : httpRequest.Form[key];
 
-				  if (!string.IsNullOrWhiteSpace(value))
+				  if (!String.IsNullOrWhiteSpace(value))
 				  {
 				    if (linkParams.ContainsKey(key))
 				    {
@@ -663,7 +668,7 @@ namespace CTCClassSchedule.Common
           IList<SectionWithSeats> remainingSections = nonLinkedSections.Skip(processedCount).ToList();
           SectionWithSeats firstSection = remainingSections.First();
           // TODO: Replace BuildCourseID() with this logic - and pull in CommonCourceChar from .config
-          string blockCourseID = string.Format("{0}{1} {2}", firstSection.CourseSubject, firstSection.IsCommonCourse ? "&" : string.Empty, firstSection.CourseNumber);
+          string blockCourseID = String.Format("{0}{1} {2}", firstSection.CourseSubject, firstSection.IsCommonCourse ? "&" : String.Empty, firstSection.CourseNumber);
 
           if (allLinkedSections.Any(l => l.LinkedTo == firstSection.ID.ItemNumber))
           {
@@ -933,6 +938,11 @@ namespace CTCClassSchedule.Common
 			return String.Concat(quarter, year);
 		}
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="linkedSections"></param>
+    /// <returns></returns>
 	  public static IList<SectionWithSeats> ParseCommonHeadingLinkedSections(List<SectionWithSeats> linkedSections)
 	  {
 	    string prevCourseID = String.Empty;
@@ -956,6 +966,104 @@ namespace CTCClassSchedule.Common
 	    }
 
 	    return common;
+	  }
+
+    // TODO: Move StripHtml() into CtcApi
+    ///  <summary>
+	  /// 
+	  ///  </summary>
+	  ///  <param name="withHtml"></param>
+	  /// <param name="whitelistPattern"></param>
+	  /// <returns></returns>
+	  public static string StripHtml(string withHtml, string whitelistPattern = null)
+	  {
+	    string stripped;
+	    if (String.IsNullOrWhiteSpace(whitelistPattern))
+	    {
+	      whitelistPattern = ConfigurationManager.AppSettings["CMSHtmlParsingAllowedElements"];
+	    }
+	    try
+	    {
+	      string pattern = @"</?(?(?=" + whitelistPattern +
+	                       @")notag|[a-zA-Z0-9]+)(?:\s[a-zA-Z0-9\-]+=?(?:(["",']?).*?\1?)?)*\s*/?>";
+	      stripped = Regex.Replace(withHtml, pattern, String.Empty);
+	    }
+	    catch (Exception ex)
+	    {
+	      stripped = Encoder.HtmlEncode(withHtml);
+	      _log.Warn(m => m("Unable to remove HTML from string '{0}'\nReturning HTML-encoded string instead.\n{1}", withHtml, ex));
+	    }
+	    return stripped;
+	  }
+
+	  /// <summary>
+	  /// Gets the course outcome information by scraping the Bellevue College
+	  /// course outcomes website
+	  /// </summary>
+	  public static dynamic GetCourseOutcome(ICourseID courseId)
+	  {
+	    string fullCourseID = BuildCourseID(courseId.Number, courseId.Subject.TrimEnd(), courseId.IsCommonCourse);
+	    string courseOutcomes;
+	    try
+	    {
+	      Service1Client client = new Service1Client();
+	      string rawCourseOutcomes = client.GetCourseOutcome(fullCourseID);
+	      if (rawCourseOutcomes.IndexOf("<li>", StringComparison.OrdinalIgnoreCase) >= 0)
+	      {
+	        courseOutcomes = StripHtml(rawCourseOutcomes, "ul|UL|li|LI");
+	      }
+	      else
+	      {
+	        courseOutcomes = StripHtml(rawCourseOutcomes, "");
+	        string[] outcomeArray = courseOutcomes.Split('\n');
+
+	        StringBuilder outcomes = new StringBuilder("<ul>");
+	        foreach (string outcome in outcomeArray)
+	        {
+	          outcomes.AppendFormat("<li>{0}</li>", outcome);
+	        }
+	        outcomes.Append("</ul>");
+
+	        courseOutcomes = outcomes.ToString();
+	      }
+	    }
+	    catch (Exception ex)
+	    {
+	      // TODO: log exception details
+	      courseOutcomes = "Error: Cannot find course outcome for this course or cannot connect to the course outcomes webservice.";
+	      _log.Warn(m => m("Unable to retrieve course outomes for '{0}'", fullCourseID), ex);
+	    }
+
+	    return courseOutcomes;
+	  }
+
+    /// <summary>
+    /// Allows user to enter "current" in URL in place of quarter
+    /// </summary>
+    /// <param name="quarter"></param>
+    /// <param name="currentQuarter"></param>
+    /// <param name="routeData"></param>
+    /// <returns></returns>
+	  public static YearQuarter DetermineRegistrationQuarter(string quarter, YearQuarter currentQuarter, RouteData routeData)
+	  {
+	    YearQuarter yrq;
+	    if (String.IsNullOrWhiteSpace(quarter))
+	    {
+	      yrq = null;
+	    }
+	    else
+	    {
+	      if (quarter.ToUpper() == "CURRENT")
+	      {
+	        yrq = currentQuarter;
+	        routeData.Values["YearQuarter"] = yrq.FriendlyName.Replace(" ", string.Empty);
+	      }
+	      else
+	      {
+	        yrq = YearQuarter.FromFriendlyName(quarter);
+	      }
+	    }
+	    return yrq;
 	  }
 	}
 }

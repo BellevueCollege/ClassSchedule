@@ -87,7 +87,11 @@
                     <span class="descriptor">at </span>@String.Format("{0:t}", item.StartTime).Replace(" ", string.Empty)-@String.Format("{0:t}", item.EndTime).Replace(" ", string.Empty)
                   </span>
                   <span class="room">
-                    <span class="descriptor">in </span>@item.Room
+                    @*
+                    NOTE: Need to explicitly encode item.Room because Html.Raw() skips encoding
+                    And we need to use Raw() so that the entity doesn't get re-encoded
+                    *@
+                    <span class="descriptor">in </span>@Html.Raw(string.IsNullOrWhiteSpace(item.Room) ? "&nbsp;" : Encoder.HtmlEncode(item.Room))
                   </span>
                 }
               </li>

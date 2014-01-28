@@ -367,7 +367,7 @@ namespace CTCClassSchedule.Controllers
 				string username = HttpContext.User.Identity.Name;
 				string footnote = collection["Footnote"];
 
-				footnote = StripHtml(footnote);
+				footnote = Helpers.StripHtml(footnote);
 
 				if (ModelState.IsValid)
 				{
@@ -476,31 +476,6 @@ namespace CTCClassSchedule.Controllers
 	  #endregion
 
 	  #region Private methods
-	  /// <summary>
-	  ///
-	  /// </summary>
-	  /// <param name="withHtml"></param>
-	  /// <returns></returns>
-	  private string StripHtml(string withHtml)
-	  {
-	    string stripped;
-	    // BUG: The appSetting value "CMSHtmlParsingAllowedElements" is not present
-	    string whitelist = ConfigurationManager.AppSettings["CMSHtmlParsingAllowedElements"];
-
-	    try
-	    {
-	      string pattern = @"</?(?(?=" + whitelist +
-	                       @")notag|[a-zA-Z0-9]+)(?:\s[a-zA-Z0-9\-]+=?(?:(["",']?).*?\1?)?)*\s*/?>";
-	      stripped = Regex.Replace(withHtml, pattern, string.Empty);
-	    }
-	    catch (Exception ex)
-	    {
-	      stripped = Microsoft.Security.Application.Encoder.HtmlEncode(withHtml);
-	      _log.Warn(
-	        m => m("Unable to remove HTML from string '{0}'\nReturning HTML-encoded string instead.\n{1}", withHtml, ex));
-	    }
-	    return stripped;
-	  }
 	  #endregion
   }
 }

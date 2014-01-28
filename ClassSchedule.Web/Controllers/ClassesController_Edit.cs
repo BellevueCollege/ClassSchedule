@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using CTCClassSchedule.Models;
@@ -19,7 +17,6 @@ using CtcApi.Web.Mvc;
 using System.Web.Security;
 using DotNetCasClient;
 using CTCClassSchedule.Common;
-using Encoder = Microsoft.Security.Application.Encoder;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -169,7 +166,7 @@ namespace CTCClassSchedule.Controllers
             {
               // Update the proper fields
               subject.Title = model.Subject.Title;
-              subject.Intro = StripHtml(model.Subject.Intro);
+              subject.Intro = Helpers.StripHtml(model.Subject.Intro);
               subject.LastUpdated = DateTime.Now;
               subject.LastUpdatedBy = username;
 
@@ -491,33 +488,6 @@ namespace CTCClassSchedule.Controllers
 	  {
 	    return entities.Any(expression) ? entities.Single(expression) : new T();
 	  }
-
-	  /// <summary>
-	  ///
-	  /// </summary>
-	  /// <param name="withHtml"></param>
-	  /// <returns></returns>
-	  private string StripHtml(string withHtml)
-	  {
-	    string stripped;
-	    // BUG: The appSetting value "CMSHtmlParsingAllowedElements" is not present
-	    string whitelist = ConfigurationManager.AppSettings["CMSHtmlParsingAllowedElements"];
-
-	    try
-	    {
-	      string pattern = @"</?(?(?=" + whitelist +
-	                       @")notag|[a-zA-Z0-9]+)(?:\s[a-zA-Z0-9\-]+=?(?:(["",']?).*?\1?)?)*\s*/?>";
-	      stripped = Regex.Replace(withHtml, pattern, string.Empty);
-	    }
-	    catch (Exception ex)
-	    {
-	      stripped = Encoder.HtmlEncode(withHtml);
-	      _log.Warn(
-	        m => m("Unable to remove HTML from string '{0}'\nReturning HTML-encoded string instead.\n{1}", withHtml, ex));
-	    }
-	    return stripped;
-	  }
-
 	  #endregion
-    }
+  }
 }

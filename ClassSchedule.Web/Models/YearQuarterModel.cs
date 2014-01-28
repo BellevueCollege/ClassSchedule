@@ -9,15 +9,13 @@ namespace CTCClassSchedule.Models
   {
     public IList<YearQuarter> NavigationQuarters {get;set;}
 
-    public string WhichClass {get;set;}
-
     public IList<GeneralFacetInfo> Modality {get;set;}
 
     public IList<GeneralFacetInfo> Days {get;set;}
 
     public IDictionary<string, object> LinkParams {get;set;}
 
-    public List<Subject> ViewingSubjects {get;set;}
+    public List<SubjectModel> ViewingSubjects {get;set;}
 
     public IList<char> SubjectLetters {get;set;}
 

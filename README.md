@@ -1,9 +1,10 @@
 Online Class Schedule
 =====================
-(for WA SBCTC colleges)
+(for [WA SBCTC](http://www.sbctc.ctc.edu/) colleges)
 
 ## Overview
-TODO
+
+The online Class Schedule application was developed to replace a previous manual process of creating a static HTML schedule from print resources. This applicaton dynamically displays course catalog and class schedule information, and serves as the master source for such data.
 
 ## Requirements
 
@@ -12,7 +13,7 @@ TODO
 + Visual Studio 2012 (later versions will probably work)
 + NuGet Package Manager (included in Visual Studio) - for various other 3rd-party libraries
 + [CtcApi.Ods](https://github.com/BellevueCollege/CtcApi) - included via [Bellevue College's NuGet package server](http://www.bellevuecollege.edu/dev/).
-+ [ods-legacy]() - this application was designed to run off the CTCODS, while supporting the possibility that this data source will change in the future.
++ [ods-legacy](https://github.com/ctcdev/ods-legacy) (private repo) - this application was designed to run off the CTCODS, while supporting the possibility that this data source will change in the future.
 
 ### Optional
 
@@ -36,4 +37,4 @@ TODO
 ## See also
 
 + [CtcApi.Ods](https://github.com/BellevueCollege/CtcApi/wiki#what-is-it)
-+ [Class Schedule web api reference](https://github.com/shawn-bellevuecollege/ctcClassSchedule/wiki/Class-schedule-web-api-reference)
++ [Class Schedule web api reference](https://github.com/BellevueCollege/ClassSchedule/wiki/Class-schedule-web-api-reference)

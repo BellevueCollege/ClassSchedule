@@ -21,12 +21,15 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Common.Logging;
 
 namespace CTCClassSchedule
 {
 	public partial class ScheduleError : Page
 	{
-		protected void Page_Load(object sender, EventArgs e)
+	  private readonly ILog _log = LogManager.GetCurrentClassLogger();
+
+	  protected void Page_Load(object sender, EventArgs e)
 		{
 			Exception exception = Application["LastError"] as Exception;
 
@@ -35,13 +38,16 @@ namespace CTCClassSchedule
 				// Specific error messages checked for and enabled here
 				Message_ValidationError.Visible = (exception is HttpRequestValidationException);
 				Message_DatabaseError.Visible = (exception is SqlException || exception is DataException);
+
+        // If an exception waas thrown, it will be recorded/reported by ELMAH
+      }
+			else
+			{
+			  _log.Error(m => m("Error.aspx is being displayed, but no exception was detected."));
 			}
 
 			// Display a generic error message if Exception is not one of those specified above.
 			Message_UnknownError.Visible = Controls.OfType<Panel>().Where(p => p.ID.StartsWith("Message_") && p.Visible).Count() <= 0;
-
-			// Display the detailed Exception dump
-//			StackTrace.Text = stackTrace;
 		}
 	}
 }

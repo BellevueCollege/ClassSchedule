@@ -32,7 +32,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;ENABLE_PROFILING</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -58,6 +58,9 @@
     <Reference Include="Common.Logging.Elmah">
       <HintPath>..\packages\Common.Logging.Elmah.1.2.1\lib\net40\Common.Logging.Elmah.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Logging.NLog20">
+      <HintPath>..\packages\Common.Logging.NLog20.2.1.2\lib\net40\Common.Logging.NLog20.dll</HintPath>
+    </Reference>
     <Reference Include="CtcApi, Version=0.9.15.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\CtcApi.0.9.15.0\lib\net40\CtcApi.dll</HintPath>
@@ -72,8 +75,9 @@
     <Reference Include="Elmah">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
-    <Reference Include="Elmah.Mvc">
-      <HintPath>..\packages\Elmah.MVC.2.0.2\lib\net40\Elmah.Mvc.dll</HintPath>
+    <Reference Include="Elmah.Mvc, Version=2.0.0.29988, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
@@ -88,6 +92,9 @@
     </Reference>
     <Reference Include="MvcMiniProfiler">
       <HintPath>..\packages\MiniProfiler.1.9\lib\net40\MvcMiniProfiler.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.DirectoryServices" />
@@ -189,6 +196,7 @@
     <Compile Include="Models\SectionEditModelBinder.cs" />
     <Compile Include="Models\SectionIdModelBinder.cs" />
     <Compile Include="Models\SectionWithSeats.cs" />
+    <Compile Include="Models\SubjectModel.cs" />
     <Compile Include="Models\SubjectViewModel.cs" />
     <Compile Include="Models\YearQuarterModel.cs" />
     <Compile Include="Models\YearQuarterSubjectModel.cs" />
@@ -379,6 +387,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="_configSource\Smtp.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="globals\btheme_v0.1\dotNET\" />
@@ -411,18 +420,23 @@
       <DependentUpon>web.config</DependentUpon>
     </Content>
     <Content Include="Views\Shared\CourseDescriptions.cshtml" />
-    <None Include="_ConfigSource\RoleManager.config" />
-    <None Include="_ConfigSource\CasClient.config" />
-    <None Include="_ConfigSource\ElmahAuthorization.config" />
-    <None Include="_ConfigSource\Authentication.config" />
-    <None Include="_ConfigSource\AppSettings.config" />
-    <None Include="_ConfigSource\ConnectionStrings.config" />
-    <None Include="_ConfigSource\EXAMPLE-AppSettings.config" />
-    <None Include="_ConfigSource\EXAMPLE-Authentication.config" />
-    <None Include="_ConfigSource\EXAMPLE-CasClient.config" />
-    <None Include="_ConfigSource\EXAMPLE-ConnectionStrings.config" />
-    <None Include="_ConfigSource\EXAMPLE-ElmahAuthorization.config" />
-    <None Include="_ConfigSource\EXAMPLE-RoleManager.config" />
+    <Content Include="_configSource\ElmahMail.config" />
+    <Content Include="_configSource\EXAMPLE-ElmahMail.config" />
+    <Content Include="_configSource\EXAMPLE-NLog.config" />
+    <Content Include="_configSource\EXAMPLE-Smtp.config" />
+    <Content Include="_configSource\NLog.config" />
+    <None Include="_configSource\RoleManager.config" />
+    <None Include="_configSource\CasClient.config" />
+    <None Include="_configSource\ElmahAuthorization.config" />
+    <None Include="_configSource\Authentication.config" />
+    <None Include="_configSource\AppSettings.config" />
+    <None Include="_configSource\ConnectionStrings.config" />
+    <None Include="_configSource\EXAMPLE-AppSettings.config" />
+    <None Include="_configSource\EXAMPLE-Authentication.config" />
+    <None Include="_configSource\EXAMPLE-CasClient.config" />
+    <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
+    <None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
+    <None Include="_configSource\EXAMPLE-RoleManager.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Classes\YearQuarter.cshtml" />
