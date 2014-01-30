@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data.Objects;
+using CtcApi.Extensions;
 // ReSharper disable RedundantUsingDirective
 using System.Diagnostics;
 // ReSharper restore RedundantUsingDirective
@@ -1064,6 +1065,32 @@ namespace CTCClassSchedule.Common
 	      }
 	    }
 	    return yrq;
+	  }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="resource">The path and file to load over HTTP</param>
+    /// <returns>A full URL to the 'globals' resource</returns>
+	  public static string GlobalsHttp(string resource)
+	  {
+	    string globalsRoot = string.Empty;
+	    try
+	    {
+	      globalsRoot = ConfigurationManager.AppSettings["Globals_UrlRoot"];
+	    }
+	    catch (System.Configuration.ConfigurationException ex)
+	    {
+	      _log.Error(m => m("Unable to retrieve 'Globals_UrlRoot' from appSettings: {0}", ex));
+	    }
+
+	    if (string.IsNullOrWhiteSpace(globalsRoot))
+	    {
+	      _log.Warn(m => m("'Globals_UrlRoot' was not found in appSettings, or was empty. Will likely result in an HTTP resource error."));
+	      return resource;
+	    }
+	    string fullUrl = globalsRoot.CombineUrl(resource);
+	    return fullUrl;
 	  }
 	}
 }
