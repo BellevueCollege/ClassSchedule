@@ -20,14 +20,18 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 @{
   const int ANY = -1;
-  int _numCredits = Request.QueryString.SafeNameValueToInt32("numcredits", ANY);
+  int _numCredits;
+  if (!int.TryParse(Model.FacetData.Credits, out _numCredits))
+  {
+    _numCredits = ANY;
+  }
   int subjectsCount = Model.Subjects == null ? 0 : Model.Subjects.Count();
   string _availabilityFacet = Model.FacetData.Availability;
 
   // construct the route values we'll pass to the ActionLink helper
   IDictionary<string, object> routeParms = ViewBag.LinkParams;
 
-  string QuarterParam = Request.QueryString["quarter"];
+  string _quarterParam = routeParms.Keys.Contains("quarter") ? routeParms["quarter"].ToString() : string.Empty;
 }
 
 <div id="overlay"></div>
@@ -103,9 +107,9 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
       <form id="daystimesform" action="@Url.Content("~/Search/")" method="get">
 
       <!-- hidden fields to include in form -->
-      @if (!String.IsNullOrWhiteSpace(QuarterParam))
+      @if (!String.IsNullOrWhiteSpace(_quarterParam))
       {
-        <input type="hidden" name="quarter" value="@QuarterParam"/>
+        <input type="hidden" name="quarter" value="@_quarterParam"/>
       }
 
       @if (!String.IsNullOrWhiteSpace(Model.SelectedSubject))

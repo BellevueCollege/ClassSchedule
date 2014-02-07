@@ -48,5 +48,10 @@ namespace CTCClassSchedule
     /// 
     /// </summary>
     string Credits {get;set;}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    int CreditsAny {get;}
   }
 }

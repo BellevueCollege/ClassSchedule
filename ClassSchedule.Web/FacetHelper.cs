@@ -22,15 +22,17 @@ using Common.Logging;
 using Ctc.Ods;
 using CtcApi.Extensions;
 using CTCClassSchedule.Common;
+using Elmah.ContentSyndication;
 using Microsoft.Security.Application;
 
 namespace CTCClassSchedule
 {
   public class FacetHelper : IFacetData
   {
+    private const int CREDITS_ANY = -1; // actual credits should always be positive (or zero), so we can use -1 as a flag
+
     private const string DEFAULT_START_TIME = "00:00 AM";
     private const string DEFAULT_END_TIME = "23:59 PM";
-    private const int CREDITS_ANY = -1; // actual credits should always be positive (or zero), so we can use -1 as a flag
 
     readonly IList<GeneralFacetInfo> _modality = new List<GeneralFacetInfo>(4);
     readonly IList<GeneralFacetInfo> _days = new List<GeneralFacetInfo>(7);
@@ -47,10 +49,13 @@ namespace CTCClassSchedule
     private int _creditsNumber = CREDITS_ANY;
     private readonly IList<GeneralFacetInfo> _facets;
 
-    public FacetHelper(HttpRequestBase request, params string[] ignoreKeys)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="ignoreKeys"></param>
+    public FacetHelper(HttpRequestBase request, params string[] ignoreKeys) : this()
     {
-      _facets = new List<GeneralFacetInfo>();
-
       IList<string> requestParameters = request.QueryString.AllKeys.Union(request.Form.AllKeys).ToList();
       _linkParameters = new Dictionary<string, object>(requestParameters.Count);
 
@@ -73,6 +78,96 @@ namespace CTCClassSchedule
             }
           }
         }
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public FacetHelper()
+    {
+      _facets = new List<GeneralFacetInfo>();
+      _modality = InitializeFacetList(ModalityListSchema);
+      _days = InitializeFacetList(DaysListSchema);
+
+      if (_linkParameters == null)
+      {
+        _linkParameters = new Dictionary<string, object>();
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="listSchema"></param>
+    /// <returns></returns>
+    private IList<GeneralFacetInfo> InitializeFacetList(IDictionary<string, string> listSchema)
+    {
+      IList<GeneralFacetInfo> list;
+      
+      if (listSchema.Any())
+      {
+        list = new List<GeneralFacetInfo>(listSchema.Count);
+
+        foreach (KeyValuePair<string, string> item in listSchema)
+        {
+          list.Add(new GeneralFacetInfo
+                   {
+                     ID = item.Key,
+                     Title = item.Value,
+                     Value = string.Empty
+                   });
+        }
+      }
+      else
+      {
+        list = new List<GeneralFacetInfo>();
+      }
+
+      return list;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private IDictionary<string, string> DaysListSchema
+    {
+      get
+      {
+        // TODO: allow specifying modality schema in config
+        IDictionary<string, string> listSchema = new Dictionary<string, string>
+                                                 {
+                                                   {"day_su", "S"},
+                                                   {"day_m", "M"},
+                                                   {"day_t", "T"},
+                                                   {"day_w", "W"},
+                                                   {"day_th", "T"},
+                                                   {"day_f", "F"},
+                                                   {"day_s", "S"}
+                                                 };
+
+
+        return listSchema;
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private IDictionary<string, string> ModalityListSchema
+    {
+      get
+      {
+        // TODO: allow specifying modality schema in config
+        IDictionary<string, string> listSchema = new Dictionary<string, string>
+                                                 {
+                                                   {"f_oncampus", "On Campus"},
+                                                   {"f_online", "Online"},
+                                                   {"f_hybrid", "Hybrid"}
+                                                 };
+
+
+        return listSchema;
       }
     }
 
@@ -250,46 +345,33 @@ namespace CTCClassSchedule
     /// <summary>
     /// 
     /// </summary>
+    public int CreditsAny
+    {
+      // TODO: Allow CreditsAny value to be set in config
+      get {return CREDITS_ANY;}
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="fOncampus"></param>
     /// <param name="fOnline"></param>
     /// <param name="fHybrid"></param>
     public void SetModalities(string fOncampus = "", string fOnline = "", string fHybrid = "")
     {
-      _modality.Clear();
       ModalityFacet.Options modality = ModalityFacet.Options.All;	// default
-
-      // TODO: validate incoming value
-      if (!string.IsNullOrWhiteSpace(fOncampus))
-      {
-        _modality.Add(new GeneralFacetInfo
-                      {
-                        ID = "f_oncampus",
-                        Title = "On Campus",
-                        Value = fOncampus
-                      });
-        modality = (modality | ModalityFacet.Options.OnCampus);
-      }        
       
-      if (!string.IsNullOrWhiteSpace(fOnline))
+      if (SetFacetValue("f_oncampus", fOncampus))
       {
-        _modality.Add(new GeneralFacetInfo
-                      {
-                        ID = "f_online",
-                        Title = "Online",
-                        Value = fOnline
-                      });
-        modality = (modality | ModalityFacet.Options.Online);
-      }        
-
-      if (!string.IsNullOrWhiteSpace(fHybrid))
+        modality = (modality | ModalityFacet.Options.OnCampus);
+      }
+      if (SetFacetValue("f_online", fOnline))
       {
-        _modality.Add(new GeneralFacetInfo
-                      {
-                        ID = "f_hybrid",
-                        Title = "Hybrid",
-                        Value = fHybrid
-                      });
-        modality = (modality | ModalityFacet.Options.Hybrid);
+        modality = (modality | ModalityFacet.Options.OnCampus);
+      }
+      if (SetFacetValue("f_hybrid", fHybrid))
+      {
+        modality = (modality | ModalityFacet.Options.OnCampus);
       }
 
       _sectionFacets.Add(new ModalityFacet(modality));
@@ -436,6 +518,23 @@ namespace CTCClassSchedule
     /// 
     /// </summary>
     /// <param name="id"></param>
+    /// <param name="value"></param>
+    private bool SetFacetValue(string id, string value)
+    {
+      bool valueBool = false;
+
+      if (!string.IsNullOrWhiteSpace(value) && bool.TryParse(value, out valueBool))
+      {
+        _modality.First(m => m.ID == id).Value = valueBool.ToString();
+      }
+
+      return valueBool;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
     /// <param name="title"></param>
     /// <param name="value"></param>
     private void UpdateFacetList(string id, string title, string value)
@@ -488,8 +587,13 @@ namespace CTCClassSchedule
     /// <param name="defaultTime"></param>
     private static TimeSpan ToTime(string time, string defaultTime = DEFAULT_START_TIME)
     {
+      if (string.IsNullOrWhiteSpace(time))
+      {
+        time = defaultTime;
+      }
+
       // Determine integer values for time hours and minutes
-      string timeTrimmed = (string.IsNullOrWhiteSpace(time) ? defaultTime : time).Trim();
+      string timeTrimmed = time.Trim();
       bool isPM = (timeTrimmed.Length > 2 ? timeTrimmed.Substring(timeTrimmed.Length - 2) : timeTrimmed).Equals("PM",
         StringComparison.OrdinalIgnoreCase);
 
