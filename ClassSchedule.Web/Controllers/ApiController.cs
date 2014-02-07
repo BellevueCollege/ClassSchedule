@@ -1,9 +1,24 @@
-﻿using System.Collections.Generic;
+﻿/*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using Common.Logging;
-using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
@@ -11,12 +26,7 @@ using CTCClassSchedule.Models;
 using System;
 using CtcApi.Extensions;
 using CtcApi.Web.Mvc;
-using System.Text.RegularExpressions;
-using System.Configuration;
-using Microsoft.Security.Application;
 using System.Diagnostics;
-using Ctc.Ods.Config;
-using System.Text;
 
 namespace CTCClassSchedule.Controllers
 {
@@ -25,11 +35,10 @@ namespace CTCClassSchedule.Controllers
     // Any section that has more than this many courses cross-listed with it will produce a warning in the application log.
     const int MAX_COURSE_CROSSLIST_WARNING_THRESHOLD = 10;
 
-    private ILog _log = LogManager.GetCurrentClassLogger();
-		private readonly ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
+    private readonly ILog _log = LogManager.GetCurrentClassLogger();
 
 	  public ApiController()
-		{
+	  {
 			ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		}
 
@@ -132,7 +141,8 @@ namespace CTCClassSchedule.Controllers
 				return Json(subjectList, JsonRequestBehavior.AllowGet);
 			}
 
-			ViewBag.LinkParams = Helpers.getLinkParams(Request);
+		  FacetHelper facetHelper = new FacetHelper(Request);
+		  ViewBag.LinkParams = facetHelper.LinkParameters;
 			ViewBag.SubjectsColumns = 2;
 
       return PartialView(subjectList);

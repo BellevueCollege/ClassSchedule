@@ -1,4 +1,20 @@
-﻿@using Ctc.Ods.Types
+﻿@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
+@using Ctc.Ods.Types
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Models
 @model YearQuarterModel
@@ -10,7 +26,7 @@
   @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })
   <div id="container" class="sidebar">
     <div id="sidebar">
-        @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = yrq, Days = Model.FacetData.Days, Modality = Model.FacetData.Modality})
+        @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = yrq, FacetData = Model.FacetData})
     </div> <!-- #sidebar -->
 
     <div id="content">
@@ -19,7 +35,7 @@
 
 			@Html.Partial("a_to_z", new AToZViewModel { LettersList = alphabet, ViewingLetter = ViewBag.letter == null ? (char?)null : ViewBag.letter[0] })
 
-			@if (Helpers.isAdmin(Context))
+			@if (Helpers.IsAdmin(Context))
 			{
 				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
 			}
@@ -70,7 +86,7 @@
 			}
 		});
 
-		@if(Helpers.isAdmin(Context))  {
+		@if(Helpers.IsAdmin(Context))  {
 
 			<text>$('li.subject-name').hover(function () {
 				$(this).children('a.edit_button').show();

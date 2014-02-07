@@ -1,8 +1,24 @@
-﻿@using CTCClassSchedule.Common
+﻿@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
+@using CTCClassSchedule.Common
 @using Ctc.Ods.Types
 @using CTCClassSchedule.Models
-<!-- TODO: Make the title configurable in web.config. Possible? -->
 @{
+    // TODO: Make the title configurable in web.config. Possible?
     ViewBag.PageTitle = "Classes at Bellevue College";
 
 		YearQuarter currentQuarter = ViewBag.CurrentYearQuarter;
@@ -50,7 +66,7 @@
 			</div>
 			<div id="printable-schedules"> <!-- Bellevue specific and/or optional -->
 				You can also <a href="http://bellevuecollege.edu/about/publications/schedule/">Download PDF versions of the credit class schedule</a>.
-				@if (Helpers.isAdmin(Context) || Helpers.isEditor(Context)) {
+				@if (Helpers.IsAdmin(Context) || Helpers.IsEditor(Context)) {
 					<br />@:Download course data for
 					bool isFirst = true;
 					foreach (YearQuarter yrq in ViewBag.RegistrationQuarters) {

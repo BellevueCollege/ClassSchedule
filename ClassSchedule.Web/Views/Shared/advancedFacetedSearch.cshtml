@@ -1,12 +1,28 @@
-﻿@using Ctc.Ods.Types
+﻿@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Models
-@using CTCClassSchedule
 @model AdvancedFacetedSearchModel
+
 @{
   const int ANY = -1;
   int _numCredits = Request.QueryString.SafeNameValueToInt32("numcredits", ANY);
   int subjectsCount = Model.Subjects == null ? 0 : Model.Subjects.Count();
+  string _availabilityFacet = Model.FacetData.Availability;
 
   // construct the route values we'll pass to the ActionLink helper
   IDictionary<string, object> routeParms = ViewBag.LinkParams;
@@ -113,8 +129,8 @@
   <h3>Class Format</h3>
   <div id="classformat">
     @{
-      IList<GeneralFacetInfo> modalities = Model.Modality;
-      IList<GeneralFacetInfo> days = Model.Days;
+      IList<GeneralFacetInfo> modalities = Model.FacetData.Modality;
+      IList<GeneralFacetInfo> days = Model.FacetData.Days;
       bool showDaysAndTimes = true;
     }
     @if (modalities.Where(m => m.Selected == true).Count() > 0)
@@ -153,12 +169,12 @@
     <div id="times">
       <label>
         <span title="Start Time" class="time-text">START</span>
-        <input id="timestart"  name="timestart" type="text" value="@ViewBag.timestart" />
+        <input id="timestart"  name="timestart" type="text" value="@Model.FacetData.TimeStart" />
       </label>
       <span class="time-separator">-</span>
       <label>
         <span title="End Time" class="time-text">END</span>
-        <input id="timeend" name="timeend" type="text" value="@ViewBag.timeend" />
+        <input id="timeend" name="timeend" type="text" value="@Model.FacetData.TimeEnd" />
       </label>
     </div>
 
@@ -199,7 +215,7 @@
 	<h3>Other Options</h3>
 	<div id="latestart-facet">
 		<p class="label_checkbox_pair">
-			<input class="clear" type="checkbox" name="latestart" id="latestart" value="true" @if (@ViewBag.latestart == "true")
+			<input class="clear" type="checkbox" name="latestart" id="latestart" value="true" @if (@Model.FacetData.LateStart == "true")
                                                                                      { <text>checked='checked'</text> } />
 			<label for="latestart">Late Start</label>
 		</p>
@@ -209,13 +225,13 @@
 	<ul id="availability-facet">
 		<li>
       <label>
-        <input id="radio_all" type="radio" name="avail" value="All" @if (@ViewBag.avail == "All" || @ViewBag.avail == null)
+        <input id="radio_all" type="radio" name="avail" value="All" @if (@_availabilityFacet == "All" || @_availabilityFacet == null)
                                                                     { <text> checked="checked"</text> } /> All
       </label>
     </li>
 		<li>
       <label>
-        <input id="radio_open" type="radio" name="avail" value="Open"	@if (@ViewBag.avail == "Open")
+        <input id="radio_open" type="radio" name="avail" value="Open"	@if (@_availabilityFacet == "Open")
                                                                       { <text> checked="checked"</text> } /> Open
       </label>
     </li>

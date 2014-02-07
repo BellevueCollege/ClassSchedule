@@ -1,14 +1,27 @@
-﻿using System;
-using System.Collections;
+﻿/*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using Ctc.Ods;
-using Ctc.Ods.Config;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
@@ -21,14 +34,13 @@ namespace CTCClassSchedule.Controllers
 	{
     const int ITEMS_PER_PAGE = 40;
     readonly private MiniProfiler _profiler = MiniProfiler.Current;
-		private ApiSettings _apiSettings = ConfigurationManager.GetSection(ApiSettings.SectionName) as ApiSettings;
 
-		public SearchController()
+	  public SearchController()
 		{
-			ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+		  ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		}
 
-		//
+	  //
 		// GET: /Search/
 		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
@@ -48,14 +60,9 @@ namespace CTCClassSchedule.Controllers
 			}
 
       // TODO: replace ViewBag calls w/ ref to FacetHelper
-      ViewBag.timestart = timestart;
-			ViewBag.timeend = timeend;
-      ViewBag.avail = avail;
 			ViewBag.Subject = Subject;
 			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
       ViewBag.ErrorMsg = string.Empty;
-
-      ViewBag.LinkParams = Helpers.getLinkParams(Request, "submit");
 
       FacetHelper facetHelper = new FacetHelper(Request, "submit");
       facetHelper.SetModalities(f_oncampus, f_online, f_hybrid);
@@ -65,6 +72,7 @@ namespace CTCClassSchedule.Controllers
       facetHelper.LateStart = latestart;
       facetHelper.Availability = avail;
       facetHelper.Credits = numcredits;
+		  ViewBag.LinkParams = facetHelper.LinkParameters;
 
 		  IList<ISectionFacet> facets = facetHelper.CreateSectionFacets();
 

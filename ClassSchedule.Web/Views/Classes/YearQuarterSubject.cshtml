@@ -1,4 +1,20 @@
-﻿@using System.Text.RegularExpressions
+﻿@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
+@using System.Text.RegularExpressions
 @using CTCClassSchedule
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Models
@@ -21,8 +37,7 @@
 	                                           {
 	                                             ViewingQuarter = Model.ViewingQuarter,
                                                SelectedSubject = Model.Slug,
-                                               Days = Model.FacetData.Days,
-                                               Modality = Model.FacetData.Modality
+                                               FacetData = Model.FacetData
 	                                           })
     </div><!-- #sidebar -->
 
@@ -71,9 +86,9 @@
           </p>
         }
 
-        if (Helpers.isAdmin(Context) || Helpers.isEditor(Context))
+        if (Helpers.IsAdmin(Context) || Helpers.IsEditor(Context))
         {
-          string role = Helpers.isAdmin(Context) ? "admin" : "editor";
+          string role = Helpers.IsAdmin(Context) ? "admin" : "editor";
           <div class="message">@Context.User.Identity.Name! You have @role access to this section. [ <a class="toggleEditingMode" data-inlineMode="false">Enable Inline Editing</a> ]</div>
         }
 
@@ -110,7 +125,7 @@
 	              </h2> <!-- classHeading -->
 
                 <div class="classInfo">
-                  @if (Helpers.isAdmin(Context))
+                  @if (Helpers.IsAdmin(Context))
                   {
                     @Ajax.ActionLink("Edit",
                                       "ClassEdit",
@@ -251,7 +266,7 @@
 			window.location.href = $(location).attr('href');
 		});
 
-	 @if (Helpers.isEditor(Context))
+	 @if (Helpers.IsEditor(Context))
 	 {
 				<text>
 				var cmsFootnotePlaceholder = "<em>[Enter additional notes]</em>";
@@ -353,7 +368,7 @@
 	 }
 
 
-			@if (Helpers.isAdmin(Context))
+			@if (Helpers.IsAdmin(Context))
 	 {
 				<text>
 				$('.classInfo').hover(

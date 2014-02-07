@@ -1,3 +1,19 @@
+/*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+ */
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +34,7 @@ namespace CTCClassSchedule
 
     readonly IList<GeneralFacetInfo> _modality = new List<GeneralFacetInfo>(4);
     readonly IList<GeneralFacetInfo> _days = new List<GeneralFacetInfo>(7);
-    IList<string> _requestParameters;
+    readonly IDictionary<string, object> _linkParameters;
     private string _timeEnd;
     private string _timeStart;
     private string _availability;
@@ -35,10 +51,10 @@ namespace CTCClassSchedule
     {
       _facets = new List<GeneralFacetInfo>();
 
-      _requestParameters = request.QueryString.AllKeys.Union(request.Form.AllKeys).ToList();
-      IDictionary<string, object> linkParams = new Dictionary<string, object>(_requestParameters.Count);
+      IList<string> requestParameters = request.QueryString.AllKeys.Union(request.Form.AllKeys).ToList();
+      _linkParameters = new Dictionary<string, object>(requestParameters.Count);
 
-      foreach (string key in _requestParameters)
+      foreach (string key in requestParameters)
       {
         // X-Requested-With is appended for AJAX calls.
         if (key != null && key != "X-Requested-With" && !ignoreKeys.Contains(key, StringComparer.OrdinalIgnoreCase))
@@ -47,13 +63,13 @@ namespace CTCClassSchedule
 
           if (!String.IsNullOrWhiteSpace(value))
           {
-            if (linkParams.ContainsKey(key))
+            if (_linkParameters.ContainsKey(key))
             {
-              linkParams[key] = value;
+              _linkParameters[key] = value;
             }
             else
             {
-              linkParams.Add(key, value);
+              _linkParameters.Add(key, value);
             }
           }
         }
@@ -221,6 +237,14 @@ namespace CTCClassSchedule
     public IList<GeneralFacetInfo> Modality
     {
       get {return _modality;}
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public IDictionary<string, object> LinkParameters
+    {
+      get {return _linkParameters;}
     }
 
     /// <summary>

@@ -1,5 +1,20 @@
-﻿@using Ctc.Ods.Types
-@using CTCClassSchedule
+﻿@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
+@using Ctc.Ods.Types
 @using CTCClassSchedule.Common
 @using Microsoft.Security.Application
 @using MvcMiniProfiler
@@ -37,7 +52,7 @@
               if (!string.IsNullOrWhiteSpace(item.InstructorName))
               {
               <li>
-                <a href="@Helpers.getProfileURL(item.InstructorID)">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a>
+                <a href="@Helpers.GetProfileUrl(item.InstructorID)">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a>
               </li>
               }
               else
@@ -79,7 +94,7 @@
                 else
                 {
                   <span class="days">
-                    <abbr title="@Helpers.getFriendlyDayRange(item.Days)">
+                    <abbr title="@Helpers.GetFriendlyDayRange(item.Days)">
                       @item.Days
                     </abbr>
                   </span>
@@ -115,7 +130,7 @@
     {
       // Course books link
       <li class="bookstoreinfo">
-        <a href='@Helpers.getBookstoreBooksLink(Model.Sections)'>
+        <a href='@Helpers.GetBookstoreBooksLink(Model.Sections)'>
           <img src="@Url.Content("~/Content/images/books.gif")" alt="Required books/supplies" />
         </a>
       </li>
@@ -154,7 +169,7 @@
     }
 
     <li class="editing">
-      @if (Context.User.Identity.Name.Length > 0 && Helpers.isEditor(Context))
+      @if (Context.User.Identity.Name.Length > 0 && Helpers.IsEditor(Context))
       {
 		    @Ajax.ActionLink("Edit",
                          "SectionEdit",
@@ -182,7 +197,7 @@
     *@
     @{
       HelperResult footnotes = ViewHelpers.DisplayFootnotes(Model.Sections[0].Footnotes, Model.Sections[0].SectionFootnotes, Model.CommonFootnotes, Model.Sections[0]);
-      if (!String.IsNullOrWhiteSpace(Regex.Replace(Regex.Replace(footnotes.ToString(), "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", String.Empty)) || Helpers.isEditor(Context))
+      if (!String.IsNullOrWhiteSpace(Regex.Replace(Regex.Replace(footnotes.ToString(), "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", String.Empty)) || Helpers.IsEditor(Context))
       {
 		    <li class="section-notes"><span class="descriptor">Notes: </span>
 			    <ul>

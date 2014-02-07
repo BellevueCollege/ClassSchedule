@@ -1,14 +1,24 @@
-﻿@using System.Diagnostics
+﻿@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
+@using System.Diagnostics
 @using CTCClassSchedule.Common
-@using CTCClassSchedule.Controllers
 @using CTCClassSchedule.Models
-@using Common.Logging
 @using CtcApi.Extensions
 @model IList<SubjectModel>
-
-@functions {
-  private ILog _log = LogManager.GetCurrentClassLogger();
-}
 
 @{
 	// construct the route values we'll pass to the ActionLink helper
@@ -73,7 +83,7 @@
 	}
     <a href="@Html.Raw(link)">@linkText</a> @(item.CoursePrefixes.Any() ? string.Concat("(", item.CoursePrefixes.Distinct().ToArray().Mash(", "), ")") : string.Empty)
 
-	@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
+	@if (Context.User.Identity.Name.Length > 0 && Helpers.IsAdmin(Context))
 	{
 		@Ajax.ActionLink("Edit",
 				              "ProgramEdit",

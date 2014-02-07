@@ -105,8 +105,9 @@ namespace CTCClassSchedule.Controllers
           }
           
           // set up all the ancillary data we'll need to display the View
-					SetCommonViewBagVars(repository, string.Empty, letter);
-					ViewBag.LinkParams = Helpers.getLinkParams(Request);
+					SetCommonViewBagVars(repository, letter);
+				  FacetHelper facetHelper = new FacetHelper(Request);
+				  ViewBag.LinkParams = facetHelper.LinkParameters;
 
           return View(model);
 				}
@@ -152,8 +153,9 @@ namespace CTCClassSchedule.Controllers
 					return Json(model, JsonRequestBehavior.AllowGet);
 				}
 
-				ViewBag.LinkParams = Helpers.getLinkParams(Request);
-				SetCommonViewBagVars(repository, string.Empty, string.Empty);
+			  FacetHelper facetHelper = new FacetHelper(Request);
+			  ViewBag.LinkParams = facetHelper.LinkParameters;
+				SetCommonViewBagVars(repository, string.Empty);
 
 				return View(model);
 			}
@@ -176,13 +178,7 @@ namespace CTCClassSchedule.Controllers
 		  facetHelper.LateStart = latestart;
 		  facetHelper.Availability = avail;
 		  facetHelper.Credits = numcredits;
-
-      // TODO: replace ViewBag calls w/ ref to FacetHelper
-      ViewBag.LinkParams = Helpers.getLinkParams(Request);
-      ViewBag.timestart = timestart;
-      ViewBag.timeend = timeend;
-      ViewBag.latestart = latestart;
-      ViewBag.avail = avail;
+      ViewBag.LinkParams = facetHelper.LinkParameters;
 
       IList<ISectionFacet> facets = facetHelper.CreateSectionFacets();
 
@@ -203,7 +199,7 @@ namespace CTCClassSchedule.Controllers
           model.NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository);
 
           // set up all the ancillary data we'll need to display the View
-          SetCommonViewBagVars(repository, avail, letter);
+          SetCommonViewBagVars(repository, letter);
 
           // TODO: Refactor the following code to use ApiController.GetSubjectList()
           // after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
@@ -282,6 +278,7 @@ namespace CTCClassSchedule.Controllers
       facetHelper.LateStart = latestart;
       facetHelper.Availability = avail;
       facetHelper.Credits = numcredits;
+      ViewBag.LinkParams = facetHelper.LinkParameters;
       
       IList<ISectionFacet> facets = facetHelper.CreateSectionFacets();
 
@@ -372,19 +369,7 @@ namespace CTCClassSchedule.Controllers
 			      return Json(model, JsonRequestBehavior.AllowGet);
 			    }
 
-        // TODO: replace ViewBag calls w/ ref to FacetHelper
-        // set up all the ancillary data we'll need to display the View
-				ViewBag.timestart = timestart;
-				ViewBag.timeend = timeend;
-				ViewBag.avail = avail;
-				ViewBag.latestart = latestart;
-        ViewBag.LinkParams = Helpers.getLinkParams(Request);
-        SetCommonViewBagVars(repository, avail, string.Empty);
-
-        // TODO: Add query string info (e.g. facets) to the routeValues dictionary so we can pass it all as one chunk.
-				IDictionary<string, object> routeValues = new Dictionary<string, object>(3);
-				routeValues.Add("YearQuarterID", YearQuarter);
-				ViewBag.RouteValues = routeValues;
+        SetCommonViewBagVars(repository, string.Empty);
 
 				return View(model);
 			}
@@ -499,13 +484,12 @@ namespace CTCClassSchedule.Controllers
 	  /// <summary>
 		/// Sets all of the common ViewBag variables
 		/// </summary>
-		private void SetCommonViewBagVars(OdsRepository repository, string avail, string letter)
+		private void SetCommonViewBagVars(OdsRepository repository, string letter)
 		{
 			ViewBag.ErrorMsg = string.Empty;
 			ViewBag.CurrentYearQuarter = repository.CurrentYearQuarter;
 
 			ViewBag.letter = letter;
-			ViewBag.avail = string.IsNullOrWhiteSpace(avail) ? "all" : avail;
 		}
 		#endregion
 	}
