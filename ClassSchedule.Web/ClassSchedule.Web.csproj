@@ -160,6 +160,7 @@
     <Compile Include="Common\ClassScheduleExporter.cs" />
     <Compile Include="Common\CourseOutcomes.cs" />
     <Compile Include="Common\CASAuthorizeAttribute.cs" />
+    <Compile Include="FacetHelper.cs" />
     <Compile Include="Models\AToZViewModel.cs" />
     <Compile Include="Models\ClassScheduleSectionID.cs" />
     <Compile Include="Models\AdvancedFacetedSearchModel.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Models\SubjectViewModel.cs" />
     <Compile Include="Models\YearQuarterModel.cs" />
     <Compile Include="Models\YearQuarterSubjectModel.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -516,7 +518,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -168,15 +168,24 @@ namespace CTCClassSchedule.Controllers
 		{
 		  _log.Trace(m => m("Calling: [.../classes/{0}...] From (referrer): [{1}]", YearQuarter, Request.UrlReferrer));
 
-      // TODO: come up with a better way to maintain various State flags
-      ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid);
+      FacetHelper facetHelper = new FacetHelper(Request);
+		  facetHelper.AddModalities(f_oncampus, f_online, f_hybrid);
+		  facetHelper.AddDays(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
+		  facetHelper.TimeStart = timestart;
+		  facetHelper.TimeEnd = timeend;
+		  facetHelper.LateStart = latestart;
+		  facetHelper.Availability = avail;
+		  facetHelper.Credits = numcredits;
+
+      // TODO: replace ViewBag calls w/ ref to FacetHelper
       ViewBag.Days = Helpers.ConstructDaysList(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
       ViewBag.LinkParams = Helpers.getLinkParams(Request);
       ViewBag.timestart = timestart;
       ViewBag.timeend = timeend;
       ViewBag.latestart = latestart;
       ViewBag.avail = avail;
-      IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, avail, latestart, numcredits);
+
+      IList<ISectionFacet> facets = facetHelper.CreateSectionFacets();
 
       YearQuarterModel model = new YearQuarterModel
       {
@@ -265,7 +274,16 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "YearQuarterSubjectCacheTime")]
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, string format)
 		{
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s, f_oncampus, f_online, f_hybrid, avail, latestart, numcredits);
+      FacetHelper facetHelper = new FacetHelper(Request);
+      facetHelper.AddModalities(f_oncampus, f_online, f_hybrid);
+      facetHelper.AddDays(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
+      facetHelper.TimeStart = timestart;
+      facetHelper.TimeEnd = timeend;
+      facetHelper.LateStart = latestart;
+      facetHelper.Availability = avail;
+      facetHelper.Credits = numcredits;
+      
+      IList<ISectionFacet> facets = facetHelper.CreateSectionFacets();
 
 			using (OdsRepository repository = new OdsRepository())
 			{
@@ -353,6 +371,7 @@ namespace CTCClassSchedule.Controllers
 			      return Json(model, JsonRequestBehavior.AllowGet);
 			    }
 
+        // TODO: replace ViewBag calls w/ ref to FacetHelper
         // set up all the ancillary data we'll need to display the View
 				ViewBag.timestart = timestart;
 				ViewBag.timeend = timeend;

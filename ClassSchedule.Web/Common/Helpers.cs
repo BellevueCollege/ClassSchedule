@@ -1092,5 +1092,25 @@ namespace CTCClassSchedule.Common
 	    string fullUrl = globalsRoot.CombineUrl(resource);
 	    return fullUrl;
 	  }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="timeString"></param>
+    /// <returns></returns>
+	  public static bool IsValidTimeString(string timeString)
+    {
+      // an empty value is "valid" - defaults will be used
+      if (string.IsNullOrWhiteSpace(timeString)) return true;
+
+	    string pattern = ConfigurationManager.AppSettings["Regex_Time"];
+
+	    if (string.IsNullOrWhiteSpace(pattern))
+	    {
+	      pattern = @"^(?:0?[1-9]:[0-5]|1(?:[012]):[0-5])\d(?:\s?[ap]m)"; // default pattern - for 12/hour times
+	    }
+
+	    return Regex.IsMatch(timeString, pattern, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+	  }
 	}
 }

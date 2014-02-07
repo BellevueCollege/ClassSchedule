@@ -47,7 +47,8 @@ namespace CTCClassSchedule.Controllers
 				return RedirectToAction("AllClasses", "Classes", new { YearQuarterID = quarter });
 			}
 
-			ViewBag.timestart = timestart;
+      // TODO: replace ViewBag calls w/ ref to FacetHelper
+      ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
       ViewBag.avail = avail;
       ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid);
@@ -56,10 +57,18 @@ namespace CTCClassSchedule.Controllers
 			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
       ViewBag.ErrorMsg = string.Empty;
 
-			IList<ISectionFacet> facets = Helpers.addFacets(timestart, timeend, day_su, day_m, day_t, day_w, day_th, day_f, day_s,
-			                                                f_oncampus, f_online, f_hybrid, avail, latestart, numcredits);
+      ViewBag.LinkParams = Helpers.getLinkParams(Request, "submit");
 
-			ViewBag.LinkParams = Helpers.getLinkParams(Request, "submit");
+      FacetHelper facetHelper = new FacetHelper(Request, "submit");
+      facetHelper.AddModalities(f_oncampus, f_online, f_hybrid);
+      facetHelper.AddDays(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
+      facetHelper.TimeStart = timestart;
+      facetHelper.TimeEnd = timeend;
+      facetHelper.LateStart = latestart;
+      facetHelper.Availability = avail;
+      facetHelper.Credits = numcredits;
+
+		  IList<ISectionFacet> facets = facetHelper.CreateSectionFacets();
 
 			using (OdsRepository repository = new OdsRepository())
 			{
