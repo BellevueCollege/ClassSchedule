@@ -10,7 +10,7 @@
   @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })
   <div id="container" class="sidebar">
     <div id="sidebar">
-        @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = yrq })
+        @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = yrq, Days = Model.FacetData.Days, Modality = Model.FacetData.Modality})
     </div> <!-- #sidebar -->
 
     <div id="content">

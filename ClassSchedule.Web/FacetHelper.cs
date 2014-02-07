@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Web;
-using System.Web.WebPages;
 using Common.Logging;
 using Ctc.Ods;
+using CtcApi.Extensions;
 using CTCClassSchedule.Common;
 using Microsoft.Security.Application;
 
 namespace CTCClassSchedule
 {
-  public class FacetHelper
+  public class FacetHelper : IFacetData
   {
     private const string DEFAULT_START_TIME = "00:00 AM";
     private const string DEFAULT_END_TIME = "23:59 PM";
@@ -24,15 +23,18 @@ namespace CTCClassSchedule
     private string _timeStart;
     private string _availability;
 
-    IList<ISectionFacet> _sectionFacets = new List<ISectionFacet>();
+    readonly IList<ISectionFacet> _sectionFacets = new List<ISectionFacet>();
     private readonly ILog _log = LogManager.GetCurrentClassLogger();
     private string _lateStart;
     private bool _isLateStart;
     private string _credits;
     private int _creditsNumber = CREDITS_ANY;
+    private readonly IList<GeneralFacetInfo> _facets;
 
     public FacetHelper(HttpRequestBase request, params string[] ignoreKeys)
     {
+      _facets = new List<GeneralFacetInfo>();
+
       _requestParameters = request.QueryString.AllKeys.Union(request.Form.AllKeys).ToList();
       IDictionary<string, object> linkParams = new Dictionary<string, object>(_requestParameters.Count);
 
@@ -68,12 +70,16 @@ namespace CTCClassSchedule
       {
         if (Helpers.IsValidTimeString(value))
         {
-          _log.Warn(m =>m("Ignoring invalid start time value provided by the user: (encoded): [{0}]", Encoder.HtmlEncode(value)));
-          _timeStart = string.Empty;
+          _timeStart = value;
+
+          UpdateFacetList("timestart", "Start", _timeStart);
         }
         else
         {
-          _timeStart = value;
+          _log.Warn(m =>m("Ignoring invalid start time value provided by the user: (encoded): [{0}]", Encoder.HtmlEncode(value)));
+          _timeStart = string.Empty;
+
+          DropFacetFromList("timestart");
         }
       }
     }
@@ -86,14 +92,18 @@ namespace CTCClassSchedule
       get {return _timeEnd;}
       set
       {
-        if (Helpers.IsValidTimeString(value))
+        if (!Helpers.IsValidTimeString(value))
         {
-          _log.Warn(m => m("Ignoring invalid end time value provided by the user: (encoded): [{0}]", Encoder.HtmlEncode(value)));
-          _timeEnd = string.Empty;
+          _timeEnd = value;
+
+          UpdateFacetList("timeend", "End", _timeEnd);
         }
         else
         {
-          _timeEnd = value;
+          _log.Warn(m => m("Ignoring invalid end time value provided by the user: (encoded): [{0}]", Encoder.HtmlEncode(value)));
+          _timeEnd = string.Empty;
+
+          DropFacetFromList("timeend");
         }
       }
     }
@@ -107,6 +117,7 @@ namespace CTCClassSchedule
       set
       {
         _availability = value ?? string.Empty;
+        UpdateFacetList("avail", "Availability", _availability);
       }
     }
 
@@ -123,12 +134,16 @@ namespace CTCClassSchedule
         {
           _lateStart = value;
           _isLateStart = isLateStart;
+
+          UpdateFacetList("latestart", "Late Start", _lateStart);
         }
         else
         {
           _log.Warn(m => m("Ignoring invalid late start value entered by user: (encoded) [{0}]", Encoder.HtmlEncode(value)));
           _lateStart = string.Empty;
           _isLateStart = false;
+
+          DropFacetFromList("latestart");
         }
       }
     }
@@ -149,12 +164,15 @@ namespace CTCClassSchedule
           {
             _creditsNumber = credits;
             _credits = value;
+
+            UpdateFacetList("numcredits", "Number of Credits", _credits);
           }
           else
           {
             if (value.Equals("Any", StringComparison.OrdinalIgnoreCase))
             {
               _credits = value;
+              UpdateFacetList("numcredits", "Number of Credits", _credits);
             }
             else
             {
@@ -162,14 +180,47 @@ namespace CTCClassSchedule
               _credits = string.Empty;
             }
             _creditsNumber = CREDITS_ANY;
+
+            DropFacetFromList("numcredits");
           }
         }
         else
         {
           _credits = string.Empty;
           _creditsNumber = CREDITS_ANY;
+
+          DropFacetFromList("numcredits");
         }
       }
+    }
+
+    public IList<GeneralFacetInfo> Facets
+    {
+      get
+      {
+        // merge all the collections and return to the caller
+        List<GeneralFacetInfo> facets = new List<GeneralFacetInfo>(_facets);
+        facets.AddRangeIfNotNull(_days);
+        facets.AddRangeIfNotNull(_modality);
+
+        return facets;
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public IList<GeneralFacetInfo> Days
+    {
+      get {return _days;}
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public IList<GeneralFacetInfo> Modality
+    {
+      get {return _modality;}
     }
 
     /// <summary>
@@ -178,9 +229,9 @@ namespace CTCClassSchedule
     /// <param name="fOncampus"></param>
     /// <param name="fOnline"></param>
     /// <param name="fHybrid"></param>
-    public void AddModalities(string fOncampus = "", string fOnline = "", string fHybrid = "")
+    public void SetModalities(string fOncampus = "", string fOnline = "", string fHybrid = "")
     {
-      //add the class format facet options (online, hybrid, telecourse, on campus)
+      _modality.Clear();
       ModalityFacet.Options modality = ModalityFacet.Options.All;	// default
 
       // TODO: validate incoming value
@@ -230,8 +281,9 @@ namespace CTCClassSchedule
     /// <param name="dayTh"></param>
     /// <param name="dayF"></param>
     /// <param name="dayS"></param>
-    public void AddDays(string daySu, string dayM, string dayT, string dayW, string dayTh, string dayF, string dayS)
+    public void SetDays(string daySu, string dayM, string dayT, string dayW, string dayTh, string dayF, string dayS)
     {
+      _days.Clear();
       DaysFacet.Options days = DaysFacet.Options.All;	// default
 
       // TODO: validate incoming value
@@ -312,11 +364,6 @@ namespace CTCClassSchedule
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="timestart"></param>
-    /// <param name="timeend"></param>
-    /// <param name="avail"></param>
-    /// <param name="latestart"></param>
-    /// <param name="numcredits"></param>
     /// <returns></returns>
     public IList<ISectionFacet> CreateSectionFacets()
     {
@@ -360,6 +407,41 @@ namespace CTCClassSchedule
       return _sectionFacets;
     }
 
+    #region Private methods
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="title"></param>
+    /// <param name="value"></param>
+    private void UpdateFacetList(string id, string title, string value)
+    {
+      DropFacetFromList(id);
+      _facets.Add(new GeneralFacetInfo
+      {
+        ID = id,
+        Title = title,
+        Value = value
+      });
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="facetID"></param>
+    private void DropFacetFromList(string facetID)
+    {
+      if (_facets.Any(f => f.ID == facetID))
+      {
+        bool removed = _facets.Remove(_facets.First(f => f.ID == facetID));
+
+        if (!removed)
+        {
+          _log.Warn(m => m("Failed to remove '{0}' facet from collection.", facetID));
+        }
+      }
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -380,11 +462,12 @@ namespace CTCClassSchedule
     /// </summary>
     /// <param name="time">String representing a time value</param>
     /// <param name="defaultTime"></param>
-    static private TimeSpan ToTime(string time, string defaultTime = DEFAULT_START_TIME)
+    private static TimeSpan ToTime(string time, string defaultTime = DEFAULT_START_TIME)
     {
       // Determine integer values for time hours and minutes
       string timeTrimmed = (string.IsNullOrWhiteSpace(time) ? defaultTime : time).Trim();
-      bool isPM = (timeTrimmed.Length > 2 ? timeTrimmed.Substring(timeTrimmed.Length - 2) : timeTrimmed).Equals("PM", StringComparison.OrdinalIgnoreCase);
+      bool isPM = (timeTrimmed.Length > 2 ? timeTrimmed.Substring(timeTrimmed.Length - 2) : timeTrimmed).Equals("PM",
+        StringComparison.OrdinalIgnoreCase);
 
       // Adjust the conversion to integers if the user leaves off a leading 0
       // (possible by using tab instead of mouseoff on the time selector)
@@ -410,5 +493,7 @@ namespace CTCClassSchedule
 
       return ToTime(hour, minute);
     }
+
+    #endregion
   }
 }

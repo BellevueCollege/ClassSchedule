@@ -167,6 +167,7 @@
     <Compile Include="Models\AllClassesModel.cs" />
     <Compile Include="Models\ClassDetailsModel.cs" />
     <Compile Include="Models\CrossListedCourseModel.cs" />
+    <Compile Include="Models\IFacetData.cs" />
     <Compile Include="Models\PagerViewModel.cs" />
     <Compile Include="Models\ProgramEditModel.cs" />
     <Compile Include="Common\Encryption64.cs" />
@@ -518,7 +519,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

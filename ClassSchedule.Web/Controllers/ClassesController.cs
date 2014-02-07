@@ -169,8 +169,8 @@ namespace CTCClassSchedule.Controllers
 		  _log.Trace(m => m("Calling: [.../classes/{0}...] From (referrer): [{1}]", YearQuarter, Request.UrlReferrer));
 
       FacetHelper facetHelper = new FacetHelper(Request);
-		  facetHelper.AddModalities(f_oncampus, f_online, f_hybrid);
-		  facetHelper.AddDays(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
+		  facetHelper.SetModalities(f_oncampus, f_online, f_hybrid);
+		  facetHelper.SetDays(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
 		  facetHelper.TimeStart = timestart;
 		  facetHelper.TimeEnd = timeend;
 		  facetHelper.LateStart = latestart;
@@ -178,7 +178,6 @@ namespace CTCClassSchedule.Controllers
 		  facetHelper.Credits = numcredits;
 
       // TODO: replace ViewBag calls w/ ref to FacetHelper
-      ViewBag.Days = Helpers.ConstructDaysList(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
       ViewBag.LinkParams = Helpers.getLinkParams(Request);
       ViewBag.timestart = timestart;
       ViewBag.timeend = timeend;
@@ -191,11 +190,12 @@ namespace CTCClassSchedule.Controllers
       {
         ViewingSubjects = new List<SubjectModel>(),
         SubjectLetters = new List<char>(),
+        FacetData = facetHelper
       };
 
       try
       {
-        using (OdsRepository repository = new OdsRepository(HttpContext))
+        using (OdsRepository repository = new OdsRepository())
         {
           YearQuarter yrq = Helpers.DetermineRegistrationQuarter(YearQuarter, repository.CurrentRegistrationQuarter, RouteData);
           model.ViewingQuarter = yrq;
@@ -275,8 +275,8 @@ namespace CTCClassSchedule.Controllers
 		public ActionResult YearQuarterSubject(String YearQuarter, string Subject, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, string format)
 		{
       FacetHelper facetHelper = new FacetHelper(Request);
-      facetHelper.AddModalities(f_oncampus, f_online, f_hybrid);
-      facetHelper.AddDays(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
+      facetHelper.SetModalities(f_oncampus, f_online, f_hybrid);
+      facetHelper.SetDays(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
       facetHelper.TimeStart = timestart;
       facetHelper.TimeEnd = timeend;
       facetHelper.LateStart = latestart;
@@ -362,6 +362,7 @@ namespace CTCClassSchedule.Controllers
 			                                      SubjectIntro = subject != null ? subject.Subject.Intro : string.Empty,
 			                                      DepartmentTitle = subject != null ? subject.Department.Title : string.Empty,
 			                                      DepartmentURL = subject != null ? subject.Department.URL : string.Empty,
+                                            FacetData = facetHelper
 			                                    };
 
 			    if (format == "json")
@@ -377,8 +378,6 @@ namespace CTCClassSchedule.Controllers
 				ViewBag.timeend = timeend;
 				ViewBag.avail = avail;
 				ViewBag.latestart = latestart;
-        ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid);
-        ViewBag.Days = Helpers.ConstructDaysList(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
         ViewBag.LinkParams = Helpers.getLinkParams(Request);
         SetCommonViewBagVars(repository, avail, string.Empty);
 

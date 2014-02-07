@@ -51,8 +51,6 @@ namespace CTCClassSchedule.Controllers
       ViewBag.timestart = timestart;
 			ViewBag.timeend = timeend;
       ViewBag.avail = avail;
-      ViewBag.Modality = Helpers.ConstructModalityList(f_oncampus, f_online, f_hybrid);
-			ViewBag.Days = Helpers.ConstructDaysList(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
 			ViewBag.Subject = Subject;
 			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
       ViewBag.ErrorMsg = string.Empty;
@@ -60,8 +58,8 @@ namespace CTCClassSchedule.Controllers
       ViewBag.LinkParams = Helpers.getLinkParams(Request, "submit");
 
       FacetHelper facetHelper = new FacetHelper(Request, "submit");
-      facetHelper.AddModalities(f_oncampus, f_online, f_hybrid);
-      facetHelper.AddDays(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
+      facetHelper.SetModalities(f_oncampus, f_online, f_hybrid);
+      facetHelper.SetDays(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
       facetHelper.TimeStart = timestart;
       facetHelper.TimeEnd = timeend;
       facetHelper.LateStart = latestart;
@@ -146,6 +144,7 @@ namespace CTCClassSchedule.Controllers
 			                                 SearchResultNoSection = noSectionSearchResults,
 			                                 AllSubjects = allSubjects,
                                        QuarterNavigation = quarterNavigation,
+                                       FacetData = facetHelper
 			                               };
 				return View(model);
 			}

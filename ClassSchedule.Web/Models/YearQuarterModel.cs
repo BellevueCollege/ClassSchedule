@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using CTCClassSchedule.Common;
 using Ctc.Ods.Types;
 
@@ -20,5 +19,7 @@ namespace CTCClassSchedule.Models
     public IList<char> SubjectLetters {get;set;}
 
     public YearQuarter ViewingQuarter {get;set;}
+
+    public IFacetData FacetData {get;set;}
   }
 }

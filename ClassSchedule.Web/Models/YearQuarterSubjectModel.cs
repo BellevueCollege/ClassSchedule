@@ -19,5 +19,6 @@ namespace CTCClassSchedule.Models
     public string SubjectIntro { get; set; }
     public string DepartmentTitle { get; set; }
     public string DepartmentURL { get; set; }
+    public IFacetData FacetData {get;set;}
   }
 }

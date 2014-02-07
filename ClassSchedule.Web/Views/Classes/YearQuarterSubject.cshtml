@@ -17,7 +17,13 @@
 	    <a href="@Url.Action("YearQuarter", "Classes")">@Model.ViewingQuarter.FriendlyName</a>
     </p>
     <div id="sidebar">
-	    @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = Model.ViewingQuarter, SelectedSubject = Model.Slug })
+	    @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel
+	                                           {
+	                                             ViewingQuarter = Model.ViewingQuarter,
+                                               SelectedSubject = Model.Slug,
+                                               Days = Model.FacetData.Days,
+                                               Modality = Model.FacetData.Modality
+	                                           })
     </div><!-- #sidebar -->
 
 		<div id="content">

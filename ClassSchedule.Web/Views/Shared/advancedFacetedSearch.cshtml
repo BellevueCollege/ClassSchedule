@@ -113,8 +113,8 @@
   <h3>Class Format</h3>
   <div id="classformat">
     @{
-      IList<GeneralFacetInfo> modalities = (IList<GeneralFacetInfo>)ViewBag.Modality;
-      IList<GeneralFacetInfo> days = (IList<GeneralFacetInfo>)ViewBag.Days;
+      IList<GeneralFacetInfo> modalities = Model.Modality;
+      IList<GeneralFacetInfo> days = Model.Days;
       bool showDaysAndTimes = true;
     }
     @if (modalities.Where(m => m.Selected == true).Count() > 0)
