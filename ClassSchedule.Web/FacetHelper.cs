@@ -20,9 +20,7 @@ using System.Linq;
 using System.Web;
 using Common.Logging;
 using Ctc.Ods;
-using CtcApi.Extensions;
 using CTCClassSchedule.Common;
-using Elmah.ContentSyndication;
 using Microsoft.Security.Application;
 
 namespace CTCClassSchedule
@@ -99,12 +97,304 @@ namespace CTCClassSchedule
     /// <summary>
     /// 
     /// </summary>
+    public string TimeStart
+    {
+      get {return _timeStart = _timeStart ?? string.Empty;}
+      set
+      {
+        if (Helpers.IsValidTimeString(value))
+        {
+          _timeStart = value;
+
+          UpdateFacetList("timestart", "Start", _timeStart);
+        }
+        else
+        {
+          _log.Warn(m =>m("Ignoring invalid start time value provided by the user: (encoded): [{0}]", Encoder.HtmlEncode(value)));
+          _timeStart = string.Empty;
+
+          DropFacetFromList("timestart");
+        }
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string TimeEnd
+    {
+      get
+      {
+        return _timeEnd = _timeEnd ?? string.Empty;
+      }
+      set
+      {
+        if (!Helpers.IsValidTimeString(value))
+        {
+          _timeEnd = value;
+
+          UpdateFacetList("timeend", "End", _timeEnd);
+        }
+        else
+        {
+          _log.Warn(m => m("Ignoring invalid end time value provided by the user: (encoded): [{0}]", Encoder.HtmlEncode(value)));
+          _timeEnd = string.Empty;
+
+          DropFacetFromList("timeend");
+        }
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Availability
+    {
+      get {return _availability = _availability ?? string.Empty;}
+      set
+      {
+        _availability = value ?? string.Empty;
+        UpdateFacetList("avail", "Availability", _availability);
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string LateStart
+    {
+      get {return _lateStart = _lateStart ?? string.Empty;}
+      set
+      {
+        bool isLateStart;
+        if (bool.TryParse(value, out isLateStart))
+        {
+          _lateStart = value;
+          _isLateStart = isLateStart;
+
+          UpdateFacetList("latestart", "Late Start", _lateStart);
+        }
+        else
+        {
+          _log.Warn(m => m("Ignoring invalid late start value entered by user: (encoded) [{0}]", Encoder.HtmlEncode(value)));
+          _lateStart = string.Empty;
+          _isLateStart = false;
+
+          DropFacetFromList("latestart");
+        }
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public string Credits
+    {
+      get {return _credits = _credits ?? string.Empty;}
+      set
+      {
+        if (!String.IsNullOrWhiteSpace(value))
+        {
+          int credits;
+
+          if (int.TryParse(value, out credits))
+          {
+            _creditsNumber = credits;
+            _credits = value;
+
+            UpdateFacetList("numcredits", "Number of Credits", _credits);
+          }
+          else
+          {
+            if (value.Equals("Any", StringComparison.OrdinalIgnoreCase))
+            {
+              _credits = value;
+              UpdateFacetList("numcredits", "Number of Credits", _credits);
+            }
+            else
+            {
+              _log.Warn(m => m("Ignoring invalid credits value entered by user: (encoded) [{0}]", Encoder.HtmlEncode(value)));
+              _credits = string.Empty;
+            }
+            _creditsNumber = CREDITS_ANY;
+
+            DropFacetFromList("numcredits");
+          }
+        }
+        else
+        {
+          _credits = string.Empty;
+          _creditsNumber = CREDITS_ANY;
+
+          DropFacetFromList("numcredits");
+        }
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public IList<GeneralFacetInfo> Days
+    {
+      get {return _days;}
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public IList<GeneralFacetInfo> Modality
+    {
+      get {return _modality;}
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public IDictionary<string, object> LinkParameters
+    {
+      get {return _linkParameters;}
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public int CreditsAny
+    {
+      // TODO: Allow CreditsAny value to be set in config
+      get {return CREDITS_ANY;}
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fOncampus"></param>
+    /// <param name="fOnline"></param>
+    /// <param name="fHybrid"></param>
+    public void SetModalities(string fOncampus = "", string fOnline = "", string fHybrid = "")
+    {
+      ModalityFacet.Options modality = ModalityFacet.Options.All;	// default
+      
+      if (SetFacetValue(_modality, "f_oncampus", fOncampus))
+      {
+        modality = (modality | ModalityFacet.Options.OnCampus);
+      }
+      if (SetFacetValue(_modality, "f_online", fOnline))
+      {
+        modality = (modality | ModalityFacet.Options.OnCampus);
+      }
+      if (SetFacetValue(_modality, "f_hybrid", fHybrid))
+      {
+        modality = (modality | ModalityFacet.Options.OnCampus);
+      }
+
+      _sectionFacets.Add(new ModalityFacet(modality));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="daySu"></param>
+    /// <param name="dayM"></param>
+    /// <param name="dayT"></param>
+    /// <param name="dayW"></param>
+    /// <param name="dayTh"></param>
+    /// <param name="dayF"></param>
+    /// <param name="dayS"></param>
+    public void SetDays(string daySu = "", string dayM = "", string dayT = "", string dayW = "", string dayTh = "", string dayF = "", string dayS = "")
+    {
+      DaysFacet.Options days = DaysFacet.Options.All;	// default
+
+      if (SetFacetValue(_days, "day_su", daySu))
+      {
+        days = (days | DaysFacet.Options.Sunday);
+      }
+      if (SetFacetValue(_days, "day_m", dayM))
+      {
+        days = (days | DaysFacet.Options.Monday);
+      }
+      if (SetFacetValue(_days, "day_t", dayT))
+      {
+        days = (days | DaysFacet.Options.Tuesday);
+      }
+      if (SetFacetValue(_days, "day_w", dayW))
+      {
+        days = (days | DaysFacet.Options.Wednesday);
+      }
+      if (SetFacetValue(_days, "day_th", dayTh))
+      {
+        days = (days | DaysFacet.Options.Thursday);
+      }
+      if (SetFacetValue(_days, "day_f", dayF))
+      {
+        days = (days | DaysFacet.Options.Friday);
+      }
+      if (SetFacetValue(_days, "day_s", dayS))
+      {
+        days = (days | DaysFacet.Options.Saturday);
+      }
+
+      _sectionFacets.Add(new DaysFacet(days));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public IList<ISectionFacet> CreateSectionFacets()
+    {
+      /*
+       * Time facet
+       */
+      if (!string.IsNullOrWhiteSpace(TimeStart) || !string.IsNullOrWhiteSpace(TimeEnd))
+      {
+        TimeSpan startTime = ToTime(TimeStart);
+        TimeSpan endTime = ToTime(TimeEnd, DEFAULT_END_TIME);
+
+        _sectionFacets.Add(new TimeFacet(startTime, endTime));
+      }
+
+      /*
+       * Availability facet
+       */
+      switch (Availability.ToUpper())
+      {
+        case "OPEN":
+          _sectionFacets.Add(new AvailabilityFacet(AvailabilityFacet.Options.Open));
+          break;
+        case "ALL":
+          _sectionFacets.Add(new AvailabilityFacet(AvailabilityFacet.Options.All));
+          break;
+      }
+
+      /*
+       * Late start facet
+       */
+      if (_isLateStart) // <= string property is backed by bool variable
+      {
+        _sectionFacets.Add(new LateStartFacet());
+      }
+
+      /*
+       * Number of credits facet
+       */
+      if (_creditsNumber != CREDITS_ANY && !string.IsNullOrWhiteSpace(Credits))
+      {
+        _sectionFacets.Add(new CreditsFacet(_creditsNumber));
+      }
+
+      return _sectionFacets;
+    }
+
+    #region Private methods
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="listSchema"></param>
     /// <returns></returns>
     private IList<GeneralFacetInfo> InitializeFacetList(IDictionary<string, string> listSchema)
     {
       IList<GeneralFacetInfo> list;
-      
+
       if (listSchema.Any())
       {
         list = new List<GeneralFacetInfo>(listSchema.Count);
@@ -112,11 +402,11 @@ namespace CTCClassSchedule
         foreach (KeyValuePair<string, string> item in listSchema)
         {
           list.Add(new GeneralFacetInfo
-                   {
-                     ID = item.Key,
-                     Title = item.Value,
-                     Value = string.Empty
-                   });
+          {
+            ID = item.Key,
+            Title = item.Value,
+            Value = string.Empty
+          });
         }
       }
       else
@@ -174,358 +464,16 @@ namespace CTCClassSchedule
     /// <summary>
     /// 
     /// </summary>
-    public string TimeStart
-    {
-      get {return _timeStart;}
-      set
-      {
-        if (Helpers.IsValidTimeString(value))
-        {
-          _timeStart = value;
-
-          UpdateFacetList("timestart", "Start", _timeStart);
-        }
-        else
-        {
-          _log.Warn(m =>m("Ignoring invalid start time value provided by the user: (encoded): [{0}]", Encoder.HtmlEncode(value)));
-          _timeStart = string.Empty;
-
-          DropFacetFromList("timestart");
-        }
-      }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string TimeEnd
-    {
-      get {return _timeEnd;}
-      set
-      {
-        if (!Helpers.IsValidTimeString(value))
-        {
-          _timeEnd = value;
-
-          UpdateFacetList("timeend", "End", _timeEnd);
-        }
-        else
-        {
-          _log.Warn(m => m("Ignoring invalid end time value provided by the user: (encoded): [{0}]", Encoder.HtmlEncode(value)));
-          _timeEnd = string.Empty;
-
-          DropFacetFromList("timeend");
-        }
-      }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string Availability
-    {
-      get {return _availability;}
-      set
-      {
-        _availability = value ?? string.Empty;
-        UpdateFacetList("avail", "Availability", _availability);
-      }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string LateStart
-    {
-      get {return _lateStart;}
-      set
-      {
-        bool isLateStart;
-        if (bool.TryParse(value, out isLateStart))
-        {
-          _lateStart = value;
-          _isLateStart = isLateStart;
-
-          UpdateFacetList("latestart", "Late Start", _lateStart);
-        }
-        else
-        {
-          _log.Warn(m => m("Ignoring invalid late start value entered by user: (encoded) [{0}]", Encoder.HtmlEncode(value)));
-          _lateStart = string.Empty;
-          _isLateStart = false;
-
-          DropFacetFromList("latestart");
-        }
-      }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public string Credits
-    {
-      get {return _credits;}
-      set
-      {
-        if (!String.IsNullOrWhiteSpace(value))
-        {
-          int credits;
-
-          if (int.TryParse(value, out credits))
-          {
-            _creditsNumber = credits;
-            _credits = value;
-
-            UpdateFacetList("numcredits", "Number of Credits", _credits);
-          }
-          else
-          {
-            if (value.Equals("Any", StringComparison.OrdinalIgnoreCase))
-            {
-              _credits = value;
-              UpdateFacetList("numcredits", "Number of Credits", _credits);
-            }
-            else
-            {
-              _log.Warn(m => m("Ignoring invalid credits value entered by user: (encoded) [{0}]", Encoder.HtmlEncode(value)));
-              _credits = string.Empty;
-            }
-            _creditsNumber = CREDITS_ANY;
-
-            DropFacetFromList("numcredits");
-          }
-        }
-        else
-        {
-          _credits = string.Empty;
-          _creditsNumber = CREDITS_ANY;
-
-          DropFacetFromList("numcredits");
-        }
-      }
-    }
-
-    public IList<GeneralFacetInfo> Facets
-    {
-      get
-      {
-        // merge all the collections and return to the caller
-        List<GeneralFacetInfo> facets = new List<GeneralFacetInfo>(_facets);
-        facets.AddRangeIfNotNull(_days);
-        facets.AddRangeIfNotNull(_modality);
-
-        return facets;
-      }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public IList<GeneralFacetInfo> Days
-    {
-      get {return _days;}
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public IList<GeneralFacetInfo> Modality
-    {
-      get {return _modality;}
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public IDictionary<string, object> LinkParameters
-    {
-      get {return _linkParameters;}
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public int CreditsAny
-    {
-      // TODO: Allow CreditsAny value to be set in config
-      get {return CREDITS_ANY;}
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="fOncampus"></param>
-    /// <param name="fOnline"></param>
-    /// <param name="fHybrid"></param>
-    public void SetModalities(string fOncampus = "", string fOnline = "", string fHybrid = "")
-    {
-      ModalityFacet.Options modality = ModalityFacet.Options.All;	// default
-      
-      if (SetFacetValue("f_oncampus", fOncampus))
-      {
-        modality = (modality | ModalityFacet.Options.OnCampus);
-      }
-      if (SetFacetValue("f_online", fOnline))
-      {
-        modality = (modality | ModalityFacet.Options.OnCampus);
-      }
-      if (SetFacetValue("f_hybrid", fHybrid))
-      {
-        modality = (modality | ModalityFacet.Options.OnCampus);
-      }
-
-      _sectionFacets.Add(new ModalityFacet(modality));
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="daySu"></param>
-    /// <param name="dayM"></param>
-    /// <param name="dayT"></param>
-    /// <param name="dayW"></param>
-    /// <param name="dayTh"></param>
-    /// <param name="dayF"></param>
-    /// <param name="dayS"></param>
-    public void SetDays(string daySu, string dayM, string dayT, string dayW, string dayTh, string dayF, string dayS)
-    {
-      _days.Clear();
-      DaysFacet.Options days = DaysFacet.Options.All;	// default
-
-      // TODO: validate incoming value
-      if (!string.IsNullOrWhiteSpace(daySu))
-      {
-        _days.Add(new GeneralFacetInfo
-                  {
-                    ID = "day_su",
-                    Title = "S",
-                    Value = daySu
-                  });
-        days = (days | DaysFacet.Options.Sunday);
-      }
-      if (!string.IsNullOrWhiteSpace(dayM))
-      {
-        _days.Add(new GeneralFacetInfo
-                  {
-                    ID = "day_m",
-                    Title = "M",
-                    Value = dayM
-                  });
-        days = (days | DaysFacet.Options.Monday);
-      }
-      if (!string.IsNullOrWhiteSpace(dayT))
-      {
-        _days.Add(new GeneralFacetInfo
-                  {
-                    ID = "day_t",
-                    Title = "T",
-                    Value = dayT
-                  });
-        days = (days | DaysFacet.Options.Tuesday);
-      }
-      if (!string.IsNullOrWhiteSpace(dayW))
-      {
-        _days.Add(new GeneralFacetInfo
-                  {
-                    ID = "day_w",
-                    Title = "W",
-                    Value = dayW
-                  });
-        days = (days | DaysFacet.Options.Wednesday);
-      }
-      if (!string.IsNullOrWhiteSpace(dayTh))
-      {
-        _days.Add(new GeneralFacetInfo
-                  {
-                    ID = "day_th",
-                    Title = "T",
-                    Value = dayTh
-                  });
-        days = (days | DaysFacet.Options.Thursday);
-      }
-      if (!string.IsNullOrWhiteSpace(dayF))
-      {
-        _days.Add(new GeneralFacetInfo
-                  {
-                    ID = "day_f",
-                    Title = "F",
-                    Value = dayF
-                  });
-        days = (days | DaysFacet.Options.Friday);
-      }
-      if (!string.IsNullOrWhiteSpace(dayS))
-      {
-        _days.Add(new GeneralFacetInfo
-                  {
-                    ID = "day_s",
-                    Title = "S",
-                    Value = dayS
-                  });
-        days = (days | DaysFacet.Options.Saturday);
-      }
-
-      _sectionFacets.Add(new DaysFacet(days));
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public IList<ISectionFacet> CreateSectionFacets()
-    {
-      /*
-       * Time facet
-       */
-      TimeSpan startTime = ToTime(TimeStart);
-      TimeSpan endTime = ToTime(TimeEnd, DEFAULT_END_TIME);
-
-      _sectionFacets.Add(new TimeFacet(startTime, endTime));
-
-      /*
-       * Availability facet
-       */
-      switch (Availability.ToUpper())
-      {
-        case "OPEN":
-          _sectionFacets.Add(new AvailabilityFacet(AvailabilityFacet.Options.Open));
-          break;
-        default:
-          _sectionFacets.Add(new AvailabilityFacet(AvailabilityFacet.Options.All));
-          break;
-      }
-
-      /*
-       * Late start facet
-       */
-      if (_isLateStart) // <= string property is backed by bool variable
-      {
-        _sectionFacets.Add(new LateStartFacet());
-      }
-
-      /*
-       * Number of credits facet
-       */
-      if (_creditsNumber != CREDITS_ANY && !string.IsNullOrWhiteSpace(Credits))
-      {
-        _sectionFacets.Add(new CreditsFacet(_creditsNumber));
-      }
-
-      return _sectionFacets;
-    }
-
-    #region Private methods
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <param name="list"></param>
     /// <param name="id"></param>
     /// <param name="value"></param>
-    private bool SetFacetValue(string id, string value)
+    private bool SetFacetValue(IList<GeneralFacetInfo> list, string id, string value)
     {
       bool valueBool = false;
 
       if (!string.IsNullOrWhiteSpace(value) && bool.TryParse(value, out valueBool))
       {
-        _modality.First(m => m.ID == id).Value = valueBool.ToString();
+        list.First(m => m.ID == id).Value = valueBool.ToString();
       }
 
       return valueBool;
@@ -572,7 +520,7 @@ namespace CTCClassSchedule
     /// <param name="minute"></param>
     /// <param name="seconds"></param>
     /// <returns></returns>
-    private static TimeSpan ToTime(int hour, int minute, int seconds = 0)
+    public static TimeSpan ToTime(int hour, int minute, int seconds = 0)
     {
       return new TimeSpan(hour, minute, seconds);
     }
@@ -585,7 +533,7 @@ namespace CTCClassSchedule
     /// </summary>
     /// <param name="time">String representing a time value</param>
     /// <param name="defaultTime"></param>
-    private static TimeSpan ToTime(string time, string defaultTime = DEFAULT_START_TIME)
+    public static TimeSpan ToTime(string time, string defaultTime = DEFAULT_START_TIME)
     {
       if (string.IsNullOrWhiteSpace(time))
       {
@@ -594,8 +542,7 @@ namespace CTCClassSchedule
 
       // Determine integer values for time hours and minutes
       string timeTrimmed = time.Trim();
-      bool isPM = (timeTrimmed.Length > 2 ? timeTrimmed.Substring(timeTrimmed.Length - 2) : timeTrimmed).Equals("PM",
-        StringComparison.OrdinalIgnoreCase);
+      bool isPM = (timeTrimmed.Length > 2 ? timeTrimmed.Substring(timeTrimmed.Length - 2) : timeTrimmed).Equals("PM", StringComparison.OrdinalIgnoreCase);
 
       // Adjust the conversion to integers if the user leaves off a leading 0
       // (possible by using tab instead of mouseoff on the time selector)

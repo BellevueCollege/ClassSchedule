@@ -19,11 +19,10 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 @model AdvancedFacetedSearchModel
 
 @{
-  const int ANY = -1;
   int _numCredits;
   if (!int.TryParse(Model.FacetData.Credits, out _numCredits))
   {
-    _numCredits = ANY;
+    _numCredits = Model.FacetData.CreditsAny; // default
   }
   int subjectsCount = Model.Subjects == null ? 0 : Model.Subjects.Count();
   string _availabilityFacet = Model.FacetData.Availability;
@@ -204,7 +203,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
   <div id="numcredits-facet">
     <p class="label_checkbox_pair">
       <select class="clear"name="numcredits" id="numcredits" value="true">
-        <option @if (_numCredits == ANY)
+        <option @if (_numCredits == Model.FacetData.CreditsAny)
                 { <text>selected='selected'</text> }>Any</option>
         @for (int i = 1; i <= 15; i++)
         {
