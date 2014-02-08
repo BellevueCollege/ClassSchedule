@@ -23,6 +23,23 @@ You should have received a copy of the GNU General Public License&#xD;
 along with CtcClassSchedule.  If not, see &lt;http://www.gnu.org/licenses/&gt;.&#xD;
 *@&#xD;
 </s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Description/@EntryValue">Test method</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Field/=Method_005FName/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Field/=Method_005FName/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Scope/=B68999B9D6B43E47A02B22C12A54C3CC/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Scope/=B68999B9D6B43E47A02B22C12A54C3CC/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Scope/=B68999B9D6B43E47A02B22C12A54C3CC/Type/@EntryValue">InCSharpTypeMember</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Shortcut/@EntryValue">test</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Text/@EntryValue">[TestMethod]&#xD;
+public void $Method_Name$()&#xD;
+{&#xD;
+      $END$&#xD;
+}&#xD;
+</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/@KeyIndexDefined">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Description/@EntryValue">License</s:String>
