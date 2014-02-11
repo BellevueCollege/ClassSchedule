@@ -129,7 +129,7 @@ namespace CTCClassSchedule
       }
       set
       {
-        if (!Helpers.IsValidTimeString(value))
+        if (Helpers.IsValidTimeString(value))
         {
           _timeEnd = value;
 

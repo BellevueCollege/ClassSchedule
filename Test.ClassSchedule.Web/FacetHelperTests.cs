@@ -43,6 +43,56 @@ namespace Test.CtcClassSchedule
     }
 
 
+    #region Time tests
+    [TestMethod]
+    public void Time_Invalid_Start()
+    {
+      string[] invalidTimes =
+      {
+        "12:",
+        ":30"
+      };
+      foreach (string invalidTime in invalidTimes)
+      {
+        FacetHelper fh = new FacetHelper
+                         {
+                           TimeStart = invalidTime,
+                         };
+
+        Assert.IsNotNull(fh.TimeStart);
+        Assert.IsTrue(string.IsNullOrEmpty(fh.TimeStart), "TimeStart is not empty: '{0}'", fh.TimeStart);
+
+        IList<ISectionFacet> facets = fh.CreateSectionFacets();
+        AssertSectionFacetTypeCount(facets, typeof(TimeFacet), 0);
+      }
+    }
+
+    [TestMethod]
+    public void Time_Invalid_End()
+    {
+      string[] invalidTimes =
+      {
+        "12:",
+        ":30"
+      };
+      foreach (string invalidTime in invalidTimes)
+      {
+        FacetHelper fh = new FacetHelper
+                         {
+                           TimeEnd = invalidTime,
+                         };
+
+        Assert.IsNotNull(fh.TimeEnd);
+        Assert.IsTrue(string.IsNullOrEmpty(fh.TimeEnd), "TimeEnd is not empty: '{0}'", fh.TimeEnd);
+
+        IList<ISectionFacet> facets = fh.CreateSectionFacets();
+        AssertSectionFacetTypeCount(facets, typeof(TimeFacet), 0);
+      }
+    }
+
+    #endregion
+
+
     #region Modality tests
     [TestMethod]
     public void Modality_Initialized()
@@ -66,41 +116,6 @@ namespace Test.CtcClassSchedule
       AssertFacetValue(fh.Modality, "f_hybrid", "Hybrid", false);
     }
 
-    #region SectionFacet results
-    [TestMethod]
-    public void SectionFacets_None()
-    {
-      FacetHelper fh = new FacetHelper();
-
-      IList<ISectionFacet> facets = fh.CreateSectionFacets();
-
-      AssertSectionFacetTypeCount(facets, typeof(ModalityFacet), 0);
-      AssertSectionFacetTypeCount(facets, typeof(AvailabilityFacet), 0);
-      AssertSectionFacetTypeCount(facets, typeof(DaysFacet), 0);
-      AssertSectionFacetTypeCount(facets, typeof(TimeFacet), 0);
-      AssertSectionFacetTypeCount(facets, typeof(LateStartFacet), 0);
-      AssertSectionFacetTypeCount(facets, typeof(CreditsFacet), 0);
-    }
-
-    [TestMethod]
-    public void SectionFacets_Time_Start_No_End()
-    {
-      throw new NotImplementedException();
-    }
-
-    [TestMethod]
-    public void SectionFacets_Time_End_No_Start()
-    {
-      throw new NotImplementedException();
-    }
-
-    [TestMethod]
-    public void SectionFacets_Time_Start_And_End()
-    {
-      throw new NotImplementedException();
-    }
-
-    #endregion
 
     #endregion
 
@@ -135,6 +150,207 @@ namespace Test.CtcClassSchedule
       AssertFacetValue(fh.Days, "day_s", "Sat", false);
     }
 
+    #endregion
+
+    #region SectionFacet results
+    [TestMethod]
+    public void SectionFacets_None()
+    {
+      FacetHelper fh = new FacetHelper();
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      AssertSectionFacetTypeCount(facets, typeof(ModalityFacet), 0);
+      AssertSectionFacetTypeCount(facets, typeof(AvailabilityFacet), 0);
+      AssertSectionFacetTypeCount(facets, typeof(DaysFacet), 0);
+      AssertSectionFacetTypeCount(facets, typeof(TimeFacet), 0);
+      AssertSectionFacetTypeCount(facets, typeof(LateStartFacet), 0);
+      AssertSectionFacetTypeCount(facets, typeof(CreditsFacet), 0);
+    }
+
+    // **************************************************************
+    // Observed injection attempts
+    // See https://dev.bellevuecollege.edu/fogbugz/default.asp?4895
+    // **************************************************************
+
+    [TestMethod]
+    public void InjectionAttempts()
+    {
+      string[] attackStrings =
+      {
+        "'/*N*/and/*N*/'3'='2",
+        "')/*N*/and/*N*/('3'='3/*N*/",
+        "LNzfENfNLhuGioCF",
+        "IUQJwJKLT",
+        "Caleb"
+      };
+
+      foreach (string attackString in attackStrings)
+      {
+        FacetHelper fh = new FacetHelper
+        {
+          TimeStart = attackString,
+          TimeEnd = attackString,
+          Availability = attackString,
+          Credits = attackString,
+          LateStart = attackString
+        };
+
+        IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+        // invalid values should be ignored
+        AssertSectionFacetTypeCount(facets, typeof(AvailabilityFacet), 0);
+        AssertSectionFacetTypeCount(facets, typeof(TimeFacet), 0);
+        AssertSectionFacetTypeCount(facets, typeof(LateStartFacet), 0);
+        AssertSectionFacetTypeCount(facets, typeof(CreditsFacet), 0);
+      }
+    }
+
+    #region Time facets
+    [TestMethod]
+    public void SectionFacets_Time_Start_No_End()
+    {
+      FacetHelper fh = new FacetHelper
+                       {
+                         TimeStart = "11:00 AM",
+                       };
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      // use default end time if not provided
+      AssertSectionFacetTypeCount(facets, typeof(TimeFacet));
+    }
+
+    [TestMethod]
+    public void SectionFacets_Time_End_No_Start()
+    {
+      FacetHelper fh = new FacetHelper
+                       {
+                         TimeEnd = "5:00 PM",
+                       };
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      // use default start time if not provided
+      AssertSectionFacetTypeCount(facets, typeof(TimeFacet));
+    }
+
+    [TestMethod]
+    public void SectionFacets_Time_Start_And_End()
+    {
+      FacetHelper fh = new FacetHelper
+                       {
+                         TimeStart = "11:00 AM",
+                         TimeEnd = "5:00 PM",
+                       };
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      AssertSectionFacetTypeCount(facets, typeof(TimeFacet));
+    }
+
+    #endregion
+
+    #region AvailabilityFacet
+    [TestMethod]
+    public void SectionFacets_Availability_All()
+    {
+      FacetHelper fh = new FacetHelper
+                       {
+                         Availability = "All"
+                       };
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      AssertSectionFacetTypeCount(facets, typeof(AvailabilityFacet));
+    }
+
+    [TestMethod]
+    public void SectionFacets_Availability_Open()
+    {
+      FacetHelper fh = new FacetHelper
+                       {
+                         Availability = "Open"
+                       };
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      AssertSectionFacetTypeCount(facets, typeof(AvailabilityFacet));
+    }
+
+    #endregion
+
+    #region ModalityFacet
+    [TestMethod]
+    public void SectionFacets_Modality_OnCampus()
+    {
+      FacetHelper fh = new FacetHelper();
+      fh.SetModalities("true");
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      AssertSectionFacetTypeCount(facets, typeof(ModalityFacet));
+    }
+
+    [TestMethod]
+    public void SectionFacets_Modality_Online()
+    {
+      FacetHelper fh = new FacetHelper();
+      fh.SetModalities(fOnline:"true");
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      AssertSectionFacetTypeCount(facets, typeof(ModalityFacet));
+    }
+
+    [TestMethod]
+    public void SectionFacets_Modality_Hybrid()
+    {
+      FacetHelper fh = new FacetHelper();
+      fh.SetModalities(fHybrid:"true");
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      AssertSectionFacetTypeCount(facets, typeof(ModalityFacet));
+    }
+
+    [TestMethod]
+    public void SectionFacets_Modality_OnCampusAndOnline()
+    {
+      FacetHelper fh = new FacetHelper();
+      fh.SetModalities("true", "true");
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      AssertSectionFacetTypeCount(facets, typeof(ModalityFacet));
+    }
+
+    [TestMethod]
+    public void SectionFacets_Modality_OnlineAndHybrid()
+    {
+      FacetHelper fh = new FacetHelper();
+      fh.SetModalities(fOnline:"true", fHybrid:"true");
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      AssertSectionFacetTypeCount(facets, typeof(ModalityFacet));
+    }
+
+    [TestMethod]
+    public void SectionFacets_Modality_HybridAndOnCampus()
+    {
+      FacetHelper fh = new FacetHelper();
+      fh.SetModalities("true", fHybrid:"true");
+
+      IList<ISectionFacet> facets = fh.CreateSectionFacets();
+
+      AssertSectionFacetTypeCount(facets, typeof(ModalityFacet));
+    }
+
+    #endregion
+
+    #endregion
+
     #region Methods that will be moved into the CtcApi
     [TestMethod]
     public void ToTime_String_1159pm_WithSpace()
@@ -160,7 +376,7 @@ namespace Test.CtcClassSchedule
       Assert.IsTrue(59 == result.Minutes, "Found <{0}> minutes.", result.Minutes);
     }
 
-    #endregion
+
 
     #endregion
 
@@ -187,6 +403,14 @@ namespace Test.CtcClassSchedule
     private static void AssertFacetExists(IList<GeneralFacetInfo> list, string facetID, string facetTitle)
     {
       AssertFacetValue(list, facetID, facetTitle, false);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void AssertFacetDoesNotExist(IList<GeneralFacetInfo> list, string facetID)
+    {
+      Assert.IsFalse(list.Any(m => m.ID == facetID && !string.IsNullOrWhiteSpace(m.Value) && bool.Parse(m.Value)));
     }
 
     /// <summary>
