@@ -247,6 +247,8 @@ namespace Test.CtcClassSchedule
       IList<ISectionFacet> facets = fh.CreateSectionFacets();
 
       AssertSectionFacetTypeCount(facets, typeof(TimeFacet));
+      Assert.AreEqual("11:00 AM", fh.TimeStart);
+      Assert.AreEqual("5:00 PM", fh.TimeEnd);
     }
 
     #endregion

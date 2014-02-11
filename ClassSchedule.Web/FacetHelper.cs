@@ -280,11 +280,11 @@ namespace CTCClassSchedule
       }
       if (SetFacetValue(_modality, "f_online", fOnline))
       {
-        modality = (modality | ModalityFacet.Options.OnCampus);
+        modality = (modality | ModalityFacet.Options.Online);
       }
       if (SetFacetValue(_modality, "f_hybrid", fHybrid))
       {
-        modality = (modality | ModalityFacet.Options.OnCampus);
+        modality = (modality | ModalityFacet.Options.Hybrid);
       }
 
       _sectionFacets.Add(new ModalityFacet(modality));
