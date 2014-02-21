@@ -40,11 +40,15 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.8.17.custom.min.js")"></script>
     <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.unobtrusive-ajax.min.js"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-timepicker-addon.js")"></script>
+    <script type="text/javascript">
+      // This global variable MUST be declared before loading classes.js
+      var g_globalsPath = "@Helpers.GlobalsPath";
+    </script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/classes.js")"></script>
     <script type="text/javascript" src="@Helpers.GlobalsHttp("btheme_v0.1/js/searchbox.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/spin.min.js")"></script>	<!-- from http://fgnass.github.com/spin.js/ -->
     <script type="text/javascript">
-		// global values used by multiple client scripts
+      // global values used by multiple client scripts
       var g_ajaxLoaderImgPath = "@Url.Content("~/Content/images/ajax-loader.gif")";
       var g_getSeatsUrl = "@Url.Action("GetSeats", "Api")";
       var g_updateCMSFootnoteUrl = "@Url.Action("UpdateSectionFootnote", "Api")";
@@ -74,7 +78,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 <body class="@(Helpers.GetBodyClasses(Context))">
 
-	@Html.Include(Server.MapPath("/globals/btheme_v0.1/asp/header_big.asp"))
+	@Html.Include(Server.MapPath(Helpers.GlobalsFile("btheme_v0.1/asp/header_big.asp")))
 
 	<div id="bodyWrapper">
 
@@ -105,13 +109,13 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 	</div>
 
-	@Html.Include(Server.MapPath("/globals/btheme_v0.1/asp/footer_big.asp"))
+	@Html.Include(Server.MapPath(Helpers.GlobalsFile("btheme_v0.1/asp/footer_big.asp")))
 
 
   <script type="text/javascript">
     var _gaq = _gaq || [];
     var pluginUrl =
-   '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+      '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
     _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
     _gaq.push(['_setAccount', 'UA-3966899-1']);
     _gaq.push(['_setAllowLinker', true]);
@@ -143,7 +147,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
       i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
         (i[r].q = i[r].q || []).push(arguments)
       }, i[r].l = 1 * new Date(); a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-3966899-14', 'bellevuecollege.edu');

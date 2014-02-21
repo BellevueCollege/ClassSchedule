@@ -44,16 +44,23 @@ namespace CTCClassSchedule.Common
 	  private static readonly ILog _log = LogManager.GetCurrentClassLogger();
 
 	  /// <summary>
-		/// Useful if a helper method works with a timespan and should default to
-		/// either 12:00am or 23:59pm (start time/end time).
-		/// </summary>
-		private enum DefaultTimeResult
-		{
-			StartTime,
-			EndTime
-		};
+    /// 
+    /// </summary>
+	  public static string GlobalsPath
+	  {
+	    get
+	    {
+	      string globalsPath = ConfigurationManager.AppSettings["Globals_LocalPath"] ?? @"\";
+	      return globalsPath;
+	    }
+	  }
 
-		public static string GetBodyClasses(HttpContextBase Context)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Context"></param>
+    /// <returns></returns>
+	  public static string GetBodyClasses(HttpContextBase Context)
 		{
 			string classes = String.Empty;
 
@@ -849,6 +856,16 @@ namespace CTCClassSchedule.Common
 	    }
 
 	    return Regex.IsMatch(timeString, pattern, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+	  }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pathAndFilename"></param>
+    /// <returns></returns>
+	  public static string GlobalsFile(string pathAndFilename)
+	  {
+	    return GlobalsPath.CombinePath(pathAndFilename);
 	  }
 	}
 }
