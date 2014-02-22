@@ -44,6 +44,12 @@ namespace CTCClassSchedule.Controllers
 		// GET: /Search/
 		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
+		  if (string.IsNullOrWhiteSpace(searchterm))
+		  {
+        // display home page
+		    return RedirectToAction("Index", "Classes");
+		  }
+
 			// We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
 			searchterm = searchterm.Replace("\"", string.Empty);
 
@@ -78,13 +84,13 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository repository = new OdsRepository())
 			{
-				YearQuarter yrq = string.IsNullOrWhiteSpace(quarter) ? repository.CurrentYearQuarter : YearQuarter.FromFriendlyName(quarter);
-        IList<YearQuarter> menuQuarters = Helpers.GetYearQuarterListForMenus(repository);
+			  IList<YearQuarter> menuQuarters = Helpers.GetYearQuarterListForMenus(repository);
+			  YearQuarter viewingQuarter = string.IsNullOrWhiteSpace(quarter) ? menuQuarters[0] : YearQuarter.FromFriendlyName(quarter);
 			  QuarterNavigationModel quarterNavigation = new QuarterNavigationModel
 			                                               {
 			                                                 NavigationQuarters = menuQuarters,
 			                                                 CurrentQuarter = menuQuarters[0],
-			                                                 ViewingQuarter = yrq,
+			                                                 ViewingQuarter = viewingQuarter,
 			                                               };
 
 				IList<Section> sections;
@@ -92,12 +98,12 @@ namespace CTCClassSchedule.Controllers
 				{
 					if (string.IsNullOrWhiteSpace(Subject))
 					{
-						sections = repository.GetSections(yrq, facets);
+						sections = repository.GetSections(viewingQuarter, facets);
 					}
 					else
 					{
             IList<string> prefixes = SubjectInfo.GetSubjectPrefixes(Subject);
-						sections = repository.GetSections(prefixes, yrq, facets);
+						sections = repository.GetSections(prefixes, viewingQuarter, facets);
 					}
 				}
 
@@ -110,14 +116,14 @@ namespace CTCClassSchedule.Controllers
 			  IList<SectionsBlock> courseBlocks;
 			  using (ClassScheduleDb db = new ClassScheduleDb())
 				{
-					searchResults = GetSearchResults(db, searchterm, quarter);
-					noSectionSearchResults = GetNoSectionSearchResults(db, searchterm, yrq);
+					searchResults = GetSearchResults(db, searchterm, viewingQuarter);
+					noSectionSearchResults = GetNoSectionSearchResults(db, searchterm, viewingQuarter);
 
           sections = (from s in sections
                       join r in searchResults on s.ID.ToString() equals r.ClassID
                       select s).ToList();
 
-					sectionsEnum = Helpers.GetSectionsWithSeats(yrq.ID, sections, db);
+					sectionsEnum = Helpers.GetSectionsWithSeats(viewingQuarter.ID, sections, db);
 
           // do not count Linked sections (since we don't display them)
           itemCount = sectionsEnum.Count(s => !s.IsLinked);
@@ -188,11 +194,11 @@ namespace CTCClassSchedule.Controllers
 		/// <param name="searchterm"></param>
 		/// <param name="quarter"></param>
 		/// <returns></returns>
-		private IList<SearchResult> GetSearchResults(ClassScheduleDb db, string searchterm, string quarter)
+		private IList<SearchResult> GetSearchResults(ClassScheduleDb db, string searchterm, YearQuarter quarter)
 		{
 			SqlParameter[] parms = {
 							new SqlParameter("SearchWord", searchterm),
-							new SqlParameter("YearQuarterID", YearQuarter.ToYearQuarterID(quarter))
+							new SqlParameter("YearQuarterID", quarter.ID)
 			                       };
 
 			using (_profiler.Step("Executing search stored procedure"))
