@@ -69,9 +69,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\CtcOdsApi.0.9.15.0\lib\net40\CtcOdsApi.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetCasClient">
-      <HintPath>..\packages\DotNetCasClient.1.0.1\lib\DotNetCasClient.dll</HintPath>
-    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
@@ -159,7 +156,7 @@
     <Compile Include="Common\ClassFootnote.cs" />
     <Compile Include="Common\ClassScheduleExporter.cs" />
     <Compile Include="Common\CourseOutcomes.cs" />
-    <Compile Include="Common\CASAuthorizeAttribute.cs" />
+    <Compile Include="Common\SsoAuthorizeAttribute.cs" />
     <Compile Include="FacetHelper.cs" />
     <Compile Include="Models\AToZViewModel.cs" />
     <Compile Include="Models\ClassScheduleSectionID.cs" />
@@ -429,14 +426,12 @@
     <Content Include="_configSource\EXAMPLE-Smtp.config" />
     <Content Include="_configSource\NLog.config" />
     <None Include="_configSource\RoleManager.config" />
-    <None Include="_configSource\CasClient.config" />
     <None Include="_configSource\ElmahAuthorization.config" />
     <None Include="_configSource\Authentication.config" />
     <None Include="_configSource\AppSettings.config" />
     <None Include="_configSource\ConnectionStrings.config" />
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-Authentication.config" />
-    <None Include="_configSource\EXAMPLE-CasClient.config" />
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
     <None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
     <None Include="_configSource\EXAMPLE-RoleManager.config" />
