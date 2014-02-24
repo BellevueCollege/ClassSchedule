@@ -1,9 +1,39 @@
 /*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
 contents:
 - custom functions
 - hoverintent r6 plugin
 - tooltipsy
 */
+
+function AppendUrlPath(base, part) {
+  var lastChar = base.length - 1;
+
+  if (base[lastChar] == "/") {
+    base = base.substring(0, lastChar);
+  }
+  if (part[0] == "/") {
+    part = part.substring(1, part.length);
+  }
+  var url = base + "/" + part;
+  return url;
+}
 
 $(function () {
     /*has javascript*/
@@ -20,10 +50,10 @@ $(function () {
     })
 
     //Generate dropdown menus
-    $("#mainnav-about").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load("/globals/dropdown_about.asp");
-    $("#mainnav-programs").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load("/globals/dropdown_programs.asp");
-    $("#mainnav-enrollment").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load("/globals/dropdown_enrollment.asp");
-    $("#mainnav-resources").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load("/globals/dropdown_resources.asp");
+    $("#mainnav-about").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load(AppendUrlPath(g_globalsPath, "dropdown_about.asp"));
+    $("#mainnav-programs").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load(AppendUrlPath(g_globalsPath, "dropdown_programs.asp"));
+    $("#mainnav-enrollment").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load(AppendUrlPath(g_globalsPath, "dropdown_enrollment.asp"));
+    $("#mainnav-resources").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load(AppendUrlPath(g_globalsPath, "dropdown_resources.asp"));
 
 
     $('#mainnav-list .dropdown').focusin(function () {

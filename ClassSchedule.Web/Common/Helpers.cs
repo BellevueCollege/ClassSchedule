@@ -1,7 +1,23 @@
-﻿using System;
+﻿/*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Data.Objects;
+using CtcApi.Extensions;
 // ReSharper disable RedundantUsingDirective
 using System.Diagnostics;
 // ReSharper restore RedundantUsingDirective
@@ -11,7 +27,6 @@ using System.Web;
 using System.Web.Routing;
 using CTCClassSchedule.Properties;
 using Common.Logging;
-using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Models;
@@ -29,16 +44,23 @@ namespace CTCClassSchedule.Common
 	  private static readonly ILog _log = LogManager.GetCurrentClassLogger();
 
 	  /// <summary>
-		/// Useful if a helper method works with a timespan and should default to
-		/// either 12:00am or 23:59pm (start time/end time).
-		/// </summary>
-		private enum DefaultTimeResult
-		{
-			StartTime,
-			EndTime
-		};
+    /// 
+    /// </summary>
+	  public static string GlobalsPath
+	  {
+	    get
+	    {
+	      string globalsPath = ConfigurationManager.AppSettings["Globals_LocalPath"] ?? @"\";
+	      return globalsPath;
+	    }
+	  }
 
-		public static string getBodyClasses(HttpContextBase Context)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Context"></param>
+    /// <returns></returns>
+	  public static string GetBodyClasses(HttpContextBase Context)
 		{
 			string classes = String.Empty;
 
@@ -78,7 +100,7 @@ namespace CTCClassSchedule.Common
 		/// </summary>
 		/// <param name="Context"></param>
 		/// <returns></returns>
-		public static bool isAdmin(HttpContextBase Context)
+		public static bool IsAdmin(HttpContextBase Context)
 		{
 			bool isAdmin = false;
 			if (Context.User.Identity.IsAuthenticated)
@@ -98,7 +120,7 @@ namespace CTCClassSchedule.Common
 		/// </summary>
 		/// <param name="Context"></param>
 		/// <returns></returns>
-		public static bool isEditor(HttpContextBase Context)
+		public static bool IsEditor(HttpContextBase Context)
 		{
 			bool isEditor = false;
 			if (Context.User.Identity.IsAuthenticated)
@@ -114,7 +136,7 @@ namespace CTCClassSchedule.Common
 		}
 
 		// TODO: Jeremy, another optional/BCC specific way of getting data - find another way?
-		public static String getProfileURL(string SID)
+		public static String GetProfileUrl(string SID)
 		{
 			Encryption64 en = new Encryption64();
 
@@ -126,7 +148,7 @@ namespace CTCClassSchedule.Common
 		}
 
 		// TODO: Jeremy, another optional/BCC specific way of getting data - find another way?
-		public static string getBookstoreBooksLink(IList<SectionWithSeats> linkedSections)
+		public static string GetBookstoreBooksLink(IList<SectionWithSeats> linkedSections)
 		{
 			StringBuilder resultURL = new StringBuilder("http://bellevue.verbacompare.com/comparison?id=");
 			for (int i = 0; i < linkedSections.Count; i++)
@@ -134,7 +156,7 @@ namespace CTCClassSchedule.Common
 				SectionWithSeats sec = linkedSections[i];
         // TODO: can we make the bookstore link template configurable in case it needs to change?
 				resultURL.AppendFormat("{0}{1}__{2}__{3}{4}__{5}", (i > 0? "%2C" : String.Empty),
-																	getYRQValueForBookstoreURL(sec.Yrq),
+																	GetYrqValueForBookstoreUrl(sec.Yrq),
 																	sec.CourseSubject,
 																	sec.CourseNumber,
                                   // TODO: get CommonCourseChar from .config instead of hard-coding
@@ -145,123 +167,12 @@ namespace CTCClassSchedule.Common
 			return resultURL.ToString();
 		}
 
-		/// <summary>
-		/// returns an IList<ISectionFacet/> that contains all of the facet information
-		/// passed into the app by the user clicking on the faceted search left pane
-		/// facets accepted: flex, time, days, availability
-		/// </summary>
-		static public IList<ISectionFacet> addFacets(string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits)
-		{
-			IList<ISectionFacet> facets = new List<ISectionFacet>();
-
-			//add the class format facet options (online, hybrid, telecourse, on campus)
-			ModalityFacet.Options modality = ModalityFacet.Options.All;	// default
-
-			if (!String.IsNullOrWhiteSpace(f_online))
-			{
-				modality = (modality | ModalityFacet.Options.Online);
-			}
-			if (!String.IsNullOrWhiteSpace(f_hybrid))
-			{
-				modality = (modality | ModalityFacet.Options.Hybrid);
-			}
-			if (!String.IsNullOrWhiteSpace(f_oncampus))
-			{
-				modality = (modality | ModalityFacet.Options.OnCampus);
-			}
-			facets.Add(new ModalityFacet(modality));
-
-
-			//determine integer values for start/end time hours and minutes
-			int startHour, startMinute;
-			int endHour, endMinute;
-			getHourAndMinuteFromString(timestart, out startHour, out startMinute);
-			getHourAndMinuteFromString(timeend, out endHour, out endMinute, DefaultTimeResult.EndTime);
-
-			//add the time facet
-			facets.Add(new TimeFacet(new TimeSpan(startHour, startMinute, 0), new TimeSpan(endHour, endMinute, 0)));
-
-			//day of the week facets
-			DaysFacet.Options days = DaysFacet.Options.All;	// default
-
-			if (!String.IsNullOrWhiteSpace(day_su))
-			{
-				days = (days | DaysFacet.Options.Sunday);
-			}
-			if (!String.IsNullOrWhiteSpace(day_m))
-			{
-				days = (days | DaysFacet.Options.Monday);
-			}
-			if (!String.IsNullOrWhiteSpace(day_t))
-			{
-				days = (days | DaysFacet.Options.Tuesday);
-			}
-			if (!String.IsNullOrWhiteSpace(day_w))
-			{
-				days = (days | DaysFacet.Options.Wednesday);
-			}
-			if (!String.IsNullOrWhiteSpace(day_th))
-			{
-				days = (days | DaysFacet.Options.Thursday);
-			}
-			if (!String.IsNullOrWhiteSpace(day_f))
-			{
-				days = (days | DaysFacet.Options.Friday);
-			}
-			if (!String.IsNullOrWhiteSpace(day_s))
-			{
-				days = (days | DaysFacet.Options.Saturday);
-			}
-			facets.Add(new DaysFacet(days));
-
-
-			if (!String.IsNullOrWhiteSpace(avail))
-			{
-				if (avail == "All")
-				{
-					facets.Add(new AvailabilityFacet(AvailabilityFacet.Options.All));
-				}
-
-				if (avail == "Open")
-				{
-					facets.Add(new AvailabilityFacet(AvailabilityFacet.Options.Open));
-				}
-			}
-
-			if (!String.IsNullOrWhiteSpace(latestart))
-			{
-				if (latestart == "true")
-				{
-					facets.Add(new LateStartFacet());
-				}
-			}
-
-
-			if (!String.IsNullOrWhiteSpace(numcredits))
-			{
-				if (numcredits != "Any")
-				{
-					int credits;
-					try
-					{
-						credits = Convert.ToInt16(numcredits);
-						facets.Add(new CreditsFacet(credits));
-					}
-					catch
-					{
-						throw new FormatException("Number of credits was not a valid integer");
-					}
-				}
-
-			}
-
-
-
-
-			return facets;
-		}
-
-    public static CourseID getCourseIdFromString(string courseId)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="courseId"></param>
+    /// <returns></returns>
+	  public static CourseID GetCourseIdFromString(string courseId)
     {
       int ix = courseId.IndexOfAny(new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' });
       string subject = courseId.Substring(0, ix).TrimEnd();
@@ -274,75 +185,13 @@ namespace CTCClassSchedule.Common
       return new CourseID(subject.Replace(commonCourseChar, String.Empty), courseNumber, subject.Contains(commonCourseChar));
     }
 
-		/// <summary>
-		/// Returns a friendly time in sentance form given a datetime. This value
-		/// is create by subtracting the input datetime from the current datetime.
-		/// example: 6/8/2011 07:23:123 -> about 4 hours ago
-		/// </summary>
-		public static string getFriendlyTime(DateTime theDate)
-		{
-			const int SECOND = 1;
-			const int MINUTE = 60 * SECOND;
-			const int HOUR = 60 * MINUTE;
-			const int DAY = 24 * HOUR;
-			const int MONTH = 30 * DAY;
-
-			var deltaTimeSpan = new TimeSpan(DateTime.Now.Ticks - theDate.Ticks);
-
-			var delta = deltaTimeSpan.TotalSeconds;
-
-			if (delta < 0)
-			{
-				return "not yet";
-			}
-
-			if (delta < 1 * MINUTE)
-			{
-				return deltaTimeSpan.Seconds == 1 ? "one second ago" : deltaTimeSpan.Seconds + " seconds ago";
-			}
-			if (delta < 2 * MINUTE)
-			{
-				return "a minute ago";
-			}
-			if (delta < 45 * MINUTE)
-			{
-				return deltaTimeSpan.Minutes + " minutes ago";
-			}
-			if (delta < 90 * MINUTE)
-			{
-				return "an hour ago";
-			}
-			if (delta < 24 * HOUR)
-			{
-				return deltaTimeSpan.Hours + " hours ago";
-			}
-			if (delta < 48 * HOUR)
-			{
-				return "yesterday";
-			}
-			if (delta < 30 * DAY)
-			{
-				return deltaTimeSpan.Days + " days ago";
-			}
-			if (delta < 12 * MONTH)
-			{
-				int months = Convert.ToInt32(Math.Floor((double)deltaTimeSpan.Days / 30));
-				return months <= 1 ? "one month ago" : months + " months ago";
-			}
-			else
-			{
-				int years = Convert.ToInt32(Math.Floor((double)deltaTimeSpan.Days / 365));
-				return years <= 1 ? "one year ago" : years + " years ago";
-			}
-		}
-
-    /// <summary>
+	  /// <summary>
     /// Take a full name and converts it to a short format, with the last name and first initial of
     /// the first name (e.g. ANDREW CRASWELL -> CRASWELL A).
     /// </summary>
     /// <param name="fullName">The full name to be converted.</param>
     /// <returns>A string with the short name version of the full name. If fullName was blank or empty, a null is returned.</returns>
-    public static string getShortNameFormat(string fullName)
+    public static string GetShortNameFormat(string fullName)
     {
       string shortName = null;
       if (!String.IsNullOrWhiteSpace(fullName))
@@ -355,50 +204,7 @@ namespace CTCClassSchedule.Common
       return shortName;
     }
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="fieldID"></param>
-		/// <param name="fieldTitle"></param>
-		/// <param name="fieldValue"></param>
-		/// <returns></returns>
-		static public GeneralFacetInfo getFacetInfo(string fieldID, string fieldTitle, string fieldValue)
-		{
-			return new GeneralFacetInfo {
-			  ID = fieldID,
-			  Title = fieldTitle,
-				Value = fieldValue,
-			  Selected = Utility.SafeConvertToBool(fieldValue)
-			};
-		}
-
-		static public IList<GeneralFacetInfo> ConstructModalityList(string f_oncampus, string f_online, string f_hybrid)
-		{
-			IList<GeneralFacetInfo> modality = new List<GeneralFacetInfo>(4);
-
-			modality.Add(getFacetInfo("f_oncampus", "On Campus", f_oncampus));
-			modality.Add(getFacetInfo("f_online", "Online", f_online));
-			modality.Add(getFacetInfo("f_hybrid", "Hybrid", f_hybrid));
-
-			return modality;
-		}
-
-		static public IList<GeneralFacetInfo> ConstructDaysList(string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s)
-		{
-			IList<GeneralFacetInfo> modality = new List<GeneralFacetInfo>(7);
-
-			modality.Add(getFacetInfo("day_su", "S", day_su));
-			modality.Add(getFacetInfo("day_m", "M", day_m));
-			modality.Add(getFacetInfo("day_t", "T", day_t));
-			modality.Add(getFacetInfo("day_w", "W", day_w));
-			modality.Add(getFacetInfo("day_th", "T", day_th));
-			modality.Add(getFacetInfo("day_f", "F", day_f));
-			modality.Add(getFacetInfo("day_s", "S", day_s));
-
-			return modality;
-		}
-
-		/// <summary>
+	  /// <summary>
 		/// Gets the <see cref="YearQuarter"/> for the current, and previous 3 quarters.
 		/// This drives the dynamic YRQ navigation bar
 		/// </summary>
@@ -417,41 +223,7 @@ namespace CTCClassSchedule.Common
 			return futureQuarters;
 		}
 
-		/// <summary>
-		/// Gets the current http get/post params and assigns them to an IDictionary<string, object>
-		/// This is mainly used to set a Viewbag variable so these can be passed into action links in the views.
-		/// </summary>
-		/// <param name="httpRequest"></param>
-		/// <param name="ignoreKeys">List of key values to ignore.</param>
-		static public IDictionary<string, object> getLinkParams(HttpRequestBase httpRequest, params string[] ignoreKeys)
-		{
-      IList<string> incomingParams = httpRequest.QueryString.AllKeys.Union(httpRequest.Form.AllKeys).ToList();
-      IDictionary<string, object> linkParams = new Dictionary<string, object>(incomingParams.Count);
-
-      foreach (string key in incomingParams)
-			{
-        // X-Requested-With is appended for AJAX calls.
-				if (key != null && key != "X-Requested-With" && !ignoreKeys.Contains(key, StringComparer.OrdinalIgnoreCase))
-				{
-          string value = httpRequest.QueryString.AllKeys.Contains(key) ? httpRequest.QueryString[key] : httpRequest.Form[key];
-
-				  if (!String.IsNullOrWhiteSpace(value))
-				  {
-				    if (linkParams.ContainsKey(key))
-				    {
-				      linkParams[key] = value;
-				    }
-				    else
-				    {
-				      linkParams.Add(key, value);
-				    }
-				  }
-				}
-			}
-			return linkParams;
-		}
-
-		/// <summary>
+	  /// <summary>
 		/// Common method to retrieve <see cref="SectionWithSeats"/> records
 		/// </summary>
 		/// <param name="currentYrq"></param>
@@ -543,7 +315,7 @@ namespace CTCClassSchedule.Common
 			return sectionsEnum;
 		}
 
-	  public static string getFriendlyDayRange(string dayString)
+	  public static string GetFriendlyDayRange(string dayString)
     {
       StringBuilder friendlyName = new StringBuilder(dayString);
       IDictionary<string, string> daysDictionary = new Dictionary<string, string>
@@ -786,22 +558,42 @@ namespace CTCClassSchedule.Common
 			return new string(CourseID);
 		}
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sec"></param>
+    /// <returns></returns>
 		public static string SubjectWithCommonCourseFlag(SectionWithSeats sec)
 		{
 			return SubjectWithCommonCourseFlag(sec.CourseSubject, sec.IsCommonCourse);
 		}
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="course"></param>
+    /// <returns></returns>
 		public static string SubjectWithCommonCourseFlag(Course course)
 		{
 			return SubjectWithCommonCourseFlag(course.Subject, course.IsCommonCourse);
 		}
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="course"></param>
+    /// <returns></returns>
     public static string SubjectWithCommonCourseFlag(CourseID course)
     {
       return SubjectWithCommonCourseFlag(course.Subject, course.IsCommonCourse);
     }
 
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="subject"></param>
+    /// <param name="isCommonCourse"></param>
+    /// <returns></returns>
 		private static string SubjectWithCommonCourseFlag(string subject, bool isCommonCourse)
 		{
 			return isCommonCourse ? subject.Trim() + "&" : subject.Trim();
@@ -857,58 +649,12 @@ namespace CTCClassSchedule.Common
 			return Regex.Replace(text, searchTerm, @"<em class='keyword'>$&</em>", RegexOptions.IgnoreCase);
 		}
 
-		/// <summary>
-		/// Takes a string that represents a time (ie "6:45pm") and outputs the parsed hour and minute integers
-		/// based on a 24 hour clock. If a time cannot be parsed, the output defaults to either 12am or 11:59pm
-		/// depending on the time default parameter passed
-		/// </summary>
-		/// <param name="time">String representing a time value</param>
-		/// <param name="hour">Reference to an integer storage for the parsed hour value</param>
-		/// <param name="minute">Reference to an integer storage for the parsed minute value</param>
-		/// <param name="defaultResultMode">Flag which determines the default result values if a time values were unable to be parsed</param>
-		static private void getHourAndMinuteFromString(string time, out int hour, out int minute, DefaultTimeResult defaultResultMode = DefaultTimeResult.StartTime)
-		{
-			// In case the method is unable to convert a time, default to either a start/end time
-			switch (defaultResultMode)
-			{
-				case DefaultTimeResult.EndTime:
-					hour = 23;
-					minute = 59;
-					break;
-				default:
-					hour = 0;
-					minute = 0;
-					break;
-			}
-
-			// Determine integer values for time hours and minutes
-			if (!String.IsNullOrWhiteSpace(time))
-			{
-				string timeTrimmed = time.Trim();
-				bool period = (timeTrimmed.Length > 2 ? timeTrimmed.Substring(timeTrimmed.Length - 2) : timeTrimmed).Equals("PM", StringComparison.OrdinalIgnoreCase);
-
-				// Adjust the conversion to integers if the user leaves off a leading 0
-				// (possible by using tab instead of mouseoff on the time selector)
-				if (time.IndexOf(':') == 2)
-				{
-					hour = Convert.ToInt16(time.Substring(0, 2)) + (period ? 12 : 0);
-					if (time.IndexOf(':') != -1)
-					{
-						minute = Convert.ToInt16(time.Substring(3, 2));
-					}
-				}
-				else
-				{
-					hour = Convert.ToInt16(time.Substring(0, 1)) + (period ? 12 : 0);
-					if (time.IndexOf(':') != -1)
-					{
-						minute = Convert.ToInt16(time.Substring(2, 2));
-					}
-				}
-			}
-		}
-
-		static private string getYRQValueForBookstoreURL(YearQuarter yrq)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="yrq"></param>
+    /// <returns></returns>
+	  static private string GetYrqValueForBookstoreUrl(YearQuarter yrq)
 		{
 			string quarter = String.Empty;
 			string year = String.Empty;
@@ -1064,6 +810,62 @@ namespace CTCClassSchedule.Common
 	      }
 	    }
 	    return yrq;
+	  }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="resource">The path and file to load over HTTP</param>
+    /// <returns>A full URL to the 'globals' resource</returns>
+	  public static string GlobalsHttp(string resource)
+	  {
+	    string globalsRoot = string.Empty;
+	    try
+	    {
+	      globalsRoot = ConfigurationManager.AppSettings["Globals_UrlRoot"];
+	    }
+	    catch (System.Configuration.ConfigurationException ex)
+	    {
+	      _log.Error(m => m("Unable to retrieve 'Globals_UrlRoot' from appSettings: {0}", ex));
+	    }
+
+	    if (string.IsNullOrWhiteSpace(globalsRoot))
+	    {
+	      _log.Warn(m => m("'Globals_UrlRoot' was not found in appSettings, or was empty. Will likely result in an HTTP resource error."));
+	      return resource;
+	    }
+	    string fullUrl = globalsRoot.CombineUrl(resource);
+	    return fullUrl;
+	  }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="timeString"></param>
+    /// <returns></returns>
+	  public static bool IsValidTimeString(string timeString)
+    {
+      // an empty value is "valid" - defaults will be used
+      if (string.IsNullOrWhiteSpace(timeString)) return true;
+
+	    string pattern = ConfigurationManager.AppSettings["Regex_Time"];
+
+	    if (string.IsNullOrWhiteSpace(pattern))
+	    {
+	      pattern = @"^(?:0?[1-9]:[0-5]|1(?:[012]):[0-5])\d(?:\s?[ap]m)"; // default pattern - for 12/hour times
+	    }
+
+	    return Regex.IsMatch(timeString, pattern, RegexOptions.IgnoreCase | RegexOptions.Multiline);
+	  }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pathAndFilename"></param>
+    /// <returns></returns>
+	  public static string GlobalsFile(string pathAndFilename)
+	  {
+	    return GlobalsPath.CombinePath(pathAndFilename);
 	  }
 	}
 }

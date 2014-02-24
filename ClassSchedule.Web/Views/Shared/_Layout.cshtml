@@ -1,3 +1,19 @@
+@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
 @using CTCClassSchedule.Common;
 
 @{
@@ -10,14 +26,13 @@
 
     <title>@ViewBag.PageTitle</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- TODO: Any hope for making this page configurable? -->
-    <link rel="stylesheet" href="/globals/btheme_v0.1/css/btheme_v0.1.2.css" type="text/css" />
+    <link rel="stylesheet" href="@Helpers.GlobalsHttp("btheme_v0.1/css/btheme_v0.1.2.css")" type="text/css" />
     <link rel="stylesheet" href="@Url.Content("~/Content/grids.css")" type="text/css" />
     <link rel="stylesheet" href="@Url.Content("~/Content/automatic-image-slider.css")" type="text/css" />
     <link rel="stylesheet" href="@Url.Content("~/Content/jquery-ui-1.8.17.custom.css")" type="text/css" />
     <link rel="stylesheet" href="@Url.Content("~/Content/ClassSchedule.css")?v=@ver" type="text/css" />
     <!--[if IE 7]>
-      <link rel="stylesheet" href="http://bellevuecollege.edu/globals/btheme_v0.1/css/ie7.css" type="text/css" />
+      <link rel="stylesheet" href="@Helpers.GlobalsHttp("btheme_v0.1/css/ie7.css")" type="text/css" />
       <link rel="stylesheet" href="@Url.Content("~/Content/ie7.css")?v=@ver" type="text/css" />
     <![endif]-->
 
@@ -25,11 +40,15 @@
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.8.17.custom.min.js")"></script>
     <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.unobtrusive-ajax.min.js"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-timepicker-addon.js")"></script>
+    <script type="text/javascript">
+      // This global variable MUST be declared before loading classes.js
+      var g_globalsPath = "@Helpers.GlobalsPath";
+    </script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/classes.js")"></script>
-    <script type="text/javascript" src="/globals/btheme_v0.1/js/searchbox.js"></script>
+    <script type="text/javascript" src="@Helpers.GlobalsHttp("btheme_v0.1/js/searchbox.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Scripts/spin.min.js")"></script>	<!-- from http://fgnass.github.com/spin.js/ -->
     <script type="text/javascript">
-		// global values used by multiple client scripts
+      // global values used by multiple client scripts
       var g_ajaxLoaderImgPath = "@Url.Content("~/Content/images/ajax-loader.gif")";
       var g_getSeatsUrl = "@Url.Action("GetSeats", "Api")";
       var g_updateCMSFootnoteUrl = "@Url.Action("UpdateSectionFootnote", "Api")";
@@ -48,12 +67,6 @@
           width: 500,
           modal: true
         });
-@*
-        $( "#betaFeedback" ).click(function() {
-          $( "#feedbackdialog" ).dialog( "open" );
-          return false;
-        });
-*@
       });
     </script>
     @RenderSection("PageScripts", false)
@@ -63,9 +76,9 @@
 
 
 
-<body class="@(Helpers.getBodyClasses(Context))">
+<body class="@(Helpers.GetBodyClasses(Context))">
 
-	@Html.Include(Server.MapPath("/globals/btheme_v0.1/asp/header_big.asp"))
+	@Html.Include(Server.MapPath(Helpers.GlobalsFile("btheme_v0.1/asp/header_big.asp")))
 
 	<div id="bodyWrapper">
 
@@ -74,7 +87,7 @@
 		<!-- ******************************************************************************************* -->
 		<div style="float:right;">
 	@if(Context.User.Identity.IsAuthenticated) {
-			<text>[ Welcome <b>@Context.User.Identity.Name</b>! ] @(Helpers.isAdmin(Context) ? " - Admin" : "") @(!Helpers.isAdmin(Context) && Helpers.isEditor(Context) ? " - Editor" : "")</text>
+			<text>[ Welcome <b>@Context.User.Identity.Name</b>! ] @(Helpers.IsAdmin(Context) ? " - Admin" : "") @(!Helpers.IsAdmin(Context) && Helpers.IsEditor(Context) ? " - Editor" : "")</text>
 		<text>[ @Html.ActionLink("Logout", "Logout", "Classes")  ]</text>
  }
  else
@@ -94,18 +107,15 @@
 
 	  @(Html.Partial("Footer"))
 
-@*
-	  <div id="betaFeedback"><a href="http://bellevuecollege.edu/classesfeedback/"><img alt="Give Feedback" title="Give Feedback" src="@Url.Content("~/Content/images/feedbackbutton.png")"></a></div><div id="feedbackdialog" title="Feedback"></div>
-*@
 	</div>
 
-	@Html.Include(Server.MapPath("/globals/btheme_v0.1/asp/footer_big.asp"))
+	@Html.Include(Server.MapPath(Helpers.GlobalsFile("btheme_v0.1/asp/footer_big.asp")))
 
 
   <script type="text/javascript">
     var _gaq = _gaq || [];
     var pluginUrl =
-   '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+      '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
     _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
     _gaq.push(['_setAccount', 'UA-3966899-1']);
     _gaq.push(['_setAllowLinker', true]);
@@ -137,7 +147,7 @@
       i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
         (i[r].q = i[r].q || []).push(arguments)
       }, i[r].l = 1 * new Date(); a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-3966899-14', 'bellevuecollege.edu');
