@@ -25,7 +25,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
   MiniProfiler _profiler = MiniProfiler.Current;
 
   string sectionID = Model.Sections[0].ID.ToString();
-  string _searchTerm = Request.QueryString["searchterm"];
+  string _searchTerm = ViewBag.searchterm ?? string.Empty;
 }
 
 <!-- SEARCHTERM: @_searchTerm -->
