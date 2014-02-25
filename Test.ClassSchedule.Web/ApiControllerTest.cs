@@ -144,11 +144,39 @@ namespace Test.CtcClassSchedule
     public void Courses_OneSubject_LowerCase_NoQuarter()
     {
       ApiController target = new ApiController();
-      JsonResult actual = target.Courses("engl", null);
+      JsonResult actual = target.Courses("engl");
 
       Assert.IsNotNull(actual, "Returned Result is NULL");
       Assert.IsNotNull(actual.Data, "JSON data is NULL");
       Assert.IsInstanceOfType(actual.Data, typeof(IEnumerable<Course>));
+
+      IEnumerable<Course> courses = actual.Data as IEnumerable<Course>;
+      foreach (var course in courses)
+      {
+        Console.Out.WriteLine(course.CourseID);
+      }
+
+      Assert.IsTrue(courses.Any(), "Did not receive any courses.");
+    }
+
+    [TestMethod()]
+    public void Courses_TwoSubjects_LowerCase_NoQuarter()
+    {
+      ApiController target = new ApiController();
+      JsonResult actual = target.Courses(new [] {"engl", "biol"});
+
+      Assert.IsNotNull(actual, "Returned Result is NULL");
+      Assert.IsNotNull(actual.Data, "JSON data is NULL");
+      Assert.IsInstanceOfType(actual.Data, typeof(IEnumerable<Course>));
+
+      IEnumerable<Course> courses = actual.Data as IEnumerable<Course>;
+      foreach (var course in courses)
+      {
+        Console.Out.WriteLine(course.CourseID);
+      }
+
+      int count = courses.Count();
+      Assert.IsTrue(count > 1, "Expected more than one Course, received [{0}]", count);
     }
 
     /// <summary>

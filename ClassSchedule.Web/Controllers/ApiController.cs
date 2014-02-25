@@ -148,16 +148,34 @@ namespace CTCClassSchedule.Controllers
       return PartialView(subjectList);
     }
 
-	  public JsonResult Courses(IEnumerable<string> subjects, string yearQuarter)
+	  /// <summary>
+	  /// 
+	  /// </summary>
+	  /// <param name="subjects"></param>
+	  /// <returns></returns>
+    [HttpGet]
+    public JsonResult Courses(IEnumerable<string> subjects)
 	  {
-      // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
+      IList<Course> courses;
+      using (OdsRepository repository = new OdsRepository())
+	    {
+        courses = repository.GetCourses(subjects.ToList());
+      }
+
+	    // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
       // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
-      return Json(null, JsonRequestBehavior.AllowGet);
+      return Json(courses.Distinct().OrderBy(c => c.Subject).ThenBy(c => c.Number), JsonRequestBehavior.AllowGet);
 	  }
 
-    public JsonResult Courses(string subject, string yearQuarter)
+	  /// <summary>
+	  /// 
+	  /// </summary>
+	  /// <param name="subject"></param>
+	  /// <returns></returns>
+	  [HttpGet]
+	  public JsonResult Courses(string subject)
     {
-      return Courses(new[] {subject}, yearQuarter);
+      return Courses(new[] {subject});
     }
     
     /// <summary>
@@ -454,7 +472,7 @@ namespace CTCClassSchedule.Controllers
 	  /// </summary>
 	  /// <param name="yearQuarter"></param>
 	  /// <returns></returns>
-	  public static IList<ScheduleCoursePrefix> GetSubjectList(string yearQuarter)
+	  private static IList<ScheduleCoursePrefix> GetSubjectList(string yearQuarter)
 	  {
 	    IList<ScheduleCoursePrefix> subjectList;
 	    using (OdsRepository db = new OdsRepository())
