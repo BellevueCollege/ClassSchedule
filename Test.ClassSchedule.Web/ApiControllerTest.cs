@@ -1,14 +1,28 @@
-﻿using System.Collections.Generic;
+﻿/*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using CTCClassSchedule.Controllers;
 using CTCClassSchedule.Models;
 using CtcApi.Extensions;
-using Ctc.Ods;
 using Ctc.Ods.Types;
-using CtcApi.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Web;
 using System.Web.Mvc;
 
 namespace Test.CtcClassSchedule
@@ -140,14 +154,16 @@ namespace Test.CtcClassSchedule
       }
     }
 
+    #region Courses tests
     [TestMethod()]
-    public void Courses_OneSubject_LowerCase_NoQuarter()
+    public void Courses_OneSubject_LowerCase()
     {
       ApiController target = new ApiController();
       ActionResult actual = target.Courses("engl");
 
       Assert.IsNotNull(actual, "Returned Result is NULL");
-      
+      Assert.IsInstanceOfType(actual, typeof(JsonResult));
+
       JsonResult json = actual as JsonResult;
       Assert.IsNotNull(json.Data, "JSON data is NULL");
       Assert.IsInstanceOfType(json.Data, typeof(IEnumerable<Course>));
@@ -162,10 +178,13 @@ namespace Test.CtcClassSchedule
     }
 
     [TestMethod()]
-    public void Courses_TwoSubjects_LowerCase_NoQuarter()
+    public void Courses_TwoSubjects_LowerCase()
     {
       ApiController target = new ApiController();
       ActionResult actual = target.Courses("engl", "biol");
+
+      Assert.IsNotNull(actual, "Returned Result is NULL");
+      Assert.IsInstanceOfType(actual, typeof(JsonResult));
 
       JsonResult json = actual as JsonResult;
       Assert.IsNotNull(json.Data, "JSON data is NULL");
@@ -180,6 +199,58 @@ namespace Test.CtcClassSchedule
       int count = courses.Count();
       Assert.IsTrue(count > 1, "Expected more than one Course, received [{0}]", count);
     }
+
+    [TestMethod()]
+    public void Courses_TooManyPrefixes()
+    {
+      IList<string> prefixes = new List<string>(ApiController.MAX_COURSE_PREFIXES + 1);
+      for (int i = 0; i < ApiController.MAX_COURSE_PREFIXES + 1; i++)
+      {
+        prefixes.Add(string.Format("PRE{0}", i));
+      }
+
+      ApiController target = new ApiController();
+      ActionResult actual = target.Courses(prefixes.ToArray());
+
+      Assert.IsNotNull(actual);
+      Assert.IsInstanceOfType(actual, typeof(HttpStatusCodeResult));
+
+      HttpStatusCodeResult http = actual as HttpStatusCodeResult;
+      Assert.AreEqual((int)HttpStatusCode.BadRequest, http.StatusCode);
+    }
+
+    [TestMethod()]
+    public void Courses_NoPrefixes()
+    {
+      ApiController target = new ApiController();
+      ActionResult actual = target.Courses();
+
+      Assert.IsNotNull(actual);
+      Assert.IsInstanceOfType(actual, typeof(HttpStatusCodeResult));
+
+      HttpStatusCodeResult http = actual as HttpStatusCodeResult;
+      Assert.AreEqual((int)HttpStatusCode.BadRequest, http.StatusCode);
+    }
+
+    [TestMethod()]
+    public void Courses_EmptyStringPrefix()
+    {
+      ApiController target = new ApiController();
+      ActionResult actual = target.Courses("");
+
+      Assert.IsNotNull(actual, "Returned Result is NULL");
+      Assert.IsInstanceOfType(actual, typeof(JsonResult));
+
+      JsonResult json = actual as JsonResult;
+      Assert.IsNotNull(json.Data, "JSON data is NULL");
+      Assert.IsInstanceOfType(json.Data, typeof(IEnumerable<Course>));
+
+      IEnumerable<Course> courses = json.Data as IEnumerable<Course>;
+      int count = courses.Count();
+      Assert.IsTrue(count == 0, "Expected an empty Course list, received [{0}]", count);
+    }
+
+    #endregion
 
     /// <summary>
     /// Constructs a CourseID string in the format "ENGL& 101"

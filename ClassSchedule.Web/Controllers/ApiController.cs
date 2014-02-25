@@ -35,8 +35,9 @@ namespace CTCClassSchedule.Controllers
 	{
     // Any section that has more than this many courses cross-listed with it will produce a warning in the application log.
     const int MAX_COURSE_CROSSLIST_WARNING_THRESHOLD = 10;
-
     private readonly ILog _log = LogManager.GetCurrentClassLogger();
+
+	  public const int MAX_COURSE_PREFIXES = 5;
 
 	  public ApiController()
 	  {
@@ -161,6 +162,10 @@ namespace CTCClassSchedule.Controllers
 	    {
 	      if (prefix != null && prefix.Length > 0)
 	      {
+	        if (prefix.Length > MAX_COURSE_PREFIXES)
+	        {
+	          return new HttpStatusCodeResult((int)HttpStatusCode.BadRequest, string.Format("Requests are limited to {0} Course prefixes.", MAX_COURSE_PREFIXES));
+	        }
 	        if (prefix.Length > 1)
 	        {
 	          courses = repository.GetCourses(prefix.ToList());
