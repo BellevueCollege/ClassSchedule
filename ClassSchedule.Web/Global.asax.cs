@@ -43,11 +43,13 @@ namespace CTCClassSchedule
 			// API calls the application exposes
       routes.MapRoute("ApiGetSeats", "Api/GetSeats/", new { controller = "Api", action = "GetSeats" });
       routes.MapRoute("ApiSubjects", "Api/Subjects/", new { controller = "Api", action = "Subjects" });
-			routes.MapRoute("ApiSectionEdit", "Classes/SectionEdit", new { controller = "Classes", action = "SectionEdit" });
+      routes.MapRoute("Courses", "Api/Courses", new { controller = "Api", action = "Courses" });
+      routes.MapRoute("ApiSectionEdit", "Classes/SectionEdit", new { controller = "Classes", action = "SectionEdit" });
 			routes.MapRoute("ApiClassEdit", "Api/ClassEdit", new { controller = "Api", action = "ClassEdit" });
 			routes.MapRoute("ApiUpdateSectionFootnote", "Api/UpdateSectionFootnote", new { controller = "Api", action = "UpdateSectionFootnote" });
       routes.MapRoute("CrossListedCourses", "Api/CrossListedCourses", new { controller = "Api", action = "CrossListedCourses" });
 			routes.MapRoute("ScheduleExport", "Api/Export/{YearQuarterID}", new { controller = "Api", action = "Export", YearQuarterID = UrlParameter.Optional });
+
 
 			// Authentication
 			routes.MapRoute("LogOn", "Authenticate", new { controller = "Classes", action = "Authenticate" });

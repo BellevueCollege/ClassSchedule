@@ -144,13 +144,15 @@ namespace Test.CtcClassSchedule
     public void Courses_OneSubject_LowerCase_NoQuarter()
     {
       ApiController target = new ApiController();
-      JsonResult actual = target.Courses("engl");
+      ActionResult actual = target.Courses("engl");
 
       Assert.IsNotNull(actual, "Returned Result is NULL");
-      Assert.IsNotNull(actual.Data, "JSON data is NULL");
-      Assert.IsInstanceOfType(actual.Data, typeof(IEnumerable<Course>));
+      
+      JsonResult json = actual as JsonResult;
+      Assert.IsNotNull(json.Data, "JSON data is NULL");
+      Assert.IsInstanceOfType(json.Data, typeof(IEnumerable<Course>));
 
-      IEnumerable<Course> courses = actual.Data as IEnumerable<Course>;
+      IEnumerable<Course> courses = json.Data as IEnumerable<Course>;
       foreach (var course in courses)
       {
         Console.Out.WriteLine(course.CourseID);
@@ -163,13 +165,13 @@ namespace Test.CtcClassSchedule
     public void Courses_TwoSubjects_LowerCase_NoQuarter()
     {
       ApiController target = new ApiController();
-      JsonResult actual = target.Courses(new [] {"engl", "biol"});
+      ActionResult actual = target.Courses("engl", "biol");
 
-      Assert.IsNotNull(actual, "Returned Result is NULL");
-      Assert.IsNotNull(actual.Data, "JSON data is NULL");
-      Assert.IsInstanceOfType(actual.Data, typeof(IEnumerable<Course>));
+      JsonResult json = actual as JsonResult;
+      Assert.IsNotNull(json.Data, "JSON data is NULL");
+      Assert.IsInstanceOfType(json.Data, typeof(IEnumerable<Course>));
 
-      IEnumerable<Course> courses = actual.Data as IEnumerable<Course>;
+      IEnumerable<Course> courses = json.Data as IEnumerable<Course>;
       foreach (var course in courses)
       {
         Console.Out.WriteLine(course.CourseID);

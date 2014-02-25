@@ -16,6 +16,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Web.Mvc;
 using Common.Logging;
@@ -149,35 +150,37 @@ namespace CTCClassSchedule.Controllers
     }
 
 	  /// <summary>
-	  /// 
+	  /// Retrieves course data for the prefixes specified
 	  /// </summary>
-	  /// <param name="subjects"></param>
+	  /// <param name="prefix"></param>
 	  /// <returns></returns>
-    [HttpGet]
-    public JsonResult Courses(IEnumerable<string> subjects)
+    public ActionResult Courses(params string[] prefix)
 	  {
       IList<Course> courses;
       using (OdsRepository repository = new OdsRepository())
 	    {
-        courses = repository.GetCourses(subjects.ToList());
-      }
+	      if (prefix != null && prefix.Length > 0)
+	      {
+	        if (prefix.Length > 1)
+	        {
+	          courses = repository.GetCourses(prefix.ToList());
+	        }
+	        else
+	        {
+	          courses = repository.GetCourses(prefix[0]);
+	        }
+	      }
+	      else
+	      {
+	        return new HttpStatusCodeResult((int)HttpStatusCode.BadRequest, "Please provide one or more subject abbreviations.");
+	      }
+	    }
 
 	    // NOTE: AllowGet exposes the potential for JSON Hijacking (see http://haacked.com/archive/2009/06/25/json-hijacking.aspx)
       // but is not an issue here because we are receiving and returning public (e.g. non-sensitive) data
       return Json(courses.Distinct().OrderBy(c => c.Subject).ThenBy(c => c.Number), JsonRequestBehavior.AllowGet);
 	  }
 
-	  /// <summary>
-	  /// 
-	  /// </summary>
-	  /// <param name="subject"></param>
-	  /// <returns></returns>
-	  [HttpGet]
-	  public JsonResult Courses(string subject)
-    {
-      return Courses(new[] {subject});
-    }
-    
     /// <summary>
 	  ///
 	  /// </summary>
