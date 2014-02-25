@@ -29,6 +29,7 @@ using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
 using CtcApi.Extensions;
+using Microsoft.Security.Application;
 using MvcMiniProfiler;
 
 namespace CTCClassSchedule.Controllers
@@ -209,7 +210,16 @@ namespace CTCClassSchedule.Controllers
       {
         using (OdsRepository repository = new OdsRepository())
         {
-          YearQuarter yrq = Helpers.DetermineRegistrationQuarter(YearQuarter, repository.CurrentRegistrationQuarter, RouteData);
+          YearQuarter yrq;
+          try
+          {
+            yrq = Helpers.DetermineRegistrationQuarter(YearQuarter, repository.CurrentRegistrationQuarter, RouteData);
+          }
+          catch (ArgumentOutOfRangeException ex)
+          {
+            _log.Warn(m => m("Invalid URL attempt: <{0}>", Request.Url), ex);
+            return HttpNotFound(string.Format("'{0}' is not a valid quarter.", Encoder.HtmlEncode(YearQuarter)));
+          }
           model.ViewingQuarter = yrq;
 
           model.NavigationQuarters = Helpers.GetYearQuarterListForMenus(repository);
@@ -300,8 +310,8 @@ namespace CTCClassSchedule.Controllers
 
 			using (OdsRepository repository = new OdsRepository())
 			{
-        YearQuarter yrq = Helpers.DetermineRegistrationQuarter(YearQuarter, repository.CurrentRegistrationQuarter, RouteData);
-
+			  YearQuarter yrq = Helpers.DetermineRegistrationQuarter(YearQuarter, repository.CurrentRegistrationQuarter, RouteData);
+        
         // Get the courses to display on the View
 				IList<Section> sections;
 				using (_profiler.Step("ODSAPI::GetSections()"))
