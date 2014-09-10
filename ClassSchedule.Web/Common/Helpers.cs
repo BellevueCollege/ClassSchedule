@@ -260,7 +260,7 @@ namespace CTCClassSchedule.Common
                       //        the filter of the CtcApi - which normalizes spacing of the CourseID field data.
                       join cm in db.CourseMetas on (d != null ? d.CourseID : "") equals cm.CourseID into t4
 											from cm in t4.DefaultIfEmpty()
-			      orderby c.Yrq.ID descending
+            orderby c.Offered.First().StartTime, c.Yrq.ID descending
 			      select new SectionWithSeats {
 								ParentObject = c,
 								SeatsAvailable = ss != null ? ss.SeatsAvailable : Int32.MinValue,	// allows us to identify past quarters (with no availability info)
@@ -270,7 +270,7 @@ namespace CTCClassSchedule.Common
 													CourseFootnotes = cm != null && !String.IsNullOrWhiteSpace(cm.Footnote) ? cm.Footnote : String.Empty,
                           CourseTitle = sm != null && !String.IsNullOrWhiteSpace(sm.Title) ? sm.Title : c.CourseTitle,
 													CustomDescription = sm != null && !String.IsNullOrWhiteSpace(sm.Description) ? sm.Description : String.Empty,
-											}).OrderBy(s => s.CourseNumber).ThenBy(s => s.CourseTitle).ToList();
+                }).OrderBy(s => s.CourseNumber).ThenBy(s => s.CourseTitle).ToList();
 
           string _availValue = "";
           if (HttpContext.Current.Request.QueryString["avail"] != null)
@@ -367,6 +367,9 @@ namespace CTCClassSchedule.Common
 	    MiniProfiler profiler = MiniProfiler.Current;
 
       IList<SectionsBlock> results = new List<SectionsBlock>();
+      //we need to captuer linked classes and exclude from the export:
+      // Linked section defintion: An item number linking a class to another class in the next quarter. Automatic registration into the linked 
+      //class occurs in batch registration for students enrolled in the class containing the ITM-YRQ-LINK.
       IList<SectionWithSeats> allLinkedSections = sections.Where(s => s.IsLinked).ToList();
       IList<SectionWithSeats> nonLinkedSections;
 
@@ -390,13 +393,26 @@ namespace CTCClassSchedule.Common
                           .OrderBy(s => s.CourseNumber)
                           .ThenBy(s => allLinkedSections.Where(l => l.LinkedTo == s.ID.ItemNumber).Count())
                           .ThenBy(s => s.CourseTitle)
+                          .ThenBy(s => s.IsOnline)
+                          .ThenBy(s => s.Offered.First().StartTime)
                           .ThenByDescending(s => s.IsVariableCredits)
                           .ThenBy(s => s.Credits)
                           .ThenBy(s => s.IsTelecourse)
-                          .ThenBy(s => s.IsOnline)
                           .ThenBy(s => s.IsHybrid)
                           .ThenBy(s => s.IsOnCampus)
                           .ThenBy(s => s.SectionCode).ToList();
+
+        //nonLinkedSections = sections.Where(s => !s.IsLinked)
+        //                  .OrderBy(s => s.CourseNumber)
+        //                  .ThenBy(s => allLinkedSections.Where(l => l.LinkedTo == s.ID.ItemNumber).Count())
+        //                  .ThenBy(s => s.CourseTitle)
+        //                  .ThenByDescending(s => s.IsVariableCredits)
+        //                  .ThenBy(s => s.Credits)
+        //                  .ThenBy(s => s.IsTelecourse)
+        //                  .ThenBy(s => s.IsOnline)
+        //                  .ThenBy(s => s.IsHybrid)
+        //                  .ThenBy(s => s.IsOnCampus)
+        //                  .ThenBy(s => s.SectionCode).ToList();
       }
 
 #if DEBUG
