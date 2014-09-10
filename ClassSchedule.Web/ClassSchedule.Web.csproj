@@ -425,11 +425,24 @@
     <Content Include="_configSource\EXAMPLE-NLog.config" />
     <Content Include="_configSource\EXAMPLE-Smtp.config" />
     <Content Include="_configSource\NLog.config" />
+    <None Include="Properties\PublishProfiles\Publish Test.pubxml" />
+    <Content Include="_configSource\testCasClient.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="_configSource\testConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="_configSource\RoleManager.config" />
-    <None Include="_configSource\CasClient.config" />
+    <None Include="_configSource\CasClient.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="_configSource\ElmahAuthorization.config" />
-    <None Include="_configSource\Authentication.config" />
-    <None Include="_configSource\AppSettings.config" />
+    <None Include="_configSource\Authentication.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="_configSource\AppSettings.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="_configSource\ConnectionStrings.config" />
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-Authentication.config" />
@@ -516,7 +529,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_BuildAction="ReBuild" BuildVersion_ConfigurationName="Debug" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Debug" BuildVersion_BuildAction="ReBuild" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
