@@ -241,17 +241,20 @@ namespace CTCClassSchedule.Common
         _builder.AppendLine("* <CLS2>   -- Course header, or linked section headers");
         _builder.AppendLine("* <CLS3>   -- HP footnotes, CMS course footnotes, and common Section footnotes");
         _builder.AppendLine("* <CLS5>   -- Default section tag");
-        _builder.AppendLine("* <CLS6>   -- Evening section");
-        _builder.AppendLine("* <CLS7>   -- Weekend section");
-        _builder.AppendLine("* <CLSD>   -- Distance Education section");
+        _builder.AppendLine("* <CLS6>   -- Evening or weekend section");
         _builder.AppendLine("* <CLSA>   -- Section to be arranged");
         _builder.AppendLine("* <CLSY>   -- Automated footnotes");
         _builder.AppendLine("* <CLSN>   -- Section footnotes");
         _builder.AppendLine("* [h]      -- Hybrid section flag");
         _builder.AppendLine("* [online] -- Online section flag");
         _builder.AppendLine("* [-]      -- separates a course title and the number of credits");
-        _builder.AppendLine("* D110     -- Default room if no room was assigned to the section");
         _builder.AppendLine("* staff    -- Default instructor name if no instructor is assigned to the section");
+
+        //Notes removed on 7/31/14
+       // _builder.AppendLine("* D110     -- Default room if no room was assigned to the section");
+       // _builder.AppendLine("* <CLS7>   -- Weekend section");
+       // _builder.AppendLine("* <CLSD>   -- Distance Education section");
+
 
         return _builder.ToString();
       }
@@ -430,7 +433,7 @@ namespace CTCClassSchedule.Common
       {
         // Configurables
         string onlineDaysStr = "[online]";
-        string onlineRoomStr = "D110";
+        string onlineRoomStr = "";  // 8/3/14 johanna.aqui - Removed D110 as the default room
         string arrangedStr = "Arranged";
         string hybridCodeStr = "[h]";
         string instructorDefaultNameStr = "staff";
@@ -459,9 +462,9 @@ namespace CTCClassSchedule.Common
           case "<CLSA>":
             roomStr = String.IsNullOrEmpty(item.Room) ? string.Empty : String.Concat("\t", item.Room);
             break;
-          case "<CLSD>":
-            roomStr = String.Concat("\t", item.Room);
-            break;
+          //case "<CLSD>":  // 8/3/14 johanna.aqui removed case since <CLSD> is no longer used
+          //  roomStr = String.Concat("\t", item.Room);
+          //  break;
         }
 
 
@@ -491,25 +494,27 @@ namespace CTCClassSchedule.Common
       /// <returns>A string containing the tag code that represents the given Section.</returns>
       private static string GetSectionExportTag(SectionWithSeats section, OfferedItem item)
       {
-        string tag = "<CLS5>";
+        string tag = "<CLS5>";  //set the default
         string distanceEdMinStr = "7000";
         string distanceEdMaxStr = "ZZZZ";
         string arrangedStr = "Arranged";
 
         OfferedItem primary = section.Offered.Where(o => o.IsPrimary).FirstOrDefault();
-        if ((primary.Days.Contains("Sa") || primary.Days.Contains("Su")) && // TODO: Move to helper function
-            !(primary.Days.Contains("M") || primary.Days.Contains("T") || primary.Days.Contains("W") || primary.Days.Contains("Th"))) // Weekend course
-        {
-          tag = "<CLS7>";
-        }
-        else if (IsEveningCourse(primary)) // Evening course
+
+        // johanna.aqui 8/20/14 - retired CLS7 tag.  We now only distinguish CLS5 (default), CLS6 (evening = section offered after 1730) and CLSA (arranged)
+        //if ((primary.Days.Contains("Sa") || primary.Days.Contains("Su")) && // TODO: Move to helper function
+        //    !(primary.Days.Contains("M") || primary.Days.Contains("T") || primary.Days.Contains("W") || primary.Days.Contains("Th"))) // Weekend course
+        //{
+        //  tag = "<CLS7>";
+        //}
+        if (IsEveningCourse(primary)) // Evening course
         {
           tag = "<CLS6>";
         }
-        else if (section.ID.ItemNumber.CompareTo(distanceEdMinStr) >= 0 && section.ID.ItemNumber.CompareTo(distanceEdMaxStr) <= 0) // Distance Ed
-        {
-          tag = "<CLSD>";
-        }
+        //else if (section.ID.ItemNumber.CompareTo(distanceEdMinStr) >= 0 && section.ID.ItemNumber.CompareTo(distanceEdMaxStr) <= 0) // Distance Ed
+        //{
+        //  tag = "[online]";   //8/5/14 johanna.aqui changed from <CLSD> to <CLS5> which is the default behavior so no need this condition and [online] added to class information line
+        //}
         else if (item.Days == arrangedStr && !section.IsOnline) // Arranged course
         {
           tag = "<CLSA>";
@@ -558,6 +563,7 @@ namespace CTCClassSchedule.Common
       /// </summary>
       /// <param name="course">The OfferedItem to evaluate.</param>
       /// <returns>True if evening course, otherwise false.</returns>
+      
       private static bool IsEveningCourse(OfferedItem course)
       {
         bool isEvening = false;
@@ -567,7 +573,7 @@ namespace CTCClassSchedule.Common
         {
           if (new TimeSpan(course.StartTime.Value.Hour, course.StartTime.Value.Minute, course.StartTime.Value.Second) >= eveningCourse)
           {
-            isEvening = false;
+            isEvening = true;  //8/3/14 johanna.aqui - fixed bug where isEvening was always returning false
           }
         }
 
