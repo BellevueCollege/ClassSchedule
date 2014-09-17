@@ -260,7 +260,7 @@ namespace CTCClassSchedule.Common
                       //        the filter of the CtcApi - which normalizes spacing of the CourseID field data.
                       join cm in db.CourseMetas on (d != null ? d.CourseID : "") equals cm.CourseID into t4
 											from cm in t4.DefaultIfEmpty()
-            orderby c.Offered.First().StartTime, c.Yrq.ID descending
+            orderby c.Credits ,c.Offered.First().StartTime, c.Yrq.ID descending    //9/15/2014 johanna.aqui, added credit and start time to sort order.  Order applied at different times and has different effects depending on the controller (Search, Classes, Scheduler)
 			      select new SectionWithSeats {
 								ParentObject = c,
 								SeatsAvailable = ss != null ? ss.SeatsAvailable : Int32.MinValue,	// allows us to identify past quarters (with no availability info)
@@ -393,10 +393,10 @@ namespace CTCClassSchedule.Common
                           .OrderBy(s => s.CourseNumber)
                           .ThenBy(s => allLinkedSections.Where(l => l.LinkedTo == s.ID.ItemNumber).Count())
                           .ThenBy(s => s.CourseTitle)
+                          .ThenByDescending(s => s.IsVariableCredits)     // johanna.aqui 9/11/2014 moved IsVariableCredits & Credits above starttime to keep correct section group
+                          .ThenBy(s => s.Credits)
                           .ThenBy(s => s.IsOnline)
                           .ThenBy(s => s.Offered.First().StartTime)
-                          .ThenByDescending(s => s.IsVariableCredits)
-                          .ThenBy(s => s.Credits)
                           .ThenBy(s => s.IsTelecourse)
                           .ThenBy(s => s.IsHybrid)
                           .ThenBy(s => s.IsOnCampus)
