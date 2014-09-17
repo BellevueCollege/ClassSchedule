@@ -306,7 +306,7 @@
         </member>
         <member name="M:System.Data.Edm.Error.NotSupported">
             <summary>
-            The exception that is thrown when an invoked method is not supported, or when there is an attempt to read, seek, or write to a stream that does not support the invoked functionality.
+            The exception that is thrown when an invoked method is not supported, or when there is an attempt to read, seek, or write to a stream that does not support the invoked functionality. 
             </summary>
         </member>
         <member name="T:System.Data.Edm.Common.DataModelAnnotation">
@@ -347,7 +347,7 @@
         </member>
         <member name="T:System.Data.Edm.Common.DataModelErrorEventArgs">
             <summary>
-
+            
             </summary>
         </member>
         <member name="T:System.Data.Edm.Common.DataModelEventArgs">
@@ -598,7 +598,7 @@
         </member>
         <member name="T:System.Data.Edm.Db.DbSchemaMetadataItem">
             <summary>
-            DbSchemaMetadataItem is the base for all types that can be contained in a <see cref="T:System.Data.Edm.Db.DbSchemaMetadata"/> schema.
+            DbSchemaMetadataItem is the base for all types that can be contained in a <see cref="T:System.Data.Edm.Db.DbSchemaMetadata"/> schema. 
             </summary>
         </member>
         <member name="T:System.Data.Edm.Db.DbTableColumnMetadata">
@@ -648,7 +648,7 @@
         </member>
         <member name="T:System.Data.Edm.Db.DbTypeMetadata">
             <summary>
-            Represents a specific use of a type in a Database Metadata item.
+            Represents a specific use of a type in a Database Metadata item. 
             </summary>
         </member>
         <member name="P:System.Data.Edm.Db.DbTypeMetadata.Facets">
@@ -1001,7 +1001,7 @@
         </member>
         <member name="P:System.Data.Edm.EdmDataModelType.IsAbstract">
             <summary>
-            Gets a value indicating whether this type is abstract.
+            Gets a value indicating whether this type is abstract. 
             </summary>
         </member>
         <member name="P:System.Data.Edm.EdmDataModelType.BaseType">
@@ -1077,7 +1077,7 @@
         </member>
         <member name="F:System.Data.Edm.EdmConcurrencyMode.Fixed">
             <summary>
-            Fixed concurrency mode: the property is always validated at
+            Fixed concurrency mode: the property is always validated at 
             write time
             </summary>
         </member>
@@ -1283,7 +1283,7 @@
         </member>
         <member name="T:System.Data.Edm.EdmNamespace">
             <summary>
-            Allows the construction and modification of a namespace in an <see cref="T:System.Data.Edm.EdmModel"/>.
+            Allows the construction and modification of a namespace in an <see cref="T:System.Data.Edm.EdmModel"/>. 
             </summary>
         </member>
         <member name="P:System.Data.Edm.EdmNamespace.NamespaceItems">
@@ -1318,7 +1318,7 @@
         </member>
         <member name="P:System.Data.Edm.EdmNavigationProperty.ResultEnd">
             <summary>
-            Gets or sets the <see cref="T:System.Data.Edm.EdmAssociationEnd"/> that specifies which association end is the 'destination' end of the navigation and produces the navigation property result.
+            Gets or sets the <see cref="T:System.Data.Edm.EdmAssociationEnd"/> that specifies which association end is the 'destination' end of the navigation and produces the navigation property result. 
             </summary>
         </member>
         <member name="T:System.Data.Edm.EdmOperationAction">
@@ -1659,7 +1659,7 @@
         </member>
         <member name="M:System.Data.Edm.EdmUtil.IsValidUndottedName(System.String)">
             <summary>
-
+            
             </summary>
             <param name="name"></param>
             <returns></returns>
@@ -2274,7 +2274,7 @@
         </member>
         <member name="M:System.Data.Edm.Validation.Internal.DataModelValidationHelper.TypeIsSubTypeOf(System.Data.Edm.EdmEntityType,System.Collections.Generic.Dictionary{System.Data.Edm.EdmEntityType,System.Data.Edm.EdmEntitySet},System.Data.Edm.EdmEntitySet@)">
             <summary>
-            Return true if the entityType is a subtype of any entity type in the dictionary keys,
+            Return true if the entityType is a subtype of any entity type in the dictionary keys, 
             and return the corresponding entry EntitySet value. Otherwise return false.
             </summary>
             <param name="entityType"></param>
@@ -2959,7 +2959,7 @@
         </member>
         <member name="M:System.Data.Entity.ModelConfiguration.Resources.Error.NotSupported">
             <summary>
-            The exception that is thrown when an invoked method is not supported, or when there is an attempt to read, seek, or write to a stream that does not support the invoked functionality.
+            The exception that is thrown when an invoked method is not supported, or when there is an attempt to read, seek, or write to a stream that does not support the invoked functionality. 
             </summary>
         </member>
         <member name="T:System.Data.Entity.Resources.Strings">
@@ -3662,7 +3662,7 @@
         </member>
         <member name="M:System.Data.Entity.Resources.Error.NotSupported">
             <summary>
-            The exception that is thrown when an invoked method is not supported, or when there is an attempt to read, seek, or write to a stream that does not support the invoked functionality.
+            The exception that is thrown when an invoked method is not supported, or when there is an attempt to read, seek, or write to a stream that does not support the invoked functionality. 
             </summary>
         </member>
         <member name="T:System.ComponentModel.DataAnnotations.Resources.Strings">
@@ -3732,7 +3732,7 @@
         </member>
         <member name="M:System.ComponentModel.DataAnnotations.Resources.Error.NotSupported">
             <summary>
-            The exception that is thrown when an invoked method is not supported, or when there is an attempt to read, seek, or write to a stream that does not support the invoked functionality.
+            The exception that is thrown when an invoked method is not supported, or when there is an attempt to read, seek, or write to a stream that does not support the invoked functionality. 
             </summary>
         </member>
         <member name="P:System.Data.Entity.Infrastructure.DbDatabaseMapping.Model">
@@ -4015,7 +4015,7 @@
         </member>
         <member name="M:System.Data.Entity.DropCreateDatabaseAlways`1.Seed(`0)">
             <summary>
-            A that should be overridden to actually add data to the context for seeding.
+            A that should be overridden to actually add data to the context for seeding. 
             The default implementation does nothing.
             </summary>
             <param name="context">The context to seed.</param>
@@ -4036,7 +4036,7 @@
         </member>
         <member name="M:System.Data.Entity.CreateDatabaseIfNotExists`1.Seed(`0)">
             <summary>
-            A that should be overridden to actually add data to the context for seeding.
+            A that should be overridden to actually add data to the context for seeding. 
             The default implementation does nothing.
             </summary>
             <param name="context">The context to seed.</param>
@@ -4082,11 +4082,11 @@
         <member name="M:System.Data.Entity.Database.Initialize(System.Boolean)">
             <summary>
             Runs the the registered <see cref="T:System.Data.Entity.IDatabaseInitializer`1"/> on this context.
-
+            
             If "force" is set to true, then the initializer is run regardless of whether or not it
             has been run before.  This can be useful if a database is deleted while an app is running
             and needs to be reinitialized.
-
+            
             If "force" is set to false, then the initializer is only run if it has not already been
             run for this context, model, and connection in this app domain. This method is typically
             used when it is necessary to ensure that the database has been created and seeded
@@ -4274,7 +4274,7 @@
         </member>
         <member name="M:System.Data.Entity.DropCreateDatabaseIfModelChanges`1.Seed(`0)">
             <summary>
-            A that should be overridden to actually add data to the context for seeding.
+            A that should be overridden to actually add data to the context for seeding. 
             The default implementation does nothing.
             </summary>
             <param name="context">The context to seed.</param>
@@ -4292,35 +4292,35 @@
             instance of the derived class is created.  This behavior can be modified by applying the
             <see cref="T:System.Data.Entity.Infrastructure.SuppressDbSetInitializationAttribute"/>  attribute to either the entire derived context
             class, or to individual properties on the class.
-
+            
             The Entity Data Model backing the context can be specified in several ways.  When using the Code First
             approach, the <see cref="T:System.Data.Entity.DbSet`1"/> properties on the derived context are used to build a model
             by convention.  The protected OnModelCreating method can be overridden to tweak this model.  More
             control over the model used for the Model First approach can be obtained by creating a <see cref="T:System.Data.Entity.Infrastructure.DbCompiledModel"/>
             explicitly from a <see cref="T:System.Data.Entity.DbModelBuilder"/> and passing this model to one of the DbContext constructors.
-
+            
             When using the Database First or Model First approach the Entity Data Model can be created using the
             Entity Designer (or manually through creation of an EDMX file) and then this model can be specified using
             entity connection string or an <see cref="T:System.Data.EntityClient.EntityConnection"/> object.
-
+            
             The connection to the database (including the name of the database) can be specified in several ways.
             If the parameterless DbContext constructor is called from a derived context, then the name of the derived context
             is used to find a connection string in the app.config or web.config file.  If no connection string is found, then
             the name is passed to the DefaultConnectionFactory registered on the <see cref="T:System.Data.Entity.Database"/> class.  The connection
             factory then uses the context name as the database name in a default connection string.  (This default connection
             string points to .\SQLEXPRESS on the local machine unless a different DefaultConnectionFactory is registered.)
-
+            
             Instead of using the derived context name, the connection/database name can also be specified explicitly by
             passing the name to one of the DbContext constructors that takes a string.  The name can also be passed in
             the form "name=myname", in which case the name must be found in the config file or an exception will be thrown.
-
+            
             Note that the connection found in the app.config or web.config file can be a normal database connection
             string (not a special Entity Framework connection string) in which case the DbContext will use Code First.
             However, if the connection found in the config file is a special Entity Framework connection string, then the
             DbContext will use Database/Model First and the model specified in the connection string will be used.
-
+            
             An existing or explicitly created DbConnection can also be used instead of the database/connection name.
-
+            
             A <see cref="T:System.Data.Entity.DbModelBuilderVersionAttribute"/> can be applied to a class derived from DbContext to set the
             version of conventions used by the context when it creates a model. If no attribute is applied then the
             latest version of conventions will be used.
@@ -4468,13 +4468,13 @@
             Validates tracked entities and returns a Collection of <see cref="T:System.Data.Entity.Validation.DbEntityValidationResult"/> containing validation results.
             </summary>
             <returns>
-            Collection of validation results for invalid entities. The collection is never null and must not contain null
+            Collection of validation results for invalid entities. The collection is never null and must not contain null 
             values or results for valid entities.
             </returns>
             <remarks>
-            1. This method calls DetectChanges() to determine states of the tracked entities unless
+            1. This method calls DetectChanges() to determine states of the tracked entities unless 
                DbContextConfiguration.AutoDetectChangesEnabled is set to false.
-            2. By default only Added on Modified entities are validated. The user is able to change this behavior
+            2. By default only Added on Modified entities are validated. The user is able to change this behavior 
                by overriding ShouldValidateEntity method.
             </remarks>
         </member>
@@ -4627,7 +4627,7 @@
             </summary>
             <remarks>
             Note that DbSet does not support MEST (Multiple Entity Sets per Type) meaning that there is always a
-            one-to-one correlation between a type and a set.
+            one-to-one correlation between a type and a set. 
             </remarks>
             <typeparam name="TEntity">The type that defines the set.</typeparam>
         </member>
@@ -4694,7 +4694,7 @@
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbQuery`1.op_Implicit(System.Data.Entity.Infrastructure.DbQuery{`0})~System.Data.Entity.Infrastructure.DbQuery">
             <summary>
-            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbQuery"/> class for this query.
+            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbQuery"/> class for this query. 
             </summary>
             <returns>A non-generic version.</returns>
         </member>
@@ -5250,13 +5250,13 @@
         </member>
         <member name="F:System.Data.Entity.DbModelBuilderVersion.Latest">
             <summary>
-            Indicates that the latest version of the <see cref="T:System.Data.Entity.DbModelBuilder"/> and
+            Indicates that the latest version of the <see cref="T:System.Data.Entity.DbModelBuilder"/> and 
             <see cref="T:System.Data.Entity.DbContext"/> conventions should be used.
             </summary>
         </member>
         <member name="F:System.Data.Entity.DbModelBuilderVersion.V4_1">
             <summary>
-            Indicates that the version of the <see cref="T:System.Data.Entity.DbModelBuilder"/> and
+            Indicates that the version of the <see cref="T:System.Data.Entity.DbModelBuilder"/> and 
             <see cref="T:System.Data.Entity.DbContext"/> conventions shipped with Entity Framework v4.1
             should be used.
             </summary>
@@ -5284,7 +5284,7 @@
         <member name="T:System.Data.Entity.Infrastructure.IDbConnectionFactory">
             <summary>
             Implementations of this interface are used to create DbConnection objects for
-            a type of database server based on a given database name.
+            a type of database server based on a given database name.  
             An Instance is set on the <see cref="T:System.Data.Entity.Database"/> class to
             cause all DbContexts created with no connection information or just a database
             name or connection string to use a certain type of database server by default.
@@ -5306,9 +5306,9 @@
         </member>
         <member name="T:System.Data.Entity.Infrastructure.DbSqlQuery">
             <summary>
-            Represents a SQL query for entities that is created from a <see cref="T:System.Data.Entity.DbContext"/>
+            Represents a SQL query for entities that is created from a <see cref="T:System.Data.Entity.DbContext"/> 
             and is executed using the connection from that context.
-            Instances of this class are obtained from the <see cref="T:System.Data.Entity.DbSet"/> instance for the
+            Instances of this class are obtained from the <see cref="T:System.Data.Entity.DbSet"/> instance for the 
             entity type. The query is not executed when this object is created; it is executed
             each time it is enumerated, for example by using foreach.
             SQL queries for non-entities are created using the <see cref="P:System.Data.Entity.DbContext.Database"/>.
@@ -5367,9 +5367,9 @@
         </member>
         <member name="T:System.Data.Entity.Infrastructure.DbSqlQuery`1">
             <summary>
-            Represents a SQL query for entities that is created from a <see cref="T:System.Data.Entity.DbContext"/>
+            Represents a SQL query for entities that is created from a <see cref="T:System.Data.Entity.DbContext"/> 
             and is executed using the connection from that context.
-            Instances of this class are obtained from the <see cref="T:System.Data.Entity.DbSet`1"/> instance for the
+            Instances of this class are obtained from the <see cref="T:System.Data.Entity.DbSet`1"/> instance for the 
             entity type. The query is not executed when this object is created; it is executed
             each time it is enumerated, for example by using foreach.
             SQL queries for non-entities are created using the <see cref="P:System.Data.Entity.DbContext.Database"/>.
@@ -5428,7 +5428,7 @@
         </member>
         <member name="T:System.Data.Entity.Infrastructure.IncludeMetadataConvention">
             <summary>
-              This <see cref="T:System.Data.Entity.DbModelBuilder"/> convention causes DbModelBuilder to include metadata about the model
+              This <see cref="T:System.Data.Entity.DbModelBuilder"/> convention causes DbModelBuilder to include metadata about the model 
               when it builds the model. When <see cref="T:System.Data.Entity.DbContext"/> creates a model by convention it will
               add this convention to the list of those used by the DbModelBuilder.  This will then result in
               model metadata being written to the database if the DbContext is used to create the database.
@@ -5595,7 +5595,7 @@
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbContextInfo.#ctor(System.Type,System.Configuration.ConnectionStringSettingsCollection)">
             <summary>
-                Creates a new instance representing a given <see cref="T:System.Data.Entity.DbContext"/> type. An external list of
+                Creates a new instance representing a given <see cref="T:System.Data.Entity.DbContext"/> type. An external list of 
                 connection strings can be supplied and will be used during connection string resolution in place
                 of any connection strings specified in external configuration files.
             </summary>
@@ -5762,7 +5762,7 @@
             it was loaded from the database.
             </summary>
             <value>
-		<c>true</c> if this instance is modified; otherwise, <c>false</c>.
+            	<c>true</c> if this instance is modified; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:System.Data.Entity.Infrastructure.DbPropertyEntry.EntityEntry">
@@ -5861,7 +5861,7 @@
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbMemberEntry`2.op_Implicit(System.Data.Entity.Infrastructure.DbMemberEntry{`0,`1})~System.Data.Entity.Infrastructure.DbMemberEntry">
             <summary>
-            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbMemberEntry"/> class for
+            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbMemberEntry"/> class for 
             the property represented by this object.
             </summary>
             <returns>A non-generic version.</returns>
@@ -5909,7 +5909,7 @@
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbPropertyEntry`2.op_Implicit(System.Data.Entity.Infrastructure.DbPropertyEntry{`0,`1})~System.Data.Entity.Infrastructure.DbPropertyEntry">
             <summary>
-            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbPropertyEntry"/> class for
+            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbPropertyEntry"/> class for 
             the property represented by this object.
             </summary>
             <returns>A non-generic version.</returns>
@@ -5938,7 +5938,7 @@
             it was loaded from the database.
             </summary>
             <value>
-		<c>true</c> if this instance is modified; otherwise, <c>false</c>.
+            	<c>true</c> if this instance is modified; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:System.Data.Entity.Infrastructure.DbPropertyEntry`2.EntityEntry">
@@ -5978,7 +5978,7 @@
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbComplexPropertyEntry`2.op_Implicit(System.Data.Entity.Infrastructure.DbComplexPropertyEntry{`0,`1})~System.Data.Entity.Infrastructure.DbComplexPropertyEntry">
             <summary>
-            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbComplexPropertyEntry"/> class for
+            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbComplexPropertyEntry"/> class for 
             the property represented by this object.
             </summary>
             <returns>A non-generic version.</returns>
@@ -6182,7 +6182,7 @@
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbCollectionEntry`2.op_Implicit(System.Data.Entity.Infrastructure.DbCollectionEntry{`0,`1})~System.Data.Entity.Infrastructure.DbCollectionEntry">
             <summary>
-            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbCollectionEntry"/> class for
+            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbCollectionEntry"/> class for 
             the navigation property represented by this object.
             </summary>
             <returns>A non-generic version.</returns>
@@ -6427,7 +6427,7 @@
             Validates this <see cref="T:System.Data.Entity.Infrastructure.DbEntityEntry"/> instance and returns validation result.
             </summary>
             <returns>
-            Entity validation result. Possibly null if
+            Entity validation result. Possibly null if 
             <see cref="M:System.Data.Entity.DbContext.ValidateEntity(System.Data.Entity.Infrastructure.DbEntityEntry,System.Collections.Generic.IDictionary{System.Object,System.Object})"/> method is overridden.
             </returns>
         </member>
@@ -6439,7 +6439,7 @@
             </summary>
             <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
             <returns>
-		<c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+            	<c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbEntityEntry.Equals(System.Data.Entity.Infrastructure.DbEntityEntry)">
@@ -6450,7 +6450,7 @@
             </summary>
             <param name="other">The <see cref="T:System.Data.Entity.Infrastructure.DbEntityEntry"/> to compare with this instance.</param>
             <returns>
-		<c>true</c> if the specified <see cref="T:System.Data.Entity.Infrastructure.DbEntityEntry"/> is equal to this instance; otherwise, <c>false</c>.
+            	<c>true</c> if the specified <see cref="T:System.Data.Entity.Infrastructure.DbEntityEntry"/> is equal to this instance; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbEntityEntry.GetHashCode">
@@ -6458,7 +6458,7 @@
             Returns a hash code for this instance.
             </summary>
             <returns>
-            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
             </returns>
         </member>
         <member name="P:System.Data.Entity.Infrastructure.DbEntityEntry.Entity">
@@ -6647,7 +6647,7 @@
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbEntityEntry`1.op_Implicit(System.Data.Entity.Infrastructure.DbEntityEntry{`0})~System.Data.Entity.Infrastructure.DbEntityEntry">
             <summary>
-            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbEntityEntry"/> class for
+            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbEntityEntry"/> class for 
             the tracked entity represented by this object.
             </summary>
             <returns>A non-generic version.</returns>
@@ -6657,7 +6657,7 @@
             Validates this <see cref="T:System.Data.Entity.Infrastructure.DbEntityEntry`1"/> instance and returns validation result.
             </summary>
             <returns>
-            Entity validation result. Possibly null if
+            Entity validation result. Possibly null if 
             <see cref="M:System.Data.Entity.DbContext.ValidateEntity(System.Data.Entity.Infrastructure.DbEntityEntry,System.Collections.Generic.IDictionary{System.Object,System.Object})"/> method is overridden.
             </returns>
         </member>
@@ -6669,7 +6669,7 @@
             </summary>
             <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
             <returns>
-		<c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+            	<c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbEntityEntry`1.Equals(System.Data.Entity.Infrastructure.DbEntityEntry{`0})">
@@ -6680,7 +6680,7 @@
             </summary>
             <param name="other">The <see cref="T:System.Data.Entity.Infrastructure.DbEntityEntry`1"/> to compare with this instance.</param>
             <returns>
-		<c>true</c> if the specified <see cref="T:System.Data.Entity.Infrastructure.DbEntityEntry`1"/> is equal to this instance; otherwise, <c>false</c>.
+            	<c>true</c> if the specified <see cref="T:System.Data.Entity.Infrastructure.DbEntityEntry`1"/> is equal to this instance; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbEntityEntry`1.GetHashCode">
@@ -6688,7 +6688,7 @@
             Returns a hash code for this instance.
             </summary>
             <returns>
-            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
             </returns>
         </member>
         <member name="P:System.Data.Entity.Infrastructure.DbEntityEntry`1.Entity">
@@ -6719,9 +6719,9 @@
         </member>
         <member name="T:System.Data.Entity.Infrastructure.DbCompiledModel">
             <summary>
-            An immutable representation of an Entity Data Model (EDM) model that can be used to create an
-            <see cref="T:System.Data.Objects.ObjectContext"/> or can be passed to the constructor of a <see cref="T:System.Data.Entity.DbContext"/>.
-            For increased performance, instances of this type should be cached and re-used to construct contexts.
+            An immutable representation of an Entity Data Model (EDM) model that can be used to create an 
+            <see cref="T:System.Data.Objects.ObjectContext"/> or can be passed to the constructor of a <see cref="T:System.Data.Entity.DbContext"/>. 
+            For increased performance, instances of this type should be cached and re-used to construct contexts. 
             </summary>
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbCompiledModel.#ctor(System.Data.Entity.Infrastructure.DbModel)">
@@ -6944,7 +6944,7 @@
         </member>
         <member name="M:System.Data.Entity.Infrastructure.DbReferenceEntry`2.op_Implicit(System.Data.Entity.Infrastructure.DbReferenceEntry{`0,`1})~System.Data.Entity.Infrastructure.DbReferenceEntry">
             <summary>
-            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbReferenceEntry"/> class for
+            Returns a new instance of the non-generic <see cref="T:System.Data.Entity.Infrastructure.DbReferenceEntry"/> class for 
             the navigation property represented by this object.
             </summary>
             <returns>A non-generic version.</returns>
@@ -7016,13 +7016,13 @@
         </member>
         <member name="T:System.Data.Entity.Infrastructure.IDbContextFactory`1">
             <summary>
-                A factory for creating derived <see cref="T:System.Data.Entity.DbContext"/> instances. Implement this
-                interface to enable design-time services for context types that do not have a
+                A factory for creating derived <see cref="T:System.Data.Entity.DbContext"/> instances. Implement this 
+                interface to enable design-time services for context types that do not have a 
                 public default constructor.
-
+                
                 At design-time, derived <see cref="T:System.Data.Entity.DbContext"/> instances can be created in order to enable specific
                 design-time experiences such as model rendering, DDL generation etc. To enable design-time instantiation
-                for derived <see cref="T:System.Data.Entity.DbContext"/> types that do not have a public, default constructor, implement
+                for derived <see cref="T:System.Data.Entity.DbContext"/> types that do not have a public, default constructor, implement 
                 this interface. Design-time services will auto-discover implementations of this interface that are in the
                 same assembly as the derived <see cref="T:System.Data.Entity.DbContext"/> type.
             </summary>
@@ -7362,20 +7362,20 @@
             ValidationResults instances to be converted to <see cref="T:System.Data.Entity.Validation.DbValidationError"/> instances.
             </param>
             <returns>
-            An <see cref="T:System.Collections.Generic.IEnumerable`1"/> created based on the
+            An <see cref="T:System.Collections.Generic.IEnumerable`1"/> created based on the 
             <paramref name="validationResults"/>.
             </returns>
             <remarks>
             <see cref="T:System.ComponentModel.DataAnnotations.ValidationResult"/> class contains a property with names of properties the error applies to.
             On the other hand each <see cref="T:System.Data.Entity.Validation.DbValidationError"/> applies at most to a single property. As a result for
-            each name in ValidationResult.MemberNames one <see cref="T:System.Data.Entity.Validation.DbValidationError"/> will be created (with some
+            each name in ValidationResult.MemberNames one <see cref="T:System.Data.Entity.Validation.DbValidationError"/> will be created (with some 
             exceptions for special cases like null or empty .MemberNames or null names in the .MemberNames).
             </remarks>
         </member>
         <member name="M:System.Data.Entity.Internal.DbHelpers.GetPropertyPath(System.Data.Entity.Internal.InternalMemberEntry)">
             <summary>
-            Calculates a "path" to a property. For primitive properties on an entity type it is just the
-            name of the property. Otherwise it is a dot separated list of names of the property and all
+            Calculates a "path" to a property. For primitive properties on an entity type it is just the 
+            name of the property. Otherwise it is a dot separated list of names of the property and all 
             its ancestor properties starting from the entity.
             </summary>
             <param name="property">Property for which to calculate the path.</param>
@@ -7407,7 +7407,7 @@
         </member>
         <member name="M:System.Data.Entity.Internal.DbHelpers.CloneObjectContext(System.Data.Objects.ObjectContext,System.Boolean)">
             <summary>
-            Creates a clone of the given <see cref="T:System.Data.Objects.ObjectContext"/> that has the same
+            Creates a clone of the given <see cref="T:System.Data.Objects.ObjectContext"/> that has the same 
             loaded metadata as the original but a new connection and new, empty, state manager.
             </summary>
             <param name="original">The original.</param>
@@ -7686,7 +7686,7 @@
         </member>
         <member name="T:System.Data.Entity.Internal.EagerInternalContext">
             <summary>
-            An <see cref="T:System.Data.Entity.Internal.EagerInternalContext"/> is an <see cref="T:System.Data.Entity.Internal.InternalContext"/> where the <see cref="P:System.Data.Entity.Internal.EagerInternalContext.ObjectContext"/>
+            An <see cref="T:System.Data.Entity.Internal.EagerInternalContext"/> is an <see cref="T:System.Data.Entity.Internal.InternalContext"/> where the <see cref="P:System.Data.Entity.Internal.EagerInternalContext.ObjectContext"/> 
             instance that it wraps is set immediately at construction time rather than being created lazily. In this case
             the internal context may or may not own the <see cref="P:System.Data.Entity.Internal.EagerInternalContext.ObjectContext"/> instance but will only dispose it
             if it does own it.
@@ -7718,7 +7718,7 @@
         </member>
         <member name="M:System.Data.Entity.Internal.InternalContext.CreateObjectContextForDdlOps">
             <summary>
-            Creates a cloned ObjectContext suitable for use with DDL operations.
+            Creates a cloned ObjectContext suitable for use with DDL operations. 
             </summary>
         </member>
         <member name="M:System.Data.Entity.Internal.InternalContext.UseTempObjectContext">
@@ -8147,7 +8147,7 @@
         </member>
         <member name="M:System.Data.Entity.Internal.EagerInternalContext.CreateObjectContextForDdlOps">
             <summary>
-            Creates a cloned ObjectContext suitable for use with DDL operations.
+            Creates a cloned ObjectContext suitable for use with DDL operations. 
             </summary>
         </member>
         <member name="M:System.Data.Entity.Internal.EagerInternalContext.CreateModelBuilderForEdmx">
@@ -8381,7 +8381,7 @@
             Gets a value indicating whether this instance is set to track entities or not.
             </summary>
             <value>
-		<c>true</c> if this instance is no-tracking; otherwise, <c>false</c>.
+            	<c>true</c> if this instance is no-tracking; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="T:System.Data.Entity.Internal.LazyInternalConnection">
@@ -8491,7 +8491,7 @@
         </member>
         <member name="M:System.Data.Entity.Internal.LazyInternalContext.CreateObjectContextForDdlOps">
             <summary>
-            Creates a cloned ObjectContext suitable for use with DDL operations.
+            Creates a cloned ObjectContext suitable for use with DDL operations. 
             </summary>
         </member>
         <member name="M:System.Data.Entity.Internal.LazyInternalContext.SaveChanges">
@@ -8675,7 +8675,7 @@
             Gets a value indicating whether this list is sorted.
             </summary>
             <value>
-		<c>true</c> if this instance is sorted; otherwise, <c>false</c>.
+            	<c>true</c> if this instance is sorted; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:System.Data.Entity.Internal.SortableBindingList`1.SortDirectionCore">
@@ -8723,7 +8723,7 @@
             </summary>
             <param name="type">The type.</param>
             <returns>
-		<c>true</c> if this instance can sort for the specified type; otherwise, <c>false</c>.
+            	<c>true</c> if this instance can sort for the specified type; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:System.Data.Entity.Internal.SortableBindingList`1.PropertyComparer.CanSortWithIComparable(System.Type)">
@@ -8732,7 +8732,7 @@
             </summary>
             <param name="type">The type.</param>
             <returns>
-		<c>true</c> if this instance can sort for the specified type; otherwise, <c>false</c>.
+            	<c>true</c> if this instance can sort for the specified type; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:System.Data.Entity.Internal.SortableBindingList`1.PropertyComparer.CanSortWithToString(System.Type)">
@@ -8741,7 +8741,7 @@
             </summary>
             <param name="type">The type.</param>
             <returns>
-		<c>true</c> if this instance can sort for the specified type; otherwise, <c>false</c>.
+            	<c>true</c> if this instance can sort for the specified type; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:System.Data.Entity.Internal.ObservableBackedBindingList`1.#ctor(System.Collections.ObjectModel.ObservableCollection{`0})">
@@ -8853,7 +8853,7 @@
         </member>
         <member name="T:System.Data.Entity.Internal.InternalPropertyEntry">
             <summary>
-            The internal class used to implement <see cref="T:System.Data.Entity.Infrastructure.DbPropertyEntry"/> and
+            The internal class used to implement <see cref="T:System.Data.Entity.Infrastructure.DbPropertyEntry"/> and 
             <see cref="T:System.Data.Entity.Infrastructure.DbPropertyEntry`2"/>.
             This internal class contains all the common implementation between the generic and non-generic
             entry classes and also allows for a clean internal factoring without compromising the public API.
@@ -9211,7 +9211,7 @@
         </member>
         <member name="T:System.Data.Entity.Internal.InternalCollectionEntry">
             <summary>
-            The internal class used to implement <see cref="T:System.Data.Entity.Infrastructure.DbCollectionEntry"/> and
+            The internal class used to implement <see cref="T:System.Data.Entity.Infrastructure.DbCollectionEntry"/> and 
             <see cref="T:System.Data.Entity.Infrastructure.DbCollectionEntry`2"/>.
             This internal class contains all the common implementation between the generic and non-generic
             entry classes and also allows for a clean internal factoring without compromising the public API.
@@ -9516,7 +9516,7 @@
             property itself is a complex property.
             </summary>
             <value>
-		<c>true</c> if this instance is complex; otherwise, <c>false</c>.
+            	<c>true</c> if this instance is complex; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:System.Data.Entity.Internal.PropertyEntryMetadata.MemberEntryType">
@@ -9730,7 +9730,7 @@
             Gets a value indicating whether this item represents a complex property.
             </summary>
             <value>
-		<c>true</c> If this instance represents a complex property; otherwise, <c>false</c>.
+            	<c>true</c> If this instance represents a complex property; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:System.Data.Entity.Internal.ClonedPropertyValuesItem.Type">
@@ -9797,7 +9797,7 @@
             Gets a value indicating whether this item represents a complex property.
             </summary>
             <value>
-		<c>true</c> If this instance represents a complex property; otherwise, <c>false</c>.
+            	<c>true</c> If this instance represents a complex property; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:System.Data.Entity.Internal.DbDataRecordPropertyValuesItem.Type">
@@ -9995,7 +9995,7 @@
             </summary>
             <param name="obj">The <see cref="T:System.Object"/> to compare with this instance.</param>
             <returns>
-		<c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+            	<c>true</c> if the specified <see cref="T:System.Object"/> is equal to this instance; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:System.Data.Entity.Internal.InternalEntityEntry.Equals(System.Data.Entity.Internal.InternalEntityEntry)">
@@ -10006,7 +10006,7 @@
             </summary>
             <param name="other">The <see cref="T:System.Data.Entity.Internal.InternalEntityEntry"/> to compare with this instance.</param>
             <returns>
-		<c>true</c> if the specified <see cref="T:System.Data.Entity.Internal.InternalEntityEntry"/> is equal to this instance; otherwise, <c>false</c>.
+            	<c>true</c> if the specified <see cref="T:System.Data.Entity.Internal.InternalEntityEntry"/> is equal to this instance; otherwise, <c>false</c>.
             </returns>
         </member>
         <member name="M:System.Data.Entity.Internal.InternalEntityEntry.GetHashCode">
@@ -10014,7 +10014,7 @@
             Returns a hash code for this instance.
             </summary>
             <returns>
-            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
             </returns>
         </member>
         <member name="P:System.Data.Entity.Internal.InternalEntityEntry.Entity">
@@ -10955,7 +10955,7 @@
             <param name="targetType">Whether the currently processed type is the target type or one of the ancestor types.
             </param>
             <returns>
-            <see cref="T:System.Data.Entity.Internal.Validation.EntityValidator"/> for the given <paramref name="entityEntry"/>. Possibly null
+            <see cref="T:System.Data.Entity.Internal.Validation.EntityValidator"/> for the given <paramref name="entityEntry"/>. Possibly null 
             if no validation has been specified for this entity type.
             </returns>
         </member>
@@ -11012,8 +11012,8 @@
             </summary>
             <param name="attributes">Attributes used to build validators.</param>
             <returns>
-            A list of <see cref="T:System.Data.Entity.Internal.Validation.ValidationAttributeValidator"/>s built from <paramref name="attributes"/>.
-            Possibly empty, never null.
+            A list of <see cref="T:System.Data.Entity.Internal.Validation.ValidationAttributeValidator"/>s built from <paramref name="attributes"/>. 
+            Possibly empty, never null. 
             </returns>
         </member>
         <member name="M:System.Data.Entity.Internal.Validation.EntityValidatorBuilder.GetPublicInstanceProperties(System.Type)">
@@ -11048,7 +11048,7 @@
         </member>
         <member name="F:System.Data.Entity.Internal.Validation.ValidatableObjectValidator._displayAttribute">
             <summary>
-            Display attribute used to specify the display name for an entity or complex property.
+            Display attribute used to specify the display name for an entity or complex property. 
             </summary>
         </member>
         <member name="M:System.Data.Entity.Internal.Validation.ValidatableObjectValidator.Validate(System.Data.Entity.Internal.Validation.EntityValidationContext,System.Data.Entity.Internal.InternalMemberEntry)">
@@ -11058,7 +11058,7 @@
             </summary>
             <param name="entityValidationContext">Validation context. Never null.</param>
             <param name="property">
-            Property to validate. Null if this is the entity that will be validated. Never null if this
+            Property to validate. Null if this is the entity that will be validated. Never null if this 
             is the complex type that will be validated.
             </param>
             <returns>Validation error as <see cref="T:System.Collections.Generic.IEnumerable`1"/>. Empty if no errors. Never null.
@@ -11074,23 +11074,23 @@
         </member>
         <member name="T:System.Data.Entity.Internal.Validation.ValidationAttributeValidator">
             <summary>
-            Validates a property, complex property or an entity using validation attributes the property
+            Validates a property, complex property or an entity using validation attributes the property 
             or the complex/entity type is decorated with.
             </summary>
             <remarks>
-            Note that this class is used for validating primitive properties using attributes declared on the property
+            Note that this class is used for validating primitive properties using attributes declared on the property 
             (property level validation) and complex properties and entities using attributes declared on the type
             (type level validation).
             </remarks>
         </member>
         <member name="F:System.Data.Entity.Internal.Validation.ValidationAttributeValidator._displayAttribute">
             <summary>
-            Display attribute used to specify the display name for a property or entity.
+            Display attribute used to specify the display name for a property or entity. 
             </summary>
         </member>
         <member name="F:System.Data.Entity.Internal.Validation.ValidationAttributeValidator._validationAttribute">
             <summary>
-            Validation attribute used to validate a property or an entity.
+            Validation attribute used to validate a property or an entity. 
             </summary>
         </member>
         <member name="M:System.Data.Entity.Internal.Validation.ValidationAttributeValidator.#ctor(System.ComponentModel.DataAnnotations.ValidationAttribute,System.ComponentModel.DataAnnotations.DisplayAttribute)">
@@ -11134,7 +11134,7 @@
             </summary>
             <param name="entityEntry">Entity the validator is requested for.</param>
             <returns>
-            <see cref="T:System.Data.Entity.Internal.Validation.EntityValidator"/> to validate <paramref name="entityEntry"/>. Possibly null if no validation
+            <see cref="T:System.Data.Entity.Internal.Validation.EntityValidator"/> to validate <paramref name="entityEntry"/>. Possibly null if no validation 
             has been specified for the entity.
             </returns>
         </member>
@@ -11144,7 +11144,7 @@
             </summary>
             <param name="property">Navigation property the validator is requested for.</param>
             <returns>
-            Validator to validate <paramref name="property"/>. Possibly null if no validation
+            Validator to validate <paramref name="property"/>. Possibly null if no validation 
             has been specified for the requested property.
             </returns>
         </member>
@@ -11155,13 +11155,13 @@
             <param name="entityValidator">Entity validator.</param>
             <param name="memberEntry">Property to get a validator for.</param>
             <returns>
-            Validator to validate <paramref name="memberEntry"/>. Possibly null if there is no validation for the
+            Validator to validate <paramref name="memberEntry"/>. Possibly null if there is no validation for the 
             <paramref name="memberEntry"/>.
             </returns>
             <remarks>
             For complex properties this method walks up the type hierarchy to get to the entity level and then goes down
             and gets a validator for the child property that is an ancestor of the property to validate. If a validator
-            returned for an ancestor is null it means that there is no validation defined beneath and the method just
+            returned for an ancestor is null it means that there is no validation defined beneath and the method just 
             propagates (and eventually returns) null.
             </remarks>
         </member>
@@ -11177,7 +11177,7 @@
         <member name="T:System.Data.Entity.ModelConfiguration.ComplexTypeConfiguration`1">
             <summary>
               Allows configuration to be performed for an complex type in a model.
-
+            
               A ComplexTypeConfiguration can be obtained via the ComplexType method on
               <see cref="T:System.Data.Entity.DbModelBuilder"/> or a custom type derived from ComplexTypeConfiguration
               can be registered via the Configurations property on <see cref="T:System.Data.Entity.DbModelBuilder"/>.
@@ -11197,7 +11197,7 @@
             <typeparam name = "T">The type of the property being configured.</typeparam>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11209,7 +11209,7 @@
             <typeparam name = "T">The type of the property being configured.</typeparam>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11220,7 +11220,7 @@
             </summary>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11231,7 +11231,7 @@
             </summary>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11242,7 +11242,7 @@
             </summary>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11253,7 +11253,7 @@
             </summary>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11264,7 +11264,7 @@
             </summary>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11275,7 +11275,7 @@
             </summary>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11286,7 +11286,7 @@
             </summary>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11297,7 +11297,7 @@
             </summary>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11308,7 +11308,7 @@
             </summary>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11319,7 +11319,7 @@
             </summary>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to configure the property.</returns>
@@ -11331,7 +11331,7 @@
             <typeparam name = "TProperty">The type of the property to be ignored.</typeparam>
             <param name = "propertyExpression">
               A lambda expression representing the property to be configured.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
         </member>
@@ -11461,10 +11461,10 @@
             <summary>
               Configures the table name that the foreign key column(s) reside in.
               The table that is specified must already be mapped for the entity type.
-
+            
               If you want the foreign key(s) to reside in their own table then use the Map method
-              on <see cref = "T:System.Data.Entity.ModelConfiguration.EntityTypeConfiguration" /> to perform
-              entity splitting to create the table with just the primary key property. Foreign keys can
+              on <see cref = "T:System.Data.Entity.ModelConfiguration.EntityTypeConfiguration" /> to perform 
+              entity splitting to create the table with just the primary key property. Foreign keys can 
               then be added to the table via this method.
             </summary>
             <param name = "tableName">Name of the table.</param>
@@ -11474,10 +11474,10 @@
             <summary>
               Configures the table name and schema that the foreign key column(s) reside in.
               The table that is specified must already be mapped for the entity type.
-
+            
               If you want the foreign key(s) to reside in their own table then use the Map method
-              on <see cref = "T:System.Data.Entity.ModelConfiguration.EntityTypeConfiguration" /> to perform
-              entity splitting to create the table with just the primary key property. Foreign keys can
+              on <see cref = "T:System.Data.Entity.ModelConfiguration.EntityTypeConfiguration" /> to perform 
+              entity splitting to create the table with just the primary key property. Foreign keys can 
               then be added to the table via this method.
             </summary>
             <param name = "tableName">Name of the table.</param>
@@ -11572,13 +11572,13 @@
         </member>
         <member name="T:System.Data.Entity.ModelConfiguration.Configuration.LengthPropertyConfiguration">
             <summary>
-              Used to configure a property with length facets for an entity type or complex type.
+              Used to configure a property with length facets for an entity type or complex type. 
               This configuration functionality is available via the Code First Fluent API, see <see cref="T:System.Data.Entity.DbModelBuilder"/>.
             </summary>
         </member>
         <member name="T:System.Data.Entity.ModelConfiguration.Configuration.PrimitivePropertyConfiguration">
             <summary>
-              Used to configure a primitive property of an entity type or complex type.
+              Used to configure a primitive property of an entity type or complex type. 
               This configuration functionality is available via the Code First Fluent API, see <see cref="T:System.Data.Entity.DbModelBuilder"/>.
             </summary>
         </member>
@@ -11782,7 +11782,7 @@
         </member>
         <member name="T:System.Data.Entity.ModelConfiguration.Configuration.DateTimePropertyConfiguration">
             <summary>
-              Used to configure a <see cref="T:System.DateTime"/> property of an entity type or complex type.
+              Used to configure a <see cref="T:System.DateTime"/> property of an entity type or complex type. 
               This configuration functionality is available via the Code First Fluent API, see <see cref="T:System.Data.Entity.DbModelBuilder"/>.
             </summary>
         </member>
@@ -11861,7 +11861,7 @@
         </member>
         <member name="T:System.Data.Entity.ModelConfiguration.Configuration.DecimalPropertyConfiguration">
             <summary>
-              Used to configure a <see cref="T:System.decimal"/> property of an entity type or complex type.
+              Used to configure a <see cref="T:System.decimal"/> property of an entity type or complex type. 
               This configuration functionality is available via the Code First Fluent API, see <see cref="T:System.Data.Entity.DbModelBuilder"/>.
             </summary>
         </member>
@@ -12103,8 +12103,8 @@
             </summary>
             <typeparam name = "TKey">The type of the key.</typeparam>
             <param name = "foreignKeyExpression">
-              A lambda expression representing the property to be used as the foreign key.
-              If the foreign key is made up of multiple properties then specify an anonymous type including the properties.
+              A lambda expression representing the property to be used as the foreign key. 
+              If the foreign key is made up of multiple properties then specify an anonymous type including the properties. 
               When using multiple foreign key properties, the properties must be specified in the same order that the
               the primary key properties were configured for the principal entity type.
             </param>
@@ -12132,7 +12132,7 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.EntityMappingConfiguration`1.Properties``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
             <summary>
               Configures the properties that will be included in this mapping fragment.
-              If this method is not called then all properties that have not yet been
+              If this method is not called then all properties that have not yet been 
               included in a mapping fragment will be configured.
             </summary>
             <typeparam name = "TObject">An anonymous type including the properties to be mapped.</typeparam>
@@ -12145,8 +12145,8 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.EntityMappingConfiguration`1.MapInheritedProperties">
             <summary>
               Re-maps all properties inherited from base types.
-
-              When configuring a derived type to be mapped to a separate table this will cause all properties to
+            
+              When configuring a derived type to be mapped to a separate table this will cause all properties to 
               be included in the table rather than just the non-inherited properties. This is known as
               Table per Concrete Type (TPC) mapping.
             </summary>
@@ -12178,7 +12178,7 @@
             <typeparam name = "TProperty">The type of the property being used to discriminate between types.</typeparam>
             <param name = "property">
               A lambda expression representing the property being used to discriminate between types.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object to further configure the discriminator condition.</returns>
@@ -12192,8 +12192,8 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.NotNullConditionConfiguration.HasValue">
             <summary>
               Configures the condition to require a value in the property.
-
-              Rows that do not have a value assigned to column that this property is stored in are
+            
+              Rows that do not have a value assigned to column that this property is stored in are 
               assumed to be of the base type of this entity type.
             </summary>
         </member>
@@ -12205,7 +12205,7 @@
         </member>
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.ValueConditionConfiguration.HasValue``1(``0)">
             <summary>
-              Configures the discriminator value used to identify the entity type being
+              Configures the discriminator value used to identify the entity type being 
               configured from other types in the inheritance hierarchy.
             </summary>
             <typeparam name = "T">Type of the discriminator value.</typeparam>
@@ -12214,7 +12214,7 @@
         </member>
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.ValueConditionConfiguration.HasValue``1(System.Nullable{``0})">
             <summary>
-              Configures the discriminator value used to identify the entity type being
+              Configures the discriminator value used to identify the entity type being 
               configured from other types in the inheritance hierarchy.
             </summary>
             <typeparam name = "T">Type of the discriminator value.</typeparam>
@@ -12223,7 +12223,7 @@
         </member>
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.ValueConditionConfiguration.HasValue(System.String)">
             <summary>
-              Configures the discriminator value used to identify the entity type being
+              Configures the discriminator value used to identify the entity type being 
               configured from other types in the inheritance hierarchy.
             </summary>
             <param name = "value">The value to be used to identify the entity type.</param>
@@ -12237,7 +12237,7 @@
               Derived configuration classes are created by deriving from <see cref="T:System.Data.Entity.ModelConfiguration.Configuration.Types.EntityTypeConfiguration"/>
               or <see cref="T:System.Data.Entity.ModelConfiguration.Configuration.Types.ComplexTypeConfiguration"/> and using a type to be included in the model as the generic
               parameter.
-
+            
               Configuration can be performed without creating derived configuration classes via the Entity and ComplexType
               methods on <see cref="T:System.Data.Entity.DbModelBuilder"/>.
             </remarks>
@@ -12279,7 +12279,7 @@
             </summary>
             <param name = "navigationPropertyExpression">
               An lambda expression representing the navigation property on the other end of the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12296,7 +12296,7 @@
             </summary>
             <param name = "navigationPropertyExpression">
               An lambda expression representing the navigation property on the other end of the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12313,7 +12313,7 @@
             </summary>
             <param name = "navigationPropertyExpression">
               An lambda expression representing the navigation property on the other end of the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12343,7 +12343,7 @@
             </summary>
             <param name = "navigationPropertyExpression">
               An lambda expression representing the navigation property on the other end of the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12360,7 +12360,7 @@
             </summary>
             <param name = "navigationPropertyExpression">
               An lambda expression representing the navigation property on the other end of the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12374,12 +12374,12 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.OptionalNavigationPropertyConfiguration`2.WithOptionalDependent(System.Linq.Expressions.Expression{System.Func{`1,`0}})">
             <summary>
               Configures the relationship to be optional:optional with a navigation property on the other side of the relationship.
-              The entity type being configured will be the dependent and contain a foreign key to the principal.
+              The entity type being configured will be the dependent and contain a foreign key to the principal. 
               The entity type that the relationship targets will be the principal in the relationship.
             </summary>
             <param name = "navigationPropertyExpression">
               An lambda expression representing the navigation property on the other end of the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12387,7 +12387,7 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.OptionalNavigationPropertyConfiguration`2.WithOptionalDependent">
             <summary>
               Configures the relationship to be optional:optional without a navigation property on the other side of the relationship.
-              The entity type being configured will be the dependent and contain a foreign key to the principal.
+              The entity type being configured will be the dependent and contain a foreign key to the principal. 
               The entity type that the relationship targets will be the principal in the relationship.
             </summary>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12395,7 +12395,7 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.OptionalNavigationPropertyConfiguration`2.WithOptionalPrincipal(System.Linq.Expressions.Expression{System.Func{`1,`0}})">
             <summary>
               Configures the relationship to be optional:optional with a navigation property on the other side of the relationship.
-              The entity type being configured will be the principal in the relationship.
+              The entity type being configured will be the principal in the relationship. 
               The entity type that the relationship targets will be the dependent and contain a foreign key to the principal.
             </summary>
             <param name = "navigationPropertyExpression">
@@ -12406,7 +12406,7 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.OptionalNavigationPropertyConfiguration`2.WithOptionalPrincipal">
             <summary>
               Configures the relationship to be optional:optional without a navigation property on the other side of the relationship.
-              The entity type being configured will be the principal in the relationship.
+              The entity type being configured will be the principal in the relationship. 
               The entity type that the relationship targets will be the dependent and contain a foreign key to the principal.
             </summary>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12488,7 +12488,7 @@
         </member>
         <member name="T:System.Data.Entity.ModelConfiguration.Conventions.ColumnTypeCasingConvention">
             <summary>
-              Convention to convert any data types that were explicitly specified, via data annotations or <see cref="T:System.Data.Entity.DbModelBuilder"/> API,
+              Convention to convert any data types that were explicitly specified, via data annotations or <see cref="T:System.Data.Entity.DbModelBuilder"/> API, 
               to be lower case. The default SqlClient provider is case sensitive and requires data types to be lower case. This convention
               allows the <see cref="T:System.ComponentModel.DataAnnotations.ColumnAttrbiute"/> and <see cref="T:System.Data.Entity.DbModelBuilder"/> API to be case insensitive.
             </summary>
@@ -12568,7 +12568,7 @@
         </member>
         <member name="T:System.Data.Entity.ModelConfiguration.Conventions.IdKeyDiscoveryConvention">
             <summary>
-              Convention to detect primary key properties.
+              Convention to detect primary key properties. 
               Recognized naming patterns in order of precedence are:
               1. 'Id'
               2. [type name]Id
@@ -12610,7 +12610,7 @@
         </member>
         <member name="T:System.Data.Entity.ModelConfiguration.Conventions.AssociationInverseDiscoveryConvention">
             <summary>
-              Convention to detect navigation properties to be inverses of each other when only one pair
+              Convention to detect navigation properties to be inverses of each other when only one pair 
               of navigation properties exists between the related types.
             </summary>
         </member>
@@ -12628,7 +12628,7 @@
         <member name="T:System.Data.Entity.ModelConfiguration.EntityTypeConfiguration`1">
             <summary>
               Allows configuration to be performed for an entity type in a model.
-
+            
               An EntityTypeConfiguration can be obtained via the Entity method on
               <see cref="T:System.Data.Entity.DbModelBuilder"/> or a custom type derived from EntityTypeConfiguration
               can be registered via the Configurations property on <see cref="T:System.Data.Entity.DbModelBuilder"/>.
@@ -12645,11 +12645,11 @@
             </summary>
             <typeparam name = "TKey">The type of the key.</typeparam>
             <param name = "keyExpression">
-              A lambda expression representing the property to be used as the primary key.
-              C#: t => t.Id
+              A lambda expression representing the property to be used as the primary key. 
+              C#: t => t.Id   
               VB.Net: Function(t) t.Id
-
-              If the primary key is made up of multiple properties then specify an anonymous type including the properties.
+            
+              If the primary key is made up of multiple properties then specify an anonymous type including the properties. 
               C#: t => new { t.Id1, t.Id2 }
               VB.Net: Function(t) New From { t.Id1, t.Id2 }
             </param>
@@ -12680,12 +12680,12 @@
             <summary>
               Allows advanced configuration related to how this entity type is mapped to the database schema.
               By default, any configuration will also apply to any type derived from this entity type.
-
+            
               Derived types can be configured via the overload of Map that configures a derived type or
               by using an EntityTypeConfiguration for the derived type.
-
+            
               The properties of an entity can be split between multiple tables using multiple Map calls.
-
+            
               Calls to Map are additive, subsequent calls will not override configuration already preformed via Map.
             </summary>
             <param name="entityMappingConfigurationAction">An action that performs configuration against an <see cref="T:System.Data.Entity.ModelConfiguration.Configuration.EntityMappingConfiguration`1"/>.</param>
@@ -12709,7 +12709,7 @@
             <typeparam name = "TTargetEntity">The type of the entity at the other end of the relationship.</typeparam>
             <param name = "navigationPropertyExpression">
               A lambda expression representing the navigation property for the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12723,7 +12723,7 @@
             <typeparam name = "TTargetEntity">The type of the entity at the other end of the relationship.</typeparam>
             <param name = "navigationPropertyExpression">
               A lambda expression representing the navigation property for the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12735,7 +12735,7 @@
             <typeparam name = "TTargetEntity">The type of the entity at the other end of the relationship.</typeparam>
             <param name = "navigationPropertyExpression">
               A lambda expression representing the navigation property for the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12746,49 +12746,49 @@
             This code centric approach to building an Entity Data Model (EDM) model is known as 'Code First'.
             </summary>
             <remarks>
-            DbModelBuilder is typically used to configure a model by overriding <see cref="M:System.Data.Entity.DbContext.OnModelCreating(System.Data.Entity.DbModelBuilder)"/>.
-            You can also use DbModelBuilder independently of DbContext to build a model and then construct a
+            DbModelBuilder is typically used to configure a model by overriding <see cref="M:System.Data.Entity.DbContext.OnModelCreating(System.Data.Entity.DbModelBuilder)"/>. 
+            You can also use DbModelBuilder independently of DbContext to build a model and then construct a 
             <see cref="T:System.Data.Entity.DbContext"/> or <see cref="T:System.Data.Objects.ObjectContext"/>.
             The recommended approach, however, is to use OnModelCreating in <see cref="T:System.Data.Entity.DbContext"/> as
             the workflow is more intuitive and takes care of common tasks, such as caching the created model.
-
+            
             Types that form your model are registered with DbModelBuilder and optional configuration can be
             performed by applying data annotations to your classes and/or using the fluent style DbModelBuilder
-            API.
-
+            API. 
+            
             When the Build method is called a set of conventions are run to discover the initial model.
             These conventions will automatically discover aspects of the model, such as primary keys, and
             will also process any data annotations that were specified on your classes. Finally
-            any configuration that was performed using the DbModelBuilder API is applied.
-
-            Configuration done via the DbModelBuilder API takes precedence over data annotations which
+            any configuration that was performed using the DbModelBuilder API is applied. 
+            
+            Configuration done via the DbModelBuilder API takes precedence over data annotations which 
             in turn take precedence over the default conventions.
             </remarks>
         </member>
         <member name="M:System.Data.Entity.DbModelBuilder.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:System.Data.Entity.DbModelBuilder"/> class.
-
-            The process of discovering the initial model will use the set of conventions included
-            in the most recent version of the Entity Framework installed on your machine.
+            Initializes a new instance of the <see cref="T:System.Data.Entity.DbModelBuilder"/> class. 
+            
+            The process of discovering the initial model will use the set of conventions included 
+            in the most recent version of the Entity Framework installed on your machine. 
             </summary>
             <remarks>
-            Upgrading to newer versions of the Entity Framework may cause breaking changes
-            in your application because new conventions may cause the initial model to be
-            configured differently. There is an alternate constructor that allows a specific
+            Upgrading to newer versions of the Entity Framework may cause breaking changes 
+            in your application because new conventions may cause the initial model to be 
+            configured differently. There is an alternate constructor that allows a specific 
             version of conventions to be specified.
             </remarks>
         </member>
         <member name="M:System.Data.Entity.DbModelBuilder.#ctor(System.Data.Entity.DbModelBuilderVersion)">
             <summary>
-            Initializes a new instance of the <see cref="T:System.Data.Entity.DbModelBuilder"/> class that will use
+            Initializes a new instance of the <see cref="T:System.Data.Entity.DbModelBuilder"/> class that will use 
             a specific set of conventions to discover the initial model.
             </summary>
             <param name="modelBuilderVersion">The version of conventions to be used.</param>
         </member>
         <member name="M:System.Data.Entity.DbModelBuilder.Ignore``1">
             <summary>
-            Excludes a type from the model. This is used to remove types from the model that were added
+            Excludes a type from the model. This is used to remove types from the model that were added 
             by convention during initial model discovery.
             </summary>
             <typeparam name="T">The type to be excluded.</typeparam>
@@ -12796,7 +12796,7 @@
         </member>
         <member name="M:System.Data.Entity.DbModelBuilder.Ignore(System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
-            Excludes a type(s) from the model. This is used to remove types from the model that were added
+            Excludes a type(s) from the model. This is used to remove types from the model that were added 
             by convention during initial model discovery.
             </summary>
             <param name="types">The types to be excluded from the model.</param>
@@ -12854,7 +12854,7 @@
         </member>
         <member name="P:System.Data.Entity.DbModelBuilder.Configurations">
             <summary>
-            Gets the <see cref="T:System.Data.Entity.ModelConfiguration.Configuration.ConfigurationRegistrar"/> for this DbModelBuilder.
+            Gets the <see cref="T:System.Data.Entity.ModelConfiguration.Configuration.ConfigurationRegistrar"/> for this DbModelBuilder. 
             The registrar allows derived entity and complex type configurations to be registered with this builder.
             </summary>
         </member>
@@ -12882,12 +12882,12 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Edm.EdmAssociationTypeExtensions.TryGuessPrincipalAndDependentEnds(System.Data.Edm.EdmAssociationType,System.Data.Edm.EdmAssociationEnd@,System.Data.Edm.EdmAssociationEnd@)">
             <summary>
               Attempt to determine the principal and dependent ends of this association.
-
+            
               The following table illustrates the solution space.
-
+             
               Source | Target || Prin  | Dep   |
               -------|--------||-------|-------|
-              1      | 1      || -     | -     |
+              1      | 1      || -     | -     | 
               1      | 0..1   || Sr    | Ta    |
               1      | *      || Sr    | Ta    |
               0..1   | 1      || Ta    | Sr    |
@@ -12911,7 +12911,7 @@
             </summary>
             <param name = "navigationPropertyExpression">
               An lambda expression representing the navigation property on the other end of the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12928,7 +12928,7 @@
             </summary>
             <param name = "navigationPropertyExpression">
               An lambda expression representing the navigation property on the other end of the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12942,12 +12942,12 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.RequiredNavigationPropertyConfiguration`2.WithRequiredDependent(System.Linq.Expressions.Expression{System.Func{`1,`0}})">
             <summary>
               Configures the relationship to be required:required with a navigation property on the other side of the relationship.
-              The entity type being configured will be the dependent and contain a foreign key to the principal.
+              The entity type being configured will be the dependent and contain a foreign key to the principal. 
               The entity type that the relationship targets will be the principal in the relationship.
             </summary>
             <param name = "navigationPropertyExpression">
               An lambda expression representing the navigation property on the other end of the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12955,7 +12955,7 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.RequiredNavigationPropertyConfiguration`2.WithRequiredDependent">
             <summary>
               Configures the relationship to be required:required without a navigation property on the other side of the relationship.
-              The entity type being configured will be the dependent and contain a foreign key to the principal.
+              The entity type being configured will be the dependent and contain a foreign key to the principal. 
               The entity type that the relationship targets will be the principal in the relationship.
             </summary>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12963,12 +12963,12 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.RequiredNavigationPropertyConfiguration`2.WithRequiredPrincipal(System.Linq.Expressions.Expression{System.Func{`1,`0}})">
             <summary>
               Configures the relationship to be required:required with a navigation property on the other side of the relationship.
-              The entity type being configured will be the principal in the relationship.
+              The entity type being configured will be the principal in the relationship. 
               The entity type that the relationship targets will be the dependent and contain a foreign key to the principal.
             </summary>
             <param name = "navigationPropertyExpression">
               An lambda expression representing the navigation property on the other end of the relationship.
-              C#: t => t.MyProperty
+              C#: t => t.MyProperty   
               VB.Net: Function(t) t.MyProperty
             </param>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -12976,7 +12976,7 @@
         <member name="M:System.Data.Entity.ModelConfiguration.Configuration.RequiredNavigationPropertyConfiguration`2.WithRequiredPrincipal">
             <summary>
               Configures the relationship to be required:required without a navigation property on the other side of the relationship.
-              The entity type being configured will be the principal in the relationship.
+              The entity type being configured will be the principal in the relationship. 
               The entity type that the relationship targets will be the dependent and contain a foreign key to the principal.
             </summary>
             <returns>A configuration object that can be used to further configure the relationship.</returns>
@@ -13001,7 +13001,7 @@
         <member name="T:System.Data.Entity.Validation.DbEntityValidationException">
             <summary>
             Exception thrown from <see cref="M:System.Data.Entity.DbContext.SaveChanges"/> when validating entities fails.
-            </summary>
+            </summary>    
         </member>
         <member name="M:System.Data.Entity.Validation.DbEntityValidationException.#ctor">
             <summary>
@@ -13154,7 +13154,7 @@
         <member name="T:System.ComponentModel.DataAnnotations.ForeignKeyAttribute">
             <summary>
             Denotes a property used as a foreign key in a relationship.
-            The annotation may be placed on the foreign key property and specify the associated navigation property name,
+            The annotation may be placed on the foreign key property and specify the associated navigation property name, 
             or placed on a navigation property and specify the associated foreign key name.
             </summary>
         </member>
@@ -13187,7 +13187,7 @@
         </member>
         <member name="P:System.ComponentModel.DataAnnotations.InversePropertyAttribute.Property">
             <summary>
-            The navigation property representing the other end of the same relationship.
+            The navigation property representing the other end of the same relationship. 
             </summary>
         </member>
         <member name="T:System.ComponentModel.DataAnnotations.ColumnAttribute">
@@ -13246,7 +13246,7 @@
             Determines whether a specified object is valid. (Overrides <see cref="M:System.ComponentModel.DataAnnotations.ValidationAttribute.IsValid(System.Object)"/>)
             </summary>
             <remarks>
-            This method returns <c>true</c> if the <paramref name="value"/> is null.
+            This method returns <c>true</c> if the <paramref name="value"/> is null.  
             It is assumed the <see cref="T:System.ComponentModel.DataAnnotations.RequiredAttribute"/> is used if the value may not be null.
             </remarks>
             <param name="value">The object to validate.</param>
@@ -13289,7 +13289,7 @@
             Determines whether a specified object is valid. (Overrides <see cref="M:System.ComponentModel.DataAnnotations.ValidationAttribute.IsValid(System.Object)"/>)
             </summary>
             <remarks>
-            This method returns <c>true</c> if the <paramref name="value"/> is null.
+            This method returns <c>true</c> if the <paramref name="value"/> is null.  
             It is assumed the <see cref="T:System.ComponentModel.DataAnnotations.RequiredAttribute"/> is used if the value may not be null.
             </remarks>
             <param name="value">The object to validate.</param>
@@ -13357,7 +13357,7 @@
         <member name="T:System.ComponentModel.DataAnnotations.ComplexTypeAttribute">
             <summary>
             Denotes that the class is a complex type.
-            Complex types are non-scalar properties of entity types that enable scalar properties to be organized within entities.
+            Complex types are non-scalar properties of entity types that enable scalar properties to be organized within entities. 
             Complex types do not have keys and cannot be managed by the Entity Framework apart from the parent object.
             </summary>
         </member>
@@ -13401,7 +13401,7 @@
         <member name="T:System.ComponentModel.DataAnnotations.ResourceProvider">
              <summary>
                 AutoGenerated resource class. Usage:
-
+            
                     string s = ResourceProvider.GetString(ResourceProvider.MyIdenfitier);
              </summary>
         </member>
@@ -13424,7 +13424,7 @@
         <member name="T:System.Data.Entity.ModelConfiguration.Resources.ResourceProvider">
              <summary>
                 AutoGenerated resource class. Usage:
-
+            
                     string s = ResourceProvider.GetString(ResourceProvider.MyIdenfitier);
              </summary>
         </member>
@@ -13447,7 +13447,7 @@
         <member name="T:System.Data.Entity.Resources.ResourceProvider">
              <summary>
                 AutoGenerated resource class. Usage:
-
+            
                     string s = ResourceProvider.GetString(ResourceProvider.MyIdenfitier);
              </summary>
         </member>
@@ -13470,7 +13470,7 @@
         <member name="T:System.Data.Edm.EntityRes">
              <summary>
                 AutoGenerated resource class. Usage:
-
+            
                     string s = EntityRes.GetString(EntityRes.MyIdenfitier);
              </summary>
         </member>

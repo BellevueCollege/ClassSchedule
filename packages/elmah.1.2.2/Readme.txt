@@ -1,5 +1,5 @@
 A new HTTP handler has been configured in your application for consulting the
-error log and its feeds. It is reachable at elmah.axd under your application
+error log and its feeds. It is reachable at elmah.axd under your application 
 root. If, for example, your application is deployed at http://www.example.com,
 the URL for ELMAH would be http://www.example.com/elmah.axd. You can, of
 course, change this path in your application's configuration file.

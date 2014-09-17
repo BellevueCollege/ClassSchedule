@@ -376,7 +376,7 @@
             Encoded string for use in HTML.
             </returns>
             <exception cref="!:InvalidUnicodeValueException">Thrown if a character with an invalid Unicode value is encountered within the input string.</exception>
-            <exception cref="!:InvalidSurrogatePairException">Thrown if a high surrogate code point is encoded without a following low surrogate code point, or a
+            <exception cref="!:InvalidSurrogatePairException">Thrown if a high surrogate code point is encoded without a following low surrogate code point, or a 
             low surrogate code point is encounter without having been preceded by a high surrogate code point.</exception>
         </member>
         <member name="M:Microsoft.Security.Application.UnicodeCharacterEncoder.InitialiseSafeList">
@@ -826,181 +826,181 @@
             <summary>
             Provides the safe characters for the Georgian code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>        
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.HangulJamo">
             <summary>
             Provides the safe characters for the Hangul Jamo code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>   
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Ethiopic">
             <summary>
             Provides the safe characters for the Ethiopic code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>   
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.EthiopicSupplement">
             <summary>
             Provides the safe characters for the Ethiopic Supplement code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>   
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Cherokee">
             <summary>
             Provides the safe characters for the Cherokee code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>   
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.UnifiedCanadianAboriginalSyllabics">
             <summary>
             Provides the safe characters for the Unified Canadian Aboriginal Syllabic code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>  
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Ogham">
             <summary>
             Provides the safe characters for the Ogham code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns> 
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Runic">
             <summary>
             Provides the safe characters for the Runic code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns> 
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Tagalog">
             <summary>
             Provides the safe characters for the Tagalog code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns> 
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Hanunoo">
             <summary>
             Provides the safe characters for the Hanunoo code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns> 
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Buhid">
             <summary>
             Provides the safe characters for the Buhid code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns> 
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Tagbanwa">
             <summary>
             Provides the safe characters for the Tagbanwa code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns> 
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Khmer">
             <summary>
             Provides the safe characters for the Khmer code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns> 
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Mongolian">
             <summary>
             Provides the safe characters for the Mongolian code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns> 
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.UnifiedCanadianAboriginalSyllabicsExtended">
             <summary>
             Provides the safe characters for the Unified Canadian Aboriginal Syllabic Extended code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>  
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Limbu">
             <summary>
             Provides the safe characters for the Limbu code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>  
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.TaiLe">
             <summary>
             Provides the safe characters for the Tai Le code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>  
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.NewTaiLue">
             <summary>
             Provides the safe characters for the New Tai Lue code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>          
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.KhmerSymbols">
             <summary>
             Provides the safe characters for the Khmer Symbols code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>   
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Buginese">
             <summary>
             Provides the safe characters for the Khmer Symbols code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>   
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.TaiTham">
             <summary>
             Provides the safe characters for the Tai Tham code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>   
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Balinese">
             <summary>
             Provides the safe characters for the Balinese code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>   
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Sudanese">
             <summary>
             Provides the safe characters for the Sudanese code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>   
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.Lepcha">
             <summary>
             Provides the safe characters for the Lepcha code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>   
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.OlChiki">
             <summary>
             Provides the safe characters for the Ol Chiki code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>  
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.VedicExtensions">
             <summary>
             Provides the safe characters for the Vedic Extensions code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>  
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.PhoneticExtensions">
             <summary>
             Provides the safe characters for the Phonetic Extensions code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>  
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.PhoneticExtensionsSupplement">
             <summary>
             Provides the safe characters for the Phonetic Extensions Supplement code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>  
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.CombiningDiacriticalMarksSupplement">
             <summary>
             Provides the safe characters for the Combining Diacritical Marks Supplement code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>  
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.LowerMiddle.LatinExtendedAdditional">
             <summary>
             Provides the safe characters for the Latin Extended Addition code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>  
         </member>
         <member name="T:Microsoft.Security.Application.UrlEncoder">
             <summary>
@@ -1074,17 +1074,17 @@
         <member name="T:Microsoft.Security.Application.Encoder">
             <summary>
             Performs encoding of input strings to provide protection against
-            Cross-Site Scripting (XSS) attacks and LDAP injection attacks in
+            Cross-Site Scripting (XSS) attacks and LDAP injection attacks in 
             various contexts.
             </summary>
             <remarks>
-            This encoding library uses the Principle of Inclusions,
-            sometimes referred to as "safe-listing" to provide protection
-            against injection attacks.  With safe-listing protection,
-            algorithms look for valid inputs and automatically treat
-            everything outside that set as a potential attack.  This library
-            can be used as a defense in depth approach with other mitigation
-            techniques. It is suitable for applications with high security
+            This encoding library uses the Principle of Inclusions, 
+            sometimes referred to as "safe-listing" to provide protection 
+            against injection attacks.  With safe-listing protection, 
+            algorithms look for valid inputs and automatically treat 
+            everything outside that set as a potential attack.  This library 
+            can be used as a defense in depth approach with other mitigation 
+            techniques. It is suitable for applications with high security 
             requirements.
             </remarks>
         </member>
@@ -1112,8 +1112,8 @@
             <remarks>
             This method encodes all but known safe characters defined in the safe list.
             <newpara/>
-            RFC 4515 defines the format in which special characters need to be
-            escaped to be used inside a search filter. Special characters need to be
+            RFC 4515 defines the format in which special characters need to be 
+            escaped to be used inside a search filter. Special characters need to be 
             encoded in \XX format where XX is the hex representation of the character.
             <newpara/>
             The following examples illustrate the use of the escaping mechanism.
@@ -1134,9 +1134,9 @@
             <returns>Encoded string for use as a value in LDAP DNs.</returns>
             <remarks>This method encodes all but known safe characters defined in the safe list.
             <newpara/>
-            RFC 2253 defines the format in which special characters need to be
-            escaped to be used inside a search filter. Special characters need to be
-            encoded in #XX format where XX is the hex representation of the character or a
+            RFC 2253 defines the format in which special characters need to be 
+            escaped to be used inside a search filter. Special characters need to be 
+            encoded in #XX format where XX is the hex representation of the character or a 
             specific \ escape format.
             <newpara/>
             The following examples illustrate the use of the escaping mechanism.
@@ -1159,9 +1159,9 @@
             <returns>Encoded string for use as a value in LDAP DNs.</returns>\
             <remarks>This method encodes all but known safe characters defined in the safe list.
             <newpara/>
-            RFC 2253 defines the format in which special characters need to be
-            escaped to be used inside a search filter. Special characters need to be
-            encoded in #XX format where XX is the hex representation of the character or a
+            RFC 2253 defines the format in which special characters need to be 
+            escaped to be used inside a search filter. Special characters need to be 
+            encoded in #XX format where XX is the hex representation of the character or a 
             specific \ escape format.
             <newpara/>
             The following examples illustrate the use of the escaping mechanism.
@@ -1198,8 +1198,8 @@
             <returns>Encoded string for use in LDAP search queries.</returns>
             <remarks>This method encodes all but known safe characters defined in the safe list.
             <newpara/>
-            RFC 4515 defines the format in which special characters need to be
-            escaped to be used inside a search filter. Special characters need to be
+            RFC 4515 defines the format in which special characters need to be 
+            escaped to be used inside a search filter. Special characters need to be 
             encoded in \XX format where XX is the hex representation of the character.
             <newpara/>
             The following examples illustrate the use of the escaping mechanism.
@@ -1229,9 +1229,9 @@
             <item><term>C0 Controls and Basic Latin</term><term>0-9</term><description>Numbers</description>></item>
             </list>
             <newpara />
-            The CSS character escape sequence consists of a backslash character (\) followed by up to six hexadecimal digits that represent a character code from the ISO 10646 standard.
-            (The ISO 10646 standard is effectively equivalent to Unicode.) Any character other than a hexadecimal digit terminates the escape sequence. If a character that follows the
-            escape sequence is also a valid hexadecimal digit, it must either include six digits in the escape sequence or use a whitespace character to terminate the escape sequence.
+            The CSS character escape sequence consists of a backslash character (\) followed by up to six hexadecimal digits that represent a character code from the ISO 10646 standard. 
+            (The ISO 10646 standard is effectively equivalent to Unicode.) Any character other than a hexadecimal digit terminates the escape sequence. If a character that follows the 
+            escape sequence is also a valid hexadecimal digit, it must either include six digits in the escape sequence or use a whitespace character to terminate the escape sequence. 
             For example, \000020 denotes a space.
             </remarks>
         </member>
@@ -1341,7 +1341,7 @@
             Encoded string for use in URLs.
             </returns>
             <remarks>
-            This function encodes all but known safe characters.  Characters are encoded using %SINGLE_BYTE_HEX
+            This function encodes all but known safe characters.  Characters are encoded using %SINGLE_BYTE_HEX 
             and %DOUBLE_BYTE_HEX notation.
             <newpara/>
             Safe characters include:
@@ -1372,7 +1372,7 @@
             Encoded string for use in URLs.
             </returns>
             <remarks>
-            This function encodes all but known safe characters.  Characters are encoded using %SINGLE_BYTE_HEX
+            This function encodes all but known safe characters.  Characters are encoded using %SINGLE_BYTE_HEX 
             and %DOUBLE_BYTE_HEX notation.
             <newpara/>
             Safe characters include:
@@ -1404,7 +1404,7 @@
             Encoded string for use in URLs.
             </returns>
             <remarks>
-            This function encodes the output as per the encoding parameter (codepage) passed to it. It encodes
+            This function encodes the output as per the encoding parameter (codepage) passed to it. It encodes 
             all but known safe characters.  Characters are encoded using %SINGLE_BYTE_HEX and %DOUBLE_BYTE_HEX notation.
             <newpara/>
             Safe characters include:
@@ -1436,7 +1436,7 @@
             Encoded string for use in URLs.
             </returns>
             <remarks>
-            This function encodes the output as per the encoding parameter (codepage) passed to it. It encodes
+            This function encodes the output as per the encoding parameter (codepage) passed to it. It encodes 
             all but known safe characters.  Characters are encoded using %SINGLE_BYTE_HEX and %DOUBLE_BYTE_HEX notation.
             <newpara/>
             Safe characters include:
@@ -1468,7 +1468,7 @@
             Encoded string for use in URLs.
             </returns>
             <remarks>
-            This function encodes the output as per the encoding parameter (codepage) passed to it. It encodes
+            This function encodes the output as per the encoding parameter (codepage) passed to it. It encodes 
             all but known safe characters.  Characters are encoded using %SINGLE_BYTE_HEX and %DOUBLE_BYTE_HEX notation.
             If the inputEncoding is null then UTF-8 is assumed by default.
             <newpara/>
@@ -1501,7 +1501,7 @@
             Encoded string for use in URLs.
             </returns>
             <remarks>
-            This function encodes the output as per the encoding parameter (codepage) passed to it. It encodes
+            This function encodes the output as per the encoding parameter (codepage) passed to it. It encodes 
             all but known safe characters.  Characters are encoded using %SINGLE_BYTE_HEX and %DOUBLE_BYTE_HEX notation.
             If the inputEncoding is null then UTF-8 is assumed by default.
             <newpara/>
@@ -1668,7 +1668,7 @@
             Encoded string for use in Visual Basic Script.
             </returns>
             <remarks>
-            This function encodes all but known safe characters.  Characters are
+            This function encodes all but known safe characters.  Characters are 
             encoded using &#38;chrw(DECIMAL) notation.
             <newpara/>
             Safe characters include:
@@ -1743,7 +1743,7 @@
             <param name="input">The string to encode.</param>
             <returns>The encoded string.</returns>
             <exception cref="!:InvalidUnicodeValueException">Thrown if a character with an invalid Unicode value is encountered within the input string.</exception>
-            <exception cref="!:InvalidSurrogatePairException">Thrown if a high surrogate code point is encoded without a following low surrogate code point, or a
+            <exception cref="!:InvalidSurrogatePairException">Thrown if a high surrogate code point is encoded without a following low surrogate code point, or a 
             low surrogate code point is encounter without having been preceded by a high surrogate code point.</exception>
         </member>
         <member name="M:Microsoft.Security.Application.CssEncoder.InitialiseSafeList">
@@ -2346,7 +2346,7 @@
             <summary>
             The Combining Diacritical Marks Supplement code table.
             </summary>
-            <remarks>http://www.unicode.org/charts/PDF/U1DC0.pdf</remarks>
+            <remarks>http://www.unicode.org/charts/PDF/U1DC0.pdf</remarks>        
         </member>
         <member name="F:Microsoft.Security.Application.LowerMidCodeCharts.LatinExtendedAdditional">
             <summary>
@@ -2500,7 +2500,7 @@
             <summary>
             The Miscellaneous Mathematical Symbols-B code table.
             </summary>
-            <remarks>http://www.unicode.org/charts/PDF/U2980.pdf</remarks>
+            <remarks>http://www.unicode.org/charts/PDF/U2980.pdf</remarks>                
         </member>
         <member name="F:Microsoft.Security.Application.MidCodeCharts.SupplementalMathematicalOperators">
             <summary>
@@ -2512,7 +2512,7 @@
             <summary>
             The Miscellaneous Symbols and Arrows code table.
             </summary>
-            <remarks>http://www.unicode.org/charts/PDF/U2B00.pdf</remarks>
+            <remarks>http://www.unicode.org/charts/PDF/U2B00.pdf</remarks>        
         </member>
         <member name="F:Microsoft.Security.Application.MidCodeCharts.Glagolitic">
             <summary>
@@ -2524,7 +2524,7 @@
             <summary>
             The Latin Extended-C code table.
             </summary>
-            <remarks>http://www.unicode.org/charts/PDF/U2C60.pdf</remarks>
+            <remarks>http://www.unicode.org/charts/PDF/U2C60.pdf</remarks>        
         </member>
         <member name="F:Microsoft.Security.Application.MidCodeCharts.Coptic">
             <summary>
@@ -2692,7 +2692,7 @@
             <summary>
             The Lisu code table.
             </summary>
-            <remarks>http://www.unicode.org/charts/PDF/UA4D0.pdf</remarks>
+            <remarks>http://www.unicode.org/charts/PDF/UA4D0.pdf</remarks>        
         </member>
         <member name="F:Microsoft.Security.Application.UpperMidCodeCharts.Vai">
             <summary>
@@ -2896,11 +2896,11 @@
             Cross-Site Scripting (XSS) attacks in various contexts.
             </summary>
             <remarks>
-            The Anti-Cross Site Scripting Library uses the Principle
-            of Inclusions, sometimes referred to as "safe listing" to
+            The Anti-Cross Site Scripting Library uses the Principle 
+            of Inclusions, sometimes referred to as "safe listing" to 
             provide protection against Cross-Site Scripting attacks.  With
-            safe listing protection, algorithms look for valid inputs and
-            automatically treat everything outside that set as a
+            safe listing protection, algorithms look for valid inputs and 
+            automatically treat everything outside that set as a 
             potential attack.  This library can be used as a defense in
             depth approach with other mitigation techniques. It is suitable
             for applications with high security requirements.
@@ -2978,7 +2978,7 @@
             Encoded string for use in URLs.
             </returns>
             <remarks>
-            This function encodes all but known safe characters.  Characters are encoded using %SINGLE_BYTE_HEX
+            This function encodes all but known safe characters.  Characters are encoded using %SINGLE_BYTE_HEX 
             and %uDOUBLE_BYTE_HEX notation.
             <newpara/>
             Safe characters include:
@@ -3010,7 +3010,7 @@
             Encoded string for use in URLs.
             </returns>
             <remarks>
-            This function encodes the output as per the encoding parameter (codepage) passed to it. It encodes
+            This function encodes the output as per the encoding parameter (codepage) passed to it. It encodes 
             all but known safe characters.  Characters are encoded using %SINGLE_BYTE_HEX and %DOUBLE_BYTE_HEX notation.
             <newpara/>
             Safe characters include:
@@ -3171,7 +3171,7 @@
             Encoded string for use in Visual Basic Script.
             </returns>
             <remarks>
-            This function encodes all but known safe characters.  Characters are
+            This function encodes all but known safe characters.  Characters are 
             encoded using &amp;chrw(DECIMAL) notation.
             <newpara/>
             Safe characters include:
@@ -3304,7 +3304,7 @@
             <summary>
             Provides the safe characters for the Armenian code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>        
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.Lower.Hebrew">
             <summary>
@@ -3394,7 +3394,7 @@
             <summary>
             Provides the safe characters for the Kannada code table.
             </summary>
-            <returns>The safe characters for the code table.</returns>
+            <returns>The safe characters for the code table.</returns>        
         </member>
         <member name="M:Microsoft.Security.Application.CodeCharts.Lower.Malayalam">
             <summary>
@@ -3579,9 +3579,9 @@
             <param name="s">The text to URL-encode.</param>
             <param name="encoding">The encoding for the text parameter.</param>
             <returns>The URL-encoded text.</returns>
-            <remarks>URL encoding ensures that all browsers will correctly transmit text in URL strings.
-            Characters such as a question mark (?), ampersand (&amp;), slash mark (/), and spaces might be truncated or corrupted by some browsers.
-            As a result, these characters must be encoded in &lt;a&gt; tags or in query strings where the strings can be re-sent by a browser
+            <remarks>URL encoding ensures that all browsers will correctly transmit text in URL strings. 
+            Characters such as a question mark (?), ampersand (&amp;), slash mark (/), and spaces might be truncated or corrupted by some browsers. 
+            As a result, these characters must be encoded in &lt;a&gt; tags or in query strings where the strings can be re-sent by a browser 
             in a request string.</remarks>
             <exception cref="T:System.ArgumentNullException">Thrown if the encoding is null.</exception>
         </member>
@@ -3592,9 +3592,9 @@
             <param name="s">The text to URL-encode.</param>
             <param name="encoding">The encoding for the text parameter.</param>
             <returns>The URL-encoded text.</returns>
-            <remarks>URL encoding ensures that all browsers will correctly transmit text in URL strings.
-            Characters such as a question mark (?), ampersand (&amp;), slash mark (/), and spaces might be truncated or corrupted by some browsers.
-            As a result, these characters must be encoded in &lt;a&gt; tags or in query strings where the strings can be re-sent by a browser
+            <remarks>URL encoding ensures that all browsers will correctly transmit text in URL strings. 
+            Characters such as a question mark (?), ampersand (&amp;), slash mark (/), and spaces might be truncated or corrupted by some browsers. 
+            As a result, these characters must be encoded in &lt;a&gt; tags or in query strings where the strings can be re-sent by a browser 
             in a request string.</remarks>
             <exception cref="T:System.ArgumentNullException">Thrown if the encoding is null.</exception>
         </member>
