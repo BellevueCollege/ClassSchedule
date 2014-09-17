@@ -12,7 +12,7 @@
         <member name="F:Microsoft.Exchange.Data.TextConverters.ConverterStreamAccess.Read">
             <summary>
             Read access.
-            </summary>
+            </summary>        
         </member>
         <member name="F:Microsoft.Exchange.Data.TextConverters.ConverterStreamAccess.Write">
             <summary>
@@ -487,7 +487,7 @@
         <member name="T:Microsoft.Exchange.Data.Globalization.FallbackExceptions">
             <summary>
             Value indidicating which fallback exceptions should be allowed.
-            </summary>
+            </summary>      
         </member>
         <member name="F:Microsoft.Exchange.Data.Globalization.FallbackExceptions.None">
             <summary>
@@ -792,7 +792,7 @@
             Gets a value indicating whether this instance can invoke callback for end tag.
             </summary>
             <value>
-		<c>true</c> if this instance can invoke callback for end tag; otherwise, <c>false</c>.
+            	<c>true</c> if this instance can invoke callback for end tag; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="M:Microsoft.Exchange.Data.TextConverters.ConverterWriter.#ctor">
@@ -1202,7 +1202,7 @@
         <member name="F:Microsoft.Exchange.Data.TextConverters.HtmlToHtml.outputFragment">
             <summary>
             Value indicating fragmented output can be generated.
-            </summary>
+            </summary>        
         </member>
         <member name="F:Microsoft.Exchange.Data.TextConverters.HtmlToHtml.testMaxTokenRuns">
             <summary>
@@ -1272,7 +1272,7 @@
             Gets a value indicating whether this instance is finished.
             </summary>
             <value>
-		<c>true</c> if this instance is finished; otherwise, <c>false</c>.
+            	<c>true</c> if this instance is finished; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="T:Microsoft.Exchange.Data.Internal.DefaultApplicationServices">
@@ -2581,12 +2581,12 @@
             Gets a value indicating whether this instance is rejected.
             </summary>
             <value>
-		<c>true</c> if this instance is rejected; otherwise, <c>false</c>.
+            	<c>true</c> if this instance is rejected; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="T:Microsoft.Exchange.Data.Globalization.Culture">
             <summary>
-            Represents a culture
+            Represents a culture 
             </summary>
         </member>
         <member name="F:Microsoft.Exchange.Data.Globalization.Culture.lcid">
@@ -2970,7 +2970,7 @@
             </summary>
             <returns>
             A byte array containing a sequence of bytes that specifies the encoding used.
-            -or-
+            -or- 
             A byte array of length zero, if a preamble is not required.
             </returns>
         </member>
@@ -2979,7 +2979,7 @@
             Calculates the maximum number of bytes produced by encoding the specified number of characters.
             </summary>
             <param name="charCount">
-            The number of characters to encode.
+            The number of characters to encode. 
             </param>
             <returns>
             The maximum number of bytes produced by encoding the specified number of characters.
@@ -2990,7 +2990,7 @@
             Calculates the maximum number of characters produced by decoding the specified number of bytes.
             </summary>
             <param name="byteCount">
-            The number of bytes to decode.
+            The number of bytes to decode. 
             </param>
             <returns>
             The maximum number of characters produced by decoding the specified number of bytes.
@@ -3001,13 +3001,13 @@
             Calculates the number of bytes produced by encoding a set of characters from the specified character array.
             </summary>
             <param name="chars">
-            The character array containing the set of characters to encode.
+            The character array containing the set of characters to encode. 
             </param>
             <param name="index">
-            The index of the first character to encode.
+            The index of the first character to encode. 
             </param>
             <param name="count">
-            The number of characters to encode.
+            The number of characters to encode. 
             </param>
             <returns>
             The number of bytes produced by encoding the specified characters.
@@ -3015,10 +3015,10 @@
         </member>
         <member name="M:Microsoft.Exchange.Data.Globalization.RemapEncoding.GetByteCount(System.String)">
             <summary>
-            Calculates the number of bytes produced by encoding the characters in the specified <see cref="T:System.String"/>.
+            Calculates the number of bytes produced by encoding the characters in the specified <see cref="T:System.String"/>. 
             </summary>
             <param name="s">
-            The <see cref="T:System.String"/> containing the set of characters to encode.
+            The <see cref="T:System.String"/> containing the set of characters to encode. 
             </param>
             <returns>
             The number of bytes produced by encoding the specified characters.
@@ -3029,10 +3029,10 @@
             Calculates the number of bytes produced by encoding a set of characters starting at the specified character pointer.
             </summary>
             <param name="chars">
-            A pointer to the first character to encode.
+            A pointer to the first character to encode. 
             </param>
             <param name="count">
-            The number of characters to encode.
+            The number of characters to encode. 
             </param>
             <returns>
             The number of bytes produced by encoding the specified characters.
@@ -3040,25 +3040,25 @@
         </member>
         <member name="M:Microsoft.Exchange.Data.Globalization.RemapEncoding.GetBytes(System.String,System.Int32,System.Int32,System.Byte[],System.Int32)">
             <summary>
-            Encodes a set of characters from the specified String into the specified byte array.
+            Encodes a set of characters from the specified String into the specified byte array. 
             </summary>
             <param name="s">
-            The <see cref="T:System.String"/> containing the set of characters to encode.
+            The <see cref="T:System.String"/> containing the set of characters to encode. 
             </param>
             <param name="charIndex">
-            The index of the first character to encode.
+            The index of the first character to encode. 
             </param>
             <param name="charCount">
-            The number of characters to encode.
+            The number of characters to encode. 
             </param>
             <param name="bytes">
-            The byte array to contain the resulting sequence of bytes.
+            The byte array to contain the resulting sequence of bytes. 
             </param>
             <param name="byteIndex">
             The index at which to start writing the resulting sequence of bytes.
             </param>
             <returns>
-            The actual number of bytes written into bytes.
+            The actual number of bytes written into bytes. 
             </returns>
         </member>
         <member name="M:Microsoft.Exchange.Data.Globalization.RemapEncoding.GetBytes(System.Char[],System.Int32,System.Int32,System.Byte[],System.Int32)">
@@ -3066,22 +3066,22 @@
             Encodes a set of characters from the specified character array into the specified byte array.
             </summary>
             <param name="chars">
-            The character array containing the set of characters to encode.
+            The character array containing the set of characters to encode. 
             </param>
             <param name="charIndex">
-            The index of the first character to encode.
+            The index of the first character to encode. 
             </param>
             <param name="charCount">
-            The number of characters to encode.
+            The number of characters to encode. 
             </param>
             <param name="bytes">
-            The byte array to contain the resulting sequence of bytes.
+            The byte array to contain the resulting sequence of bytes. 
             </param>
             <param name="byteIndex">
-            The index at which to start writing the resulting sequence of bytes.
+            The index at which to start writing the resulting sequence of bytes. 
             </param>
             <returns>
-            The actual number of bytes written into bytes.
+            The actual number of bytes written into bytes. 
             </returns>
         </member>
         <member name="M:Microsoft.Exchange.Data.Globalization.RemapEncoding.GetBytes(System.Char*,System.Int32,System.Byte*,System.Int32)">
@@ -3089,16 +3089,16 @@
             Encodes a set of characters starting at the specified character pointer into a sequence of bytes that are stored starting at the specified byte pointer.
             </summary>
             <param name="chars">
-            A pointer to the first character to encode.
+            A pointer to the first character to encode. 
             </param>
             <param name="charCount">
-            The number of characters to encode.
+            The number of characters to encode. 
             </param>
             <param name="bytes">
-            A pointer to the location at which to start writing the resulting sequence of bytes.
+            A pointer to the location at which to start writing the resulting sequence of bytes. 
             </param>
             <param name="byteCount">
-            The maximum number of bytes to write.
+            The maximum number of bytes to write. 
             </param>
             <returns>
             The actual number of bytes written at the location indicated by the bytes parameter.
@@ -3109,13 +3109,13 @@
             Calculates the number of characters produced by decoding a sequence of bytes from the specified byte array.
             </summary>
             <param name="bytes">
-            The byte array containing the sequence of bytes to decode.
+            The byte array containing the sequence of bytes to decode. 
             </param>
             <param name="index">
-            The index of the first byte to decode.
+            The index of the first byte to decode. 
             </param>
             <param name="count">
-            The number of bytes to decode.
+            The number of bytes to decode. 
             </param>
             <returns>
             The number of characters produced by decoding the specified sequence of bytes.
@@ -3140,22 +3140,22 @@
             Decodes a sequence of bytes from the specified byte array into the specified character array.
             </summary>
             <param name="bytes">
-            The byte array containing the sequence of bytes to decode.
+            The byte array containing the sequence of bytes to decode. 
             </param>
             <param name="byteIndex">
-            The index of the first byte to decode.
+            The index of the first byte to decode. 
             </param>
             <param name="byteCount">
-            The number of bytes to decode.
+            The number of bytes to decode. 
             </param>
             <param name="chars">
-            The character array to contain the resulting set of characters.
+            The character array to contain the resulting set of characters. 
             </param>
             <param name="charIndex">
             The index at which to start writing the resulting set of characters.
             </param>
             <returns>
-            The actual number of characters written into chars.
+            The actual number of characters written into chars. 
             </returns>
         </member>
         <member name="M:Microsoft.Exchange.Data.Globalization.RemapEncoding.GetChars(System.Byte*,System.Int32,System.Char*,System.Int32)">
@@ -3172,10 +3172,10 @@
             The characters written.
             </param>
             <param name="charCount">
-            The maximum number of characters to write.
+            The maximum number of characters to write. 
             </param>
             <returns>
-            The actual number of characters written at the location indicated by the chars parameter.
+            The actual number of characters written at the location indicated by the chars parameter. 
             </returns>
         </member>
         <member name="M:Microsoft.Exchange.Data.Globalization.RemapEncoding.GetString(System.Byte[],System.Int32,System.Int32)">
@@ -3186,13 +3186,13 @@
             The byte array containing the sequence of bytes to decode.
             </param>
             <param name="index">
-            The index of the first byte to decode.
+            The index of the first byte to decode. 
             </param>
             <param name="count">
-            The number of bytes to decode.
+            The number of bytes to decode. 
             </param>
             <returns>
-            A <see cref="T:System.String"/> containing the results of decoding the specified sequence of bytes.
+            A <see cref="T:System.String"/> containing the results of decoding the specified sequence of bytes. 
             </returns>
         </member>
         <member name="M:Microsoft.Exchange.Data.Globalization.RemapEncoding.GetDecoder">
@@ -3367,16 +3367,16 @@
         </member>
         <member name="T:Microsoft.Security.Application.Sanitizer">
             <summary>
-             Sanitizes input HTML to make it safe to be displayed on a
+             Sanitizes input HTML to make it safe to be displayed on a 
              browser by removing potentially dangerous tags.
             </summary>
             <remarks>
-             This santization library uses the Principle of Inclusions,
-             sometimes referred to as "safe-listing" to provide protection
-             against injection attacks.  With safe-listing protection,
-             algorithms look for valid inputs and automatically treat
-             everything outside that set as a potential attack.  This library
-             can be used as a defense in depth approach with other mitigation
+             This santization library uses the Principle of Inclusions, 
+             sometimes referred to as "safe-listing" to provide protection 
+             against injection attacks.  With safe-listing protection, 
+             algorithms look for valid inputs and automatically treat 
+             everything outside that set as a potential attack.  This library 
+             can be used as a defense in depth approach with other mitigation 
              techniques.
             </remarks>
         </member>
@@ -3387,9 +3387,9 @@
             <param name="input">Malicious HTML Document</param>
             <returns>A santizied HTML document</returns>
             <remarks>
-            The method transforms and filters HTML of executable scripts.
-            A safe list of tags and attributes are used to strip dangerous
-            scripts from the HTML. HTML is also normalized where tags are
+            The method transforms and filters HTML of executable scripts. 
+            A safe list of tags and attributes are used to strip dangerous 
+            scripts from the HTML. HTML is also normalized where tags are 
             properly closed and attributes are properly formatted.
             </remarks>
         </member>
@@ -3400,9 +3400,9 @@
             <param name="input">Malicious HTML fragment</param>
             <returns>Safe HTML fragment</returns>
             <remarks>
-            The method transforms and filters HTML of executable scripts.
-            A safe list of tags and attributes are used to strip dangerous
-            scripts from the HTML. HTML is also normalized where tags are
+            The method transforms and filters HTML of executable scripts. 
+            A safe list of tags and attributes are used to strip dangerous 
+            scripts from the HTML. HTML is also normalized where tags are 
             properly closed and attributes are properly formatted.
             </remarks>
         </member>
@@ -3413,9 +3413,9 @@
             <param name="sourceReader">Source text reader with malicious HTML</param>
             <param name="destinationWriter">Text Writer to write safe HTML</param>
             <remarks>
-            The method transforms and filters HTML of executable scripts.
-            A safe list of tags and attributes are used to strip dangerous
-            scripts from the HTML. HTML is also normalized where tags are
+            The method transforms and filters HTML of executable scripts. 
+            A safe list of tags and attributes are used to strip dangerous 
+            scripts from the HTML. HTML is also normalized where tags are 
             properly closed and attributes are properly formatted.
             </remarks>
         </member>
@@ -3426,9 +3426,9 @@
             <param name="sourceReader">Source text reader with malicious HTML</param>
             <param name="destinationStream">Stream to write safe HTML</param>
             <remarks>
-            The method transforms and filters HTML of executable scripts.
-            A safe list of tags and attributes are used to strip dangerous
-            scripts from the HTML. HTML is also normalized where tags are
+            The method transforms and filters HTML of executable scripts. 
+            A safe list of tags and attributes are used to strip dangerous 
+            scripts from the HTML. HTML is also normalized where tags are 
             properly closed and attributes are properly formatted.
             </remarks>
         </member>
@@ -3439,9 +3439,9 @@
             <param name="sourceReader">Source text reader with malicious HTML</param>
             <param name="destinationWriter">Stream to write safe HTML</param>
             <remarks>
-            The method transforms and filters HTML of executable scripts.
-            A safe list of tags and attributes are used to strip dangerous
-            scripts from the HTML. HTML is also normalized where tags are
+            The method transforms and filters HTML of executable scripts. 
+            A safe list of tags and attributes are used to strip dangerous 
+            scripts from the HTML. HTML is also normalized where tags are 
             properly closed and attributes are properly formatted.
             </remarks>
         </member>
@@ -3452,9 +3452,9 @@
             <param name="sourceReader">Source text reader with malicious HTML</param>
             <param name="destinationStream">Stream to write safe HTML</param>
             <remarks>
-            The method transforms and filters HTML of executable scripts.
-            A safe list of tags and attributes are used to strip dangerous
-            scripts from the HTML. HTML is also normalized where tags are
+            The method transforms and filters HTML of executable scripts. 
+            A safe list of tags and attributes are used to strip dangerous 
+            scripts from the HTML. HTML is also normalized where tags are 
             properly closed and attributes are properly formatted.
             </remarks>
         </member>

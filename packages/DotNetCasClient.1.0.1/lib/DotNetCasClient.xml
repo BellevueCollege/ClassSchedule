@@ -42,7 +42,7 @@
         </member>
         <member name="M:DotNetCasClient.Utils.UrlUtil.ConstructValidateUrl(System.String,System.Boolean,System.Boolean,System.Collections.Specialized.NameValueCollection)">
             <summary>
-            Constructs a URL used to check the validitiy of a service ticket, with or without a proxy
+            Constructs a URL used to check the validitiy of a service ticket, with or without a proxy 
             callback URL, and with or without requiring renewed credentials.
             </summary>
             <remarks>See CAS Protocol specification, section 2.5</remarks>
@@ -59,21 +59,21 @@
         </member>
         <member name="M:DotNetCasClient.Utils.UrlUtil.ConstructProxyCallbackUrl">
             <summary>
-            Constructs a proxy callback URL containing a ProxyCallbackParameter
+            Constructs a proxy callback URL containing a ProxyCallbackParameter 
             (proxyResponse by default).  This URL is sent to the CAS server during a proxy
             ticket request and is then connected to by the CAS server.  If the CAS server
             cannot successfully connect (generally due to SSL configuration issues), the
-            CAS server will refuse to send a proxy ticket.
+            CAS server will refuse to send a proxy ticket. 
             </summary>
             <remarks>
-            This is a .NET implementation specific method used to eliminate the need for
+            This is a .NET implementation specific method used to eliminate the need for 
             a special HTTP Handler.  Essentially, if the client detects an incoming request
-            with the ProxyCallbackParameter in the URL (i.e., proxyResponse), that request
-            is treated specially and behaves as if it were handled by an HTTP Handler.  In
-            other words, this behavior may or may not short circuit the request event
+            with the ProxyCallbackParameter in the URL (i.e., proxyResponse), that request 
+            is treated specially and behaves as if it were handled by an HTTP Handler.  In 
+            other words, this behavior may or may not short circuit the request event 
             processing and will not allow the underlying page to execute and transmit back to
-            the client.  If your application does coincidentally make use of the key
-            'proxyResponse' as a URL parameter, you will need to configure a custom
+            the client.  If your application does coincidentally make use of the key 
+            'proxyResponse' as a URL parameter, you will need to configure a custom 
             proxyCallbackParameter value which does not conflict with the URL parameters in
             your application.
             </remarks>
@@ -81,15 +81,15 @@
         </member>
         <member name="M:DotNetCasClient.Utils.UrlUtil.ConstructProxyTicketRequestUrl(System.String,System.String)">
             <summary>
-            Constructs a proxy ticket request URL containing both a proxy granting
+            Constructs a proxy ticket request URL containing both a proxy granting 
             ticket and a URL Encoded targetServiceUrl.  The URL returned will generally only
-            be executed by the CAS client as a part of a proxy redirection in
+            be executed by the CAS client as a part of a proxy redirection in 
             CasAuthentication.ProxyRedirect(...) or CasAuthentication.GetProxyTicketIdFor(...)
             but may also be used by applications which require low-level access to the proxy
             ticket request functionality.
             </summary>
             <param name="proxyGrantingTicketId">
-            The proxy granting ticket used to authorize the request for a proxy ticket on the
+            The proxy granting ticket used to authorize the request for a proxy ticket on the 
             CAS server
             </param>
             <param name="targetService">
@@ -124,7 +124,7 @@
             Constructs the URL to use for redirection to the CAS server for single
             signout.  The CAS server will invalidate the ticket granting ticket and
             redirect back to the current page.  The web application must then call
-            ClearAuthCookie and revoke the ticket from the ServiceTicketManager to sign
+            ClearAuthCookie and revoke the ticket from the ServiceTicketManager to sign 
             the client out.
             </summary>
             <returns>the redirection URL to use, not encoded</returns>
@@ -143,7 +143,7 @@
             client.
             <remarks>
             Derived from: http://weblogs.asp.net/palermo4/archive/2004/06/18/getting-the-absolute-path-in-asp-net-part-2.aspx
-            </remarks>
+            </remarks>        
             </summary>
             <author>J. Michael Palermo IV</author>
             <author>Scott Holodak</author>
@@ -183,14 +183,14 @@
         <member name="P:DotNetCasClient.Security.ICasPrincipal.ProxyGrantingTicket">
             <summary>
             The Proxy Granting ticket associated with this principal
-            which is used to generate Proxy tickets to external
+            which is used to generate Proxy tickets to external 
             services.
             </summary>
         </member>
         <member name="P:DotNetCasClient.Security.ICasPrincipal.Proxies">
             <summary>
-            The chain of URL's involved in the proxy authentication of
-            the user on this system.  If a user starts on site A, proxy
+            The chain of URL's involved in the proxy authentication of 
+            the user on this system.  If a user starts on site A, proxy 
             authenticates to site B, and then proxy authenticates to this
             site, this will contain the URL of site A and site B.
             </summary>
@@ -214,7 +214,7 @@
             an Http server.
             </summary>
             <remarks>
-            This is the .Net port of
+            This is the .Net port of 
               org.jasig.cas.client.validation.AbstractUrlBasedTicketValidator
             </remarks>
             <author>Scott Battaglia</author>
@@ -228,7 +228,7 @@
             </summary>
             <remarks>
             <para>
-            Validator makes no statement about how to validate the ticket or the format
+            Validator makes no statement about how to validate the ticket or the format 
             of the ticket (other than that it must be a String).
             </para>
             <para>
@@ -241,9 +241,9 @@
         </member>
         <member name="M:DotNetCasClient.Validation.TicketValidator.ITicketValidator.Initialize">
             <summary>
-            You retrieve CasAuthentication properties in the constructor or else you will cause
-            a StackOverflow.  CasAuthentication.Initialize() will call Initialize() on all
-            relevant controls when its initialization is complete.  In Initialize(), you can
+            You retrieve CasAuthentication properties in the constructor or else you will cause 
+            a StackOverflow.  CasAuthentication.Initialize() will call Initialize() on all 
+            relevant controls when its initialization is complete.  In Initialize(), you can 
             retrieve properties from CasAuthentication.
             </summary>
         </member>
@@ -270,7 +270,7 @@
         <member name="P:DotNetCasClient.Validation.TicketValidator.ITicketValidator.ServiceParameterName">
             <summary>
             The default name of the request parameter whose value is the service
-            for the protocol.  The default values are defined in
+            for the protocol.  The default values are defined in 
             DefaultServiceParameterName, but these can be overridden in web.config.
             </summary>
         </member>
@@ -332,7 +332,7 @@
         <member name="P:DotNetCasClient.Validation.TicketValidator.AbstractUrlTicketValidator.CustomParameters">
             <summary>
             Custom parameters to pass to the validation URL.
-            </summary>
+            </summary>        
         </member>
         <member name="P:DotNetCasClient.Validation.TicketValidator.AbstractUrlTicketValidator.UrlSuffix">
             <summary>
@@ -435,7 +435,7 @@
         </member>
         <member name="T:DotNetCasClient.Utils.RequestEvaluator">
             <summary>
-            A utility class for evaluating the type of request
+            A utility class for evaluating the type of request 
             </summary>
             <author>Scott Holodak</author>
         </member>
@@ -447,21 +447,21 @@
         </member>
         <member name="M:DotNetCasClient.Utils.RequestEvaluator.GetRequestIsCasAuthenticationResponse">
             <summary>
-            Determines whether the request is a return request from the
+            Determines whether the request is a return request from the 
             CAS server containing a CAS ticket
             </summary>
             <returns>True if the request URL contains a CAS ticket, otherwise False</returns>
         </member>
         <member name="M:DotNetCasClient.Utils.RequestEvaluator.GetRequestHasGatewayParameter">
             <summary>
-            Determines whether the request contains the GatewayParameterName defined in
+            Determines whether the request contains the GatewayParameterName defined in 
             web.config or the default value 'gatewayResponse'
             </summary>
             <returns>True if the request contains the GatewayParameterName, otherwise False</returns>
         </member>
         <member name="M:DotNetCasClient.Utils.RequestEvaluator.GetRequestIsProxyResponse">
             <summary>
-            Determines whether the request is an inbound proxy callback verifications
+            Determines whether the request is an inbound proxy callback verifications 
             from the CAS server
             </summary>
             <returns>True if the request is a proxy callback verificiation, otherwise False</returns>
@@ -492,7 +492,7 @@
         </member>
         <member name="M:DotNetCasClient.Utils.RequestEvaluator.GetResponseIsCasLoginRedirect">
             <summary>
-            Determines whether the current request will be redirected to the
+            Determines whether the current request will be redirected to the 
             CAS login page
             </summary>
             <returns>True if the request will be redirected, otherwise False.</returns>
@@ -505,7 +505,7 @@
         </member>
         <member name="M:DotNetCasClient.Utils.RequestEvaluator.GetUserIsAuthenticated">
             <summary>
-            Determines whether the User associated with the request has been
+            Determines whether the User associated with the request has been 
             defined and is authenticated.
             </summary>
             <returns>True if the request has an authenticated User, otherwise False</returns>
@@ -657,7 +657,7 @@
         <member name="T:DotNetCasClient.CasAuthentication">
             <summary>
             CasAuthentication exposes a public API for use in working with CAS Authentication
-            in the .NET framework.  It also exposes all configured CAS client configuration
+            in the .NET framework.  It also exposes all configured CAS client configuration 
             parameters as public static properties.
             </summary>
             <author>Marvin S. Addison</author>
@@ -676,12 +676,12 @@
         <member name="M:DotNetCasClient.CasAuthentication.Initialize">
             <summary>
             Initializes configuration-related properties and validates configuration.
-            </summary>
+            </summary>        
         </member>
         <member name="M:DotNetCasClient.CasAuthentication.ProxyRedirect(System.String)">
             <summary>
-            Obtain a Proxy ticket and redirect to the foreign service url with
-            that ticket included in the url.  The foreign service must be configured
+            Obtain a Proxy ticket and redirect to the foreign service url with 
+            that ticket included in the url.  The foreign service must be configured 
             to accept the ticket.
             </summary>
             <param name="url">The foreign service to redirect to</param>
@@ -690,13 +690,13 @@
         </member>
         <member name="M:DotNetCasClient.CasAuthentication.ProxyRedirect(System.String,System.Boolean)">
             <summary>
-            Obtain a Proxy ticket and redirect to the foreign service url with
-            that ticket included in the url.  The foreign service must be configured
+            Obtain a Proxy ticket and redirect to the foreign service url with 
+            that ticket included in the url.  The foreign service must be configured 
             to accept the ticket.
             </summary>
             <param name="url">The foreign service to redirect to</param>
             <param name="endResponse">
-            Boolean indicating whether or not to short circuit the remaining request
+            Boolean indicating whether or not to short circuit the remaining request 
             pipeline events
             </param>
             <exception cref="T:System.ArgumentNullException">The url supplied is null</exception>
@@ -704,8 +704,8 @@
         </member>
         <member name="M:DotNetCasClient.CasAuthentication.ProxyRedirect(System.String,System.String)">
             <summary>
-            Obtain a Proxy ticket and redirect to the foreign service url with
-            that ticket included in the url.  The foreign service must be configured
+            Obtain a Proxy ticket and redirect to the foreign service url with 
+            that ticket included in the url.  The foreign service must be configured 
             to accept the ticket.
             </summary>
             <param name="url">The foreign service to redirect to</param>
@@ -727,7 +727,7 @@
             The ticket parameter to include in the remote service Url.
             </param>
             <param name="endResponse">
-            Boolean indicating whether or not to short circuit the remaining request
+            Boolean indicating whether or not to short circuit the remaining request 
             pipeline events
             </param>
             <exception cref="T:System.ArgumentNullException">
@@ -739,14 +739,14 @@
         </member>
         <member name="M:DotNetCasClient.CasAuthentication.GetProxyTicketIdFor(System.String)">
             <summary>
-            Attempts to connect to the CAS server to retrieve a proxy ticket
+            Attempts to connect to the CAS server to retrieve a proxy ticket 
             for the target URL specified.
             </summary>
             <remarks>
             Problems retrieving proxy tickets are generally caused by SSL misconfiguration.
-            The CAS server must be configured to trust the SSL certificate on the web application's
-            server.  The CAS server will attempt to establish an SSL connection to this web
-            application server to confirm that the proxy ticket request is legitimate.  If the
+            The CAS server must be configured to trust the SSL certificate on the web application's 
+            server.  The CAS server will attempt to establish an SSL connection to this web 
+            application server to confirm that the proxy ticket request is legitimate.  If the 
             server does not trust the SSL certificate or the certificate authority/chain of the SSL
             certificate, the request will fail.
             </remarks>
@@ -791,38 +791,38 @@
         <member name="M:DotNetCasClient.CasAuthentication.GatewayAuthenticate(System.Boolean)">
             <summary>
             Attempt to perform a CAS gateway authentication.  This causes a transparent
-            redirection out to the CAS server and back to the requesting page with or
-            without a CAS service ticket.  If the user has already authenticated for
-            another service against the CAS server and the CAS server supports Single
+            redirection out to the CAS server and back to the requesting page with or 
+            without a CAS service ticket.  If the user has already authenticated for 
+            another service against the CAS server and the CAS server supports Single 
             Sign On, this will result in the user being automatically authenticated.
             Otherwise, the user will remain anonymous.
             </summary>
             <param name="ignoreGatewayStatusCookie">
-            The Gateway Status Cookie reflects whether a gateway authentication has
-            already been attempted, in which case the redirection is generally
-            unnecessary.  This property allows you to override the behavior and
+            The Gateway Status Cookie reflects whether a gateway authentication has 
+            already been attempted, in which case the redirection is generally 
+            unnecessary.  This property allows you to override the behavior and 
             perform a redirection regardless of whether it has already been attempted.
             </param>
         </member>
         <member name="M:DotNetCasClient.CasAuthentication.SingleSignOut">
             <summary>
-            Logs the user out of the application and attempts to perform a Single Sign
-            Out against the CAS server.  If the CAS server is configured to support
-            Single Sign Out, this will prevent users from gateway authenticating
-            to other services.  The CAS server will attempt to notify any other
-            applications to revoke the session.  Each of the applications must be
-            configured to maintain session state on the server.  In the case of
-            ASP.NET web applications using DotNetCasClient, this requires defining a
-            serviceTicketManager.  The configuration for other client types (Java,
+            Logs the user out of the application and attempts to perform a Single Sign 
+            Out against the CAS server.  If the CAS server is configured to support 
+            Single Sign Out, this will prevent users from gateway authenticating 
+            to other services.  The CAS server will attempt to notify any other 
+            applications to revoke the session.  Each of the applications must be 
+            configured to maintain session state on the server.  In the case of 
+            ASP.NET web applications using DotNetCasClient, this requires defining a 
+            serviceTicketManager.  The configuration for other client types (Java, 
             PHP) varies based on the client implementation.  Consult the Jasig wiki
             for more details.
             </summary>
         </member>
         <member name="M:DotNetCasClient.CasAuthentication.ProcessSingleSignOutRequest">
             <summary>
-            Process SingleSignOut requests originating from another web application by removing the ticket
+            Process SingleSignOut requests originating from another web application by removing the ticket 
             from the ServiceTicketManager (assuming one is configured).  Without a ServiceTicketManager
-            configured, this method will not execute and this web application cannot respect external
+            configured, this method will not execute and this web application cannot respect external 
             SingleSignOut requests.
             </summary>
             <returns>
@@ -834,11 +834,11 @@
             <summary>
             Process a Proxy Callback request from the CAS server.  Proxy Callback requests occur as a part
             of a proxy ticket request.  When the web application requests a proxy ticket for a third party
-            service from the CAS server, the CAS server attempts to connect back to the web application
-            over an HTTPS connection.  The success of this callback is essential for the proxy ticket
-            request to succeed.  Failures are generally caused by SSL configuration errors.  See the
-            description of the SingleSignOut method for more details.  Assuming the SSL configuration is
-            correct, this method is responsible for handling the callback from the CAS server.  For
+            service from the CAS server, the CAS server attempts to connect back to the web application 
+            over an HTTPS connection.  The success of this callback is essential for the proxy ticket 
+            request to succeed.  Failures are generally caused by SSL configuration errors.  See the 
+            description of the SingleSignOut method for more details.  Assuming the SSL configuration is 
+            correct, this method is responsible for handling the callback from the CAS server.  For 
             more details, see the CAS protocol specification.
             </summary>
             <returns>
@@ -850,24 +850,24 @@
             <summary>
             Validates a ticket contained in the URL, presumably generated by
             the CAS server after a successful authentication.  The actual ticket
-            validation is performed by the configured TicketValidator
+            validation is performed by the configured TicketValidator 
             (i.e., CAS 1.0, CAS 2.0, SAML 1.0).  If the validation succeeds, the
-            request is authenticated and a FormsAuthenticationCookie and
-            corresponding CasAuthenticationTicket are created for the purpose of
-            authenticating subsequent requests (see ProcessTicketValidation
-            method).  If the validation fails, the authentication status remains
+            request is authenticated and a FormsAuthenticationCookie and 
+            corresponding CasAuthenticationTicket are created for the purpose of 
+            authenticating subsequent requests (see ProcessTicketValidation 
+            method).  If the validation fails, the authentication status remains 
             unchanged (generally the user is and remains anonymous).
             </summary>
         </member>
         <member name="M:DotNetCasClient.CasAuthentication.ProcessRequestAuthentication">
             <summary>
             Attempts to authenticate requests subsequent to the initial authentication
-            request (handled by ProcessTicketValidation).  This method looks for a
+            request (handled by ProcessTicketValidation).  This method looks for a 
             FormsAuthenticationCookie containing a FormsAuthenticationTicket and attempts
-            to confirms its validitiy.  It either contains the CAS service ticket or a
-            reference to a CasAuthenticationTicket stored in the ServiceTicketManager
-            (if configured).  If it succeeds, the context.User and Thread.CurrentPrincipal
-            are set with a ICasPrincipal and the current request is considered
+            to confirms its validitiy.  It either contains the CAS service ticket or a 
+            reference to a CasAuthenticationTicket stored in the ServiceTicketManager 
+            (if configured).  If it succeeds, the context.User and Thread.CurrentPrincipal 
+            are set with a ICasPrincipal and the current request is considered 
             authenticated.  Otherwise, the current request is effectively anonymous.
             </summary>
         </member>
@@ -875,9 +875,9 @@
             <summary>
             Attempts to set the GatewayStatus client cookie.  If the cookie is not
             present and equal to GatewayStatus.Attempting when a CAS Gateway request
-            comes in (indicated by the presence of the 'gatewayParameterName'
-            defined in web.config appearing in the URL), the server knows that the
-            client is not accepting session cookies and will optionally redirect
+            comes in (indicated by the presence of the 'gatewayParameterName' 
+            defined in web.config appearing in the URL), the server knows that the 
+            client is not accepting session cookies and will optionally redirect 
             the user to the 'cookiesRequiredUrl' (also defined in web.config).  If
             'cookiesRequiredUrl' is not defined but 'gateway' is, every page request
             will result in a round-trip to the CAS server.
@@ -889,23 +889,23 @@
             Retrieves the GatewayStatus from the client cookie.
             </summary>
             <returns>
-            The GatewayStatus stored in the cookie if present, otherwise
+            The GatewayStatus stored in the cookie if present, otherwise 
             GatewayStatus.NotAttempted.
             </returns>
         </member>
         <member name="M:DotNetCasClient.CasAuthentication.ClearAuthCookie">
             <summary>
-            Sends a blank and expired FormsAuthentication cookie to the
+            Sends a blank and expired FormsAuthentication cookie to the 
             client response.  This effectively removes the FormsAuthentication
             cookie and revokes the FormsAuthenticationTicket.  It also removes
-            the cookie from the current Request object, preventing subsequent
-            code from being able to access it during the execution of the
+            the cookie from the current Request object, preventing subsequent 
+            code from being able to access it during the execution of the 
             current request.
             </summary>
         </member>
         <member name="M:DotNetCasClient.CasAuthentication.SetAuthCookie(System.Web.Security.FormsAuthenticationTicket)">
             <summary>
-            Encrypts a FormsAuthenticationTicket in an HttpCookie (using
+            Encrypts a FormsAuthenticationTicket in an HttpCookie (using 
             GetAuthCookie) and includes it in the response.
             </summary>
             <param name="clientTicket">The FormsAuthenticationTicket to encode</param>
@@ -921,8 +921,8 @@
         <member name="M:DotNetCasClient.CasAuthentication.CreateFormsAuthenticationTicket(System.String,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
             <summary>
             Creates a FormsAuthenticationTicket for storage on the client.
-            The UserData field contains the CAS Service Ticket which can be
-            used by the server-side ServiceTicketManager to retrieve additional
+            The UserData field contains the CAS Service Ticket which can be 
+            used by the server-side ServiceTicketManager to retrieve additional 
             details about the ticket (e.g. assertions)
             </summary>
             <param name="netId">User associated with the ticket</param>
@@ -940,7 +940,7 @@
             to be a CAS Service Ticket).
             </summary>
             <returns>
-            Returns the FormsAuthenticationTicket contained in the
+            Returns the FormsAuthenticationTicket contained in the 
             cookie or null if any issues are encountered.
             </returns>
         </member>
@@ -953,15 +953,15 @@
         </member>
         <member name="P:DotNetCasClient.CasAuthentication.TicketValidatorName">
             <summary>
-            Name of ticket validator that validates CAS tickets using a
+            Name of ticket validator that validates CAS tickets using a 
             particular protocol.  Valid values are Cas10, Cas20, and Saml11.
             </summary>
         </member>
         <member name="P:DotNetCasClient.CasAuthentication.TicketValidator">
             <summary>
-            An instance of the TicketValidator specified in the
-            TicketValidatorName property.  This will either be an instance of
-            a Cas10TicketValidator, Cas20TicketValidator, or
+            An instance of the TicketValidator specified in the 
+            TicketValidatorName property.  This will either be an instance of 
+            a Cas10TicketValidator, Cas20TicketValidator, or 
             Saml11TicketValidator.
             </summary>
         </member>
@@ -977,16 +977,16 @@
         <member name="P:DotNetCasClient.CasAuthentication.ServiceTicketManager">
             <summary>
             An instance of the provider specified in the ServiceTicketManagerProvider property.
-            ServiceTicketManager will be null if no serviceTicketManager is
-            defined in web.config.  If a ServiceTicketManager is defined, this will allow
-            access to and revocation of outstanding CAS service tickets along with
-            additional information about the service tickets (i.e., IP address,
+            ServiceTicketManager will be null if no serviceTicketManager is 
+            defined in web.config.  If a ServiceTicketManager is defined, this will allow 
+            access to and revocation of outstanding CAS service tickets along with 
+            additional information about the service tickets (i.e., IP address, 
             assertions, etc.).
             </summary>
         </member>
         <member name="P:DotNetCasClient.CasAuthentication.ProxyTicketManagerProvider">
             <summary>
-            The ticket manager to use to store and resolve ProxyGrantingTicket IOUs to
+            The ticket manager to use to store and resolve ProxyGrantingTicket IOUs to 
             ProxyGrantingTickets
             <remarks>
             Currently supported values: CacheProxyTicketManager
@@ -996,9 +996,9 @@
         <member name="P:DotNetCasClient.CasAuthentication.ProxyTicketManager">
             <summary>
             An instance of the provider specified in the ProxyTicketManagerProvider property.
-            ProxyTicketManager will be null if no proxyTicketManager is
-            defined in web.config.  If a ProxyTicketManager is defined, this will allow
-            generation of proxy tickets for external sites and services.
+            ProxyTicketManager will be null if no proxyTicketManager is 
+            defined in web.config.  If a ProxyTicketManager is defined, this will allow 
+            generation of proxy tickets for external sites and services.  
             </summary>
         </member>
         <member name="P:DotNetCasClient.CasAuthentication.Gateway">
@@ -1009,8 +1009,8 @@
         </member>
         <member name="P:DotNetCasClient.CasAuthentication.GatewayStatusCookieName">
             <summary>
-            The name of the cookie used to store the Gateway status (NotAttempted,
-            Success, Failed).  This cookie is used to prevent the client from
+            The name of the cookie used to store the Gateway status (NotAttempted, 
+            Success, Failed).  This cookie is used to prevent the client from 
             attempting to gateway authenticate every request.
             </summary>
         </member>
@@ -1031,17 +1031,17 @@
         </member>
         <member name="P:DotNetCasClient.CasAuthentication.CasServerUrlPrefix">
             <summary>
-            URL to root of CAS server application.  For example, if your
+            URL to root of CAS server application.  For example, if your 
             CasServerLoginUrl is https://fed.example.com/cas/login
             then your CasServerUrlPrefix would be https://fed.example.com/cas/
             </summary>
         </member>
         <member name="P:DotNetCasClient.CasAuthentication.TicketTimeTolerance">
             <summary>
-            SAML ticket validator property to allow at most the given time
-            difference in ms between artifact (ticket) timestamp and CAS server
-            system time.  Increasing this may have negative security consequences;
-            we recommend fixing sources of clock drift rather than increasing
+            SAML ticket validator property to allow at most the given time 
+            difference in ms between artifact (ticket) timestamp and CAS server 
+            system time.  Increasing this may have negative security consequences; 
+            we recommend fixing sources of clock drift rather than increasing 
             this value.
             </summary>
         </member>
@@ -1072,31 +1072,31 @@
         </member>
         <member name="P:DotNetCasClient.CasAuthentication.NotAuthorizedUrl">
             <summary>
-            The URL to redirect to when the request has a valid CAS ticket but the user is
+            The URL to redirect to when the request has a valid CAS ticket but the user is 
             not authorized to access the URL or resource.  If this option is set, users will
-            be redirected to this URL.  If it is not set, the user will be redirected to the
+            be redirected to this URL.  If it is not set, the user will be redirected to the 
             CAS login screen with a Renew option in the URL (to force for alternate credential
             collection).
             </summary>
         </member>
         <member name="P:DotNetCasClient.CasAuthentication.CookiesRequiredUrl">
             <summary>
-            The URL to redirect to when the client is not accepting session
-            cookies.  This condition is detected only when gateway is enabled.
-            This will lock the users onto a specific page.  Otherwise, every
-            request will cause a silent round-trip to the CAS server, adding
+            The URL to redirect to when the client is not accepting session 
+            cookies.  This condition is detected only when gateway is enabled.  
+            This will lock the users onto a specific page.  Otherwise, every 
+            request will cause a silent round-trip to the CAS server, adding 
             a parameter to the URL.
-            </summary>
+            </summary>        
         </member>
         <member name="P:DotNetCasClient.CasAuthentication.GatewayParameterName">
             <summary>
-            The URL parameter to append to outbound CAS request's ServiceName
-            when initiating an automatic CAS Gateway request.  This parameter
-            plays a role in detecting whether or not the client has cookies
-            enabled.  The default value is 'gatewayResponse' and only needs to
+            The URL parameter to append to outbound CAS request's ServiceName 
+            when initiating an automatic CAS Gateway request.  This parameter 
+            plays a role in detecting whether or not the client has cookies 
+            enabled.  The default value is 'gatewayResponse' and only needs to 
             be explicitly defined if that URL parameter has a meaning elsewhere
-            in your application.
-            </summary>
+            in your application.                              
+            </summary>        
         </member>
         <member name="P:DotNetCasClient.CasAuthentication.ProxyCallbackParameterName">
             <summary>
@@ -1110,7 +1110,7 @@
             <summary>
              Defines the interface for a ProxyTicketManager implementation.  ProxyTicketManagers
              are responsible for temporary storage of state information relating to Proxy Tickets.
-             For active-active clustered/web-farm configurations, the state must be stored in a
+             For active-active clustered/web-farm configurations, the state must be stored in a 
              persistent storage mechanism that is accessible from any node or server that handles
              web requests.
             </summary>
@@ -1118,9 +1118,9 @@
         </member>
         <member name="M:DotNetCasClient.State.IProxyTicketManager.Initialize">
             <summary>
-            You retrieve CasAuthentication properties in the constructor or else you will cause
-            a StackOverflow.  CasAuthentication.Initialize() will call Initialize() on all
-            relevant controls when its initialization is complete.  In Initialize(), you can
+            You retrieve CasAuthentication properties in the constructor or else you will cause 
+            a StackOverflow.  CasAuthentication.Initialize() will call Initialize() on all 
+            relevant controls when its initialization is complete.  In Initialize(), you can 
             retrieve properties from CasAuthentication.
             </summary>
         </member>
@@ -1140,7 +1140,7 @@
             <summary>
             Method to retrieve a ProxyGrantingTicket based on the
             ProxyGrantingTicketIou.  Implementations are not guaranteed to
-            return the same result if retieve is called twice with the same
+            return the same result if retieve is called twice with the same 
             proxyGrantingTicketIou.
             </summary>
             <param name="proxyGrantingTicketIou">used as the key</param>
@@ -1148,18 +1148,18 @@
         </member>
         <member name="T:DotNetCasClient.State.CacheProxyTicketManager">
             <summary>
-             An IProxyTicketManager implementation that relies on the ASP.NET Caching model for ticket
+             An IProxyTicketManager implementation that relies on the ASP.NET Caching model for ticket 
              storage.  Generally this implies that the ticket storage is maintained locally on the web
-             server (either in memory or on disk).  A limitation of this model is that it will not
+             server (either in memory or on disk).  A limitation of this model is that it will not 
              support clustered, load balanced, or round-robin style configurations.
             </summary>
              <author>Scott Holodak</author>
         </member>
         <member name="M:DotNetCasClient.State.CacheProxyTicketManager.Initialize">
             <summary>
-            You retrieve CasAuthentication properties in the constructor or else you will cause
-            a StackOverflow.  CasAuthentication.Initialize() will call Initialize() on all
-            relevant controls when its initialization is complete.  In Initialize(), you can
+            You retrieve CasAuthentication properties in the constructor or else you will cause 
+            a StackOverflow.  CasAuthentication.Initialize() will call Initialize() on all 
+            relevant controls when its initialization is complete.  In Initialize(), you can 
             retrieve properties from CasAuthentication.
             </summary>
         </member>
@@ -1179,7 +1179,7 @@
             <summary>
             Method to retrieve a ProxyGrantingTicket based on the
             ProxyGrantingTicketIou.  Implementations are not guaranteed to
-            return the same result if retieve is called twice with the same
+            return the same result if retieve is called twice with the same 
             proxyGrantingTicketIou.
             </summary>
             <param name="proxyGrantingTicketIou">used as the key</param>
@@ -1193,32 +1193,32 @@
         </member>
         <member name="M:DotNetCasClient.Utils.HttpUtil.PerformHttpGet(System.String,System.Boolean)">
             <summary>
-            Executes an HTTP GET request against the Url specified, returning the
+            Executes an HTTP GET request against the Url specified, returning the 
             entire response body in string form.
             </summary>
             <param name="url">The URL to request</param>
             <param name="requireHttp200">
-            Boolean indicating whether or not to return
+            Boolean indicating whether or not to return 
             null if the repsonse status code is not 200 (OK).
             </param>
             <returns>
-            The response body or null if the response status is required to
+            The response body or null if the response status is required to 
             be 200 (OK) but is not
             </returns>
         </member>
         <member name="M:DotNetCasClient.Utils.HttpUtil.PerformHttpPost(System.String,System.String,System.Boolean)">
             <summary>
-            Executes an HTTP POST against the Url specified with the supplied post data,
+            Executes an HTTP POST against the Url specified with the supplied post data, 
             returning the entire response body in string form.
             </summary>
             <param name="url">The URL to post to</param>
             <param name="postData">The x-www-form-urlencoded data to post to the URL</param>
             <param name="requireHttp200">
-            Boolean indicating whether or not to return
+            Boolean indicating whether or not to return 
             null if the repsonse status code is not 200 (OK).
             </param>
             <returns>
-            The response body or null if the response status is required to
+            The response body or null if the response status is required to 
             be 200 (OK) but is not
             </returns>
         </member>
@@ -1235,7 +1235,7 @@
         </member>
         <member name="P:DotNetCasClient.Logging.Category.Config">
             <summary>
-            Gets the Config category.
+            Gets the Config category. 
             </summary>
         </member>
         <member name="P:DotNetCasClient.Logging.Category.HttpModule">
@@ -1334,13 +1334,13 @@
         </member>
         <member name="T:DotNetCasClient.GatewayStatus">
             <summary>
-            Lists the possible states of the gateway feature.
+            Lists the possible states of the gateway feature. 
             </summary>
             <author>Scott Holodak</author>
         </member>
         <member name="F:DotNetCasClient.GatewayStatus.NotAttempted">
             <summary>
-            Gateway authentication has not been attempted or the client is not
+            Gateway authentication has not been attempted or the client is not 
             accepting session cookies
             </summary>
         </member>
@@ -1351,14 +1351,14 @@
         </member>
         <member name="F:DotNetCasClient.GatewayStatus.Success">
             <summary>
-            The Gateway authentication attempt was successful.  Gateway
+            The Gateway authentication attempt was successful.  Gateway 
             authentication will not be attempted in subsequent requests
             </summary>
         </member>
         <member name="F:DotNetCasClient.GatewayStatus.Failed">
             <summary>
-            The Gateway authentication attempt was attempted, but a service
-            ticket was not returned.  Gateway authentication will not be
+            The Gateway authentication attempt was attempted, but a service 
+            ticket was not returned.  Gateway authentication will not be 
             attempted in subsequent requests.
             </summary>
         </member>
@@ -1371,7 +1371,7 @@
         </member>
         <member name="P:DotNetCasClient.Configuration.CasClientConfiguration.Config">
             <summary>
-            The CasClientConfiguration configuration element defined
+            The CasClientConfiguration configuration element defined 
             in web.config
             </summary>
         </member>
@@ -1428,8 +1428,8 @@
         </member>
         <member name="P:DotNetCasClient.Configuration.CasClientConfiguration.GatewayStatusCookieName">
             <summary>
-            The name of the cookie used to store the Gateway status (NotAttempted,
-            Success, Failed).  This cookie is used to prevent the client from
+            The name of the cookie used to store the Gateway status (NotAttempted, 
+            Success, Failed).  This cookie is used to prevent the client from 
             attempting to gateway authenticate every request.
             </summary>
         </member>
@@ -1461,7 +1461,7 @@
         </member>
         <member name="P:DotNetCasClient.Configuration.CasClientConfiguration.ServiceTicketManager">
             <summary>
-            The service ticket manager to use to store tickets returned by the
+            The service ticket manager to use to store tickets returned by the 
             CAS server for validation, revocation, and single sign out support.
             <remarks>
             Currently supported values: CacheServiceTicketManager
@@ -1470,7 +1470,7 @@
         </member>
         <member name="P:DotNetCasClient.Configuration.CasClientConfiguration.ProxyTicketManager">
             <summary>
-            The proxy ticket manager to use to store and resolve
+            The proxy ticket manager to use to store and resolve 
             ProxyGrantingTicket IOUs to ProxyGrantingTickets
             <remarks>
             Currently supported values: CacheProxyTicketManager
@@ -1479,32 +1479,32 @@
         </member>
         <member name="P:DotNetCasClient.Configuration.CasClientConfiguration.NotAuthorizedUrl">
             <summary>
-            URL to redirect to when the request has a validated and verified
-            CAS Authentication Ticket, but the identity associated with that
-            ticket is not authorized to access the requested resource.  If this
+            URL to redirect to when the request has a validated and verified 
+            CAS Authentication Ticket, but the identity associated with that 
+            ticket is not authorized to access the requested resource.  If this 
             option is omitted, the request will be redirected to the CAS server
-            for alternate credentials (with the 'renew' argument set).
+            for alternate credentials (with the 'renew' argument set). 
             </summary>
         </member>
         <member name="P:DotNetCasClient.Configuration.CasClientConfiguration.CookiesRequiredUrl">
             <summary>
-            The URL to redirect to when the client is not accepting session
-            cookies.  This condition is detected only when gateway is enabled.
-            This will lock the users onto a specific page.  Otherwise, every
-            request will cause a silent round-trip to the CAS server, adding
+            The URL to redirect to when the client is not accepting session 
+            cookies.  This condition is detected only when gateway is enabled.  
+            This will lock the users onto a specific page.  Otherwise, every 
+            request will cause a silent round-trip to the CAS server, adding 
             a parameter to the URL.
             </summary>
         </member>
         <member name="P:DotNetCasClient.Configuration.CasClientConfiguration.GatewayParameterName">
             <summary>
-            The URL parameter to append to outbound CAS request's ServiceName
-            when initiating an automatic CAS Gateway request.  This parameter
-            plays a role in detecting whether or not the client has cookies
-            enabled.  The default value is 'gatewayResponse' and only needs to
+            The URL parameter to append to outbound CAS request's ServiceName 
+            when initiating an automatic CAS Gateway request.  This parameter 
+            plays a role in detecting whether or not the client has cookies 
+            enabled.  The default value is 'gatewayResponse' and only needs to 
             be explicitly defined if that URL parameter has a meaning elsewhere
             in your application.  If you choose not define the CookiesRequiredUrl,
             you can detect that session cookies are not enabled in your application
-            by testing for this parameter in the Request.QueryString having the
+            by testing for this parameter in the Request.QueryString having the 
             value 'true'.
             </summary>
         </member>
@@ -1520,8 +1520,8 @@
             <summary>
             Data object representing a Cas Authentication Ticket.  The ServiceTicket,
             stored on the client in the UserData field of a FormsAuthenticationTicket,
-            is used as a key to retrieve the information in this class from a
-            ServiceTicketManager instance.  Without a ServiceTicketManager configured, the
+            is used as a key to retrieve the information in this class from a 
+            ServiceTicketManager instance.  Without a ServiceTicketManager configured, the 
             CasAuthententicationTicket cannot be retrieved.
             </summary>
             <author>Scott Holodak</author>
@@ -1549,13 +1549,13 @@
         <member name="P:DotNetCasClient.CasAuthenticationTicket.NetId">
             <summary>
             The NetId username used to authenticate against the CAS server.  This
-            information is retrieved via ticket validation and should not from
+            information is retrieved via ticket validation and should not from 
             the web application.
             </summary>
         </member>
         <member name="P:DotNetCasClient.CasAuthenticationTicket.ServiceTicket">
             <summary>
-            The CAS Service Ticket returned from the CAS Server (typically as the
+            The CAS Service Ticket returned from the CAS Server (typically as the 
             ticket parameter in the URL).
             </summary>
         </member>
@@ -1576,42 +1576,42 @@
         </member>
         <member name="P:DotNetCasClient.CasAuthenticationTicket.OriginatingServiceName">
             <summary>
-            The ServiceName used during the initial authentication and ticket
+            The ServiceName used during the initial authentication and ticket 
             validation.  When a Single Sign Out request is received from the CAS s
-            server, this is used as a safety mechanism to confirm that the CAS
+            server, this is used as a safety mechanism to confirm that the CAS 
             server's SSO request is valid.
             </summary>
         </member>
         <member name="P:DotNetCasClient.CasAuthenticationTicket.ClientHostAddress">
             <summary>
-            The IP address of the client that originally requested the CAS Service
-            Ticket.  By tracking IP addresses, this enables applications with a
-            ServiceTicketManager configured to detect and/or prevent multiple logins by a
-            user from different IP addresses.
+            The IP address of the client that originally requested the CAS Service 
+            Ticket.  By tracking IP addresses, this enables applications with a 
+            ServiceTicketManager configured to detect and/or prevent multiple logins by a 
+            user from different IP addresses.  
             </summary>
         </member>
         <member name="P:DotNetCasClient.CasAuthenticationTicket.Assertion">
             <summary>
-            The CAS assertion associated with the service ticket.  This contains the
+            The CAS assertion associated with the service ticket.  This contains the 
             principal name, the validity date/times, and the attributes associated
             with the service ticket.
             </summary>
         </member>
         <member name="P:DotNetCasClient.CasAuthenticationTicket.ValidFromDate">
             <summary>
-            The ValidFromDate associated with the ticket.  This is derived from, but
-            not the same as the Assertion's ValidFromDate.  If the Assertion's
-            ValidFromDate is equal to DateTime.MinValue, the CasAuthenticationTicket's
+            The ValidFromDate associated with the ticket.  This is derived from, but 
+            not the same as the Assertion's ValidFromDate.  If the Assertion's 
+            ValidFromDate is equal to DateTime.MinValue, the CasAuthenticationTicket's 
             ValidFromDate is set to DateTime.Now.
             </summary>
         </member>
         <member name="P:DotNetCasClient.CasAuthenticationTicket.ValidUntilDate">
             <summary>
             The ValidUntilDate associated with the ticket.  This is derived from, but
-            not the same as the Assertion's ValidUntilDate.  If the Assertion's
-            ValidUntilDate is equal to DateTime.MinValue, the following rule is
-            applied:  If the Assertion's ValidUntilDate is in the future, the
-            ValidUntilDate is used as is.  If the Assertion's ValidUntilDate is in
+            not the same as the Assertion's ValidUntilDate.  If the Assertion's 
+            ValidUntilDate is equal to DateTime.MinValue, the following rule is 
+            applied:  If the Assertion's ValidUntilDate is in the future, the 
+            ValidUntilDate is used as is.  If the Assertion's ValidUntilDate is in 
             the past, the ValidFromDate + FormsAuthentication.Timeout timespan is
             used.
             </summary>
@@ -1619,7 +1619,7 @@
         <member name="P:DotNetCasClient.CasAuthenticationTicket.Expired">
             <summary>
             Readonly property which indicates whether or not the ValidUntilDate is in
-            the past (i.e., the ticket is expired).  Expired tickets should/will be
+            the past (i.e., the ticket is expired).  Expired tickets should/will be 
             purged from the ServiceTicketManager during the RemoveExpiredTickets() call,
             during the BeginRequest event handler.
             </summary>
@@ -1671,8 +1671,8 @@
         <member name="T:DotNetCasClient.Utils.EnhancedUriBuilder">
             <summary>
             Enhanced UriBuilder class with collection-based query string access.
-            </summary>
-            <remarks>Adapted from http://forums.asp.net/t/693414.aspx </remarks>
+            </summary>    
+            <remarks>Adapted from http://forums.asp.net/t/693414.aspx </remarks>    
             <author>TlighT on ASP.NET forums</author>
             <author>Scott Holodak</author>
         </member>
@@ -1740,7 +1740,7 @@
             The string representation of the EnhancedUriBuilder
             </summary>
             <remarks>
-            Use of this method is discouraged.  You will generally want to return the
+            Use of this method is discouraged.  You will generally want to return the 
             Uri.RawUri property instead as ToString() will include standard port numbers
             where they generally are not necessary (:80 and :443).
             </remarks>
@@ -1808,22 +1808,22 @@
         </member>
         <member name="P:DotNetCasClient.Utils.EnhancedUriBuilder.QueryItemCollection.IsDirty">
             <summary>
-            Indicates whether the collection is dirty (has had values
+            Indicates whether the collection is dirty (has had values 
             added, removed, or changed)
             </summary>
         </member>
         <member name="T:DotNetCasClient.State.IServiceTicketManager">
             <summary>
-            IServiceTicketManager defines the core contract that a ticket manager must implement in
+            IServiceTicketManager defines the core contract that a ticket manager must implement in 
             order to support the CAS client features which require server-side state tracking.
             </summary>
             <author>Scott Holodak</author>
         </member>
         <member name="M:DotNetCasClient.State.IServiceTicketManager.Initialize">
             <summary>
-            You retrieve CasAuthentication properties in the constructor or else you will cause
-            a StackOverflow.  CasAuthentication.Initialize() will call Initialize() on all
-            relevant controls when its initialization is complete.  In Initialize(), you can
+            You retrieve CasAuthentication properties in the constructor or else you will cause 
+            a StackOverflow.  CasAuthentication.Initialize() will call Initialize() on all 
+            relevant controls when its initialization is complete.  In Initialize(), you can 
             retrieve properties from CasAuthentication.
             </summary>
         </member>
@@ -1834,7 +1834,7 @@
         </member>
         <member name="M:DotNetCasClient.State.IServiceTicketManager.GetTicket(System.String)">
             <summary>
-            Retrieve a CasAuthenticationTicket from the ticket store
+            Retrieve a CasAuthenticationTicket from the ticket store 
             by it's CAS Service Ticket
             </summary>
             <param name="serviceTicket">The service ticket generated by the CAS server</param>
@@ -1844,7 +1844,7 @@
         </member>
         <member name="M:DotNetCasClient.State.IServiceTicketManager.InsertTicket(DotNetCasClient.CasAuthenticationTicket,System.DateTime)">
             <summary>
-            Inserts a CasAuthenticationTicket to the ticket store with a corresponding
+            Inserts a CasAuthenticationTicket to the ticket store with a corresponding 
             ticket expiration date.
             </summary>
             <param name="casAuthenticationTicket">The CasAuthenticationTicket to insert</param>
@@ -1894,7 +1894,7 @@
         </member>
         <member name="M:DotNetCasClient.State.IServiceTicketManager.GetUserTickets(System.String)">
             <summary>
-            Retrieves all non-expired tickets in the ticket store associated with the
+            Retrieves all non-expired tickets in the ticket store associated with the 
             netId supplied.
             </summary>
             <param name="netId">The NetId to search the collection for</param>
@@ -1911,7 +1911,7 @@
         </member>
         <member name="M:DotNetCasClient.State.IServiceTicketManager.GetUserServiceTickets(System.String)">
             <summary>
-            Retrieves all non-expired CAS Service Tickets in the ticket store associated
+            Retrieves all non-expired CAS Service Tickets in the ticket store associated 
             with the netId supplied.
             </summary>
             <param name="netId">The netId to search the collection for</param>
@@ -1921,7 +1921,7 @@
         </member>
         <member name="M:DotNetCasClient.State.IServiceTicketManager.GetAllTicketedUsers">
             <summary>
-            Retrieves a list of all users that have non-expired CAS authentication
+            Retrieves a list of all users that have non-expired CAS authentication 
             tickets.
             </summary>
             <returns>An enumerable collection of NetId's</returns>
@@ -1932,7 +1932,7 @@
             </summary>
             <param name="casAuthenticationTicket">The casAuthenticationTicket to verify</param>
             <returns>
-            True if the ticket exists in the ticket store and the properties of that
+            True if the ticket exists in the ticket store and the properties of that 
             ticket match the properties of the ticket in the ticket store.
             </returns>
         </member>
@@ -2033,7 +2033,7 @@
         </member>
         <member name="F:DotNetCasClient.Security.CasPrincipal.CAS_AUTH_TYPE">
             <summary>
-            Constant representing the IIdentity AuthenticationType for
+            Constant representing the IIdentity AuthenticationType for 
             authentications via CAS.
             </summary>
         </member>
@@ -2044,7 +2044,7 @@
             </summary>
             <param name="role">The role to check for membership</param>
             <returns>
-            True or False indicating whether the user is in the role
+            True or False indicating whether the user is in the role 
             specified.
             </returns>
         </member>
@@ -2091,14 +2091,14 @@
         <member name="P:DotNetCasClient.Security.CasPrincipal.ProxyGrantingTicket">
             <summary>
             The Proxy Granting ticket associated with this principal
-            which is used to generate Proxy tickets to external
+            which is used to generate Proxy tickets to external 
             services.
             </summary>
         </member>
         <member name="P:DotNetCasClient.Security.CasPrincipal.Proxies">
             <summary>
-            The chain of URL's involved in the proxy authentication of
-            the user on this system.  If a user starts on site A, proxy
+            The chain of URL's involved in the proxy authentication of 
+            the user on this system.  If a user starts on site A, proxy 
             authenticates to site B, and then proxy authenticates to this
             site, this will contain the URL of site A and site B.
             </summary>
@@ -2122,7 +2122,7 @@
             Performs initializations / startup functionality when an instance of this HttpModule
             is being created.
             </summary>
-            <param name="context">the current HttpApplication</param>
+            <param name="context">the current HttpApplication</param>        
         </member>
         <member name="M:DotNetCasClient.CasAuthenticationModule.Dispose">
             <summary>
@@ -2131,14 +2131,14 @@
         </member>
         <member name="M:DotNetCasClient.CasAuthenticationModule.OnBeginRequest(System.Object,System.EventArgs)">
             <summary>
-            Intercepts the beginning of the request pipeline.  This will detect SingleSignOut
+            Intercepts the beginning of the request pipeline.  This will detect SingleSignOut 
             requests.  SingleSignOut requests are posted back to the serviceName URL that
             was passed when the CAS session was established.  Since the behavior of the script
-            at that URL is unknown, a POST back by the CAS server could have unexpected
-            consequences.  We want to prevent this request from authenticating and from
-            executing the HttpHandler typically associated with that URL.  So we are handling
-            this by sending back an HTTP 200 (OK) message with a blank body and short
-            circuiting all event processing and firing EndRequest directly
+            at that URL is unknown, a POST back by the CAS server could have unexpected 
+            consequences.  We want to prevent this request from authenticating and from 
+            executing the HttpHandler typically associated with that URL.  So we are handling 
+            this by sending back an HTTP 200 (OK) message with a blank body and short 
+            circuiting all event processing and firing EndRequest directly 
             (via CompleteRequest()).
             </summary>
             <param name="sender">The HttpApplication that sent the request</param>
@@ -2146,18 +2146,18 @@
         </member>
         <member name="M:DotNetCasClient.CasAuthenticationModule.OnAuthenticateRequest(System.Object,System.EventArgs)">
             <summary>
-            Handles the authentication of the request.
-
-            If the request contains a ticket, this will validate the ticket and create a
-            FormsAuthenticationTicket and encrypted cookie container for it.  It will redirect
-            to remove the ticket from the URL.  With Forms-based authentication, this is
-            required to prevent the client from automatically/silently re-authenticating on a
-            refresh or after logout.
-
-            If the request does not contain a ticket, it checks for a FormsAuthentication
-            cookie, decrypts it, extracts the FormsAuthenticationTicket, verifies that it
-            exists in the StateProvider/ServiceTicketManager, and assigns a Principal to the
-            thread and context.User properties.  All events after this request become
+            Handles the authentication of the request.  
+            
+            If the request contains a ticket, this will validate the ticket and create a 
+            FormsAuthenticationTicket and encrypted cookie container for it.  It will redirect 
+            to remove the ticket from the URL.  With Forms-based authentication, this is 
+            required to prevent the client from automatically/silently re-authenticating on a 
+            refresh or after logout.  
+            
+            If the request does not contain a ticket, it checks for a FormsAuthentication 
+            cookie, decrypts it, extracts the FormsAuthenticationTicket, verifies that it 
+            exists in the StateProvider/ServiceTicketManager, and assigns a Principal to the 
+            thread and context.User properties.  All events after this request become 
             authenticated.
             </summary>
             <param name="sender">The HttpApplication that sent the request</param>
@@ -2166,7 +2166,7 @@
         <member name="M:DotNetCasClient.CasAuthenticationModule.OnEndRequest(System.Object,System.EventArgs)">
             <summary>
             EndRequest is used to trigger the appropriate redirection.  There are
-            currently three scenarios that require special redirections.
+            currently three scenarios that require special redirections.  
             <list>
                 <item>
                     Request is unauthenticated and is being routed to the FormsLoginUrl
@@ -2177,13 +2177,13 @@
                     Request contains a CAS ticket in the URL.  This request needs to be
                     redirected back to itself without the 'ticket' parameter in order to
                     avoid potential infinite automatic ticket validation loops for when
-                    a the ticket in the URL has expired or was revoked and the Renew
+                    a the ticket in the URL has expired or was revoked and the Renew 
                     configuration parameter is set.
                 </item>
                 <item>
-                    Request is authenticated, but is not authorized to access the
-                    requested resource (by UrlAuthorizationModule).  If the CAS is
-                    configured with a NotAuthorizedUrl, the request is redirected to
+                    Request is authenticated, but is not authorized to access the 
+                    requested resource (by UrlAuthorizationModule).  If the CAS is 
+                    configured with a NotAuthorizedUrl, the request is redirected to 
                     that page.  Otherwise, it is redirected to the CAS login page with
                     a forced 'Renew' property (to prevent infinite redirect loops).
                 </item>
@@ -2194,9 +2194,9 @@
         </member>
         <member name="T:DotNetCasClient.State.CacheServiceTicketManager">
             <summary>
-            An IServiceTicketManager implementation that relies on the ASP.NET Caching model for ticket
+            An IServiceTicketManager implementation that relies on the ASP.NET Caching model for ticket 
             storage.  Generally this implies that the ticket storage is maintained locally on the web
-            server (either in memory or on disk).  A limitation of this model is that it will not
+            server (either in memory or on disk).  A limitation of this model is that it will not 
             support clustered, load balanced, or round-robin style configurations.
             </summary>
             <author>Scott Holodak</author>
@@ -2208,7 +2208,7 @@
         </member>
         <member name="M:DotNetCasClient.State.CacheServiceTicketManager.#ctor">
             <summary>
-            The constructor is marked internal because this object is not suitable for use
+            The constructor is marked internal because this object is not suitable for use 
             outside of this assembly.
             </summary>
         </member>
@@ -2224,7 +2224,7 @@
         </member>
         <member name="M:DotNetCasClient.State.CacheServiceTicketManager.GetTicket(System.String)">
             <summary>
-            Retrieve a CasAuthenticationTicket from the ticket store
+            Retrieve a CasAuthenticationTicket from the ticket store 
             by it's CAS Service Ticket
             </summary>
             <param name="serviceTicket">The service ticket generated by the CAS server</param>
@@ -2234,7 +2234,7 @@
         </member>
         <member name="M:DotNetCasClient.State.CacheServiceTicketManager.InsertTicket(DotNetCasClient.CasAuthenticationTicket,System.DateTime)">
             <summary>
-            Inserts a CasAuthenticationTicket to the ticket store with a corresponding
+            Inserts a CasAuthenticationTicket to the ticket store with a corresponding 
             ticket expiration date.
             </summary>
             <param name="casAuthenticationTicket">The CasAuthenticationTicket to insert</param>
@@ -2284,7 +2284,7 @@
         </member>
         <member name="M:DotNetCasClient.State.CacheServiceTicketManager.GetUserTickets(System.String)">
             <summary>
-            Retrieves all non-expired tickets in the ticket store associated with the
+            Retrieves all non-expired tickets in the ticket store associated with the 
             netId supplied.
             </summary>
             <param name="netId">The NetId to search the collection for</param>
@@ -2301,7 +2301,7 @@
         </member>
         <member name="M:DotNetCasClient.State.CacheServiceTicketManager.GetUserServiceTickets(System.String)">
             <summary>
-            Retrieves all non-expired CAS Service Tickets in the ticket store associated
+            Retrieves all non-expired CAS Service Tickets in the ticket store associated 
             with the netId supplied.
             </summary>
             <param name="netId">The netId to search the collection for</param>
@@ -2311,7 +2311,7 @@
         </member>
         <member name="M:DotNetCasClient.State.CacheServiceTicketManager.GetAllTicketedUsers">
             <summary>
-            Retrieves a list of all users that have non-expired CAS authentication
+            Retrieves a list of all users that have non-expired CAS authentication 
             tickets.
             </summary>
             <returns>An enumerable collection of NetId's</returns>
@@ -2322,20 +2322,20 @@
             </summary>
             <param name="casAuthenticationTicket">The casAuthenticationTicket to verify</param>
             <returns>
-            True if the ticket exists in the ticket store and the properties of that
+            True if the ticket exists in the ticket store and the properties of that 
             ticket match the properties of the ticket in the ticket store.
             </returns>
         </member>
         <member name="M:DotNetCasClient.State.CacheServiceTicketManager.GetTicketKey(System.String)">
             <summary>
             Converts a CAS Service Ticket to its corresponding key in the
-            ticket manager store (cache provider).
+            ticket manager store (cache provider). 
             </summary>
             <param name="serviceTicket">
             The CAS Service ticket to convert.
             </param>
             <returns>
-            The cache key associated with the corresponding
+            The cache key associated with the corresponding 
             service ticket
             </returns>
             <exception cref="T:System.ArgumentNullException">serviceTicket is null</exception>

@@ -11,7 +11,7 @@
         </member>
         <member name="M:MvcMiniProfiler.ISqlFormatter.FormatSql(MvcMiniProfiler.SqlTiming)">
             <summary>
-            Return SQL the way you want it to look on the in the trace. Usually used to format parameters
+            Return SQL the way you want it to look on the in the trace. Usually used to format parameters 
             </summary>
             <param name="timing"></param>
             <returns>Formatted SQL</returns>
@@ -51,7 +51,7 @@
         </member>
         <member name="M:MvcMiniProfiler.Data.IDbProfiler.ReaderFinish(System.Data.Common.DbDataReader)">
             <summary>
-            Called when a reader is done iterating through the data
+            Called when a reader is done iterating through the data 
             </summary>
             <param name="reader"></param>
         </member>
@@ -73,7 +73,7 @@
         </member>
         <member name="F:MvcMiniProfiler.MiniProfiler._sqlCounts">
             <summary>
-
+            
             </summary>
         </member>
         <member name="M:MvcMiniProfiler.MiniProfiler.#ctor(System.String,MvcMiniProfiler.ProfileLevel)">
@@ -112,7 +112,7 @@
             Ends the current profiling session, if one exists.
             </summary>
             <param name="discardResults">
-            When true, clears the <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/> for this HttpContext, allowing profiling to
+            When true, clears the <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/> for this HttpContext, allowing profiling to 
             be prematurely stopped and discarded. Useful for when a specific route does not need to be profiled.
             </param>
         </member>
@@ -178,7 +178,7 @@
         </member>
         <member name="P:MvcMiniProfiler.MiniProfiler.Level">
             <summary>
-            Allows filtering of <see cref="T:MvcMiniProfiler.Timing"/> steps based on what <see cref="T:MvcMiniProfiler.ProfileLevel"/>
+            Allows filtering of <see cref="T:MvcMiniProfiler.Timing"/> steps based on what <see cref="T:MvcMiniProfiler.ProfileLevel"/> 
             the steps are created with.
             </summary>
         </member>
@@ -254,7 +254,7 @@
         </member>
         <member name="P:MvcMiniProfiler.MiniProfiler.Head">
             <summary>
-            Points to the currently executing Timing.
+            Points to the currently executing Timing. 
             </summary>
         </member>
         <member name="P:MvcMiniProfiler.MiniProfiler.Current">
@@ -372,7 +372,7 @@
             4) profiler is stopped
             5) profiler is cached with <see cref="P:MvcMiniProfiler.MiniProfiler.Settings.Storage"/>'s implementation of <see cref="M:MvcMiniProfiler.Storage.IStorage.Save(MvcMiniProfiler.MiniProfiler)"/>
             6) request ends
-            7) page is displayed and profiling results are ajax-fetched down, pulling cached results from
+            7) page is displayed and profiling results are ajax-fetched down, pulling cached results from 
                <see cref="P:MvcMiniProfiler.MiniProfiler.Settings.Storage"/>'s implementation of <see cref="M:MvcMiniProfiler.Storage.IStorage.Load(System.Guid)"/>
             </remarks>
         </member>
@@ -394,7 +394,7 @@
         <member name="P:MvcMiniProfiler.MiniProfiler.Settings.ProfilerProvider">
             <summary>
             The provider used to provider the current instance of a provider
-            This is also
+            This is also 
             </summary>
         </member>
         <member name="P:MvcMiniProfiler.MiniProfiler.Settings.Results_Authorize">
@@ -409,7 +409,7 @@
         </member>
         <member name="M:MvcMiniProfiler.Helpers.SqlMapper.Execute(System.Data.IDbConnection,System.String,System.Object,System.Data.IDbTransaction,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType})">
             <summary>
-            Execute parameterized SQL
+            Execute parameterized SQL  
             </summary>
             <returns>Number of rows affected</returns>
         </member>
@@ -473,7 +473,7 @@
         </member>
         <member name="M:MvcMiniProfiler.Data.ProfiledDbConnection.#ctor(System.Data.Common.DbConnection,MvcMiniProfiler.Data.IDbProfiler)">
             <summary>
-            Returns a new <see cref="T:MvcMiniProfiler.Data.ProfiledDbConnection"/> that wraps <paramref name="connection"/>,
+            Returns a new <see cref="T:MvcMiniProfiler.Data.ProfiledDbConnection"/> that wraps <paramref name="connection"/>, 
             providing query execution profiling.  If profiler is null, no profiling will occur.
             </summary>
             <param name="connection">Your provider-specific flavor of connection, e.g. SqlConnection, OracleConnection</param>
@@ -584,7 +584,7 @@
         </member>
         <member name="M:MvcMiniProfiler.Data.ProfiledDbProviderFactory.#ctor">
             <summary>
-            Used for db provider apis internally
+            Used for db provider apis internally 
             </summary>
         </member>
         <member name="M:MvcMiniProfiler.Data.ProfiledDbProviderFactory.InitProfiledDbProviderFactory(MvcMiniProfiler.Data.IDbProfiler,System.Data.Common.DbProviderFactory)">
@@ -670,7 +670,7 @@
             Ends the current profiling session, if one exists.
             </summary>
             <param name="discardResults">
-            When true, clears the <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/> for this HttpContext, allowing profiling to
+            When true, clears the <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/> for this HttpContext, allowing profiling to 
             be prematurely stopped and discarded. Useful for when a specific route does not need to be profiled.
             </param>
         </member>
@@ -853,14 +853,14 @@
         </member>
         <member name="P:MvcMiniProfiler.Storage.HttpRuntimeCacheStorage.CacheDuration">
             <summary>
-            How long to cache each <see cref="T:MvcMiniProfiler.MiniProfiler"/> for (i.e. the absolute expiration parameter of
+            How long to cache each <see cref="T:MvcMiniProfiler.MiniProfiler"/> for (i.e. the absolute expiration parameter of 
             <see cref="M:System.Web.Caching.Cache.Insert(System.String,System.Object,System.Web.Caching.CacheDependency,System.DateTime,System.TimeSpan,System.Web.Caching.CacheItemUpdateCallback)"/>)
             </summary>
         </member>
         <member name="T:MvcMiniProfiler.WebRequestProfilerProvider">
             <summary>
             HttpContext based profiler provider.  This is the default provider to use in a web context.
-            The current profiler is associated with a HttpContext.Current ensuring that profilers are
+            The current profiler is associated with a HttpContext.Current ensuring that profilers are 
             specific to a individual HttpRequest.
             </summary>
         </member>
@@ -879,7 +879,7 @@
             Ends the current profiling session, if one exists.
             </summary>
             <param name="discardResults">
-            When true, clears the <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/> for this HttpContext, allowing profiling to
+            When true, clears the <see cref="P:MvcMiniProfiler.MiniProfiler.Current"/> for this HttpContext, allowing profiling to 
             be prematurely stopped and discarded. Useful for when a specific route does not need to be profiled.
             </param>
         </member>
@@ -1170,7 +1170,7 @@
         </member>
         <member name="P:MvcMiniProfiler.SqlTiming.FirstFetchDurationMilliseconds">
             <summary>
-            When executing readers, how long it took to come back initially from the database,
+            When executing readers, how long it took to come back initially from the database, 
             before all records are fetched and reader is closed.
             </summary>
         </member>
@@ -1287,7 +1287,7 @@
         </member>
         <member name="M:MvcMiniProfiler.Storage.SqlServerStorage.Save(MvcMiniProfiler.MiniProfiler)">
             <summary>
-            Stores <param name="profiler"/> to dbo.MiniProfilers under its <see cref="P:MvcMiniProfiler.MiniProfiler.Id"/>;
+            Stores <param name="profiler"/> to dbo.MiniProfilers under its <see cref="P:MvcMiniProfiler.MiniProfiler.Id"/>; 
             stores all child Timings and SqlTimings to their respective tables.
             </summary>
         </member>
