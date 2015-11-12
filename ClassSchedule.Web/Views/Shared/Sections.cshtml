@@ -52,7 +52,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
               if (!string.IsNullOrWhiteSpace(item.InstructorName))
               {
               <li>
-                <a href="@Helpers.GetProfileUrl(item.InstructorID)">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a>
+                <a href="https://www.bellevuecollege.edu/directory/?SearchString=@Url.Encode(item.InstructorName)">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a>
               </li>
               }
               else
