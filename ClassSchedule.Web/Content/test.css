@@ -1,0 +1,171 @@
+﻿.buffer-top {
+    margin-top: 1em;
+}
+.buffer-bottom {
+    margin-bottom: 1em;
+}
+.course-updated a {
+    cursor: pointer;
+    text-decoration: none;
+}
+.table-classes {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1.42857143;
+}
+.table-classes thead {
+    border-bottom: 1px solid #ddd;
+}
+.table-classes thead th {
+    vertical-align: bottom;
+}
+.table-classes th {
+  font-weight: bold;
+}
+
+.table-classes tbody {
+  border-top: 1px solid #ddd;
+}
+
+.table-classes th, .table-classes td {
+    padding: 8px;
+    line-height: 1.42857143;
+}
+/** Search styles **/
+em.keyword
+{
+	color: Black;
+	font-style: normal;
+	background: #93d35f; /* Old browsers */
+    background: -moz-linear-gradient(top,  #93d35f 0%, #7cd335 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#93d35f), color-stop(100%,#7cd335)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #93d35f 0%,#7cd335 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #93d35f 0%,#7cd335 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #93d35f 0%,#7cd335 100%); /* IE10+ */
+    background: linear-gradient(top,  #93d35f 0%,#7cd335 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#93d35f', endColorstr='#7cd335',GradientType=0 ); /* IE6-9 */
+
+}
+/** Reset weird things globals does to bootstrap/default styles **/
+ol.breadcrumb li {
+    margin-top: 0;
+    margin-left: 0;
+    padding-left: 0;
+}
+ul {
+    margin-top: 0;
+}
+/** end **/
+
+li.subject-name .edit-button {
+    display: none;
+}
+
+#lastModifiedBy
+{
+	float: right;
+	color: #777;
+	font-size: .8em;
+	margin-right: 10px;
+}
+
+.editor-label
+{
+	font-weight: bold;
+}
+
+.editor-field
+{
+	margin-top: 0;
+    margin-bottom: .5em;
+}
+
+/* start program edit */
+#ProgramEdit .left,
+#ProgramEdit .right
+{
+	width: 100%;
+	float: left;
+}
+
+#ProgramEdit .subject-text-field
+{
+	width: 100%;
+}
+
+#SectionEdit .subject-text-field
+{
+	width: 500px;
+}
+
+.merged-subject-link
+{
+	margin-right: 15px;
+}
+
+ul.subject-merger {
+	padding:2px 2px 4px 2px;
+	border:1px solid #C6C6C6;
+	overflow:auto;
+}
+ul.subject-merger li {
+	display: block;
+	float: left;
+	width: 75px;
+	padding: 2px 2px 2px 2px;
+	margin: 2px 2px 0px 2px;
+}
+ul.subject-merger li.subject-choice {
+	background-color:#DEE7F8;
+	border:1px solid #CAD8F3;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	padding:2px 2px;
+	margin-right: 2px;
+}
+ul.subject-merger li.subject-choice:hover {
+	background-color:#bbcef1;
+	border-color:#6d95e0;
+}
+ul.subject-merger li.subject-new {
+	padding: 3px;
+}
+
+ul.subject-merger select {
+	-moz-box-sizing:border-box;
+	border:none;
+	margin:0;
+	padding-top:1px;
+	width:68px;
+	border-color:#C6C6C6;
+	background-color:#FFFFFF;
+	color:#333333;
+}
+ul.subject-merger li.subject-choice span.subject-choice-close
+{
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	top: 2px;
+	float: right;
+}
+
+/* end program edit */
+
+/** inline editing styles **/
+.toggleEditingMode
+{
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.section-details-edit
+{ 
+    margin-left: 0; padding-left: 20px;
+}
+
+/** Search results **/
+#classes-search-results .pagination li {
+    display: initial;
+}

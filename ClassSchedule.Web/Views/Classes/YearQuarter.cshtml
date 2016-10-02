@@ -20,33 +20,35 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 @model YearQuarterModel
 @{
 	YearQuarter yrq = Model.ViewingQuarter;
-  IList<char> alphabet = Model.SubjectLetters;
+    IList<char> alphabet = Model.SubjectLetters;
+    ViewBag.PageTitle = yrq.FriendlyName + " Credit Classes at Bellevue College";
 }
-<div id="scheduleMain">
-  @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })
-  <div id="container" class="sidebar">
-    <div id="sidebar">
+<div class="row row-padding">
+    
+    @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })
+
+    <div class="row row-padding buffer-top buffer-bottom">
+        <div class="col-md-10">
+            <div class="content-padding">
+
+    @*<div id="sidebar">
         @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = yrq, FacetData = Model.FacetData})
-    </div> <!-- #sidebar -->
+    </div>*@ <!-- #sidebar -->
 
-    <div id="content">
-
-			<h1 id="pageTitle">@yrq.FriendlyName Credit Classes</h1>
+			<h1>@yrq.FriendlyName Credit Classes</h1>
 
 			@Html.Partial("a_to_z", new AToZViewModel { LettersList = alphabet, ViewingLetter = ViewBag.letter == null ? (char?)null : ViewBag.letter[0] })
 
 			@if (Helpers.IsAdmin(Context))
 			{
-				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
+				<div class="alert alert-info">Hi, @Context.User.Identity.Name. You have admin access to this section.</div>
 			}
 
 			@if (Model.ViewingSubjects.Count() == 0)
 			{
 				string letter = Request.QueryString["letter"];
-				<div id="error-noclassesfound">
-					<h2>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h2>
-					<p><em>TIP:</em> Information for @yrq.FriendlyName may not be available yet.</p>
-				</div>
+			    <h3>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h3>
+			    <p><em>Tip:</em> Information for @yrq.FriendlyName may not be available yet.</p>
 			}
 			else
 			{
@@ -54,47 +56,65 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 			}
 
 
-			<div title="Edit Subject Information" id="edit-program"></div>
+			<div title="Edit subject information" id="edit-program"></div>
 
-    </div> <!-- #content -->
-  </div> <!-- #container -->
+            </div> <!-- #content -->
+        </div> <!-- #container -->
+    </div>
 </div>
-
+@section PageScripts
+{
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <!--<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.unobtrusive-ajax.min.js"></script>-->
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.min.css" type="text/css" />
+}
 <script type="text/javascript">
 	/* program editor pop-up dialog */
-	$(function () {
+    $(function () {
 
-		$("#edit-program").dialog({
-			closeOnEscape: false,
-			autoOpen: false,
-			height: 455,
-			width: 950
+        var bootstrapButton = $.fn.button.noConflict() // return $.fn.button to previously assigned value
+        $.fn.bootstrapBtn = bootstrapButton            // give $().bootstrapBtn the Bootstrap functionality
+
+        $("#edit-program").dialog({
+            autoOpen: false,
+		    width: 'auto', // overcomes width:'auto' and maxWidth bug
+		    maxWidth: 600,
+		    height: 'auto',
+		    modal: true,
+		    fluid: true, //new option
+		    resizable: false,
+		    position: {
+		        my: "center center",
+		        at: "center center",
+		        of: window
+		    }
 		});
 
-
 		/* make the cancel button close the window and reload the page */
-		$("span.ui-icon-closethick").click(function () {
-			showThrobber();
+	    $("span.ui-icon-closethick").click(function () {
+			//showThrobber();
 			window.location.href = $(location).attr('href');
 		});
 
 		$(".ui-dialog").keydown(function(e) {
 			if (e.keyCode == 27) { // esc
 				$(".ui-dialog").hide();
-				showThrobber();
+				//showThrobber();
 				window.location.href = $(location).attr('href');
 			}
 		});
 
+        @** Script for show/hide edit **@
 		@if(Helpers.IsAdmin(Context))  {
 
 			<text>$('li.subject-name').hover(function () {
-				$(this).children('a.edit_button').show();
-				$(this).addClass('edit-hover subject-name-edit');
+				$(this).children('a.edit-button').show();
 				},
 				function () {
-					$(this).children('a.edit_button').hide();
-					$(this).removeClass('edit-hover subject-name-edit');
+					$(this).children('a.edit-button').hide();
 			});
 			</text>
 		}

@@ -4,36 +4,40 @@
 	IDictionary<string, object> routeParms = ViewBag.LinkParams;
 	string Action = ViewContext.RouteData.Values["Action"].ToString();
 
-  routeParms.Remove("letter");
+    routeParms.Remove("letter");
 }
-<p id="a_to_z">
-  @if (Model.ViewingLetter == null)
-  {
-    @Html.ActionLink("View All", Action, new RouteValueDictionary(routeParms), new { @class = "selected" })
-  }
-  else
-  {
-    @Html.ActionLink("View All", Action, new RouteValueDictionary(routeParms))
-  }
 
-
-  @{
-    routeParms.Add("letter", string.Empty);
-  }
-  @foreach (char letter in Model.LettersList)
-  {
-    routeParms["letter"] = letter.ToString();
-    if(letter.Equals(Model.ViewingLetter))
+<nav>
+    <!--<ul class="pagination pagination-sm">-->
+    <ol class="breadcrumb">
+    @if (Model.ViewingLetter == null)
     {
-		  @Html.ActionLink(letter.ToString(), Action, new RouteValueDictionary(routeParms), new { @class = "selected" })
+        @:<li class="active">View all</li>
     }
     else
     {
-      @Html.ActionLink(letter.ToString(), Action, new RouteValueDictionary(routeParms))
+        @:<li>@Html.ActionLink("View all", Action, new RouteValueDictionary(routeParms))</li>
+    }
+        
+  @{
+    routeParms.Add("letter", string.Empty);
+  }
+
+  @foreach (char letter in Model.LettersList.OrderBy(c => c))
+  {
+    routeParms["letter"] = letter.ToString();
+    
+    if(letter.Equals(Model.ViewingLetter)) {
+        @:<li class="active">@letter.ToString()</li>
+    } 
+    else
+    {
+        @:<li>@Html.ActionLink(letter.ToString(), Action, new RouteValueDictionary(routeParms))</li>
     }
   }
 
   @{
     routeParms.Remove("letter");
   }
-</p>
+    </ol>
+</nav>

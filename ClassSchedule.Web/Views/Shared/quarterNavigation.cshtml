@@ -1,9 +1,32 @@
 ﻿@using Ctc.Ods.Types
 @model CTCClassSchedule.Models.QuarterNavigationModel
 
-<div id="site-navigation">
-	@using(Html.BeginForm("Index", "Search", FormMethod.Get, new { id = "submitSearchForm" }))
+<div class="row row-padding buffer-top buffer-bottom">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="box-shadow">
+            <ul class="nav navbar-left nav-pills">
+                <li><a href="@Url.Content("~/")">Browse classes</a></li>
+                <li><a href="//bellevuecollege.edu/registration/register/">Register</a></li>
+            </ul>
+        
+	@using (Html.BeginForm("Index", "Search", FormMethod.Get, new { @id = "submitSearchForm", @class = "navbar-form navbar-left" }))
 	{
+        <div class="form-group">
+            <label for="seach-quarter-select" class="sr-only">Pick a quarter</label>
+			<select name="quarter" id="seach-quarter-select" class="form-control">
+				@foreach (YearQuarter yrq in Model.NavigationQuarters)
+				{
+					<option value="@yrq.FriendlyName.Replace(" ", string.Empty)" @if (Model.ViewingQuarter != null && Model.ViewingQuarter == yrq) { <text> selected="selected" </text> }>@yrq.FriendlyName</option>
+				}
+				<option value="CE">Continuing Education</option>
+			</select>
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="search-keyword">Classes search</label>
+            <input type="text" class="form-control" id="search-keyword" name="searchterm" maxlength="40" value="@(Request.QueryString["searchterm"] ?? string.Empty)" />
+        </div>
+        <button type="submit" class="btn btn-default" name="submit" value="Search classes">Search classes</button>
+        @*
 		<div id="browse">
 			<a href="@Url.Content("~/")" class="home roundcorners">Browse Classes</a>
 			<div class="nav-dropdown roundcorners">
@@ -46,14 +69,15 @@
 			</div>
 
     </div>
-
+          *@
+     @*
 		<div id="search" class="roundcorners">
 			<span id="search-text">Search</span>  <span id="search-tip">
 				<strong>Tip:</strong> you can search by course, title, subject, item number or instructor.
 			</span>
 
 			<label for="seach-quarter-select">Pick a quarter</label>
-			<select name="quarter" id="seach-quarter-select">
+			<select name="quarter" id="seach-quarter-select" class="form-control">
 				@foreach (YearQuarter yrq in Model.NavigationQuarters)
 				{
 					<option value="@yrq.FriendlyName.Replace(" ", string.Empty)" @if (Model.ViewingQuarter != null && Model.ViewingQuarter == yrq) { <text> selected="selected" </text> }>@yrq.FriendlyName</option>
@@ -62,9 +86,10 @@
 				<option value="CE">Continuing Education</option>
 			</select>
 
-			<label for="searh-keyword">Keywords</label>
+
+            <input type="text" class="form-control" id="search-keyword" name="searchterm" maxlength="40" value="@(Request.QueryString["searchterm"] ?? string.Empty)" />
+			<label class="sr-only" for="search-keyword">Search</label>
 			<div id="searchfield-wrap" class="roundcorners">
-				<input type="text" class="searchInput" id="search-keyword" name="searchterm" maxlength="40" value="@(Request.QueryString["searchterm"] ?? string.Empty)" />
 				<div id="searchbutton-wrap">
 					<input type="submit" class="searchSubmit"  name="submit" value="Search" />
 				</div>
@@ -74,13 +99,18 @@
 		<div id="register">
 			<a href="http://bellevuecollege.edu/registration/register/" class="roundcorners">Register</a>
 		</div>
+      *@
 	}
+            </div>
+    </div> 
+</div>
 
+@*
 	<div class="clearer"></div>
 
 </div> <!-- #navbar   TODO: configurable? -->
-
-
+*@
+@*
 <script type="text/javascript">
 	$(function () {
 
@@ -92,3 +122,4 @@
 
 	});
 </script>
+*@

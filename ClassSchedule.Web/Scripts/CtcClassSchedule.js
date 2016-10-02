@@ -6,7 +6,7 @@
 $(document).ready(function() {
 
   $('.course-updated a').click(function () {
-
+      //alert("here");
     var classID = this.id;
     var availability = '#availability-' + classID + ' .seatsAvailable';
     var courseUpdated = '#availability-' + classID + ' .course-updated';
@@ -31,9 +31,9 @@ $(document).ready(function() {
           $(availability).html(seatsAvailable);
           $(updateTime).html("refreshed " + friendlyTime);
         } else {
-          $(availability).html("class full");
+          $(availability).html("Class full");
 //          $(updateTime).html("refreshed " + friendlyTime);
-          $(updateTime).html("re-check");
+          $(updateTime).html("recheck");
           //$(courseUpdated).empty();
         }
       },

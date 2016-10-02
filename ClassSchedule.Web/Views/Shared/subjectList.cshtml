@@ -44,12 +44,12 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 		{
 			@:</ul>
 		}
-		<h2 class="subject-letter">@letter</h2>
-		@:<ul class="subject-list">
+		<h3>@letter</h3>
+		@:<ul>
 	}
 
 	routeParms["Subject"] = item.Slug.Trim();
-  string linkText = item.Title;
+    string linkText = item.Title;
 
 //  string[] prefixList = new string[] {};
 //  if (prefixes.Any())
@@ -62,7 +62,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 //  {
 //    _log.Warn(m => m("No CoursePrefixes found for '{0}'.", linkText));
 //  }
-  string link;
+    string link;
 
 	<li class="subject-name">
 	@if (FriendlyYrq != "ALL")
@@ -97,7 +97,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 												InsertionMode = InsertionMode.Replace,
 												OnBegin = "$('#edit-program').dialog('open');",
 				              },
-				              new { @class = "edit_button" })
+				              new { @class = "edit-button btn btn-info btn-sm" })
 	}
 
 

@@ -4,19 +4,23 @@
 @{
     ViewBag.PageTitle = "All Class Descriptions at Bellevue College";
 }
-<div id="scheduleMain">
-  @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
-  <div id="container" class="sidebar">
+<div class="row row-padding">
+
+    @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
+    <div class="row row-padding buffer-top buffer-bottom">
+        <div class="col-md-10">
+            <div class="content-padding">
+
+  @*<div id="container" class="sidebar">
     <div id="sidebar">
       @Html.Partial("basicFacetedSearch", Model.NavigationQuarters)
-    </div> <!-- #sidebar -->
+    </div> <!-- #sidebar -->*@
 
-    <div id="content">
-      <h1 id="pageTitle">All Credit Classes &amp; Descriptions</h1>
+                <h1>All Credit Classes and Descriptions</h1>
 
-      @Html.Partial("a_to_z", new AToZViewModel { LettersList = Model.LettersList, ViewingLetter = Model.ViewingLetter })
-      @Html.Partial("subjectList", Model.Subjects)
-    </div> <!-- #content -->
-
-  </div> <!-- #container -->
-</div>
+                @Html.Partial("a_to_z", new AToZViewModel { LettersList = Model.LettersList, ViewingLetter = Model.ViewingLetter })
+                @Html.Partial("subjectList", Model.Subjects)
+            </div> <!-- .content-padding -->
+        </div> <!-- .col-md-8 -->
+    </div> <!-- .row -->
+</div> <!-- .row -->

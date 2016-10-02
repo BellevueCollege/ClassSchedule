@@ -1,11 +1,13 @@
 ﻿@using System.Diagnostics
 @using Ctc.Ods.Types
+@using CTCClassSchedule.Models
 @model IEnumerable<CourseDescription>
 
 @{
   const string NO_DESCRIPTION_MSG = "No class description found. Please report this via the feedback link to the right of this website.";
 
   YearQuarter currentQuarter = ViewData["CurrentQuarter"] as YearQuarter;
+  ViewBag.PageTitle = "All Credit Classes and Descriptions at Bellevue College";
 }
 
 @if (currentQuarter != null)
@@ -26,11 +28,11 @@
     if (string.IsNullOrWhiteSpace(currentDesc.Description) && !future.Any())
     {
     <!-- A current course description was found, but no actual description text exists. AND no future course descriptions were found -->
-	  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
+	  <p>@NO_DESCRIPTION_MSG</p>
     }
     else
     {
-    <p class="classDescription">@currentDesc.Description</p>
+    <p>@currentDesc.Description</p>
     }
   }
   else
@@ -38,7 +40,7 @@
     if (!future.Any())
     {
     <!-- No current or future course descriptions found -->
-	  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
+	  <p>@NO_DESCRIPTION_MSG</p>
     }
   }
 
@@ -46,16 +48,16 @@
   {
     CourseDescription futureDesc = future.First();
 
-     <div class="upcomingChange">
+     <div>
 			  <h3>Description starting @(futureDesc.YearQuarterBegin.FriendlyName)</h3>
     @if (string.IsNullOrWhiteSpace(futureDesc.Description))
     {
         <!-- A future course description was found, but no actual description text exists -->
-			  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
+			  <p>@NO_DESCRIPTION_MSG</p>
     }
     else
     {
-        <p class="classDescription">@futureDesc.Description</p>
+        <p>@futureDesc.Description</p>
     }
 		  </div>
   }
@@ -63,5 +65,5 @@
 else
 {
   <!-- Unable to determine current quarter - skipping course descriptions. -->
-  <p class="classDescription error">@NO_DESCRIPTION_MSG</p>
+  <p>@NO_DESCRIPTION_MSG</p>
 }

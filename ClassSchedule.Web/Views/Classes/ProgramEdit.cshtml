@@ -9,84 +9,81 @@
 	<fieldset id="ProgramEdit">
 		@Html.HiddenFor(model => model.Subject.SubjectID)
 		@Html.HiddenFor(model => model.Subject.Slug)
-		<div class="left">
-			<div class="editor-label">
-				@Html.LabelFor(model => model.Subject.Title)
-			</div>
-			<div class="editor-field">
-				@Html.TextBoxFor(model => model.Subject.Title, new { @class = "subject-text-field", @maxlength = "50" })
-				@Html.ValidationMessageFor(model => model.Subject.Title)
-			</div>
 
-			<!-- Subject Merging -->
-			<div class="editor-label">
-				Modify Subject's Course Prefixes
-			</div>
-			<div class="editor-field">
-				<ul class="subject-merger subject-text-field">
-					@{
-							IList<string> mergedPrefixes = Model.Subject.CoursePrefixes.Select(s => s.CoursePrefixID).ToList();
-							foreach (string prefix in mergedPrefixes)
-							{
-								<li class="subject-choice">
-									<span>@prefix.Trim()</span>
-									<input name="PrefixesToMerge" value="@prefix.Trim()" type="hidden" />
-									<span class="subject-choice-close ui-icon ui-icon-close"></span>
-								</li>
-							}
-							<li class="subject-new">
-								<select id="newSubjectMerge">
-									<option>Select</option>
-									@foreach (string prefix in Model.AllCoursePrefixes)
-									{
-										@* Don't output an option if the prefix is already merged *@
-										if (!mergedPrefixes.Contains(prefix))
-										{
-											<option>@prefix</option>
-										}
-									}
-								</select>
-							</li>
-						}
-				</ul>
-			</div>
-
-			<div class="editor-label">
-				@Html.LabelFor(model => model.Subject.Intro)
-			</div>
-			<div class="editor-field">
-				@Html.TextAreaFor(model => Model.Subject.Intro, new { @class = "subject-text-field", @cols = 60, @rows = 7 })
-				@Html.ValidationMessageFor(model => model.Subject.Intro)
-			</div>
+		<div class="editor-label">
+			@Html.LabelFor(model => model.Subject.Title)
+		</div>
+		<div class="editor-field">
+			@Html.TextBoxFor(model => model.Subject.Title, new { @class = "subject-text-field", @maxlength = "50" })
+			@Html.ValidationMessageFor(model => model.Subject.Title)
 		</div>
 
-	<div class="right">
-	  <div class="editor-label">
-	    @Html.LabelFor(model => model.Department.DepartmentID, "Department")
-	  </div>
-	  <div id="department-field" class="editor-field">
-	    @Html.DropDownListFor(model => model.Department.DepartmentID, 
+		<!-- Subject Merging -->
+		<div class="editor-label">
+			Modify subject's course prefixes
+		</div>
+		<div class="editor-field">
+			<ul class="subject-merger subject-text-field">
+				@{
+						IList<string> mergedPrefixes = Model.Subject.CoursePrefixes.Select(s => s.CoursePrefixID).ToList();
+						foreach (string prefix in mergedPrefixes)
+						{
+							<li class="subject-choice">
+								<span>@prefix.Trim()</span>
+								<input name="PrefixesToMerge" value="@prefix.Trim()" type="hidden" />
+								<span class="subject-choice-close ui-icon ui-icon-close"></span>
+							</li>
+						}
+						<li class="subject-new">
+							<select id="newSubjectMerge">
+								<option>Select</option>
+								@foreach (string prefix in Model.AllCoursePrefixes)
+								{
+									@* Don't output an option if the prefix is already merged *@
+									if (!mergedPrefixes.Contains(prefix))
+									{
+										<option>@prefix</option>
+									}
+								}
+							</select>
+						</li>
+					}
+			</ul>
+		</div>
+
+		<div class="editor-label">
+			@Html.LabelFor(model => model.Subject.Intro)
+		</div>
+		<div class="editor-field">
+			@Html.TextAreaFor(model => Model.Subject.Intro, new { @class = "subject-text-field", @cols = 60, @rows = 7 })
+			@Html.ValidationMessageFor(model => model.Subject.Intro)
+		</div>
+
+        <div class="editor-label">
+	        @Html.LabelFor(model => model.Department.DepartmentID, "Department")
+	    </div>
+	    <div id="department-field" class="editor-field">
+	        @Html.DropDownListFor(model => model.Department.DepartmentID, 
 	                          Model.AllDepartments.Select(d => new SelectListItem {Value = d.DepartmentID.ToString(), Text = d.Title}).OrderBy(i => i.Text), 
 	                          new { @class = "subject-text-field", @maxlength = "50" })
-	    @Html.ValidationMessageFor(model => model.Department.DepartmentID)
-	  </div>
+	        @Html.ValidationMessageFor(model => model.Department.DepartmentID)
+	    </div>
 
-	  <div class="editor-label">
+	    <div class="editor-label">
 	    <div id="department-url" class="url-preview">
-	      @if (!string.IsNullOrWhiteSpace(Model.Department.URL))
-	      {
+	        @if (!string.IsNullOrWhiteSpace(Model.Department.URL))
+	        {
 	        <a href="@Model.Department.URL">Link preview</a>
-	      }
-	      else
-	      {
-         @:(No web page specified)
-	      }
+	        }
+	        else
+	        {
+            @:(No web page specified)
+	        }
 	    </div>
 	    <noscript>
-	      <div>Preview will not update unless Javascript is enabled.</div>
+	        <div>Preview will not update unless Javascript is enabled.</div>
 	    </noscript>
-	  </div>
-	</div>
+	    </div>
 	</fieldset>
 
 	<div id="lastModifiedBy">
@@ -104,15 +101,13 @@
 }
 
 @* TODO: Can we also put this JS in a pageScripts section? *@
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 <script type="text/javascript">
 
   $(function () {
     $("#cancelEdit").click(function (e) {
       e.preventDefault();
       $(".ui-dialog").hide();
-      showThrobber();
+      //showThrobber();
       window.location.href = $(location).attr('href');
     });
 
@@ -153,7 +148,7 @@
     $('#department-field select').change(function() {
       var deptLinks = new Array();
     @foreach (Department department in Model.AllDepartments) {
-  @:deptLinks[@(department.DepartmentID)] = "@department.URL";
+        @:deptLinks[@(department.DepartmentID)] = "@department.URL";
     }
 
       UpdatePreview($(this), $('#department-url'), deptLinks);
@@ -179,5 +174,59 @@
     } else {
       container.text(title);
     }
+  }
+
+  $("#edit-program").dialog({
+      autoOpen: false,
+      width: 'auto', // overcomes width:'auto' and maxWidth bug
+      maxWidth: 600,
+      height: 'auto',
+      modal: true,
+      fluid: true, //new option
+      resizable: false,
+      position: {
+          my: "center center",
+          at: "center center",
+          of: window
+      }
+  });
+
+  // on window resize run function
+  $(window).resize(function () {
+      fluidDialog();
+  });
+
+  // catch dialog if opened within a viewport smaller than the dialog width
+  $(document).on("dialogopen", ".ui-dialog", function (event, ui) {
+      fluidDialog();
+  });
+
+  function fluidDialog() {
+      var $visible = $(".ui-dialog:visible");
+      // each open dialog
+      $visible.each(function () {
+          var $this = $(this);
+          var dialog = $this.find(".ui-dialog-content");
+          //alert(dialog);
+          var fluid = dialog.dialog("option", "fluid");
+          var maxw = dialog.dialog("option", "maxWidth");
+
+          // if fluid option == true
+          if ( fluid ) {
+              var wWidth = $(window).width();
+              // check window width against dialog width
+              if (wWidth < maxw + 50) {
+                  // keep dialog from filling entire screen
+                  $this.css("max-width", "90%");
+              } else {
+                  // fix maxWidth bug
+                  $this.css("max-width", maxw);
+              }
+              //reposition dialog
+              var position = dialog.dialog("option", "position");
+              dialog.dialog("option", "position", position);
+          }
+      });
+
   }
 </script>

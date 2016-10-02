@@ -20,6 +20,60 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
   string ver = ViewBag.Version;
   ViewBag.SubjectChooserDisplayed = false;
 }
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en-US" class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en-US" class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en-US" class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en-US" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+
+<head>
+	<title>@ViewBag.PageTitle</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="@Helpers.GlobalsHttp("c/g.css?ver=3.3")">
+	<link rel="stylesheet" media="print" href="@Helpers.GlobalsHttp("c/p.css?ver=3.3")">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script type="text/javascript" src="@Helpers.GlobalsHttp("j/ghead.js")"></script>
+	<!--[if lt IE 9]><script type="text/javascript" src="@Helpers.GlobalsHttp("j/respond.js")"></script><![endif]-->
+	<link rel="stylesheet"" id="open-sans-css"" href="//fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C600italic%2C300%2C400%2C600&#038;subset=latin%2Clatin-ext&#038;ver=4.0.1"" type="text/css" media="all" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/test.css")" type="text/css" />
+
+    @Html.Include(Server.MapPath(Helpers.GlobalsFile("h/gabranded.html")))
+    <script type="text/javascript">
+        // global values used by multiple client scripts
+        var g_ajaxLoaderImgPath = "@Url.Content("~/Content/images/ajax-loader.gif")";
+        var g_getSeatsUrl = "@Url.Action("GetSeats", "Api")";
+        var g_updateCMSFootnoteUrl = "@Url.Action("UpdateSectionFootnote", "Api")";
+        var g_searchRootUrl = "@Url.Action("Index", "Search")";
+    </script>
+    @RenderSection("PageScripts", false)
+
+    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
+</head>
+
+<body class="nav-classes @(Helpers.GetBodyClasses(Context))">
+    @Html.Include(Server.MapPath(Helpers.GlobalsFile("h/bhead.html")))
+        <div id="main-wrap" class="globals-branded">
+            <div id="main" class="container no-padding">
+                <div class="content-padding">
+                    <div id="site-header">
+                        <p class="site-title">
+                            <!--  Header content  -->
+                            <a href="/classes/">Classes</a>
+                        </p><!-- container header -->
+                    </div>
+                </div><!-- content-padding -->
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div id="content" class="box-shadow">
+                            @RenderBody()
+@*
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
@@ -74,84 +128,24 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     @MvcMiniProfiler.MiniProfiler.RenderIncludes()
   </head>
 
+*@
 
+                            </div>
+				        <!-- #content-->
+                    </div>
+                    <!-- .col-md-12 -->
+                </div>
+                <!-- .row -->
+                @(Html.Partial("Footer"))
+		    </div>
+		    <!-- #main .container -->
+	    </div>
+	    <!-- #main-wrap -->
 
-<body class="@(Helpers.GetBodyClasses(Context))">
+    @Html.Include(Server.MapPath(Helpers.GlobalsFile("h/bfoot.html")))
+    @Html.Include(Server.MapPath(Helpers.GlobalsFile("h/legal.html")))
 
-	@Html.Include(Server.MapPath(Helpers.GlobalsFile("btheme_v0.1/asp/header_big.asp")))
-
-	<div id="bodyWrapper">
-
-
-		<!-- PROTOTYPE: This block of code only exists to prove that authentication/authorization works. -->
-		<!-- ******************************************************************************************* -->
-		<div style="float:right;">
-	@if(Context.User.Identity.IsAuthenticated) {
-			<text>[ Welcome <b>@Context.User.Identity.Name</b>! ] @(Helpers.IsAdmin(Context) ? " - Admin" : "") @(!Helpers.IsAdmin(Context) && Helpers.IsEditor(Context) ? " - Editor" : "")</text>
-		<text>[ @Html.ActionLink("Logout", "Logout", "Classes")  ]</text>
- }
- else
- {
-			@:[ @Html.ActionLink("Login", "Authenticate", "Classes") ]
-	}
-		</div>
-		<!-- ******************************************************************************************* -->
-		<!-- END PROTOTYPE -->
-
-
-    <div id="titlebar">
-		    <h1 id="sitename"><a href="@Url.Content("~/")">Classes</a></h1>
-		</div>
-
-		@RenderBody()
-
-	  @(Html.Partial("Footer"))
-
-	</div>
-
-	@Html.Include(Server.MapPath(Helpers.GlobalsFile("btheme_v0.1/asp/footer_big.asp")))
-
-
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    var pluginUrl =
-      '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
-    _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
-    _gaq.push(['_setAccount', 'UA-3966899-1']);
-    _gaq.push(['_setAllowLinker', true]);
-    _gaq.push(['_setDomainName', 'bellevuecollege.edu']);
-    _gaq.push(['_trackPageview']);
-
-    //multisite
-    _gaq.push(['multi._setAccount', 'UA-17566683-1']);
-    _gaq.push(['multi._setAllowLinker', true]);
-    _gaq.push(['multi._setDomainName', 'bellevuecollege.edu']);
-    _gaq.push(['multi._trackPageview']);
-
-    //CE
-    _gaq.push(['ce._setAccount', 'UA-16482970-1']);
-    _gaq.push(['ce._setAllowLinker', true]);
-    _gaq.push(['ce._setDomainName', 'bellevuecollege.edu']);
-    _gaq.push(['ce._trackPageview']);
-
-    (function () {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-  <script>
-    /* New analytics.js tracking */
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-3966899-14', 'bellevuecollege.edu');
-    ga('send', 'pageview');
-  </script>
+	<script src="@Helpers.GlobalsHttp("j/bootstrap.min.js")"></script>
+	<script src="@Helpers.GlobalsHttp("j/g.js")"></script>
 </body>
 </html>

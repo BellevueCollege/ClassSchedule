@@ -6,34 +6,38 @@
     ViewBag.PageTitle = Model.Slug + "-" + Model.DepartmentTitle + " Classes at Bellevue College";
 }
 
-<div id="scheduleMain">
+<div class="row row-padding">
+    
 	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
-	<div id="container" class="sidebar subject">
-		<p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>
-		<div id="sidebar">
+    
+    <div class="row row-padding buffer-top buffer-bottom">
+        <div class="col-md-10">
+            <div class="content-padding">
+
+		@*<p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>*@
+		@*<div id="sidebar">
 			@Html.Partial("basicFacetedSearch", Model.NavigationQuarters)
 		</div> <!-- #sidebar -->
-
-		<div id="content">
+        *@
 			@if (!Model.Courses.Any())
 			{
 				<h1>No @Model.Slug classes were found</h1>
-				<p><strong>TIP:</strong> Try changing the <strong>Subject</strong> to the left.</p>
+				<p><strong>Tip:</strong> Try changing the <strong>Subject</strong> to the left.</p>
 			}
 			else
 			{
 				if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
 				{
-					<h1 id="pageTitle">@Model.SubjectTitle</h1>
+					<h1>@Model.SubjectTitle</h1>
 				}
 
 				if (!string.IsNullOrWhiteSpace(Model.SubjectIntro))
 				{
-					<p class="subjectdesc">@Model.SubjectIntro</p>
+					<p>@Model.SubjectIntro</p>
 				}
 				if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
 				{
-					<p id="programLink">
+					<p>
 						<strong>Need more info?</strong>
 						<a href="@Model.DepartmentURL">Visit the
 							@if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
@@ -48,44 +52,31 @@
 							{
 								<text>Program</text>
 							}
-							website
-						</a>
+							website</a>.
 					</p>
 				}
 
-				<div id="classDescriptions">
-					@foreach (Course item in Model.Courses)
+				foreach (Course item in Model.Courses)
+				{
+					<h2>
+						<a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number })">
+							@Html.SectionCourseHeading(item)
+							@ViewHelpers.DisplayCredits(item)
+						</a>
+					</h2>
+
+					if (string.Compare(item.YearQuarterBegin.ToString(), Model.CurrentQuarter.ID) == 1)
 					{
-						<div class="classInfo">
-							<h2 class="classHeading">
-								<a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number })">
-									@Html.SectionCourseHeading(item)
-									@ViewHelpers.DisplayCredits(item)
-								</a>
-							</h2>
+						<div class="upcomingChange new">New class</div>
+					}
 
-							@if (string.Compare(item.YearQuarterBegin.ToString(), Model.CurrentQuarter.ID) == 1)
-							{
-								<div class="upcomingChange new">New class</div>
-							}
+					@Html.Partial("CourseDescriptions", item.Descriptions, new ViewDataDictionary {
+                                                    new KeyValuePair<string, object>("CurrentQuarter", Model.CurrentQuarter)
+						                                    })
+               }
 
-						  @Html.Partial("CourseDescriptions", item.Descriptions, new ViewDataDictionary
-						                                        {
-                                                      new KeyValuePair<string, object>("CurrentQuarter", Model.CurrentQuarter)
-						                                        })
-
-						  <p class="classDetailsLink">
-
-								@Html.ActionLink(String.Concat("View details for ", Helpers.SubjectWithCommonCourseFlag(item), " ", item.Number),
-                                                                "ClassDetails",
-                                                                "Classes",
-                                                                new { Prefix = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number },
-                                                                null)
-							 </p>
-						</div>
-          }
-				</div> <!-- #classDescriptions -->
 			}
-		</div> <!-- #content -->
-	</div> <!-- #container -->
-</div> <!-- schedulemain -->
+		    </div> <!-- content -->
+	    </div> <!-- col -->
+    </div> <!-- row -->
+</div> <!-- row -->

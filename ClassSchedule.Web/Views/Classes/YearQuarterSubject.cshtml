@@ -23,12 +23,17 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 @{
   MiniProfiler _profiler = MiniProfiler.Current;
 
-  ViewBag.PageTitle = Model.ViewingQuarter.FriendlyName + " " + Model.SubjectTitle + " Credit Class Schedule at Bellevue College";
+  ViewBag.PageTitle = Model.ViewingQuarter.FriendlyName + " " + Model.SubjectTitle + " Credit Classes at Bellevue College";
 }
 
-<div id="scheduleMain">
+<div class="row row-padding">
 	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = Model.ViewingQuarter })
-	<div id="container" class="sidebar">
+
+    <div class="row row-padding buffer-top buffer-bottom">
+    <div class="col-md-10">
+        <div class="content-padding">
+        
+	@*<div id="container" class="sidebar">
     <p id="sectionTitle">
 	    <a href="@Url.Action("YearQuarter", "Classes")">@Model.ViewingQuarter.FriendlyName</a>
     </p>
@@ -39,113 +44,108 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                                                SelectedSubject = Model.Slug,
                                                FacetData = Model.FacetData
 	                                           })
-    </div><!-- #sidebar -->
+    </div><!-- #sidebar -->*@
 
-		<div id="content">
-      @if (Model.Courses.Count == 0)
-      {
-        @*
-        TODO: The Subject (aka Prefix) should be displayed to the user here, not the Slug - the slug is only for URL construction, the Subject is the user info
-        *@
-        <h1 id="pageTitle">No @Model.Slug classes were found</h1>
-        <div id="error-noclassesfound">
-          <strong>TIP:</strong>
-          @Html.Partial("subjectNavigation", Model.ViewingQuarter) or try selecting fewer <em>Refine</em> options to the left.
-        </div>
-      }
-      else
-      {
-        <h1 id="pageTitle">
-	        @Model.SubjectTitle
-        </h1>
-
-        if (!string.IsNullOrWhiteSpace(Model.SubjectIntro))
-        {
-          <p class="subjectdesc">@Model.SubjectIntro</p>
-        }
-
-        if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
-        {
-          <p id="programLink">
-            <strong>Need more info?</strong>
-            <a href="@Model.DepartmentURL">Visit the
-              @if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
-              {
-                @Model.DepartmentTitle
-              }
-              else if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
-              {
-                @Model.SubjectTitle
-              }
-              else
-              {
-                <text>Program</text>
-              }
-              website
-            </a>
-          </p>
-        }
-
-        if (Helpers.IsAdmin(Context) || Helpers.IsEditor(Context))
-        {
-          string role = Helpers.IsAdmin(Context) ? "admin" : "editor";
-          <div class="message">@Context.User.Identity.Name! You have @role access to this section. [ <a class="toggleEditingMode" data-inlineMode="false">Enable Inline Editing</a> ]</div>
-        }
-
-        using (_profiler.Step("Rendering Sections by Course (outer loop)"))
-        {
-          foreach (SectionsBlock block in Model.Courses)
-          {
-            SectionWithSeats firstSection = block.Sections.First();
-
-            if (firstSection != null)
+            @if (Model.Courses.Count == 0)
             {
-              if (!firstSection.IsLinked)
-              {
-                <h2 class="classHeading">
-                  @if (block.LinkedSections.Count > 0)
-                  {
-                    <span class="combinationClass">Combination class:</span><br />
-                  }
-                  <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber })">
-                    @Html.SectionCourseHeading(firstSection)
-                    @ViewHelpers.DisplayCredits(firstSection)
-                  </a>
-                  @{
-                    IList<SectionWithSeats> commonLinkedSections = Helpers.ParseCommonHeadingLinkedSections(block.LinkedSections);
-                  }
-                  @foreach (SectionWithSeats linkedSec in commonLinkedSections)
-                  {
-                    <br />
-                    <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber })">
-                      @Html.SectionCourseHeading(linkedSec)
-                      @ViewHelpers.DisplayCredits(linkedSec)
-                    </a>
-                  }
-	              </h2> <!-- classHeading -->
+                @*
+                TODO: The Subject (aka Prefix) should be displayed to the user here, not the Slug - the slug is only for URL construction, the Subject is the user info
+                *@
+                <h2>No @Model.Slug classes were found</h2>
+        
+                <div class="alert alert-info">
+                    <strong>Tip:</strong>
+                    @Html.Partial("subjectNavigation", Model.ViewingQuarter) or try selecting fewer refinement options to the left.
+                </div>
+            }
+            else
+            {
+                <h1>@Model.SubjectTitle</h1>
 
-                <div class="classInfo">
-                  @if (Helpers.IsAdmin(Context))
-                  {
-                    @Ajax.ActionLink("Edit",
-                                      "ClassEdit",
-                                      "Api",
-                                      new {
-                                        CourseNumber = firstSection.CourseNumber,
-                                        Subject = firstSection.CourseSubject,
-                                        IsCommonCourse = firstSection.IsCommonCourse,
-                                      },
-                                      new AjaxOptions {
-                                        UpdateTargetId = "edit-class",
-                                        HttpMethod = "GET",
-                                        InsertionMode = InsertionMode.Replace,
-                                        OnBegin = "$('#edit-class').dialog('open');",
-                                        OnComplete = "spinner.stop();",
-                                      },
-                                      new { @class = "edit_button" })
-                  }
+                if (!string.IsNullOrWhiteSpace(Model.SubjectIntro))
+                {
+                    <p>@Model.SubjectIntro</p>
+                }
 
-                  <div class="classDetails">
+                if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
+                {
+                  <p>
+                    <strong>Need more info?</strong>
+                    <a href="@Model.DepartmentURL">Visit the
+                      @if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
+                      {
+                        @Model.DepartmentTitle
+                      }
+                      else if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
+                      {
+                        @Model.SubjectTitle
+                      }
+                      else
+                      {
+                        <text>program</text>
+                      }
+                      website</a>.
+                  </p>
+                }
+
+                if (Helpers.IsAdmin(Context) || Helpers.IsEditor(Context))
+                {
+                  string role = Helpers.IsAdmin(Context) ? "admin" : "editor";
+                  <div class="alert alert-info buffer-top buffer-bottom">@Context.User.Identity.Name! You have @role access to this section. [ <a class="toggleEditingMode" data-inlineMode="false">Enable inline editing</a> ]</div>
+                }
+
+                using (_profiler.Step("Rendering Sections by Course (outer loop)"))
+                {
+                  foreach (SectionsBlock block in Model.Courses)
+                  {
+                    SectionWithSeats firstSection = block.Sections.First();
+
+                    if (firstSection != null)
+                    {
+                      if (!firstSection.IsLinked)
+                      {
+                        <h3>
+                            @if (block.LinkedSections.Count > 0)
+                            {
+                                <span class="small">Combination class:</span><br />
+                            }
+                            <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber })">
+                                @Html.SectionCourseHeading(firstSection)
+                                @ViewHelpers.DisplayCredits(firstSection)
+                            </a>
+                          @{
+                            IList<SectionWithSeats> commonLinkedSections = Helpers.ParseCommonHeadingLinkedSections(block.LinkedSections);
+                          }
+                          @foreach (SectionWithSeats linkedSec in commonLinkedSections)
+                          {
+                            <br /><a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber })">
+                              @Html.SectionCourseHeading(linkedSec)
+                              @ViewHelpers.DisplayCredits(linkedSec)
+                            </a>
+                          }
+	                    </h3> <!-- classHeading -->
+
+                        <div class="classInfo">
+                          @if (Helpers.IsAdmin(Context))
+                          {
+                            @Ajax.ActionLink("Edit",
+                                              "ClassEdit",
+                                              "Api",
+                                              new {
+                                                CourseNumber = firstSection.CourseNumber,
+                                                Subject = firstSection.CourseSubject,
+                                                IsCommonCourse = firstSection.IsCommonCourse,
+                                              },
+                                              new AjaxOptions {
+                                                UpdateTargetId = "edit-class",
+                                                HttpMethod = "GET",
+                                                InsertionMode = InsertionMode.Replace,
+                                                OnBegin = "$('#edit-class').dialog('open');",
+                                                //OnComplete = "spinner.stop();",
+                                              },
+                                              new { @class = "edit-button" })
+                          }
+
 				            @*
                       NOTE: Only display a custom description, if one exists, otherwise don't display a description
                       See http://irwiki.bellevuecollege.edu/wiki/Class_Schedule#Displaying_of_Course_Descriptions
@@ -154,48 +154,52 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                     {
                       @Html.Raw(firstSection.CustomDescription)
                     }
-                    <ul>
-                      <li class="classDetailsLink">
-                        @Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber }, null)
-                      </li>
-                      @foreach (SectionWithSeats linkedSec in commonLinkedSections)
-                      {
-                        string linkedCourseId = Helpers.BuildCourseID(linkedSec.CourseNumber, linkedSec.CourseSubject, linkedSec.IsCommonCourse);
-                        <li class="classDetailsLink">
-                          @Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber }, null)
-                        </li>
-                      }
-                    </ul>
-                  </div>
-                  <p class="classNotes">
+                  <p>
                     @ViewHelpers.DisplayFootnotes(block.CommonFootnotes, firstSection.CourseFootnotes)
                   </p>
                 </div> <!--classInfo -->
 
-                <ul class='course-block @(Model.ViewingQuarter.ID.CompareTo(Model.CurrentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
-                  @foreach (SectionWithSeats sec in block.Sections)
-                  {
-                    // Both Sections includes a master and its subordinate linked section(s)
-                    IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
-                    IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
+                @*<ul class='course-block @(Model.ViewingQuarter.ID.CompareTo(Model.CurrentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
+                *@
+                  <table class="table-classes">
+                      <thead>
+                          <tr>
+                              <th scope="col">Item #</th>
+                              <th scope="col">Section</th>
+                              <th scope="col">Instructor</th>
+                              <th scope="col">Day(s), Times, Room</th>
+                              <!--<th scope="col">Times</th>
+                              <th scope="col">Room</th>-->
+                              <th scope="col">Books</th>
+                              <th scope="col">Seats available</th>
+                              <th></th>
+                          </tr>
+                      </thead>
+                      @foreach (SectionWithSeats sec in block.Sections)
+                      {
+                        // Both Sections includes a master and its subordinate linked section(s)
+                        IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
+                        IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
 
-                    if (linked.Count > 0)
-                    {
-	                    multipleSections = multipleSections.Union(linked).ToList();
-                    }
+                        if (linked.Count > 0)
+                        {
+	                        multipleSections = multipleSections.Union(linked).ToList();
+                        }
 
-                    // NOTE: We must pass the current ViewData object to RenderPartial here.
-                    // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-                    Html.RenderPartial("Sections", new SectionsViewModel
-                    {
-                      Sections = multipleSections.ToList(),
-                      CurrentQuarter = Model.CurrentQuarter,
-                      ViewingQuarter = Model.ViewingQuarter,
-                      CommonFootnotes = block.CommonFootnotes,
-                    });
-                  }
-                  <li>
-@if (block.IsCrosslisted && block.LinkedSections.Count <= 0)
+                        // NOTE: We must pass the current ViewData object to RenderPartial here.
+                        // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+                        Html.RenderPartial("Sections", new SectionsViewModel
+                        {
+                          Sections = multipleSections.ToList(),
+                          CurrentQuarter = Model.CurrentQuarter,
+                          ViewingQuarter = Model.ViewingQuarter,
+                          CommonFootnotes = block.CommonFootnotes,
+                        });
+                      }
+                  </table>
+                @block.IsCrosslisted
+                  @*<li>*@
+if (block.IsCrosslisted && block.LinkedSections.Count <= 0)
   {
     // TODO: Replace Helpers.BuildCourseID() with this logic - and pull in CommonCourseChar from .config
     string courseID = string.Format("{0}{1} {2}", firstSection.CourseSubject, firstSection.IsCommonCourse ? "&" : string.Empty, firstSection.CourseNumber);
@@ -223,8 +227,8 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
         });
       </script>
   }
-                  </li>
-                </ul>
+                @*  </li>
+                </ul>*@
               }
             }
           }
@@ -236,38 +240,65 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 			<div title="Edit Class" id="edit-class">
 			</div>
-
-		</div><!-- content -->
-	</div><!-- container -->
-</div><!-- #scheduleMain -->
+            </div><!--content padding-->
+		</div><!-- col -->
+	</div><!-- row -->
+</div><!-- row -->
 
 @section PageScripts
 {
 	<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")?v=@ViewBag.Version"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.min.css" type="text/css" />
 	<script type="text/javascript">
 
-	/* subject chooser pop-up dialog */
-	$(document).ready(function () {
+	/* class edit pop-up dialog */
+	//$(document).ready(function () {
+	    $(function () {
 
-		$("#edit-section").dialog({
-			autoOpen: false,
-			height: 575,
-			width: 650
-		});
+	        var bootstrapButton = $.fn.button.noConflict() // return $.fn.button to previously assigned value
+	        $.fn.bootstrapBtn = bootstrapButton            // give $().bootstrapBtn the Bootstrap functionality
+
+		    $("#edit-section").dialog({
+		        autoOpen: false,
+		        width: 'auto', // overcomes width:'auto' and maxWidth bug
+		        maxWidth: 600,
+		        height: 'auto',
+		        modal: true,
+		        fluid: true, //new option
+		        resizable: false,
+		        position: {
+		            my: "center center",
+		            at: "center center",
+		            of: window
+		        }
+		    });
 
 		$("#edit-class").dialog({
-			autoOpen: false,
-			height: 425,
-			width: 600
+		    autoOpen: false,
+		    width: 'auto', // overcomes width:'auto' and maxWidth bug
+		    maxWidth: 600,
+		    height: 'auto',
+		    modal: true,
+		    fluid: true, //new option
+		    resizable: false,
+		    position: {
+		        my: "center center",
+		        at: "center center",
+		        of: window
+		    }
 		});
 
 		$("span.ui-icon-closethick").click(function () {
-			showThrobber();
+			//showThrobber();
 			window.location.href = $(location).attr('href');
 		});
 
-	 @if (Helpers.IsEditor(Context))
-	 {
+	     @if (Helpers.IsEditor(Context))
+	     {
 				<text>
 				var cmsFootnotePlaceholder = "<em>[Enter additional notes]</em>";
 
@@ -278,9 +309,9 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 							toggle = (oldVal === 'true');
 
 							if (toggle) {
-								$(this).html('Enable Inline Editing');
+								$(this).html('Enable inline editing');
 							} else {
-								$(this).html('Disable Inline Editing');
+								$(this).html('Disable inline editing');
 							}
 
 							return !(toggle);
@@ -288,7 +319,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 						// Toggle footnote editability
 						var toggleState = $(this).attr('data-inlineMode') === 'true';
-						$('ul.section-details').find('span.cmsfootnote').each(function () {
+						$('tbody.section-details').find('span.cmsfootnote').each(function () {
 							$(this).attr('contenteditable', toggleState);
 							$(this).toggleClass('text-editable');
 
@@ -307,12 +338,12 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 				});
 
 				// Bind inline editing event behaviors
-				$('ul.section-details').find('span.cmsfootnote').each(function () {
-            $(this).bind('focus', function(e) {
-              window.setTimeout(function() {
-                $(e.target).children().remove();
-              }, 100);
-						});
+				$('tbody.section-details').find('span.cmsfootnote').each(function () {
+                    $(this).bind('focus', function(e) {
+                      window.setTimeout(function() {
+                        $(e.target).children().remove();
+                      }, 100);
+				});
 
 						$(this).bind('blur', function() {
 							var footnote = $(this).text().trim();
@@ -350,26 +381,26 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 				});
 
 
-				$('li.section-listing').hover(
+				$('tbody.section-details').hover(
 					function () {
-						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').show();
-						$(this).addClass('section-listing-edit edit-hover');
+						$(this).children('td.editing').children('a.edit-button').show();
+						$(this).addClass('section-details-edit edit-hover');
 
 						if ($('a[data-inlineMode*="true"]').length) {
 							$(this).find('span.cmsfootnote').addClass('edit-hover text-highlight');
 						}
 					},
 					function () {
-						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').hide();
+						$(this).children('tbody.section-details').children('td.editing').children('a.edit-button').hide();
 						$(this).find('span.cmsfootnote').removeClass('edit-hover text-highlight');
-						$(this).removeClass('section-listing-edit edit-hover');
+						$(this).removeClass('section-details-edit edit-hover');
 				});
 				</text>
-	 }
+	    }
 
 
-			@if (Helpers.IsAdmin(Context))
-	 {
+			@*@if (Helpers.IsAdmin(Context))
+	        {
 				<text>
 				$('.classInfo').hover(
 					function () {
@@ -381,8 +412,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 						$(this).removeClass('edit-hover classInfo-edit');
 				});
 				</text>
-			}
+			}*@
 
 	});
 	</script>
-}

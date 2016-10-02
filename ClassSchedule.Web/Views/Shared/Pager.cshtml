@@ -10,31 +10,39 @@
 
 @if (Model.TotalPages > 1)
 {
-  <div id="pager">
-    <div id="pagerNums">
-      @if (Model.CurrentPage > 1)
-      {
-        <a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@(Model.CurrentPage - 2)" id="pagerArrowLeft">&lt; Previous</a>
-      }
+    <nav id="classes-search-results" class="text-center" aria-label="Search results navigation">
+        <ul class="pagination">
+            @if (Model.CurrentPage > 1)
+            {
+                <li>
+                    <a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@(Model.CurrentPage - 2)"><span aria-hidden="true">&laquo;</span> Previous</a>
+                </li>
+            }
 
-      <span id='pagerPages'>Pages:
-        @for (int i = 1; i <= Model.TotalPages; i++)
-        {
-          if (Model.CurrentPage == i)
-          {
-            <span class="selected">@i</span>
-          }
-          else
-          {
-            <a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@(i - 1)"> @i</a>
-          }
-        }
-      </span>
+          @*<span id='pagerPages'>Pages:*@
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+              if (Model.CurrentPage == i)
+              {
+                  <li class="active">
+                    <span>@i <span class="sr-only">(current)</span></span>
+                  </li>  
+              }
+              else
+              {
+                  <li>
+                    <a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@(i - 1)"> @i</a>
+                  </li>
+              }
+            }
+      
 
-      @if (Model.CurrentPage < Model.TotalPages)
-      {
-        <a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@Model.CurrentPage" id="pagerArrowRight">Next &gt;</a>
-      }
-    </div>
-  </div>
+          @if (Model.CurrentPage < Model.TotalPages)
+          {
+              <li>
+                <a href="@Url.Content("~/Search/")?@modifiedQueryString&p_offset=@Model.CurrentPage">Next <span aria-hidden="true">&raquo;</span></a>
+              </li>
+          }
+        </ul>
+    </nav>
 }

@@ -28,149 +28,136 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
   string _searchTerm = ViewBag.searchterm ?? string.Empty;
 }
 
-<!-- SEARCHTERM: @_searchTerm -->
-<li class="section-listing" data-sectionid="@sectionID"><span class="item-number"><span class="descriptor">
-	Item number: </span>@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? Model.Sections[0].ID.ItemNumber : Html.FormatWithSearchTerm(_searchTerm, Model.Sections[0].ID.ItemNumber).ToString())</span>
-	<ul class="section-details">
-		<li class="section"><span class="descriptor">Section: </span>@Model.Sections[0].SectionCode</li>
-		<li class="instructor"><span class="descriptor">Instructors:</span>
-			<ul>
+<!-- section details -->
+<tbody class="section-details" data-sectionid="@sectionID">
+<tr>
+    <th rowspan="2" scope="rowgroup">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? Model.Sections[0].ID.ItemNumber : Html.FormatWithSearchTerm(_searchTerm, Model.Sections[0].ID.ItemNumber).ToString())</th>
+    <td>@Model.Sections[0].SectionCode</td>
+    <td>
         @{
           bool firstIteration = true;
         }
-			  @if (Model.Sections[0].Offered.Any())
-			  {
+	    @if (Model.Sections[0].Offered.Any())
+	    {
           foreach (OfferedItem item in Model.Sections[0].Offered.OrderBy(o => o.SequenceOrder))
           {
             // Instructors
             if (firstIteration && string.IsNullOrWhiteSpace(item.InstructorName))
             {
-            <li>Staff</li>
+                @:Staff
             }
             else
             {
               if (!string.IsNullOrWhiteSpace(item.InstructorName))
               {
-              <li>
-                <a href="https://www.bellevuecollege.edu/directory/?SearchString=@Url.Encode(item.InstructorName)">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a>
-              </li>
-              }
-              else
-              {
-              <li>&nbsp;</li>
+                  if ( ! firstIteration ) 
+                  {
+                      <br />
+                  }
+                  <a href="https://www.bellevuecollege.edu/directory/?SearchString=@Url.Encode(item.InstructorName)">@Html.Raw(string.IsNullOrWhiteSpace(_searchTerm) ? item.InstructorName : Html.FormatWithSearchTerm(_searchTerm, item.InstructorName).ToString())</a>
               }
             }
             firstIteration = false;
           }
-			  }
-			  else
-			  {
-			    <li>
-			      <!-- No section offerings found -->
-            &nbsp;
-			    </li>
-			  }
-			</ul>
-		</li>
-		<li>
-      <span class="descriptor">Meets: </span>
-      <ul class="meets">
-        @using (_profiler.Step("Rendering offered items"))
+	    }
+		@*else
+		{
+	        <li><!-- No section offerings found -->&nbsp;</li>
+	    }*@
+	</td>
+    @using (_profiler.Step("Rendering offered items"))
+    {
+        <td>
+        @{
+            bool firstItem = true;
+        }
+        @foreach (SectionWithSeats section in Model.Sections)
         {
-          foreach (SectionWithSeats section in Model.Sections)
-          {
+
             if (section.Offered.Any())
             {
-              foreach (OfferedItem item in section.Offered.OrderBy(o => o.SequenceOrder))
-              {
-              // Meeting times
-              <li>
-                @if (Model.Sections[0].IsOnline)
+                foreach (OfferedItem item in section.Offered.OrderBy(o => o.SequenceOrder))
                 {
-                  <span class="days online">Online</span>
-                  <span class="times"><span class="descriptor">&nbsp;</span>&nbsp;</span>
-                  <span class="room"><span class="descriptor">&nbsp;</span>&nbsp;</span>
+                    // Meeting times
+                    if (Model.Sections[0].IsOnline)
+                    {
+                        @:Online
+                    }
+                    else
+                    {
+                        //build start/end time and room string
+                        string timeRoom = "";
+                        string startTime = String.Format("{0:t}", item.StartTime).Replace(" ", string.Empty).ToLower();
+                        string endTime = String.Format("{0:t}", item.EndTime).Replace(" ", string.Empty).ToLower();
+                        if ( !( string.IsNullOrWhiteSpace(startTime) && string.IsNullOrWhiteSpace(endTime) ) )
+                        {
+                            timeRoom += ", " + startTime + "-" + endTime;
+                        }
+                        if ( !string.IsNullOrWhiteSpace(item.Room) ) {
+                            timeRoom += " in " + Encoder.HtmlEncode(item.Room);
+                        }
+                        if ( ! firstItem) {
+                            <br />
+                        }
+                        @*
+                        NOTE: Need to explicitly encode timeRoom because Html.Raw() skips encoding
+                        And we need to use Raw() so that the entity doesn't get re-encoded
+                        *@
+                        <abbr title="@Helpers.GetFriendlyDayRange(item.Days)">@item.Days</abbr>@Html.Raw(timeRoom)
+                        
+                    }
+                    firstItem = false;
                 }
-                else
-                {
-                  <span class="days">
-                    <abbr title="@Helpers.GetFriendlyDayRange(item.Days)">
-                      @item.Days
-                    </abbr>
-                  </span>
-                  <span class="times">
-                    <span class="descriptor">at </span>@String.Format("{0:t}", item.StartTime).Replace(" ", string.Empty)-@String.Format("{0:t}", item.EndTime).Replace(" ", string.Empty)
-                  </span>
-                  <span class="room">
-                    @*
-                    NOTE: Need to explicitly encode item.Room because Html.Raw() skips encoding
-                    And we need to use Raw() so that the entity doesn't get re-encoded
-                    *@
-                    <span class="descriptor">in </span>@Html.Raw(string.IsNullOrWhiteSpace(item.Room) ? "&nbsp;" : Encoder.HtmlEncode(item.Room))
-                  </span>
-                }
-              </li>
-              }
+                //firstItem = false;
             }
             else
             {
-              <li>
-                <!-- No section offerings found -->
-                <span class="days">&nbsp;</span>
-                <span class="times"><span class="descriptor">&nbsp;</span>&nbsp;</span>
-                <span class="room"><span class="descriptor">&nbsp;</span>&nbsp;</span>
-              </li>
             }
-          } // end of iterate section list
+        } @*end of iterate section list*@
+        </td>
+    }
+    <td>
+        @if (Model.Sections[0].Yrq.ID.CompareTo(Model.CurrentQuarter.ID) >= 0)
+        {
+          // Course books link
+            <a href="@Helpers.GetBookstoreBooksLink(Model.Sections)"><span class="glyphicon glyphicon-book"><span class="sr-only">view required books/supplies</span></span></a>
         }
-      </ul>
-		</li>
-
-    @if (Model.Sections[0].Yrq.ID.CompareTo(Model.CurrentQuarter.ID) >= 0)
-    {
-      // Course books link
-      <li class="bookstoreinfo">
-        <a href='@Helpers.GetBookstoreBooksLink(Model.Sections)'>
-          <img src="@Url.Content("~/Content/images/books.gif")" alt="Required books/supplies" />
-        </a>
-      </li>
-
-        <li class="availability" id="availability-@sectionID">
-          <span class="descriptor">Seat Availability: </span>
-          @if (Model.Sections[0].SeatsAvailable == 0 || Model.Sections[0].WaitlistCount > 0)
+    </td>
+    <td class="availability" id="availability-@sectionID">
+        @if (Model.Sections[0].Yrq.ID.CompareTo(Model.CurrentQuarter.ID) >= 0)
+        {
+          if (Model.Sections[0].SeatsAvailable == 0 || Model.Sections[0].WaitlistCount > 0)
           {
             if (Model.Sections[0].WaitlistCount > 0)
             {
-            <strong class="seatsAvailable">
-              class full, @Model.Sections[0].WaitlistCount on waitlist
-            </strong>
+                <strong class="seatsAvailable">Class full, @Model.Sections[0].WaitlistCount on waitlist</strong>
             }
             else
             {
-            <strong class="seatsAvailable">class full</strong>
-            <span class="course-updated"><a id="@sectionID"><span class="ui-icon ui-icon-arrowrefresh-1-e"></span><span class="update-time">re-check</span></a></span>
+                <strong class="seatsAvailable">Class full</strong>
+                <span class="course-updated small"><a id="@sectionID"><span class="glyphicon glyphicon-refresh"></span> <span class="update-time">recheck</span></a></span>
             }
           }
           else
           {
             if (Model.Sections[0].SeatsAvailable < 0)
             {
-              // e.g. int.MinValue
-            <strong class="seatsAvailable"></strong>
-            <span class="course-updated"><a id="@sectionID"><span class="ui-icon ui-icon-arrowrefresh-1-e"></span><span class="update-time">click to update</span></a></span>
+                // e.g. int.MinValue
+                <strong class="seatsAvailable"></strong>
+                <span class="course-updated small"><a id="@sectionID"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> <span class="update-time">click to update</span></a></span>
             }
             else
             {
-            <strong class="seatsAvailable">@Model.Sections[0].SeatsAvailable</strong>
-            <span class="course-updated"><a id="@sectionID"><span class="ui-icon ui-icon-arrowrefresh-1-e"></span><span class="update-time">refreshed @Model.Sections[0].SeatsLastUpdated</span></a></span>
+                <strong class="seatsAvailable">@Model.Sections[0].SeatsAvailable</strong>
+                <span class="course-updated small"><a id="@sectionID"><span class="glyphicon glyphicon-refresh"></span> <span class="update-time">refreshed @Model.Sections[0].SeatsLastUpdated</span></a></span>
             }
           }
-        </li>
-    }
-
-    <li class="editing">
-      @if (Context.User.Identity.Name.Length > 0 && Helpers.IsEditor(Context))
-      {
+        }
+    </td>
+    <td class="editing">
+        @* FOR EDITING *@
+        @if (Context.User.Identity.Name.Length > 0 && Helpers.IsEditor(Context) && String.IsNullOrEmpty(_searchTerm) )
+        {
 		    @Ajax.ActionLink("Edit",
                          "SectionEdit",
                          "Classes",
@@ -185,30 +172,19 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                            HttpMethod = "GET",
                            InsertionMode = InsertionMode.Replace,
                            OnBegin = "$('#edit-section').dialog('open');",
-                           OnComplete = "spinner.stop();",
+                           //OnComplete = "spinner.stop();",
                          },
-                         new { @class = "edit_button" })
-      }
-    </li>
-
-
-    @* Don't add a footnote DIV if there are no footnotes
-		    Code based on: http://stackoverflow.com/questions/785715/how-can-i-strip-html-tags-from-a-string-in-asp-net
-    *@
-    @{
+                         new { @class = "edit-button btn btn-info btn-sm" })
+        }
+    </td>
+</tr>
+<tr>
+     @{
       HelperResult footnotes = ViewHelpers.DisplayFootnotes(Model.Sections[0].Footnotes, Model.Sections[0].SectionFootnotes, Model.CommonFootnotes, Model.Sections[0]);
       if (!String.IsNullOrWhiteSpace(Regex.Replace(Regex.Replace(footnotes.ToString(), "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", String.Empty)) || Helpers.IsEditor(Context))
       {
-		    <li class="section-notes"><span class="descriptor">Notes: </span>
-			    <ul>
-				    <li>
-					    <span class="label">
-						    @footnotes
-					    </span>
-				    </li>
-			    </ul>
-		    </li>
+          <td colspan="6"><span class="sr-only">Notes: </span>@footnotes</td>
       }
     }
-	</ul>
-</li>
+ </tr>
+</tbody>
