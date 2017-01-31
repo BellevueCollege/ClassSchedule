@@ -96,8 +96,9 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 												HttpMethod = "GET",
 												InsertionMode = InsertionMode.Replace,
 												OnBegin = "$('#edit-program').dialog('open');",
+                                                OnComplete = "fluidDialog();"
 				              },
-				              new { @class = "edit-button btn btn-info btn-sm" })
+				              new { @class = "edit-button small" })
 	}
 
 

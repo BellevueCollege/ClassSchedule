@@ -33,15 +33,13 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 	<li>
         <strong>
-          <span class="classHeading noPadding">
             <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(courseId), ClassNum = courseId.Number })">
               <span class="courseID">@Html.FormatWithSearchTerm(_searchTerm, item.CourseID)</span>
               <span class="courseTitle">@Html.FormatWithSearchTerm(_searchTerm, item.CourseTitle)</span>
               <span class="courseCredits">&#8226; @Html.CreditsValue(item.Credits, "<span class='error'>UNK</span>") @* Remove any trailing zero-decimals *@
-                  <abbr title="Credit(s) ">Cr.</abbr>
+                  <abbr title="Credit(s)">Cr.</abbr>
               </span>
             </a>
-          </span>
         </strong>
         <br />
         <span class="courseDescription">@Html.FormatWithSearchTerm(_searchTerm, Encoder.HtmlEncode(item.CourseDescription)) </span>

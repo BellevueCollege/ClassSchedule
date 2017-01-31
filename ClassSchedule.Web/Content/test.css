@@ -4,6 +4,12 @@
 .buffer-bottom {
     margin-bottom: 1em;
 }
+.buffer-padding {
+    padding: 1em;
+}
+.nowrap {
+    white-space: nowrap;
+}
 .course-updated a {
     cursor: pointer;
     text-decoration: none;
@@ -31,10 +37,18 @@
     padding: 8px;
     line-height: 1.42857143;
 }
+@media(min-width:768px){
+    .padding-left-none {
+        padding-left: 0;
+    }
+    .padding-right-none {
+        padding-right: 0;
+    }
+}
 /** Search styles **/
 em.keyword
 {
-	color: Black;
+	color: black;
 	font-style: normal;
 	background: #93d35f; /* Old browsers */
     background: -moz-linear-gradient(top,  #93d35f 0%, #7cd335 100%); /* FF3.6+ */
@@ -55,10 +69,15 @@ ol.breadcrumb li {
 ul {
     margin-top: 0;
 }
+ul.dropdown-menu li {
+    margin-top: 0;
+    margin-left: 0;
+    padding-left: 0;
+}
 /** end **/
 
 li.subject-name .edit-button {
-    display: none;
+    /*display: none;*/
 }
 
 #lastModifiedBy
@@ -168,4 +187,44 @@ ul.subject-merger li.subject-choice span.subject-choice-close
 /** Search results **/
 #classes-search-results .pagination li {
     display: initial;
+}
+
+/** Advanced search form **/
+.subject-sidenav li {
+    margin-left: .5em;
+}
+#days {
+    clear: left;
+}
+#times div {
+    float: left;
+}
+#times .form-group {
+    max-width: 40%;
+}
+
+.daylabel
+{
+    font-weight: bold;
+    /*line-height: 14px;
+    margin-left: 3px;*/
+    text-align: center;
+    color: #003d79;
+}
+.daylabel abbr {cursor: help;}
+.weekend { font-weight: normal; color: #666}
+
+/** Inline editing styles **/
+.text-editable {
+	display: inline-block;
+	min-width: 125px;
+	min-height: 15px;
+	background-color: #f1f1f1;
+	padding: 0 5px;
+}
+.text-highlight {
+	background-color: #ffa;
+}
+.edit-hover {
+	outline: 1px dashed #fdd425;
 }

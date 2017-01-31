@@ -33,7 +33,8 @@
 								    UpdateTargetId = "nav-choose-subjects",
 								    HttpMethod = "POST",
 								    InsertionMode = InsertionMode.Replace,
-								    OnBegin = "$('#nav-choose-subjects').dialog('open');"
+								    OnBegin = "$('#nav-choose-subjects').dialog('open');",
+                                    OnComplete = "fluidDialog();"
 							    },
                   new { id = linkID })
 
@@ -52,39 +53,12 @@
   <input type="hidden" id="javascriptEnabled" value="0" />
 
   <script type="text/javascript">
-    /* "processing" spinner */
-    var opts = {
-      lines: 12, // The number of lines to draw
-      length: 7, // The length of each line
-      width: 5, // The line thickness
-      radius: 10, // The radius of the inner circle
-      color: '#000', // #rbg or #rrggbb
-      speed: 1, // Rounds per second
-      trail: 100, // Afterglow percentage
-      shadow: true // Whether to render a shadow
-    };
-    var spinner = new Spinner(opts);
-
     /* subject chooser pop-up dialog */
-    $(document).ready(function() {
-      var href_value = "@Html.Raw(Url.Action("Subjects", "Api", new RouteValueDictionary(routeParms)))";
-      $("#change_subject").attr('href', href_value);
-
-
-      $("div#nav-choose-subjects").dialog({
-        autoOpen: false,
-        height: 500,
-        width: 600,
-        modal: true,
-        resizable: false,
-        open: function() {
-          // only show the spinner if we don't already have data in the dialog
-          if ($("div#nav-choose-subjects").html() == '') {
-            spinner.spin(document.getElementById('nav-choose-subjects'));
-          }
-        }
-      });
-
+      $(document).ready(function () {
+          $(function () {
+              var href_value = "@Html.Raw(Url.Action("Subjects", "Api", new RouteValueDictionary(routeParms)))";
+              $("#change_subject").attr('href', href_value);
+          })
     });
   </script>
   

@@ -19,7 +19,6 @@
                 </li>
             }
 
-          @*<span id='pagerPages'>Pages:*@
             @for (int i = 1; i <= Model.TotalPages; i++)
             {
               if (Model.CurrentPage == i)
@@ -36,7 +35,6 @@
               }
             }
       
-
           @if (Model.CurrentPage < Model.TotalPages)
           {
               <li>

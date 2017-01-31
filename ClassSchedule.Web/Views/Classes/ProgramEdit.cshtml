@@ -102,14 +102,19 @@
 
 @* TODO: Can we also put this JS in a pageScripts section? *@
 <script type="text/javascript">
-
   $(function () {
-    $("#cancelEdit").click(function (e) {
-      e.preventDefault();
-      $(".ui-dialog").hide();
-      //showThrobber();
-      window.location.href = $(location).attr('href');
-    });
+    
+      // Cancel and esc closure functionality
+      $("#cancelEdit").click(function (e) {
+          e.preventDefault();
+          $('#edit-program').dialog('close');
+      });
+
+      $(".ui-dialog").keydown(function (e) {
+          if (e.keyCode == 27) { // esc
+              $("#edit-program").dialog('close');
+          }
+      });
 
     // Delete subject merge choices
     $('.subject-merger').on('click', '.subject-choice-close', function () {
@@ -176,7 +181,7 @@
     }
   }
 
-  $("#edit-program").dialog({
+  /*$("#edit-program").dialog({
       autoOpen: false,
       width: 'auto', // overcomes width:'auto' and maxWidth bug
       maxWidth: 600,
@@ -228,5 +233,5 @@
           }
       });
 
-  }
+  }*/
 </script>

@@ -25,66 +25,68 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 <div class="row row-padding">
-    
-    @Html.Partial("quarterNavigation", new QuarterNavigationModel { NavigationQuarters = ViewBag.QuarterNavMenu, CurrentQuarter = currentQuarter })
-
-    <div class="row buffer-top buffer-bottom">
-        <div class="col-md-7">
-            <div class="content-padding">
-                <h2>Browse Credit Classes</h2>
-
-		        <ul>
-	            @foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
-                {
-		            <li>
-			            <a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">@yrq.FriendlyName</a>
-		            @{
-		                int yrqComparison = yrq.ID.CompareTo(currentQuarter.ID);
-		            }
-		            @if (yrqComparison >= 0)
-		            {
-			            if (yrqComparison > 0) {
-						    @:(upcoming)
-			            } else {
-						    @:(current quarter)
-			            }
-		            }
-				    </li>
-                }
-		        </ul>
-
-			    <ul>
-				    <li><a href="@Url.Action("AllClasses", "Classes")">All class descriptions</a></li>
-			    </ul>
-
-			    <p> <!-- Bellevue specific and/or optional -->
-				    You can also <a href="//bellevuecollege.edu/publications/schedule/">download PDF versions of the credit class schedule</a>.
-				    @if (Helpers.IsAdmin(Context) || Helpers.IsEditor(Context)) {
-					    <br />@:Download course data for
-					    bool isFirst = true;
-					    foreach (YearQuarter yrq in ViewBag.RegistrationQuarters) {
-						    if (!isFirst) {
-							    @Html.Raw(", ")
-						    }	else {
-							    isFirst = false;
-						    }
-						    @Html.ActionLink(yrq.FriendlyName, "Export", "Api", new { YearQuarterID = yrq.ID }, null)
-					    }
-					    @Html.Raw(".")
-				    }
-			    </p>
-            </div>
-        </div>
-
-        <div class="col-md-5">
-            <div class="content-padding">
-	            <h3>Other classes and workshops</h3>
-	            <h4><a href="http://www.campusce.net/BC/Search/Search.aspx">Continuing Education <span class="low-emphasis">(non-credit)</span></a></h4>
-	            <p>Continuing Education offers a wide variety variety of non-credit classes. <a href="http://www.campusce.net/BC/Search/Search.aspx" title="Continuing Education Classes">View classes</a>.</p>
-
-	            <h4><a href="http://depts.bellevuecollege.edu/careers/students-alumni-and-community-members/classes-and-workshops/">Center for Career Connections</a></h4>
-	            <p>The Center for Career Connections offers various classes, free workshops and orientations to students, alumni and the community to help your career. <a href="http://depts.bellevuecollege.edu/careers/students-alumni-and-community-members/classes-and-workshops/" title="Career Center classes and workshops">View classes and workshops</a>.</p>
-            </div>
+    <div class="col-md-12">
+        <div class="content-padding buffer-top buffer-bottom">
+            @Html.Partial("quarterNavigation", new QuarterNavigationModel { NavigationQuarters = ViewBag.QuarterNavMenu, CurrentQuarter = currentQuarter })
         </div>
     </div>
+</div>
+<div class="row row-padding buffer-top">
+    <div class="col-md-6 buffer-bottom">
+        <div class="content-padding">
+            <h2>Browse Credit Classes</h2>
+
+		    <ul>
+	        @foreach (YearQuarter yrq in ViewBag.QuarterNavMenu)
+            {
+		        <li>
+			        <a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", "")})">@yrq.FriendlyName</a>
+		        @{
+		            int yrqComparison = yrq.ID.CompareTo(currentQuarter.ID);
+		        }
+		        @if (yrqComparison >= 0)
+		        {
+			        if (yrqComparison > 0) {
+						@:(upcoming)
+			        } else {
+						@:(current quarter)
+			        }
+		        }
+				</li>
+            }
+		    </ul>
+
+			<ul>
+				<li><a href="@Url.Action("AllClasses", "Classes")">All class descriptions</a></li>
+			</ul>
+
+			<p> <!-- Bellevue specific and/or optional -->
+				You can also <a href="//bellevuecollege.edu/publications/schedule/">download PDF versions of the credit class schedule</a>.
+				@if (Helpers.IsAdmin(Context) || Helpers.IsEditor(Context)) {
+					<br />@:Download course data for
+					bool isFirst = true;
+					foreach (YearQuarter yrq in ViewBag.RegistrationQuarters) {
+						if (!isFirst) {
+							@Html.Raw(", ")
+						}	else {
+							isFirst = false;
+						}
+						@Html.ActionLink(yrq.FriendlyName, "Export", "Api", new { YearQuarterID = yrq.ID }, null)
+					}
+					@Html.Raw(".")
+				}
+			</p>
+        </div>
+    </div>
+
+    <div class="col-md-6 buffer-bottom">
+        <div class="content-padding">
+	        <h3>Other classes and workshops</h3>
+	        <h4><a href="http://www.campusce.net/BC/Search/Search.aspx">Continuing Education <span class="low-emphasis">(non-credit)</span></a></h4>
+	        <p>Continuing Education offers a wide variety variety of non-credit classes. <a href="http://www.campusce.net/BC/Search/Search.aspx" title="Continuing Education Classes">View classes</a>.</p>
+
+	        <h4><a href="http://depts.bellevuecollege.edu/careers/students-alumni-and-community-members/classes-and-workshops/">Center for Career Connections</a></h4>
+	        <p>The Center for Career Connections offers various classes, free workshops and orientations to students, alumni and the community to help your career. <a href="http://depts.bellevuecollege.edu/careers/students-alumni-and-community-members/classes-and-workshops/" title="Career Center classes and workshops">View classes and workshops</a>.</p>
+        </div>
+     </div>
 </div>

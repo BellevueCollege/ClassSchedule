@@ -7,76 +7,88 @@
 }
 
 <div class="row row-padding">
-    
-	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
-    
-    <div class="row row-padding buffer-top buffer-bottom">
-        <div class="col-md-10">
-            <div class="content-padding">
+    <div class="col-md-12 buffer-top buffer-bottom">
+        <div class="content-padding">
+        	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
+        </div>
+    </div>
+</div>
+<div class="row row-padding">
+    <!-- sidebar -->
+    <div class="col-md-3 buffer-top buffer-bottom">
+        <div class="content-padding padding-right-none">
+            <div class="pull-right buffer-bottom">
+                <span>
+	                <b><a href="@Url.Action("AllClasses", "Classes")">All credit classes</a></b>
+                    <span class="glyphicon glyphicon-triangle-left"></span>
+                </span>
+            </div>
+            <br style="clear: both;" />
+            @Html.Partial("basicFacetedSearch", Model.NavigationQuarters)
+        </div>
+    </div>
+    <!-- end sidebar -->
+    <div class="col-md-9 buffer-top buffer-bottom">
+        <div class="content-padding padding-left-none">
 
 		@*<p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>*@
-		@*<div id="sidebar">
-			@Html.Partial("basicFacetedSearch", Model.NavigationQuarters)
-		</div> <!-- #sidebar -->
-        *@
-			@if (!Model.Courses.Any())
+
+		@if (!Model.Courses.Any())
+		{
+			<h1>No @Model.Slug classes were found</h1>
+			<p><strong>Tip:</strong> Try changing the <strong>Subject</strong> to the left.</p>
+		}
+		else
+		{
+			if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
 			{
-				<h1>No @Model.Slug classes were found</h1>
-				<p><strong>Tip:</strong> Try changing the <strong>Subject</strong> to the left.</p>
+				<h1>@Model.SubjectTitle</h1>
 			}
-			else
+
+			if (!string.IsNullOrWhiteSpace(Model.SubjectIntro))
 			{
-				if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
-				{
-					<h1>@Model.SubjectTitle</h1>
-				}
+				<p>@Model.SubjectIntro</p>
+			}
+			if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
+			{
+				<p>
+					<strong>Need more info?</strong>
+					<a href="@Model.DepartmentURL">Visit the
+						@if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
+						{
+							@Model.DepartmentTitle
+						}
+						else if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
+						{
+							@Model.SubjectTitle
+						}
+						else
+						{
+							<text>Program</text>
+						}
+						website</a>.
+				</p>
+			}
 
-				if (!string.IsNullOrWhiteSpace(Model.SubjectIntro))
-				{
-					<p>@Model.SubjectIntro</p>
-				}
-				if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
-				{
-					<p>
-						<strong>Need more info?</strong>
-						<a href="@Model.DepartmentURL">Visit the
-							@if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
-							{
-								@Model.DepartmentTitle
-							}
-							else if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
-							{
-								@Model.SubjectTitle
-							}
-							else
-							{
-								<text>Program</text>
-							}
-							website</a>.
-					</p>
-				}
+			foreach (Course item in Model.Courses)
+			{
+				<h2>
+					<a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number })">
+						@Html.SectionCourseHeading(item)
+						@ViewHelpers.DisplayCredits(item)
+					</a>
+                    @if (string.Compare(item.YearQuarterBegin.ToString(), Model.CurrentQuarter.ID) == 1)
+				    {
+                        <text>&nbsp;<span class="label label-default">New</span></text>
+                    }
+				</h2>
 
-				foreach (Course item in Model.Courses)
-				{
-					<h2>
-						<a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number })">
-							@Html.SectionCourseHeading(item)
-							@ViewHelpers.DisplayCredits(item)
-						</a>
-					</h2>
-
-					if (string.Compare(item.YearQuarterBegin.ToString(), Model.CurrentQuarter.ID) == 1)
-					{
-						<div class="upcomingChange new">New class</div>
-					}
-
-					@Html.Partial("CourseDescriptions", item.Descriptions, new ViewDataDictionary {
-                                                    new KeyValuePair<string, object>("CurrentQuarter", Model.CurrentQuarter)
-						                                    })
-               }
+				@Html.Partial("CourseDescriptions", item.Descriptions, new ViewDataDictionary {
+                                                new KeyValuePair<string, object>("CurrentQuarter", Model.CurrentQuarter)
+						                                })
+            }
 
 			}
-		    </div> <!-- content -->
-	    </div> <!-- col -->
-    </div> <!-- row -->
+        </div> <!-- content -->
+    </div> <!-- col -->
 </div> <!-- row -->

@@ -3,6 +3,8 @@
 
 # Skip content/script files included via nuget packages
 */Scripts/jquery-3.1*
+*/Scripts/jquery*
+*/Scripts/jquery.unobtrusive*
 
 # User-specific files
 *.suo

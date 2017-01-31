@@ -13,41 +13,46 @@
 	}
 }
 
-<div id="basicFacetedSearch" class="sidenav">
-	<h2>Browse for classes</h2>
-	<h3>Subject</h3>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Browse for Classes</h3>
+    </div>
+    
+    <div class="buffer-padding">
+        <h4>Subject</h4>
 
-	<ul class="subject">
-		@if (!string.IsNullOrWhiteSpace(subject))
-		{
-			<li class="active">
-				<span class="notlink">@subject</span>
-			</li>
-		}
+        <ul class="subject-sidenav buffer-bottom list-unstyled">
+		    @if (!string.IsNullOrWhiteSpace(subject))
+		    {
+			    <li class="active">
+				    <span class="notlink">@subject</span>
+			    </li>
+		    }
 
-		<li>
-			@Html.Partial("subjectNavigation", quarterViewing, new ViewDataDictionary())
-		</li>
-	</ul>
+		    <li>
+			    @Html.Partial("subjectNavigation", quarterViewing, new ViewDataDictionary())
+		    </li>
+	    </ul>
 
-	<h3>Classes Offered:</h3>
-	<ul>
-		<li @if (quarterViewing == null) { <text> class="active" </text> }>
-			<a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a>
-		</li>
+	    <h4>Classes offered</h4>
+	    <ul>
+		    <li @if (quarterViewing == null) { <text> class="active" </text> }>
+			    <a href="@Url.Action("AllClasses", "Classes")">All credit classes</a>
+		    </li>
 
-		@foreach (YearQuarter yrq in Model)
-		{
-			<li @if (quarterViewing != null && quarterViewing == yrq) { <text> class="active" </text> }>
-			@if (String.IsNullOrEmpty(subject))
-			{
-				<a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", string.Empty)})">@yrq.FriendlyName</a>
-			}
-			else
-			{
-				<a href="@Url.Action("YearQuarterSubject", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", string.Empty), Subject = subject})">@yrq.FriendlyName</a>
-			}
-			</li>
-		}
-	</ul>
+		    @foreach (YearQuarter yrq in Model)
+		    {
+			    <li @if (quarterViewing != null && quarterViewing == yrq) { <text> class="active" </text> }>
+			    @if (String.IsNullOrEmpty(subject))
+			    {
+				    <a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", string.Empty)})">@yrq.FriendlyName</a>
+			    }
+			    else
+			    {
+				    <a href="@Url.Action("YearQuarterSubject", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", string.Empty), Subject = subject})">@yrq.FriendlyName</a>
+			    }
+			    </li>
+		    }
+        </ul>
+    </div>
 </div>
