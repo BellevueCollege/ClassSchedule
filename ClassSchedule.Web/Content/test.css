@@ -50,15 +50,14 @@ em.keyword
 {
 	color: black;
 	font-style: normal;
-	background: #93d35f; /* Old browsers */
-    background: -moz-linear-gradient(top,  #93d35f 0%, #7cd335 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#93d35f), color-stop(100%,#7cd335)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #93d35f 0%,#7cd335 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #93d35f 0%,#7cd335 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #93d35f 0%,#7cd335 100%); /* IE10+ */
-    background: linear-gradient(top,  #93d35f 0%,#7cd335 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#93d35f', endColorstr='#7cd335',GradientType=0 ); /* IE6-9 */
-
+	background: #ffa; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffa 0%, #ffffdd 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffa), color-stop(100%,#ffd)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ffa 0%, #ffd 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ffa 0%, #ffd 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ffa 0%, #ffd 100%); /* IE10+ */
+    background: linear-gradient(top,  #ffa 0%, #ffd 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffa', endColorstr='#ffd', GradientType=0 ); /* IE6-9 */
 }
 /** Reset weird things globals does to bootstrap/default styles **/
 ol.breadcrumb li {
@@ -210,6 +209,7 @@ ul.subject-merger li.subject-choice span.subject-choice-close
     margin-left: 3px;*/
     text-align: center;
     color: #003d79;
+    margin-right: 7px;
 }
 .daylabel abbr {cursor: help;}
 .weekend { font-weight: normal; color: #666}
@@ -227,4 +227,13 @@ ul.subject-merger li.subject-choice span.subject-choice-close
 }
 .edit-hover {
 	outline: 1px dashed #fdd425;
+}
+
+/** Edit form **/
+textarea {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	width: 100%;
 }
