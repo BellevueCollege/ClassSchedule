@@ -239,11 +239,10 @@ namespace CTCClassSchedule.Common
 			db.vw_Class.MergeOption = MergeOption.OverwriteChanges;
 
 			IList<vw_Class> classes;
-      using (profiler.Step("API::Get Class Schedule Specific Data()"))
-      {
-				classes = db.vw_Class.Where(c => c.YearQuarterID == currentYrq).ToList();
-      }
-
+            using (profiler.Step("API::Get Class Schedule Specific Data()"))
+            {
+				    classes = db.vw_Class.Where(c => c.YearQuarterID == currentYrq).ToList();
+            }
 
 			IList<SectionWithSeats> sectionsEnum;
       using (profiler.Step("Joining all data"))
@@ -287,17 +286,25 @@ namespace CTCClassSchedule.Common
 
 
 #if DEBUG
-          /* COMMENT THIS LINE TO DEBUG
-      if (sectionsEnum.Any(s => s.CourseSubject.StartsWith("ACCT") && s.CourseNumber == "203" && s.IsCommonCourse))
+      /* COMMENT THIS LINE TO DEBUG 
+      if (sectionsEnum.Any(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "101" && s.IsCommonCourse))
       {
-        SectionWithSeats zSec = sectionsEnum.Where(s => s.CourseSubject.StartsWith("ACCT") && s.CourseNumber == "202" && s.IsCommonCourse).First();
-        string s1 = zSec.ID.ToString();
-        Debug.Print("\n{0} - {1} {2}\t{3}\t(Crosslinks: {4})\n", zSec.ID, zSec.CourseID, zSec.IsCommonCourse ? "(&)" : string.Empty, zSec.CourseTitle,
+        IEnumerable<SectionWithSeats> zSecs = sectionsEnum.Where(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "101" && s.IsCommonCourse);
+        foreach (SectionWithSeats zSec in zSecs)
+        {
+            string s1 = zSec.ID.ToString();
+            Debug.Print("\n{0} - {1} {2}\t{3}\t(Crosslinks: {4})\n", zSec.ID, zSec.CourseID, zSec.IsCommonCourse ? "(&)" : string.Empty, zSec.CourseTitle,
                                                                  db.SectionCourseCrosslistings.Select(x => x.ClassID).Distinct().Count(x => x == s1));
+        }
       }
       else
       {
-        Debug.Print("\nACCT& 202 - NOT FOUND AMONG SECTIONS.\n");
+        Debug.Print("\nENGL 101 - NOT FOUND AMONG SECTIONS.\n");
+      }
+
+      foreach (SectionWithSeats ss in sectionsEnum)
+      {
+          Debug.Print("\n{0} - {1} {2} - {3}, iscommoncourse: {4}\n", ss.CourseID, ss.CourseSubject, ss.CourseNumber, ss.CourseTitle, ss.IsCommonCourse);
       }
       // END DEBUGGING */
 #endif
@@ -305,10 +312,10 @@ namespace CTCClassSchedule.Common
         // Flag sections that are cross-linked with a Course
         foreach (string sec in db.SectionCourseCrosslistings.Select(x => x.ClassID).Distinct())
         {
-          if (sectionsEnum.Any(s => s.ID.ToString() == sec))
-          {
-            sectionsEnum.Single(s => s.ID.ToString() == sec).IsCrossListed = true;
-          }
+            if (sectionsEnum.Any(s => s.ID.ToString() == sec))
+            {
+                sectionsEnum.Single(s => s.ID.ToString() == sec).IsCrossListed = true;
+            }
         }
       }
 
@@ -352,15 +359,15 @@ namespace CTCClassSchedule.Common
 	  public static IList<SectionsBlock> GroupSectionsIntoBlocks(IList<SectionWithSeats> sections, ClassScheduleDb db)
     {
 #if DEBUG
-  /* COMMENT THIS LINE TO DEBUG
-      if (sections.Any(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "266"))
+  /* COMMENT THIS LINE TO DEBUG 
+      if (sections.Any(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "092"))
       {
-        SectionWithSeats zengl266 = sections.Where(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "266").First();
+        SectionWithSeats zengl266 = sections.Where(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "092").First();
         Debug.Print("\n{0} - {1} {2}\t[{4}]\t(Linked to: {3})\n", zengl266.ID, zengl266.CourseID, zengl266.CourseTitle, zengl266.LinkedTo, zengl266.IsLinked ? "LINKED" : string.Empty);
       }
       else
       {
-        Debug.Print("\nENGL 266 - NOT FOUND AMONG SECTIONS.\n");
+        Debug.Print("\nENGL 092 - NOT FOUND AMONG SECTIONS.\n");
       }
       // END DEBUGGING */
 #endif
@@ -416,8 +423,8 @@ namespace CTCClassSchedule.Common
       }
 
 #if DEBUG
-  /* COMMENT THIS LINE TO DEBUG
-	    foreach (SectionWithSeats zs in nonLinkedSections.Where(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "101"))
+  /* COMMENT THIS LINE TO DEBUG *
+	    foreach (SectionWithSeats zs in nonLinkedSections.Where(s => s.CourseSubject.StartsWith("MATH") && s.CourseNumber == "097"))
 	    {
 	      Debug.Print("{0} - {1} {2}\t{3}\t(Linked sections: {4})", zs.ID, zs.CourseID, zs.CourseTitle, zs.IsLinked ? " [LINKED] " : string.Empty,
 	                  allLinkedSections.Count(l => l.LinkedTo == zs.ID.ItemNumber));
@@ -428,13 +435,13 @@ namespace CTCClassSchedule.Common
 	    }
 	    else
 	    {
-        SectionWithSeats zengl266 = allLinkedSections.Where(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "266").First();
+        SectionWithSeats zengl266 = allLinkedSections.Where(s => s.CourseSubject.StartsWith("MATH") && s.CourseNumber == "097").First();
         Debug.Print("\n{0} - {1} {2}\t(Linked to: {3})", zengl266.ID, zengl266.CourseID, zengl266.CourseTitle, zengl266.LinkedTo);
       }
 
-      if (!allLinkedSections.Any(s => s.CourseSubject.StartsWith("ENGL") && s.CourseNumber == "246"))
+      if (!allLinkedSections.Any(s => s.CourseSubject.StartsWith("HD") && s.CourseNumber == "120"))
 	    {
-	      Debug.Print("\nENGL& 246 - NOT FOUND AMONG LINKED SECTIONS.");
+	      Debug.Print("\nHD 120 - NOT FOUND AMONG LINKED SECTIONS.");
 	    }
 	    else
 	    {
@@ -568,8 +575,6 @@ namespace CTCClassSchedule.Common
 
 				CourseID[8] = CourseNumber[CourseNumber.Length - 1];
 			}
-
-
 
 			return new string(CourseID);
 		}
