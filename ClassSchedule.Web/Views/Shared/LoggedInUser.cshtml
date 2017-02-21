@@ -1,0 +1,12 @@
+﻿@using CTCClassSchedule.Common;
+@if (Context.User.Identity.IsAuthenticated && (Helpers.IsAdmin(Context) || Helpers.IsEditor(Context)))
+{
+    string role = Helpers.IsAdmin(Context) ? "admin" : "editor";
+    <div class="alert alert-info buffer-top buffer-bottom">
+        Hi, @Context.User.Identity.Name. You have @role access. 
+        @if( null != @ViewData["allowInlineEditing"] && (bool)@ViewData["allowInlineEditing"] == true ) {
+            <text>[ <a class="toggleEditingMode" data-inlineMode="false">Enable inline editing</a> ]</text>
+        }
+	    [ @Html.ActionLink("Log out", "Logout", "Classes")  ]
+    </div>
+}

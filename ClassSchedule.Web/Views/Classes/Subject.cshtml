@@ -6,24 +6,14 @@
     ViewBag.PageTitle = Model.Slug + "-" + Model.DepartmentTitle + " Classes at Bellevue College";
 }
 
-<div class="row row-padding">
-    <div class="col-md-12 buffer-top buffer-bottom">
-        <div class="content-padding">
-        	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
-        </div>
-    </div>
-</div>
+@Html.Partial("breadcrumbNavigation")
+
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
+
 <div class="row row-padding">
     <!-- sidebar -->
     <div class="col-md-3 buffer-top buffer-bottom">
         <div class="content-padding padding-right-none">
-            <div class="pull-right buffer-bottom">
-                <span>
-	                <b><a href="@Url.Action("AllClasses", "Classes")">All credit classes</a></b>
-                    <span class="glyphicon glyphicon-triangle-left"></span>
-                </span>
-            </div>
-            <br style="clear: both;" />
             @Html.Partial("basicFacetedSearch", Model.NavigationQuarters)
         </div>
     </div>

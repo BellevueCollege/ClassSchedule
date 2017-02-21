@@ -24,27 +24,17 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
   MiniProfiler _profiler = MiniProfiler.Current;
 
   ViewBag.PageTitle = Model.ViewingQuarter.FriendlyName + " " + Model.SubjectTitle + " Credit Classes at Bellevue College";
+  
 }
 
-<div class="row row-padding">
-    <div class="col-md-12 buffer-top buffer-bottom">
-        <div class="content-padding">
-        	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
-        </div>
-    </div>
-</div>
+@Html.Partial("breadcrumbNavigation")
+
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
 
 <div class="row row-padding buffer-top buffer-bottom">
     <!-- sidebar -->
     <div class="col-md-3">
         <div class="content-padding padding-right-none">
-            <div class="pull-right buffer-bottom">
-                <span>
-	                <b><a href="@Url.Action("YearQuarter", "Classes")">@Model.ViewingQuarter.FriendlyName</a></b>
-                    <span class="glyphicon glyphicon-triangle-left"></span>
-                </span>
-            </div>
-            <br style="clear: both;" />
             @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel
 	                    {
 	                        ViewingQuarter = Model.ViewingQuarter,
@@ -52,7 +42,6 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                         FacetData = Model.FacetData
 	                    })
         </div>
-
     </div>
     <!-- end sidebar -->
     <div class="col-md-9">
@@ -68,14 +57,10 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                 <strong>Tip:</strong>
                 @Html.Partial("subjectNavigation", Model.ViewingQuarter) or try selecting fewer refinement options to the left.
             </div>
-        }
+        } 
         else
         {                
-            if (Helpers.IsAdmin(Context) || Helpers.IsEditor(Context))
-            {
-                string role = Helpers.IsAdmin(Context) ? "admin" : "editor";
-                <div class="alert alert-info buffer-top buffer-bottom">@Context.User.Identity.Name! You have @role access to this section. [ <a class="toggleEditingMode" data-inlineMode="false">Enable inline editing</a> ]</div>
-            }
+            @Html.Partial("LoggedInUser", new ViewDataDictionary { { "allowInlineEditing", true } })
                 
             <h1>@Model.SubjectTitle</h1>
 

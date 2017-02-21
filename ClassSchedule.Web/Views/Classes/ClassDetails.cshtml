@@ -17,13 +17,10 @@
 
 <!--<div title="Edit Section" id="edit-section"></div>-->
 
-<div class="row row-padding">
-    <div class="col-md-12 buffer-top buffer-bottom">
-        <div class="content-padding">
-           	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
-        </div>
-    </div>
-</div>
+@Html.Partial("breadcrumbNavigation")
+
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
+
 <div class="row row-padding">
     <div class="col-md-8">
         <div class="content-padding buffer-top buffer-bottom">

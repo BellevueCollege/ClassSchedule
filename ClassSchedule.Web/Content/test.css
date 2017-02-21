@@ -7,6 +7,12 @@
 .buffer-padding {
     padding: 1em;
 }
+.buffer-right {
+    margin-right: 1em;
+}
+.buffer-left {
+    margin-left: 1em;
+}
 .nowrap {
     white-space: nowrap;
 }
@@ -17,7 +23,7 @@
 .table-classes {
     width: 100%;
     max-width: 100%;
-    margin-bottom: 1.42857143;
+    margin-bottom: 1.4em;
 }
 .table-classes thead {
     border-bottom: 1px solid #ddd;
@@ -37,7 +43,7 @@
     padding: 8px;
     line-height: 1.42857143;
 }
-@media(min-width:768px){
+@media (min-width:992px){
     .padding-left-none {
         padding-left: 0;
     }
@@ -45,6 +51,12 @@
         padding-right: 0;
     }
 }
+
+/** Classes for nav bar **/
+.nav-margin {
+    margin-top: 8px;
+}
+
 /** Search styles **/
 em.keyword
 {
@@ -73,12 +85,33 @@ ul.dropdown-menu li {
     margin-left: 0;
     padding-left: 0;
 }
-/** end **/
-
-li.subject-name .edit-button {
-    /*display: none;*/
+h4.panel-title {
+    font-size: 1.25em;
+}
+.panel h5 {
+    margin-top: .7em;
 }
 
+/** Styles specific to larger screens **/
+@media (min-width:768px) {
+    .navbar-form {
+        padding-left: 0;
+    }
+}
+/** Styles specific to xs screens **/
+@media (max-width: 767px) {
+    /** Footer links **/
+    .classes-links h4 {
+        margin-top: 1em;
+    }
+    .classes-links .col-md-3:first-child h4 {
+        margin-top: 0;
+    }
+}
+
+/** end **/
+
+/** Edit classes **/
 #lastModifiedBy
 {
 	float: right;
@@ -168,7 +201,6 @@ ul.subject-merger li.subject-choice span.subject-choice-close
 	top: 2px;
 	float: right;
 }
-
 /* end program edit */
 
 /** inline editing styles **/
@@ -213,6 +245,21 @@ ul.subject-merger li.subject-choice span.subject-choice-close
 }
 .daylabel abbr {cursor: help;}
 .weekend { font-weight: normal; color: #666}
+.time-separator {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+.refine-glyph {
+    margin-top: .4em;
+    font-size: .7em;
+}
+.checkbox, .radio {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+.ui-timepicker-div dt {
+    margin-top: -3px;
+}
 
 /** Inline editing styles **/
 .text-editable {
@@ -234,6 +281,27 @@ textarea {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-
 	width: 100%;
+}
+
+/* Refine panel */
+.panel-title a {
+    display: block;
+    text-decoration: none;
+}
+
+/** Footer */
+.footer-info {
+    color: #888;
+}
+
+/** Breadcrumb **/
+.classes-breadcrumb {
+    font-size: .8em;
+    color: #888;
+}
+.classes-breadcrumb ol.breadcrumb {
+    background: none;
+    margin-bottom: 0;
+    padding-left: .5em;
 }

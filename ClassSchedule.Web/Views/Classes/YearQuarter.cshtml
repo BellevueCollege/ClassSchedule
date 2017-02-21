@@ -23,13 +23,10 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     IList<char> alphabet = Model.SubjectLetters;
     ViewBag.PageTitle = yrq.FriendlyName + " Credit Classes at Bellevue College";
 }
-<div class="row row-padding">
-    <div class="col-md-12 buffer-top buffer-bottom">
-        <div class="content-padding">
-            @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })
-        </div>
-    </div>
-</div>
+@Html.Partial("breadcrumbNavigation")
+
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })
+
 <div class="row row-padding buffer-top buffer-bottom">
     <div class="col-md-3">
         <div class="content-padding padding-right-none">
@@ -42,10 +39,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 			@Html.Partial("a_to_z", new AToZViewModel { LettersList = alphabet, ViewingLetter = ViewBag.letter == null ? (char?)null : ViewBag.letter[0] })
 
-			@if (Helpers.IsAdmin(Context))
-			{
-				<div class="alert alert-info">Hi, @Context.User.Identity.Name. You have admin access to this section.</div>
-			}
+            @Html.Partial("LoggedInUser")
 
 			@if (Model.ViewingSubjects.Count() == 0)
 			{

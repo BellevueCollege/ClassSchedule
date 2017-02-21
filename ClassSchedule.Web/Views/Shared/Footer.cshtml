@@ -1,63 +1,71 @@
 ﻿<div class="container">
-    <div class="row row-padding buffer-top buffer-bottom">
-        <div class="col-md-3">
-            <div class="content-padding">
-		        <h4>Next steps</h4>
-		        <ul>
-			        <li><a href="http://www.bellevuecollege.edu/registration/register/">Register</a></li>
-                    <li><a href="https://www.ctc.edu/~bellevue/student/waci004.html">When do I register?</a></li>
-			        <li><a href="http://bcc.collegestoreonline.com/">Buy books</a></li>
-			        <li>Not a student yet? <a href="http://www.bellevuecollege.edu/admissions/apply/">Apply now</a></li>
-		        </ul>
-            </div>
-	    </div>
-        <div class="col-md-3">
-            <div class="content-padding">
-		        <h4>Important dates</h4>
-		        <ul>
-			        <li><a href="http://bellevuecollege.edu/courses/exams/">Final exam schedule</a></li>
-			        <li><a href="http://bellevuecollege.edu/enrollment/calendar/deadlines/">Enrollment deadlines</a></li>
-                    <li><a href="http://bellevuecollege.edu/enrollment/calendar/">Academic calendar</a></li>
-		        </ul>
-            </div>
-	    </div>
-	    <div class="col-md-3">
-            <div class="content-padding">
-		        <h4>Need help planning?</h4>
-		        <ul>
-			        <li><a href="http://www.bellevuecollege.edu/services/schedule-planner/">Schedule planner</a></li>
-			        <li><a href="http://bellevuecollege.edu/degreeaudit/">Degree audit</a></li>
-			        <li><a href="http://bellevuecollege.edu/courses/projected/">Projected annual course offerings</a></li>
-			        <li><a href="http://bellevuecollege.edu/advising/">Advising</a></li>
-		        </ul>
-            </div>
-	    </div>
-        <div class="col-md-3">
-            <div class="content-padding">
-                <h4>Related information</h4>
-                <ul>
-                    <li><a href="http://www.bellevuecollege.edu/tuition/">Tuition &amp; fees</a></li>
-                    <li><a href="http://bellevuecollege.edu/enrollment/financial/">Financial assistance</a></li>
-                    <li><a href="http://bellevuecollege.edu/resources/services/">Student services</a></li>
-                </ul>
+    <div class="well classes-links">
+        <div class="row row-padding buffer-top buffer-bottom">
+            <div class="col-md-3">
+                <div class="content-padding">
+		            <h4>Next steps</h4>
+		            <ul>
+			            <li><a href="http://www.bellevuecollege.edu/registration/register/">Register</a></li>
+                        <li><a href="https://www.ctc.edu/~bellevue/student/waci004.html">When do I register?</a></li>
+			            <li><a href="http://bcc.collegestoreonline.com/">Buy books</a></li>
+			            <li>Not a student yet? <a href="http://www.bellevuecollege.edu/admissions/apply/">Apply now</a></li>
+		            </ul>
+                </div>
+	        </div>
+            <div class="col-md-3">
+                <div class="content-padding">
+		            <h4>Important dates</h4>
+		            <ul>
+			            <li><a href="http://bellevuecollege.edu/courses/exams/">Final exam schedule</a></li>
+			            <li><a href="http://bellevuecollege.edu/enrollment/calendar/deadlines/">Enrollment deadlines</a></li>
+                        <li><a href="http://bellevuecollege.edu/enrollment/calendar/">Academic calendar</a></li>
+		            </ul>
+                </div>
+	        </div>
+	        <div class="col-md-3">
+                <div class="content-padding">
+		            <h4>Need help planning?</h4>
+		            <ul>
+			            <li><a href="http://www.bellevuecollege.edu/services/schedule-planner/">Schedule planner</a></li>
+			            <li><a href="http://bellevuecollege.edu/degreeaudit/">Degree audit</a></li>
+			            <li><a href="http://bellevuecollege.edu/courses/projected/">Projected annual course offerings</a></li>
+			            <li><a href="http://bellevuecollege.edu/advising/">Advising</a></li>
+		            </ul>
+                </div>
+	        </div>
+            <div class="col-md-3">
+                <div class="content-padding">
+                    <h4>Related information</h4>
+                    <ul>
+                        <li><a href="http://www.bellevuecollege.edu/tuition/">Tuition &amp; fees</a></li>
+                        <li><a href="http://bellevuecollege.edu/enrollment/financial/">Financial assistance</a></li>
+                        <li><a href="http://bellevuecollege.edu/resources/services/">Student services</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-        <div style="clear: both;text-align: right;color:gray;">
-            <!-- PROTOTYPE: This block of code only exists to prove that authentication/authorization works. -->
-		    <!-- ******************************************************************************************* -->
-            @using CTCClassSchedule.Common;
-	        @if(Context.User.Identity.IsAuthenticated) {
-			    <text>[ Welcome <b>@Context.User.Identity.Name</b>! ] @(Helpers.IsAdmin(Context) ? " - Admin" : "") @(!Helpers.IsAdmin(Context) && Helpers.IsEditor(Context) ? " - Editor" : "")</text>
-		        <text>[ @Html.ActionLink("Log out", "Logout", "Classes")  ]</text>
-            }
-            else
-            {
-			    @:[ @Html.ActionLink("Log in", "Authenticate", "Classes") ]
-	        }
-		    <!-- ******************************************************************************************* -->
-		    <!-- END PROTOTYPE -->
-            <br />
-            v@(ViewBag.Version)
+    </div>
+    <div class="row footer-info">
+        <div class="col-md-6">
+            <div class="text-left">
+                <p>v@(ViewBag.Version)</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="text-right">
+                @* Code to show authentication/authorization.
+		        ******************************************************************************************* *@
+                @using CTCClassSchedule.Common;
+	            @if(Context.User.Identity.IsAuthenticated) {
+			        <text>[ <b>@Context.User.Identity.Name</b> ] @(Helpers.IsAdmin(Context) ? " - Admin" : "") @(!Helpers.IsAdmin(Context) && Helpers.IsEditor(Context) ? " - Editor" : "")</text>
+		            <text>[ @Html.ActionLink("Log out", "Logout", "Classes")  ]</text>
+                }
+                else
+                {
+			        @:[ @Html.ActionLink("Log in", "Authenticate", "Classes") ]
+	            }
+		        @* **************************************************************************************** *@
+            </div>
         </div>
     </div>
 </div>

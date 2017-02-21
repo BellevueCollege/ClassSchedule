@@ -1,0 +1,53 @@
+﻿@{
+    RouteValueDictionary routeInfo = ViewContext.RouteData.Values;
+    string routeAction = routeInfo["action"].ToString();
+    string routeController = routeInfo["controller"].ToString();
+
+    // construct the route values we'll pass to the ActionLink helper
+    //IDictionary<string, object> routeParams = new IDictionary<string, object>(); //ViewBag. ViewBag.LinkParams;
+}
+
+@*@foreach( object t in ViewContext.RouteData.Values ) {
+    @t.ToString()
+}*@
+<div class="row classes-breadcrumb">
+    <div class="col-md-12">
+        <div class="content-padding">
+            <nav aria-label="Breadcrumb">
+                <ol class="breadcrumb">
+                @if ( new String[] {"YearQuarterSubject", "YearQuarter", "ClassDetails", "AllClasses", "Subject"}.Any(routeAction.Contains) 
+                        || (routeController == "Search" && routeAction == "Index") ) {
+                    <li><a href="@Url.Action("Index", "Classes")">Classes</a></li>
+                }
+                @if (routeAction == "YearQuarter")
+                {
+                    <li>@Model.ViewingQuarter.FriendlyName</li>
+                }
+                else if ( routeAction == "YearQuarterSubject" ) {
+                    <li><a href="@Url.Action("YearQuarter", "Classes")">@Model.ViewingQuarter.FriendlyName</a></li>
+                    <li>@routeInfo["Subject"]</li>
+                }
+                else if (routeAction == "AllClasses")
+                {
+                    <li>Class Descriptions</li>
+                }
+                else if (routeController == "Search" && routeAction == "Index")
+                {
+                    <li>Search</li>
+                }
+                else if (routeAction == "ClassDetails")
+                {
+                    <li><a href="@Url.Action("AllClasses", "Classes")">Class Descriptions</a></li>
+                    <li><a href="@Url.Action("Subject", "Classes", new RouteValueDictionary( new { subject = routeInfo["Prefix"] } ))">@routeInfo["Prefix"]</a></li>
+                    <li>@routeInfo["Prefix"] @routeInfo["ClassNum"]</li>
+                }
+                else if (routeAction == "Subject")
+                {
+                    <li><a href="@Url.Action("AllClasses", "Classes")">Class Descriptions</a></li>
+                    <li>@routeInfo["Subject"]</li>
+                }
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>

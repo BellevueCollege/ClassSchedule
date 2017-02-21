@@ -23,13 +23,8 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 	YearQuarter currentQuarter = ViewBag.CurrentYearQuarter;
 }
-
-<div class="row row-padding">
-    <div class="col-md-12">
-        <div class="content-padding buffer-top buffer-bottom">
-            @Html.Partial("quarterNavigation", new QuarterNavigationModel { NavigationQuarters = ViewBag.QuarterNavMenu, CurrentQuarter = currentQuarter })
-        </div>
-    </div>
+<div >
+    @Html.Partial("quarterNavigation", new QuarterNavigationModel { NavigationQuarters = ViewBag.QuarterNavMenu, CurrentQuarter = currentQuarter })
 </div>
 <div class="row row-padding buffer-top">
     <div class="col-md-6 buffer-bottom">
@@ -85,8 +80,8 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 	        <h4><a href="http://www.campusce.net/BC/Search/Search.aspx">Continuing Education <span class="low-emphasis">(non-credit)</span></a></h4>
 	        <p>Continuing Education offers a wide variety variety of non-credit classes. <a href="http://www.campusce.net/BC/Search/Search.aspx" title="Continuing Education Classes">View classes</a>.</p>
 
-	        <h4><a href="http://depts.bellevuecollege.edu/careers/students-alumni-and-community-members/classes-and-workshops/">Center for Career Connections</a></h4>
-	        <p>The Center for Career Connections offers various classes, free workshops and orientations to students, alumni and the community to help your career. <a href="http://depts.bellevuecollege.edu/careers/students-alumni-and-community-members/classes-and-workshops/" title="Career Center classes and workshops">View classes and workshops</a>.</p>
+	        <h4><a href="http://bellevuecollege.edu/careers/sac_classes.html">Center for Career Connections</a></h4>
+	        <p>The Center for Career Connections offers various classes, free workshops and orientations to students, alumni and the community to help your career. <a href="http://bellevuecollege.edu/careers/sac_classes.html" title="Career Center classes and workshops">View classes and workshops</a>.</p>
         </div>
      </div>
 </div>

@@ -5,13 +5,9 @@
     ViewBag.PageTitle = "All Class Descriptions at Bellevue College";
 }
 
-<div class="row row-padding">
-    <div class="col-md-12 buffer-top buffer-bottom">
-        <div class="content-padding">
-            @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
-        </div>
-    </div>
-</div>
+@Html.Partial("breadcrumbNavigation")
+
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
 
 <div class="row row-padding buffer-top buffer-bottom">
     <!-- sidebar -->
