@@ -17,23 +17,9 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
 contents:
-- custom functions
-- hoverintent r6 plugin
-- tooltipsy
+- edit dialog popups definition
+- fluiddialog for auto-resizing, centering dialogs
 */
-
-function AppendUrlPath(base, part) {
-  var lastChar = base.length - 1;
-
-  if (base[lastChar] == "/") {
-    base = base.substring(0, lastChar);
-  }
-  if (part[0] == "/") {
-    part = part.substring(1, part.length);
-  }
-  var url = base + "/" + part;
-  return url;
-}
 
 /* program editor pop-up dialog */
 $(function () {
@@ -135,52 +121,3 @@ function fluidDialog() {
         }
     });
 }
-
-$(function () {
-    /*has javascript*/
-    //$("body").addClass("js");
-
-    /*make classes tab selected*/
-   /* $("#mainnav-classes").find("a").addClass("selected");
-
-    $("#mainnav-list").find(".mainnav-item").hoverIntent({
-        interval: 50, // milliseconds delay before onMouseOver
-        over: dropdown_show,
-        timeout: 100, // milliseconds delay before onMouseOut
-        out: dropdown_hide
-    })*/
-
-    //Generate dropdown menus
-    //$("#mainnav-about").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load(AppendUrlPath(g_globalsPath, "dropdown_about.asp"));
-    //$("#mainnav-programs").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load(AppendUrlPath(g_globalsPath, "dropdown_programs.asp"));
-    //$("#mainnav-enrollment").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load(AppendUrlPath(g_globalsPath, "dropdown_enrollment.asp"));
-    //$("#mainnav-resources").addClass('hasarrow').append('<div class="downarrow"></div><div class="dropdown"></div>').find(".dropdown").load(AppendUrlPath(g_globalsPath, "dropdown_resources.asp"));
-
-
-    /*$('#mainnav-list .dropdown').focusin(function () {
-        $(this).parent(".mainnav-item").addClass('hover');
-    });
-    $('#mainnav-list .dropdown').focusout(function () {
-        $(this).parent(".mainnav-item").removeClass('hover');
-    });*/
-
-    /*tooltip*/
-    //$('abbr').tooltipsy();
-
-    /*drowdown menu*/
-   /* $('#browse').hoverIntent({
-        interval: 50, // milliseconds delay before onMouseOver
-        over: dropdown_show,
-        timeout: 400, // milliseconds delay before onMouseOut
-        out: dropdown_hide
-    }).find(".nav-dropdown").prepend('<div class="downarrow"></div>');*/
-
-    /*search bar*/
-    $("#search-keyword").focus(function () {
-        $(this).parents('#searchfield-wrap').addClass('focus');
-    }).blur(function () {
-        $(this).parents('#searchfield-wrap').removeClass('focus');
-    });
-
-
-});
