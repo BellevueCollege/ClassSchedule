@@ -41,7 +41,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
         </h4>
     </div>
     
-    <div id="collapseRefine" class="buffer-padding panel-collapse collapse in" role="tabpanel" aria-labelledby="refinePanel">
+    <div id="collapseRefine" class="panel-body buffer-padding panel-collapse collapse in" role="tabpanel" aria-labelledby="refinePanel">
         @* If the user has browsed vs. searched for a term, display a different subject chooser UI  *@
         @if ( !Model.IsSearch || (Model.IsSearch && subjectsCount > 0) ) {
             <h5>Subject</h5>
@@ -127,12 +127,6 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
       IList<GeneralFacetInfo> days = Model.FacetData.Days;
       bool showDaysAndTimes = true;
     }
-    @if (modalities.Where(m => m.Selected == true).Count() > 0)
-    {
-      <p class="label_checkbox_pair">
-	      <a href="#" id="uncheckFormat">Uncheck all</a>
-      </p>
-    }
 
     @foreach (GeneralFacetInfo m in modalities)
     {
@@ -170,7 +164,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     <div id="days">
         <fieldset>
             <legend class="sr-only">Class days</legend>
-            <div class="form-group form-group-sm">
+            <div class="form-group-sm">
                 @foreach (GeneralFacetInfo d in days)
                 {
                     string abbrv = d.Title;
@@ -207,7 +201,6 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                     </label>
                 }
             </div>
-            <div id="submitjquery" class="text-center"></div>
         </fieldset>
     </div>
   }
@@ -263,59 +256,31 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 <div id="check-xs" class="visible-xs"></div>
 
 <script type="text/javascript">
-  $(function () {
-      $('#timestart').timepicker({
-          timeFormat: 'h:mm tt',
-    });
-      $('#timeend').timepicker({
-          timeFormat: 'h:mm tt',
-    });
+    $(function () {
+                
+        $('#timestart').timepicker({
+            timeFormat: 'h:mm tt',
+        });
+        $('#timeend').timepicker({
+            timeFormat: 'h:mm tt',
+        });
 
-    $('#submitjquery').html('<input type="submit" id="submit_days_times" name="submitbtn" value="Refine &raquo;" class="btn btn-sm" />');
-    $('#submit').html('');
+        if ($('#check-xs').is(':visible')) {
+            $("#collapseRefine").removeClass("in");
+            $("#refineGlyph").removeClass("glyphicon-menu-down");
+            $("#refineGlyph").addClass("glyphicon-menu-up");
+        }
 
-    //when user clicks refine, show throbber
-    $('#submit_days_times').click(function () {
-      $('#daystimesform').submit();
-    });
+        $('#collapseRefine').on('hidden.bs.collapse', function () {
+            $("#refineGlyph").removeClass("glyphicon-menu-down");
+            $("#refineGlyph").addClass("glyphicon-menu-up");
+        });
+        $('#collapseRefine').on('show.bs.collapse', function () {
+            $("#refineGlyph").removeClass("glyphicon-menu-up");
+            $("#refineGlyph").addClass("glyphicon-menu-down");
+        });
 
-    if (!$("#radio_all").is(':checked')) {
-      $('#radio_all').click(function () {
-        $('#daystimesform').submit();
-      });
-    }
-
-    if (!$("#radio_open").is(':checked')) {
-      $('#radio_open').click(function () {
-        $('#daystimesform').submit();
-      });
-    }
-
-    //when class formats are clicked, auto submit the form
-    $('#f_oncampus').click(function () {
-      $('#daystimesform').submit();
-    });
-
-    $('#f_online').click(function () {
-      $('#daystimesform').submit();
-    });
-
-    $('#f_hybrid').click(function () {
-      $('#daystimesform').submit();
-    });
-
-    $('#f_telecourse').click(function () {
-      $('#daystimesform').submit();
-    });
-
-    $('#latestart').click(function () {
-      $('#daystimesform').submit();
-    });
-
-    $('#numcredits').change(function () {
-      $('#daystimesform').submit();
-    });
-
+    /*
     //when the user clicks uncheck all formats, uncheck them and resubmit the form.
     $('#uncheckFormat').click(function (event) {
       event.preventDefault();
@@ -325,21 +290,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
       $('#f_telecourse').removeAttr('checked');
       $('#daystimesform').submit();
     });
-
-    if ( $('#check-xs').is(':visible') ) {
-        $("#collapseRefine").removeClass("in");
-        $("#refineGlyph").removeClass("glyphicon-menu-down");
-        $("#refineGlyph").addClass("glyphicon-menu-up");
-    }
-
-    $('#collapseRefine').on('hidden.bs.collapse', function () {
-        $("#refineGlyph").removeClass("glyphicon-menu-down");
-        $("#refineGlyph").addClass("glyphicon-menu-up");
-    });
-    $('#collapseRefine').on('show.bs.collapse', function () {
-        $("#refineGlyph").removeClass("glyphicon-menu-up");
-        $("#refineGlyph").addClass("glyphicon-menu-down");
-    });
+    */
 
   });
 </script>
