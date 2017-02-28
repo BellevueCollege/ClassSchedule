@@ -20,84 +20,40 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 @model YearQuarterModel
 @{
 	YearQuarter yrq = Model.ViewingQuarter;
-  IList<char> alphabet = Model.SubjectLetters;
+    IList<char> alphabet = Model.SubjectLetters;
+    ViewBag.PageTitle = yrq.FriendlyName + " Credit Classes at Bellevue College";
 }
-<div id="scheduleMain">
-  @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })
-  <div id="container" class="sidebar">
-    <div id="sidebar">
-        @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = yrq, FacetData = Model.FacetData})
-    </div> <!-- #sidebar -->
+@Html.Partial("breadcrumbNavigation")
 
-    <div id="content">
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })
 
-			<h1 id="pageTitle">@yrq.FriendlyName Credit Classes</h1>
+<div class="row row-padding buffer-top buffer-bottom">
+    <div class="col-md-3">
+        <div class="content-padding padding-right-none">
+            @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = yrq, FacetData = Model.FacetData})
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="content-padding padding-left-none">
+			<h1>@yrq.FriendlyName Credit Classes</h1>
 
 			@Html.Partial("a_to_z", new AToZViewModel { LettersList = alphabet, ViewingLetter = ViewBag.letter == null ? (char?)null : ViewBag.letter[0] })
 
-			@if (Helpers.IsAdmin(Context))
-			{
-				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
-			}
+            @Html.Partial("LoggedInUser")
 
 			@if (Model.ViewingSubjects.Count() == 0)
 			{
 				string letter = Request.QueryString["letter"];
-				<div id="error-noclassesfound">
-					<h2>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h2>
-					<p><em>TIP:</em> Information for @yrq.FriendlyName may not be available yet.</p>
-				</div>
+			    <h3>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h3>
+			    <p><em>Tip:</em> Information for @yrq.FriendlyName may not be available yet.</p>
 			}
 			else
 			{
 				Html.RenderPartial("subjectList", Model.ViewingSubjects.ToList());
 			}
 
+			<div title="Edit subject information" id="edit-program"></div>
 
-			<div title="Edit Subject Information" id="edit-program"></div>
-
-    </div> <!-- #content -->
-  </div> <!-- #container -->
+        </div> <!-- #content -->
+    </div> <!-- #col -->
 </div>
-
-<script type="text/javascript">
-	/* program editor pop-up dialog */
-	$(function () {
-
-		$("#edit-program").dialog({
-			closeOnEscape: false,
-			autoOpen: false,
-			height: 455,
-			width: 950
-		});
-
-
-		/* make the cancel button close the window and reload the page */
-		$("span.ui-icon-closethick").click(function () {
-			showThrobber();
-			window.location.href = $(location).attr('href');
-		});
-
-		$(".ui-dialog").keydown(function(e) {
-			if (e.keyCode == 27) { // esc
-				$(".ui-dialog").hide();
-				showThrobber();
-				window.location.href = $(location).attr('href');
-			}
-		});
-
-		@if(Helpers.IsAdmin(Context))  {
-
-			<text>$('li.subject-name').hover(function () {
-				$(this).children('a.edit_button').show();
-				$(this).addClass('edit-hover subject-name-edit');
-				},
-				function () {
-					$(this).children('a.edit_button').hide();
-					$(this).removeClass('edit-hover subject-name-edit');
-			});
-			</text>
-		}
-
-	});
-</script>

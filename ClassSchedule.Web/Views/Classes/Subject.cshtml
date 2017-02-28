@@ -6,86 +6,79 @@
     ViewBag.PageTitle = Model.Slug + "-" + Model.DepartmentTitle + " Classes at Bellevue College";
 }
 
-<div id="scheduleMain">
-	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
-	<div id="container" class="sidebar subject">
-		<p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>
-		<div id="sidebar">
-			@Html.Partial("basicFacetedSearch", Model.NavigationQuarters)
-		</div> <!-- #sidebar -->
+@Html.Partial("breadcrumbNavigation")
 
-		<div id="content">
-			@if (!Model.Courses.Any())
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
+
+<div class="row row-padding">
+    <!-- sidebar -->
+    <div class="col-md-3 buffer-top buffer-bottom">
+        <div class="content-padding padding-right-none">
+            @Html.Partial("basicFacetedSearch", Model.NavigationQuarters)
+        </div>
+    </div>
+    <!-- end sidebar -->
+    <div class="col-md-9 buffer-top buffer-bottom">
+        <div class="content-padding padding-left-none">
+
+		@*<p id="sectionTitle"><a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a></p>*@
+
+		@if (!Model.Courses.Any())
+		{
+			<h1>No @Model.Slug classes were found</h1>
+			<p><strong>Tip:</strong> Try changing the <strong>Subject</strong> to the left.</p>
+		}
+		else
+		{
+			if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
 			{
-				<h1>No @Model.Slug classes were found</h1>
-				<p><strong>TIP:</strong> Try changing the <strong>Subject</strong> to the left.</p>
+				<h1>@Model.SubjectTitle</h1>
 			}
-			else
+
+			if (!string.IsNullOrWhiteSpace(Model.SubjectIntro))
 			{
-				if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
-				{
-					<h1 id="pageTitle">@Model.SubjectTitle</h1>
-				}
-
-				if (!string.IsNullOrWhiteSpace(Model.SubjectIntro))
-				{
-					<p class="subjectdesc">@Model.SubjectIntro</p>
-				}
-				if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
-				{
-					<p id="programLink">
-						<strong>Need more info?</strong>
-						<a href="@Model.DepartmentURL">Visit the
-							@if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
-							{
-								@Model.DepartmentTitle
-							}
-							else if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
-							{
-								@Model.SubjectTitle
-							}
-							else
-							{
-								<text>Program</text>
-							}
-							website
-						</a>
-					</p>
-				}
-
-				<div id="classDescriptions">
-					@foreach (Course item in Model.Courses)
-					{
-						<div class="classInfo">
-							<h2 class="classHeading">
-								<a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number })">
-									@Html.SectionCourseHeading(item)
-									@ViewHelpers.DisplayCredits(item)
-								</a>
-							</h2>
-
-							@if (string.Compare(item.YearQuarterBegin.ToString(), Model.CurrentQuarter.ID) == 1)
-							{
-								<div class="upcomingChange new">New class</div>
-							}
-
-						  @Html.Partial("CourseDescriptions", item.Descriptions, new ViewDataDictionary
-						                                        {
-                                                      new KeyValuePair<string, object>("CurrentQuarter", Model.CurrentQuarter)
-						                                        })
-
-						  <p class="classDetailsLink">
-
-								@Html.ActionLink(String.Concat("View details for ", Helpers.SubjectWithCommonCourseFlag(item), " ", item.Number),
-                                                                "ClassDetails",
-                                                                "Classes",
-                                                                new { Prefix = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number },
-                                                                null)
-							 </p>
-						</div>
-          }
-				</div> <!-- #classDescriptions -->
+				<p>@Model.SubjectIntro</p>
 			}
-		</div> <!-- #content -->
-	</div> <!-- #container -->
-</div> <!-- schedulemain -->
+			if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
+			{
+				<p>
+					<strong>Need more info?</strong>
+					<a href="@Model.DepartmentURL">Visit the
+						@if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
+						{
+							@Model.DepartmentTitle
+						}
+						else if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
+						{
+							@Model.SubjectTitle
+						}
+						else
+						{
+							<text>Program</text>
+						}
+						website</a>.
+				</p>
+			}
+
+			foreach (Course item in Model.Courses)
+			{
+				<h2>
+					<a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(item), ClassNum = item.Number })">
+						@Html.SectionCourseHeading(item)
+						@ViewHelpers.DisplayCredits(item)
+					</a>
+                    @if (string.Compare(item.YearQuarterBegin.ToString(), Model.CurrentQuarter.ID) == 1)
+				    {
+                        <text>&nbsp;<span class="label label-default">New</span></text>
+                    }
+				</h2>
+
+				@Html.Partial("CourseDescriptions", item.Descriptions, new ViewDataDictionary {
+                                                new KeyValuePair<string, object>("CurrentQuarter", Model.CurrentQuarter)
+						                                })
+            }
+
+			}
+        </div> <!-- content -->
+    </div> <!-- col -->
+</div> <!-- row -->

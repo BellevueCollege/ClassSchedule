@@ -72,7 +72,7 @@ namespace CTCClassSchedule.Controllers
 
 	    if (string.IsNullOrWhiteSpace(originalUrl))
 	    {
-	      originalUrl = Request.ApplicationPath;
+	      originalUrl = Request.UserHostName + Request.ApplicationPath;
 	    }
 
 	    return Redirect(originalUrl);

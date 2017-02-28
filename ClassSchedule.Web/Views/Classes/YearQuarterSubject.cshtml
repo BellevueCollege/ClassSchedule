@@ -23,366 +23,313 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 @{
   MiniProfiler _profiler = MiniProfiler.Current;
 
-  ViewBag.PageTitle = Model.ViewingQuarter.FriendlyName + " " + Model.SubjectTitle + " Credit Class Schedule at Bellevue College";
+  ViewBag.PageTitle = Model.ViewingQuarter.FriendlyName + " " + Model.SubjectTitle + " Credit Classes at Bellevue College";
+  
 }
 
-<div id="scheduleMain">
-	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = Model.ViewingQuarter })
-	<div id="container" class="sidebar">
-    <p id="sectionTitle">
-	    <a href="@Url.Action("YearQuarter", "Classes")">@Model.ViewingQuarter.FriendlyName</a>
-    </p>
-    <div id="sidebar">
-	    @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel
-	                                           {
-	                                             ViewingQuarter = Model.ViewingQuarter,
-                                               SelectedSubject = Model.Slug,
-                                               FacetData = Model.FacetData
-	                                           })
-    </div><!-- #sidebar -->
+@Html.Partial("breadcrumbNavigation")
 
-		<div id="content">
-      @if (Model.Courses.Count == 0)
-      {
-        @*
-        TODO: The Subject (aka Prefix) should be displayed to the user here, not the Slug - the slug is only for URL construction, the Subject is the user info
-        *@
-        <h1 id="pageTitle">No @Model.Slug classes were found</h1>
-        <div id="error-noclassesfound">
-          <strong>TIP:</strong>
-          @Html.Partial("subjectNavigation", Model.ViewingQuarter) or try selecting fewer <em>Refine</em> options to the left.
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
+
+<div class="row row-padding buffer-top buffer-bottom">
+    <!-- sidebar -->
+    <div class="col-md-3">
+        <div class="content-padding padding-right-none">
+            @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel
+	                    {
+	                        ViewingQuarter = Model.ViewingQuarter,
+                        SelectedSubject = Model.Slug,
+                        FacetData = Model.FacetData
+	                    })
         </div>
-      }
-      else
-      {
-        <h1 id="pageTitle">
-	        @Model.SubjectTitle
-        </h1>
-
-        if (!string.IsNullOrWhiteSpace(Model.SubjectIntro))
+    </div>
+    <!-- end sidebar -->
+    <div class="col-md-9">
+        <div class="content-padding padding-left-none">
+        @if (Model.Courses.Count == 0)
         {
-          <p class="subjectdesc">@Model.SubjectIntro</p>
-        }
+            @*
+            TODO: The Subject (aka Prefix) should be displayed to the user here, not the Slug - the slug is only for URL construction, the Subject is the user info
+            *@
+            <h2>No @Model.Slug classes were found</h2>
+        
+            <div class="alert alert-info">
+                <strong>Tip:</strong>
+                @Html.Partial("subjectNavigation", Model.ViewingQuarter) or try selecting fewer refinement options to the left.
+            </div>
+        } 
+        else
+        {                
+            @Html.Partial("LoggedInUser", new ViewDataDictionary { { "allowInlineEditing", true } })
+                
+            <h1>@Model.SubjectTitle</h1>
 
-        if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
-        {
-          <p id="programLink">
-            <strong>Need more info?</strong>
-            <a href="@Model.DepartmentURL">Visit the
-              @if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
-              {
-                @Model.DepartmentTitle
-              }
-              else if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
-              {
-                @Model.SubjectTitle
-              }
-              else
-              {
-                <text>Program</text>
-              }
-              website
-            </a>
-          </p>
-        }
-
-        if (Helpers.IsAdmin(Context) || Helpers.IsEditor(Context))
-        {
-          string role = Helpers.IsAdmin(Context) ? "admin" : "editor";
-          <div class="message">@Context.User.Identity.Name! You have @role access to this section. [ <a class="toggleEditingMode" data-inlineMode="false">Enable Inline Editing</a> ]</div>
-        }
-
-        using (_profiler.Step("Rendering Sections by Course (outer loop)"))
-        {
-          foreach (SectionsBlock block in Model.Courses)
-          {
-            SectionWithSeats firstSection = block.Sections.First();
-
-            if (firstSection != null)
+            if (!string.IsNullOrWhiteSpace(Model.SubjectIntro))
             {
-              if (!firstSection.IsLinked)
-              {
-                <h2 class="classHeading">
-                  @if (block.LinkedSections.Count > 0)
-                  {
-                    <span class="combinationClass">Combination class:</span><br />
-                  }
-                  <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber })">
-                    @Html.SectionCourseHeading(firstSection)
-                    @ViewHelpers.DisplayCredits(firstSection)
-                  </a>
-                  @{
-                    IList<SectionWithSeats> commonLinkedSections = Helpers.ParseCommonHeadingLinkedSections(block.LinkedSections);
-                  }
-                  @foreach (SectionWithSeats linkedSec in commonLinkedSections)
-                  {
-                    <br />
-                    <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber })">
-                      @Html.SectionCourseHeading(linkedSec)
-                      @ViewHelpers.DisplayCredits(linkedSec)
-                    </a>
-                  }
-	              </h2> <!-- classHeading -->
-
-                <div class="classInfo">
-                  @if (Helpers.IsAdmin(Context))
-                  {
-                    @Ajax.ActionLink("Edit",
-                                      "ClassEdit",
-                                      "Api",
-                                      new {
-                                        CourseNumber = firstSection.CourseNumber,
-                                        Subject = firstSection.CourseSubject,
-                                        IsCommonCourse = firstSection.IsCommonCourse,
-                                      },
-                                      new AjaxOptions {
-                                        UpdateTargetId = "edit-class",
-                                        HttpMethod = "GET",
-                                        InsertionMode = InsertionMode.Replace,
-                                        OnBegin = "$('#edit-class').dialog('open');",
-                                        OnComplete = "spinner.stop();",
-                                      },
-                                      new { @class = "edit_button" })
-                  }
-
-                  <div class="classDetails">
-				            @*
-                      NOTE: Only display a custom description, if one exists, otherwise don't display a description
-                      See http://irwiki.bellevuecollege.edu/wiki/Class_Schedule#Displaying_of_Course_Descriptions
-                    *@
-                    @if (!string.IsNullOrWhiteSpace(firstSection.CustomDescription))
-                    {
-                      @Html.Raw(firstSection.CustomDescription)
-                    }
-                    <ul>
-                      <li class="classDetailsLink">
-                        @Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber }, null)
-                      </li>
-                      @foreach (SectionWithSeats linkedSec in commonLinkedSections)
-                      {
-                        string linkedCourseId = Helpers.BuildCourseID(linkedSec.CourseNumber, linkedSec.CourseSubject, linkedSec.IsCommonCourse);
-                        <li class="classDetailsLink">
-                          @Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber }, null)
-                        </li>
-                      }
-                    </ul>
-                  </div>
-                  <p class="classNotes">
-                    @ViewHelpers.DisplayFootnotes(block.CommonFootnotes, firstSection.CourseFootnotes)
-                  </p>
-                </div> <!--classInfo -->
-
-                <ul class='course-block @(Model.ViewingQuarter.ID.CompareTo(Model.CurrentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
-                  @foreach (SectionWithSeats sec in block.Sections)
-                  {
-                    // Both Sections includes a master and its subordinate linked section(s)
-                    IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
-                    IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
-
-                    if (linked.Count > 0)
-                    {
-	                    multipleSections = multipleSections.Union(linked).ToList();
-                    }
-
-                    // NOTE: We must pass the current ViewData object to RenderPartial here.
-                    // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-                    Html.RenderPartial("Sections", new SectionsViewModel
-                    {
-                      Sections = multipleSections.ToList(),
-                      CurrentQuarter = Model.CurrentQuarter,
-                      ViewingQuarter = Model.ViewingQuarter,
-                      CommonFootnotes = block.CommonFootnotes,
-                    });
-                  }
-                  <li>
-@if (block.IsCrosslisted && block.LinkedSections.Count <= 0)
-  {
-    // TODO: Replace Helpers.BuildCourseID() with this logic - and pull in CommonCourseChar from .config
-    string courseID = string.Format("{0}{1} {2}", firstSection.CourseSubject, firstSection.IsCommonCourse ? "&" : string.Empty, firstSection.CourseNumber);
-    // because we're using this in an attribute name, replace invalid characters w/ dashes
-    string cssID = Regex.Replace(courseID.Replace('&','-'), @"\s+", "-");
-
-    <ul class="section-crosslisted-courses">
-      <li>
-        Also offered as part of
-        <div id="courses-crosslisted-with-@cssID" class="section-crosslisted-courses">
-          <noscript><strong>Javascript is required to load cross-listed courses.</strong></noscript>
-        </div>
-      </li>
-    </ul>
-
-      <script type="text/javascript">
-      // dynamically load course cross-listings, if present
-      // NOTE: This script is inline so that it's only created for the courses that need it.
-        $(function () {
-          @* WARNING: If we don't specify .Raw() output below, the query parameter separator (&) will be encoded (&amp;), which breaks the URL *@
-          var jsonUrl = "@Html.Raw(Url.Action("CrossListedCourses", "Api", new {courseID = courseID, yearQuarterID = Model.ViewingQuarter.ID}))";
-          var quarter = "@(Model.ViewingQuarter.FriendlyName)";
-
-          LoadCrossListedCourses(jsonUrl, $('div#courses-crosslisted-with-@cssID'), quarter);
-        });
-      </script>
-  }
-                  </li>
-                </ul>
-              }
+                <p>@Model.SubjectIntro</p>
             }
-          }
+
+            if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
+            {
+                <p>
+                <strong>Need more info?</strong>
+                <a href="@Model.DepartmentURL">Visit the
+                    @if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
+                    {
+                    @Model.DepartmentTitle
+                    }
+                    else if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
+                    {
+                    @Model.SubjectTitle
+                    }
+                    else
+                    {
+                    <text>program</text>
+                    }
+                    website</a>.
+                </p>
+            }
+
+            using (_profiler.Step("Rendering Sections by Course (outer loop)"))
+            {
+                foreach (SectionsBlock block in Model.Courses)
+                {
+                    SectionWithSeats firstSection = block.Sections.First();
+
+                    if (firstSection != null)
+                    {
+                        if (!firstSection.IsLinked)
+                        {
+                            <h3>
+                                @if (block.LinkedSections.Count > 0)
+                                {
+                                    <span class="small">Combination class:</span><br />
+                                }
+                                <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber })">
+                                    @Html.SectionCourseHeading(firstSection)
+                                    @ViewHelpers.DisplayCredits(firstSection)
+                                </a>
+                                @{
+                                    IList<SectionWithSeats> commonLinkedSections = Helpers.ParseCommonHeadingLinkedSections(block.LinkedSections);
+                                }
+                                @foreach (SectionWithSeats linkedSec in commonLinkedSections)
+                                {
+                                    <br /><a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber })">
+                                        @Html.SectionCourseHeading(linkedSec)
+                                        @ViewHelpers.DisplayCredits(linkedSec)
+                                    </a>
+                                }
+	                        </h3> <!-- classHeading -->
+
+                            if (Helpers.IsAdmin(Context))
+                            {
+                                @Ajax.ActionLink("Edit",
+                                                    "ClassEdit",
+                                                    "Api",
+                                                    new {
+                                                    CourseNumber = firstSection.CourseNumber,
+                                                    Subject = firstSection.CourseSubject,
+                                                    IsCommonCourse = firstSection.IsCommonCourse,
+                                                    },
+                                                    new AjaxOptions {
+                                                    UpdateTargetId = "edit-class",
+                                                    HttpMethod = "GET",
+                                                    InsertionMode = InsertionMode.Replace,
+                                                    OnBegin = "$('#edit-class').dialog('open');",
+                                                    OnComplete = "fluidDialog();",
+                                                    },
+                                                    new { @class = "edit-button small" })
+                            }
+
+				            @*
+                              NOTE: Only display a custom description, if one exists, otherwise don't display a description
+                              See http://irwiki.bellevuecollege.edu/wiki/Class_Schedule#Displaying_of_Course_Descriptions
+                            *@
+                            if (!string.IsNullOrWhiteSpace(firstSection.CustomDescription))
+                            {
+                              @Html.Raw(firstSection.CustomDescription)
+                            }
+                          <p>
+                            @ViewHelpers.DisplayFootnotes(block.CommonFootnotes, firstSection.CourseFootnotes)
+                          </p>
+
+                            @*<ul class='course-block @(Model.ViewingQuarter.ID.CompareTo(Model.CurrentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
+                            *@
+                          <table class="table-classes">
+                              <thead>
+                                  <tr>
+                                      <th scope="col">Item #</th>
+                                      <th scope="col">Section</th>
+                                      <th scope="col">Instructor</th>
+                                      <th scope="col">Day(s), Times, Room</th>
+                                      <th scope="col">Books</th>
+                                      <th scope="col">Seats available</th>
+                                      <th></th>
+                                  </tr>
+                              </thead>
+                              @foreach (SectionWithSeats sec in block.Sections)
+                              {
+                                // Both Sections includes a master and its subordinate linked section(s)
+                                IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
+                                IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
+
+                                if (linked.Count > 0)
+                                {
+	                                multipleSections = multipleSections.Union(linked).ToList();
+                                }
+
+                                // NOTE: We must pass the current ViewData object to RenderPartial here.
+                                // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+                                Html.RenderPartial("Sections", new SectionsViewModel
+                                {
+                                  Sections = multipleSections.ToList(),
+                                  CurrentQuarter = Model.CurrentQuarter,
+                                  ViewingQuarter = Model.ViewingQuarter,
+                                  CommonFootnotes = block.CommonFootnotes,
+                                });
+                              }
+                          </table>
+                          if (block.IsCrosslisted && block.LinkedSections.Count <= 0)
+                          {
+                            // TODO: Replace Helpers.BuildCourseID() with this logic - and pull in CommonCourseChar from .config
+                            string courseID = string.Format("{0}{1} {2}", firstSection.CourseSubject, firstSection.IsCommonCourse ? "&" : string.Empty, firstSection.CourseNumber);
+                            // because we're using this in an attribute name, replace invalid characters w/ dashes
+                            string cssID = Regex.Replace(courseID.Replace('&','-'), @"\s+", "-");
+                            <p>Also offered as part of:</p>
+                            <div id="courses-crosslisted-with-@cssID" class="section-crosslisted-courses">
+                                  <noscript><strong>Javascript is required to load cross-listed courses.</strong></noscript>
+                            </div>
+
+                              <script type="text/javascript">
+                              // dynamically load course cross-listings, if present
+                              // NOTE: This script is inline so that it's only created for the courses that need it.
+                                $(function () {
+                                  @* WARNING: If we don't specify .Raw() output below, the query parameter separator (&) will be encoded (&amp;), which breaks the URL *@
+                                  var jsonUrl = "@Html.Raw(Url.Action("CrossListedCourses", "Api", new {courseID = courseID, yearQuarterID = Model.ViewingQuarter.ID}))";
+                                  var quarter = "@(Model.ViewingQuarter.FriendlyName)";
+
+                                  LoadCrossListedCourses(jsonUrl, $('div#courses-crosslisted-with-@cssID'), quarter);
+                                });
+                              </script>
+                          }
+                        }
+                    }
+                }
+            }
         }
-      }
 
-			<div title="Edit Section" id="edit-section">
-			</div>
+		    <div title="Edit section" id="edit-section">
+		    </div>
 
-			<div title="Edit Class" id="edit-class">
-			</div>
+		    <div title="Edit class" id="edit-class">
+		    </div>
+        </div><!--content padding-->
+    </div><!-- col -->
+</div><!-- row -->
 
-		</div><!-- content -->
-	</div><!-- container -->
-</div><!-- #scheduleMain -->
+<script type="text/javascript">
 
-@section PageScripts
-{
-	<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")?v=@ViewBag.Version"></script>
-	<script type="text/javascript">
+	/* inline editing js */
+	$(function () {
+	    @if (Helpers.IsEditor(Context))
+	    {
+			<text>
+	        var cmsFootnotePlaceholder = "<em>[Enter additional notes]</em>";
 
-	/* subject chooser pop-up dialog */
-	$(document).ready(function () {
+	        // Toggle editing modes
+	        $('.toggleEditingMode').click(function () {
+	            // Change button text
+	            $(this).attr('data-inlineMode', function (idx, oldVal) {
+	                toggle = (oldVal === 'true');
 
-		$("#edit-section").dialog({
-			autoOpen: false,
-			height: 575,
-			width: 650
-		});
+	                if (toggle) {
+	                    $(this).html('Enable inline editing');
+	                } else {
+	                    $(this).html('Disable inline editing');
+	                }
 
-		$("#edit-class").dialog({
-			autoOpen: false,
-			height: 425,
-			width: 600
-		});
+	                return !(toggle);
+	            });
 
-		$("span.ui-icon-closethick").click(function () {
-			showThrobber();
-			window.location.href = $(location).attr('href');
-		});
+	            // Toggle footnote editability
+	            var toggleState = $(this).attr('data-inlineMode') === 'true';
+	            $('tbody.section-details').find('span.cmsfootnote').each(function () {
+	                $(this).attr('contenteditable', toggleState);
+	                $(this).toggleClass('text-editable');
 
-	 @if (Helpers.IsEditor(Context))
-	 {
-				<text>
-				var cmsFootnotePlaceholder = "<em>[Enter additional notes]</em>";
+	                if (toggleState) { // Inline editing mode
+	                    if (!$(this).text().trim().length) {
+	                        $(this).html(cmsFootnotePlaceholder);
+	                    }
+	                    $(this).removeClass('hidden');
+	                } else { // Normal editing mode
+	                    $(this).children().remove();
+	                    if (!$(this).text().trim().length) {
+	                        $(this).addClass('hidden');
+	                    }
+	                }
+	            });
+	        });
 
-				// Toggle editing modes
-				$('.toggleEditingMode').click(function () {
-						// Change button text
-						$(this).attr('data-inlineMode', function (idx, oldVal) {
-							toggle = (oldVal === 'true');
+	        // Bind inline editing event behaviors
+	        $('tbody.section-details').find('span.cmsfootnote').each(function () {
+	            $(this).bind('focus', function (e) {
+	                window.setTimeout(function () {
+	                    $(e.target).children().remove();
+	                }, 100);
+	            });
 
-							if (toggle) {
-								$(this).html('Enable Inline Editing');
-							} else {
-								$(this).html('Disable Inline Editing');
-							}
+	            $(this).bind('blur', function () {
+	                var footnote = $(this).text().trim();
+	                var classId = $(this).closest('.section-listing').attr('data-sectionid');
+	                var footnoteRef = this;
+	                $.ajax({
+	                    url: g_updateCMSFootnoteUrl,
+	                    dataType: 'json',
+	                    type: 'POST',
+	                    data: { classId: classId, newFootnoteText: footnote },
+	                    timeout: 4000,
+	                    success: function (response) {
+	                        if ($(footnoteRef).html() != cmsFootnotePlaceholder) {
+	                            $(footnoteRef).html(response.footnote);
+	                        }
+	                        if (response.result === true) {
+	                            $(footnoteRef).append("<span id='textSuccessIcon' class='ui-icon ui-icon-check'></span>");
+	                        }
+	                    },
+	                    error: function (x, t, m) {
+	                        $(footnoteRef).switchClass(null, 'text-error', 1000);
+	                        $(footnoteRef).switchClass('text-error', null, 1000);
+	                        $(footnoteRef).append('<em> [Service unavailable]</em>');
+	                    }
+	                });
 
-							return !(toggle);
-						});
+	                if (!$(this).text().trim().length) {
+	                    $(this).html(cmsFootnotePlaceholder);
+	                }
+	            });
 
-						// Toggle footnote editability
-						var toggleState = $(this).attr('data-inlineMode') === 'true';
-						$('ul.section-details').find('span.cmsfootnote').each(function () {
-							$(this).attr('contenteditable', toggleState);
-							$(this).toggleClass('text-editable');
-
-							if (toggleState) { // Inline editing mode
-								if (!$(this).text().trim().length) {
-									$(this).html(cmsFootnotePlaceholder);
-								}
-								$(this).removeClass('hidden');
-							} else { // Normal editing mode
-								$(this).children().remove();
-								if (!$(this).text().trim().length) {
-									$(this).addClass('hidden');
-								}
-							}
-						});
-				});
-
-				// Bind inline editing event behaviors
-				$('ul.section-details').find('span.cmsfootnote').each(function () {
-            $(this).bind('focus', function(e) {
-              window.setTimeout(function() {
-                $(e.target).children().remove();
-              }, 100);
-						});
-
-						$(this).bind('blur', function() {
-							var footnote = $(this).text().trim();
-							var classId = $(this).closest('.section-listing').attr('data-sectionid');
-							var footnoteRef = this;
-							$.ajax({
-								url: g_updateCMSFootnoteUrl,
-								dataType: 'json',
-								type: 'POST',
-								data: { classId: classId, newFootnoteText: footnote },
-								timeout: 4000,
-								success: function (response) {
-									if ($(footnoteRef).html() != cmsFootnotePlaceholder) {
-										$(footnoteRef).html(response.footnote);
-									}
-									if (response.result === true)	{
-										$(footnoteRef).append("<span id='textSuccessIcon' class='ui-icon ui-icon-check'></span>");
-									}
-								},
-								error: function (x, t, m) {
-									$(footnoteRef).switchClass(null, 'text-error', 1000);
-									$(footnoteRef).switchClass('text-error', null, 1000);
-									$(footnoteRef).append('<em> [Service unavailable]</em>');
-								}
-							});
-
-							if (!$(this).text().trim().length) {
-									$(this).html(cmsFootnotePlaceholder);
-							}
-						});
-
-						$(this).bind('paste', function(e) {
-							 //console.log(e);
-						});
-				});
+	            $(this).bind('paste', function (e) {
+	                //console.log(e);
+	            });
+	        });
 
 
-				$('li.section-listing').hover(
-					function () {
-						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').show();
-						$(this).addClass('section-listing-edit edit-hover');
+	        $('tbody.section-details').hover(
+                function () {
+                    $(this).children('td.editing').children('a.edit-button').show();
+                    $(this).addClass('section-details-edit edit-hover');
 
-						if ($('a[data-inlineMode*="true"]').length) {
-							$(this).find('span.cmsfootnote').addClass('edit-hover text-highlight');
-						}
-					},
-					function () {
-						$(this).children('ul.section-details').children('li.editing').children('a.edit_button').hide();
-						$(this).find('span.cmsfootnote').removeClass('edit-hover text-highlight');
-						$(this).removeClass('section-listing-edit edit-hover');
-				});
-				</text>
-	 }
-
-
-			@if (Helpers.IsAdmin(Context))
-	 {
-				<text>
-				$('.classInfo').hover(
-					function () {
-						$(this).children('a.edit_button').show();
-						$(this).addClass('edit-hover classInfo-edit');
-					},
-					function () {
-						$(this).children('a.edit_button').hide();
-						$(this).removeClass('edit-hover classInfo-edit');
-				});
-				</text>
-			}
-
-	});
-	</script>
-}
+                    if ($('a[data-inlineMode*="true"]').length) {
+                        $(this).find('span.cmsfootnote').addClass('edit-hover text-highlight');
+                    }
+                },
+                function () {
+                    $(this).children('tbody.section-details').children('td.editing').children('a.edit-button').hide();
+                    $(this).find('span.cmsfootnote').removeClass('edit-hover text-highlight');
+                    $(this).removeClass('section-details-edit edit-hover');
+                });
+	        </text>
+     }
+});
+</script>

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Error.aspx.cs" Inherits="CTCClassSchedule.ScheduleError" %>
+﻿<%@ Page Language="C#" AutoEventWireup="True" CodeBehind="Error.aspx.cs" Inherits="CTCClassSchedule.ScheduleError" %>
 <%@ Import Namespace="CTCClassSchedule.Common" %>
 <%--
 This file is part of CtcClassSchedule.

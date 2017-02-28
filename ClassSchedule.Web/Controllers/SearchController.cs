@@ -33,10 +33,10 @@ namespace CTCClassSchedule.Controllers
 {
 	public class SearchController : Controller
 	{
-    const int ITEMS_PER_PAGE = 40;
-    readonly private MiniProfiler _profiler = MiniProfiler.Current;
+        const int ITEMS_PER_PAGE = 40;
+        readonly private MiniProfiler _profiler = MiniProfiler.Current;
 
-	  public SearchController()
+	    public SearchController()
 		{
 		  ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		}
@@ -45,21 +45,21 @@ namespace CTCClassSchedule.Controllers
 		// GET: /Search/
 		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
-      if (String.IsNullOrWhiteSpace(searchterm))
-      {
-        if (!string.IsNullOrWhiteSpace(quarter))
-        {
-          return RedirectToAction("YearQuarter", "Classes", new {YearQuarter = quarter});
-        }
-        return RedirectToAction("Index", "Classes");
-      }
+          if (String.IsNullOrWhiteSpace(searchterm))
+          {
+            if (!string.IsNullOrWhiteSpace(quarter))
+            {
+              return RedirectToAction("YearQuarter", "Classes", new {YearQuarter = quarter});
+            }
+            return RedirectToAction("Index", "Classes");
+          }
 
 		  // We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
-      // Also, remove any backslashes
+          // Also, remove any backslashes
 		  searchterm = searchterm.Replace("\"", string.Empty).Replace(@"\", string.Empty);
 		  
-      // protect against injection attacks
-		  searchterm = Encoder.UrlEncode(searchterm);
+          // protect against injection attacks
+		  //searchterm = Encoder.UrlEncode(searchterm);
 
 		  // TODO: This needs to be configurable
 			if (quarter == "CE")
@@ -119,6 +119,7 @@ namespace CTCClassSchedule.Controllers
 			  IList<SectionsBlock> courseBlocks;
 			  using (ClassScheduleDb db = new ClassScheduleDb())
 				{
+                  
 					searchResults = GetSearchResults(db, searchterm, viewingQuarter);
 					noSectionSearchResults = GetNoSectionSearchResults(db, searchterm, viewingQuarter);
 

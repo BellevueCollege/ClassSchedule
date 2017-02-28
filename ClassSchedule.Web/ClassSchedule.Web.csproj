@@ -90,8 +90,9 @@
     <Reference Include="MvcMiniProfiler">
       <HintPath>..\packages\MiniProfiler.1.9\lib\net40\MvcMiniProfiler.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
+    <Reference Include="NLog, Version=3.2.1.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.3.2.1\lib\net40\NLog.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.DirectoryServices" />
@@ -157,6 +158,9 @@
     <Compile Include="Common\ClassScheduleExporter.cs" />
     <Compile Include="Common\CourseOutcomes.cs" />
     <Compile Include="Common\SsoAuthorizeAttribute.cs" />
+    <Compile Include="Error.aspx.designer.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+    </Compile>
     <Compile Include="FacetHelper.cs" />
     <Compile Include="Models\AToZViewModel.cs" />
     <Compile Include="Models\ClassScheduleSectionID.cs" />
@@ -217,185 +221,39 @@
       <DependentUpon>Error.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Error.aspx.designer.cs">
-      <DependentUpon>Error.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="app_offline.html" />
     <None Include="App_Readme\Elmah.txt" />
-    <Content Include="Content\automatic-image-slider.css" />
-    <Content Include="Content\grids.css" />
-    <Content Include="Content\ie7.css" />
     <Content Include="Content\images\ajax-loader.gif" />
     <Content Include="Content\images\ajax-loader_big.gif" />
-    <Content Include="Content\images\alert.gif" />
-    <Content Include="Content\images\books.gif" />
-    <Content Include="Content\images\classes-bg.png" />
-    <Content Include="Content\images\coin-slider\sc1.jpg" />
-    <Content Include="Content\images\coin-slider\sc2.jpg" />
-    <Content Include="Content\images\coin-slider\sc3.jpg" />
-    <Content Include="Content\images\course-block-header-past.gif" />
-    <Content Include="Content\images\course-block-header.gif" />
-    <Content Include="Content\images\edit_button.png" />
-    <Content Include="Content\images\feedbackbutton.png" />
-    <Content Include="Content\images\online.gif" />
-    <Content Include="Content\images\or_divider.gif" />
-    <Content Include="Content\images\right_small_arrow.png" />
-    <Content Include="Content\images\scroller.jpg" />
-    <Content Include="Content\images\search-tip-arrow.png" />
-    <Content Include="Content\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
-    <Content Include="Content\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
-    <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\images\ui-bg_flat_10_000000_40x100.png" />
-    <Content Include="Content\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\images\ui-bg_glass_100_f6f6f6_1x400.png" />
-    <Content Include="Content\images\ui-bg_glass_100_fdf5ce_1x400.png" />
-    <Content Include="Content\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
-    <Content Include="Content\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
-    <Content Include="Content\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
-    <Content Include="Content\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\images\ui-icons_228ef1_256x240.png" />
-    <Content Include="Content\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\images\ui-icons_ef8c08_256x240.png" />
-    <Content Include="Content\images\ui-icons_ffd27a_256x240.png" />
-    <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
-    <Content Include="Content\jquery-ui-1.8.16.custom.css" />
-    <Content Include="Content\jquery-ui-1.8.17.custom.css" />
     <Content Include="Content\js\classes.js" />
-    <Content Include="Content\js\jquery-1.6.4.min.js" />
-    <Content Include="Content\js\jquery-ui-1.8.16.custom.min.js" />
-    <Content Include="Content\js\jquery-ui-1.8.17.custom.min.js" />
-    <Content Include="Content\js\jquery-ui-timepicker-addon.js" />
+    <Content Include="Content\js\CtcClassSchedule.js" />
+    <Content Include="Content\test.css" />
     <Content Include="Error.aspx" />
-    <None Include="globals\btheme_v0.1\asp\footer_big.asp" />
-    <None Include="globals\btheme_v0.1\asp\footer_small.asp" />
-    <None Include="globals\btheme_v0.1\asp\header_big.asp" />
-    <None Include="globals\btheme_v0.1\asp\header_menu.asp" />
-    <None Include="globals\btheme_v0.1\asp\header_small.asp" />
-    <None Include="globals\btheme_v0.1\asp\index.asp" />
-    <None Include="globals\btheme_v0.1\asp\narrow.asp" />
-    <None Include="globals\btheme_v0.1\asp\thick.html" />
-    <None Include="globals\btheme_v0.1\common\bigfoot_content.html" />
-    <None Include="globals\btheme_v0.1\common\header_bottom_big.html" />
-    <None Include="globals\btheme_v0.1\common\header_bottom_small.html" />
-    <None Include="globals\btheme_v0.1\common\header_top_big.html" />
-    <None Include="globals\btheme_v0.1\common\header_top_small.html" />
-    <None Include="globals\btheme_v0.1\common\legallinks.html" />
-    <None Include="globals\btheme_v0.1\css\btheme0.5.css" />
-    <None Include="globals\btheme_v0.1\css\btheme_v0.1.1.css" />
-    <None Include="globals\btheme_v0.1\css\btheme_v0.1.2.css" />
-    <None Include="globals\btheme_v0.1\css\btheme_v0.1.css" />
-    <None Include="globals\btheme_v0.1\css\ie7.css" />
-    <None Include="globals\btheme_v0.1\html_raw\narrow.html" />
-    <None Include="globals\btheme_v0.1\html_raw\thick.html" />
-    <None Include="globals\btheme_v0.1\img\bellevuecollege-bigblue.png" />
-    <None Include="globals\btheme_v0.1\img\bellevuecollege-idbar.png" />
-    <None Include="globals\btheme_v0.1\img\divider.png" />
-    <None Include="globals\btheme_v0.1\img\facebook.png" />
-    <None Include="globals\btheme_v0.1\img\flickr.png" />
-    <None Include="globals\btheme_v0.1\img\foot-bg-wide.jpg" />
-    <None Include="globals\btheme_v0.1\img\foot-bg.jpg" />
-    <None Include="globals\btheme_v0.1\img\foot-col-sep.png" />
-    <None Include="globals\btheme_v0.1\img\foot-legal-sep.gif" />
-    <None Include="globals\btheme_v0.1\img\foot-shadow-bot.png" />
-    <None Include="globals\btheme_v0.1\img\foot-shadow-top.png" />
-    <None Include="globals\btheme_v0.1\img\foot-shadow.png" />
-    <None Include="globals\btheme_v0.1\img\foot-square-sep.gif" />
-    <None Include="globals\btheme_v0.1\img\head-botline.png" />
-    <None Include="globals\btheme_v0.1\img\headbg.jpg" />
-    <None Include="globals\btheme_v0.1\img\headbgshadow.png" />
-    <None Include="globals\btheme_v0.1\img\headbgwide.jpg" />
-    <None Include="globals\btheme_v0.1\img\headbgwidetile.jpg" />
-    <None Include="globals\btheme_v0.1\img\homepage.png" />
-    <None Include="globals\btheme_v0.1\img\linkedin.png" />
-    <None Include="globals\btheme_v0.1\img\nav-highlight.png" />
-    <None Include="globals\btheme_v0.1\img\search-loop-btn.png" />
-    <None Include="globals\btheme_v0.1\img\translucentpixel.png" />
-    <None Include="globals\btheme_v0.1\img\twitter.png" />
-    <None Include="globals\btheme_v0.1\img\youtube.png" />
-    <None Include="globals\btheme_v0.1\js\searchbox.js" />
-    <None Include="globals\dropdown_about.asp" />
-    <None Include="globals\dropdown_enrollment.asp" />
-    <None Include="globals\dropdown_programs.asp" />
-    <None Include="globals\dropdown_resources.asp" />
-    <Content Include="Scripts\CtcClassSchedule.js" />
-    <Content Include="Scripts\jquery.ui.timepicker.js" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
-    <Content Include="Content\themes\base\jquery.ui.all.css" />
-    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
-    <Content Include="Content\themes\base\jquery.ui.base.css" />
-    <Content Include="Content\themes\base\jquery.ui.button.css" />
-    <Content Include="Content\themes\base\jquery.ui.core.css" />
-    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
-    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
-    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
-    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
-    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
-    <Content Include="Content\themes\base\jquery.ui.slider.css" />
-    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
-    <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="Content\ClassSchedule.css" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\jquery-1.5.1-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.5.1.js" />
-    <Content Include="Scripts\jquery-1.5.1.min.js" />
-    <Content Include="Scripts\jquery-ui-1.8.11.js" />
-    <Content Include="Scripts\jquery-ui-1.8.11.min.js" />
-    <Content Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\modernizr-1.7.js" />
-    <Content Include="Scripts\modernizr-1.7.min.js" />
+    <None Include="Scripts\jquery-1.8.0.intellisense.js" />
+    <Content Include="Scripts\jquery-1.8.0.js" />
+    <Content Include="Scripts\jquery-1.8.0.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\MicrosoftAjax.js" />
-    <Content Include="Scripts\MicrosoftAjax.debug.js" />
-    <Content Include="Scripts\MicrosoftMvcAjax.js" />
-    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
-    <Content Include="Scripts\MicrosoftMvcValidation.js" />
-    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
-    <Content Include="Scripts\spin.js" />
-    <Content Include="Scripts\spin.min.js" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="_configSource\Smtp.config" />
+    <Content Include="_configSource\Smtp.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="globals\btheme_v0.1\dotNET\" />
-    <Folder Include="globals\btheme_v0.1\drupal\" />
-    <Folder Include="globals\btheme_v0.1\moodle\" />
-    <Folder Include="globals\btheme_v0.1\plone\" />
-    <Folder Include="globals\btheme_v0.1\wp\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EntityDeploy Include="Models\ClassScheduleDb.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -424,7 +282,9 @@
     <Content Include="_configSource\EXAMPLE-ElmahMail.config" />
     <Content Include="_configSource\EXAMPLE-NLog.config" />
     <Content Include="_configSource\EXAMPLE-Smtp.config" />
-    <Content Include="_configSource\NLog.config" />
+    <Content Include="_configSource\NLog.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\Publish Test.pubxml" />
     <Content Include="_configSource\testCasClient.config">
       <SubType>Designer</SubType>
@@ -432,13 +292,19 @@
     <Content Include="_configSource\testConnectionStrings.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="_configSource\RoleManager.config" />
+    <Content Include="Views\Shared\LoggedInUser.cshtml" />
+    <Content Include="Views\Shared\breadcrumbNavigation.cshtml" />
+    <None Include="_configSource\RoleManager.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="_configSource\ElmahAuthorization.config" />
     <None Include="_configSource\Authentication.config" />
     <None Include="_configSource\AppSettings.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="_configSource\ConnectionStrings.config" />
+    <None Include="_configSource\ConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-Authentication.config" />
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
@@ -455,7 +321,6 @@
     <Content Include="Views\Shared\basicFacetedSearch.cshtml" />
     <Content Include="Views\Shared\advancedFacetedSearch.cshtml" />
     <Content Include="Views\Shared\quarterNavigation.cshtml" />
-    <Content Include="Views\Shared\rightSidebar.cshtml" />
     <Content Include="Views\Shared\Footer.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Shared\NoSectionCourses.cshtml" />
@@ -466,18 +331,6 @@
     <Content Include="Views\Shared\subjectNavigation.cshtml" />
     <Content Include="Views\Api\Subjects.cshtml" />
     <Content Include="Views\Shared\Pager.cshtml" />
-    <None Include="globals\btheme_v0.1\dotNET_MVC\header_small.cshtml" />
-    <None Include="globals\btheme_v0.1\dotNET_MVC\footer_big.cshtml" />
-    <None Include="globals\btheme_v0.1\html_raw\.tmp_narrow.html.42343~" />
-    <None Include="globals\btheme_v0.1\html_raw\.tmp_thick.html.70928~" />
-    <None Include="globals\btheme_v0.1\php\footer_big.php" />
-    <None Include="globals\btheme_v0.1\php\footer_small.php" />
-    <None Include="globals\btheme_v0.1\php\header_big.php" />
-    <None Include="globals\btheme_v0.1\php\header_menu.php" />
-    <None Include="globals\btheme_v0.1\php\header_small.php" />
-    <None Include="globals\btheme_v0.1\php\index.php" />
-    <None Include="globals\btheme_v0.1\php\narrow.php" />
-    <None Include="globals\btheme_v0.1\php\thick.php" />
     <None Include="Properties\PublishProfiles\Release.pubxml">
       <SubType>Designer</SubType>
     </None>
