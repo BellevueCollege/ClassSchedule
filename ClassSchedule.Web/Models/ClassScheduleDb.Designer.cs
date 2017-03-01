@@ -28,14 +28,14 @@ using System.Xml.Serialization;
 namespace CTCClassSchedule.Models
 {
     #region Contexts
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
     public partial class ClassScheduleDb : ObjectContext
     {
         #region Constructors
-
+    
         /// <summary>
         /// Initializes a new ClassScheduleDb object using the connection string found in the 'ClassScheduleDb' section of the application configuration file.
         /// </summary>
@@ -44,7 +44,7 @@ namespace CTCClassSchedule.Models
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
-
+    
         /// <summary>
         /// Initialize a new ClassScheduleDb object.
         /// </summary>
@@ -53,7 +53,7 @@ namespace CTCClassSchedule.Models
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
-
+    
         /// <summary>
         /// Initialize a new ClassScheduleDb object.
         /// </summary>
@@ -62,17 +62,17 @@ namespace CTCClassSchedule.Models
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
-
+    
         #endregion
-
+    
         #region Partial Methods
-
+    
         partial void OnContextCreated();
-
+    
         #endregion
-
+    
         #region ObjectSet Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -88,7 +88,7 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<ClassSearch> _ClassSearches;
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -104,7 +104,7 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<CourseSearch> _CourseSearches;
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -120,7 +120,7 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<Division> _Divisions;
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -136,7 +136,7 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<CourseMeta> _CourseMetas;
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -152,7 +152,7 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<SectionCourseCrosslisting> _SectionCourseCrosslistings;
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -168,7 +168,7 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<SectionsMeta> _SectionsMetas;
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -184,7 +184,7 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<SubjectsCoursePrefix> _SubjectsCoursePrefixes;
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -200,7 +200,7 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<SectionSeat> _SectionSeats;
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -216,7 +216,7 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<vw_Class> _vw_Class;
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -232,7 +232,7 @@ namespace CTCClassSchedule.Models
             }
         }
         private ObjectSet<Department> _Departments;
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -252,7 +252,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region AddTo Methods
-
+    
         /// <summary>
         /// Deprecated Method for adding a new object to the ClassSearches EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
@@ -260,7 +260,7 @@ namespace CTCClassSchedule.Models
         {
             base.AddObject("ClassSearches", classSearch);
         }
-
+    
         /// <summary>
         /// Deprecated Method for adding a new object to the CourseSearches EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
@@ -268,7 +268,7 @@ namespace CTCClassSchedule.Models
         {
             base.AddObject("CourseSearches", courseSearch);
         }
-
+    
         /// <summary>
         /// Deprecated Method for adding a new object to the Divisions EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
@@ -276,7 +276,7 @@ namespace CTCClassSchedule.Models
         {
             base.AddObject("Divisions", division);
         }
-
+    
         /// <summary>
         /// Deprecated Method for adding a new object to the CourseMetas EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
@@ -284,7 +284,7 @@ namespace CTCClassSchedule.Models
         {
             base.AddObject("CourseMetas", courseMeta);
         }
-
+    
         /// <summary>
         /// Deprecated Method for adding a new object to the SectionCourseCrosslistings EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
@@ -292,7 +292,7 @@ namespace CTCClassSchedule.Models
         {
             base.AddObject("SectionCourseCrosslistings", sectionCourseCrosslisting);
         }
-
+    
         /// <summary>
         /// Deprecated Method for adding a new object to the SectionsMetas EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
@@ -300,7 +300,7 @@ namespace CTCClassSchedule.Models
         {
             base.AddObject("SectionsMetas", sectionsMeta);
         }
-
+    
         /// <summary>
         /// Deprecated Method for adding a new object to the SubjectsCoursePrefixes EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
@@ -308,7 +308,7 @@ namespace CTCClassSchedule.Models
         {
             base.AddObject("SubjectsCoursePrefixes", subjectsCoursePrefix);
         }
-
+    
         /// <summary>
         /// Deprecated Method for adding a new object to the SectionSeats EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
@@ -316,7 +316,7 @@ namespace CTCClassSchedule.Models
         {
             base.AddObject("SectionSeats", sectionSeat);
         }
-
+    
         /// <summary>
         /// Deprecated Method for adding a new object to the vw_Class EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
@@ -324,7 +324,7 @@ namespace CTCClassSchedule.Models
         {
             base.AddObject("vw_Class", vw_Class);
         }
-
+    
         /// <summary>
         /// Deprecated Method for adding a new object to the Departments EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
@@ -332,7 +332,7 @@ namespace CTCClassSchedule.Models
         {
             base.AddObject("Departments", department);
         }
-
+    
         /// <summary>
         /// Deprecated Method for adding a new object to the Subjects EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
@@ -348,7 +348,7 @@ namespace CTCClassSchedule.Models
     #endregion
 
     #region Entities
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -358,7 +358,7 @@ namespace CTCClassSchedule.Models
     public partial class ClassSearch : EntityObject
     {
         #region Factory Method
-
+    
         /// <summary>
         /// Create a new ClassSearch object.
         /// </summary>
@@ -373,7 +373,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region Primitive Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -400,7 +400,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _ClassID;
         partial void OnClassIDChanging(global::System.String value);
         partial void OnClassIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -424,7 +424,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _SearchGroup1;
         partial void OnSearchGroup1Changing(global::System.String value);
         partial void OnSearchGroup1Changed();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -448,7 +448,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _SearchGroup2;
         partial void OnSearchGroup2Changing(global::System.String value);
         partial void OnSearchGroup2Changed();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -472,7 +472,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _SearchGroup3;
         partial void OnSearchGroup3Changing(global::System.String value);
         partial void OnSearchGroup3Changed();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -496,7 +496,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _SearchGroup4;
         partial void OnSearchGroup4Changing(global::System.String value);
         partial void OnSearchGroup4Changed();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -523,9 +523,9 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
-
+    
     }
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -535,7 +535,7 @@ namespace CTCClassSchedule.Models
     public partial class CourseMeta : EntityObject
     {
         #region Factory Method
-
+    
         /// <summary>
         /// Create a new CourseMeta object.
         /// </summary>
@@ -550,7 +550,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region Primitive Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -577,7 +577,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _CourseID;
         partial void OnCourseIDChanging(global::System.String value);
         partial void OnCourseIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -601,7 +601,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _Footnote;
         partial void OnFootnoteChanging(global::System.String value);
         partial void OnFootnoteChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -625,7 +625,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _LastUpdatedBy;
         partial void OnLastUpdatedByChanging(global::System.String value);
         partial void OnLastUpdatedByChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -652,9 +652,9 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
-
+    
     }
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -664,7 +664,7 @@ namespace CTCClassSchedule.Models
     public partial class CourseSearch : EntityObject
     {
         #region Factory Method
-
+    
         /// <summary>
         /// Create a new CourseSearch object.
         /// </summary>
@@ -683,7 +683,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region Primitive Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -710,7 +710,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _CourseKey;
         partial void OnCourseKeyChanging(global::System.String value);
         partial void OnCourseKeyChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -734,7 +734,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _YearQuarterID;
         partial void OnYearQuarterIDChanging(global::System.String value);
         partial void OnYearQuarterIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -758,7 +758,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _CourseID;
         partial void OnCourseIDChanging(global::System.String value);
         partial void OnCourseIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -785,9 +785,9 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
-
+    
     }
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -797,7 +797,7 @@ namespace CTCClassSchedule.Models
     public partial class Department : EntityObject
     {
         #region Factory Method
-
+    
         /// <summary>
         /// Create a new Department object.
         /// </summary>
@@ -812,7 +812,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region Primitive Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -839,7 +839,7 @@ namespace CTCClassSchedule.Models
         private global::System.Int32 _DepartmentID;
         partial void OnDepartmentIDChanging(global::System.Int32 value);
         partial void OnDepartmentIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -863,7 +863,7 @@ namespace CTCClassSchedule.Models
         private Nullable<global::System.Int32> _DivisionID;
         partial void OnDivisionIDChanging(Nullable<global::System.Int32> value);
         partial void OnDivisionIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -887,7 +887,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _Title;
         partial void OnTitleChanging(global::System.String value);
         partial void OnTitleChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -911,7 +911,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _URL;
         partial void OnURLChanging(global::System.String value);
         partial void OnURLChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -935,7 +935,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _ProgramChairSID;
         partial void OnProgramChairSIDChanging(global::System.String value);
         partial void OnProgramChairSIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -959,7 +959,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _LastUpdatedBy;
         partial void OnLastUpdatedByChanging(global::System.String value);
         partial void OnLastUpdatedByChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -986,9 +986,9 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
-
+    
         #region Navigation Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1026,7 +1026,7 @@ namespace CTCClassSchedule.Models
                 }
             }
         }
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1052,7 +1052,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
     }
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -1062,7 +1062,7 @@ namespace CTCClassSchedule.Models
     public partial class Division : EntityObject
     {
         #region Factory Method
-
+    
         /// <summary>
         /// Create a new Division object.
         /// </summary>
@@ -1077,7 +1077,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region Primitive Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1104,7 +1104,7 @@ namespace CTCClassSchedule.Models
         private global::System.Int32 _DivisionID;
         partial void OnDivisionIDChanging(global::System.Int32 value);
         partial void OnDivisionIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1128,7 +1128,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _Title;
         partial void OnTitleChanging(global::System.String value);
         partial void OnTitleChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1152,7 +1152,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _URL;
         partial void OnURLChanging(global::System.String value);
         partial void OnURLChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1176,7 +1176,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _LastUpdatedBy;
         partial void OnLastUpdatedByChanging(global::System.String value);
         partial void OnLastUpdatedByChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1203,9 +1203,9 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
-
+    
         #region Navigation Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1231,7 +1231,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
     }
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -1241,7 +1241,7 @@ namespace CTCClassSchedule.Models
     public partial class SectionCourseCrosslisting : EntityObject
     {
         #region Factory Method
-
+    
         /// <summary>
         /// Create a new SectionCourseCrosslisting object.
         /// </summary>
@@ -1258,7 +1258,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region Primitive Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1285,7 +1285,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _ClassID;
         partial void OnClassIDChanging(global::System.String value);
         partial void OnClassIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1315,9 +1315,9 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
-
+    
     }
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -1327,7 +1327,7 @@ namespace CTCClassSchedule.Models
     public partial class SectionSeat : EntityObject
     {
         #region Factory Method
-
+    
         /// <summary>
         /// Create a new SectionSeat object.
         /// </summary>
@@ -1342,7 +1342,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region Primitive Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1369,7 +1369,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _ClassID;
         partial void OnClassIDChanging(global::System.String value);
         partial void OnClassIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1393,7 +1393,7 @@ namespace CTCClassSchedule.Models
         private Nullable<global::System.Int32> _SeatsAvailable;
         partial void OnSeatsAvailableChanging(Nullable<global::System.Int32> value);
         partial void OnSeatsAvailableChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1420,9 +1420,9 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
-
+    
     }
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -1432,7 +1432,7 @@ namespace CTCClassSchedule.Models
     public partial class SectionsMeta : EntityObject
     {
         #region Factory Method
-
+    
         /// <summary>
         /// Create a new SectionsMeta object.
         /// </summary>
@@ -1447,7 +1447,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region Primitive Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1474,7 +1474,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _ClassID;
         partial void OnClassIDChanging(global::System.String value);
         partial void OnClassIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1498,7 +1498,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _Footnote;
         partial void OnFootnoteChanging(global::System.String value);
         partial void OnFootnoteChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1522,7 +1522,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _Title;
         partial void OnTitleChanging(global::System.String value);
         partial void OnTitleChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1546,7 +1546,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _Description;
         partial void OnDescriptionChanging(global::System.String value);
         partial void OnDescriptionChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1570,7 +1570,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _LastUpdatedBy;
         partial void OnLastUpdatedByChanging(global::System.String value);
         partial void OnLastUpdatedByChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1597,9 +1597,9 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
-
+    
     }
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -1609,7 +1609,7 @@ namespace CTCClassSchedule.Models
     public partial class Subject : EntityObject
     {
         #region Factory Method
-
+    
         /// <summary>
         /// Create a new Subject object.
         /// </summary>
@@ -1626,7 +1626,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region Primitive Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1653,7 +1653,7 @@ namespace CTCClassSchedule.Models
         private global::System.Int32 _SubjectID;
         partial void OnSubjectIDChanging(global::System.Int32 value);
         partial void OnSubjectIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1677,7 +1677,7 @@ namespace CTCClassSchedule.Models
         private Nullable<global::System.Int32> _DepartmentID;
         partial void OnDepartmentIDChanging(Nullable<global::System.Int32> value);
         partial void OnDepartmentIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1701,7 +1701,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _Title;
         partial void OnTitleChanging(global::System.String value);
         partial void OnTitleChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1725,7 +1725,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _Intro;
         partial void OnIntroChanging(global::System.String value);
         partial void OnIntroChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1749,7 +1749,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _Slug;
         partial void OnSlugChanging(global::System.String value);
         partial void OnSlugChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1773,7 +1773,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _LastUpdatedBy;
         partial void OnLastUpdatedByChanging(global::System.String value);
         partial void OnLastUpdatedByChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1800,9 +1800,9 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
-
+    
         #region Navigation Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1840,7 +1840,7 @@ namespace CTCClassSchedule.Models
                 }
             }
         }
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1866,7 +1866,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
     }
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -1876,7 +1876,7 @@ namespace CTCClassSchedule.Models
     public partial class SubjectsCoursePrefix : EntityObject
     {
         #region Factory Method
-
+    
         /// <summary>
         /// Create a new SubjectsCoursePrefix object.
         /// </summary>
@@ -1893,7 +1893,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region Primitive Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1920,7 +1920,7 @@ namespace CTCClassSchedule.Models
         private global::System.Int32 _SubjectID;
         partial void OnSubjectIDChanging(global::System.Int32 value);
         partial void OnSubjectIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1950,9 +1950,9 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
-
+    
         #region Navigation Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1994,7 +1994,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
     }
-
+    
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
@@ -2004,7 +2004,7 @@ namespace CTCClassSchedule.Models
     public partial class vw_Class : EntityObject
     {
         #region Factory Method
-
+    
         /// <summary>
         /// Create a new vw_Class object.
         /// </summary>
@@ -2019,7 +2019,7 @@ namespace CTCClassSchedule.Models
         #endregion
 
         #region Primitive Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -2046,7 +2046,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _ClassID;
         partial void OnClassIDChanging(global::System.String value);
         partial void OnClassIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -2070,7 +2070,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _YearQuarterID;
         partial void OnYearQuarterIDChanging(global::System.String value);
         partial void OnYearQuarterIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -2094,7 +2094,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _ItemNumber;
         partial void OnItemNumberChanging(global::System.String value);
         partial void OnItemNumberChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -2118,7 +2118,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _CourseID;
         partial void OnCourseIDChanging(global::System.String value);
         partial void OnCourseIDChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -2142,7 +2142,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _Department;
         partial void OnDepartmentChanging(global::System.String value);
         partial void OnDepartmentChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -2166,7 +2166,7 @@ namespace CTCClassSchedule.Models
         private global::System.String _CourseNumber;
         partial void OnCourseNumberChanging(global::System.String value);
         partial void OnCourseNumberChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -2190,7 +2190,7 @@ namespace CTCClassSchedule.Models
         private Nullable<global::System.Int32> _ClassCapacity;
         partial void OnClassCapacityChanging(Nullable<global::System.Int32> value);
         partial void OnClassCapacityChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -2214,7 +2214,7 @@ namespace CTCClassSchedule.Models
         private Nullable<global::System.Int32> _StudentsEnrolled;
         partial void OnStudentsEnrolledChanging(Nullable<global::System.Int32> value);
         partial void OnStudentsEnrolledChanged();
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -2241,10 +2241,10 @@ namespace CTCClassSchedule.Models
 
         #endregion
 
-
+    
     }
 
     #endregion
 
-
+    
 }
