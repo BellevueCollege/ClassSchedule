@@ -16,7 +16,7 @@ namespace CTCClassSchedule.Common
 	/// </remarks>
 	public static class SubjectInfo
 	{
-	  private static ILog _log = LogManager.GetCurrentClassLogger();
+	  private static ILog _log = LogManager.GetLogger(typeof(SubjectInfo));
 
 	  /// <summary>
 		/// Finds a <see cref="Subject"/> based on its <paramref name="slug"/> identifier

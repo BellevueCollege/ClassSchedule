@@ -35,7 +35,7 @@ namespace CTCClassSchedule.Controllers
 	{
     // Any section that has more than this many courses cross-listed with it will produce a warning in the application log.
     const int MAX_COURSE_CROSSLIST_WARNING_THRESHOLD = 10;
-    private readonly ILog _log = LogManager.GetCurrentClassLogger();
+    private readonly ILog _log = LogManager.GetLogger(typeof(ApiController));
 
 	  public const int MAX_COURSE_PREFIXES = 5;
 

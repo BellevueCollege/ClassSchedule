@@ -43,8 +43,8 @@ namespace CTCClassSchedule.Controllers
 	 */
 	public partial class ClassesController : Controller
   {
-    private const string DEFAULT_LOGOUT_URL = "~"; // go back to home page
-    private readonly ILog _log = LogManager.GetCurrentClassLogger();
+        private const string DEFAULT_LOGOUT_URL = "~"; // go back to home page
+        private readonly ILog _log = LogManager.GetLogger(typeof(ClassesController));
 
     #region Authentication actions
 	  /// <summary>

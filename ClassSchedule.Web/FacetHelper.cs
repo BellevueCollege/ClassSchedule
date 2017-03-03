@@ -40,7 +40,7 @@ namespace CTCClassSchedule
     private string _availability;
 
     readonly IList<ISectionFacet> _sectionFacets = new List<ISectionFacet>();
-    private readonly ILog _log = LogManager.GetCurrentClassLogger();
+    private readonly ILog _log = LogManager.GetLogger(typeof(FacetHelper));
     private string _lateStart;
     private bool _isLateStart;
     private string _credits;

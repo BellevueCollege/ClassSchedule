@@ -41,7 +41,7 @@ namespace CTCClassSchedule.Common
 {
 	public static class Helpers
 	{
-	  private static readonly ILog _log = LogManager.GetCurrentClassLogger();
+	  private static readonly ILog _log = LogManager.GetLogger(typeof(Helpers));
 
 	  /// <summary>
     /// 

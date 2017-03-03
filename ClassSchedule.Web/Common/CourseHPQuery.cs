@@ -12,7 +12,7 @@ namespace CTCClassSchedule
 {
 	public class CourseHPQuery
 	{
-	  private ILog _log = LogManager.GetCurrentClassLogger();
+	  private ILog _log = LogManager.GetLogger(typeof(CourseHPQuery));
 
 	  //code to grab the open seats and return as string
     public int FindOpenSeats (string itemNumber, string YRQ)
