@@ -267,9 +267,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="_configSource\Smtp.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -296,37 +293,28 @@
       <DependentUpon>web.config</DependentUpon>
     </Content>
     <Content Include="Views\Shared\CourseDescriptions.cshtml" />
-    <Content Include="_configSource\ElmahMail.config" />
-    <Content Include="_configSource\EXAMPLE-ElmahMail.config" />
-    <Content Include="_configSource\EXAMPLE-NLog.config" />
-    <Content Include="_configSource\EXAMPLE-Smtp.config" />
-    <Content Include="_configSource\NLog.config">
-      <SubType>Designer</SubType>
-    </Content>
+	
     <None Include="Properties\PublishProfiles\Publish Test.pubxml" />
-    <Content Include="_configSource\testCasClient.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="_configSource\testConnectionStrings.config">
-      <SubType>Designer</SubType>
-    </Content>
+
     <Content Include="Views\Shared\LoggedInUser.cshtml" />
     <Content Include="Views\Shared\breadcrumbNavigation.cshtml" />
-    <None Include="_configSource\RoleManager.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="_configSource\ElmahAuthorization.config" />
-    <None Include="_configSource\Authentication.config" />
-    <None Include="_configSource\AppSettings.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="_configSource\ConnectionStrings.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="_configSource\EXAMPLE-AppSettings.config" />
+
+	<Content Include="_configSource\AppSettings.config" />
+    <Content Include="_configSource\Authentication.config" />
+	<Content Include="_configSource\ConnectionStrings.config" />
+    <Content Include="_configSource\ElmahAuthorization.config" />
+	<Content Include="_configSource\ElmahMail.config" />
+	<Content Include="_configSource\NLog.config" />
+	<Content Include="_configSource\RoleManager.config" />
+	<Content Include="_configSource\Smtp.config" />
+
+	<None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-Authentication.config" />
-    <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
-    <None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
+	<None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
+	<None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
+	<None Include="_configSource\EXAMPLE-ElmahMail.config" />
+    <None Include="_configSource\EXAMPLE-NLog.config" />
+    <None Include="_configSource\EXAMPLE-Smtp.config" />
     <None Include="_configSource\EXAMPLE-RoleManager.config" />
   </ItemGroup>
   <ItemGroup>
@@ -368,7 +356,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v14.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
