@@ -325,6 +325,7 @@
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
     <None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
     <None Include="_configSource\EXAMPLE-ElmahMail.config" />
+    <None Include="_configSource\EXAMPLE-KentorAuthentication.config" />
     <None Include="_configSource\EXAMPLE-NLog.config" />
     <None Include="_configSource\EXAMPLE-Smtp.config" />
     <None Include="_configSource\EXAMPLE-RoleManager.config" />
