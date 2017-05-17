@@ -83,7 +83,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 	}
     <a href="@Html.Raw(link)">@linkText</a> @(item.CoursePrefixes.Any() ? string.Concat("(", item.CoursePrefixes.Distinct().ToArray().Mash(", "), ")") : string.Empty)
 
-	@if (Context.User.Identity.Name.Length > 0 && Helpers.IsAdmin(Context))
+	@if (Context.User.Identity.IsAuthenticated && Helpers.IsAdmin(Context))
 	{
 		@Ajax.ActionLink("Edit",
 				              "ProgramEdit",

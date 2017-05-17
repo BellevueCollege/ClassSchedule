@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CTCClassSchedule</RootNamespace>
     <AssemblyName>CTCClassSchedule</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -97,6 +97,18 @@
       <HintPath>..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Kentor.AuthServices, Version=0.21.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kentor.AuthServices.0.21.1\lib\net45\Kentor.AuthServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Kentor.AuthServices.HttpModule, Version=0.21.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kentor.AuthServices.HttpModule.0.21.1\lib\net45\Kentor.AuthServices.HttpModule.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Kentor.AuthServices.Mvc, Version=0.21.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Kentor.AuthServices.Mvc.0.21.1\lib\net45\Kentor.AuthServices.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -117,6 +129,8 @@
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.identitymodel.services" />
     <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -267,8 +281,10 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="_configSource\KentorAuthentication.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EntityDeploy Include="Models\ClassScheduleDb.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -293,26 +309,22 @@
       <DependentUpon>web.config</DependentUpon>
     </Content>
     <Content Include="Views\Shared\CourseDescriptions.cshtml" />
-	
     <None Include="Properties\PublishProfiles\Publish Test.pubxml" />
-
     <Content Include="Views\Shared\LoggedInUser.cshtml" />
     <Content Include="Views\Shared\breadcrumbNavigation.cshtml" />
-
-	<Content Include="_configSource\AppSettings.config" />
+    <Content Include="_configSource\AppSettings.config" />
     <Content Include="_configSource\Authentication.config" />
-	<Content Include="_configSource\ConnectionStrings.config" />
+    <Content Include="_configSource\ConnectionStrings.config" />
     <Content Include="_configSource\ElmahAuthorization.config" />
-	<Content Include="_configSource\ElmahMail.config" />
-	<Content Include="_configSource\NLog.config" />
-	<Content Include="_configSource\RoleManager.config" />
-	<Content Include="_configSource\Smtp.config" />
-
-	<None Include="_configSource\EXAMPLE-AppSettings.config" />
+    <Content Include="_configSource\ElmahMail.config" />
+    <Content Include="_configSource\NLog.config" />
+    <Content Include="_configSource\RoleManager.config" />
+    <Content Include="_configSource\Smtp.config" />
+    <None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-Authentication.config" />
-	<None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
-	<None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
-	<None Include="_configSource\EXAMPLE-ElmahMail.config" />
+    <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
+    <None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
+    <None Include="_configSource\EXAMPLE-ElmahMail.config" />
     <None Include="_configSource\EXAMPLE-NLog.config" />
     <None Include="_configSource\EXAMPLE-Smtp.config" />
     <None Include="_configSource\EXAMPLE-RoleManager.config" />
@@ -374,7 +386,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>61074</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/classes</IISUrl>
+          <IISUrl>https://nicoleswanc388.bellevuecollege.edu/classes</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

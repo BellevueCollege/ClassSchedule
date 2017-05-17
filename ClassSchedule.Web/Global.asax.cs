@@ -50,10 +50,13 @@ namespace CTCClassSchedule
             routes.MapRoute("CrossListedCourses", "Api/CrossListedCourses", new { controller = "Api", action = "CrossListedCourses" });
 			routes.MapRoute("ScheduleExport", "Api/Export/{YearQuarterID}", new { controller = "Api", action = "Export", YearQuarterID = UrlParameter.Optional });
 
-
-			// Authentication
-			routes.MapRoute("LogOn", "Authenticate", new { controller = "Classes", action = "Authenticate" });
-			routes.MapRoute("LogOut", "Logout", new { controller = "Classes", action = "Logout" });
+            // Authentication
+            routes.MapRoute("AuthIndex", "AuthServices", new { controller = "AuthServices", action = "Index" });
+            routes.MapRoute("AuthAcs", "AuthServices/Acs", new { controller = "AuthServices", action = "Acs" });
+            routes.MapRoute("SignIn", "AuthServices/SignIn", new { controller = "AuthServices", action = "SignIn" });
+            routes.MapRoute("Logout", "AuthServices/Logout", new { controller = "AuthServices", action = "Logout" });
+            //routes.MapRoute("LogOn", "Authenticate", new { controller = "Classes", action = "Authenticate" });
+			//routes.MapRoute("LogOut", "Logout", new { controller = "Classes", action = "Logout" });
 
 			// Default application routes
             routes.MapRoute("Index", "", new { controller = "Classes", action = "Index" });
@@ -93,7 +96,9 @@ namespace CTCClassSchedule
 
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
-		}
+            Kentor.AuthServices.Configuration.Options.GlobalEnableSha256XmlSignatures();
+
+        }
 
 		/// <summary>
 		///
