@@ -41,7 +41,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
         </h4>
     </div>
     
-    <div id="collapseRefine" class="panel-body buffer-padding panel-collapse collapse in" role="tabpanel" aria-labelledby="refinePanel">
+    <div id="collapseRefine" class="panel-body buffer-padding panel-collapse collapse in" aria-labelledby="refinePanel">
         @* If the user has browsed vs. searched for a term, display a different subject chooser UI  *@
         @if ( !Model.IsSearch || (Model.IsSearch && subjectsCount > 0) ) {
             <h5>Subject</h5>
