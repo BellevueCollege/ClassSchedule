@@ -183,7 +183,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
       HelperResult footnotes = ViewHelpers.DisplayFootnotes(Model.Sections[0].Footnotes, Model.Sections[0].SectionFootnotes, Model.CommonFootnotes, Model.Sections[0]);
       if (!String.IsNullOrWhiteSpace(Regex.Replace(Regex.Replace(footnotes.ToString(), "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", String.Empty)) || Helpers.IsEditor(Context))
       {
-          <td colspan="6" class="section-notes"><span class="sr-only">Notes: </span>@footnotes</td>
+          <td colspan="6" class="section-notes" aria-label="Notes">@footnotes</td>
       }
     }
  </tr>
