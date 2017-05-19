@@ -16,7 +16,7 @@
 <div class="panel panel-default">
     <div class="panel-heading" id="refinePanel">
         <h4 class="panel-title">
-            <a href="#collapseRefine" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="collapseRefine">Refine<span id="refineGlyph" class="glyphicon glyphicon-menu-down pull-right refine-glyph" aria-hidden="true"></span></a>
+            <a href="#collapseRefine" id="refinePanelTitle" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="collapseRefine">Refine<span id="refineGlyph" class="glyphicon glyphicon-menu-down pull-right refine-glyph" aria-hidden="true"></span></a>
         </h4>
     </div>
     
@@ -66,6 +66,7 @@
 
     if ( $('#check-xs').is(':visible') ) {
         $("#collapseRefine").removeClass("in");
+        $("#refinePanelTitle").attr("aria-expanded", "false");
         $("#refineGlyph").removeClass("glyphicon-menu-down");
         $("#refineGlyph").addClass("glyphicon-menu-up");
     }
