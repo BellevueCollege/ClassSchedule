@@ -154,36 +154,42 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
           }
         }
     </td>
-    <td class="editing">
+    @{ 
+
+        int numCols = 5;
+    }
+    @if (Context.User.Identity.IsAuthenticated && Helpers.IsEditor(Context) && String.IsNullOrEmpty(_searchTerm))
+    {
         @* FOR EDITING *@
-        @if (Context.User.Identity.Name.Length > 0 && Helpers.IsEditor(Context) && String.IsNullOrEmpty(_searchTerm) )
-        {
+        numCols = 6;    //if person is an editor, there are 6 columns - need to know this for notes
+        <td class="editing">
 		    @Ajax.ActionLink("Edit",
-                         "SectionEdit",
-                         "Classes",
-                         new
-                         {
-                           itemNumber = Model.Sections[0].ID.ItemNumber,
-                           yrq = Model.Sections[0].ID.YearQuarter
-                         },
-                         new AjaxOptions
-                         {
-                           UpdateTargetId = "edit-section",
-                           HttpMethod = "GET",
-                           InsertionMode = InsertionMode.Replace,
-                           OnBegin = "$('#edit-section').dialog('open');",
-                           OnComplete = "fluidDialog();",
-                         },
-                         new { @class = "edit-button small" })
-        }
-    </td>
+                                   "SectionEdit",
+                                   "Classes",
+                                   new
+                                   {
+                                       itemNumber = Model.Sections[0].ID.ItemNumber,
+                                       yrq = Model.Sections[0].ID.YearQuarter
+                                   },
+                                   new AjaxOptions
+                                   {
+                                       UpdateTargetId = "edit-section",
+                                       HttpMethod = "GET",
+                                       InsertionMode = InsertionMode.Replace,
+                                       OnBegin = "$('#edit-section').dialog('open');",
+                                       OnComplete = "fluidDialog();",
+                                   },
+                                   new { @class = "edit-button small" })
+            
+        </td>
+    }
 </tr>
 <tr>
      @{
       HelperResult footnotes = ViewHelpers.DisplayFootnotes(Model.Sections[0].Footnotes, Model.Sections[0].SectionFootnotes, Model.CommonFootnotes, Model.Sections[0]);
       if (!String.IsNullOrWhiteSpace(Regex.Replace(Regex.Replace(footnotes.ToString(), "<[^>]*(>|$)", string.Empty), @"[\s\r\n]+", String.Empty)) || Helpers.IsEditor(Context))
       {
-          <td colspan="6" class="section-notes" aria-label="Notes">@footnotes</td>
+          <td colspan="@numCols" class="section-notes" aria-label="Notes">@footnotes</td>
       }
     }
  </tr>

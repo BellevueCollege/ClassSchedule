@@ -164,7 +164,11 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                                       <th scope="col">Day(s), Times, Room</th>
                                       <th scope="col">Books</th>
                                       <th scope="col">Seats available</th>
+                                    @if (Context.User.Identity.IsAuthenticated && Helpers.IsEditor(Context))
+                                    {
+                                        //person is an editor, so there will be an extra sections columns
                                       <th></th>
+                                    }
                                   </tr>
                               </thead>
                               @foreach (SectionWithSeats sec in block.Sections)
