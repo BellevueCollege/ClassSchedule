@@ -176,7 +176,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                                        UpdateTargetId = "edit-section",
                                        HttpMethod = "GET",
                                        InsertionMode = InsertionMode.Replace,
-                                       OnBegin = "$('#edit-section').dialog('open');",
+                                       OnBegin = "$('#edit-section').dialog('open'); $('.ui-widget-overlay').on('click', function () { $('#edit-section').dialog('close'); });",
                                        OnComplete = "fluidDialog();",
                                    },
                                    new { @class = "edit-button small" })

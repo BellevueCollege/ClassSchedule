@@ -33,11 +33,11 @@
 								    UpdateTargetId = "nav-choose-subjects",
 								    HttpMethod = "POST",
 								    InsertionMode = InsertionMode.Replace,
-								    OnBegin = "$('#nav-choose-subjects').dialog('open');",
+								    OnBegin = "$('#nav-choose-subjects').dialog('open'); $('.ui-widget-overlay').on('click', function () { $('#nav-choose-subjects').dialog('close'); });",
                                     OnComplete = "fluidDialog();"
 							    },
                   new { id = linkID })
-
+    
   <script type="text/javascript">
     /* subject chooser pop-up dialog */
     $(document).ready(function () {
