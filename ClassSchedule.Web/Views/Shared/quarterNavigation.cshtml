@@ -15,8 +15,8 @@
 			            }
 			            <option value="CE">Continuing Education</option>
 		            </select>
+                    <label class="sr-only" for="search-keyword">Classes search</label>
                     <div class="input-group">
-                        <label class="sr-only" for="search-keyword">Classes search</label>
                         <input type="text" class="form-control" id="search-keyword" name="searchterm" maxlength="40" value="@(Request.QueryString["searchterm"] ?? string.Empty)" />
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-default" name="submit" value="Search classes">Search classes</button>
