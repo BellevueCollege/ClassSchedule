@@ -59,6 +59,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/themes/base/jquery-ui.min.css" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.css" type="text/css" />
     <script type="text/javascript" src="@Url.Content("~/Content/js/classes.js")?v=@ViewBag.Version"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.5.4/jquery.timeago.js"></script>
 
     <link rel="stylesheet" href="@Url.Content("~/Content/ClassSchedule.css")" type="text/css" />
     @MvcMiniProfiler.MiniProfiler.RenderIncludes()
@@ -97,5 +98,6 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     @Html.Include(Server.MapPath(Helpers.GlobalsFile("h/legal.html")))
 
     <script src="@Helpers.GlobalsHttp("j/bootstrap.min.js")"></script>
+    <script src="@Helpers.GlobalsHttp("j/g.js")"></script>
 </body>
 </html>

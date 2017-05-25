@@ -6,6 +6,7 @@
     var availability = '#availability-' + classID + ' .seatsAvailable';
     var courseUpdated = '#availability-' + classID + ' .course-updated';
     var updateTime = '#availability-' + classID + ' .course-updated .update-time';
+    var timeagoEl = '#availability-' + classID + ' .course-updated .timeago';
     var originalSeatsAvailable = $(availability).html();
 
     //load the throbber
@@ -21,10 +22,20 @@
         var indexOfPipe = result.indexOf("|");
         var seatsAvailable = result.substring(0, indexOfPipe);
         var friendlyTime = result.substring(indexOfPipe + 1, result.length);
+          //console.log("friendly time: " + friendlyTime);
+        
+        var curDate = new Date();
+        var timeagoTime = $.timeago(curDate);
+        var formattedTime = formatAMPM(curDate);
+        var formattedDate =  formattedTime + ' ' + (curDate.getMonth() + 1) + '/' + curDate.getDate();
+        //console.log("formattedDate: " + formattedDate);
 
         if (seatsAvailable > 0) {
           $(availability).html(seatsAvailable);
-          $(updateTime).html("refreshed " + friendlyTime);
+          $(updateTime).html(timeagoTime);
+          $(updateTime).attr('datetime', curDate);
+          $(updateTime).attr('title', formattedDate);
+          $(timeagoEl).timeago('update', curDate);
         } else {
           $(availability).html("Class full");
 //          $(updateTime).html("refreshed " + friendlyTime);
@@ -41,6 +52,16 @@
   });
 });
 
+function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+}
 
 function LoadCrossListedCourses(jsonUrl, div, quarter) {
   //console.log("Loading cross-listed courses...");

@@ -144,12 +144,12 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
             {
                 // e.g. int.MinValue
                 <strong class="seatsAvailable"></strong>
-                <span class="course-updated small"><a id="@sectionID"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> <span class="update-time">click to update</span></a></span>
+                <span class="course-updated small"><a id="@sectionID"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> <span class="update-time">check availability</span></a></span>
             }
             else
             {
                 <strong class="seatsAvailable">@Model.Sections[0].SeatsAvailable</strong>
-                <span class="course-updated small"><a id="@sectionID"><span class="glyphicon glyphicon-refresh"></span> <span class="update-time">refreshed @Model.Sections[0].SeatsLastUpdated</span></a></span>
+                <span class="course-updated small"><a id="@sectionID"><span class="glyphicon glyphicon-refresh"></span> refreshed <time class="update-time timeago" datetime="@Convert.ToDateTime(Model.Sections[0].SeatsLastUpdated)">@Model.Sections[0].SeatsLastUpdated</time></a></span>
             }
           }
         }
