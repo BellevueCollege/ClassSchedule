@@ -153,46 +153,47 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                             @ViewHelpers.DisplayFootnotes(block.CommonFootnotes, firstSection.CourseFootnotes)
                           </p>
 
-                            @*<ul class='course-block @(Model.ViewingQuarter.ID.CompareTo(Model.CurrentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
-                            *@
-                          <table class="table-classes">
-                              <thead>
-                                  <tr>
-                                      <th scope="col">Item #</th>
-                                      <th scope="col">Section</th>
-                                      <th scope="col">Instructor</th>
-                                      <th scope="col">Day(s), Times, Room</th>
-                                      <th scope="col">Books</th>
-                                      <th scope="col">Seats available</th>
-                                    @if (Context.User.Identity.IsAuthenticated && Helpers.IsEditor(Context))
+                          <div class="table-responsive">
+                              <table class="table table-classes">
+                                  <thead>
+                                      <tr>
+                                          <th scope="col">Item #</th>
+                                          <th scope="col">Section</th>
+                                          <th scope="col">Instructor</th>
+                                          <th scope="col">Day(s), Times, Room</th>
+                                          <th scope="col">Books</th>
+                                          <th scope="col">Seats available</th>
+                                        @if (Context.User.Identity.IsAuthenticated && Helpers.IsEditor(Context))
+                                        {
+                                            //person is an editor, so there will be an extra sections columns
+                                          <th></th>
+                                        }
+                                      </tr>
+                                  </thead>
+                                  @foreach (SectionWithSeats sec in block.Sections)
+                                  {
+                                    // Both Sections includes a master and its subordinate linked section(s)
+                                    IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
+                                    IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
+
+                                    if (linked.Count > 0)
                                     {
-                                        //person is an editor, so there will be an extra sections columns
-                                      <th></th>
+	                                    multipleSections = multipleSections.Union(linked).ToList();
                                     }
-                                  </tr>
-                              </thead>
-                              @foreach (SectionWithSeats sec in block.Sections)
-                              {
-                                // Both Sections includes a master and its subordinate linked section(s)
-                                IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats>() { sec };
-                                IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
 
-                                if (linked.Count > 0)
-                                {
-	                                multipleSections = multipleSections.Union(linked).ToList();
-                                }
+                                    // NOTE: We must pass the current ViewData object to RenderPartial here.
+                                    // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+                                    Html.RenderPartial("Sections", new SectionsViewModel
+                                    {
+                                      Sections = multipleSections.ToList(),
+                                      CurrentQuarter = Model.CurrentQuarter,
+                                      ViewingQuarter = Model.ViewingQuarter,
+                                      CommonFootnotes = block.CommonFootnotes,
+                                    });
+                                  }
+                              </table>
+                          </div>
 
-                                // NOTE: We must pass the current ViewData object to RenderPartial here.
-                                // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-                                Html.RenderPartial("Sections", new SectionsViewModel
-                                {
-                                  Sections = multipleSections.ToList(),
-                                  CurrentQuarter = Model.CurrentQuarter,
-                                  ViewingQuarter = Model.ViewingQuarter,
-                                  CommonFootnotes = block.CommonFootnotes,
-                                });
-                              }
-                          </table>
                           if (block.IsCrosslisted && block.LinkedSections.Count <= 0)
                           {
                             // TODO: Replace Helpers.BuildCourseID() with this logic - and pull in CommonCourseChar from .config

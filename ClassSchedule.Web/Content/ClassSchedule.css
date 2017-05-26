@@ -21,8 +21,6 @@
     text-decoration: none;
 }
 .table-classes {
-    width: 100%;
-    max-width: 100%;
     margin-bottom: 1.4em;
 }
 .table-classes thead {
@@ -41,8 +39,18 @@
 
 .table-classes th, .table-classes td {
     padding: 8px;
-    line-height: 1.42857143;
+    border: none;
 }
+
+/* Unset bootstrap responsive .table styles */
+.table-classes tbody>tr>td, .table-classes thead>tr>th {
+    border: none;
+}
+.table>tbody+tbody {
+    border-width: 1px;
+}
+/* end unset to bootstrap .table styles */
+
 @media (min-width:992px){
     .padding-left-none {
         padding-left: 0;
