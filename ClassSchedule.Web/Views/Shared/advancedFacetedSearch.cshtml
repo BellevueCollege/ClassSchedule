@@ -257,12 +257,13 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 <script type="text/javascript">
     $(function () {
-                
         $('#timestart').timepicker({
-            timeFormat: 'h:mm tt',
+            minTime: '7:00am',
+            maxTime: '10:00pm',
         });
         $('#timeend').timepicker({
-            timeFormat: 'h:mm tt',
+            minTime: '7:00am',
+            maxTime: '10:00pm',
         });
 
         if ($('#check-xs').is(':visible')) {
@@ -280,18 +281,6 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
             $("#refineGlyph").removeClass("glyphicon-menu-up");
             $("#refineGlyph").addClass("glyphicon-menu-down");
         });
-
-    /*
-    //when the user clicks uncheck all formats, uncheck them and resubmit the form.
-    $('#uncheckFormat').click(function (event) {
-      event.preventDefault();
-      $('#f_oncampus').removeAttr('checked');
-      $('#f_online').removeAttr('checked');
-      $('#f_hybrid').removeAttr('checked');
-      $('#f_telecourse').removeAttr('checked');
-      $('#daystimesform').submit();
-    });
-    */
 
   });
 </script>
