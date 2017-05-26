@@ -60,25 +60,28 @@
 </div>
 
 <div id="check-xs" class="visible-xs"></div>
+<div id="check-sm" class="visible-sm"></div>
 
 <script type="text/javascript">
   $(function () {
 
-    if ( $('#check-xs').is(':visible') ) {
-        $("#collapseRefine").removeClass("in");
-        $("#refinePanelTitle").attr("aria-expanded", "false");
-        $("#refineGlyph").removeClass("glyphicon-menu-down");
-        $("#refineGlyph").addClass("glyphicon-menu-up");
-    }
+      // if small or xs screen size collapse refine panel
+      if ($('#check-xs').is(':visible') || $('#check-sm').is(':visible')) {
+          $("#collapseRefine").removeClass("in");
+          $("#refinePanelTitle").attr("aria-expanded", "false");
+          $("#refineGlyph").removeClass("glyphicon-menu-down");
+          $("#refineGlyph").addClass("glyphicon-menu-up");
+      }
 
-    $('#collapseRefine').on('hidden.bs.collapse', function () {
-        $("#refineGlyph").removeClass("glyphicon-menu-down");
-        $("#refineGlyph").addClass("glyphicon-menu-up");
-    });
-    $('#collapseRefine').on('show.bs.collapse', function () {
-        $("#refineGlyph").removeClass("glyphicon-menu-up");
-        $("#refineGlyph").addClass("glyphicon-menu-down");
-    });
+      // change direction icon on panel title
+      $('#collapseRefine').on('hidden.bs.collapse', function () {
+          $("#refineGlyph").removeClass("glyphicon-menu-down");
+          $("#refineGlyph").addClass("glyphicon-menu-up");
+      });
+      $('#collapseRefine').on('show.bs.collapse', function () {
+          $("#refineGlyph").removeClass("glyphicon-menu-up");
+          $("#refineGlyph").addClass("glyphicon-menu-down");
+      });
 
   });
 </script>
