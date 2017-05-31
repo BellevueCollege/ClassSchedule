@@ -51,42 +51,42 @@
 
 	<h2 id="nav-subjects-@letter" class="buffer-top">@letter</h2>
 
-    <div class="row">
-        @if( titles.Count() == 1 )
-        {
-            colClassName = "col-md-12";
-        }
-        <div class="@colClassName">
-            <ul class="list-unstyled">
-			@foreach (var item in titles)
+        <div class="row">
+            @if( titles.Count() == 1 )
             {
-                if (count++ > breakPoint)
-                {
-                    // insert a column break
-                    count = 1;
-		            @:</ul></div>
-		            @:<div class="col-md-6"><ul class="list-unstyled">
-				}
-
-                // construct the appropriate link, maintaining any query string paramters
-                routeParms["Subject"] = item.Slug.Trim();
-
-                string linkText = item.Title;
-                string prefix = item.Subject;
-                string link;
-
-                if (routeParms.Keys.Contains("YearQuarter") && routeParms["YearQuarter"] != null && !routeParms["YearQuarter"].ToString().IsEmpty() && routeParms["YearQuarter"].ToString().ToUpper() != "ALL")
-                {
-                    link = Url.Action("YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms));
-                }
-                else
-                {
-                    link = Url.Action("Subject", "Classes", new RouteValueDictionary(routeParms));
-                }
-                @:<li><a href="@Html.Raw(link)" onclick="$('#nav-choose-subjects').dialog('close');">@linkText</a> @(!string.IsNullOrWhiteSpace(prefix) ? string.Concat("(", prefix, ")") : string.Empty)</li>
+                colClassName = "col-md-12";
             }
-            </ul>
-		</div>
-    </div>
+            <div class="@colClassName">
+                <ul class="list-unstyled">
+			    @foreach (var item in titles)
+                {
+                    if (count++ > breakPoint)
+                    {
+                        // insert a column break
+                        count = 1;
+		                @:</ul></div>
+		                @:<div class="col-md-6"><ul class="list-unstyled">
+				    }
+
+                    // construct the appropriate link, maintaining any query string paramters
+                    routeParms["Subject"] = item.Slug.Trim();
+
+                    string linkText = item.Title;
+                    string prefix = item.Subject;
+                    string link;
+
+                    if (routeParms.Keys.Contains("YearQuarter") && routeParms["YearQuarter"] != null && !routeParms["YearQuarter"].ToString().IsEmpty() && routeParms["YearQuarter"].ToString().ToUpper() != "ALL")
+                    {
+                        link = Url.Action("YearQuarterSubject", "Classes", new RouteValueDictionary(routeParms));
+                    }
+                    else
+                    {
+                        link = Url.Action("Subject", "Classes", new RouteValueDictionary(routeParms));
+                    }
+                    @:<li><a href="@Html.Raw(link)" onclick="$('#nav-choose-subjects').dialog('close');">@linkText</a> @(!string.IsNullOrWhiteSpace(prefix) ? string.Concat("(", prefix, ")") : string.Empty)</li>
+                }
+                </ul>
+		    </div>
+        </div>
 }
 </div>
