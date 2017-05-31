@@ -6,6 +6,9 @@
     ViewBag.PageTitle = Model.Slug + "-" + Model.DepartmentTitle + " Classes at Bellevue College";
 }
 
+@section metatags {
+    <meta name="robots" content="noindex, follow">
+}
 @Html.Partial("breadcrumbNavigation")
 
 @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })

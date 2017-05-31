@@ -17,8 +17,9 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 @using CTCClassSchedule.Common;
 
 @{
-  string ver = ViewBag.Version;
-  ViewBag.SubjectChooserDisplayed = false;
+    string ver = ViewBag.Version;
+    ViewBag.SubjectChooserDisplayed = false;
+    string appUrl = HttpContext.Current.Request.Url.Host + HttpContext.Current.Request.ApplicationPath;
 }
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="en-US" class="ie6"> <![endif]-->
@@ -34,6 +35,11 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @if (appUrl != null)
+    {
+        <meta class="swiftype" name="site_home_url" data-type="string" content="@appUrl" />
+    }
+    @RenderSection("metatags", false)
 	<link rel="stylesheet" href="@Helpers.GlobalsHttp("c/g.css?ver=3.9")">
 	<link rel="stylesheet" media="print" href="@Helpers.GlobalsHttp("c/p.css?ver=3.9")">
 
@@ -98,6 +104,6 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     @Html.Include(Server.MapPath(Helpers.GlobalsFile("h/legal.html")))
 
     <script src="@Helpers.GlobalsHttp("j/bootstrap.min.js")"></script>
-    <script src="@Helpers.GlobalsHttp("j/g.js")"></script>
+    <!--<script src="@Helpers.GlobalsHttp("j/g.js")"></script>-->
 </body>
 </html>

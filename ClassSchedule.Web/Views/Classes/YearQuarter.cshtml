@@ -23,6 +23,11 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     IList<char> alphabet = Model.SubjectLetters;
     ViewBag.PageTitle = yrq.FriendlyName + " Credit Classes at Bellevue College";
 }
+
+@section metatags {
+    <meta name="robots" content="noindex, follow">
+}
+
 @Html.Partial("breadcrumbNavigation")
 
 @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })
