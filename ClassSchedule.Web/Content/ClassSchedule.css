@@ -64,6 +64,9 @@
 .nav-margin {
     margin-top: 8px;
 }
+.nav-top-buffer {
+    padding-top: 5px;
+}
 
 /** Search styles **/
 em.keyword

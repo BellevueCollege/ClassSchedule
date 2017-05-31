@@ -23,7 +23,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 	YearQuarter currentQuarter = ViewBag.CurrentYearQuarter;
 }
-<div >
+<div class="nav-top-buffer">
     @Html.Partial("quarterNavigation", new QuarterNavigationModel { NavigationQuarters = ViewBag.QuarterNavMenu, CurrentQuarter = currentQuarter })
 </div>
 <div class="row row-padding buffer-top">
