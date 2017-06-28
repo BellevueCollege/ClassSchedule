@@ -44,6 +44,7 @@
         <div class="col-md-6">
             <div class="text-left">
                 <p>v@(ViewBag.Version)</p>
+                
             </div>
         </div>
         <div class="col-md-6">
@@ -53,11 +54,11 @@
                 @using CTCClassSchedule.Common;
 	            @if(Context.User.Identity.IsAuthenticated) {
 			        <text>[ <b>@Context.User.Identity.Name</b> ] @(Helpers.IsAdmin(Context) ? " - Admin" : "") @(!Helpers.IsAdmin(Context) && Helpers.IsEditor(Context) ? " - Editor" : "")</text>
-		            <text>[ @Html.ActionLink("Log out", "Logout", "Classes")  ]</text>
+		            <text>[ @Html.ActionLink("Log out", "Logout", "AuthServices")  ]</text>
                 }
                 else
                 {
-			        @:[ @Html.ActionLink("Log in", "Authenticate", "Classes") ]
+			        @:[ @Html.ActionLink("Log in", "SignIn", "AuthServices") ]
 	            }
 		        @* **************************************************************************************** *@
             </div>

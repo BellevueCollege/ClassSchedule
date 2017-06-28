@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CTCClassSchedule</RootNamespace>
     <AssemblyName>CTCClassSchedule</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -325,6 +325,7 @@
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
     <None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
     <None Include="_configSource\EXAMPLE-ElmahMail.config" />
+    <None Include="_configSource\EXAMPLE-KentorAuthentication.config" />
     <None Include="_configSource\EXAMPLE-NLog.config" />
     <None Include="_configSource\EXAMPLE-Smtp.config" />
     <None Include="_configSource\EXAMPLE-RoleManager.config" />
@@ -386,7 +387,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>61074</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost/classes</IISUrl>
+          <IISUrl>http://localhost/classes</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
