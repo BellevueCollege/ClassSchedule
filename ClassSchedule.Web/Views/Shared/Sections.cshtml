@@ -78,6 +78,10 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
             {
                 foreach (OfferedItem item in section.Offered.OrderBy(o => o.SequenceOrder))
                 {
+                    if (!firstItem)
+                    {
+                        <br />
+                    }
                     // Meeting times
                     if (Model.Sections[0].IsOnline)
                     {
@@ -96,9 +100,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                         if ( !string.IsNullOrWhiteSpace(item.Room) ) {
                             timeRoom += " in " + Encoder.HtmlEncode(item.Room);
                         }
-                        if ( ! firstItem) {
-                            <br />
-                        }
+
                         @*
                         NOTE: Need to explicitly encode timeRoom because Html.Raw() skips encoding
                         And we need to use Raw() so that the entity doesn't get re-encoded
