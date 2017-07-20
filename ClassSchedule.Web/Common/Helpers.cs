@@ -259,8 +259,9 @@ namespace CTCClassSchedule.Common
                       //        the filter of the CtcApi - which normalizes spacing of the CourseID field data.
                       join cm in db.CourseMetas on (d != null ? d.CourseID : "") equals cm.CourseID into t4
 											from cm in t4.DefaultIfEmpty()
-            orderby c.Credits ,c.Offered.First().StartTime, c.Yrq.ID descending    //9/15/2014 johanna.aqui, added credit and start time to sort order.  Order applied at different times and has different effects depending on the controller (Search, Classes, Scheduler)
-			      select new SectionWithSeats {
+                  //orderby c.Credits, c.Offered.First().StartTime, c.Yrq.ID //9/15/2014 johanna.aqui, added credit and start time to sort order.  Order applied at different times and has different effects depending on the controller (Search, Classes, Scheduler)
+                  orderby c.Credits , (c.Offered != null && c.Offered.FirstOrDefault() != null && c.Offered.FirstOrDefault().StartTime != null ? c.Offered.FirstOrDefault().StartTime : DateTime.MinValue), c.Yrq.ID descending   // 7/20/17 Updated by Nicole S to consider situation where instruction(offered) data doesn't exists. This shouldn't happen if data is correct but it did throw an error with bad data.
+                  select new SectionWithSeats {
 								ParentObject = c,
 								SeatsAvailable = ss != null ? ss.SeatsAvailable : Int32.MinValue,	// allows us to identify past quarters (with no availability info)
                           SeatsLastUpdated = (ss != null ? ss.LastUpdated.GetValueOrDefault() : DateTime.MinValue).ToString(Settings.Default.SeatUpdatedDateTimeFormat).ToLower(),
@@ -403,7 +404,8 @@ namespace CTCClassSchedule.Common
                           .ThenByDescending(s => s.IsVariableCredits)     // johanna.aqui 9/11/2014 moved IsVariableCredits & Credits above starttime to keep correct section group
                           .ThenBy(s => s.Credits)
                           .ThenBy(s => s.IsOnline)
-                          .ThenBy(s => s.Offered.First().StartTime)
+                          //.ThenBy(s => s.Offered.First().StartTime)
+                          .ThenBy(s => (s.Offered != null && s.Offered.FirstOrDefault() != null && s.Offered.FirstOrDefault().StartTime != null ? s.Offered.First().StartTime : DateTime.MinValue)) // 7/20/17 Updated by Nicole S to consider situation where instruction(offered) data doesn't exists. This shouldn't happen if data is correct but it did throw an error with bad data.
                           .ThenBy(s => s.IsTelecourse)
                           .ThenBy(s => s.IsHybrid)
                           .ThenBy(s => s.IsOnCampus)
