@@ -17,6 +17,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Web.Mvc;
 using System.Web.Routing;
+using StackExchange.Profiling;
 
 namespace CTCClassSchedule
 {
@@ -83,7 +84,7 @@ namespace CTCClassSchedule
 
 #if ENABLE_PROFILING
 			// Add profiling view engine
-			var copy = ViewEngines.Engines.ToList();
+			var copy = ViewEngines.Engines;
 			ViewEngines.Engines.Clear();
 			foreach (var item in copy)
 			{
@@ -96,7 +97,7 @@ namespace CTCClassSchedule
 
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
-            Kentor.AuthServices.Configuration.Options.GlobalEnableSha256XmlSignatures();
+            //Kentor.AuthServices.Configuration.Options.GlobalEnableSha256XmlSignatures();
 
         }
 

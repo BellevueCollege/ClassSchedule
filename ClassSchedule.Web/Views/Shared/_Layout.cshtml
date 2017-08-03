@@ -68,7 +68,6 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css" type="text/css" />
 
     <link rel="stylesheet" href="@Url.Content("~/Content/ClassSchedule.css")" type="text/css" />
-    @MvcMiniProfiler.MiniProfiler.RenderIncludes()
 </head>
 
 <body class="nav-classes @(Helpers.GetBodyClasses(Context))">
@@ -105,5 +104,6 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
     <script src="@Helpers.GlobalsHttp("j/bootstrap.min.js")"></script>
     <!--<script src="@Helpers.GlobalsHttp("j/g.js")"></script>-->
+    @StackExchange.Profiling.MiniProfiler.RenderIncludes()
 </body>
 </html>

@@ -1,11 +1,11 @@
 ﻿using System.Web.Mvc;
-using MvcMiniProfiler;
+using StackExchange.Profiling;
 
 namespace CTCClassSchedule
 {
 #if ENABLE_PROFILING
 	/// <summary>
-	/// Enables MvcMiniProfiler for all views
+	/// Enables MiniProfiler for all views
 	/// </summary>
 	public class ProfilingViewEngine : IViewEngine
 	{

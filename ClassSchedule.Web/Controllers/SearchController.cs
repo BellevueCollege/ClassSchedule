@@ -27,7 +27,7 @@ using Ctc.Ods.Types;
 using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
 using Microsoft.Security.Application;
-using MvcMiniProfiler;
+using StackExchange.Profiling;
 
 namespace CTCClassSchedule.Controllers
 {

@@ -31,7 +31,7 @@ using Ctc.Ods.Data;
 using Ctc.Ods.Types;
 using CTCClassSchedule.Models;
 using CtcApi.Web.Security;
-using MvcMiniProfiler;
+using StackExchange.Profiling;
 using System.Configuration;
 using System.Text;
 using Ctc.Ods.Config;

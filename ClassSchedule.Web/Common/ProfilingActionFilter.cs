@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
-using MvcMiniProfiler;
+using StackExchange.Profiling;
 
 namespace CTCClassSchedule
 {
 #if ENABLE_PROFILING
 	/// <summary>
-	/// Enables MvcMiniProfiler for all controller actions
+	/// Enables MiniProfiler for all controller actions
 	/// </summary>
 	/// <remarks>
 	/// The code for this filter was obtained from the following blog post:
