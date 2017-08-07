@@ -46,11 +46,11 @@ Update `Globals_UrlRoot` and `Globals_LocalPath` in `appSettings.config`. `Globa
 
 Now build the ClassSchedule.Web project. This should theoretically successfully build error free, but if not work through each error (usually a missing reference/package). Once built, you should be able to run it (with or without debugging) from Visual Studio.  It is recommended, however, to set up your own local IIS server and set up the project application there.
 
-### Setting up the ClassSchedule.DB project
+## Setting up the ClassSchedule.DB project
 
 TODO
 
-### Setting up the Test.ClassSchedule project
+## Setting up the Test.ClassSchedule project
 
 TODO
 
