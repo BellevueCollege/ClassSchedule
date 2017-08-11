@@ -669,7 +669,8 @@ namespace CTCClassSchedule.Common
 			{
 				text = String.Format(text, args);
 			}
-			return Regex.Replace(text, searchTerm, @"<em class='keyword'>$&</em>", RegexOptions.IgnoreCase);
+
+            return Regex.Replace(text, Regex.Escape(searchTerm), @"<em class='keyword'>$&</em>", RegexOptions.IgnoreCase);
 		}
 
     /// <summary>
