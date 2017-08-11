@@ -23,19 +23,19 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 @model SearchResultsModel
 
 @{
-  MiniProfiler _profiler = MiniProfiler.Current;
+    MiniProfiler _profiler = MiniProfiler.Current;
 
-  YearQuarter currentQuarter = Model.QuarterNavigation.CurrentQuarter;
-  // NOTE: we should always have a YearQuarter (searching all quarters is not an option)
-  YearQuarter searchQuarter = Model.QuarterNavigation.ViewingQuarter;	// this is the YRQ being searched
+    YearQuarter currentQuarter = Model.QuarterNavigation.CurrentQuarter;
+    // NOTE: we should always have a YearQuarter (searching all quarters is not an option)
+    YearQuarter searchQuarter = Model.QuarterNavigation.ViewingQuarter; // this is the YRQ being searched
 
-  int itemCount = Model.ItemCount;
-  int _courseCount = Model.Courses.Count;
-  String classDesc = _courseCount == 1 ? "course" : "courses";
-  String sectionDesc = itemCount == 1 ? "section" : "sections";
+    int itemCount = Model.ItemCount;
+    int _courseCount = Model.Courses.Count;
+    String classDesc = _courseCount == 1 ? "course" : "courses";
+    String sectionDesc = itemCount == 1 ? "section" : "sections";
 
-  string _searchTerm = ViewBag.searchterm;
-  ViewBag.PageTitle = searchQuarter.FriendlyName + " class search results for \"" + _searchTerm + "\" at Bellevue College";
+    string _searchTerm = ViewBag.searchterm;  //don't need to HTML encode as Razor automatically does this, if we do it, it will be double-encoded - but be cautious if using for purposes other than direct output
+    ViewBag.PageTitle = searchQuarter.FriendlyName + " class search results for \"" + _searchTerm + "\" at Bellevue College";
 
 }
 
@@ -66,7 +66,6 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
         <div id="content" class="content-padding padding-left-none">
 	    @if (itemCount == 0)
         {
-		    <!--<h1>No classes were found for &quot;@Uri.UnescapeDataString(_searchTerm)&quot;</h1>-->
             <h3>No classes were found for &quot;@_searchTerm&quot;</h3>
 		    <p><strong>Tip:</strong> Try searching for something else or selecting fewer <em>Refine</em> options.</p>
         } else

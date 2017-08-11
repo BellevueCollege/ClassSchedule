@@ -38,134 +38,132 @@ namespace CTCClassSchedule.Controllers
 
 	    public SearchController()
 		{
-		  ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+		    ViewBag.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 		}
 
-	  //
 		// GET: /Search/
 		public ActionResult Index(string searchterm, string Subject, string quarter, string timestart, string timeend, string day_su, string day_m, string day_t, string day_w, string day_th, string day_f, string day_s, string f_oncampus, string f_online, string f_hybrid, string avail, string latestart, string numcredits, int p_offset = 0)
 		{
-          if (String.IsNullOrWhiteSpace(searchterm))
-          {
-            if (!string.IsNullOrWhiteSpace(quarter))
-            {
-              return RedirectToAction("YearQuarter", "Classes", new {YearQuarter = quarter});
-            }
-            return RedirectToAction("Index", "Classes");
-          }
-
-		  // We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
-          // Also, remove any backslashes
-		  searchterm = searchterm.Replace("\"", string.Empty).Replace(@"\", string.Empty);
-		  
-          // protect against injection attacks
-		  //searchterm = Encoder.UrlEncode(searchterm);
-
-		  // TODO: This needs to be configurable
-			if (quarter == "CE")
-			{
-				Response.Redirect("http://www.campusce.net/BC/Search/Search.aspx?q=" + searchterm, true);
-				return null;
-			}
-
-      // TODO: replace ViewBag calls w/ ref to FacetHelper
-			ViewBag.Subject = Subject;
-			ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
-      ViewBag.ErrorMsg = string.Empty;
-
-      FacetHelper facetHelper = new FacetHelper(Request, "submit");
-      facetHelper.SetModalities(f_oncampus, f_online, f_hybrid);
-      facetHelper.SetDays(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
-      facetHelper.TimeStart = timestart;
-      facetHelper.TimeEnd = timeend;
-      facetHelper.LateStart = latestart;
-      facetHelper.Availability = avail;
-      facetHelper.Credits = numcredits;
-		  ViewBag.LinkParams = facetHelper.LinkParameters;
-
-		  IList<ISectionFacet> facets = facetHelper.CreateSectionFacets();
-
-			using (OdsRepository repository = new OdsRepository())
-			{
-			  IList<YearQuarter> menuQuarters = Helpers.GetYearQuarterListForMenus(repository);
-			  YearQuarter viewingQuarter = string.IsNullOrWhiteSpace(quarter) ? menuQuarters[0] : YearQuarter.FromFriendlyName(quarter);
-			  QuarterNavigationModel quarterNavigation = new QuarterNavigationModel
-			                                               {
-			                                                 NavigationQuarters = menuQuarters,
-			                                                 CurrentQuarter = menuQuarters[0],
-			                                                 ViewingQuarter = viewingQuarter,
-			                                               };
-
-				IList<Section> sections;
-				using (_profiler.Step("API::GetSections()"))
-				{
-					if (string.IsNullOrWhiteSpace(Subject))
+			  if (String.IsNullOrWhiteSpace(searchterm))
+			  {
+					if (!string.IsNullOrWhiteSpace(quarter))
 					{
-						sections = repository.GetSections(viewingQuarter, facets);
+						return RedirectToAction("YearQuarter", "Classes", new {YearQuarter = quarter});
 					}
-					else
-					{
-            IList<string> prefixes = SubjectInfo.GetSubjectPrefixes(Subject);
-						sections = repository.GetSections(prefixes, viewingQuarter, facets);
-					}
-				}
+					return RedirectToAction("Index", "Classes");
+			  }
 
-        int currentPage;
-        int totalPages;
-        int itemCount;
-        IList<SectionWithSeats> sectionsEnum;
-				IList<SearchResult> searchResults;
-        SearchResultNoSectionModel noSectionSearchResults;
-			  IList<SectionsBlock> courseBlocks;
-			  using (ClassScheduleDb db = new ClassScheduleDb())
-				{
-                  
-					searchResults = GetSearchResults(db, searchterm, viewingQuarter);
-					noSectionSearchResults = GetNoSectionSearchResults(db, searchterm, viewingQuarter);
+			  // We don't currently support quoted phrases. - 4/19/2012, shawn.south@bellevuecollege.edu
+			  // Also, remove any backslashes
+			  searchterm = searchterm.Replace("\"", string.Empty).Replace(@"\", string.Empty);
 
-          sections = (from s in sections
-                      join r in searchResults on s.ID.ToString() equals r.ClassID
-                      select s).ToList();
+			  // TODO: This needs to be configurable
+			  if (quarter == "CE")
+			  {
+					searchterm = Encoder.UrlEncode(searchterm); //encode for use in URL before forwarding
+					Response.Redirect("http://www.campusce.net/BC/Search/Search.aspx?q=" + searchterm, true);
+					return null;
+			  }
 
-					sectionsEnum = Helpers.GetSectionsWithSeats(viewingQuarter.ID, sections, db);
+			  // TODO: replace ViewBag calls w/ ref to FacetHelper
+			  ViewBag.Subject = Subject;
+			  ViewBag.searchterm = Regex.Replace(searchterm, @"\s+", " ");	// replace each clump of whitespace w/ a single space (so the database can better handle it)
+	          ViewBag.ErrorMsg = string.Empty;
 
-          // do not count Linked sections (since we don't display them)
-          itemCount = sectionsEnum.Count(s => !s.IsLinked);
+	          FacetHelper facetHelper = new FacetHelper(Request, "submit");
+	          facetHelper.SetModalities(f_oncampus, f_online, f_hybrid);
+	          facetHelper.SetDays(day_su, day_m, day_t, day_w, day_th, day_f, day_s);
+	          facetHelper.TimeStart = timestart;
+	          facetHelper.TimeEnd = timeend;
+	          facetHelper.LateStart = latestart;
+	          facetHelper.Availability = avail;
+	          facetHelper.Credits = numcredits;
+		      ViewBag.LinkParams = facetHelper.LinkParameters;
 
-				  totalPages = (int)Math.Round((itemCount / ITEMS_PER_PAGE) + 0.5);
-				  currentPage = p_offset + 1;
+		    IList<ISectionFacet> facets = facetHelper.CreateSectionFacets();
 
-          using (_profiler.Step("Getting just records for page"))
-          {
-            if (currentPage > totalPages && totalPages > 0)
+            using (OdsRepository repository = new OdsRepository())
             {
-              currentPage = totalPages;
+                IList<YearQuarter> menuQuarters = Helpers.GetYearQuarterListForMenus(repository);
+                YearQuarter viewingQuarter = string.IsNullOrWhiteSpace(quarter) ? menuQuarters[0] : YearQuarter.FromFriendlyName(quarter);
+                QuarterNavigationModel quarterNavigation = new QuarterNavigationModel
+                {
+                    NavigationQuarters = menuQuarters,
+                    CurrentQuarter = menuQuarters[0],
+                    ViewingQuarter = viewingQuarter,
+                };
+
+                IList<Section> sections;
+                using (_profiler.Step("API::GetSections()"))
+                {
+                    if (string.IsNullOrWhiteSpace(Subject))
+                    {
+                        sections = repository.GetSections(viewingQuarter, facets);
+                    }
+                    else
+                    {
+                        IList<string> prefixes = SubjectInfo.GetSubjectPrefixes(Subject);
+                        sections = repository.GetSections(prefixes, viewingQuarter, facets);
+                    }
+                }
+
+                int currentPage;
+                int totalPages;
+                int itemCount;
+                IList<SectionWithSeats> sectionsEnum;
+                IList<SearchResult> searchResults;
+                SearchResultNoSectionModel noSectionSearchResults;
+                IList<SectionsBlock> courseBlocks;
+
+                using (ClassScheduleDb db = new ClassScheduleDb())
+                {
+
+                    searchResults = GetSearchResults(db, searchterm, viewingQuarter);
+                    noSectionSearchResults = GetNoSectionSearchResults(db, searchterm, viewingQuarter);
+
+                    sections = (from s in sections
+                                join r in searchResults on s.ID.ToString() equals r.ClassID
+                                select s).ToList();
+
+                    sectionsEnum = Helpers.GetSectionsWithSeats(viewingQuarter.ID, sections, db);
+
+                    // do not count Linked sections (since we don't display them)
+                    itemCount = sectionsEnum.Count(s => !s.IsLinked);
+
+                    totalPages = (int)Math.Round((itemCount / ITEMS_PER_PAGE) + 0.5);
+                    currentPage = p_offset + 1;
+
+                    using (_profiler.Step("Getting just records for page"))
+                    {
+                        if (currentPage > totalPages && totalPages > 0)
+                        {
+                            currentPage = totalPages;
+                        }
+                        sectionsEnum = sectionsEnum.Skip(p_offset * ITEMS_PER_PAGE).Take(ITEMS_PER_PAGE).ToList();
+                    }
+
+                    courseBlocks = Helpers.GroupSectionsIntoBlocks(sectionsEnum, db);
+                }
+
+                IEnumerable<string> allSubjects;
+                using (_profiler.Step("Getting distinct list of subjects"))
+                {
+                    allSubjects = sectionsEnum.Select(c => c.CourseSubject).Distinct().OrderBy(c => c);
+                }
+
+                SearchResultsModel model = new SearchResultsModel
+                {
+                    ItemCount = itemCount,
+                    TotalPages = totalPages,
+                    CurrentPage = currentPage,
+                    Courses = courseBlocks,
+                    SearchResultNoSection = noSectionSearchResults,
+                    AllSubjects = allSubjects,
+                    QuarterNavigation = quarterNavigation,
+                    FacetData = facetHelper
+                };
+                return View(model);
             }
-            sectionsEnum = sectionsEnum.Skip(p_offset * ITEMS_PER_PAGE).Take(ITEMS_PER_PAGE).ToList();
-          }
-
-          courseBlocks = Helpers.GroupSectionsIntoBlocks(sectionsEnum, db);
-				}
-
-				IEnumerable<string> allSubjects;
-				using (_profiler.Step("Getting distinct list of subjects"))
-				{
-					allSubjects = sectionsEnum.Select(c => c.CourseSubject).Distinct().OrderBy(c => c);
-				}
-
-        SearchResultsModel model = new SearchResultsModel
-			                               {
-			                                 ItemCount = itemCount,
-                                       TotalPages = totalPages,
-                                       CurrentPage = currentPage,
-                                       Courses = courseBlocks,
-			                                 SearchResultNoSection = noSectionSearchResults,
-			                                 AllSubjects = allSubjects,
-                                       QuarterNavigation = quarterNavigation,
-                                       FacetData = facetHelper
-			                               };
-				return View(model);
-			}
 		}
 
 		#region helper methods
@@ -176,20 +174,20 @@ namespace CTCClassSchedule.Controllers
 	  /// <param name="searchterm"></param>
 	  /// <param name="yrq"></param>
 	  /// <returns></returns>
-    private SearchResultNoSectionModel GetNoSectionSearchResults(ClassScheduleDb db, string searchterm, YearQuarter yrq)
+	private SearchResultNoSectionModel GetNoSectionSearchResults(ClassScheduleDb db, string searchterm, YearQuarter yrq)
 		{
 			SqlParameter[] parms = {
 							new SqlParameter("SearchWord", searchterm),
 							new SqlParameter("YearQuarterID", yrq.ID)
-			                       };
+								   };
 
-      SearchResultNoSectionModel model = new SearchResultNoSectionModel {SearchedYearQuarter = yrq};
-	    using (_profiler.Step("Executing 'other classes' stored procedure"))
-      {
-        model.NoSectionSearchResults = db.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms).ToList();
-      }
-      return model;
-    }
+	  SearchResultNoSectionModel model = new SearchResultNoSectionModel {SearchedYearQuarter = yrq};
+		using (_profiler.Step("Executing 'other classes' stored procedure"))
+	  {
+		model.NoSectionSearchResults = db.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms).ToList();
+	  }
+	  return model;
+	}
 
 		/// <summary>
 		///
@@ -203,7 +201,7 @@ namespace CTCClassSchedule.Controllers
 			SqlParameter[] parms = {
 							new SqlParameter("SearchWord", searchterm),
 							new SqlParameter("YearQuarterID", quarter.ID)
-			                       };
+								   };
 
 			using (_profiler.Step("Executing search stored procedure"))
 			{
