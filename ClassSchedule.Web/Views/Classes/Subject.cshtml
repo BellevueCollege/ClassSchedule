@@ -3,7 +3,7 @@
 @using Ctc.Ods.Types
 @model SubjectViewModel
 @{
-    ViewBag.PageTitle = Model.Slug + "-" + Model.DepartmentTitle + " Classes at Bellevue College";
+    ViewBag.PageTitle = String.Format("{0} - {1} :: Classes", Model.Slug, Model.SubjectTitle);
 }
 
 @section metatags {

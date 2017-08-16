@@ -23,8 +23,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 @{
   MiniProfiler _profiler = MiniProfiler.Current;
 
-  ViewBag.PageTitle = Model.ViewingQuarter.FriendlyName + " " + Model.SubjectTitle + " Credit Classes at Bellevue College";
-  
+  ViewBag.PageTitle = String.Format("{0} {1} Credit Classes :: Classes", Model.ViewingQuarter.FriendlyName, Model.SubjectTitle);
 }
 
 @Html.Partial("breadcrumbNavigation")

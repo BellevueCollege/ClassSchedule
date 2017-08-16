@@ -10,12 +10,8 @@
     Course course = Model.Courses.Count > 0 ? Model.Courses[0] : null;
 
     string courseId = String.Concat(ViewContext.RouteData.Values["Prefix"].ToString(), " ", ViewContext.RouteData.Values["ClassNum"].ToString());
-    ViewBag.PageTitle = String.Concat(courseId, " at Bellevue College");
+    ViewBag.PageTitle = String.Format("{0} - {1} :: Class Schedule", courseId, course.Title);
 }
-
-<!--<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>-->
-
-<!--<div title="Edit Section" id="edit-section"></div>-->
 
 @Html.Partial("breadcrumbNavigation")
 

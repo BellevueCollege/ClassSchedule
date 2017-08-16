@@ -35,8 +35,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     String sectionDesc = itemCount == 1 ? "section" : "sections";
 
     string _searchTerm = ViewBag.searchterm;  //don't need to HTML encode as Razor automatically does this, if we do it, it will be double-encoded - but be cautious if using for purposes other than direct output
-    ViewBag.PageTitle = searchQuarter.FriendlyName + " class search results for \"" + _searchTerm + "\" at Bellevue College";
-
+    ViewBag.PageTitle = String.Format("{0} search results for \"{1}\" :: Classes", searchQuarter.FriendlyName, _searchTerm);
 }
 
 @section metatags {
