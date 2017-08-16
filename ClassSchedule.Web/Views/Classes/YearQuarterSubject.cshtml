@@ -231,109 +231,106 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     </div><!-- col -->
 </div><!-- row -->
 
+@if (Helpers.IsEditor(Context))
+{
 <script type="text/javascript">
-
 	/* inline editing js */
 	$(function () {
-	    @if (Helpers.IsEditor(Context))
-	    {
-			<text>
-	        var cmsFootnotePlaceholder = "<em>[Enter additional notes]</em>";
+	    var cmsFootnotePlaceholder = "<em>[Enter additional notes]</em>";
 
-	        // Toggle editing modes
-	        $('.toggleEditingMode').click(function () {
-	            // Change button text
-	            $(this).attr('data-inlineMode', function (idx, oldVal) {
-	                toggle = (oldVal === 'true');
+	    // Toggle editing modes
+	    $('.toggleEditingMode').click(function () {
+	        // Change button text
+	        $(this).attr('data-inlineMode', function (idx, oldVal) {
+	            toggle = (oldVal === 'true');
 
-	                if (toggle) {
-	                    $(this).html('Enable inline editing');
-	                } else {
-	                    $(this).html('Disable inline editing');
-	                }
+	            if (toggle) {
+	                $(this).html('Enable inline editing');
+	            } else {
+	                $(this).html('Disable inline editing');
+	            }
 
-	                return !(toggle);
-	            });
-
-	            // Toggle footnote editability
-	            var toggleState = $(this).attr('data-inlineMode') === 'true';
-	            $('tbody.section-details').find('span.cmsfootnote').each(function () {
-	                $(this).attr('contenteditable', toggleState);
-	                $(this).toggleClass('text-editable');
-
-	                if (toggleState) { // Inline editing mode
-	                    if (!$(this).text().trim().length) {
-	                        $(this).html(cmsFootnotePlaceholder);
-	                    }
-	                    $(this).removeClass('hidden');
-	                } else { // Normal editing mode
-	                    $(this).children().remove();
-	                    if (!$(this).text().trim().length) {
-	                        $(this).addClass('hidden');
-	                    }
-	                }
-	            });
+	            return !(toggle);
 	        });
 
-	        // Bind inline editing event behaviors
+	        // Toggle footnote editability
+	        var toggleState = $(this).attr('data-inlineMode') === 'true';
 	        $('tbody.section-details').find('span.cmsfootnote').each(function () {
-	            $(this).bind('focus', function (e) {
-	                window.setTimeout(function () {
-	                    $(e.target).children().remove();
-	                }, 100);
-	            });
+	            $(this).attr('contenteditable', toggleState);
+	            $(this).toggleClass('text-editable');
 
-	            $(this).bind('blur', function () {
-	                var footnote = $(this).text().trim();
-	                var classId = $(this).closest('.section-listing').attr('data-sectionid');
-	                var footnoteRef = this;
-	                $.ajax({
-	                    url: g_updateCMSFootnoteUrl,
-	                    dataType: 'json',
-	                    type: 'POST',
-	                    data: { classId: classId, newFootnoteText: footnote },
-	                    timeout: 4000,
-	                    success: function (response) {
-	                        if ($(footnoteRef).html() != cmsFootnotePlaceholder) {
-	                            $(footnoteRef).html(response.footnote);
-	                        }
-	                        if (response.result === true) {
-	                            $(footnoteRef).append("<span id='textSuccessIcon' class='ui-icon ui-icon-check'></span>");
-	                        }
-	                    },
-	                    error: function (x, t, m) {
-	                        $(footnoteRef).switchClass(null, 'text-error', 1000);
-	                        $(footnoteRef).switchClass('text-error', null, 1000);
-	                        $(footnoteRef).append('<em> [Service unavailable]</em>');
-	                    }
-	                });
-
+	            if (toggleState) { // Inline editing mode
 	                if (!$(this).text().trim().length) {
 	                    $(this).html(cmsFootnotePlaceholder);
 	                }
-	            });
+	                $(this).removeClass('hidden');
+	            } else { // Normal editing mode
+	                $(this).children().remove();
+	                if (!$(this).text().trim().length) {
+	                    $(this).addClass('hidden');
+	                }
+	            }
+	        });
+	    });
 
-	            $(this).bind('paste', function (e) {
-	                //console.log(e);
-	            });
+	    // Bind inline editing event behaviors
+	    $('tbody.section-details').find('span.cmsfootnote').each(function () {
+	        $(this).bind('focus', function (e) {
+	            window.setTimeout(function () {
+	                $(e.target).children().remove();
+	            }, 100);
 	        });
 
+	        $(this).bind('blur', function () {
+	            var footnote = $(this).text().trim();
+	            var classId = $(this).closest('.section-listing').attr('data-sectionid');
+	            var footnoteRef = this;
+	            $.ajax({
+	                url: g_updateCMSFootnoteUrl,
+	                dataType: 'json',
+	                type: 'POST',
+	                data: { classId: classId, newFootnoteText: footnote },
+	                timeout: 4000,
+	                success: function (response) {
+	                    if ($(footnoteRef).html() != cmsFootnotePlaceholder) {
+	                        $(footnoteRef).html(response.footnote);
+	                    }
+	                    if (response.result === true) {
+	                        $(footnoteRef).append("<span id='textSuccessIcon' class='ui-icon ui-icon-check'></span>");
+	                    }
+	                },
+	                error: function (x, t, m) {
+	                    $(footnoteRef).switchClass(null, 'text-error', 1000);
+	                    $(footnoteRef).switchClass('text-error', null, 1000);
+	                    $(footnoteRef).append('<em> [Service unavailable]</em>');
+	                }
+	            });
 
-	        $('tbody.section-details').hover(
-                function () {
-                    $(this).children('td.editing').children('a.edit-button').show();
-                    $(this).addClass('section-details-edit edit-hover');
+	            if (!$(this).text().trim().length) {
+	                $(this).html(cmsFootnotePlaceholder);
+	            }
+	        });
 
-                    if ($('a[data-inlineMode*="true"]').length) {
-                        $(this).find('span.cmsfootnote').addClass('edit-hover text-highlight');
-                    }
-                },
-                function () {
-                    $(this).children('tbody.section-details').children('td.editing').children('a.edit-button').hide();
-                    $(this).find('span.cmsfootnote').removeClass('edit-hover text-highlight');
-                    $(this).removeClass('section-details-edit edit-hover');
-                });
-	        </text>
-     }
+	        $(this).bind('paste', function (e) {
+	            //console.log(e);
+	        });
+	    });
+
+
+	    $('tbody.section-details').hover(
+            function () {
+                $(this).children('td.editing').children('a.edit-button').show();
+                $(this).addClass('section-details-edit edit-hover');
+
+                if ($('a[data-inlineMode*="true"]').length) {
+                    $(this).find('span.cmsfootnote').addClass('edit-hover text-highlight');
+                }
+            },
+            function () {
+                $(this).children('tbody.section-details').children('td.editing').children('a.edit-button').hide();
+                $(this).find('span.cmsfootnote').removeClass('edit-hover text-highlight');
+                $(this).removeClass('section-details-edit edit-hover');
+            });
 });
 </script>
+}
