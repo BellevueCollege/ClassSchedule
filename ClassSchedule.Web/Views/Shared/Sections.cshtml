@@ -22,10 +22,11 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 @using CTCClassSchedule.Models
 @model SectionsViewModel
 @{
-  MiniProfiler _profiler = MiniProfiler.Current;
+    MiniProfiler _profiler = MiniProfiler.Current;
 
-  string sectionID = Model.Sections[0].ID.ToString();
-  string _searchTerm = ViewBag.searchterm ?? string.Empty;
+    string sectionID = Model.Sections[0].ID.ToString();
+    string _searchTerm = ViewBag.searchterm ?? string.Empty;
+    int numCols = 3; //starting number of columns to keep track of for notes column span
 }
 
 <!-- section details -->
@@ -118,52 +119,47 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
         } @*end of iterate section list*@
         </td>
     }
-    <td>
-        @if (Model.Sections[0].Yrq.ID.CompareTo(Model.CurrentQuarter.ID) >= 0)
-        {
-          // Course books link
-            <a href="@Helpers.GetBookstoreBooksLink(Model.Sections)"><span class="glyphicon glyphicon-book"><span class="sr-only">view required books/supplies</span></span></a>
-        }
-    </td>
-    <td class="availability" id="availability-@sectionID" aria-controls="@sectionID">
-        @if (Model.Sections[0].Yrq.ID.CompareTo(Model.CurrentQuarter.ID) >= 0)
-        {
-          if (Model.Sections[0].SeatsAvailable == 0 || Model.Sections[0].WaitlistCount > 0)
+    @if (Model.Sections[0].Yrq.ID.CompareTo(Model.CurrentQuarter.ID) >= 0)
+    {
+        numCols += 2; //adding two more columns to span
+        <td>
+
+              @* Course books link *@
+              <a href="@Helpers.GetBookstoreBooksLink(Model.Sections)"><span class="glyphicon glyphicon-book"><span class="sr-only">view required books/supplies</span></span></a>
+        </td>
+        <td class="availability" id="availability-@sectionID" aria-controls="@sectionID">
+          @if (Model.Sections[0].SeatsAvailable == 0 || Model.Sections[0].WaitlistCount > 0)
           {
-            if (Model.Sections[0].WaitlistCount > 0)
-            {
+              if (Model.Sections[0].WaitlistCount > 0)
+              {
                 <strong class="seatsAvailable">Class full, @Model.Sections[0].WaitlistCount on waitlist</strong>
-            }
-            else
-            {
+              }
+              else
+              {
                 <strong class="seatsAvailable">Class full</strong>
                 <span class="course-updated small"><a id="@sectionID" role="status"><span class="glyphicon glyphicon-refresh"></span> <span class="update-time">recheck</span></a></span>
-            }
+              }
           }
           else
           {
-            if (Model.Sections[0].SeatsAvailable < 0)
-            {
-                // e.g. int.MinValue
+              if (Model.Sections[0].SeatsAvailable < 0)
+              {
+                  // e.g. int.MinValue
                 <strong class="seatsAvailable"></strong>
                 <span class="course-updated small"><a id="@sectionID" role="status"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> <span class="update-time">check availability</span></a></span>
-            }
-            else
-            {
+              }
+              else
+              {
                 <strong class="seatsAvailable">@Model.Sections[0].SeatsAvailable</strong>
                 <span class="course-updated small"><a id="@sectionID" role="status"><span class="glyphicon glyphicon-refresh"></span> refreshed <time class="update-time timeago" datetime="@Convert.ToDateTime(Model.Sections[0].SeatsLastUpdated)">@Model.Sections[0].SeatsLastUpdated</time></a></span>
-            }
+              }
           }
-        }
     </td>
-    @{ 
-
-        int numCols = 5;
     }
     @if (Context.User.Identity.IsAuthenticated && Helpers.IsEditor(Context) && String.IsNullOrEmpty(_searchTerm))
     {
         @* FOR EDITING *@
-        numCols = 6;    //if person is an editor, there are 6 columns - need to know this for notes
+        numCols++;    //if person is an editor, add another column to span - need to know this for notes
         <td class="editing">
 		    @Ajax.ActionLink("Edit",
                                    "SectionEdit",

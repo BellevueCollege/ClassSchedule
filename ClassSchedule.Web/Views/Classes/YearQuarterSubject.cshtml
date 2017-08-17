@@ -160,8 +160,11 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                                           <th scope="col">Section</th>
                                           <th scope="col">Instructor</th>
                                           <th scope="col">Day(s), Times, Room</th>
-                                          <th scope="col">Books</th>
-                                          <th scope="col">Seats available</th>
+                                        @if (Model.ViewingQuarter.ID.CompareTo(Model.CurrentQuarter.ID) >= 0 )
+                                        { 
+                                                <th scope="col">Books</th>
+                                                <th scope="col">Seats available</th>
+                                        }
                                         @if (Context.User.Identity.IsAuthenticated && Helpers.IsEditor(Context))
                                         {
                                             //person is an editor, so there will be an extra sections columns
