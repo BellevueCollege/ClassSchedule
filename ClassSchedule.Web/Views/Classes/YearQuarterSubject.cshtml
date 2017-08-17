@@ -54,7 +54,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
         
             <div class="alert alert-info">
                 <strong>Tip:</strong>
-                @Html.Partial("subjectNavigation", Model.ViewingQuarter) or try selecting fewer refinement options to the left.
+                @Html.Partial("subjectNavigation", Model.ViewingQuarter) or try selecting fewer refinement options.
             </div>
         } 
         else
@@ -227,6 +227,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 		    <div title="Edit class" id="edit-class">
 		    </div>
+            <div id="nav-choose-subjects" title="Select new class subject"></div> @* div for pop-up dialog *@
         </div><!--content padding-->
     </div><!-- col -->
 </div><!-- row -->

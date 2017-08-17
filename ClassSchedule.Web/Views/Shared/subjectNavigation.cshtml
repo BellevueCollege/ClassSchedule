@@ -49,7 +49,7 @@
 @* Ensure that only one instance of the code, etc. is included in the page *@
 @if (!Convert.ToBoolean(ViewBag.SubjectChooserDisplayed))
 {
-  <div id="nav-choose-subjects" title="Select new course subject"></div>
+  @*<div id="nav-choose-subjects" title="Select new class subject"></div>
   <input type="hidden" id="javascriptEnabled" value="0" />
 
   <script type="text/javascript">
@@ -60,7 +60,7 @@
               $("#change_subject").attr('href', href_value);
           })
     });
-  </script>
+  </script>*@
   
   ViewBag.SubjectChooserDisplayed = true;
 }

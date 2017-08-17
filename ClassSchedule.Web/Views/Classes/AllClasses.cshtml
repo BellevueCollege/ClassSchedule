@@ -23,6 +23,7 @@
 
             @Html.Partial("a_to_z", new AToZViewModel { LettersList = Model.LettersList, ViewingLetter = Model.ViewingLetter })
             @Html.Partial("subjectList", Model.Subjects)
+            <div id="nav-choose-subjects" title="Select new class subject"></div> @* div for pop-up dialog *@
         </div> <!-- .content-padding -->
     </div> <!-- .col-md-9 -->
 </div> <!-- .row -->
