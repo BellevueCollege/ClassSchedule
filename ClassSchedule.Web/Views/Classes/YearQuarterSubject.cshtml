@@ -146,7 +146,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                             *@
                             if (!string.IsNullOrWhiteSpace(firstSection.CustomDescription))
                             {
-                              @Html.Raw(firstSection.CustomDescription)
+                              <p>@firstSection.CustomDescription</p>
                             }
                           <p>
                             @ViewHelpers.DisplayFootnotes(block.CommonFootnotes, firstSection.CourseFootnotes)
