@@ -14,7 +14,7 @@
 			@Html.Hidden("referrer", Request.UrlReferrer.ToString())
 
 			<div class="editor-label">
-				@Html.LabelFor(model => Model.HPFootnote, "Default Notes:")
+				@Html.LabelFor(model => Model.HPFootnote, "Default Notes")
 			</div>
 			@if (@Model.HPFootnote != "")
 			{
@@ -23,7 +23,7 @@
 				</div>
 			}
 			<div class="editor-label">
-                @Html.LabelFor(model => Model.Footnote, @Model.HPFootnote != "" ? "Additional Notes" : "Notes:")
+                @Html.LabelFor(model => Model.Footnote, @Model.HPFootnote != "" ? "Additional Notes" : "Notes")
             </div>
             <div class="editor-field">
                 @Html.TextAreaFor(model => Model.Footnote, new { @class = "editClassFootnotes", @cols = 60, @rows = 5 })
