@@ -121,7 +121,8 @@ function fluidDialog() {
                 $this.css("max-width", dialog.options.maxWidth + "px");
             }
             //reposition dialog
-            dialog.option("position", dialog.options.position);
+            //dialog.option("position", dialog.options.position);
+            dialog.option("position", { my: "center center", at: "center center", of: window });
         }
     });
 }
