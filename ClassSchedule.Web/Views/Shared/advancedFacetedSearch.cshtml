@@ -195,7 +195,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                             abbrv = d.Title;
                             break;
                     }
-                    <label class="daylabel @if (d.ID == "day_su" || d.ID == "day_s"){ <text>weekend</text> }">
+                    <label class="daylabel">
                     <abbr title="@abbrv">@d.Title</abbr><br />
                     <input type="checkbox" name="@d.ID" id="@d.ID" aria-label="@abbrv" value="true" @if (d.Selected){ <text>checked="checked"</text> }/>
                     </label>

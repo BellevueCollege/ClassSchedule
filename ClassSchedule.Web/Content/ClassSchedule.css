@@ -251,15 +251,11 @@ ul.subject-merger li.subject-choice span.subject-choice-close
 
 .daylabel
 {
-    font-weight: bold;
-    /*line-height: 14px;
-    margin-left: 3px;*/
+    font-weight: normal;
     text-align: center;
-    color: #003d79;
     margin-right: 7px;
 }
 .daylabel abbr {cursor: help;}
-.weekend { font-weight: normal; color: #666}
 .time-separator {
     margin-left: 3px;
     margin-right: 3px;
