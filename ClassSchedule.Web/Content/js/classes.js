@@ -24,8 +24,8 @@ contents:
 /* program editor pop-up dialog */
 $(function () {
 
-    var bootstrapButton = $.fn.button.noConflict() // return $.fn.button to previously assigned value
-    $.fn.bootstrapBtn = bootstrapButton            // give $().bootstrapBtn the Bootstrap functionality
+    var bootstrapButton = $.fn.button.noConflict(); // return $.fn.button to previously assigned value
+    $.fn.bootstrapBtn = bootstrapButton;            // give $().bootstrapBtn the Bootstrap functionality
 
     $("#edit-program").dialog({
         autoOpen: false,
@@ -35,10 +35,14 @@ $(function () {
         modal: true,
         fluid: true, //new option
         resizable: false,
+        closeOnEscape: true,
         position: {
             my: "center center",
             at: "center center",
             of: window
+        },
+        close: function (event, ui) {
+            $(this).empty();
         }
     });
 
@@ -50,10 +54,14 @@ $(function () {
         modal: true,
         fluid: true, //new option
         resizable: false,
+        closeOnEscape: true,
         position: {
             my: "center center",
             at: "center center",
             of: window
+        },
+        close: function (event, ui) {
+            $(this).empty();
         }
     });
 
@@ -65,10 +73,14 @@ $(function () {
         modal: true,
         fluid: true, //new option
         resizable: false,
+        closeOnEscape: true,
         position: {
             my: "center center",
             at: "center center",
             of: window
+        },
+        close: function (event, ui) {
+            $(this).empty();
         }
     });
 
@@ -80,10 +92,15 @@ $(function () {
         modal: true,
         fluid: true, //new option
         resizable: false,
+        closeOnEscape: true,
         position: {
             my: "center center",
             at: "center center",
-            of: window
+            of: window,
+            collision: "fit"
+        },
+        close: function (event, ui) {
+            $(this).empty();
         }
     });
 
@@ -122,7 +139,7 @@ function fluidDialog() {
             }
             //reposition dialog
             //dialog.option("position", dialog.options.position);
-            dialog.option("position", { my: "center center", at: "center center", of: window });
+            dialog.option("position", { my: "center center", at: "center center", of: window, collision: "fit" });
         }
     });
 }

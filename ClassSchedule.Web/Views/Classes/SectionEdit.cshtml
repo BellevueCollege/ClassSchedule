@@ -125,12 +125,6 @@
         $("#edit-section").dialog('close');
       });
 
-      $(".ui-dialog").keydown(function(e) {
-        if (e.keyCode == 27) { // esc
-          $("#edit-section").dialog('close');
-        }
-      });
-
       // Delete cross-listed course choices
       $('#cross-listed-courses').on('click', '.cross-listed-course-choice-close', function() {
         var courseToRemove = $(this).parent(); // Remove the courseID from the list of selected
