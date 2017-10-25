@@ -93,7 +93,7 @@ namespace Test.CtcClassSchedule
     {
       ApiController target = new ApiController();
       //      string courseID = ConstructCourseID(CourseID.FromString("MATH","255"), false);
-      string courseID = ConstructCourseID(CourseID.FromString("CEO", "196"), false);
+      string courseID = ConstructCourseID(CourseID.FromString("ACCT", "101"), false);
       JsonResult actual = target.CrossListedCourses(courseID, "** INVALID YRQ **");
 
       Assert.IsNotNull(actual, "Returned Result is NULL");

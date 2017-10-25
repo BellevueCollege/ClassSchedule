@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Test.CtcClassSchedule</RootNamespace>
     <AssemblyName>Test.CtcClassSchedule</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SccProjectName>SAK</SccProjectName>
@@ -137,12 +137,6 @@
     <Compile Include="FacetHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassSchedule.Web\ClassSchedule.Web.csproj">
-      <Project>{D0DFD430-8A10-440D-A564-4E113D57A079}</Project>
-      <Name>ClassSchedule.Web</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -155,6 +149,12 @@
     </None>
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassSchedule.Web\ClassSchedule.Web.csproj">
+      <Project>{d0dfd430-8a10-440d-a564-4e113d57a079}</Project>
+      <Name>ClassSchedule.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
