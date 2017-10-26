@@ -46,14 +46,19 @@ Update `Globals_UrlRoot` and `Globals_LocalPath` in `appSettings.config`. `Globa
 
 Now build the ClassSchedule.Web project. This should theoretically successfully build error free, but if not work through each error (usually a missing reference/package). Once built, you should be able to run it (with or without debugging) from Visual Studio.  It is recommended, however, to set up your own local IIS server and set up the project application there.
 
+## Testing with the Test.ClassSchedule.Web project
+
+The Test project currently contains some unit tests for the API portion of the Class Schedule. To use the project:
+
+ - Create `AppSettings.config` and `ConnectionStrings.config` files using the included example files.
+ - Build project, if not already built. You may also need to build the main ClassSchedule project as the Test project depends on it.
+ - To run the existing tests, go to Test > Windows > Test Explorer. Then you can select to run all tests (or a portion).
+
+Note: Visual Studio uses the account Visual Studio was opened under (likely the account you used to log into your computer) to connect to the database. If you need to use a different account that has database access, you will need to open Visual Studio under that user before running the tests.
+
 ## Setting up the ClassSchedule.DB project
 
 TODO
-
-## Setting up the Test.ClassSchedule project
-
-TODO
-
 ## See also
 
 + [CtcApi.Ods](https://github.com/BellevueCollege/CtcApi/wiki#what-is-it)
