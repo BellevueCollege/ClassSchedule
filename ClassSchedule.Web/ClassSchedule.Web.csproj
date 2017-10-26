@@ -75,9 +75,9 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CtcApi, Version=0.9.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\CtcApi.0.9.15.0\lib\net40\CtcApi.dll</HintPath>
+    <Reference Include="CtcApi, Version=0.9.16.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CtcApi.0.9.16.0\lib\net40\CtcApi.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="CtcOdsApi, Version=0.9.15.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
