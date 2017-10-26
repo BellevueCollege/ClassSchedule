@@ -1,54 +1,58 @@
 ﻿$(document).ready(function() {
 
-  $('.course-updated a').click(function () {
-      //alert("here");
-    var classID = this.id;
-    var availability = '#availability-' + classID + ' .seatsAvailable';
-    var courseUpdated = '#availability-' + classID + ' .course-updated';
-    var updateTime = '#availability-' + classID + ' .course-updated .update-time';
-    var timeagoEl = '#availability-' + classID + ' .course-updated .timeago';
-    var originalSeatsAvailable = $(availability).html();
+  $('.course-updated a').on('keyup click', function (e) {
 
-    //load the throbber
-    $(availability).html('<img src="' + g_ajaxLoaderImgPath + '" title="loading_seats_available" alt="loading_seats_available" />');
+      if (e.type == 'click' || (e.type == 'keyup' && e.key == 'Enter')) {
 
-    //post the ajax call to get the available seats and update the UI
-    $.ajax({
-      url: g_getSeatsUrl,
-      type: 'POST',
-      data: { classID: classID },
-      timeout: 4000,
-      success: function (result) {
-        var indexOfPipe = result.indexOf("|");
-        var seatsAvailable = result.substring(0, indexOfPipe);
-        var friendlyTime = result.substring(indexOfPipe + 1, result.length);
-          //console.log("friendly time: " + friendlyTime);
-        
-        var curDate = new Date();
-        var timeagoTime = $.timeago(curDate);
-        var formattedTime = formatAMPM(curDate);
-        var formattedDate =  formattedTime + ' ' + (curDate.getMonth() + 1) + '/' + curDate.getDate();
-        //console.log("formattedDate: " + formattedDate);
+          var classID = this.id;
 
-        if (seatsAvailable > 0) {
-          $(availability).html(seatsAvailable);
-          $(updateTime).html(timeagoTime);
-          $(updateTime).attr('datetime', curDate);
-          $(updateTime).attr('title', formattedDate);
-          $(timeagoEl).timeago('update', curDate);
-        } else {
-          $(availability).html("Class full");
-//          $(updateTime).html("refreshed " + friendlyTime);
-          $(updateTime).html("recheck");
-          //$(courseUpdated).empty();
-        }
-      },
-      error: function (x, t, m) {
-        $(availability).html(originalSeatsAvailable);
-        $(updateTime).html("[service unavailable]");
+          var availability = '#availability-' + classID + ' .seatsAvailable';
+          var courseUpdated = '#availability-' + classID + ' .course-updated';
+          var updateTime = '#availability-' + classID + ' .course-updated .update-time';
+          var timeagoEl = '#availability-' + classID + ' .course-updated .timeago';
+          var originalSeatsAvailable = $(availability).html();
+
+          //load the throbber
+          $(availability).html('<img src="' + g_ajaxLoaderImgPath + '" alt="loading seats available" />');
+
+          //post the ajax call to get the available seats and update the UI
+          $.ajax({
+              url: g_getSeatsUrl,
+              type: 'POST',
+              data: { classID: classID },
+              timeout: 4000,
+              success: function (result) {
+                  var indexOfPipe = result.indexOf("|");
+                  var seatsAvailable = result.substring(0, indexOfPipe);
+                  var friendlyTime = result.substring(indexOfPipe + 1, result.length);
+                  //console.log("friendly time: " + friendlyTime);
+
+                  var curDate = new Date();
+                  var timeagoTime = $.timeago(curDate);
+                  var formattedTime = formatAMPM(curDate);
+                  var formattedDate = formattedTime + ' ' + (curDate.getMonth() + 1) + '/' + curDate.getDate();
+                  //console.log("formattedDate: " + formattedDate);
+
+                  if (seatsAvailable > 0) {
+                      $(availability).html(seatsAvailable);
+                      $(updateTime).html(timeagoTime);
+                      $(updateTime).attr('datetime', curDate);
+                      $(updateTime).attr('title', formattedDate);
+                      $(timeagoEl).timeago('update', curDate);
+                  } else {
+                      $(availability).html("Class full");
+                      //          $(updateTime).html("refreshed " + friendlyTime);
+                      $(updateTime).html("recheck");
+                      //$(courseUpdated).empty();
+                  }
+              },
+              error: function (x, t, m) {
+                  $(availability).html(originalSeatsAvailable);
+                  $(updateTime).html("[service unavailable]");
+              }
+
+          });
       }
-
-    });
   });
 });
 

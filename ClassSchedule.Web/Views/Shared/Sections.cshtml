@@ -127,7 +127,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
               @* Course books link *@
               <a href="@Helpers.GetBookstoreBooksLink(Model.Sections)"><span class="glyphicon glyphicon-book"><span class="sr-only">view required books/supplies</span></span></a>
         </td>
-        <td class="availability" id="availability-@sectionID" aria-controls="@sectionID">
+        <td class="availability" id="availability-@sectionID">
           @if (Model.Sections[0].SeatsAvailable == 0 || Model.Sections[0].WaitlistCount > 0)
           {
               if (Model.Sections[0].WaitlistCount > 0)
@@ -136,8 +136,8 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
               }
               else
               {
-                <strong class="seatsAvailable">Class full</strong>
-                <span class="course-updated small"><a id="@sectionID" role="status"><span class="glyphicon glyphicon-refresh"></span> <span class="update-time">recheck</span></a></span>
+                <strong class="seatsAvailable" id="seatsAvailable-@sectionID">Class full</strong>
+                <span class="course-updated small"><a id="@sectionID" role="link" tabindex="0" aria-controls="seatsAvailable-@sectionID"><span class="glyphicon glyphicon-refresh"></span> <span class="update-time">recheck</span></a></span>
               }
           }
           else
@@ -145,13 +145,13 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
               if (Model.Sections[0].SeatsAvailable < 0)
               {
                   // e.g. int.MinValue
-                <strong class="seatsAvailable"></strong>
-                <span class="course-updated small"><a id="@sectionID" role="status"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> <span class="update-time">check availability</span></a></span>
+                <strong class="seatsAvailable" id="seatsAvailable-@sectionID" role="status"></strong>
+                <span class="course-updated small"><a id="@sectionID" role="link" tabindex="0" aria-controls="seatsAvailable-@sectionID"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> <span class="update-time">check availability</span></a></span>
               }
               else
               {
-                <strong class="seatsAvailable">@Model.Sections[0].SeatsAvailable</strong>
-                <span class="course-updated small"><a id="@sectionID" role="status"><span class="glyphicon glyphicon-refresh"></span> refreshed <time class="update-time timeago" datetime="@Convert.ToDateTime(Model.Sections[0].SeatsLastUpdated)">@Model.Sections[0].SeatsLastUpdated</time></a></span>
+                <strong class="seatsAvailable" id="seatsAvailable-@sectionID" role="status">@Model.Sections[0].SeatsAvailable</strong>
+                <span class="course-updated small"><a id="@sectionID" role="link" tabindex="0" aria-controls="seatsAvailable-@sectionID"><span class="glyphicon glyphicon-refresh"></span> refreshed <time class="update-time timeago" datetime="@Convert.ToDateTime(Model.Sections[0].SeatsLastUpdated)">@Model.Sections[0].SeatsLastUpdated</time></a></span>
               }
           }
     </td>
