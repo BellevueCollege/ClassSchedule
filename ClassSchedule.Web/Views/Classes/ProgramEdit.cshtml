@@ -31,11 +31,12 @@
 							<li class="subject-choice">
 								<span>@prefix.Trim()</span>
 								<input name="PrefixesToMerge" value="@prefix.Trim()" type="hidden" />
-								<span class="subject-choice-close ui-icon ui-icon-close"></span>
+								<span class="subject-choice-close ui-icon ui-icon-close" aria-label="delete course prefix" tabindex="0"></span>
 							</li>
 						}
 						<li class="subject-new">
-							<select id="newSubjectMerge">
+                            <label for="newSubjectMerge" class="sr-only">Select subject</label>
+							<select id="newSubjectMerge" name="newSubjectMerge">
 								<option>Select</option>
 								@foreach (string prefix in Model.AllCoursePrefixes)
 								{
@@ -111,60 +112,64 @@
       });
 
     // Delete subject merge choices
-    $('.subject-merger').on('click', '.subject-choice-close', function () {
+      $('.subject-merger').on('click keyup', '.subject-choice-close', function (e) {
 
-      // Make sure at least one prefix is always merged
-      if ($('.subject-merger').children('.subject-choice').length > 1) {
-        subjectToRemove = $(this).parent();
-
-        // Add option back into the drop down list alphabetically
-        var subjectToAdd = '<option>' + $(subjectToRemove).text() + '</option>';
-        $('#newSubjectMerge').children().each(function () {
-          if ($(this).text() != 'Select' && $(this).text() > $(subjectToRemove).text()) {
-            $(subjectToAdd).insertBefore($(this));
-            return false;
+          if (e.type == 'click' || (e.type == 'keyup' && e.key == 'Enter')) {
+              // Make sure at least one prefix is always merged
+              if ($('.subject-merger').children('.subject-choice').length > 1) {
+                  subjectToRemove = $(this).parent();
+                  
+                  // Add option back into the drop down list alphabetically
+                  var subjectToAdd = '<option>' + $(subjectToRemove).text() + '</option>';
+                  $('#newSubjectMerge').children().each(function () {
+                      if ($(this).text() != 'Select' && $(this).text() > $(subjectToRemove).text()) {
+                          $(subjectToAdd).insertBefore($(this));
+                          return false;
+                      }
+                  });
+                  
+                  // Remove the subject from the list of selected
+                  $(subjectToRemove).remove();
+              }
+              else {
+                  alert("Each subject must have at least one course prefix associated with it.");
+              }
           }
-        });
+      });
+      
+      // Allow user to select subjects to merge
+      $('#newSubjectMerge').change(function () {
+          var selectedSubject = $(this).find(':selected');
+          if ($('#newSubjectMerge').prop('selectedIndex') > 0) {
+              var optionToAdd = '<li class="subject-choice"><span>' + selectedSubject.text() + '</span><input name="PrefixesToMerge" value="' + selectedSubject.text() + '" type="hidden"><span class="subject-choice-close ui-icon ui-icon-close" aria-label="delete course prefix" tabindex="0"></span></li>';
+              $(optionToAdd).insertBefore($(this).parent());
+              selectedSubject.remove();
+              $('#newSubjectMerge').prop('selectedIndex', 0);
+          }
+      });
+      
+      // Update department & division previews when selection is changed
+      $('#department-field select').change(function() {
+          var deptLinks = new Array();
+          @foreach (Department department in Model.AllDepartments) {
+              @:deptLinks[@(department.DepartmentID)] = "@department.URL";
+          }
 
-        // Remove the subject from the list of selected
-        $(subjectToRemove).remove();
-      }
-    });
-
-    // Allow user to select subjects to merge
-    $('#newSubjectMerge').change(function () {
-      var selectedSubject = $(this).find(':selected');
-
-      if ($('#newSubjectMerge').prop('selectedIndex') > 0) {
-        var optionToAdd = '<li class="subject-choice"><span>' + selectedSubject.text() + '</span><input name="PrefixesToMerge" value="' + selectedSubject.text() + '" type="hidden"><span class="subject-choice-close ui-icon ui-icon-close"></span></li>';
-        $(optionToAdd).insertBefore($(this).parent());
-        selectedSubject.remove();
-        $('#newSubjectMerge').prop('selectedIndex', 0);
-      }
-    });
-
-    // Update department & division previews when selection is changed
-    $('#department-field select').change(function() {
-      var deptLinks = new Array();
-    @foreach (Department department in Model.AllDepartments) {
-        @:deptLinks[@(department.DepartmentID)] = "@department.URL";
-    }
-
-      UpdatePreview($(this), $('#department-url'), deptLinks);
-    });
+          UpdatePreview($(this), $('#department-url'), deptLinks);
+      });
   });
 
   /** Update URL preview */
   function UpdatePreview(ddl, container, links) {
-    console.log("UpdatePreview(" + ddl + ", " + container + ")");
+    //console.log("UpdatePreview(" + ddl + ", " + container + ")");
     //console.log(ddl);
     //console.log(container);
     var selected = ddl.find(":selected");
     var id = selected.val();
-    console.log("New dept ID = '" + id + "'");
+    //console.log("New dept ID = '" + id + "'");
 
     var link = links[id];
-    console.log("New dept link = '" + link + "'");
+    //console.log("New dept link = '" + link + "'");
 
     var title = "Link preview";
 
