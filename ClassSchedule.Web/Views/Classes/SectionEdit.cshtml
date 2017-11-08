@@ -71,7 +71,7 @@
                   foreach (string courseID in Model.CrossListedCourses)
                   {
                     <li class="cross-listed-course-choice">
-                      <span>@courseID</span><span class="cross-listed-course-choice-close ui-icon ui-icon-close" aria-label="delete cross-listed course" tabindex="0"></span>
+                      <span>@courseID</span><span class="cross-listed-course-choice-close ui-icon ui-icon-close" aria-label="remove cross-listed course @courseID" role="link" tabindex="0"></span>
                       <input name="CrossListedCourses" value="@courseID" type="hidden" />
                     </li>
                   }
@@ -80,7 +80,7 @@
             </ul>
           </div>
           <div class="editor-label">
-            Add a cross-listed CourseID
+            <label for="newCrossListCourseID">Add a cross-listed CourseID</label>
           </div>
           <div class="editor-field">
             <ul class="cross-list-merger">
@@ -133,6 +133,7 @@
           }
       });
       
+      //Add cross-listed course on enter key push when focused
       $('#newCrossListCourseID').bind("enterKey", function (e) {
           addCrossListedCourse();
       });
@@ -147,27 +148,8 @@
       // Add a cross-listed course
       $('#addCourseID').click(function() {
        // console.log('Clicked Add button');
-
-        var txtBox = $('#newCrossListCourseID');
-        var enteredCourseID = txtBox.val().toUpperCase();
-       // console.log('Value = ' + enteredCourseID);
-
-        // only continue if we have a syntactically valid course ID (too expensive to call to the DB to completely validate)
-        if (enteredCourseID.length > 0 && enteredCourseID.match(/^([A-Z]{1,4}&?|[A-Z]{1,5})&{0}\s+\d{3,4}/)) {
-            var optionToAdd = '<li class="cross-listed-course-choice"><span>' + enteredCourseID + '</span><input name="CrossListedCourses" value="' + enteredCourseID + '" type="hidden"><span class="cross-listed-course-choice-close ui-icon ui-icon-close" aria-label="delete course prefix" tabindex="0"></span></li>';
-         // console.log('Adding ' + optionToAdd);
-
-          $('#cross-listed-courses').append(optionToAdd);
-
-         // console.log("Clearing textbox.");
-          txtBox.val('');
-        } else {
-          // TODO: highlight empty field
-          alert("Please enter a valid CourseID (e.g. ENGL 101)");
-          txtBox.focus();
-          txtBox.select();
-        }
-      });
+          addCrossListedCourse();
+        });
     });
 
     function addCrossListedCourse() {
@@ -177,7 +159,7 @@
 
         // only continue if we have a syntactically valid course ID (too expensive to call to the DB to completely validate)
         if (enteredCourseID.length > 0 && enteredCourseID.match(/^([A-Z]{1,4}&?|[A-Z]{1,5})&{0}\s+\d{3,4}/)) {
-            var optionToAdd = '<li class="cross-listed-course-choice"><span>' + enteredCourseID + '</span><input name="CrossListedCourses" value="' + enteredCourseID + '" type="hidden"><span class="cross-listed-course-choice-close ui-icon ui-icon-close" aria-label="delete course prefix" tabindex="0"></span></li>';
+            var optionToAdd = '<li class="cross-listed-course-choice"><span>' + enteredCourseID + '</span><input name="CrossListedCourses" value="' + enteredCourseID + '" type="hidden"><span class="cross-listed-course-choice-close ui-icon ui-icon-close" aria-label="remove cross-listed course ' + enteredCourseID + '" role="link" tabindex="0"></span></li>';
             // console.log('Adding ' + optionToAdd);
 
             $('#cross-listed-courses').append(optionToAdd);

@@ -31,7 +31,7 @@
 							<li class="subject-choice">
 								<span>@prefix.Trim()</span>
 								<input name="PrefixesToMerge" value="@prefix.Trim()" type="hidden" />
-								<span class="subject-choice-close ui-icon ui-icon-close" aria-label="delete course prefix" tabindex="0"></span>
+								<span class="subject-choice-close ui-icon ui-icon-close" aria-label="remove course prefix @prefix.Trim()" role="link" tabindex="0"></span>
 							</li>
 						}
 						<li class="subject-new">
@@ -141,7 +141,7 @@
       $('#newSubjectMerge').change(function () {
           var selectedSubject = $(this).find(':selected');
           if ($('#newSubjectMerge').prop('selectedIndex') > 0) {
-              var optionToAdd = '<li class="subject-choice"><span>' + selectedSubject.text() + '</span><input name="PrefixesToMerge" value="' + selectedSubject.text() + '" type="hidden"><span class="subject-choice-close ui-icon ui-icon-close" aria-label="delete course prefix" tabindex="0"></span></li>';
+              var optionToAdd = '<li class="subject-choice"><span>' + selectedSubject.text() + '</span><input name="PrefixesToMerge" value="' + selectedSubject.text() + '" type="hidden"><span class="subject-choice-close ui-icon ui-icon-close" aria-label="remove course prefix ' + selectedSubject.text() + '" role="link" tabindex="0"></span></li>';
               $(optionToAdd).insertBefore($(this).parent());
               selectedSubject.remove();
               $('#newSubjectMerge').prop('selectedIndex', 0);
