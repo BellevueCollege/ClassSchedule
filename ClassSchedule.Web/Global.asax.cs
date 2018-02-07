@@ -92,6 +92,9 @@ namespace CTCClassSchedule
 
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
+
+            //Specify TLS 1.2 or TLS fall through for security protocol
+            System.Net.ServicePointManager.SecurityProtocol = (System.Net.SecurityProtocolType)3072 | System.Net.SecurityProtocolType.Tls;
 		}
 
 		/// <summary>
