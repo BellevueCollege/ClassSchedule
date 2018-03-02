@@ -278,7 +278,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="_configSource\KentorAuthentication.config">
+    <Content Include="_configSource\SamlAuthentication.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
@@ -330,7 +330,7 @@
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
     <None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
     <None Include="_configSource\EXAMPLE-ElmahMail.config" />
-    <None Include="_configSource\EXAMPLE-KentorAuthentication.config" />
+    <None Include="_configSource\EXAMPLE-SamlAuthentication.config" />
     <None Include="_configSource\EXAMPLE-NLog.config" />
     <None Include="_configSource\EXAMPLE-Smtp.config" />
     <None Include="_configSource\EXAMPLE-RoleManager.config" />
