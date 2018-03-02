@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CTCClassSchedule</RootNamespace>
     <AssemblyName>CTCClassSchedule</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -301,20 +301,28 @@
     </Content>
     <Content Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Shared\CourseDescriptions.cshtml" />
     <None Include="Properties\PublishProfiles\Publish Test.pubxml" />
     <Content Include="Views\Shared\LoggedInUser.cshtml" />
     <Content Include="Views\Shared\breadcrumbNavigation.cshtml" />
-    <Content Include="_configSource\AppSettings.config" />
+    <Content Include="_configSource\AppSettings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="_configSource\Authentication.config" />
-    <Content Include="_configSource\ConnectionStrings.config" />
+    <Content Include="_configSource\ConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="_configSource\ElmahAuthorization.config" />
     <Content Include="_configSource\ElmahMail.config" />
-    <Content Include="_configSource\NLog.config" />
+    <Content Include="_configSource\NLog.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="_configSource\RoleManager.config" />
     <Content Include="_configSource\Smtp.config" />
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
