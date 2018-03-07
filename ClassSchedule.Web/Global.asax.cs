@@ -52,10 +52,10 @@ namespace CTCClassSchedule
 			routes.MapRoute("ScheduleExport", "Api/Export/{YearQuarterID}", new { controller = "Api", action = "Export", YearQuarterID = UrlParameter.Optional });
 
             // Authentication
-            routes.MapRoute("AuthIndex", "AuthServices", new { controller = "AuthServices", action = "Index" });
-            routes.MapRoute("AuthAcs", "AuthServices/Acs", new { controller = "AuthServices", action = "Acs" });
-            routes.MapRoute("SignIn", "AuthServices/SignIn", new { controller = "AuthServices", action = "SignIn" });
-            routes.MapRoute("Logout", "AuthServices/Logout", new { controller = "AuthServices", action = "Logout" });
+            routes.MapRoute("AuthIndex", "Saml2", new { controller = "Saml2", action = "Index" });
+            routes.MapRoute("AuthAcs", "Saml2/Acs", new { controller = "Saml2", action = "Acs" });
+            routes.MapRoute("SignIn", "Saml2/SignIn", new { controller = "Saml2", action = "SignIn" });
+            routes.MapRoute("Logout", "Saml2/Logout", new { controller = "Saml2", action = "Logout" });
             //routes.MapRoute("LogOn", "Authenticate", new { controller = "Classes", action = "Authenticate" });
 			//routes.MapRoute("LogOut", "Logout", new { controller = "Classes", action = "Logout" });
 
@@ -97,8 +97,6 @@ namespace CTCClassSchedule
 
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
-            //Kentor.AuthServices.Configuration.Options.GlobalEnableSha256XmlSignatures();
-
         }
 
 		/// <summary>

@@ -7,6 +7,6 @@
         @if( null != @ViewData["allowInlineEditing"] && (bool)@ViewData["allowInlineEditing"] == true ) {
             <text>[ <a class="toggleEditingMode" data-inlineMode="false">Enable inline editing</a> ]</text>
         }
-	    [ @Html.ActionLink("Log out", "Logout", "AuthServices")  ]
+	    [ @Html.RouteLink("Log out", "Logout")  ]
     </div>
 }
