@@ -79,9 +79,9 @@
       <HintPath>..\packages\CtcApi.0.9.16.0\lib\net40\CtcApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CtcOdsApi, Version=0.9.15.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="CtcOdsApi, Version=0.9.15.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\CtcOdsApi.0.9.15.0\lib\net40\CtcOdsApi.dll</HintPath>
+      <HintPath>..\packages\CtcOdsApi.0.9.15.1\lib\net40\CtcOdsApi.dll</HintPath>
     </Reference>
     <Reference Include="Elmah">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
@@ -97,18 +97,6 @@
       <HintPath>..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Kentor.AuthServices, Version=0.21.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kentor.AuthServices.0.21.1\lib\net45\Kentor.AuthServices.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Kentor.AuthServices.HttpModule, Version=0.21.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kentor.AuthServices.HttpModule.0.21.1\lib\net45\Kentor.AuthServices.HttpModule.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Kentor.AuthServices.Mvc, Version=0.21.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Kentor.AuthServices.Mvc.0.21.1\lib\net45\Kentor.AuthServices.Mvc.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -120,6 +108,14 @@
     <Reference Include="NLog, Version=3.2.1.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.4.3\lib\net45\NLog.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sustainsys.Saml2, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sustainsys.Saml2.0.23.0\lib\net45\Sustainsys.Saml2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sustainsys.Saml2.Mvc, Version=0.23.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sustainsys.Saml2.Mvc.0.23.0\lib\net45\Sustainsys.Saml2.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
@@ -278,9 +274,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="_configSource\SamlAuthentication.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Models\ClassScheduleDb.edmx">
@@ -311,20 +304,15 @@
     <None Include="Properties\PublishProfiles\Publish Test.pubxml" />
     <Content Include="Views\Shared\LoggedInUser.cshtml" />
     <Content Include="Views\Shared\breadcrumbNavigation.cshtml" />
-    <Content Include="_configSource\AppSettings.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="_configSource\AppSettings.config" />
     <Content Include="_configSource\Authentication.config" />
-    <Content Include="_configSource\ConnectionStrings.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="_configSource\ConnectionStrings.config" />
     <Content Include="_configSource\ElmahAuthorization.config" />
     <Content Include="_configSource\ElmahMail.config" />
-    <Content Include="_configSource\NLog.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="_configSource\NLog.config" />
     <Content Include="_configSource\RoleManager.config" />
     <Content Include="_configSource\Smtp.config" />
+	<Content Include="_configSource\SamlAuthentication.config" />
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-Authentication.config" />
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
