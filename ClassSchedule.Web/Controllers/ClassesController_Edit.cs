@@ -1,21 +1,33 @@
-﻿using System;
+﻿/*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using CTCClassSchedule.Models;
 using Common.Logging;
-using Ctc.Ods;
 using Ctc.Ods.Data;
 using Ctc.Ods.Types;
-using CtcApi.Extensions;
 using CtcApi.Web.Mvc;
-using System.Web.Security;
-using DotNetCasClient;
 using CTCClassSchedule.Common;
 
 namespace CTCClassSchedule.Controllers
@@ -31,7 +43,8 @@ namespace CTCClassSchedule.Controllers
 	 */
 	public partial class ClassesController : Controller
   {
-    private ILog _log = LogManager.GetCurrentClassLogger();
+        private const string DEFAULT_LOGOUT_URL = "~"; // go back to home page
+        private readonly ILog _log = LogManager.GetLogger(typeof(ClassesController));
 
     #region Authentication actions
 	  /// <summary>
@@ -43,50 +56,42 @@ namespace CTCClassSchedule.Controllers
 	  /// accessing protected data/functionality. For example; in response to the user clicking a "Log in"
 	  /// button.
 	  /// </remarks>
-    /// <seealso cref="https://wiki.jasig.org/pages/viewpage.action?pageId=32210981">Jasig - ASP.NET MVC + CAS</seealso>
-	  [CASAuthorize]
+	  [SsoAuthorize]
 	  public ActionResult Authenticate()
 	  {
-      string url;
-
-      if (HttpContext.Session != null)
+	    string originalUrl;
+	    if (Session != null)
 	    {
-	      url = HttpContext.Session[CASAuthorizeAttribute.REFERRER_SESSION_LABEL].ToString();
-	    }
-      else
-      {
-        url = System.Web.HttpContext.Current.Session[CASAuthorizeAttribute.REFERRER_SESSION_LABEL].ToString();
-      }
-
-      // if we didn't find a Referral URL, default to the home page.
-	    if (string.IsNullOrWhiteSpace(url))
-	    {
-	      url = HttpContext.Request.ApplicationPath;
-	    }
-
-      return Redirect(url);
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <returns></returns>
-    /// <seealso cref="https://wiki.jasig.org/pages/viewpage.action?pageId=32210981">Jasig - ASP.NET MVC + CAS</seealso>
-    public ActionResult Logout()
-	  {
-
-	    string url = Request.UrlReferrer == null ? CasAuthentication.ServerName : Request.UrlReferrer.ToString();
-
-	    if (!string.IsNullOrWhiteSpace(CasAuthentication.CasServerUrlPrefix))
-	    {
-	      CasAuthentication.SingleSignOut();
+        // NOTE: SsoAuthorizeAttribute assumes the SSO system is not populating the REFERRER header
+	      originalUrl = Session[SsoAuthorizeAttribute.REFERRER_SESSION_LABEL].ToString();
 	    }
 	    else
 	    {
-	      FormsAuthentication.SignOut();
+	      originalUrl = System.Web.HttpContext.Current.Session[SsoAuthorizeAttribute.REFERRER_SESSION_LABEL].ToString();
 	    }
 
-	    return Redirect(url);
+	    if (string.IsNullOrWhiteSpace(originalUrl))
+	    {
+	      originalUrl = Request.UserHostName + Request.ApplicationPath;
+	    }
+
+	    return Redirect(originalUrl);
+	  }
+
+    /// <summary>
+    /// Performs a <em>single sign-out</em>
+    /// </summary>
+    /// <returns></returns>
+    /// <remarks>
+    /// The user is logged out of the entire college namespace.
+    /// </remarks>
+    public ActionResult Logout()
+	  {
+      string logoutUrl = ConfigurationManager.AppSettings["LogoutUrl"] ?? DEFAULT_LOGOUT_URL;
+      
+      _log.Trace(m => m("User '{0}' logging out - redirecting to <{1}>...", User != null ? User.Identity.Name : string.Empty, logoutUrl));
+      
+      return Redirect(logoutUrl);
 	  }
 
 	  #endregion
@@ -95,7 +100,7 @@ namespace CTCClassSchedule.Controllers
     /// <summary>
     /// Displays dialog for editing Subject info, incl. Dept & Division
     /// </summary>
-    /// <param name="Abbreviation"></param>
+    /// <param name="Slug"></param>
     /// <returns></returns>
     [AuthorizeFromConfig(RoleKey = "ApplicationAdmin")]
     [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]

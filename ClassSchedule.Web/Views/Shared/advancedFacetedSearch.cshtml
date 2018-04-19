@@ -1,102 +1,114 @@
-﻿@using Ctc.Ods.Types
+﻿@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Models
-@using CTCClassSchedule
 @model AdvancedFacetedSearchModel
+
 @{
-  const int ANY = -1;
-  int _numCredits = Request.QueryString.SafeNameValueToInt32("numcredits", ANY);
+  int _numCredits;
+  if (!int.TryParse(Model.FacetData.Credits, out _numCredits))
+  {
+    _numCredits = Model.FacetData.CreditsAny; // default
+  }
   int subjectsCount = Model.Subjects == null ? 0 : Model.Subjects.Count();
+  string _availabilityFacet = Model.FacetData.Availability;
 
   // construct the route values we'll pass to the ActionLink helper
   IDictionary<string, object> routeParms = ViewBag.LinkParams;
 
-  string QuarterParam = Request.QueryString["quarter"];
+  string _quarterParam = routeParms.Keys.Contains("quarter") ? routeParms["quarter"].ToString() : string.Empty;
 }
 
-<div id="overlay"></div>
-<div id="lightbox">
-  <img src="@Url.Content("~/Content/")images/ajax-loader_big.gif" alt="" />
-</div>
-
-<div id="advancedFacetedSearch" class="sidenav">
-  <h2>Refine</h2>
-
-  @* If the user has browsed vs. searched for a term, display a different subject chooser UI  *@
-  <h3>Subject</h3>
-	<ul class="subject">
-    @if (Model.IsSearch)
-    {
-      if (String.IsNullOrWhiteSpace(Model.SelectedSubject))
-      {
-        // Display all available subjects
-        if (subjectsCount > 1)
-        {
-          foreach (string slug in Model.Subjects)
-          {
-            // TODO: Pass SelectedSubject to Index/Search via a model
-            routeParms["Subject"] = slug;
-            <li>
-              <a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@slug</a>
-            </li>
-          }
+<!--<div id="advancedFacetedSearch">-->
+<div class="panel panel-default">
+    <div class="panel-heading" id="refinePanel">
+        <h4 class="panel-title">
+            <a href="#collapseRefine" id="refinePanelTitle" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="collapseRefine">Refine<span id="refineGlyph" class="glyphicon glyphicon-menu-down pull-right refine-glyph" aria-hidden="true"></span></a>
+        </h4>
+    </div>
+    
+    <div id="collapseRefine" class="panel-body buffer-padding panel-collapse collapse in" aria-labelledby="refinePanel">
+        @* If the user has browsed vs. searched for a term, display a different subject chooser UI  *@
+        @if ( !Model.IsSearch || (Model.IsSearch && subjectsCount > 0) ) {
+            <h5>Subject</h5>
+        
+            <ul class="subject-sidenav list-unstyled">
+            @if (Model.IsSearch)
+            {
+                if (String.IsNullOrWhiteSpace(Model.SelectedSubject))
+                {
+                    // Display all available subjects
+                    if (subjectsCount > 1)
+                    {
+                        foreach (string slug in Model.Subjects)
+                        {
+                            // TODO: Pass SelectedSubject to Index/Search via a model
+                            routeParms["Subject"] = slug;
+                            <li>
+                              <a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">@slug</a>
+                            </li>
+                        }
+                    }
+                    else if (subjectsCount == 1)
+                    {
+                        <li>@Model.Subjects.First()</li>
+                    }
+                }
+                else
+                {
+                    // Display only the selected subject
+                    <li>
+                    @{
+                        // TODO: Pass SelectedSubject to Index/Search via a model
+                        routeParms.Remove("Subject");
+                    }
+                        <a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">All</a>
+                    </li>
+                    <li><b>@Model.SelectedSubject</b></li>
+                }
+            }
+            else
+            {
+                // This is not a search
+                if (!String.IsNullOrWhiteSpace(Model.SelectedSubject))
+                {
+                    <li><b>@Model.SelectedSubject</b></li>
+                }
+                <li>@Html.Partial("subjectNavigation", Model.ViewingQuarter)</li>
+            }
+            </ul>
         }
-        else if (subjectsCount == 1)
-        {
-          <li class="active">
-            <span class="notlink">@Model.Subjects.First()</span>
-          </li>
-        }
-      }
-      else
-      {
-        // Display only the selected subject
-        <li>
-          @{
-            // TODO: Pass SelectedSubject to Index/Search via a model
-            routeParms.Remove("Subject");
-          }
-          <a href="@Url.Action("Index", "Search", new RouteValueDictionary(routeParms))">All</a>
-        </li>
-        <li class="active">
-          <span class="notlink">@Model.SelectedSubject</span>
-        </li>
-      }
-    }
-    else
-    {
-      // This is not a search
-      if (!String.IsNullOrWhiteSpace(Model.SelectedSubject))
-      {
-        <li class="active">
-          <span class="notlink">@Model.SelectedSubject</span>
-        </li>
-      }
-      <li>
-        @Html.Partial("subjectNavigation", Model.ViewingQuarter)
-      </li>
-    }
-  </ul>
-
-
-
 
   @if (Model.IsSearch)
   {
     <div>
-      <form id="daystimesform" action="@Url.Content("~/Search/")" method="get">
+          <form id="daystimesform" action="@Url.Content("~/Search/")" method="get">
 
-      <!-- hidden fields to include in form -->
-      @if (!String.IsNullOrWhiteSpace(QuarterParam))
-      {
-        <input type="hidden" name="quarter" value="@QuarterParam"/>
-      }
+          <!-- hidden fields to include in form -->
+          @if (!String.IsNullOrWhiteSpace(_quarterParam))
+          {
+            <input type="hidden" name="quarter" value="@_quarterParam"/>
+          }
 
-      @if (!String.IsNullOrWhiteSpace(Model.SelectedSubject))
-      {
-        <input type="hidden" name="Subject" value="@Model.SelectedSubject"/>
-      }
-      <input type="hidden" name="searchterm" value="@ViewBag.searchterm"/>
+          @if (!String.IsNullOrWhiteSpace(Model.SelectedSubject))
+          {
+            <input type="hidden" name="Subject" value="@Model.SelectedSubject"/>
+          }
+          <input type="hidden" name="searchterm" value="@ViewBag.searchterm"/>
 	  </div>
   }
   else
@@ -109,19 +121,11 @@
     }
   }
 
-
-  <h3>Class Format</h3>
-  <div id="classformat">
+  <h5>Class format</h5>
     @{
-      IList<GeneralFacetInfo> modalities = (IList<GeneralFacetInfo>)ViewBag.Modality;
-      IList<GeneralFacetInfo> days = (IList<GeneralFacetInfo>)ViewBag.Days;
+      IList<GeneralFacetInfo> modalities = Model.FacetData.Modality;
+      IList<GeneralFacetInfo> days = Model.FacetData.Days;
       bool showDaysAndTimes = true;
-    }
-    @if (modalities.Where(m => m.Selected == true).Count() > 0)
-    {
-      <p class="label_checkbox_pair">
-	      <a href="#" id="uncheckFormat">Uncheck all</a>
-      </p>
     }
 
     @foreach (GeneralFacetInfo m in modalities)
@@ -132,196 +136,156 @@
         showDaysAndTimes = false;
       }
 
-		  <p class="label_checkbox_pair">
-		    <span>
-			    <input class="clear" type="checkbox" name="@m.ID" id="@m.ID" value="true" @if (m.Selected)
-                                                                                 { <text>checked='checked'</text> } />
-        </span>
-			  <label for="@m.ID">@m.Title</label>
-		  </p>
-    }
-	</div>
+        <div class="checkbox">
+		    <label>
+			    <input class="clear" type="checkbox" name="@m.ID" id="@m.ID" value="true" @if (m.Selected){ <text>checked='checked'</text> } /> @m.Title
+            </label>
+        </div>
 
-@* There are known issues with jQueryUI widgets not working properly when IE is in compatibility mode *@
-    <div id="ie-compatibility-view-warning" style="color:red;text-align:center;padding:0 2px;display:none;">
-      Please disable <em><a href="http://eis.unt.edu/content/ie8-compatibility-mode" style="color:red;">Compatibility Mode</a></em>.
-    </div>
+    }
 
   @if (showDaysAndTimes)
   {
-    <h3>Days & Times</h3>
+    <h5>Days and times</h5>
     <div id="times">
-      <label>
-        <span title="Start Time" class="time-text">START</span>
-        <input id="timestart"  name="timestart" type="text" value="@ViewBag.timestart" />
-      </label>
-      <span class="time-separator">-</span>
-      <label>
-        <span title="End Time" class="time-text">END</span>
-        <input id="timeend" name="timeend" type="text" value="@ViewBag.timeend" />
-      </label>
+        <div class="form-group">
+            <label for="timestart" class="sr-only">Start time</label>
+            <input id="timestart" class="form-control"  name="timestart" type="text" value="@Model.FacetData.TimeStart" placeholder="Start time" />
+        </div>
+        <div>
+            <span class="time-separator">-</span>
+        </div>
+        <div class="form-group">
+            <label for="timeend" class="sr-only">End time</label>
+            <input id="timeend" class="form-control" name="timeend" type="text" value="@Model.FacetData.TimeEnd" placeholder="End time" />
+        </div>
     </div>
 
     <div id="days">
-      @foreach (GeneralFacetInfo d in days)
-      {
-        <div class="day">
-          <label class="daylabel @if (d.ID == "day_su" || d.ID == "day_s")
-                                 { <text>weekend</text> }" for="days">
-            <abbr title="@d.Title ">@d.Title</abbr>
-          </label>
-          <input type="checkbox" name="@d.ID" id="@d.ID"  value="true" @if (d.Selected)
-                                                                       { <text>checked="checked"</text> } />
-        </div>
-      }
-
-      <div id="submitjquery"></div>
+        <fieldset>
+            <legend class="sr-only">Class days</legend>
+            <div class="form-group-sm">
+                @foreach (GeneralFacetInfo d in days)
+                {
+                    string abbrv = d.Title;
+                    switch ( d.ID )
+                    {
+                        case "day_su":
+                            abbrv = "Sunday";
+                            break;
+                        case "day_m":
+                            abbrv = "Monday";
+                            break;
+                        case "day_t":
+                            abbrv = "Tuesday";
+                            break;
+                        case "day_w":
+                            abbrv = "Wednesday";
+                            break;
+                        case "day_th":
+                            abbrv = "Thursday";
+                            break;
+                        case "day_f":
+                            abbrv = "Friday";
+                            break;
+                        case "day_s":
+                            abbrv = "Saturday";
+                            break;
+                        default:
+                            abbrv = d.Title;
+                            break;
+                    }
+                    <label class="daylabel">
+                    <abbr title="@abbrv">@d.Title</abbr><br />
+                    <input type="checkbox" name="@d.ID" id="@d.ID" aria-label="@abbrv" value="true" @if (d.Selected){ <text>checked="checked"</text> }/>
+                    </label>
+                }
+            </div>
+        </fieldset>
     </div>
   }
 
-
-  <h3>Credits</h3>
+  <h5>Credits</h5>
   <div id="numcredits-facet">
-    <p class="label_checkbox_pair">
-      <select class="clear"name="numcredits" id="numcredits" value="true">
-        <option @if (_numCredits == ANY)
-                { <text>selected='selected'</text> }>Any</option>
+      <label for="numcredits" class="sr-only">Number of credits</label>
+      <select class="clear form-control" name="numcredits" id="numcredits">
+        <option @if (_numCredits == Model.FacetData.CreditsAny){ <text>selected='selected'</text> }>Any</option>
         @for (int i = 1; i <= 15; i++)
         {
-          <option @if (_numCredits == i)
-                  { <text>selected='selected'</text> }>@i</option>
+          <option @if (_numCredits == i){ <text>selected='selected'</text> }>@i</option>
         }
       </select>
-
-    </p>
   </div>
 
-	<h3>Other Options</h3>
-	<div id="latestart-facet">
-		<p class="label_checkbox_pair">
-			<input class="clear" type="checkbox" name="latestart" id="latestart" value="true" @if (@ViewBag.latestart == "true")
+	<h5>Other options</h5>
+	<div id="latestart-facet" class="checkbox">
+		<label>
+			<input class="clear" type="checkbox" name="latestart" id="latestart" value="true" @if (@Model.FacetData.LateStart == "true")
                                                                                      { <text>checked='checked'</text> } />
-			<label for="latestart">Late Start</label>
-		</p>
+			Late Start
+		</label>
 	</div>
 
-	<h3>Availability</h3>
-	<ul id="availability-facet">
-		<li>
-      <label>
-        <input id="radio_all" type="radio" name="avail" value="All" @if (@ViewBag.avail == "All" || @ViewBag.avail == null)
-                                                                    { <text> checked="checked"</text> } /> All
-      </label>
-    </li>
-		<li>
-      <label>
-        <input id="radio_open" type="radio" name="avail" value="Open"	@if (@ViewBag.avail == "Open")
-                                                                      { <text> checked="checked"</text> } /> Open
-      </label>
-    </li>
-	</ul>
+	<h5>Availability</h5>
+	<div id="availability-facet">
+        <fieldset>
+            <legend class="sr-only">Class availability</legend>
+            <div class="radio">
+                <label>
+                <input id="radio_all" type="radio" name="avail" value="All" @if (@_availabilityFacet == "All" || @_availabilityFacet == null)
+                                                                        { <text> checked="checked"</text> } /> All
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input id="radio_open" type="radio" name="avail" value="Open"	@if (@_availabilityFacet == "Open")
+                                                                          { <text> checked="checked"</text> } /> Open
+                </label>
+            </div>
+        </fieldset>
+	</div>
 
-	<div id="submit">
-		<input type="submit" id="submit_days_times" name="submitbtn" value="Refine >" />
+	<div id="submit" class="text-right">
+		<input type="submit" id="submit_days_times" name="submitbtn" value="Refine &raquo;" class="btn btn-sm btn-primary" />
 	</div>
 
 </form>
 </div>
+</div>
 
+<div id="check-xs" class="visible-xs"></div>
+<div id="check-sm" class="visible-sm"></div>
 
 <script type="text/javascript">
-  @* There are known issues with jQueryUI widgets not working properly when IE is in compatibility mode *@
-  $(document).ready(function() {
-    // Compatibility view returns a value of 7 or lower (zero means no value found)
-    // see http://msdn.microsoft.com/en-us/library/cc196988%28VS.85%29.aspx
-    var m = document.documentMode;
-    //console.log("documentMode = " + m);
-    if (m > 0 && m < 8) {
-      $('#ie-compatibility-view-warning').show();
-    } else {
-      $('#ie-compatibility-view-warning').hide();
-    }
-  });
+    $(function () {
 
-  $(function () {
-    $('#timestart').timepicker({
-      numberOfMonths: 0,
-      ampm: true
-    });
-    $('#timeend').timepicker({
-      numberOfMonths: 0,
-      ampm: true
-    });
+        //attach timepickers to elements
+        $('#timestart').timepicker({
+            minTime: '7:00am',
+            maxTime: '10:00pm',
+        });
+        $('#timeend').timepicker({
+            minTime: '7:00am',
+            maxTime: '10:00pm',
+        });
 
-    $('#submitjquery').html('<input type="submit" id="submit_days_times" name="submitbtn" value="Refine >" />');
-    $('#submit').html('');
+        // if small or xs screen size collapse refine panel
+        if ($('#check-xs').is(':visible') || $('#check-sm').is(':visible') ) {
+            $("#collapseRefine").removeClass("in");
+            $("#refinePanelTitle").attr("aria-expanded", "false");
+            $("#refineGlyph").removeClass("glyphicon-menu-down");
+            $("#refineGlyph").addClass("glyphicon-menu-up");
+        }
 
+        // change direction icon on panel title
+        $('#collapseRefine').on('hidden.bs.collapse', function () {
+            $("#refineGlyph").removeClass("glyphicon-menu-down");
+            $("#refineGlyph").addClass("glyphicon-menu-up");
+        });
+        $('#collapseRefine').on('show.bs.collapse', function () {
+            $("#refineGlyph").removeClass("glyphicon-menu-up");
+            $("#refineGlyph").addClass("glyphicon-menu-down");
+        });
 
-    //when user clicks refine, show throbber
-    $('#submit_days_times').click(function () {
-      showThrobber();
-      $('#daystimesform').submit();
-    });
-
-    if (!$("#radio_all").is(':checked')) {
-      $('#radio_all').click(function () {
-        showThrobber();
-        $('#daystimesform').submit();
-      });
-    }
-
-    if (!$("#radio_open").is(':checked')) {
-      $('#radio_open').click(function () {
-        showThrobber();
-        $('#daystimesform').submit();
-      });
-    }
-
-
-    //when class formats are clicked, auto submit the form
-    $('#f_oncampus').click(function () {
-      showThrobber();
-      $('#daystimesform').submit();
-    });
-
-
-    $('#f_online').click(function () {
-      showThrobber();
-      $('#daystimesform').submit();
-    });
-
-
-    $('#f_hybrid').click(function () {
-      showThrobber();
-      $('#daystimesform').submit();
-    });
-
-
-    $('#f_telecourse').click(function () {
-      showThrobber();
-      $('#daystimesform').submit();
-    });
-
-    $('#latestart').click(function () {
-      showThrobber();
-      $('#daystimesform').submit();
-    });
-
-    $('#numcredits').change(function () {
-      showThrobber();
-      $('#daystimesform').submit();
-    });
-
-
-    //when the user clicks uncheck all formats, uncheck them and resubmit the form.
-    $('#uncheckFormat').click(function (event) {
-      event.preventDefault();
-      $('#f_oncampus').removeAttr('checked');
-      $('#f_online').removeAttr('checked');
-      $('#f_hybrid').removeAttr('checked');
-      $('#f_telecourse').removeAttr('checked');
-      showThrobber();
-      $('#daystimesform').submit();
-    });
   });
 </script>

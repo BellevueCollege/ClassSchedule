@@ -27,7 +27,7 @@ namespace CTCClassSchedule
 {
 	public partial class ScheduleError : Page
 	{
-	  private readonly ILog _log = LogManager.GetCurrentClassLogger();
+	  private readonly ILog _log = LogManager.GetLogger(typeof(ScheduleError));
 
 	  protected void Page_Load(object sender, EventArgs e)
 		{

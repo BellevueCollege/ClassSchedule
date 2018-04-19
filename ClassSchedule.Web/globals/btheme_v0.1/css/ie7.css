@@ -1,5 +1,0 @@
-/* IE7 and below */
-
-.mainnav-item {z-index: 20}
-#marketimage img {z-index: -1}
-#mainnav-list { background: transparent  url(../img/nav-highlight.png); overflow: hidden;}

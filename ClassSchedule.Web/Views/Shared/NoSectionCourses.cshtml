@@ -1,4 +1,20 @@
-﻿@using CTCClassSchedule.Common
+﻿@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
+@using CTCClassSchedule.Common
 @using Microsoft.Security.Application
 @using Ctc.Ods.Types
 @model CTCClassSchedule.Models.SearchResultNoSectionModel
@@ -6,29 +22,27 @@
 	// at the moment, this view is only used in search results. 11/15/2011, shawn.south@bellevuecollege.edu
 	string _searchTerm = ViewBag.searchterm;
 }
-<div id="NotOfferedThisQuarter">
+<hr>
+
 <h2>Classes not offered @Model.SearchedYearQuarter.FriendlyName, but match your search:</h2>
 
 <ul>
 @foreach (SearchResultNoSection item in Model.NoSectionSearchResults)
 {
-  CourseID courseId = Helpers.getCourseIdFromString(item.CourseID);
+  CourseID courseId = Helpers.GetCourseIdFromString(item.CourseID);
 
 	<li>
         <strong>
-          <span class="classHeading noPadding">
             <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(courseId), ClassNum = courseId.Number })">
               <span class="courseID">@Html.FormatWithSearchTerm(_searchTerm, item.CourseID)</span>
               <span class="courseTitle">@Html.FormatWithSearchTerm(_searchTerm, item.CourseTitle)</span>
               <span class="courseCredits">&#8226; @Html.CreditsValue(item.Credits, "<span class='error'>UNK</span>") @* Remove any trailing zero-decimals *@
-                  <abbr title="Credit(s) ">Cr.</abbr>
+                  <abbr title="Credit(s)">Cr.</abbr>
               </span>
             </a>
-          </span>
         </strong>
         <br />
         <span class="courseDescription">@Html.FormatWithSearchTerm(_searchTerm, Encoder.HtmlEncode(item.CourseDescription)) </span>
 	</li>
 }
 </ul>
-</div>

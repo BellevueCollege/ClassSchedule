@@ -15,16 +15,43 @@ You should have received a copy of the GNU General Public License
 along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System.Collections.Generic;
-using Ctc.Ods.Types;
+using CTCClassSchedule.Common;
 
-namespace CTCClassSchedule.Models
+namespace CTCClassSchedule
 {
-  public class AdvancedFacetedSearchModel
+  public interface IFacetData
   {
-    public YearQuarter ViewingQuarter { get; set; }
-    public IEnumerable<string> Subjects { get; set; } // Collection of Subject Slugs
-    public string SelectedSubject { get; set; } // Current Subject Slug
-    public bool IsSearch { get; set; }
-    public IFacetData FacetData {get;set;}
+    IList<GeneralFacetInfo> Days {get;}
+    IList<GeneralFacetInfo> Modality {get;}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    string TimeStart {get;set;}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    string TimeEnd {get;set;}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    string Availability {get;set;}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    string LateStart {get;set;}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    string Credits {get;set;}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    int CreditsAny {get;}
   }
 }

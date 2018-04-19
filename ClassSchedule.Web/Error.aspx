@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Error.aspx.cs" Inherits="CTCClassSchedule.ScheduleError" %>
+﻿<%@ Page Language="C#" AutoEventWireup="True" CodeBehind="Error.aspx.cs" Inherits="CTCClassSchedule.ScheduleError" %>
+<%@ Import Namespace="CTCClassSchedule.Common" %>
 <%--
 This file is part of CtcClassSchedule.
 
@@ -17,18 +18,17 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-
 <head runat="server">
-	<link rel="stylesheet" href="http://bellevuecollege.edu/globals/btheme_v0.1/css/btheme_v0.1.1.css" type="text/css" />
+	<link rel="stylesheet" href="<%=Helpers.GlobalsHttp("btheme_v0.1/css/btheme_v0.1.1.css") %>" type="text/css" />
 	<link rel="stylesheet" href="~/Content/grids.css" type="text/css" />
 	<link rel="stylesheet" href="~/Content/automatic-image-slider.css" type="text/css" />
 	<link rel="stylesheet" href="~/Content/jquery-ui-1.8.17.custom.css" type="text/css" />
-	<link rel="stylesheet" href="~/Content/ClassSchedule.css?v=1" type="text/css" />
+	<link rel="stylesheet" href="~/Content/ClassSchedule.css?v=2" type="text/css" />
 
   <title>Oops, an error occurred</title>
 </head>
 <body>
-	<!--#include file="/globals/btheme_v0.1/asp/header_big.asp" -->
+  <%=Html.Include(Server, Server.MapPath(Helpers.GlobalsFile("btheme_v0.1/asp/header_big.asp"))) %>
 
   <form id="form1" runat="server">
 		<div id="bodyWrapper">
@@ -57,6 +57,6 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 	  </div>
   </form>
 
-	<!--#include file="/globals/btheme_v0.1/asp/footer_big.asp" -->
+  <%=Html.Include(Server, Server.MapPath(Helpers.GlobalsFile("btheme_v0.1/asp/footer_big.asp"))) %>
 </body>
 </html>

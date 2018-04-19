@@ -13,41 +13,75 @@
 	}
 }
 
-<div id="basicFacetedSearch" class="sidenav">
-	<h2>Browse for classes</h2>
-	<h3>Subject</h3>
+<div class="panel panel-default">
+    <div class="panel-heading" id="refinePanel">
+        <h4 class="panel-title">
+            <a href="#collapseRefine" id="refinePanelTitle" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="collapseRefine">Refine<span id="refineGlyph" class="glyphicon glyphicon-menu-down pull-right refine-glyph" aria-hidden="true"></span></a>
+        </h4>
+    </div>
+    
+    <div id="collapseRefine" class="panel-body buffer-padding panel-collapse collapse in" aria-labelledby="refinePanel">
+        <h5>Subject</h5>
 
-	<ul class="subject">
-		@if (!string.IsNullOrWhiteSpace(subject))
-		{
-			<li class="active">
-				<span class="notlink">@subject</span>
-			</li>
-		}
+        <ul class="subject-sidenav buffer-bottom list-unstyled">
+		    @if (!string.IsNullOrWhiteSpace(subject))
+		    {
+			    <li class="active">
+				    <span class="notlink">@subject</span>
+			    </li>
+		    }
 
-		<li>
-			@Html.Partial("subjectNavigation", quarterViewing, new ViewDataDictionary())
-		</li>
-	</ul>
+		    <li>
+			    @Html.Partial("subjectNavigation", quarterViewing, new ViewDataDictionary())
+		    </li>
+	    </ul>
 
-	<h3>Classes Offered:</h3>
-	<ul>
-		<li @if (quarterViewing == null) { <text> class="active" </text> }>
-			<a href="@Url.Action("AllClasses", "Classes")">All Credit Classes</a>
-		</li>
+	    <h5>Classes offered</h5>
+	    <ul>
+		    <li @if (quarterViewing == null) { <text> class="active" </text> }>
+			    <a href="@Url.Action("AllClasses", "Classes")">All credit classes</a>
+		    </li>
 
-		@foreach (YearQuarter yrq in Model)
-		{
-			<li @if (quarterViewing != null && quarterViewing == yrq) { <text> class="active" </text> }>
-			@if (String.IsNullOrEmpty(subject))
-			{
-				<a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", string.Empty)})">@yrq.FriendlyName</a>
-			}
-			else
-			{
-				<a href="@Url.Action("YearQuarterSubject", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", string.Empty), Subject = subject})">@yrq.FriendlyName</a>
-			}
-			</li>
-		}
-	</ul>
+		    @foreach (YearQuarter yrq in Model)
+		    {
+			    <li @if (quarterViewing != null && quarterViewing == yrq) { <text> class="active" </text> }>
+			    @if (String.IsNullOrEmpty(subject))
+			    {
+				    <a href="@Url.Action("YearQuarter", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", string.Empty)})">@yrq.FriendlyName</a>
+			    }
+			    else
+			    {
+				    <a href="@Url.Action("YearQuarterSubject", "Classes", new {YearQuarter = yrq.FriendlyName.Replace(" ", string.Empty), Subject = subject})">@yrq.FriendlyName</a>
+			    }
+			    </li>
+		    }
+        </ul>
+    </div>
 </div>
+
+<div id="check-xs" class="visible-xs"></div>
+<div id="check-sm" class="visible-sm"></div>
+
+<script type="text/javascript">
+  $(function () {
+
+      // if small or xs screen size collapse refine panel
+      if ($('#check-xs').is(':visible') || $('#check-sm').is(':visible')) {
+          $("#collapseRefine").removeClass("in");
+          $("#refinePanelTitle").attr("aria-expanded", "false");
+          $("#refineGlyph").removeClass("glyphicon-menu-down");
+          $("#refineGlyph").addClass("glyphicon-menu-up");
+      }
+
+      // change direction icon on panel title
+      $('#collapseRefine').on('hidden.bs.collapse', function () {
+          $("#refineGlyph").removeClass("glyphicon-menu-down");
+          $("#refineGlyph").addClass("glyphicon-menu-up");
+      });
+      $('#collapseRefine').on('show.bs.collapse', function () {
+          $("#refineGlyph").removeClass("glyphicon-menu-up");
+          $("#refineGlyph").addClass("glyphicon-menu-down");
+      });
+
+  });
+</script>

@@ -1,87 +1,64 @@
-﻿@using Ctc.Ods.Types
+﻿@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
+@using Ctc.Ods.Types
 @using CTCClassSchedule.Common
 @using CTCClassSchedule.Models
 @model YearQuarterModel
 @{
 	YearQuarter yrq = Model.ViewingQuarter;
-  IList<char> alphabet = Model.SubjectLetters;
+    IList<char> alphabet = Model.SubjectLetters;
+    ViewBag.PageTitle = yrq.FriendlyName + " Credit Classes :: Classes";
 }
-<div id="scheduleMain">
-  @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })
-  <div id="container" class="sidebar">
-    <div id="sidebar">
-        @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = yrq })
-    </div> <!-- #sidebar -->
 
-    <div id="content">
+@section metatags {
+    <meta name="robots" content="noindex, follow">
+}
 
-			<h1 id="pageTitle">@yrq.FriendlyName Credit Classes</h1>
+@Html.Partial("breadcrumbNavigation")
+
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })
+
+<div class="row row-padding buffer-top buffer-bottom">
+    <div class="col-md-3">
+        <div class="content-padding padding-right-none">
+            @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel { ViewingQuarter = yrq, FacetData = Model.FacetData})
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div id="content" class="content-padding padding-left-none">
+			<h1>@yrq.FriendlyName Credit Classes</h1>
 
 			@Html.Partial("a_to_z", new AToZViewModel { LettersList = alphabet, ViewingLetter = ViewBag.letter == null ? (char?)null : ViewBag.letter[0] })
 
-			@if (Helpers.isAdmin(Context))
-			{
-				<div class="message">@Context.User.Identity.Name! You have admin access to this section.</div>
-			}
+            @Html.Partial("LoggedInUser")
 
 			@if (Model.ViewingSubjects.Count() == 0)
 			{
 				string letter = Request.QueryString["letter"];
-				<div id="error-noclassesfound">
-					<h2>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h2>
-					<p><em>TIP:</em> Information for @yrq.FriendlyName may not be available yet.</p>
-				</div>
+			    <h3>No classes @(!string.IsNullOrWhiteSpace(letter) ? string.Format("beginning with the letter '{0}'", letter) : string.Empty) were found for @yrq.FriendlyName</h3>
+			    <p><em>Tip:</em> Information for @yrq.FriendlyName may not be available yet.</p>
 			}
 			else
 			{
 				Html.RenderPartial("subjectList", Model.ViewingSubjects.ToList());
 			}
 
-
-			<div title="Edit Subject Information" id="edit-program"></div>
-
-    </div> <!-- #content -->
-  </div> <!-- #container -->
+			<div title="Edit subject information" id="edit-program"></div>
+            <div id="nav-choose-subjects" title="Select new class subject"></div> @* div for pop-up dialog *@
+        </div> <!-- #content -->
+    </div> <!-- #col -->
 </div>
-
-<script type="text/javascript">
-	/* program editor pop-up dialog */
-	$(function () {
-
-		$("#edit-program").dialog({
-			closeOnEscape: false,
-			autoOpen: false,
-			height: 455,
-			width: 950
-		});
-
-
-		/* make the cancel button close the window and reload the page */
-		$("span.ui-icon-closethick").click(function () {
-			showThrobber();
-			window.location.href = $(location).attr('href');
-		});
-
-		$(".ui-dialog").keydown(function(e) {
-			if (e.keyCode == 27) { // esc
-				$(".ui-dialog").hide();
-				showThrobber();
-				window.location.href = $(location).attr('href');
-			}
-		});
-
-		@if(Helpers.isAdmin(Context))  {
-
-			<text>$('li.subject-name').hover(function () {
-				$(this).children('a.edit_button').show();
-				$(this).addClass('edit-hover subject-name-edit');
-				},
-				function () {
-					$(this).children('a.edit_button').hide();
-					$(this).removeClass('edit-hover subject-name-edit');
-			});
-			</text>
-		}
-
-	});
-</script>

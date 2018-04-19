@@ -1,243 +1,196 @@
 ﻿@using CTCClassSchedule;
 @using CTCClassSchedule.Common;
-@using MvcMiniProfiler;
+@using StackExchange.Profiling;
 @using Ctc.Ods.Types;
 @using CTCClassSchedule.Models
 @model ClassDetailsModel
 
 @{
-	MiniProfiler _profiler = MiniProfiler.Current;
-  Course course = Model.Courses.Count > 0 ? Model.Courses[0] : null;
+    MiniProfiler _profiler = MiniProfiler.Current;
+    Course course = Model.Courses.Count > 0 ? Model.Courses[0] : null;
 
-  string courseId = String.Concat(ViewContext.RouteData.Values["Prefix"].ToString(), " ", ViewContext.RouteData.Values["ClassNum"].ToString());
-  ViewBag.PageTitle = String.Concat(courseId, " at Bellevue College");
+    string courseId = String.Concat(ViewContext.RouteData.Values["Prefix"].ToString(), " ", ViewContext.RouteData.Values["ClassNum"].ToString());
+    ViewBag.PageTitle = String.Format("{0} - {1} :: Class Schedule", courseId, course.Title);
 }
 
-<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
+@Html.Partial("breadcrumbNavigation")
 
-<div title="Edit Section" id="edit-section"></div>
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
 
-<div id="scheduleMain">
-	@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
-	<div id="container" class="nosidebar">
-		<div id="content">
-			@if (course != null)
-			{
-				<h1 id="pageTitle">
-					<span class="courseID">@(string.Format("{0} {1}", Helpers.SubjectWithCommonCourseFlag(course), course.Number))</span>
-					<span class="courseTitle">@course.Title</span>
-
-					@ViewHelpers.DisplayCredits(course)
+<div class="row row-padding">
+    <div class="col-md-8">
+        <div id="content" class="content-padding buffer-top buffer-bottom" data-swiftype-index="true" data-swiftype-name="body" data-swiftype-type="text">
+            @if (course != null)
+            {
+				<h1>
+					@(string.Format("{0} {1}", Helpers.SubjectWithCommonCourseFlag(course), course.Number))
+					@course.Title @ViewHelpers.DisplayCredits(course)
 				</h1>
-
-				<div class="aside">
-          <div class="generalInfo">
-            <h2>Department</h2>
-            <ul>
-              <li>
-                @if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
+                    
+                @* Display any upcoming course title change, if detected *@
+                if (Model.Courses.Count > 1)
                 {
-							    if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
-                  {
-								    <a href="@Model.DepartmentURL">
-									    @if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
-                      {
-										    @Model.DepartmentTitle
-                      }
-                      else
-                      {
-										    @Model.SubjectTitle
-                      }
-								    </a>
-                  }
-                  else
-                  {
-                    if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
+                    Course newCourse = Model.Courses[1];
+                    if (newCourse.IsVariableCredits != course.IsVariableCredits || newCourse.Credits != course.Credits || newCourse.Title.Trim() != course.Title.Trim())
                     {
-									    @Model.DepartmentTitle
+					    <div class="alert alert-info">
+							<h4>Class title change starting @newCourse.YearQuarterBegin.FriendlyName</h4>
+							<p>@newCourse.Title
+							&#8226;
+							@if (newCourse.IsVariableCredits)
+                            {
+									@:V1-@Html.CreditsValue(newCourse.Credits)
+									<abbr title=" variable credit(s) ">Cr.</abbr>
+                            }
+                            else
+                            {
+									@Html.CreditsValue(newCourse.Credits)
+									<abbr title=" credit(s) ">Cr.</abbr>
+                            }
+							</p>
+					    </div>
                     }
-                    else
-                    {
-									    @Model.SubjectTitle
-                    }
-                  }
                 }
-              </li>
-            </ul>
-          </div>
+                    
+                <h2>Description</h2>
+				@Html.Partial("CourseDescriptions", course.Descriptions, new ViewDataDictionary { new KeyValuePair<string, object>("CurrentQuarter", Model.CurrentQuarter) })
 
-          <div class="generalInfo">
-            <h2>Division</h2>
-            <ul>
-              <li>
-                @if (!string.IsNullOrWhiteSpace(Model.DivisionTitle))
-                {
-                  if (!string.IsNullOrWhiteSpace(Model.DivisionURL))
-                  {
-								    <a href="@Model.DivisionURL">@Model.DivisionTitle</a>
-                  }
-                  else
-                  {
-								    @Model.DivisionTitle
-                  }
-                }
-              </li>
-            </ul>
-          </div>
+                @* ***************************************************************************************************
+						Temporarily removed in order to meet initial public launch. We may want to re-enable this block
 
-				</div><!-- aside -->
-
-				<div id="class-details">
-					@* Display any upcoming course title change, if detected *@
-
-					@if (Model.Courses.Count > 1)
-					{
-						Course newCourse = Model.Courses[1];
-						if (newCourse.IsVariableCredits != course.IsVariableCredits || newCourse.Credits != course.Credits || newCourse.Title.Trim() != course.Title.Trim())
-						{
-							<div class="upcomingChange">
-								<h3>Class title change starting @newCourse.YearQuarterBegin.FriendlyName</h3>
-								<p>
-									<span>@newCourse.Title</span>
-									&#8226;
-									@if (newCourse.IsVariableCredits)
-									{
-										<span class="classCredits">
-											V1-@Html.CreditsValue(newCourse.Credits)
-											<abbr title=" variable credit(s) ">Cr.</abbr>
-										</span>
-									}
-									else
-									{
-										<span class="classCredits">
-											@Html.CreditsValue(newCourse.Credits)
-											<abbr title=" credit(s) ">Cr.</abbr>
-										</span>
-									}
-								</p>
-							</div>
-						}
-					}
-
-          <h2>Description:</h2>
-				  @Html.Partial("CourseDescriptions", course.Descriptions, new ViewDataDictionary
-						                                        {
-                                                      new KeyValuePair<string, object>("CurrentQuarter", Model.CurrentQuarter)
-						                                        })
-
-
-					@* ***************************************************************************************************
-							Temporarily removed in order to meet initial public launch. We may want to re-enable this block
-
-								- 4/05/2012, shawn.south@bellevuecollege.edu
-						 ***************************************************************************************************
-					@if (course.Footnotes.Count > 0)
-					{
-						<div id="courseFootnotes">
-							<h2>Details:</h2>
-							<p>
-								<span id="odsCourseFootnotes">
-									@foreach (string footnote in course.Footnotes.Where(f => !String.IsNullOrWhiteSpace(f)))
-									{
-										@footnote;
-									}
-								</span>
-								@if (course.Footnotes.Any(f => f.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0))
+							- 4/05/2012, shawn.south@bellevuecollege.edu
+						***************************************************************************************************
+				@if (course.Footnotes.Count > 0)
+				{
+					<div id="courseFootnotes">
+						<h2>Details:</h2>
+						<p>
+							<span id="odsCourseFootnotes">
+								@foreach (string footnote in course.Footnotes.Where(f => !String.IsNullOrWhiteSpace(f)))
 								{
-									<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/entrycode/">How to clear prerequisites?</a>
+									@footnote;
 								}
-							</p>
-						</div>
-					}
+							</span>
+							@if (course.Footnotes.Any(f => f.IndexOf("prerequisite", StringComparison.OrdinalIgnoreCase) >= 0))
+							{
+								<a class="footnote-prereq" href="http://bellevuecollege.edu/enrollment/transfer/prerequisites/entrycode/">How to clear prerequisites?</a>
+							}
+						</p>
+					</div>
+				}
 
-					@* Show footnotes, and upcoming changes to footnotes. Save this for a future release
-					@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote) || _courses[0].Footnotes.Count > 0)
+				@* Show footnotes, and upcoming changes to footnotes. Save this for a future release
+				@if (!string.IsNullOrWhiteSpace(ViewBag.CMSFootnote) || _courses[0].Footnotes.Count > 0)
+				{
+					<div id="courseFootnotes">
+						<h2>Details:</h2>
+						<p>
+							@ViewHelpers.DisplayFootnotes(course.Footnotes, ViewBag.CMSFootnote)
+						</p>
+					</div>
+				}
+
+				@if (_courses.Count > 1)
+				{
+					if (_courses[1].Footnotes.Count > 0 && !_courses[0].Footnotes.SequenceEqual(_courses[1].Footnotes))
 					{
-						<div id="courseFootnotes">
-							<h2>Details:</h2>
+						<div class="upcomingChange">
+							<h3>New details starting @_courses[1].YearQuarterBegin.FriendlyName</h3>
 							<p>
-								@ViewHelpers.DisplayFootnotes(course.Footnotes, ViewBag.CMSFootnote)
+								@ViewHelpers.DisplayFootnotes(_courses[1].Footnotes, ViewBag.CMSFootnote)
 							</p>
 						</div>
 					}
+				}
+				*@
+                if (!string.IsNullOrWhiteSpace(Model.CMSFootnote))
+                {
+					<h2>Details</h2>
+					<p>@Html.Raw(Model.CMSFootnote)</p>
+                }
 
-					@if (_courses.Count > 1)
-					{
-						if (_courses[1].Footnotes.Count > 0 && !_courses[0].Footnotes.SequenceEqual(_courses[1].Footnotes))
-						{
-							<div class="upcomingChange">
-								<h3>New details starting @_courses[1].YearQuarterBegin.FriendlyName</h3>
-								<p>
-									@ViewHelpers.DisplayFootnotes(_courses[1].Footnotes, ViewBag.CMSFootnote)
-								</p>
-							</div>
-						}
-					}
-					*@
+				if (!string.IsNullOrWhiteSpace(Model.LearningOutcomes) && !Model.LearningOutcomes.StartsWith("Error:"))
+                {
+					<h2>Outcomes</h2>
+					<p>After completing this class, students should be able to:</p>
+					@Html.Raw(Model.LearningOutcomes)
+                }
+                    
+                if (Model.QuartersOffered != null && Model.QuartersOffered.Count > 0)
+                {
+                    <h2>Offered</h2>
+		            <ul>
+		                @foreach (YearQuarter q in Model.QuartersOffered)
+                        {
+                            int relativeOffset = Model.CurrentQuarter.FriendlyName.CompareTo(q.FriendlyName);
+				            <li class="@(relativeOffset < 0 ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
+				                @Html.ActionLink(q.FriendlyName, "YearQuarterSubject", new { YearQuarter = q.FriendlyName.Replace(" ", string.Empty), Subject = Model.Slug })
 
-					@if (!string.IsNullOrWhiteSpace(Model.CMSFootnote))
-     {
-						<div id="courseFootnotes">
-							<h2>Details:</h2>
-							<p>
-								<span id="CMSCourseFootnotes">
-									@Html.Raw(Model.CMSFootnote)
-								</span>
-							</p>
-						</div>
-     }
+					            @if (relativeOffset == 0) { <span>(current quarter)</span> }
+				            </li>
+                        }
+	                </ul>
+                }
+            }
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="content-padding buffer-top buffer-bottom">
+            @if (course != null)
+            {
+                <div class="well">
+                    <h4>Department</h4>
+                    <ul class="list-unstyled">
+                        <li>
+                        @if (!string.IsNullOrWhiteSpace(Model.SubjectTitle))
+                        {
+                            if (!string.IsNullOrWhiteSpace(Model.DepartmentURL))
+                            {
+							    <a href="@Model.DepartmentURL">
+							    @if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
+                                {
+		                            @Model.DepartmentTitle
+                                }
+                                else
+                                {
+		                            @Model.SubjectTitle
+                                }
+							    </a>
+                            }
+                            else
+                            {
+                                if (!string.IsNullOrWhiteSpace(Model.DepartmentTitle))
+                                {
+								    @Model.DepartmentTitle
+                                }
+                                else
+                                {
+								    @Model.SubjectTitle
+                                }
+                            }
+                        }
+                        </li>
+                    </ul>
 
-					@if (!string.IsNullOrWhiteSpace(Model.LearningOutcomes) && !Model.LearningOutcomes.StartsWith("Error:"))
-     {
-						<div id="courseOutcome">
-							<h2>Outcomes:</h2>
-							<p>After completing this class, students should be able to:</p>
-							@Html.Raw(Model.LearningOutcomes)
-						</div>
-     }
-				</div> <!-- class-details -->
-
-     if (Model.QuartersOffered != null && Model.QuartersOffered.Count > 0)
-     {
-					<div id="allSectionsbyQuarter">
-						<div class="offeredQuarters">
-							<h2>Offered:</h2>
-							<ul>
-								@foreach (YearQuarter q in Model.QuartersOffered)
-        {
-          int relativeOffset = Model.CurrentQuarter.FriendlyName.CompareTo(q.FriendlyName);
-									<li class="@(relativeOffset < 0 ? "offeredPastQuarter" : "offeredFutureOrPresentQuarter")">
-										@Html.ActionLink(q.FriendlyName, "YearQuarterSubject", new { YearQuarter = q.FriendlyName.Replace(" ", string.Empty), Subject = Model.Slug })
-
-										@if (relativeOffset == 0)
-          {
-											<span>(current quarter)</span>
-          }
-									</li>
-        }
-							</ul>
-						</div> <!-- offeredQuarters -->
-					</div> <!-- allSectionsbyQuarter -->
-     }
-      }
-   else
-   {
-				<h1>Sorry, we don't appear to have any courses with the ID &quot;@courseId&quot;</h1>
-			}
-		</div> <!-- content -->
-	</div> <!-- container -->
-</div>
-
-
-
-<script type="text/javascript">
-	/* subject chooser pop-up dialog */
-	$(function () {
-
-		$("#edit-section").dialog({
-			autoOpen: false,
-			height: 400,
-			width: 500
-		});
-	});
-</script>
+                    @if (!string.IsNullOrWhiteSpace(Model.DivisionTitle))
+                    {
+                        <h4>Division</h4>
+                        <ul class="list-unstyled">
+                            <li>
+                            @if (!string.IsNullOrWhiteSpace(Model.DivisionURL))
+                            {
+							    <a href="@Model.DivisionURL">@Model.DivisionTitle</a>
+                            }
+                            else
+                            {
+							    @Model.DivisionTitle
+                            }
+                            </li>
+                        </ul>
+                    }
+                </div>
+                <!-- </div> -->
+            }
+        </div>
+    </div>
+</div> <!-- row -->

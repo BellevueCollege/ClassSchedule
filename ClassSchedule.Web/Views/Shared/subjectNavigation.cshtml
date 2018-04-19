@@ -26,17 +26,18 @@
 
 @Ajax.ActionLink("Change subject",
                   "YearQuarter",
-							    "Classes",
-							    new RouteValueDictionary(routeParms),
-							    new AjaxOptions
-							    {
-								    UpdateTargetId = "nav-choose-subjects",
-								    HttpMethod = "POST",
-								    InsertionMode = InsertionMode.Replace,
-								    OnBegin = "$('#nav-choose-subjects').dialog('open');"
-							    },
+                                "Classes",
+                                new RouteValueDictionary(routeParms),
+                                new AjaxOptions
+                                {
+                                    UpdateTargetId = "nav-choose-subjects",
+                                    HttpMethod = "POST",
+                                    InsertionMode = InsertionMode.Replace,
+                                    OnBegin = "$('#nav-choose-subjects').dialog('open'); $('.ui-widget-overlay').on('click', function () { $('#nav-choose-subjects').dialog('close'); });",
+                                    OnComplete = "fluidDialog();"
+                                },
                   new { id = linkID })
-
+    
   <script type="text/javascript">
     /* subject chooser pop-up dialog */
     $(document).ready(function () {
@@ -48,45 +49,18 @@
 @* Ensure that only one instance of the code, etc. is included in the page *@
 @if (!Convert.ToBoolean(ViewBag.SubjectChooserDisplayed))
 {
-  <div id="nav-choose-subjects" title="Select new course subject"></div>
+  @*<div id="nav-choose-subjects" title="Select new class subject"></div>
   <input type="hidden" id="javascriptEnabled" value="0" />
 
   <script type="text/javascript">
-    /* "processing" spinner */
-    var opts = {
-      lines: 12, // The number of lines to draw
-      length: 7, // The length of each line
-      width: 5, // The line thickness
-      radius: 10, // The radius of the inner circle
-      color: '#000', // #rbg or #rrggbb
-      speed: 1, // Rounds per second
-      trail: 100, // Afterglow percentage
-      shadow: true // Whether to render a shadow
-    };
-    var spinner = new Spinner(opts);
-
     /* subject chooser pop-up dialog */
-    $(document).ready(function() {
-      var href_value = "@Html.Raw(Url.Action("Subjects", "Api", new RouteValueDictionary(routeParms)))";
-      $("#change_subject").attr('href', href_value);
-
-
-      $("div#nav-choose-subjects").dialog({
-        autoOpen: false,
-        height: 500,
-        width: 600,
-        modal: true,
-        resizable: false,
-        open: function() {
-          // only show the spinner if we don't already have data in the dialog
-          if ($("div#nav-choose-subjects").html() == '') {
-            spinner.spin(document.getElementById('nav-choose-subjects'));
-          }
-        }
-      });
-
+      $(document).ready(function () {
+          $(function () {
+              var href_value = "@Html.Raw(Url.Action("Subjects", "Api", new RouteValueDictionary(routeParms)))";
+              $("#change_subject").attr('href', href_value);
+          })
     });
-  </script>
+  </script>*@
   
   ViewBag.SubjectChooserDisplayed = true;
 }

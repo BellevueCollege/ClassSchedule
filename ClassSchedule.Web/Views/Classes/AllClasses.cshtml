@@ -2,21 +2,28 @@
 @model AllClassesModel
 
 @{
-    ViewBag.PageTitle = "All Class Descriptions at Bellevue College";
+    ViewBag.PageTitle = "All Class Descriptions :: Classes";
 }
-<div id="scheduleMain">
-  @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
-  <div id="container" class="sidebar">
-    <div id="sidebar">
-      @Html.Partial("basicFacetedSearch", Model.NavigationQuarters)
-    </div> <!-- #sidebar -->
 
-    <div id="content">
-      <h1 id="pageTitle">All Credit Classes &amp; Descriptions</h1>
+@Html.Partial("breadcrumbNavigation")
 
-      @Html.Partial("a_to_z", new AToZViewModel { LettersList = Model.LettersList, ViewingLetter = Model.ViewingLetter })
-      @Html.Partial("subjectList", Model.Subjects)
-    </div> <!-- #content -->
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
 
-  </div> <!-- #container -->
-</div>
+<div class="row row-padding buffer-top buffer-bottom">
+    <!-- sidebar -->
+    <div class="col-md-3">
+        <div class="content-padding padding-right-none">
+            @Html.Partial("basicFacetedSearch", Model.NavigationQuarters)
+        </div>
+    </div>
+    <!-- end sidebar -->
+    <div class="col-md-9">
+        <div id="content" class="content-padding padding-left-none" data-swiftype-index="true" data-swiftype-name="body" data-swiftype-type="text">
+            <h1>All Credit Classes and Descriptions</h1>
+
+            @Html.Partial("a_to_z", new AToZViewModel { LettersList = Model.LettersList, ViewingLetter = Model.ViewingLetter })
+            @Html.Partial("subjectList", Model.Subjects)
+            <div id="nav-choose-subjects" title="Select new class subject"></div> @* div for pop-up dialog *@
+        </div> <!-- .content-padding -->
+    </div> <!-- .col-md-9 -->
+</div> <!-- .row -->

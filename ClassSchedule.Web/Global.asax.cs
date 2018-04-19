@@ -17,6 +17,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Web.Mvc;
 using System.Web.Routing;
+using StackExchange.Profiling;
 
 namespace CTCClassSchedule
 {
@@ -41,33 +42,37 @@ namespace CTCClassSchedule
 			routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
 			// API calls the application exposes
-      routes.MapRoute("ApiGetSeats", "Api/GetSeats/", new { controller = "Api", action = "GetSeats" });
-      routes.MapRoute("ApiSubjects", "Api/Subjects/", new { controller = "Api", action = "Subjects" });
-			routes.MapRoute("ApiSectionEdit", "Classes/SectionEdit", new { controller = "Classes", action = "SectionEdit" });
+            routes.MapRoute("ApiGetSeats", "Api/GetSeats/", new { controller = "Api", action = "GetSeats" });
+            routes.MapRoute("ApiSubjects", "Api/Subjects/", new { controller = "Api", action = "Subjects" });
+            routes.MapRoute("Courses", "Api/Courses", new { controller = "Api", action = "Courses" });
+            routes.MapRoute("ApiSectionEdit", "Classes/SectionEdit", new { controller = "Classes", action = "SectionEdit" });
 			routes.MapRoute("ApiClassEdit", "Api/ClassEdit", new { controller = "Api", action = "ClassEdit" });
 			routes.MapRoute("ApiUpdateSectionFootnote", "Api/UpdateSectionFootnote", new { controller = "Api", action = "UpdateSectionFootnote" });
-      routes.MapRoute("CrossListedCourses", "Api/CrossListedCourses", new { controller = "Api", action = "CrossListedCourses" });
+            routes.MapRoute("CrossListedCourses", "Api/CrossListedCourses", new { controller = "Api", action = "CrossListedCourses" });
 			routes.MapRoute("ScheduleExport", "Api/Export/{YearQuarterID}", new { controller = "Api", action = "Export", YearQuarterID = UrlParameter.Optional });
 
-			// Authentication
-			routes.MapRoute("LogOn", "Authenticate", new { controller = "Classes", action = "Authenticate" });
-			routes.MapRoute("LogOut", "Logout", new { controller = "Classes", action = "Logout" });
+            // Authentication
+            routes.MapRoute("AuthIndex", "Saml2", new { controller = "Saml2", action = "Index" });
+            routes.MapRoute("AuthAcs", "Saml2/Acs", new { controller = "Saml2", action = "Acs" });
+            routes.MapRoute("SignIn", "Saml2/SignIn", new { controller = "Saml2", action = "SignIn" });
+            routes.MapRoute("Logout", "Saml2/Logout", new { controller = "Saml2", action = "Logout" });
+            //routes.MapRoute("LogOn", "Authenticate", new { controller = "Classes", action = "Authenticate" });
+			//routes.MapRoute("LogOut", "Logout", new { controller = "Classes", action = "Logout" });
 
 			// Default application routes
-      routes.MapRoute("Index", "", new { controller = "Classes", action = "Index" });
+            routes.MapRoute("Index", "", new { controller = "Classes", action = "Index" });
 
-      // specific pages
-      routes.MapRoute("ProgramEdit", "ProgramEdit", new { controller = "Classes", action = "ProgramEdit" });
-      routes.MapRoute("Search", "Search", new { controller = "Search", action = "Index" });
+            // specific pages
+            routes.MapRoute("ProgramEdit", "ProgramEdit", new { controller = "Classes", action = "ProgramEdit" });
+            routes.MapRoute("Search", "Search", new { controller = "Search", action = "Index" });
       
-      // views not limited to quarter
-      routes.MapRoute("AllClasses", "All", new { controller = "Classes", action = "AllClasses" });
-      routes.MapRoute("Subject", "All/{Subject}", new { controller = "Classes", action = "Subject" });
+            // views not limited to quarter
+            routes.MapRoute("AllClasses", "All", new { controller = "Classes", action = "AllClasses" });
+            routes.MapRoute("Subject", "All/{Subject}", new { controller = "Classes", action = "Subject" });
 			routes.MapRoute("ClassDetails", "All/{Prefix}/{ClassNum}", new { controller = "Classes", action = "ClassDetails" });
 
-      routes.MapRoute("YearQuarter", "{YearQuarter}", new { controller = "Classes", action = "YearQuarter" });
-      routes.MapRoute("YearQuarterSubject", "{YearQuarter}/{Subject}", new { controller = "Classes", action = "YearQuarterSubject" });
-
+            routes.MapRoute("YearQuarter", "{YearQuarter}", new { controller = "Classes", action = "YearQuarter" });
+            routes.MapRoute("YearQuarterSubject", "{YearQuarter}/{Subject}", new { controller = "Classes", action = "YearQuarterSubject" });
 		}
 
 		/// <summary>
@@ -79,7 +84,7 @@ namespace CTCClassSchedule
 
 #if ENABLE_PROFILING
 			// Add profiling view engine
-			var copy = ViewEngines.Engines.ToList();
+			var copy = ViewEngines.Engines;
 			ViewEngines.Engines.Clear();
 			foreach (var item in copy)
 			{
@@ -93,9 +98,7 @@ namespace CTCClassSchedule
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
 
-            //Specify TLS 1.2 or TLS fall through for security protocol
-            System.Net.ServicePointManager.SecurityProtocol = (System.Net.SecurityProtocolType)3072 | System.Net.SecurityProtocolType.Tls;
-		}
+        }
 
 		/// <summary>
 		///

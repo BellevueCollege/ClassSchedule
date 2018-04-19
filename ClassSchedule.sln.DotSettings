@@ -1,0 +1,70 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/CodeInspection/CodeAnnotations/NamespacesWithAnnotations/=CTCClassSchedule_002EAnnotations/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=06EBB06D8819A249BBE7643563E5CE7A/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=06EBB06D8819A249BBE7643563E5CE7A/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=06EBB06D8819A249BBE7643563E5CE7A/Description/@EntryValue">License</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=06EBB06D8819A249BBE7643563E5CE7A/Scope/=2DD0981E9795BF468F5E05C3949B8ACE/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=06EBB06D8819A249BBE7643563E5CE7A/Scope/=2DD0981E9795BF468F5E05C3949B8ACE/Type/@EntryValue">InRazorTag</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=06EBB06D8819A249BBE7643563E5CE7A/Shortcut/@EntryValue">lic</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=06EBB06D8819A249BBE7643563E5CE7A/Text/@EntryValue">@*&#xD;
+This file is part of CtcClassSchedule.&#xD;
+&#xD;
+CtcClassSchedule is free software: you can redistribute it and/or modify&#xD;
+it under the terms of the GNU General Public License as published by&#xD;
+the Free Software Foundation, either version 3 of the License, or&#xD;
+(at your option) any later version.&#xD;
+&#xD;
+CtcClassSchedule is distributed in the hope that it will be useful,&#xD;
+but WITHOUT ANY WARRANTY; without even the implied warranty of&#xD;
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&#xD;
+GNU General Public License for more details.&#xD;
+&#xD;
+You should have received a copy of the GNU General Public License&#xD;
+along with CtcClassSchedule.  If not, see &lt;http://www.gnu.org/licenses/&gt;.&#xD;
+*@&#xD;
+</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Description/@EntryValue">Test method</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Field/=Method_005FName/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Field/=Method_005FName/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Scope/=B68999B9D6B43E47A02B22C12A54C3CC/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Scope/=B68999B9D6B43E47A02B22C12A54C3CC/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Scope/=B68999B9D6B43E47A02B22C12A54C3CC/Type/@EntryValue">InCSharpTypeMember</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Shortcut/@EntryValue">test</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=D1D213D312D2034CBD2E7EB5B6EE9DF4/Text/@EntryValue">[TestMethod]&#xD;
+public void $Method_Name$()&#xD;
+{&#xD;
+      $END$&#xD;
+}&#xD;
+</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Description/@EntryValue">License</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Scope/=3C1322ECA9DA8846892FCF908DDAFEE7/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Scope/=3C1322ECA9DA8846892FCF908DDAFEE7/Type/@EntryValue">InJavaScriptStatement</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Scope/=45E044E9401BFE4486388BD1A58B738C/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Scope/=45E044E9401BFE4486388BD1A58B738C/Type/@EntryValue">InCssStatement</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Scope/=558F05AA0DE96347816FF785232CFB2A/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Scope/=558F05AA0DE96347816FF785232CFB2A/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Scope/=558F05AA0DE96347816FF785232CFB2A/Type/@EntryValue">InCSharpTypeAndNamespace</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Shortcut/@EntryValue">lic</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E84F2114C9DC204A8922725FCD91911D/Text/@EntryValue">/*&#xD;
+This file is part of CtcClassSchedule.&#xD;
+&#xD;
+CtcClassSchedule is free software: you can redistribute it and/or modify&#xD;
+it under the terms of the GNU General Public License as published by&#xD;
+the Free Software Foundation, either version 3 of the License, or&#xD;
+(at your option) any later version.&#xD;
+&#xD;
+CtcClassSchedule is distributed in the hope that it will be useful,&#xD;
+but WITHOUT ANY WARRANTY; without even the implied warranty of&#xD;
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&#xD;
+GNU General Public License for more details.&#xD;
+&#xD;
+You should have received a copy of the GNU General Public License&#xD;
+along with CtcClassSchedule.  If not, see &lt;http://www.gnu.org/licenses/&gt;.&#xD;
+ */&#xD;
+</s:String></wpf:ResourceDictionary>

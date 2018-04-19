@@ -1,40 +1,67 @@
-﻿<div id="classes-footer" class="roundcorners">
-<h2>General Information</h2>
-	<div class="block first">
-		<h3>Next Steps</h3>
-		<ul>
-			<li><a href="http://www.bellevuecollege.edu/registration/register/"><strong>Register</strong></a></li>
-            <li><a href="https://www.ctc.edu/~bellevue/student/waci004.html"><strong>When do I register?</strong></a></li>
-			<li><a href="http://bcc.collegestoreonline.com/"><strong>Buy Books</strong></a></li>
-			<li>Not a student yet? <a href="http://www.bellevuecollege.edu/admissions/apply/"><strong>Apply Now</strong></a></li>
-		</ul>
-	</div>
-		<div class="block">
-		<h3>Important Dates</h3>
-		<ul>
-			<li><a href="http://bellevuecollege.edu/courses/exams/">Final Exam Schedule</a></li>
-			<li><a href="http://bellevuecollege.edu/enrollment/calendar/deadlines/">Enrollment Deadlines</a></li>
-            <li><a href="http://bellevuecollege.edu/enrollment/calendar/">Academic Calendar</a></li>
-		</ul>
-	</div>
-	<div class="block">
-		<h3>Need help planning?</h3>
-		<ul>
-			<li><a href="http://www.bellevuecollege.edu/services/schedule-planner/">Schedule Planner</a></li>
-			<li><a href="http://bellevuecollege.edu/degreeaudit/">Degree Audit</a></li>
-			<li><a href="http://bellevuecollege.edu/courses/projected/">Projected Annual Course Offerings</a></li>
-			<li><a href="http://bellevuecollege.edu/advising/">Advising Center</a></li>
-		</ul>
-	</div>
-  <div class="block last">
-    <h3>Related information</h3>
-    <ul>
-      <li><a href="http://www.bellevuecollege.edu/tuition/">Tuition & Fees</a></li>
-      <li><a href="http://bellevuecollege.edu/enrollment/financial/">Financial Assistance</a></li>
-      <li><a href="http://bellevuecollege.edu/resources/services/">Student Services</a></li>
-    </ul>
-  </div>
+﻿<div class="container">
+    <div class="well classes-links">
+        <div class="row row-padding">
+            <div class="col-md-3 col-sm-6">
+		        <h4>Next steps</h4>
+		        <ul>
+			        <li><a href="http://www.bellevuecollege.edu/registration/register/">Register</a></li>
+                    <li><a href="https://www.ctc.edu/~bellevue/student/waci004.html">When do I register?</a></li>
+			        <li><a href="http://bcc.collegestoreonline.com/">Buy books</a></li>
+			        <li>Not a student yet? <a href="http://www.bellevuecollege.edu/admissions/apply/">Apply now</a></li>
+		        </ul>
+	        </div>
+            <div class="col-md-3 col-sm-6">
+		        <h4>Important dates</h4>
+		        <ul>
+			        <li><a href="http://bellevuecollege.edu/courses/exams/">Final exam schedule</a></li>
+			        <li><a href="http://bellevuecollege.edu/enrollment/calendar/deadlines/">Enrollment deadlines</a></li>
+                    <li><a href="http://bellevuecollege.edu/enrollment/calendar/">Academic calendar</a></li>
+		        </ul>
+	        </div>
+            <!-- Add the extra clearfix for only the required viewport -->
+            <div class="clearfix visible-sm-block"></div>
+
+	        <div class="col-md-3 col-sm-6">
+		        <h4>Need help planning?</h4>
+		        <ul>
+			        <li><a href="http://www.bellevuecollege.edu/services/schedule-planner/">Schedule planner</a></li>
+			        <li><a href="http://bellevuecollege.edu/degreeaudit/">Degree audit</a></li>
+			        <li><a href="http://bellevuecollege.edu/courses/projected/">Projected annual course offerings</a></li>
+			        <li><a href="http://bellevuecollege.edu/advising/">Advising</a></li>
+		        </ul>
+	        </div>
+            <div class="col-md-3 col-sm-6">
+                <h4>Related information</h4>
+                <ul>
+                    <li><a href="http://www.bellevuecollege.edu/tuition/">Tuition &amp; fees</a></li>
+                    <li><a href="http://bellevuecollege.edu/enrollment/financial/">Financial assistance</a></li>
+                    <li><a href="http://bellevuecollege.edu/resources/services/">Student services</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row footer-info">
+        <div class="col-md-6">
+            <div class="text-left">
+                <p>v@(ViewBag.Version)</p>
+                
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="text-right">
+                @* Code to show authentication/authorization.
+		        ******************************************************************************************* *@
+                @using CTCClassSchedule.Common;
+	            @if(Context.User.Identity.IsAuthenticated) {
+			        <text>[ <b>@Context.User.Identity.Name</b> ] @(Helpers.IsAdmin(Context) ? " - Admin" : "") @(!Helpers.IsAdmin(Context) && Helpers.IsEditor(Context) ? " - Editor" : "")</text>
+		            <text>[ @Html.RouteLink("Log out", "Logout")  ]</text>
+                }
+                else
+                {
+			        @:[ @Html.RouteLink("Log in", "SignIn") ]
+	            }
+		        @* **************************************************************************************** *@
+            </div>
+        </div>
+    </div>
 </div>
-  <div style="clear: both;text-align: right;color:gray;">
-    v@(ViewBag.Version)
-  </div>

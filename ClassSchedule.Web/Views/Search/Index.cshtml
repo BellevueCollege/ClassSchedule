@@ -1,210 +1,220 @@
-﻿@using System.Text.RegularExpressions
+﻿@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
+@using System.Text.RegularExpressions
 @using CTCClassSchedule
 @using Ctc.Ods.Types;
 @using CTCClassSchedule.Common;
-@using MvcMiniProfiler;
+@using StackExchange.Profiling;
 @using CTCClassSchedule.Models
-@model CTCClassSchedule.SearchResultsModel
+@model SearchResultsModel
 
 @{
-  MiniProfiler _profiler = MiniProfiler.Current;
+    MiniProfiler _profiler = MiniProfiler.Current;
 
-  YearQuarter currentQuarter = Model.QuarterNavigation.CurrentQuarter;
-  // NOTE: we should always have a YearQuarter (searching all quarters is not an option)
-  YearQuarter searchQuarter = Model.QuarterNavigation.ViewingQuarter;	// this is the YRQ being searched
+    YearQuarter currentQuarter = Model.QuarterNavigation.CurrentQuarter;
+    // NOTE: we should always have a YearQuarter (searching all quarters is not an option)
+    YearQuarter searchQuarter = Model.QuarterNavigation.ViewingQuarter; // this is the YRQ being searched
 
-  int itemCount = Model.ItemCount;
-  int _courseCount = Model.Courses.Count;
-  String classDesc = _courseCount == 1 ? "course" : "courses";
-  String sectionDesc = itemCount == 1 ? "section" : "sections";
+    int itemCount = Model.ItemCount;
+    int _courseCount = Model.Courses.Count;
+    String classDesc = _courseCount == 1 ? "course" : "courses";
+    String sectionDesc = itemCount == 1 ? "section" : "sections";
 
-  string _searchTerm = ViewBag.searchterm;
-  ViewBag.PageTitle = searchQuarter.FriendlyName + " class search results for \"" + _searchTerm + "\" at Bellevue College";
-
+    string _searchTerm = ViewBag.searchterm;  //don't need to HTML encode as Razor automatically does this, if we do it, it will be double-encoded - but be cautious if using for purposes other than direct output
+    ViewBag.PageTitle = String.Format("{0} search results for \"{1}\" :: Classes", searchQuarter.FriendlyName, _searchTerm);
 }
-<div id="scheduleMain" class="page-search">
-    @Html.Partial("quarterNavigation", Model.QuarterNavigation)
-    <div id="container" class="sidebar">
-        <div id="sidebar">
-          @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel
-     {
-       IsSearch = true,
-       ViewingQuarter = searchQuarter,
-       Subjects = Model.AllSubjects,
-       SelectedSubject = ViewBag.Subject
-     })
-        </div> <!-- #sidebar -->
 
-        <div id="content">
+@section metatags {
+    <meta name="robots" content="noindex, follow">
+}
 
-	@if (itemCount == 0)
- {
-			<h1 id="pageTitle">No classes were found for &quot;@_searchTerm&quot;</h1>
-			<div id="error-noclassesfound">
-            <p><strong>TIP:</strong> Try searching for something else, or selecting fewer <em>Refine</em> options to the left.</p>
-			</div>
- }
- else
- {
-	<div id="searchHeaderInfo">
-		<h1 id="searchResultsMsg">
-			<strong>&quot;@_searchTerm&quot;</strong> found @itemCount @sectionDesc in @_courseCount @classDesc for @(searchQuarter != null ? searchQuarter.FriendlyName : "ERROR: Unknown quarter")
-		</h1>
-		<div id="searchPageNum">
+@Html.Partial("breadcrumbNavigation")
+@Html.Partial("quarterNavigation", Model.QuarterNavigation)
 
-		@if (Model.TotalPages > 0)
-  {
-			<text>page @Model.CurrentPage of @Model.TotalPages</text>
-  }
-		</div>
-	</div>
-  using (_profiler.Step("Rendering sections from search results"))
-  {
-    foreach (SectionsBlock block in Model.Courses)
-    {
-      SectionWithSeats firstSection = block.Sections.First();
-
-      if (firstSection != null)
-      {
-        if (!firstSection.IsLinked)
-        {
-				<h2 class="classHeading">
-			 @if (block.LinkedSections.Count > 0)
-    {
-				  <span class="combinationClass">Combination class:</span><br />
-    }
-					<a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber })">
-						@Html.SectionCourseHeading(firstSection, searchTerm: _searchTerm)
-						@ViewHelpers.DisplayCredits(firstSection)
-					</a>
-                  @{
-                    IList<SectionWithSeats> commonLinkedSections = Helpers.ParseCommonHeadingLinkedSections(block.LinkedSections);
-                  }
-       @foreach (SectionWithSeats linkedSec in commonLinkedSections)
-       {
-				  <br />
-				  <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber })">
-					  @Html.SectionCourseHeading(linkedSec, _searchTerm)
-					  @ViewHelpers.DisplayCredits(linkedSec)
-				  </a>
-       }
-				</h2> @* classHeading *@
-
-				<div class="classInfo">
-				  <div class="classDetails">
-				    @*
-              NOTE: Search results should always display a course description - either custom description (from the CMS) or from the ODS
-              See http://irwiki.bellevuecollege.edu/wiki/Class_Schedule#Displaying_of_Course_Descriptions
-            *@
-				    @if (!string.IsNullOrWhiteSpace(firstSection.CustomDescription))
-				    {
-				      @Html.Raw(firstSection.CustomDescription)
-				    }
-				    else
-				    {
-				      if (firstSection.CourseDescriptions != null && firstSection.CourseDescriptions.Count > 0 && !string.IsNullOrWhiteSpace(firstSection.CourseDescriptions[0].Description))
-				      {
-				        @Html.Raw(firstSection.CourseDescriptions[0].Description)
-				      }
-				      else
-				      {
-				        <!-- No Description found -->
-				      }
-				    }
-				    <ul>
-				      <li class="classDetailsLink">
-				        @Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(firstSection), " ", firstSection.CourseNumber, " details"), "ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber }, null)
-				      </li>
-				      @foreach (SectionWithSeats linkedSec in commonLinkedSections)
-				      {
-				        <li class="classDetailsLink">
-				          @Html.ActionLink(String.Concat("View ", Helpers.SubjectWithCommonCourseFlag(linkedSec), " ", linkedSec.CourseNumber, " details"), "ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber }, null)
-				        </li>
-				      }
-				    </ul>
-				  </div>
-					<p class="classNotes">
-						@ViewHelpers.DisplayFootnotes(block.CommonFootnotes, firstSection.CourseFootnotes)
-					</p>
-				</div> <!-- classInfo -->
-
-				<ul class='course-block @(searchQuarter.ID.CompareTo(currentQuarter.ID) < 0 ? Html.Raw("course-block-past-quarter") : Html.Raw(string.Empty))'>
-					@foreach (SectionWithSeats sec in block.Sections)
-     {
-
-       //bothSections includes a master and its subordinate linked section(s).
-       IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats> { sec };
-       IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
-
-       if (linked.Count > 0)
-       {
-         multipleSections = multipleSections.Union(linked).ToList();
-       }
-
-       // NOTE: We must pass the current ViewData object to RenderPartial here.
-       // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
-       Html.RenderPartial("Sections", new SectionsViewModel
-       {
-         Sections = multipleSections.ToList(),
-         CurrentQuarter = currentQuarter,
-         ViewingQuarter = searchQuarter,
-         CommonFootnotes = block.CommonFootnotes,
-       });
-     }
-                  <li>
-  @if (block.IsCrosslisted && block.LinkedSections.Count <= 0)
-  {
-    string courseID = firstSection.CourseID;
-    //This variable is introduced because of bug#3206 in fogbugz
-    string courseIDmodified = string.Format("{0}{1} {2}", firstSection.CourseSubject, firstSection.IsCommonCourse ? "&" : string.Empty, firstSection.CourseNumber);
-    // because we're using this in an attribute name, replace invalid characters w/ dashes
-    string uniqueID = Regex.Replace(courseID.Replace('&', '-'), @"\s+", "-");
-
-    <ul class="section-crosslisted-courses">
-      <li>
-        Also offered as part of
-        <div id="courses-crosslisted-with-@uniqueID" class="section-crosslisted-courses">
-          <noscript><strong>Javascript is required to load cross-listed courses.</strong></noscript>
+<div class="row row-padding buffer-top buffer-bottom">
+    <!-- sidebar -->
+    <div class="col-md-3">
+        <div class="content-padding padding-right-none">
+                @Html.Partial("advancedFacetedSearch", new AdvancedFacetedSearchModel
+                {
+                IsSearch = true,
+                ViewingQuarter = searchQuarter,
+                Subjects = Model.AllSubjects,
+                SelectedSubject = ViewBag.Subject,
+                FacetData = Model.FacetData
+                })
         </div>
-      </li>
-    </ul>
+    </div>
+    <!-- end sidebar -->
+    <!-- main content -->
+    <div class="col-md-9">
+        <div id="content" class="content-padding padding-left-none">
+	    @if (itemCount == 0)
+        {
+            <h3>No classes were found for &quot;@_searchTerm&quot;</h3>
+		    <p><strong>Tip:</strong> Try searching for something else or selecting fewer <em>Refine</em> options.</p>
+        } else
+        {
+	        <div id="searchHeaderInfo">
+		        <h3 id="searchResultsMsg">
+			        <strong>&quot;@_searchTerm&quot;</strong> found @itemCount @sectionDesc in @_courseCount @classDesc for @(searchQuarter != null ? searchQuarter.FriendlyName : "ERROR: Unknown quarter")
+		        </h3>
+		        <div id="searchPageNum">
+		            @if (Model.TotalPages > 0)
+                    {
+			            <text>page @Model.CurrentPage of @Model.TotalPages</text>
+                    }
+		        </div>
+	        </div>
+            using (_profiler.Step("Rendering sections from search results"))
+            {
+                foreach (SectionsBlock block in Model.Courses)
+                {
+                    SectionWithSeats firstSection = block.Sections.First();
 
-      <script type="text/javascript">
-      // dynamically load course cross-listings, if present
-      // NOTE: This script is inline so that it's only created for the courses that need it.
-        $(function () {
-          @* WARNING: If we don't specify .Raw() output below, the query parameter separator (&) will be encoded (&amp;), which breaks the URL *@
-          var jsonUrl = "@Html.Raw(Url.Action("CrossListedCourses", "Api", new { courseID = courseIDmodified, yearQuarterID = Model.QuarterNavigation.ViewingQuarter.ID }))";
-          var quarter = "@(Model.QuarterNavigation.ViewingQuarter.FriendlyName)";
-          LoadCrossListedCourses(jsonUrl, $('div#courses-crosslisted-with-@uniqueID'), quarter);
-        });
-      </script>
-  }
-                  </li>
-				 </ul>
-        } @* if (!firstSection.IsLinked) *@
+                    if (firstSection != null)
+                    {
+                        if (!firstSection.IsLinked)
+                        {
+				            <h3>
+			                    @if (block.LinkedSections.Count > 0)
+                                {
+				                    <span class="small">Combination class:</span><br />
+                                }
+					            <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(firstSection), ClassNum = firstSection.CourseNumber })">
+						            @Html.SectionCourseHeading(firstSection, searchTerm: _searchTerm)
+						            @ViewHelpers.DisplayCredits(firstSection)
+					            </a>
+                                @{
+                                    IList<SectionWithSeats> commonLinkedSections = Helpers.ParseCommonHeadingLinkedSections(block.LinkedSections);
+                                }
+                                @foreach (SectionWithSeats linkedSec in commonLinkedSections)
+                                {
+				                    <br />
+				                    <a href="@Url.Action("ClassDetails", "Classes", new { Prefix = Helpers.SubjectWithCommonCourseFlag(linkedSec), ClassNum = linkedSec.CourseNumber })">
+					                    @Html.SectionCourseHeading(linkedSec, _searchTerm)
+					                    @ViewHelpers.DisplayCredits(linkedSec)
+				                    </a>
+                                }
+				            </h3> @* classHeading *@
 
-      } @* if (firstSection != null) *@
-    }
-  }
- }
+				            @*
+                              NOTE: Search results should always display a course description - either custom description (from the CMS) or from the ODS
+                              See http://irwiki.bellevuecollege.edu/wiki/Class_Schedule#Displaying_of_Course_Descriptions
+                            *@
+				            if (!string.IsNullOrWhiteSpace(firstSection.CustomDescription))
+				            {
+				                @Html.Raw(firstSection.CustomDescription)
+				            }
+				            else
+				            {
+				                if (firstSection.CourseDescriptions != null && firstSection.CourseDescriptions.Count > 0 && !string.IsNullOrWhiteSpace(firstSection.CourseDescriptions[0].Description))
+				                {
+				                    @Html.Raw(firstSection.CourseDescriptions[0].Description)
+				                }
+				                else
+				                {
+				                    <!-- No Description found -->
+				                }
+				            }
 
+					        <p class="classNotes">
+						        @ViewHelpers.DisplayFootnotes(block.CommonFootnotes, firstSection.CourseFootnotes)
+					        </p>
 
+                            <div class="table-responsive">
+                                <table class="table table-classes">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="nowrap">Item #</th>
+                                            <th scope="col">Section</th>
+                                            <th scope="col">Instructor</th>
+                                            <th scope="col">Day(s), Times, Room</th>
+                                            @if( searchQuarter.ID.CompareTo(currentQuarter.ID) >= 0 ) {
+                                                <th scope="col">Books</th>
+                                                <th scope="col">Seats available</th>
+                                            }
+                                        </tr>
+                                    </thead>
+					                @foreach (SectionWithSeats sec in block.Sections)
+                                    {
+                                        //bothSections includes a master and its subordinate linked section(s).
+                                        IEnumerable<SectionWithSeats> multipleSections = new List<SectionWithSeats> { sec };
+                                        IList<SectionWithSeats> linked = block.LinkedSections.Where(l => l.LinkedTo == sec.ID.ItemNumber).ToList();
 
-    @if (Model.TotalPages <= 1 && Model.SearchResultNoSection.NoSectionSearchResults.Any())
-    {
-      Html.RenderPartial("NoSectionCourses", Model.SearchResultNoSection);
-    }
+                                        if (linked.Count > 0)
+                                        {
+                                            multipleSections = multipleSections.Union(linked).ToList();
+                                        }
 
-	@Html.Partial("Pager", new PagerViewModel { CurrentPage = Model.CurrentPage, TotalPages = Model.TotalPages })
+                                        // NOTE: We must pass the current ViewData object to RenderPartial here.
+                                        // If we pass a new ViewDataDictionary it blows away all our ViewBag properties.
+                                        Html.RenderPartial("Sections", new SectionsViewModel
+                                        {
+                                            Sections = multipleSections.ToList(),
+                                            CurrentQuarter = currentQuarter,
+                                            ViewingQuarter = searchQuarter,
+                                            CommonFootnotes = block.CommonFootnotes,
+                                        });
+                                    }
+                                </table>
+                            </div>
+                            if (block.IsCrosslisted && block.LinkedSections.Count <= 0)
+                            {
+                                string courseID = firstSection.CourseID;
+                                //This variable is introduced because of bug#3206 in fogbugz
+                                string courseIDmodified = string.Format("{0}{1} {2}", firstSection.CourseSubject, firstSection.IsCommonCourse ? "&" : string.Empty, firstSection.CourseNumber);
+                                // because we're using this in an attribute name, replace invalid characters w/ dashes
+                                string uniqueID = Regex.Replace(courseID.Replace('&', '-'), @"\s+", "-");
 
-    </div> <!-- #content -->
-    </div> <!-- #container -->
-</div>
+                                <ul class="section-crosslisted-courses">
+                                  <li>
+                                    Also offered as part of
+                                    <div id="courses-crosslisted-with-@uniqueID" class="section-crosslisted-courses">
+                                      <noscript><strong>Javascript is required to load cross-listed courses.</strong></noscript>
+                                    </div>
+                                  </li>
+                                </ul>
 
+                                <script type="text/javascript">
+                                    // dynamically load course cross-listings, if present
+                                    // NOTE: This script is inline so that it's only created for the courses that need it.
+                                    $(function () {
+                                        @* WARNING: If we don't specify .Raw() output below, the query parameter separator (&) will be encoded (&amp;), which breaks the URL *@
+                                        var jsonUrl = "@Html.Raw(Url.Action("CrossListedCourses", "Api", new { courseID = courseIDmodified, yearQuarterID = Model.QuarterNavigation.ViewingQuarter.ID }))";
+                                        var quarter = "@(Model.QuarterNavigation.ViewingQuarter.FriendlyName)";
+                                        LoadCrossListedCourses(jsonUrl, $('div#courses-crosslisted-with-@uniqueID'), quarter);
+                                    });
+                                </script>
+                            }
+                        } @* if (!firstSection.IsLinked) *@
 
+                    } @* if (firstSection != null) *@
+                } @* end foreach *@
+            } @* end using *@
+        } @* end else *@
 
-@section PageScripts
-{
-<script type="text/javascript" src="@Url.Content("~/Scripts/CtcClassSchedule.js")"></script>
-}
+        @if (Model.TotalPages <= 1 && Model.SearchResultNoSection.NoSectionSearchResults.Any())
+        {
+            Html.RenderPartial("NoSectionCourses", Model.SearchResultNoSection);
+        }
+
+	    @Html.Partial("Pager", new PagerViewModel { CurrentPage = Model.CurrentPage, TotalPages = Model.TotalPages })
+
+        </div><!--content padding-->
+    </div><!-- col-md-8 -->
+</div><!-- row -->

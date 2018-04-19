@@ -1,14 +1,24 @@
-﻿@using System.Diagnostics
+﻿@*
+This file is part of CtcClassSchedule.
+
+CtcClassSchedule is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CtcClassSchedule is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
+*@
+@using System.Diagnostics
 @using CTCClassSchedule.Common
-@using CTCClassSchedule.Controllers
 @using CTCClassSchedule.Models
-@using Common.Logging
 @using CtcApi.Extensions
 @model IList<SubjectModel>
-
-@functions {
-  private ILog _log = LogManager.GetCurrentClassLogger();
-}
 
 @{
 	// construct the route values we'll pass to the ActionLink helper
@@ -34,12 +44,12 @@
 		{
 			@:</ul>
 		}
-		<h2 class="subject-letter">@letter</h2>
-		@:<ul class="subject-list">
+		<h3>@letter</h3>
+		@:<ul>
 	}
 
 	routeParms["Subject"] = item.Slug.Trim();
-  string linkText = item.Title;
+    string linkText = item.Title;
 
 //  string[] prefixList = new string[] {};
 //  if (prefixes.Any())
@@ -52,7 +62,7 @@
 //  {
 //    _log.Warn(m => m("No CoursePrefixes found for '{0}'.", linkText));
 //  }
-  string link;
+    string link;
 
 	<li class="subject-name">
 	@if (FriendlyYrq != "ALL")
@@ -73,7 +83,7 @@
 	}
     <a href="@Html.Raw(link)">@linkText</a> @(item.CoursePrefixes.Any() ? string.Concat("(", item.CoursePrefixes.Distinct().ToArray().Mash(", "), ")") : string.Empty)
 
-	@if (Context.User.Identity.Name.Length > 0 && Helpers.isAdmin(Context))
+	@if (Context.User.Identity.IsAuthenticated && Helpers.IsAdmin(Context))
 	{
 		@Ajax.ActionLink("Edit",
 				              "ProgramEdit",
@@ -85,9 +95,10 @@
 												UpdateTargetId = "edit-program",
 												HttpMethod = "GET",
 												InsertionMode = InsertionMode.Replace,
-												OnBegin = "$('#edit-program').dialog('open');",
+												OnBegin = "$('#edit-program').dialog('open'); $('.ui-widget-overlay').on('click', function () { $('#edit-program').dialog('close'); });",
+                                                OnComplete = "fluidDialog();"
 				              },
-				              new { @class = "edit_button" })
+				              new { @class = "edit-button small" })
 	}
 
 

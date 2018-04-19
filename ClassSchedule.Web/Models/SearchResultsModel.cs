@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CTCClassSchedule.Common;
 using CTCClassSchedule.Models;
 
 namespace CTCClassSchedule
@@ -19,5 +18,6 @@ namespace CTCClassSchedule
     public int CurrentPage { get; set; }
 
 	  public QuarterNavigationModel QuarterNavigation {get;set;}
+	  public IFacetData FacetData {get;set;}
 	}
 }
