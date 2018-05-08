@@ -97,6 +97,7 @@ namespace CTCClassSchedule
 
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
+
         }
 
 		/// <summary>
