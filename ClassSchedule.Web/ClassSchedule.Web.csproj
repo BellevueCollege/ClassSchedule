@@ -32,6 +32,7 @@
     <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -254,20 +255,10 @@
     <Content Include="Content\images\ajax-loader_big.gif" />
     <Content Include="Content\js\classes.js" />
     <Content Include="Content\js\CtcClassSchedule.js" />
+    <Content Include="Content\js\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Error.aspx" />
     <Content Include="Content\ClassSchedule.css" />
     <Content Include="Global.asax" />
-    <None Include="Scripts\jquery-1.8.0.intellisense.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <None Include="Scripts\jquery-1.8.0-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.8.0.js" />
-    <Content Include="Scripts\jquery-1.8.0.min.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -306,13 +297,15 @@
     <Content Include="Views\Shared\breadcrumbNavigation.cshtml" />
     <Content Include="_configSource\AppSettings.config" />
     <Content Include="_configSource\Authentication.config" />
-    <Content Include="_configSource\ConnectionStrings.config" />
+    <Content Include="_configSource\ConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="_configSource\ElmahAuthorization.config" />
     <Content Include="_configSource\ElmahMail.config" />
     <Content Include="_configSource\NLog.config" />
     <Content Include="_configSource\RoleManager.config" />
     <Content Include="_configSource\Smtp.config" />
-	<Content Include="_configSource\SamlAuthentication.config" />
+    <Content Include="_configSource\SamlAuthentication.config" />
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-Authentication.config" />
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
@@ -355,6 +348,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
