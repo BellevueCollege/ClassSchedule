@@ -144,11 +144,8 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="_configSource\AppSettings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="_configSource\AppSettings.config" />
     <None Include="_configSource\ConnectionStrings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
