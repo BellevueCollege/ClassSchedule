@@ -8,7 +8,7 @@ The online Class Schedule application was developed to replace a previous manual
 
 ## Requirements
 
-+ .NET Framework 4.6.2 (the full platform, not the client)
++ .NET Framework 4.7
 + ASP.NET MVC4
 + Visual Studio 2015 (later versions will probably work)
 + NuGet Package Manager (v3.3.x, v3.4.x is hopelessly broken) - for various other 3rd-party libraries
