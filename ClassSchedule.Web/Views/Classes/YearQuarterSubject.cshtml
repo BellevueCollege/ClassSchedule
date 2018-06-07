@@ -28,7 +28,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 
 @Html.Partial("breadcrumbNavigation")
 
-@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters })
+@Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = Model.ViewingQuarter })
 
 <div class="row row-padding buffer-top buffer-bottom">
     <!-- sidebar -->
