@@ -766,55 +766,61 @@ namespace CTCClassSchedule.Common
 	    return stripped;
 	  }
 
-	  /// <summary>
-	  /// Gets the course outcome information by scraping the Bellevue College
-	  /// course outcomes website
-	  /// </summary>
-	  public static dynamic GetCourseOutcome(ICourseID courseId)
-	  {
-	    string fullCourseID = BuildCourseID(courseId.Number, courseId.Subject.TrimEnd(), courseId.IsCommonCourse);
-	    string courseOutcomes;
-	    try
-	    {
-	      Service1Client client = new Service1Client();
-	      string rawCourseOutcomes = client.GetCourseOutcome(fullCourseID);
-	      if (rawCourseOutcomes.IndexOf("<li>", StringComparison.OrdinalIgnoreCase) >= 0)
-	      {
-	        courseOutcomes = StripHtml(rawCourseOutcomes, "ul|UL|li|LI");
-	      }
-	      else
-	      {
-	        courseOutcomes = StripHtml(rawCourseOutcomes, "");
-	        string[] outcomeArray = courseOutcomes.Split('\n');
+        /// <summary>
+        /// Gets the course outcome information by scraping the Bellevue College
+        /// course outcomes website
+        /// </summary>
+        public static dynamic GetCourseOutcome(ICourseID courseId)
+        {
+            string fullCourseID = BuildCourseID(courseId.Number, courseId.Subject.TrimEnd(), courseId.IsCommonCourse);
+            string subject = courseId.Subject;
+            if (courseId.IsCommonCourse) subject += "&";
 
-	        StringBuilder outcomes = new StringBuilder("<ul>");
-	        foreach (string outcome in outcomeArray)
-	        {
-	          outcomes.AppendFormat("<li>{0}</li>", outcome);
-	        }
-	        outcomes.Append("</ul>");
+            string courseOutcomes;
+            try
+            {
+                Service1Client client = new Service1Client();
+                string rawCourseOutcomes = client.GetCourseOutcome(subject, courseId.Number);
 
-	        courseOutcomes = outcomes.ToString();
-	      }
-	    }
-	    catch (Exception ex)
-	    {
-	      // TODO: log exception details
-	      courseOutcomes = "Error: Cannot find course outcome for this course or cannot connect to the course outcomes webservice.";
-	      _log.Warn(m => m("Unable to retrieve course outomes for '{0}'", fullCourseID), ex);
-	    }
+                if (rawCourseOutcomes.IndexOf("<li>", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    courseOutcomes = StripHtml(rawCourseOutcomes, "ul|UL|li|LI");
+                }
+                else
+                {
+                    courseOutcomes = StripHtml(rawCourseOutcomes, "");
+                    string[] outcomeArray = courseOutcomes.Split('\n');
 
-	    return courseOutcomes;
-	  }
+                    StringBuilder outcomes = new StringBuilder("<ul>");
+                    foreach (string outcome in outcomeArray)
+                    {
+                        outcomes.AppendFormat("<li>{0}</li>", outcome);
+                    }
+                    outcomes.Append("</ul>");
 
-    /// <summary>
-    /// Allows user to enter "current" in URL in place of quarter
-    /// </summary>
-    /// <param name="quarter"></param>
-    /// <param name="currentQuarter"></param>
-    /// <param name="routeData"></param>
-    /// <returns></returns>
-	  public static YearQuarter DetermineRegistrationQuarter(string quarter, YearQuarter currentQuarter, RouteData routeData)
+                    courseOutcomes = outcomes.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                // TODO: log exception details
+                courseOutcomes = "Error: Cannot find outcomes for this course or cannot connect to the course outcomes webservice.";
+                _log.Warn(m => m("Unable to retrieve course outcomes for '{0}'", fullCourseID), ex);
+                _log.Error(ex.InnerException);
+                _log.Warn(ex.Message);
+            }
+
+            return courseOutcomes;
+        }
+
+        /// <summary>
+        /// Allows user to enter "current" in URL in place of quarter
+        /// </summary>
+        /// <param name="quarter"></param>
+        /// <param name="currentQuarter"></param>
+        /// <param name="routeData"></param>
+        /// <returns></returns>
+        public static YearQuarter DetermineRegistrationQuarter(string quarter, YearQuarter currentQuarter, RouteData routeData)
 	  {
 	    YearQuarter yrq;
 	    if (String.IsNullOrWhiteSpace(quarter))
