@@ -74,7 +74,7 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "AllClassesCacheTime")] // Caches for 6 hours
 		public ActionResult AllClasses(string letter, string format)
 		{
-			using (OdsRepository repository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository())
 			{
 				// TODO: Refactor the following code into its own method
 				// after reconciling the noted differences between AllClasses() and YearQuarter() - 4/27/2012, shawn.south@bellevuecollege.edu
@@ -141,7 +141,7 @@ namespace CTCClassSchedule.Controllers
 		[OutputCache(CacheProfile = "SubjectCacheTime")]
 		public ActionResult Subject(string Subject, string format)
 		{
-			using (OdsRepository repository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository())
 			{
 				SubjectInfoResult subject = SubjectInfo.GetSubjectInfo(Subject);
 				IList<string> prefixes = subject.CoursePrefixes.Select(p => p.CoursePrefixID).ToList();
@@ -412,7 +412,7 @@ namespace CTCClassSchedule.Controllers
       ICourseID courseID = CourseID.FromString(Prefix, ClassNum);
       ClassDetailsModel model;
 
-			using (OdsRepository repository = new OdsRepository(HttpContext))
+			using (OdsRepository repository = new OdsRepository())
 			{
 				IList<Course> courses;
 				using (_profiler.Step("ODSAPI::GetCourses()"))

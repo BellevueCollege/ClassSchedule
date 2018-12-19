@@ -245,7 +245,7 @@ namespace CTCClassSchedule.Controllers
 	      {
 	        ISectionID sectionID = SectionID.FromString(string.Concat(itemNumber, yrq));
 
-	        using (OdsRepository respository = new OdsRepository(HttpContext))
+	        using (OdsRepository respository = new OdsRepository())
 	        {
 	          IList<Section> sections = respository.GetSections(new List<ISectionID> {sectionID});
 
