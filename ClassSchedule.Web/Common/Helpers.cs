@@ -210,7 +210,7 @@ namespace CTCClassSchedule.Common
 		/// </summary>
 		static public IList<YearQuarter> GetYearQuarterListForMenus(OdsRepository repository)
 		{
-			IList<YearQuarter> currentFutureQuarters = repository.GetRegistrationQuarters(4);
+			IList<YearQuarter> currentFutureQuarters = repository.GetRegistrationQuarters(10);
 			return currentFutureQuarters;
 		}
 

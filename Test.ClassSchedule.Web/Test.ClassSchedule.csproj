@@ -51,17 +51,16 @@
     <Reference Include="Common.Logging.Elmah">
       <HintPath>..\packages\Common.Logging.Elmah.1.2.1\lib\net40\Common.Logging.Elmah.dll</HintPath>
     </Reference>
-    <Reference Include="CtcApi">
-      <HintPath>..\packages\CtcApi.0.9.16.0\lib\net40\CtcApi.dll</HintPath>
+    <Reference Include="CtcApi, Version=0.9.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CtcApi.0.9.16.2\lib\net40\CtcApi.dll</HintPath>
     </Reference>
-    <Reference Include="CtcOdsApi, Version=0.9.15.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CtcOdsApi.0.9.15.1\lib\net40\CtcOdsApi.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="CtcOdsApi, Version=0.9.16.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CtcOdsApi.0.9.16.2\lib\net40\CtcOdsApi.dll</HintPath>
     </Reference>
     <Reference Include="Elmah">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework">
+    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -144,9 +143,12 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="_configSource\AppSettings.config" />
+    <None Include="_configSource\AppSettings.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="_configSource\ConnectionStrings.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />

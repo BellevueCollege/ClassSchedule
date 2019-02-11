@@ -109,7 +109,7 @@
 					<p>@Html.Raw(Model.CMSFootnote)</p>
                 }
 
-				if (!string.IsNullOrWhiteSpace(Model.LearningOutcomes) && !Model.LearningOutcomes.StartsWith("Error:"))
+				if (!string.IsNullOrWhiteSpace(Model.LearningOutcomes) && !Model.LearningOutcomes.StartsWith("<ul><li>Error:"))
                 {
 					<h2>Outcomes</h2>
 					<p>After completing this class, students should be able to:</p>
