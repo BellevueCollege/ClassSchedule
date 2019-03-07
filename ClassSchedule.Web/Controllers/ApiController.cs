@@ -92,7 +92,7 @@ namespace CTCClassSchedule.Controllers
             newseat.SeatsAvailable = hpSeats;
             newseat.LastUpdated = DateTime.Now;
 
-            db.SectionSeats.AddObject(newseat);
+            db.SectionSeats.Add(newseat);
           }
 
           db.SaveChanges();
@@ -321,7 +321,7 @@ namespace CTCClassSchedule.Controllers
 						newFootnote.Footnote = newFootnoteText;
 						newFootnote.LastUpdated = DateTime.Now;
 
-						db.SectionsMetas.AddObject(newFootnote);
+						db.SectionsMetas.Add(newFootnote);
 						result = true;
 					}
 
@@ -433,7 +433,7 @@ namespace CTCClassSchedule.Controllers
 
 					  if (!exists)
 					  {
-					    db.CourseMetas.AddObject(itemToUpdate);
+					    db.CourseMetas.Add(itemToUpdate);
 					  }
 
 						db.SaveChanges();

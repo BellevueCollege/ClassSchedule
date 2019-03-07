@@ -17,8 +17,8 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Objects;
-using System.Data.Objects.DataClasses;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Core.Objects.DataClasses;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -376,7 +376,7 @@ namespace CTCClassSchedule.Controllers
                                    LastUpdatedBy = username
 	                               };
 
-                db.SectionsMetas.AddObject(sectionMeta);
+                db.SectionsMetas.Add(sectionMeta);
 	            }
 
               IEnumerable<SectionCourseCrosslisting> currentSectionCrosslistings = db.SectionCourseCrosslistings.Where(x => x.ClassID == sectionID);
@@ -390,7 +390,7 @@ namespace CTCClassSchedule.Controllers
 	                IList<SectionCourseCrosslisting> unmergables = currentSectionCrosslistings.Where(x => !CrossListedCourses.Contains(x.CourseID)).ToList();
 	                foreach (SectionCourseCrosslisting course in unmergables)
 	                {
-	                  db.SectionCourseCrosslistings.DeleteObject(course);
+	                  db.SectionCourseCrosslistings.Remove(course);
 	                }
 	              }
 
@@ -404,7 +404,7 @@ namespace CTCClassSchedule.Controllers
 
                 foreach (string prefix in crosslistingsToAdd)
                 {
-                  db.SectionCourseCrosslistings.AddObject(new SectionCourseCrosslisting
+                  db.SectionCourseCrosslistings.Add(new SectionCourseCrosslisting
                   {
                     ClassID = sectionID,
                     CourseID = prefix
@@ -420,7 +420,7 @@ namespace CTCClassSchedule.Controllers
                   // TODO: There's got to be a better way to delete multiple records than looping through them.
 	                foreach (SectionCourseCrosslisting crosslistRecord in currentSectionCrosslistings)
 	                {
-	                  db.SectionCourseCrosslistings.DeleteObject(crosslistRecord);
+	                  db.SectionCourseCrosslistings.Remove(crosslistRecord);
 	                }
 	              }
 	            }
