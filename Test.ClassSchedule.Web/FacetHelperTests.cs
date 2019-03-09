@@ -89,7 +89,25 @@ namespace Test.CtcClassSchedule
         AssertSectionFacetTypeCount(facets, typeof(TimeFacet), 0);
       }
     }
+    
+    /**
+     * Test that the ToTime() method of FacetHelper properly translates 
+     * times added by a user to filter courses to the correct 24-hour 
+     * time TimeSpan object values
+     **/
+    [TestMethod]
+    public void Time_Test_ToTime()
+    {
+        TimeSpan morningTimeSpan = FacetHelper.ToTime("8:30am");
+        TimeSpan middayTimeSpan = FacetHelper.ToTime("12:30pm");
+        TimeSpan afternoonTimeSpan = FacetHelper.ToTime("2:45pm");
+        TimeSpan endTimeSpan = FacetHelper.ToTime("23:59 PM");
 
+        Assert.IsTrue(morningTimeSpan.Hours == 8 && morningTimeSpan.Minutes == 30, "Time of 8:30am incorrectly translated to TimeSpan value of '{0}'", morningTimeSpan.ToString());
+        Assert.IsTrue(middayTimeSpan.Hours == 12 && middayTimeSpan.Minutes == 30, "Time of 12:30pm incorrectly translated to TimeSpan value of '{0}'", middayTimeSpan.ToString());
+        Assert.IsTrue(afternoonTimeSpan.Hours == 14 && afternoonTimeSpan.Minutes == 45, "Time of 2:45pm incorrectly translated to TimeSpan value of '{0}'", afternoonTimeSpan.ToString());
+        Assert.IsTrue(endTimeSpan.Hours == 23 && endTimeSpan.Minutes == 59, "Time of 23:59 PM (used by FacetHelper as the default end time) incorrectly translated to TimeSpan value of '{0}'", endTimeSpan.ToString());
+    }
     #endregion
 
 
