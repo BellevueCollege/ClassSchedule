@@ -201,6 +201,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ClassScheduleDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClassScheduleDb.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClassScheduleDb.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\ClassScheduleSectionID.cs" />
     <Compile Include="Models\AdvancedFacetedSearchModel.cs" />
     <Compile Include="Models\AllClassesModel.cs" />
