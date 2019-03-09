@@ -105,7 +105,6 @@ namespace CTCClassSchedule
         if (Helpers.IsValidTimeString(value))
         {
           _timeStart = value;
-
           UpdateFacetList("timestart", "Start", _timeStart);
         }
         else
@@ -349,7 +348,7 @@ namespace CTCClassSchedule
       {
         TimeSpan startTime = ToTime(TimeStart);
         TimeSpan endTime = ToTime(TimeEnd, DEFAULT_END_TIME);
-
+        
         _sectionFacets.Add(new TimeFacet(startTime, endTime));
       }
 
@@ -522,7 +521,7 @@ namespace CTCClassSchedule
     /// <returns></returns>
     public static TimeSpan ToTime(int hour, int minute, int seconds = 0)
     {
-      return new TimeSpan(hour, minute, seconds);
+            return new TimeSpan(hour, minute, seconds);
     }
 
     // TODO: move ToTime() to API as an extension method of String
@@ -535,38 +534,45 @@ namespace CTCClassSchedule
     /// <param name="defaultTime"></param>
     public static TimeSpan ToTime(string time, string defaultTime = DEFAULT_START_TIME)
     {
-      if (string.IsNullOrWhiteSpace(time))
+            // Adjust the conversion to integers if the user leaves off a leading 0
+            // (possible by using tab instead of mouseoff on the time selector)
+            int hour;
+            short minute = 0;
+
+            if (string.IsNullOrWhiteSpace(time))
       {
         time = defaultTime;
       }
+            // if time is using the default end time, then we don't want to do extra calculations
+            if (time == DEFAULT_END_TIME)
+            {
+                hour = Convert.ToInt16(time.Substring(0, 2));
+                minute = Convert.ToInt16(time.Substring(3, 2));
+            }
+            else
+            {
+                // Determine integer values for time hours and minutes
+                string timeTrimmed = time.Trim();
+                bool isPM = (timeTrimmed.Length > 2 ? timeTrimmed.Substring(timeTrimmed.Length - 2) : timeTrimmed).Equals("PM", StringComparison.OrdinalIgnoreCase);
 
-      // Determine integer values for time hours and minutes
-      string timeTrimmed = time.Trim();
-      bool isPM = (timeTrimmed.Length > 2 ? timeTrimmed.Substring(timeTrimmed.Length - 2) : timeTrimmed).Equals("PM", StringComparison.OrdinalIgnoreCase);
-
-      // Adjust the conversion to integers if the user leaves off a leading 0
-      // (possible by using tab instead of mouseoff on the time selector)
-      int hour;
-      short minute = 0;
-
-      if (time.IndexOf(':') == 2)
-      {
-        hour = Convert.ToInt16(time.Substring(0, 2)) + (isPM ? 12 : 0);
-        if (time.IndexOf(':') != -1)
-        {
-          minute = Convert.ToInt16(time.Substring(3, 2));
-        }
-      }
-      else
-      {
-        hour = Convert.ToInt16(time.Substring(0, 1)) + (isPM ? 12 : 0);
-        if (time.IndexOf(':') != -1)
-        {
-          minute = Convert.ToInt16(time.Substring(2, 2));
-        }
-      }
-
-      return ToTime(hour, minute);
+                if (time.IndexOf(':') == 2)
+                {
+                    hour = Convert.ToInt16(time.Substring(0, 2)) + (isPM && time.Substring(0, 2) != "12" ? 12 : 0);
+                    if (time.IndexOf(':') != -1)
+                    {
+                        minute = Convert.ToInt16(time.Substring(3, 2));
+                    }
+                }
+                else
+                {
+                    hour = Convert.ToInt16(time.Substring(0, 1)) + (isPM ? 12 : 0);
+                    if (time.IndexOf(':') != -1)
+                    {
+                        minute = Convert.ToInt16(time.Substring(2, 2));
+                    }
+                }
+            }
+            return ToTime(hour, minute);
     }
 
     #endregion
