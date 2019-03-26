@@ -39,6 +39,9 @@ Create the necessary *.config* files for your environment in the _configSource f
 #### Update globals location
 Update `Globals_UrlRoot` and `Globals_LocalPath` in `appSettings.config`. `Globals_UrlRoot` should be a URL to a version of globals, i.e. on shoes or s. `Globals_LocalPath` should be a file path to your local copy of globals.
 
+### Generate DB designer file
+Right click on `Models\ClassScheduleDb.edmx` and select "Run Custom Tool" to generate file.
+
 #### Build project
 
 Now build the ClassSchedule.Web project. This should theoretically successfully build error free, but if not work through each error (usually a missing reference/package). Once built, you should be able to run it (with or without debugging) from Visual Studio.  It is recommended, however, to set up your own local IIS server and set up the project application there.
