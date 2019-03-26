@@ -73,11 +73,11 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CtcApi, Version=0.9.16.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CtcApi.0.9.16.2\lib\net40\CtcApi.dll</HintPath>
+    <Reference Include="CtcApi, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CtcApi.1.1.0\lib\net40\CtcApi.dll</HintPath>
     </Reference>
-    <Reference Include="CtcOdsApi, Version=0.9.16.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CtcOdsApi.0.9.16.2\lib\net40\CtcOdsApi.dll</HintPath>
+    <Reference Include="CtcOdsApi, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CtcOdsApi.1.1.0\lib\net40\CtcOdsApi.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -348,8 +348,6 @@
     <Content Include="_configSource\ConnectionStrings.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="_configSource\ElmahAuthorization.config" />
-    <Content Include="_configSource\ElmahMail.config" />
     <Content Include="_configSource\NLog.config" />
     <Content Include="_configSource\RoleManager.config" />
     <Content Include="_configSource\Smtp.config" />
@@ -357,8 +355,6 @@
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-Authentication.config" />
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
-    <None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
-    <None Include="_configSource\EXAMPLE-ElmahMail.config" />
     <None Include="_configSource\EXAMPLE-SamlAuthentication.config" />
     <None Include="_configSource\EXAMPLE-NLog.config" />
     <None Include="_configSource\EXAMPLE-Smtp.config" />

@@ -51,11 +51,11 @@
     <Reference Include="Common.Logging.Elmah">
       <HintPath>..\packages\Common.Logging.Elmah.1.2.1\lib\net40\Common.Logging.Elmah.dll</HintPath>
     </Reference>
-    <Reference Include="CtcApi, Version=0.9.16.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CtcApi.0.9.16.2\lib\net40\CtcApi.dll</HintPath>
+    <Reference Include="CtcApi, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CtcApi.1.1.0\lib\net40\CtcApi.dll</HintPath>
     </Reference>
-    <Reference Include="CtcOdsApi, Version=0.9.16.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CtcOdsApi.0.9.16.2\lib\net40\CtcOdsApi.dll</HintPath>
+    <Reference Include="CtcOdsApi, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CtcOdsApi.1.1.0\lib\net40\CtcOdsApi.dll</HintPath>
     </Reference>
     <Reference Include="Elmah">
       <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
