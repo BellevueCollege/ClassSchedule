@@ -68,29 +68,24 @@
       <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Logging.Elmah">
-      <HintPath>..\packages\Common.Logging.Elmah.1.2.1\lib\net40\Common.Logging.Elmah.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Logging.NLog20, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\packages\Common.Logging.NLog20.3.3.1\lib\net40\Common.Logging.NLog20.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>True</Private>
     </Reference>
-    <Reference Include="CtcApi, Version=0.9.16.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CtcApi.0.9.16.2\lib\net40\CtcApi.dll</HintPath>
+    <Reference Include="CtcApi, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CtcApi.1.1.0\lib\net40\CtcApi.dll</HintPath>
     </Reference>
-    <Reference Include="CtcOdsApi, Version=0.9.16.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CtcOdsApi.0.9.16.2\lib\net40\CtcOdsApi.dll</HintPath>
+    <Reference Include="CtcOdsApi, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CtcOdsApi.1.1.0\lib\net40\CtcOdsApi.dll</HintPath>
     </Reference>
-    <Reference Include="Elmah">
-      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Elmah.Mvc, Version=2.0.0.29988, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
       <HintPath>..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
@@ -118,7 +113,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.IdentityModel" />
@@ -187,11 +181,41 @@
     </Compile>
     <Compile Include="FacetHelper.cs" />
     <Compile Include="Models\AToZViewModel.cs" />
+    <Compile Include="Models\ClassScheduleDb.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClassScheduleDb.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ClassScheduleDb.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ClassScheduleDb.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClassScheduleDb.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\ClassScheduleSectionID.cs" />
     <Compile Include="Models\AdvancedFacetedSearchModel.cs" />
     <Compile Include="Models\AllClassesModel.cs" />
     <Compile Include="Models\ClassDetailsModel.cs" />
+    <Compile Include="Models\ClassSearch.cs">
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CourseMeta.cs">
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CourseSearch.cs">
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CrossListedCourseModel.cs" />
+    <Compile Include="Models\Department.cs">
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Division.cs">
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\IFacetData.cs" />
     <Compile Include="Models\PagerViewModel.cs" />
     <Compile Include="Models\ProgramEditModel.cs" />
@@ -211,20 +235,33 @@
     <Compile Include="Common\ProfilingActionFilter.cs" />
     <Compile Include="Common\ProfilingViewEngine.cs" />
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\ClassScheduleDb.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ClassScheduleDb.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Models\QuarterNavigationModel.cs" />
     <Compile Include="Models\SearchResultNoSectionModel.cs" />
+    <Compile Include="Models\SectionCourseCrosslisting.cs">
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SectionSeat.cs">
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SectionsMeta.cs">
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SectionsViewModel.cs" />
     <Compile Include="Models\SectionEditModel.cs" />
     <Compile Include="Models\SectionEditModelBinder.cs" />
     <Compile Include="Models\SectionIdModelBinder.cs" />
     <Compile Include="Models\SectionWithSeats.cs" />
+    <Compile Include="Models\Subject.cs">
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SubjectModel.cs" />
+    <Compile Include="Models\SubjectsCoursePrefix.cs">
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SubjectViewModel.cs" />
+    <Compile Include="Models\vw_Class.cs">
+      <DependentUpon>ClassScheduleDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\YearQuarterModel.cs" />
     <Compile Include="Models\YearQuarterSubjectModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -257,6 +294,16 @@
     <Content Include="Error.aspx" />
     <Content Include="Content\ClassSchedule.css" />
     <Content Include="Global.asax" />
+    <Content Include="Models\ClassScheduleDb.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ClassScheduleDb.Context.cs</LastGenOutput>
+      <DependentUpon>ClassScheduleDb.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\ClassScheduleDb.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ClassScheduleDb.cs</LastGenOutput>
+      <DependentUpon>ClassScheduleDb.edmx</DependentUpon>
+    </Content>
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -301,8 +348,6 @@
     <Content Include="_configSource\ConnectionStrings.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="_configSource\ElmahAuthorization.config" />
-    <Content Include="_configSource\ElmahMail.config" />
     <Content Include="_configSource\NLog.config" />
     <Content Include="_configSource\RoleManager.config" />
     <Content Include="_configSource\Smtp.config" />
@@ -310,8 +355,6 @@
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-Authentication.config" />
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
-    <None Include="_configSource\EXAMPLE-ElmahAuthorization.config" />
-    <None Include="_configSource\EXAMPLE-ElmahMail.config" />
     <None Include="_configSource\EXAMPLE-SamlAuthentication.config" />
     <None Include="_configSource\EXAMPLE-NLog.config" />
     <None Include="_configSource\EXAMPLE-Smtp.config" />
@@ -353,6 +396,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scripts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>

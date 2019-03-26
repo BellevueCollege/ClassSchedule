@@ -81,7 +81,7 @@ namespace CTCClassSchedule.Controllers
 				using (ClassScheduleDb db = new ClassScheduleDb())
 				{
           // force CoursePrefixes to load up front for Subjects (otherwise we get an error trying to load after db has been disposed)
-          db.ContextOptions.LazyLoadingEnabled = false;
+          //db.ContextOptions.LazyLoadingEnabled = false;   //this shouldn't be necessary at all if CoursePrefixes are force Included in the query below
           IList<Subject> subjects = db.Subjects.Include("CoursePrefixes").ToList();
 
           IList<char> subjectLetters = subjects.Select(s => s.Title.First()).Distinct().ToList();
