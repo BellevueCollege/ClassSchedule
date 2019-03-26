@@ -39,7 +39,7 @@ Create the necessary *.config* files for your environment in the _configSource f
 #### Update globals location
 Update `Globals_UrlRoot` and `Globals_LocalPath` in `appSettings.config`. `Globals_UrlRoot` should be a URL to a version of globals, i.e. on shoes or s. `Globals_LocalPath` should be a file path to your local copy of globals.
 
-### Generate DB designer file
+#### Generate DB designer file
 Right click on `Models\ClassScheduleDb.edmx` and select "Run Custom Tool" to generate file.
 
 #### Build project
