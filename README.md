@@ -1,19 +1,16 @@
 Online Class Schedule
 =====================
-(for [WA SBCTC](http://www.sbctc.ctc.edu/) colleges)
 
 ## Overview
 
-The online Class Schedule application was developed to replace a previous manual process of creating a static HTML schedule from print resources. This applicaton dynamically displays course catalog and class schedule information and serves as the source for such data.
+The online Class Schedule application was developed to replace a previous manual process of creating a static HTML schedule from print resources. This application dynamically displays course catalog and class schedule information and serves as the source for such data.
 
 ## Requirements
 
 + .NET Framework 4.7
-+ ASP.NET MVC4
-+ Visual Studio 2015 (later versions will probably work)
-+ NuGet Package Manager (v3.3.x, v3.4.x is hopelessly broken) - for various other 3rd-party libraries
-+ [CtcApi.Ods](https://github.com/BellevueCollege/CtcApi) - included via [Bellevue College's NuGet package server](http://www.bellevuecollege.edu/dev/nuget).
-+ [ods-legacy](https://github.com/ctcdev/ods-legacy) (private repo) - this application was designed to run off the CTCODS, while supporting the possibility that this data source will change in the future.
++ ASP.NET MVC 4
++ Visual Studio 2017
++ [CtcApi and CtcOdsApi](https://github.com/BellevueCollege/CtcApi) - included via [the BC Azure Devops artifacts feed](https://pkgs.dev.azure.com/bcintegration/_packaging/BCFeed/nuget/v3/index.json).
 
 ### Optional
 
@@ -32,7 +29,7 @@ Clone [the Class Schedule project](https://github.com/BellevueCollege/ClassSched
 
 Additional libraries are needed for the project, including CtcApi and CtcOdsApi. You can see which ones are required by view the _packages.config_ file. 
 
-> **Note:** Before downloading packages, you will want to ensure you have Bellevue College's NuGet server added as a package source. You can do so under Tools > Options > NuGet Package Manager > Package Sources. The name for the package source can be whatever is recognizable to you. The source URL is: **http://www.bellevuecollege.edu/dev/nuget**
+> **Note:** Before downloading packages, you will want to ensure you have BC's Azure DevOps artifacts feed added as a package source. You can do so under Tools > NuGet Package Manager > Package Manager Settings. The name for the package source can be whatever is recognizable to you. The source URL is: **https://pkgs.dev.azure.com/bcintegration/_packaging/BCFeed/nuget/v3/index.json**
 
 To download the libraries required, go to Project > Manage NuGet Packages. This will open the NuGet package manager GUI and will likely also prompt you to restore packages.
 
@@ -41,6 +38,9 @@ Create the necessary *.config* files for your environment in the _configSource f
 
 #### Update globals location
 Update `Globals_UrlRoot` and `Globals_LocalPath` in `appSettings.config`. `Globals_UrlRoot` should be a URL to a version of globals, i.e. on shoes or s. `Globals_LocalPath` should be a file path to your local copy of globals.
+
+#### Generate DB designer file
+Right click on `Models\ClassScheduleDb.edmx` and select "Run Custom Tool" to generate file.
 
 #### Build project
 

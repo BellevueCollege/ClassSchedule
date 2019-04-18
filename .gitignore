@@ -161,7 +161,8 @@ $RECYCLE.BIN/
 # =========================
 # Project specific
 # =========================
-
+# ignore generated designer file for edmx because it has a local path
+**/Models/ClassScheduleDb.Designer.cs
 # ignore all except example .config & project files files
 **/_[Cc]onfigSource/*.config
 !**/_[Cc]onfigSource/EXAMPLE-*.config

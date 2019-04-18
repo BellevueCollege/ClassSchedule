@@ -16,7 +16,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
 using System.Collections.Generic;
-using System.Data.Objects;
+using System.Data.Entity.Core.Objects;
 using CtcApi.Extensions;
 // ReSharper disable RedundantUsingDirective
 using System.Diagnostics;
@@ -236,7 +236,8 @@ namespace CTCClassSchedule.Common
 
 			// ensure we're ALWAYS getting the latest data from the database (i.e. ignore any cached data)
 			// Reference: http://forums.asp.net/post/2848021.aspx
-			db.vw_Class.MergeOption = MergeOption.OverwriteChanges;
+            // Commenting out below. DbSet doesn't have this option. User should pass in fresh DbContext to ensure up-to-date data
+			//db.vw_Class.MergeOption = MergeOption.OverwriteChanges;
 
 			IList<vw_Class> classes;
             using (profiler.Step("API::Get Class Schedule Specific Data()"))

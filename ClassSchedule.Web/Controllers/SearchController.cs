@@ -184,7 +184,7 @@ namespace CTCClassSchedule.Controllers
 	  SearchResultNoSectionModel model = new SearchResultNoSectionModel {SearchedYearQuarter = yrq};
 		using (_profiler.Step("Executing 'other classes' stored procedure"))
 	  {
-		model.NoSectionSearchResults = db.ExecuteStoreQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms).ToList();
+		model.NoSectionSearchResults = db.Database.SqlQuery<SearchResultNoSection>("usp_CourseSearch @SearchWord, @YearQuarterID", parms).ToList();
 	  }
 	  return model;
 	}
@@ -205,7 +205,7 @@ namespace CTCClassSchedule.Controllers
 
 			using (_profiler.Step("Executing search stored procedure"))
 			{
-				return db.ExecuteStoreQuery<SearchResult>("usp_ClassSearch @SearchWord, @YearQuarterID", parms).ToList();
+				return db.Database.SqlQuery<SearchResult>("usp_ClassSearch @SearchWord, @YearQuarterID", parms).ToList();
 			}
 		}
 		#endregion
