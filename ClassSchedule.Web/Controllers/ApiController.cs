@@ -435,8 +435,31 @@ namespace CTCClassSchedule.Controllers
 					  {
 					    db.CourseMetas.Add(itemToUpdate);
 					  }
+                        try
+                        {
+                            // Your code...
+                            // Could also be before try if you know the exception occurs in SaveChanges
 
-						db.SaveChanges();
+                            db.SaveChanges();
+                        }
+                        catch (System.Data.Entity.Validation.DbEntityValidationException e)
+                        {
+                            foreach (var eve in e.EntityValidationErrors)
+                            {
+                                _log.Debug(m => m("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                                    eve.Entry.Entity.GetType().Name, eve.Entry.State));
+                                foreach (var ve in eve.ValidationErrors)
+                                {
+                                    _log.Debug(m => m("- Property: \"{0}\", Value: \"{1}\", Error: \"{2}\"",
+                                        ve.PropertyName,
+                                        eve.Entry.CurrentValues.GetValue<object>(ve.PropertyName),
+                                        ve.ErrorMessage));
+                                }
+                            }
+                            throw;
+                            
+                        }
+                        //db.SaveChanges();
 					}
 				}
 			}

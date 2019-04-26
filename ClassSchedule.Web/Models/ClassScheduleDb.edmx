@@ -261,7 +261,7 @@
           <Property Type="Int32" Name="DivisionID" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Title" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="URL" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastUpdatedBy" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastUpdatedBy" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastUpdated" />
           <NavigationProperty Name="Departments" Relationship="ClassSchedule.Models.FK_Departments_Division" FromRole="Division" ToRole="Department" />
         </EntityType>
@@ -271,7 +271,7 @@
           </Key>
           <Property Type="String" Name="CourseID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Footnote" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastUpdatedBy" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastUpdatedBy" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastUpdated" />
         </EntityType>
         <EntityType Name="SectionCourseCrosslisting">
@@ -290,7 +290,7 @@
           <Property Type="String" Name="Footnote" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Title" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Description" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastUpdatedBy" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastUpdatedBy" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastUpdated" />
         </EntityType>
         <EntityType Name="SubjectsCoursePrefix">
@@ -333,7 +333,7 @@
           <Property Type="String" Name="Title" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="URL" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="ProgramChairSID" MaxLength="9" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastUpdatedBy" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastUpdatedBy" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastUpdated" />
           <NavigationProperty Name="Division" Relationship="ClassSchedule.Models.FK_Departments_Division" FromRole="Department" ToRole="Division" />
           <NavigationProperty Name="Subjects" Relationship="ClassSchedule.Models.FK_Subjects_Departments" FromRole="Department" ToRole="Subject" />
@@ -347,7 +347,7 @@
           <Property Type="String" Name="Title" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Intro" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Slug" Nullable="false" MaxLength="63" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="LastUpdatedBy" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LastUpdatedBy" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastUpdated" />
           <NavigationProperty Name="Department" Relationship="ClassSchedule.Models.FK_Subjects_Departments" FromRole="Subject" ToRole="Department" />
           <NavigationProperty Name="CoursePrefixes" Relationship="ClassSchedule.Models.FK_SubjectsCoursePrefixes_Subjects" FromRole="Subject" ToRole="SubjectsCoursePrefix" />
