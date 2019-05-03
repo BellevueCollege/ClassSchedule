@@ -311,143 +311,156 @@ namespace CTCClassSchedule.Controllers
 
 	    if (HttpContext.User.Identity.IsAuthenticated)
 	    {
-	      if (ModelState.IsValid)
-	      {
-	        using (ClassScheduleDb db = new ClassScheduleDb())
-	        {
-	          try
-	          {
-              string username = HttpContext.User.Identity.Name;
-
-              // HACK: sectionID value is explicitly/separately passed to this Action method.
-              // The nested custom ModelBinders (see ModelBinderAttribute in method signature) seem to work, but
-              // the ID value still comes through as NULL. When there is more time I'd like to continue trying
-              // to get the ModelBinders to work properly.
-              //  - shawn.south@bellevuecollege.edu, 3/14/2013
-              IQueryable<SectionsMeta> sects = db.SectionsMetas.Where(m => m.ClassID == sectionID);
-	            int sectCount = sects.Count();
-
-              SectionsMeta sectionMeta;
-
-	            if (sectCount > 0)
-	            {
-	              if (sectCount == 1)
-	              {
-	                sectionMeta = sects.Single();
-	              }
-	              else
-	              {
-	                _log.Warn(m => m("More than one SectionsMeta record found for '{0}'. Using the first and ignoring others."));
-	                sectionMeta = sects.First();
-	              }
-
-                // update values, if they've changed
-	              bool changed = false;
-
-                // TODO: Strip HTML from input before assigning
-                if (TestAndUpdate(Model.SectionToEdit.CourseTitle != sectionMeta.Title, ref changed))
+                if (ModelState.IsValid)
                 {
-	                sectionMeta.Title = Model.SectionToEdit.CourseTitle;
-	              }
-                if (TestAndUpdate(Model.SectionToEdit.CustomDescription != sectionMeta.Description, ref changed))
-	              {
-                  sectionMeta.Description = Model.SectionToEdit.CustomDescription;
-	              }
-                if (TestAndUpdate(Model.SectionToEdit.SectionFootnotes != sectionMeta.Footnote, ref changed))
-                {
-                  sectionMeta.Footnote = Model.SectionToEdit.SectionFootnotes;
-	              }
+                    using (ClassScheduleDb db = new ClassScheduleDb())
+                    {
+                        try
+                        {
+                            string username = HttpContext.User.Identity.Name;
 
-	              if (changed)
-	              {
-	                sectionMeta.LastUpdated = DateTime.Now;
-	                sectionMeta.LastUpdatedBy = username;
-	              }
-	            }
-	            else
-	            {
-	              sectionMeta = new SectionsMeta
-	                               {
-	                                 ClassID = sectionID,
-	                                 Title = Model.SectionToEdit.CourseTitle,
-	                                 Description = Model.SectionToEdit.CustomDescription,
-	                                 Footnote = Model.SectionToEdit.SectionFootnotes,
-	                                 LastUpdated = DateTime.Now,
-                                   LastUpdatedBy = username
-	                               };
+                            // HACK: sectionID value is explicitly/separately passed to this Action method.
+                            // The nested custom ModelBinders (see ModelBinderAttribute in method signature) seem to work, but
+                            // the ID value still comes through as NULL. When there is more time I'd like to continue trying
+                            // to get the ModelBinders to work properly.
+                            //  - shawn.south@bellevuecollege.edu, 3/14/2013
+                            IQueryable<SectionsMeta> sects = db.SectionsMetas.Where(m => m.ClassID == sectionID);
+                            int sectCount = sects.Count();
 
-                db.SectionsMetas.Add(sectionMeta);
-	            }
+                            SectionsMeta sectionMeta;
 
-              IEnumerable<SectionCourseCrosslisting> currentSectionCrosslistings = db.SectionCourseCrosslistings.Where(x => x.ClassID == sectionID);
-              int currentCrosslistCount = currentSectionCrosslistings.Count();
+                            if (sectCount > 0)
+                            {
+                                if (sectCount == 1)
+                                {
+                                    sectionMeta = sects.Single();
+                                }
+                                else
+                                {
+                                    _log.Warn(m => m("More than one SectionsMeta record found for '{0}'. Using the first and ignoring others."));
+                                    sectionMeta = sects.First();
+                                }
 
-	            if (CrossListedCourses != null && CrossListedCourses.Count > 0)
-	            {
-                // remove existing cross-listings from the database they weren't passed
-                if (currentCrosslistCount > 0)
-	              {
-	                IList<SectionCourseCrosslisting> unmergables = currentSectionCrosslistings.Where(x => !CrossListedCourses.Contains(x.CourseID)).ToList();
-	                foreach (SectionCourseCrosslisting course in unmergables)
-	                {
-	                  db.SectionCourseCrosslistings.Remove(course);
-	                }
-	              }
+                                // update values, if they've changed
+                                bool changed = false;
 
-                // add any new cross-listings
-	              IEnumerable<string> crosslistingsToAdd = CrossListedCourses; // start with the full list...
-	              if (currentCrosslistCount > 0)
-	              {
-                  // ...then, if we already have records in the db, replace with just those items that aren't there yet
-	                crosslistingsToAdd = CrossListedCourses.Where(c => !currentSectionCrosslistings.Select(x => x.CourseID).Contains(c));
-	              }
+                                // TODO: Strip HTML from input before assigning
+                                if (TestAndUpdate(Model.SectionToEdit.CourseTitle != sectionMeta.Title, ref changed))
+                                {
+                                    sectionMeta.Title = Model.SectionToEdit.CourseTitle;
+                                }
+                                if (TestAndUpdate(Model.SectionToEdit.CustomDescription != sectionMeta.Description, ref changed))
+                                {
+                                    sectionMeta.Description = Model.SectionToEdit.CustomDescription;
+                                }
+                                if (TestAndUpdate(Model.SectionToEdit.SectionFootnotes != sectionMeta.Footnote, ref changed))
+                                {
+                                    sectionMeta.Footnote = Model.SectionToEdit.SectionFootnotes;
+                                }
 
-                foreach (string prefix in crosslistingsToAdd)
-                {
-                  db.SectionCourseCrosslistings.Add(new SectionCourseCrosslisting
-                  {
-                    ClassID = sectionID,
-                    CourseID = prefix
-                  });
+                                if (changed)
+                                {
+                                    sectionMeta.LastUpdated = DateTime.Now;
+                                    sectionMeta.LastUpdatedBy = username;
+                                }
+                            }
+                            else
+                            {
+                                sectionMeta = new SectionsMeta
+                                {
+                                    ClassID = sectionID,
+                                    Title = Model.SectionToEdit.CourseTitle,
+                                    Description = Model.SectionToEdit.CustomDescription,
+                                    Footnote = Model.SectionToEdit.SectionFootnotes,
+                                    LastUpdated = DateTime.Now,
+                                    LastUpdatedBy = username
+                                };
 
+                                db.SectionsMetas.Add(sectionMeta);
+                            }
+
+                            IEnumerable<SectionCourseCrosslisting> currentSectionCrosslistings = db.SectionCourseCrosslistings.Where(x => x.ClassID == sectionID);
+                            int currentCrosslistCount = currentSectionCrosslistings.Count();
+
+                            if (CrossListedCourses != null && CrossListedCourses.Count > 0)
+                            {
+                                // remove existing cross-listings from the database they weren't passed
+                                if (currentCrosslistCount > 0)
+                                {
+                                    IList<SectionCourseCrosslisting> unmergables = currentSectionCrosslistings.Where(x => !CrossListedCourses.Contains(x.CourseID)).ToList();
+                                    foreach (SectionCourseCrosslisting course in unmergables)
+                                    {
+                                        db.SectionCourseCrosslistings.Remove(course);
+                                    }
+                                }
+
+                                // add any new cross-listings
+                                IEnumerable<string> crosslistingsToAdd = CrossListedCourses; // start with the full list...
+                                if (currentCrosslistCount > 0)
+                                {
+                                    // ...then, if we already have records in the db, replace with just those items that aren't there yet
+                                    crosslistingsToAdd = CrossListedCourses.Where(c => !currentSectionCrosslistings.Select(x => x.CourseID).Contains(c));
+                                }
+
+                                foreach (string prefix in crosslistingsToAdd)
+                                {
+                                    db.SectionCourseCrosslistings.Add(new SectionCourseCrosslisting
+                                    {
+                                        ClassID = sectionID,
+                                        CourseID = prefix
+                                    });
+
+                                }
+                            }
+                            else
+                            {
+                                // Since no CrossListedCourses were passed, delete all existing ones from the database
+                                if (currentCrosslistCount > 0)
+                                {
+                                    // TODO: There's got to be a better way to delete multiple records than looping through them.
+                                    foreach (SectionCourseCrosslisting crosslistRecord in currentSectionCrosslistings)
+                                    {
+                                        db.SectionCourseCrosslistings.Remove(crosslistRecord);
+                                    }
+                                }
+                            }
+
+                            // saves ALL additions/deletions/changes made earlier in this method
+                            db.SaveChanges();
+                        }
+                        catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+                        {
+                            // Concat any validation exceptions together to log
+                            StringBuilder msg = new StringBuilder();
+                            foreach (var errors in ex.EntityValidationErrors)
+                            {
+                                foreach (var valErr in errors.ValidationErrors)
+                                {
+                                    msg.AppendFormat("{0}\n", valErr.ErrorMessage);
+                                }
+                            }
+                            _log.Error(m => m("Section changes NOT saved - validation exception.\n{0}", msg));
+                        }
+                        catch (Exception ex)
+                        {
+                            _log.Error(m => m("Section changes NOT saved - {0}", ex));
+                        }
+                    }
                 }
-              }
-	            else
-	            {
-                // Since no CrossListedCourses were passed, delete all existing ones from the database
-	              if (currentCrosslistCount > 0)
-	              {
-                  // TODO: There's got to be a better way to delete multiple records than looping through them.
-	                foreach (SectionCourseCrosslisting crosslistRecord in currentSectionCrosslistings)
-	                {
-	                  db.SectionCourseCrosslistings.Remove(crosslistRecord);
-	                }
-	              }
-	            }
-
-              // saves ALL additions/deletions/changes made earlier in this method
-	            db.SaveChanges();
-	          }
-	          catch (Exception ex)
-	          {
-	            _log.Error(m => m("Section changes NOT saved - {0}", ex));
-	          }
-	        }
-	      }
-	      else
-	      {
-          // Collect all ModelError messages...
-          StringBuilder msg = new StringBuilder();
-          foreach (string key in ModelState.Keys)
-          {
-            foreach (ModelError err in ModelState[key].Errors)
-            {
-              // ...so we can display them.
-              msg.AppendFormat("[{0}] - {1}\n", key, string.IsNullOrWhiteSpace(err.ErrorMessage) ? err.Exception.ToString() : err.ErrorMessage);
-            }
-          }
-	        _log.Warn(m => m("Section changes NOT saved - ModelState is not Valid.\n{0}", msg));
-	      }
+                else
+                {
+                    // Collect all ModelError messages...
+                    StringBuilder msg = new StringBuilder();
+                    foreach (string key in ModelState.Keys)
+                    {
+                        foreach (ModelError err in ModelState[key].Errors)
+                        {
+                            // ...so we can display them.
+                            msg.AppendFormat("[{0}] - {1}\n", key, string.IsNullOrWhiteSpace(err.ErrorMessage) ? err.Exception.ToString() : err.ErrorMessage);
+                        }
+                    }
+                    _log.Warn(m => m("Section changes NOT saved - ModelState is not Valid.\n{0}", msg));
+                }
 	    }
       else
       {
