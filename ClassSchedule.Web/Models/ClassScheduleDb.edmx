@@ -239,7 +239,7 @@
             <PropertyRef Name="ClassID" />
           </Key>
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="8" FixedLength="true" Unicode="false" />
-          <Property Type="String" Name="SearchGroup1" MaxLength="81" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="SearchGroup1" MaxLength="175" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SearchGroup2" MaxLength="4065" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SearchGroup3" MaxLength="265" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="SearchGroup4" MaxLength="4411" FixedLength="false" Unicode="false" />
@@ -289,7 +289,7 @@
           <Property Type="String" Name="ClassID" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Footnote" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Title" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="Description" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Description" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="LastUpdatedBy" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="LastUpdated" />
         </EntityType>
