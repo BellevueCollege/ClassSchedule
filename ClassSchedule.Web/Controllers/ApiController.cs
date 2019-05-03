@@ -437,9 +437,6 @@ namespace CTCClassSchedule.Controllers
 					  }
                         try
                         {
-                            // Your code...
-                            // Could also be before try if you know the exception occurs in SaveChanges
-
                             db.SaveChanges();
                         }
                         catch (System.Data.Entity.Validation.DbEntityValidationException e)
@@ -457,10 +454,14 @@ namespace CTCClassSchedule.Controllers
                                 }
                             }
                             throw;
-                            
+                        }
+                        catch (Exception ex)
+                        {
+                            _log.Error(m => m("Class changes NOT saved - {0}", ex));
+                            throw;
                         }
                         //db.SaveChanges();
-					}
+                    }
 				}
 			}
 
