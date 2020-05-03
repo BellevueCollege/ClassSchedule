@@ -132,8 +132,11 @@ namespace CTCClassSchedule
                 case "B":
                     yearDataInt = 2010;
                     break;
+                case "C":
+                    yearDataInt = 2020;
+                    break;
                 default:
-                    yearDataInt = 2010;
+                    yearDataInt = 2020;
                     break;
             }
 
