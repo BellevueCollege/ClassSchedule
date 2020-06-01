@@ -51,6 +51,11 @@
 }
 /* end unset to bootstrap .table styles */
 
+/* Unset Globals 3 table td styles so section notes don't run across page */
+.table-classes>tbody.section-listing>tr>td.section-notes {
+	white-space: normal;
+}
+
 @media (min-width:992px){
     .padding-left-none {
         padding-left: 0;
