@@ -26,6 +26,8 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
   ViewBag.PageTitle = String.Format("{0} {1} Credit Classes :: Classes", Model.ViewingQuarter.FriendlyName, Model.SubjectTitle);
 }
 
+@Html.Partial("Alerts")
+
 @Html.Partial("breadcrumbNavigation")
 
 @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = Model.CurrentQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = Model.ViewingQuarter })
