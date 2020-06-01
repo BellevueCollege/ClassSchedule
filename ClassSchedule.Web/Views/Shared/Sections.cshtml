@@ -68,7 +68,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
 	</td>
     @using (_profiler.Step("Rendering offered items"))
     {
-        <td>
+    <td>
         @{
             bool firstItem = true;
         }
@@ -86,7 +86,32 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                     // Meeting times
                     if (Model.Sections[0].IsOnline)
                     {
-                        @:Online
+                        string timeRoom = "";
+                        string startTime = String.Format("{0:t}", item.StartTime).Replace(" ", string.Empty).ToLower();
+                        string endTime = String.Format("{0:t}", item.EndTime).Replace(" ", string.Empty).ToLower();
+                        if (!(string.IsNullOrWhiteSpace(startTime) && string.IsNullOrWhiteSpace(endTime)))
+                        {
+                            timeRoom += ", " + startTime + "-" + endTime;
+                        }
+                        // Comment for now, as for some classes it still shows a Room
+                        @*
+                        if (!string.IsNullOrWhiteSpace(item.Room))
+                        {
+                            timeRoom += " in " + Encoder.HtmlEncode(item.Room);
+                        }
+                        *@
+
+                        // Checks if Days is Arranged so it won't show "Online Arranged" for asynchronous classes,
+                        // and shows "Online <Date>, <Time>" for synchronous classes
+                        <span>Online</span>
+                        if (item.Days != "Arranged")
+                        {
+                            @*
+                            NOTE: Need to explicitly encode timeRoom because Html.Raw() skips encoding
+                            And we need to use Raw() so that the entity doesn't get re-encoded
+                            *@
+                            <abbr title="@Helpers.GetFriendlyDayRange(item.Days)">@item.Days</abbr>@Html.Raw(timeRoom)
+                        }
                     }
                     else
                     {
@@ -94,11 +119,12 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                         string timeRoom = "";
                         string startTime = String.Format("{0:t}", item.StartTime).Replace(" ", string.Empty).ToLower();
                         string endTime = String.Format("{0:t}", item.EndTime).Replace(" ", string.Empty).ToLower();
-                        if ( !( string.IsNullOrWhiteSpace(startTime) && string.IsNullOrWhiteSpace(endTime) ) )
+                        if (!(string.IsNullOrWhiteSpace(startTime) && string.IsNullOrWhiteSpace(endTime)))
                         {
                             timeRoom += ", " + startTime + "-" + endTime;
                         }
-                        if ( !string.IsNullOrWhiteSpace(item.Room) ) {
+                        if (!string.IsNullOrWhiteSpace(item.Room))
+                        {
                             timeRoom += " in " + Encoder.HtmlEncode(item.Room);
                         }
 
@@ -107,7 +133,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
                         And we need to use Raw() so that the entity doesn't get re-encoded
                         *@
                         <abbr title="@Helpers.GetFriendlyDayRange(item.Days)">@item.Days</abbr>@Html.Raw(timeRoom)
-                        
+
                     }
                     firstItem = false;
                 }
@@ -117,7 +143,7 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
             {
             }
         } @*end of iterate section list*@
-        </td>
+    </td>
     }
     @if (Model.Sections[0].Yrq.ID.CompareTo(Model.CurrentQuarter.ID) >= 0)
     {
