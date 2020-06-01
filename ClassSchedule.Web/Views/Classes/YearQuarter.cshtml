@@ -28,6 +28,8 @@ along with CtcClassSchedule.  If not, see <http://www.gnu.org/licenses/>.
     <meta name="robots" content="noindex, follow">
 }
 
+@Html.Partial("Alerts")
+
 @Html.Partial("breadcrumbNavigation")
 
 @Html.Partial("quarterNavigation", new QuarterNavigationModel { CurrentQuarter = ViewBag.CurrentYearQuarter, NavigationQuarters = Model.NavigationQuarters, ViewingQuarter = yrq })

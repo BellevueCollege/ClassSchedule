@@ -1,0 +1,46 @@
+﻿@using Ctc.Ods.Types
+@{
+    YearQuarter yrq = Model.ViewingQuarter;
+}
+
+<!-- COVID-19 Spring 2020 Alert -->
+@if (yrq.FriendlyName == "Spring 2020")
+{
+    <div class="row">
+        <div class="col-md-12 buffer-top">
+            <div class="content-padding">
+                <div class="alert alert-warning" role="alert">
+                    Bellevue College will start Spring quarter classes April 8th and offer all instruction remotely for the entire quarter. Learn more at the <a href="https://www.bellevuecollege.edu/publicsafety/flu/" alt="Public Safety Flu Page">Public Safety Flu Page</a>.
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- COVID-19 Summer 2020 Alert -->
+@if (yrq.FriendlyName == "Summer 2020")
+{
+    <div class="row">
+        <div class="col-md-12 buffer-top">
+            <div class="content-padding">
+                <div class="alert alert-danger" role="alert">
+                    Bellevue College will offer all instruction remotely for the entire Summer quarter. See each class section for details. Learn more at the <a href="https://www.bellevuecollege.edu/publicsafety/flu/">COVID-19 Resource Page</a>.
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- COVID-19 Fall 2020 Alert -->
+@if (yrq.FriendlyName == "Fall 2020")
+{
+    <div class="row">
+        <div class="col-md-12 buffer-top">
+            <div class="content-padding">
+                <div class="alert alert-danger" role="alert">
+                    Bellevue College plans the following classes for Fall. How classes are delivered may change depending on COVID-19 situation over the summer. See each class section for details. Learn more at the <a href="https://www.bellevuecollege.edu/publicsafety/flu/">COVID-19 Resource Page</a>.
+                </div>
+            </div>
+        </div>
+    </div>
+}

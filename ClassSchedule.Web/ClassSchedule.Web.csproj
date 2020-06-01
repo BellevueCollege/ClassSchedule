@@ -340,6 +340,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\Shared\CourseDescriptions.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Publish Test.pubxml" />
     <Content Include="Views\Shared\LoggedInUser.cshtml" />
     <Content Include="Views\Shared\breadcrumbNavigation.cshtml" />
@@ -352,6 +353,7 @@
     <Content Include="_configSource\RoleManager.config" />
     <Content Include="_configSource\Smtp.config" />
     <Content Include="_configSource\SamlAuthentication.config" />
+    <Content Include="Views\Shared\Alerts.cshtml" />
     <None Include="_configSource\EXAMPLE-AppSettings.config" />
     <None Include="_configSource\EXAMPLE-Authentication.config" />
     <None Include="_configSource\EXAMPLE-ConnectionStrings.config" />
